@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   发布前请把下面的 lnwhosyourdaddy.github.io/Agan-ruankao 替换成你的真实域名
-  更新日期：2026-10-04（新增 H06 / H07 / H08 计算机网络与分布式系统）
+  更新日期：2026-10-04（新增 H14 / H15 / H16 软件工程 = 全教材第一大章 19.6%）
 -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
@@ -36,6 +36,21 @@
   </url>
   <url>
     <loc>https://lnwhosyourdaddy.github.io/Agan-ruankao/H13.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://lnwhosyourdaddy.github.io/Agan-ruankao/H14.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://lnwhosyourdaddy.github.io/Agan-ruankao/H15.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://lnwhosyourdaddy.github.io/Agan-ruankao/H16.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
