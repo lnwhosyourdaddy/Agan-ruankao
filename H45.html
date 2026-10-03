@@ -7,7 +7,7 @@
 <title>第 45 小时 · 论文写作专项（一） · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
-<meta name="build-stamp" content="2026-10-03 16:34:16">
+<meta name="build-stamp" content="2026-10-04 00:39:59">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -54,8 +54,13 @@
   --danger-bg:#fbeeee;
   --danger-line:#dd7d7d;
 
-  --gold:#a67c00;
-  --gold-bg:#fbf6e3;
+--gold:#a67c00;
+--gold-bg:#fbf6e3;
+/* 记忆口诀框（紫）——与墨绿主色同属低饱和冷调，不抢主色 */
+--mem:#6d4a8f;
+--mem-bg:#f4f1f8;
+--mem-line:#8b6bb0;
+--mem-fg:#4a3460;
 
   --radius:10px;
   --radius-lg:16px;
@@ -107,8 +112,12 @@ html[data-theme="dark"]{
   --danger-bg:#251818;
   --danger-line:#8a4545;
 
-  --gold:#d9bb6a;
-  --gold-bg:#262210;
+--gold:#d9bb6a;
+--gold-bg:#262210;
+--mem:#c9b0e0;
+--mem-bg:#221a2c;
+--mem-line:#7d5fa0;
+--mem-fg:#dccdf0;
 
   --shadow-1:0 1px 2px rgba(0,0,0,.16);
   --shadow-2:0 4px 16px rgba(0,0,0,.26);
@@ -1487,6 +1496,63 @@ html.focus-mode .focus-exit-dot{
     padding:10px 15px; font-size:12.5px;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   整合自外部笔记模板（蓝白风 → 转译为本项目墨绿设计系统）
+   借用其「结构」，颜色全部走本项目语义变量：
+     · .block.mem      记忆口诀框（紫）
+     · .fig/.figcaption 图容器 + 图题（含 mermaid 图 .fig-mermaid）
+     · .tag            行内小标签
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ---------- 记忆口诀框（紫）---------- */
+.mem{background:var(--mem-bg);border-color:var(--mem-line);border-left-color:var(--mem-line);color:var(--mem-fg)}
+.mem .block-title{color:var(--mem-line)}
+.main .block.mem{background:var(--mem-bg);border-left-color:var(--mem-line)}
+.main .block.mem .block-title{color:var(--mem-line)}
+/* 口诀正文用等宽感更强的字重，方便朗读记忆 */
+.mem strong{color:var(--mem-line)}
+
+/* ---------- 图容器 + 图题 ---------- */
+.fig{
+  margin:1.8em 0;
+  padding:16px 18px 12px;
+  background:var(--bg-card);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  text-align:center;
+}
+.fig svg{max-width:100%;height:auto}
+.fig figcaption{
+  margin-top:10px;
+  font-size:12.8px;
+  line-height:1.6;
+  color:var(--fg-2);
+  letter-spacing:.02em;
+}
+/* mermaid 图单独放开内边距，图本身已有留白 */
+.fig-mermaid{padding:18px 10px 12px;overflow-x:auto}
+.main .fig{background:var(--bg-card)}
+.main .fig figcaption{color:var(--fg-2)}
+
+/* ---------- 行内小标签 ---------- */
+.tag{
+  display:inline-block;
+  padding:1px 9px;
+  margin-right:5px;
+  border-radius:999px;
+  font-size:11.5px;
+  font-weight:600;
+  line-height:1.7;
+  background:var(--accent-soft);
+  color:var(--accent);
+  border:1px solid var(--accent-soft-2);
+  white-space:nowrap;
+}
+.tag.warn{background:var(--warn-bg);color:var(--warn-fg);border-color:var(--warn-line)}
+.tag.exam{background:var(--gold-bg);color:var(--gold);border-color:var(--gold)}
+.tag.mem{background:var(--mem-bg);color:var(--mem-line);border-color:var(--mem-line)}
+.main .tag{font-family:var(--sans)}
 </style>
 </head>
 <body>
@@ -1506,7 +1572,7 @@ html.focus-mode .focus-exit-dot{
     <h1 id="第-45-小时-论文写作专项-一">第 45 小时 · 论文写作专项（一）</h1>
 <h2 id="章节考点分析">章节考点分析</h2>
 <p>论文是<strong>唯一一个"考前没定型就必然失败"的科目</strong>——它不能靠临场发挥，120 分钟内既要选题、又要写满 2000 字，<br>还要保证数字口径不自相矛盾。本学时解决三个问题：<strong>评分怎么给、结构怎么定、背景怎么备</strong>。</p>
-<div class="mermaid-src" data-src="flowchart TD
+<div class="fig fig-mermaid"><div class="mermaid-src" data-src="flowchart TD
     A[&quot;论文写作&lt;br/&gt;120分钟 · 2选1&quot;] --&gt; B[&quot;&lt;b&gt;评分五维度&lt;/b&gt;&quot;]
     A --&gt; C[&quot;&lt;b&gt;三段式结构&lt;/b&gt;&quot;]
     A --&gt; D[&quot;&lt;b&gt;项目背景定型&lt;/b&gt;&quot;]
@@ -1519,7 +1585,7 @@ html.focus-mode .focus-exit-dot{
     C --&gt; C2[&quot;方法/技术清单与特点&lt;br/&gt;800~1200字&quot;]
     C --&gt; C3[&quot;结合项目的选型与效果&lt;br/&gt;600~800字&quot;]
     D --&gt; D1[&quot;三大子系统 + 技术栈&lt;br/&gt;数字全文锁死&quot;]
-    B1 --&gt; E[&quot;及格 45 分&quot;]"></div>
+    B1 --&gt; E[&quot;及格 45 分&quot;]"></div></div>
 <h3 id="导读小贴士">【导读小贴士】</h3>
 <p>三个"<strong>绝对不能犯</strong>"的错：① 摘要不到 120 字 → <strong>直接不及格</strong>；② 正文不到 1200 字 → 踩线；<br>③ <strong>项目数字前后不一致</strong>（今天 800 万明天 900 万）→ "项目不真实"嫌疑。<br>这三条都可以靠<strong>考前定型 + 提前练习</strong>完全规避。</p>
 <hr>
@@ -1529,19 +1595,19 @@ html.focus-mode .focus-exit-dot{
 <div class="quote"><p><strong>切题 30% 是最大权重</strong> —— 这就是"万能模板套所有题目"必然低分的原因：<br>模板再好，答的不是人家问的，这 30% 先丢掉。</p></div>
 <h3 id="s2-硬性字数要求">2. 硬性字数要求</h3>
 <table><thead><tr><th>项</th><th>要求</th><th>红线</th></tr></thead><tbody><tr><td><strong>摘要</strong></td><td>300～400 字（350 以上稳妥）</td><td><strong>< 120 字 = 直接不及格</strong></td></tr><tr><td><strong>正文</strong></td><td>2000～3000 字（最佳约 2500）</td><td><strong>< 1200 字 = 严重扣分/不及格</strong></td></tr></tbody></table>
-<div class="block tip"><div class="block-title">要点</div><p>好的摘要让人<strong>不看正文就知道全文写了什么</strong>。<br>标准写法 = <strong>一句话项目背景（谁/什么项目/我担任何职）+ 论点 + 结论（成效）</strong>。</p></div>
+<div class="block tip"><div class="block-title">摘要 = 全文的抽象，不是正文的延伸</div><p>好的摘要让人<strong>不看正文就知道全文写了什么</strong>。<br>标准写法 = <strong>一句话项目背景（谁/什么项目/我担任何职）+ 论点 + 结论（成效）</strong>。</p></div>
 <h3 id="s3-三段式标准结构">3. 三段式标准结构</h3>
-<div class="mermaid-src" data-src="flowchart LR
+<div class="fig fig-mermaid"><div class="mermaid-src" data-src="flowchart LR
     S1[&quot;&lt;b&gt;第一段&lt;/b&gt;&lt;br/&gt;项目概要与角色&lt;br/&gt;400~600字&quot;] --&gt; S2[&quot;&lt;b&gt;第二段&lt;/b&gt;&lt;br/&gt;方法/技术清单与特点&lt;br/&gt;800~1200字&quot;]
     S2 --&gt; S3[&quot;&lt;b&gt;第三段&lt;/b&gt;&lt;br/&gt;结合项目的选型与效果&lt;br/&gt;600~800字&quot;]
     S1 --&gt; S1a[&quot;背景 / 规模 / 体制 /&lt;br/&gt;我担任的角色&quot;]
     S2 --&gt; S2a[&quot;针对设问给出方法清单&lt;br/&gt;说明各自特点&lt;br/&gt;&lt;b&gt;选 2~3 个深入展开&lt;/b&gt;&quot;]
-    S3 --&gt; S3a[&quot;我是怎么选的&lt;br/&gt;为什么适合这个项目&lt;br/&gt;取得了什么效果&quot;]"></div>
+    S3 --&gt; S3a[&quot;我是怎么选的&lt;br/&gt;为什么适合这个项目&lt;br/&gt;取得了什么效果&quot;]"></div></div>
 <p><strong>三条操作要点</strong>：</p>
 <ol><li><strong>先定"段字数"再动笔</strong>——防止写到后面段落严重失衡</li><li>第二段<strong>不要面面俱到</strong>：列 5 个方法但每个都浅尝辄水 = 蜻蜓点水，反而失分</li><li>第一段的<strong>项目数字必须从头到尾一致</strong>（见 §5 项目背景卡）</li></ol>
 <h3 id="s4-120-分钟时间分配-必须练到条件反射">4. 120 分钟时间分配（<strong>必须练到条件反射</strong>）</h3>
 <table><thead><tr><th>环节</th><th>时长</th><th>说明</th></tr></thead><tbody><tr><td>选题</td><td>3 min</td><td>选最熟悉的那题，<strong>别忘了写题号考号</strong></td></tr><tr><td>构思</td><td>12 min</td><td>立论点、定摘要内容、列提纲、分配字数</td></tr><tr><td><strong>摘要</strong></td><td><strong>15 min</strong></td><td>先写摘要——若失控会导致灾难性后果</td></tr><tr><td>正文</td><td>80 min</td><td>三段式展开</td></tr><tr><td>检查</td><td>10 min</td><td>字数、数字一致性、术语一致性、笔误</td></tr></tbody></table>
-<div class="block warning"><div class="block-title">注意</div><p><strong>很多人先写正文、最后补摘要</strong> → 时间失控 → 摘要来不及写 → 触发 <120 字不及格红线。<br><strong>正确顺序：摘要在正文之前写。</strong></p></div>
+<div class="block warning"><div class="block-title">最容易出事的地方</div><p><strong>很多人先写正文、最后补摘要</strong> → 时间失控 → 摘要来不及写 → 触发 <120 字不及格红线。<br><strong>正确顺序：摘要在正文之前写。</strong></p></div>
 <h3 id="s5-项目背景定型-唯一口径">5. 项目背景定型（唯一口径）</h3>
 <div class="quote"><p><strong>原则</strong>：考场上只用这一个项目，越写越熟。<strong>所有数字全文锁死，任何一篇论文不得改动</strong>。<br>改一个字就有"项目不真实"嫌疑——这是阅卷人最敏感的扣分点。</p></div>
 <h4 id="背景卡-脱敏版-对外通用口径">背景卡（脱敏版·对外通用口径）</h4>

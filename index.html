@@ -7,7 +7,7 @@
 <title>阿甘系分 · 48 小时冲刺手册 · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
-<meta name="build-stamp" content="2026-10-03 16:34:16">
+<meta name="build-stamp" content="2026-10-04 00:39:59">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -54,8 +54,13 @@
   --danger-bg:#fbeeee;
   --danger-line:#dd7d7d;
 
-  --gold:#a67c00;
-  --gold-bg:#fbf6e3;
+--gold:#a67c00;
+--gold-bg:#fbf6e3;
+/* 记忆口诀框（紫）——与墨绿主色同属低饱和冷调，不抢主色 */
+--mem:#6d4a8f;
+--mem-bg:#f4f1f8;
+--mem-line:#8b6bb0;
+--mem-fg:#4a3460;
 
   --radius:10px;
   --radius-lg:16px;
@@ -107,8 +112,12 @@ html[data-theme="dark"]{
   --danger-bg:#251818;
   --danger-line:#8a4545;
 
-  --gold:#d9bb6a;
-  --gold-bg:#262210;
+--gold:#d9bb6a;
+--gold-bg:#262210;
+--mem:#c9b0e0;
+--mem-bg:#221a2c;
+--mem-line:#7d5fa0;
+--mem-fg:#dccdf0;
 
   --shadow-1:0 1px 2px rgba(0,0,0,.16);
   --shadow-2:0 4px 16px rgba(0,0,0,.26);
@@ -1487,6 +1496,63 @@ html.focus-mode .focus-exit-dot{
     padding:10px 15px; font-size:12.5px;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   整合自外部笔记模板（蓝白风 → 转译为本项目墨绿设计系统）
+   借用其「结构」，颜色全部走本项目语义变量：
+     · .block.mem      记忆口诀框（紫）
+     · .fig/.figcaption 图容器 + 图题（含 mermaid 图 .fig-mermaid）
+     · .tag            行内小标签
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ---------- 记忆口诀框（紫）---------- */
+.mem{background:var(--mem-bg);border-color:var(--mem-line);border-left-color:var(--mem-line);color:var(--mem-fg)}
+.mem .block-title{color:var(--mem-line)}
+.main .block.mem{background:var(--mem-bg);border-left-color:var(--mem-line)}
+.main .block.mem .block-title{color:var(--mem-line)}
+/* 口诀正文用等宽感更强的字重，方便朗读记忆 */
+.mem strong{color:var(--mem-line)}
+
+/* ---------- 图容器 + 图题 ---------- */
+.fig{
+  margin:1.8em 0;
+  padding:16px 18px 12px;
+  background:var(--bg-card);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  text-align:center;
+}
+.fig svg{max-width:100%;height:auto}
+.fig figcaption{
+  margin-top:10px;
+  font-size:12.8px;
+  line-height:1.6;
+  color:var(--fg-2);
+  letter-spacing:.02em;
+}
+/* mermaid 图单独放开内边距，图本身已有留白 */
+.fig-mermaid{padding:18px 10px 12px;overflow-x:auto}
+.main .fig{background:var(--bg-card)}
+.main .fig figcaption{color:var(--fg-2)}
+
+/* ---------- 行内小标签 ---------- */
+.tag{
+  display:inline-block;
+  padding:1px 9px;
+  margin-right:5px;
+  border-radius:999px;
+  font-size:11.5px;
+  font-weight:600;
+  line-height:1.7;
+  background:var(--accent-soft);
+  color:var(--accent);
+  border:1px solid var(--accent-soft-2);
+  white-space:nowrap;
+}
+.tag.warn{background:var(--warn-bg);color:var(--warn-fg);border-color:var(--warn-line)}
+.tag.exam{background:var(--gold-bg);color:var(--gold);border-color:var(--gold)}
+.tag.mem{background:var(--mem-bg);color:var(--mem-line);border-color:var(--mem-line)}
+.main .tag{font-family:var(--sans)}
 </style>
 </head>
 <body>
@@ -1519,17 +1585,17 @@ html.focus-mode .focus-exit-dot{
 </section>
     <h1 id="阿甘系分-48-小时冲刺手册">阿甘系分 · 48 小时冲刺手册</h1>
 <div class="quote"><p>一套按 <strong>学时</strong>拆解的系统分析师备考手册：内容讲透、图解落地、页面内直接答题、可打印带水印。</p></div>
-<div class="block warning"><div class="block-title">注意</div><p>本资料为个人独立编写的备考笔记整理，<strong>非官方出版物</strong>，与全国计算机技术与软件专业技术资格考试办公室（软考办）无隶属关系，未使用任何官方标识。</p></div>
+<div class="block warning"><div class="block-title">非官方声明</div><p>本资料为个人独立编写的备考笔记整理，<strong>非官方出版物</strong>，与全国计算机技术与软件专业技术资格考试办公室（软考办）无隶属关系，未使用任何官方标识。</p></div>
 <h2 id="这套手册为什么是-48-小时">这套手册为什么是 48 小时</h2>
 <p>市面上同题材产品多为 <strong>32 小时</strong>框架，其结构普遍是「综合知识打满、案例与论文压缩到 2–5 小时」。<br>而系统分析师的失分重灾区恰恰是<strong>案例分析</strong>与<strong>论文写作</strong>。</p>
 <p>48 小时不是为了凑时长，而是把多出的 <strong>16 个学时全部投给案例与论文</strong>：</p>
 <table><thead><tr><th>模块</th><th>学时</th><th>占比</th></tr></thead><tbody><tr><td>第一篇 · 基础知识（9 章）</td><td>20</td><td>41.7%</td></tr><tr><td>第二篇 · 关键技术（6 章）</td><td>14</td><td>29.2%</td></tr><tr><td>第三篇 · 案例实践（7 章）</td><td>7</td><td>14.6%</td></tr><tr><td><strong>案例分析专项</strong></td><td><strong>3</strong></td><td>6.3%</td></tr><tr><td><strong>论文写作专项</strong></td><td><strong>2</strong></td><td>4.2%</td></tr><tr><td><strong>全真模拟与复盘</strong></td><td><strong>2</strong></td><td>4.2%</td></tr><tr><td><strong>合计</strong></td><td><strong>48</strong></td><td>100%</td></tr></tbody></table>
 <h2 id="考试速览-2026-下半年口径">考试速览（2026 下半年口径）</h2>
-<div class="mermaid-src" data-src="flowchart LR
+<div class="fig fig-mermaid"><div class="mermaid-src" data-src="flowchart LR
     A[&quot;&lt;b&gt;10/25 上午&lt;/b&gt;&lt;br/&gt;8:30 — 12:30&quot;] --&gt; A1[&quot;综合知识&lt;br/&gt;150分钟 · 75题&quot;]
     A --&gt; A2[&quot;案例分析&lt;br/&gt;90分钟 · 5选3&quot;]
     A -- &quot;结余时间&lt;br/&gt;全部给案例&quot; --&gt; A2
-    B[&quot;&lt;b&gt;10/25 下午&lt;/b&gt;&lt;br/&gt;14:30 — 16:30&quot;] --&gt; B1[&quot;论文写作&lt;br/&gt;120分钟 · 2选1&quot;]"></div>
+    B[&quot;&lt;b&gt;10/25 下午&lt;/b&gt;&lt;br/&gt;14:30 — 16:30&quot;] --&gt; B1[&quot;论文写作&lt;br/&gt;120分钟 · 2选1&quot;]"></div></div>
 <table><thead><tr><th>科目</th><th>时长</th><th>题量</th><th>及格</th></tr></thead><tbody><tr><td>综合知识</td><td>150 分钟</td><td>75 题（含英文 5 题，第 71–75）</td><td>45 / 75</td></tr><tr><td>案例分析</td><td>90 分钟</td><td>5 题，<strong>第 1 题必答 + 选 2 题</strong>（多答无效）</td><td>45 / 75</td></tr><tr><td>论文写作</td><td>120 分钟</td><td><strong>2 题选 1</strong>（多答无效）</td><td>45 / 75</td></tr></tbody></table>
 <div class="quote"><p><strong>连考提示</strong>：上午综合与案例<strong>连续 240 分钟</strong>。综合若 100 分钟内交卷，结余时间全部计入案例——这条策略会直接决定案例能不能写完。</p></div>
 <h2 id="使用方法">使用方法</h2>
@@ -1544,7 +1610,7 @@ html.focus-mode .focus-exit-dot{
 <h3 id="专项模块-差异化核心">专项模块（差异化核心）</h3>
 <table><thead><tr><th>学时</th><th>内容</th></tr></thead><tbody><tr><td>H42–H44</td><td><strong>案例分析专项</strong> — 四步答题法 + 题型模板 + 真题演练</td></tr><tr><td>H45–H46</td><td><strong>论文写作专项</strong>（H45 已上线 ✅）— 评分五维度 + 结构骨架 + 项目背景</td></tr><tr><td>H47–H48</td><td><strong>全真模拟与冲刺复盘</strong></td></tr></tbody></table>
 <h2 id="当前-MVP-已上线">当前 MVP 已上线</h2>
-<div class="block tip"><div class="block-title">要点</div><ul><li><strong><a href="H01.html">H1 · 绪论与备考总纲</a></strong> — 先搞清考什么、怎么分配时间</li><li><strong><a href="H23.html">H23 · 软件需求工程</a></strong> — 案例题与论文的共同地基</li><li><strong><a href="H45.html">H45 · 论文写作专项</a></strong> — 评分五维度与结构骨架</li></ul></div>
+<div class="block tip"><div class="block-title">试读章节</div><ul><li><strong><a href="H01.html">H1 · 绪论与备考总纲</a></strong> — 先搞清考什么、怎么分配时间</li><li><strong><a href="H23.html">H23 · 软件需求工程</a></strong> — 案例题与论文的共同地基</li><li><strong><a href="H45.html">H45 · 论文写作专项</a></strong> — 评分五维度与结构骨架</li></ul></div>
 <hr>
     
     <div class="wrongbook"></div>

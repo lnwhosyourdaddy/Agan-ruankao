@@ -7,7 +7,7 @@
 <title>第 1 小时 · 绪论与备考总纲 · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
-<meta name="build-stamp" content="2026-10-03 16:34:16">
+<meta name="build-stamp" content="2026-10-04 00:39:59">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -54,8 +54,13 @@
   --danger-bg:#fbeeee;
   --danger-line:#dd7d7d;
 
-  --gold:#a67c00;
-  --gold-bg:#fbf6e3;
+--gold:#a67c00;
+--gold-bg:#fbf6e3;
+/* 记忆口诀框（紫）——与墨绿主色同属低饱和冷调，不抢主色 */
+--mem:#6d4a8f;
+--mem-bg:#f4f1f8;
+--mem-line:#8b6bb0;
+--mem-fg:#4a3460;
 
   --radius:10px;
   --radius-lg:16px;
@@ -107,8 +112,12 @@ html[data-theme="dark"]{
   --danger-bg:#251818;
   --danger-line:#8a4545;
 
-  --gold:#d9bb6a;
-  --gold-bg:#262210;
+--gold:#d9bb6a;
+--gold-bg:#262210;
+--mem:#c9b0e0;
+--mem-bg:#221a2c;
+--mem-line:#7d5fa0;
+--mem-fg:#dccdf0;
 
   --shadow-1:0 1px 2px rgba(0,0,0,.16);
   --shadow-2:0 4px 16px rgba(0,0,0,.26);
@@ -1487,6 +1496,63 @@ html.focus-mode .focus-exit-dot{
     padding:10px 15px; font-size:12.5px;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   整合自外部笔记模板（蓝白风 → 转译为本项目墨绿设计系统）
+   借用其「结构」，颜色全部走本项目语义变量：
+     · .block.mem      记忆口诀框（紫）
+     · .fig/.figcaption 图容器 + 图题（含 mermaid 图 .fig-mermaid）
+     · .tag            行内小标签
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ---------- 记忆口诀框（紫）---------- */
+.mem{background:var(--mem-bg);border-color:var(--mem-line);border-left-color:var(--mem-line);color:var(--mem-fg)}
+.mem .block-title{color:var(--mem-line)}
+.main .block.mem{background:var(--mem-bg);border-left-color:var(--mem-line)}
+.main .block.mem .block-title{color:var(--mem-line)}
+/* 口诀正文用等宽感更强的字重，方便朗读记忆 */
+.mem strong{color:var(--mem-line)}
+
+/* ---------- 图容器 + 图题 ---------- */
+.fig{
+  margin:1.8em 0;
+  padding:16px 18px 12px;
+  background:var(--bg-card);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  text-align:center;
+}
+.fig svg{max-width:100%;height:auto}
+.fig figcaption{
+  margin-top:10px;
+  font-size:12.8px;
+  line-height:1.6;
+  color:var(--fg-2);
+  letter-spacing:.02em;
+}
+/* mermaid 图单独放开内边距，图本身已有留白 */
+.fig-mermaid{padding:18px 10px 12px;overflow-x:auto}
+.main .fig{background:var(--bg-card)}
+.main .fig figcaption{color:var(--fg-2)}
+
+/* ---------- 行内小标签 ---------- */
+.tag{
+  display:inline-block;
+  padding:1px 9px;
+  margin-right:5px;
+  border-radius:999px;
+  font-size:11.5px;
+  font-weight:600;
+  line-height:1.7;
+  background:var(--accent-soft);
+  color:var(--accent);
+  border:1px solid var(--accent-soft-2);
+  white-space:nowrap;
+}
+.tag.warn{background:var(--warn-bg);color:var(--warn-fg);border-color:var(--warn-line)}
+.tag.exam{background:var(--gold-bg);color:var(--gold);border-color:var(--gold)}
+.tag.mem{background:var(--mem-bg);color:var(--mem-line);border-color:var(--mem-line)}
+.main .tag{font-family:var(--sans)}
 </style>
 </head>
 <body>
@@ -1506,7 +1572,7 @@ html.focus-mode .focus-exit-dot{
     <h1 id="第-1-小时-绪论与备考总纲">第 1 小时 · 绪论与备考总纲</h1>
 <h2 id="章节考点分析">章节考点分析</h2>
 <p>本学时不讲具体知识点，而是<strong>先把考场规则吃透</strong>。系分三科各自有完全不同的时间结构与判分方式，<br>盲目刷题而不理解规则，是二战考生最常见的失分原因。</p>
-<div class="mermaid-src" data-src="flowchart LR
+<div class="fig fig-mermaid"><div class="mermaid-src" data-src="flowchart LR
     A[&quot;系统分析师&lt;br/&gt;考试总纲&quot;] --&gt; B[&quot;&lt;b&gt;综合知识&lt;/b&gt;&lt;br/&gt;150分/75题&lt;br/&gt;客观·含英文5题&quot;]
     A --&gt; C[&quot;&lt;b&gt;案例分析&lt;/b&gt;&lt;br/&gt;90分/5选3&lt;br/&gt;主观·踩点给分&quot;]
     A --&gt; D[&quot;&lt;b&gt;论文写作&lt;/b&gt;&lt;br/&gt;120分/2选1&lt;br/&gt;主观·五维度评分&quot;]
@@ -1516,7 +1582,7 @@ html.focus-mode .focus-exit-dot{
     D --&gt; D2[&quot;正文 2000~3000字&quot;]
     B --&gt; E[&quot;及格线&lt;br/&gt;各 45 分&quot;]
     C --&gt; E
-    D --&gt; E"></div>
+    D --&gt; E"></div></div>
 <h3 id="导读小贴士">【导读小贴士】</h3>
 <p>系分与中项最大的不同：<strong>三科同时考、必须全部及格</strong>，且案例与论文都是<strong>主观题、按点给分</strong>。<br>所以你的策略不该是"哪科分高多投入"，而是<strong>先确保三科都摸到 45 分线，再谈拔高</strong>。</p>
 <hr>
@@ -1525,13 +1591,13 @@ html.focus-mode .focus-exit-dot{
 <table><thead><tr><th>时段</th><th>科目</th><th>时长</th><th>分值</th><th>题型</th></tr></thead><tbody><tr><td>8:30–11:00</td><td>综合知识</td><td>150 分钟</td><td>75</td><td>单选（70）+ 英文单选（5，第71–75）</td></tr><tr><td>11:00–12:30</td><td>案例分析</td><td>90 分钟</td><td>75</td><td>5 题，<strong>第1题必答 + 选2题</strong></td></tr><tr><td>14:30–16:30</td><td>论文写作</td><td>120 分钟</td><td>75</td><td>2 题<strong>选1</strong>（多答无效）</td></tr></tbody></table>
 <div class="quote"><p><strong>关键规则（易错）</strong></p><ul><li>上午两科<strong>连续 240 分钟</strong>，综合提前交卷，<strong>结余时间全部给案例</strong></li><li>案例多答无效：<strong>阅卷只按前 2 道选做题计分</strong></li><li>论文多答无效：<strong>按第一道计分</strong></li><li>三科均 <strong>≥45 分</strong> 才算通过，任一科不过即整体不通过</li></ul></div>
 <h3 id="s2-三科的判分逻辑完全不同">2. 三科的判分逻辑完全不同</h3>
-<div class="mermaid-src" data-src="flowchart TD
+<div class="fig fig-mermaid"><div class="mermaid-src" data-src="flowchart TD
     F[&quot;考试判分逻辑&quot;] --&gt; F1[&quot;综合知识&lt;br/&gt;✅ 客观题&quot;]
     F --&gt; F2[&quot;案例分析&lt;br/&gt;⚠️ 按点给分&quot;]
     F --&gt; F3[&quot;论文写作&lt;br/&gt;⚠️ 按维度给分&quot;]
     F1 --&gt; F1a[&quot;会就是会，不会就是蒙&lt;br/&gt;→ 关键是&lt;b&gt;覆盖广度&lt;/b&gt;&quot;]
     F2 --&gt; F2a[&quot;答出关键词即得分&lt;br/&gt;→ 关键是&lt;b&gt;答题结构与踩点&lt;/b&gt;&quot;]
-    F3 --&gt; F3a[&quot;看项目真实度与分析深度&lt;br/&gt;→ 关键是&lt;b&gt;结构完整 + 数据自洽&lt;/b&gt;&quot;]"></div>
+    F3 --&gt; F3a[&quot;看项目真实度与分析深度&lt;br/&gt;→ 关键是&lt;b&gt;结构完整 + 数据自洽&lt;/b&gt;&quot;]"></div></div>
 <h3 id="s3-三科备考投入建议">3. 三科备考投入建议</h3>
 <table><thead><tr><th>科目</th><th>投入</th><th>原因</th></tr></thead><tbody><tr><td>综合知识</td><td>30%</td><td>知识点固定，靠覆盖与刷题，提分边际效用递减</td></tr><tr><td>案例分析</td><td>30%</td><td><strong>结构化程度最高</strong>，掌握答题模板后提分最快</td></tr><tr><td>论文写作</td><td><strong>40%</strong></td><td><strong>最容易翻车</strong>，且最难临场速成，必须提前定型</td></tr></tbody></table>
 <div class="quote"><p><strong>为什么论文占 40%</strong>：论文是唯一一个"考前没定型就必然失败"的科目。<br>摘要字数不够（<120 字）、正文不足（<1200 字）、项目口径前后不一致——这三条任意一条就是不及格。<br>而这些必须<strong>提前练到条件反射</strong>，考场 120 分钟内补不出来。</p></div>
