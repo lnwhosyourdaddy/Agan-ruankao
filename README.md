@@ -27,4 +27,13 @@
 
 ## 部署说明
 
-本仓库由 `deploy/deploy.sh` 自动同步，**只包含构建产物**（HTML），不包含生成工具源码。
+本仓库只保留**构建产物**（HTML + robots / sitemap / NOTICE / .nojekyll），
+**不包含生成工具源码**（build.py / design.css / app.js / sync.sh / deploy.sh 均在 `site/` 目录，永不进仓库）。
+
+发布流程：
+
+```bash
+cd ../site
+./sync.sh --build     # 重建 HTML
+./deploy.sh sync      # 检查 → 同步产物 → 提交 → 推送
+```
