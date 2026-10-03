@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   发布前请把下面的 lnwhosyourdaddy.github.io/Agan-ruankao 替换成你的真实域名
-  生成日期：2026-10-03
+  更新日期：2026-10-04（新增 H06 / H07 / H08 计算机网络与分布式系统）
 -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
@@ -11,6 +11,41 @@
   </url>
   <url>
     <loc>https://lnwhosyourdaddy.github.io/Agan-ruankao/H01.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://lnwhosyourdaddy.github.io/Agan-ruankao/H06.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://lnwhosyourdaddy.github.io/Agan-ruankao/H07.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://lnwhosyourdaddy.github.io/Agan-ruankao/H08.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://lnwhosyourdaddy.github.io/Agan-ruankao/H12.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://lnwhosyourdaddy.github.io/Agan-ruankao/H13.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://lnwhosyourdaddy.github.io/Agan-ruankao/H19.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://lnwhosyourdaddy.github.io/Agan-ruankao/H20.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>

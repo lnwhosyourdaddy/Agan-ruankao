@@ -7,7 +7,7 @@
 <title>第 12 小时 · 企业信息化（一）· 信息化规划 · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
-<meta name="build-stamp" content="2026-10-04 01:07:20">
+<meta name="build-stamp" content="2026-10-04 01:24:26">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -1532,6 +1532,18 @@ html.focus-mode .focus-exit-dot{
 }
 /* mermaid 图单独放开内边距，图本身已有留白 */
 .fig-mermaid{padding:18px 10px 12px;overflow-x:auto}
+/* Slidev 手绘 SVG：颜色为深底黑板调（文字 #f2efe4），
+   放进浅色正文会隐形 → 套深色卡片还原原始配色。
+   ⚠️ 选择器必须带 .main（下文有 `.main .fig{background:var(--bg-card)}`，
+      同为 2 类时后者胜出 → 深色底会被浅色覆盖，字又隐形）。
+      所以这里用 `.main .fig.fig-slidev`（3 类）压住它。 */
+.fig-slidev{padding:14px 10px 10px}
+.main .fig.fig-slidev,
+.fig.fig-slidev{
+  background:#142b20;
+  border-color:#24402f;
+}
+.fig-slidev svg{width:100%;height:auto;max-height:420px}
 .main .fig{background:var(--bg-card)}
 .main .fig figcaption{color:var(--fg-2)}
 
@@ -1558,7 +1570,7 @@ html.focus-mode .focus-exit-dot{
 <body>
 <header class="topbar">
   <a class="brand" href="index.html"><span class="brand-mark">48</span><span>阿甘系分</span><span class="brand-sub">冲刺手册</span></a>
-  <nav class="nav"><a href="index.html" class="">首页</a><a href="H01.html" class="">H01 绪论</a><a href="H12.html" class="active">H12 信息化（一）</a><a href="H13.html" class="">H13 信息化（二）</a><a href="H19.html" class="">H19 信息安全（一）</a><a href="H20.html" class="">H20 信息安全（二）</a><a href="H23.html" class="">H23 需求工程</a><a href="H45.html" class="">H45 论文专项</a></nav>
+  <nav class="nav"><a href="index.html" class="">首页</a><a href="H01.html" class="">H01 绪论</a><a href="H06.html" class="">H06 网络（一）</a><a href="H07.html" class="">H07 网络（二）</a><a href="H08.html" class="">H08 分布式与云</a><a href="H12.html" class="active">H12 信息化（一）</a><a href="H13.html" class="">H13 信息化（二）</a><a href="H19.html" class="">H19 信息安全（一）</a><a href="H20.html" class="">H20 信息安全（二）</a><a href="H23.html" class="">H23 需求工程</a><a href="H45.html" class="">H45 论文专项</a></nav>
   <div class="theme-switch" role="group" aria-label="主题">
     <button class="theme-btn" data-theme="light" type="button">浅</button>
     <button class="theme-btn" data-theme="dark" type="button">深</button>
@@ -1710,7 +1722,15 @@ html.focus-mode .focus-exit-dot{
 <p>⑩<strong>数据管理最重要的标准是一致性标准</strong>——数据命名、数据属性、数据设计、数据使用的一致性。</p>
 <p>十原则口诀：<strong>例外不当真 · 领导要支持 · 实在又简明 · 留有余地 · 不迁就落后 · 容易执行 · 靠宣传不靠命令 · 重在有标准 · 逐步推行 · 一致性为王</strong></p>
 <h3 id="s6-2-信息资源规划-IRP-七步两条主线">6.2 信息资源规划 IRP · 七步两条主线 ⭐</h3>
-<p><svg viewBox="0 0 700 400" class="draw" style="width:100%;max-height:400px"><br><defs><br><marker id="irpAr" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 z" fill="#f2efe4" opacity="0.6"/></marker><br></defs><br><rect x="230" y="6" width="240" height="34" rx="8" fill="rgba(243,205,87,.14)" stroke="#f3cd57" stroke-width="1.4"/><br><text x="350" y="28" font-size="14px" fill="#f2efe4" text-anchor="middle">① 定义职能域</text><br><line x1="280" y1="40" x2="180" y2="66" stroke="#f2efe4" stroke-opacity="0.45" stroke-width="1.4" marker-end="url(#irpAr)"/><br><line x1="420" y1="40" x2="520" y2="66" stroke="#f2efe4" stroke-opacity="0.45" stroke-width="1.4" marker-end="url(#irpAr)"/><br><rect x="30" y="70" width="300" height="38" rx="8" fill="rgba(127,196,236,.12)" stroke="#7fc4ec" stroke-width="1.4"/><br><text x="180" y="86" font-size="13px" fill="#7fc4ec" text-anchor="middle">② 各职能域 · 业务分析</text><br><text x="180" y="101" font-size="11.5px" fill="#f2efe4" opacity="0.6" text-anchor="middle">职能域-业务过程-业务活动　三层业务模型</text><br><rect x="370" y="70" width="300" height="38" rx="8" fill="rgba(99,203,217,.12)" stroke="#63cbd9" stroke-width="1.4"/><br><text x="520" y="86" font-size="13px" fill="#63cbd9" text-anchor="middle">③ 各职能域 · 数据分析</text><br><text x="520" y="101" font-size="11.5px" fill="#f2efe4" opacity="0.6" text-anchor="middle">用户视图采集→分组分析→数据元素分析</text><br><line x1="180" y1="108" x2="300" y2="134" stroke="#f2efe4" stroke-opacity="0.45" stroke-width="1.4" marker-end="url(#irpAr)"/><br><line x1="520" y1="108" x2="400" y2="134" stroke="#f2efe4" stroke-opacity="0.45" stroke-width="1.4" marker-end="url(#irpAr)"/><br><rect x="200" y="138" width="300" height="38" rx="8" fill="rgba(134,216,148,.12)" stroke="#86d894" stroke-width="1.4"/><br><text x="350" y="154" font-size="13px" fill="#86d894" text-anchor="middle">④ 建立整个企业的 IRM 基础标准</text><br><text x="350" y="169" font-size="11.5px" fill="#f2efe4" opacity="0.6" text-anchor="middle">业务模型 ⇄ 数据模型 在此汇合定型</text><br><line x1="280" y1="176" x2="180" y2="202" stroke="#f2efe4" stroke-opacity="0.45" stroke-width="1.4" marker-end="url(#irpAr)"/><br><line x1="420" y1="176" x2="520" y2="202" stroke="#f2efe4" stroke-opacity="0.45" stroke-width="1.4" marker-end="url(#irpAr)"/><br><rect x="30" y="206" width="300" height="38" rx="8" fill="rgba(179,154,222,.12)" stroke="#b39ade" stroke-width="1.4"/><br><text x="180" y="222" font-size="13px" fill="#b39ade" text-anchor="middle">⑤ 建立信息系统功能模型</text><br><text x="180" y="237" font-size="11.5px" fill="#f2efe4" opacity="0.6" text-anchor="middle">子系统 → 功能模块 → 程序单元</text><br><rect x="370" y="206" width="300" height="38" rx="8" fill="rgba(179,154,222,.12)" stroke="#b39ade" stroke-width="1.4"/><br><text x="520" y="222" font-size="13px" fill="#b39ade" text-anchor="middle">⑥ 建立信息系统数据模型</text><br><text x="520" y="237" font-size="11.5px" fill="#f2efe4" opacity="0.6" text-anchor="middle">主题数据库 → 基本表 → 扩展表</text><br><line x1="180" y1="244" x2="310" y2="272" stroke="#f2efe4" stroke-opacity="0.45" stroke-width="1.4" marker-end="url(#irpAr)"/><br><line x1="520" y1="244" x2="390" y2="272" stroke="#f2efe4" stroke-opacity="0.45" stroke-width="1.4" marker-end="url(#irpAr)"/><br><rect x="200" y="276" width="300" height="38" rx="8" fill="rgba(236,123,123,.12)" stroke="#ec7b7b" stroke-width="1.4"/><br><text x="350" y="292" font-size="13px" fill="#ec7b7b" text-anchor="middle">⑦ 建立关联矩阵（CU 矩阵）</text><br><text x="350" y="307" font-size="11.5px" fill="#f2efe4" opacity="0.6" text-anchor="middle">功能 × 数据 的对应关系</text><br><text x="350" y="348" font-size="13px" fill="#f3cd57" text-anchor="middle">业务主线（左）　＋　数据主线（右）　两条腿走路</text><br><text x="350" y="372" font-size="12px" fill="#f2efe4" opacity="0.55" text-anchor="middle">需求分析是系统建模的准备；系统建模是用户需求的定型和规范化表达</text><br></svg></p>
+<div class="fig fig-mermaid"><div class="mermaid-src" data-src="flowchart TB
+  B1[&quot;① 定义职能域&quot;] --&gt; B2[&quot;② 各职能域 · 业务分析&lt;br/&gt;职能域—业务过程—业务活动&lt;br/&gt;（三层业务模型）&quot;]
+  B1 --&gt; D1[&quot;③ 各职能域 · 数据分析&lt;br/&gt;用户视图采集→分组分析→数据元素分析&quot;]
+  B2 --&gt; D2[&quot;④ 建立整个企业的 IRM 基础标准&lt;br/&gt;业务模型 ⇄ 数据模型 在此汇合定型&quot;]
+  D1 --&gt; D2
+  D2 --&gt; B3[&quot;⑤ 建立信息系统功能模型&lt;br/&gt;子系统 → 功能模块 → 程序单元&quot;]
+  D2 --&gt; D3[&quot;⑥ 建立信息系统数据模型&lt;br/&gt;主题数据库 → 基本表 → 扩展表&quot;]
+  B3 --&gt; E[&quot;⑦ 建立关联矩阵（CU 矩阵）&lt;br/&gt;功能 × 数据 的对应关系&quot;]
+  D3 --&gt; E"></div><figcaption>图6-1 信息资源规划（IRP）七步：业务主线与数据主线「两条腿走路」</figcaption></div>
 <p>🧠两条主线怎么区分</p>
 <p>业务主线（功能需求分析）</p>
 <ul><li>成果 = <strong>业务模型</strong>（也叫系统功能模型 / 企业模型）</li><li>三层结构：<strong>职能域 → 业务过程 → 业务活动</strong></li><li>业务活动是<strong>最小的、不可再分解</strong>的功能单元</li></ul>
@@ -1746,7 +1766,14 @@ html.focus-mode .focus-exit-dot{
 <p>企业信息化规划不仅涉及信息系统规划，同时与企业规划、业务流程建模等紧密相关，是融合<strong>企业战略、管理规划、业务流程重组</strong>等内容的<strong>"业务＋管理＋技术"</strong>的规划活动。</p>
 <p>口诀：<strong>规划是"业务＋管理＋技术"三合一</strong>，不是单纯的 IT 技术规划。</p>
 <h3 id="s6-3-五层规划-谁支撑谁">6.3 五层规划 · 谁支撑谁</h3>
-<p><svg viewBox="0 0 1150 320" class="draw" style="width:100%;max-height:320px"><br><defs><br><marker id="pgAr" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 z" fill="#f3cd57" opacity="0.75"/></marker><br></defs><br><rect x="40" y="10" width="330" height="48" rx="9" fill="rgba(243,205,87,.14)" stroke="#f3cd57" stroke-width="1.5"/><br><text x="205" y="31" font-size="15px" fill="#f3cd57" text-anchor="middle">企业战略规划</text><br><text x="205" y="49" font-size="11.5px" fill="#f2efe4" opacity="0.6" text-anchor="middle">用机会威胁评价环境，用优劣势评价现状</text><br><text x="392" y="40" font-size="13px" fill="#f2efe4" opacity="0.72">← 企业如何达到目标？</text><br><rect x="40" y="74" width="330" height="48" rx="9" fill="rgba(127,196,236,.13)" stroke="#7fc4ec" stroke-width="1.5"/><br><text x="205" y="95" font-size="15px" fill="#7fc4ec" text-anchor="middle">信息系统战略规划</text><br><text x="205" y="113" font-size="11.5px" fill="#f2efe4" opacity="0.6" text-anchor="middle">对信息系统远景、组成架构、逻辑关系做规划</text><br><text x="392" y="104" font-size="13px" fill="#f2efe4" opacity="0.72">← 信息系统如何支撑这些目标？</text><br><rect x="40" y="138" width="330" height="48" rx="9" fill="rgba(99,203,217,.13)" stroke="#63cbd9" stroke-width="1.5"/><br><text x="205" y="159" font-size="15px" fill="#63cbd9" text-anchor="middle">信息技术战略规划（IT 战略）</text><br><text x="205" y="177" font-size="11.5px" fill="#f2efe4" opacity="0.6" text-anchor="middle">对硬件、软件、支撑环境做具体规划</text><br><text x="392" y="168" font-size="13px" fill="#f2efe4" opacity="0.72">← 需要哪些信息技术来支撑？</text><br><rect x="40" y="202" width="330" height="48" rx="9" fill="rgba(134,216,148,.13)" stroke="#86d894" stroke-width="1.5"/><br><text x="205" y="223" font-size="15px" fill="#86d894" text-anchor="middle">信息资源规划（IRP）</text><br><text x="205" y="241" font-size="11.5px" fill="#f2efe4" opacity="0.6" text-anchor="middle">数据需求分析 · 信息资源标准 · 资源整合</text><br><text x="392" y="232" font-size="13px" fill="#f2efe4" opacity="0.72">← 为具体建设项目做数据准备</text><br><rect x="40" y="266" width="330" height="48" rx="9" fill="rgba(179,154,222,.13)" stroke="#b39ade" stroke-width="1.5"/><br><text x="205" y="287" font-size="15px" fill="#b39ade" text-anchor="middle">信息化建设具体项目的实施</text><br><text x="205" y="305" font-size="11.5px" fill="#f2efe4" opacity="0.6" text-anchor="middle">落到一个个可交付的项目上</text><br><text x="392" y="296" font-size="13px" fill="#f2efe4" opacity="0.72">← 落地执行</text><br><line x1="205" y1="58" x2="205" y2="72" stroke="#f3cd57" stroke-opacity="0.6" stroke-width="1.6" marker-end="url(#pgAr)"/><br><line x1="205" y1="122" x2="205" y2="136" stroke="#f3cd57" stroke-opacity="0.6" stroke-width="1.6" marker-end="url(#pgAr)"/><br><line x1="205" y1="186" x2="205" y2="200" stroke="#f3cd57" stroke-opacity="0.6" stroke-width="1.6" marker-end="url(#pgAr)"/><br><line x1="205" y1="250" x2="205" y2="264" stroke="#f3cd57" stroke-opacity="0.6" stroke-width="1.6" marker-end="url(#pgAr)"/><br><text x="762" y="62" font-size="14px" fill="#f3cd57" text-anchor="start">自上而下分解</text><br><text x="762" y="256" font-size="14px" fill="#63cbd9" text-anchor="start">自下而上反馈修正</text><br><line x1="712" y1="76" x2="712" y2="192" stroke="#f3cd57" stroke-opacity="0.6" stroke-width="2" marker-end="url(#pgAr)"/><br><line x1="732" y1="192" x2="732" y2="76" stroke="#63cbd9" stroke-opacity="0.6" stroke-width="2" marker-end="url(#pgAr)"/><br><text x="762" y="128" font-size="12px" fill="#f2efe4" opacity="0.6" text-anchor="start">所有规划都围绕</text><br><text x="762" y="146" font-size="12px" fill="#f2efe4" opacity="0.6" text-anchor="start">企业关键目标而展开</text><br></svg></p>
+<div class="fig fig-mermaid"><div class="mermaid-src" data-src="flowchart TB
+  A[&quot;企业战略规划&lt;br/&gt;用机会威胁评价环境&lt;br/&gt;用优劣势评价现状&lt;br/&gt;← 企业如何达到目标？&quot;] --&gt; B[&quot;信息系统战略规划&lt;br/&gt;对信息系统远景、组成架构、逻辑关系做规划&lt;br/&gt;← 信息系统如何支撑这些目标？&quot;]
+  B --&gt; C[&quot;信息技术战略规划（IT 战略）&lt;br/&gt;对硬件、软件、支撑环境做具体规划&lt;br/&gt;← 需要哪些信息技术来支撑？&quot;]
+  C --&gt; D[&quot;信息资源规划（IRP）&lt;br/&gt;数据需求分析 · 信息资源标准 · 资源整合&lt;br/&gt;← 为具体建设项目做数据准备&quot;]
+  D --&gt; E[&quot;信息化建设具体项目的实施&lt;br/&gt;落到一个个可交付的项目上&lt;br/&gt;← 落地执行&quot;]
+  E -.-&gt;|&quot;自下而上反馈修正&quot;| A
+  GO[&quot;所有规划都围绕&lt;br/&gt;企业关键目标而展开&quot;]
+  A -.-&gt; GO"></div><figcaption>图6-2 信息系统战略规划五层：自上而下分解、自下而上反馈</figcaption></div>
 <p>💡 <strong>IT 战略规划四步骤</strong>：业务分析（理解业务部门现在与未来）→ 检查当前 IT 架构和信息系统 → 识别机会（定义通过信息系统改进业务的机会）→ 选择方案。</p>
 <p>⚠️ <strong>四层规划最容易混</strong>：企业战略管"做什么业务"，信息系统战略管"系统架构"，IT 战略管"硬件软件环境"，IRP 管"数据"。<strong>越往下越具体、越偏技术</strong>。</p>
 <h3 id="s6-3-信息化战略-vs-企业战略-三阶段">6.3 信息化战略 vs 企业战略 · 三阶段</h3>
@@ -2026,7 +2053,7 @@ html.focus-mode .focus-exit-dot{
   <span class="item"><kbd class="kbd">P</kbd> 答下一题</span>
   <span class="item"><kbd class="kbd">0</kbd> 回顶部</span>
 </div>
-    <nav class="pager"><a class="pg pg-prev" href="H01.html"><span class="pg-label">上一学时</span><span class="pg-title">绪论与备考总纲</span></a><a class="pg pg-next" href="H13.html"><span class="pg-label">下一学时</span><span class="pg-title">企业信息化（二）· 信息系统与商务</span></a></nav>
+    <nav class="pager"><a class="pg pg-prev" href="H08.html"><span class="pg-label">上一学时</span><span class="pg-title">分布式系统、构件与云计算</span></a><a class="pg pg-next" href="H13.html"><span class="pg-label">下一学时</span><span class="pg-title">企业信息化（二）· 信息系统与商务</span></a></nav>
     <footer class="footer">
   <p><strong>阿甘系分 · 48 小时冲刺手册</strong></p>
   <p class="sep">非官方出版物 · 与软考办无隶属关系 · 内容均为独立原创编写</p>

@@ -7,7 +7,7 @@
 <title>阿甘系分 · 48 小时冲刺手册 · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
-<meta name="build-stamp" content="2026-10-04 01:07:20">
+<meta name="build-stamp" content="2026-10-04 01:24:26">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -1532,6 +1532,18 @@ html.focus-mode .focus-exit-dot{
 }
 /* mermaid 图单独放开内边距，图本身已有留白 */
 .fig-mermaid{padding:18px 10px 12px;overflow-x:auto}
+/* Slidev 手绘 SVG：颜色为深底黑板调（文字 #f2efe4），
+   放进浅色正文会隐形 → 套深色卡片还原原始配色。
+   ⚠️ 选择器必须带 .main（下文有 `.main .fig{background:var(--bg-card)}`，
+      同为 2 类时后者胜出 → 深色底会被浅色覆盖，字又隐形）。
+      所以这里用 `.main .fig.fig-slidev`（3 类）压住它。 */
+.fig-slidev{padding:14px 10px 10px}
+.main .fig.fig-slidev,
+.fig.fig-slidev{
+  background:#142b20;
+  border-color:#24402f;
+}
+.fig-slidev svg{width:100%;height:auto;max-height:420px}
 .main .fig{background:var(--bg-card)}
 .main .fig figcaption{color:var(--fg-2)}
 
@@ -1558,7 +1570,7 @@ html.focus-mode .focus-exit-dot{
 <body>
 <header class="topbar">
   <a class="brand" href="index.html"><span class="brand-mark">48</span><span>阿甘系分</span><span class="brand-sub">冲刺手册</span></a>
-  <nav class="nav"><a href="index.html" class="active">首页</a><a href="H01.html" class="">H01 绪论</a><a href="H12.html" class="">H12 信息化（一）</a><a href="H13.html" class="">H13 信息化（二）</a><a href="H19.html" class="">H19 信息安全（一）</a><a href="H20.html" class="">H20 信息安全（二）</a><a href="H23.html" class="">H23 需求工程</a><a href="H45.html" class="">H45 论文专项</a></nav>
+  <nav class="nav"><a href="index.html" class="active">首页</a><a href="H01.html" class="">H01 绪论</a><a href="H06.html" class="">H06 网络（一）</a><a href="H07.html" class="">H07 网络（二）</a><a href="H08.html" class="">H08 分布式与云</a><a href="H12.html" class="">H12 信息化（一）</a><a href="H13.html" class="">H13 信息化（二）</a><a href="H19.html" class="">H19 信息安全（一）</a><a href="H20.html" class="">H20 信息安全（二）</a><a href="H23.html" class="">H23 需求工程</a><a href="H45.html" class="">H45 论文专项</a></nav>
   <div class="theme-switch" role="group" aria-label="主题">
     <button class="theme-btn" data-theme="light" type="button">浅</button>
     <button class="theme-btn" data-theme="dark" type="button">深</button>
@@ -1602,7 +1614,7 @@ html.focus-mode .focus-exit-dot{
 <ol><li><strong>按学时推进</strong>：每晚 1–2 个学时，周末集中做专项</li><li><strong>先做题再看解析</strong>：每学时末的交互题即时判分，错题自动进错题本</li><li><strong>进度自动保存</strong>：页面内作答记录存在本地，换设备不同步（无需账号）</li><li><strong>考前 2 周</strong>：进入「全真模拟」，按真实时段（8:30 / 14:30）计时</li></ol>
 <h2 id="s48-学时总目录">48 学时总目录</h2>
 <h3 id="第一篇-基础知识">第一篇 · 基础知识</h3>
-<table><thead><tr><th>学时</th><th>内容</th><th>章</th></tr></thead><tbody><tr><td>H1</td><td><strong>绪论与备考总纲</strong> ✅ 已上线</td><td>1</td></tr><tr><td>H2–H3</td><td>数学与工程基础</td><td>2</td></tr><tr><td>H4–H5</td><td>计算机系统</td><td>3</td></tr><tr><td>H6–H8</td><td>计算机网络与分布式系统</td><td>4</td></tr><tr><td>H9–H11</td><td>数据库系统</td><td>5</td></tr><tr><td>H12–H13</td><td><strong>企业信息化战略</strong>（H12 / H13 已上线 ✅）</td><td>6</td></tr><tr><td>H14–H16</td><td>软件工程</td><td>7</td></tr><tr><td>H17–H18</td><td>项目管理</td><td>8</td></tr><tr><td>H19–H20</td><td><strong>信息安全</strong>（H19 / H20 已上线 ✅）</td><td>9</td></tr></tbody></table>
+<table><thead><tr><th>学时</th><th>内容</th><th>章</th></tr></thead><tbody><tr><td>H1</td><td><strong>绪论与备考总纲</strong> ✅ 已上线</td><td>1</td></tr><tr><td>H2–H3</td><td>数学与工程基础</td><td>2</td></tr><tr><td>H4–H5</td><td>计算机系统</td><td>3</td></tr><tr><td>H6–H8</td><td><strong>计算机网络与分布式系统</strong>（H6 / H7 / H8 已上线 ✅）</td><td>4</td></tr><tr><td>H9–H11</td><td>数据库系统</td><td>5</td></tr><tr><td>H12–H13</td><td><strong>企业信息化战略</strong>（H12 / H13 已上线 ✅）</td><td>6</td></tr><tr><td>H14–H16</td><td>软件工程</td><td>7</td></tr><tr><td>H17–H18</td><td>项目管理</td><td>8</td></tr><tr><td>H19–H20</td><td><strong>信息安全</strong>（H19 / H20 已上线 ✅）</td><td>9</td></tr></tbody></table>
 <h3 id="第二篇-关键技术">第二篇 · 关键技术</h3>
 <table><thead><tr><th>学时</th><th>内容</th><th>章</th></tr></thead><tbody><tr><td>H21–H22</td><td>系统规划与分析</td><td>10</td></tr><tr><td>H23–H25</td><td><strong>软件需求工程</strong>（H23 已上线 ✅）</td><td>11</td></tr><tr><td>H26–H28</td><td>软件架构设计</td><td>12</td></tr><tr><td>H29–H30</td><td>系统设计</td><td>13</td></tr><tr><td>H31–H32</td><td>软件实现与测试</td><td>14</td></tr><tr><td>H33–H34</td><td>系统运行与维护</td><td>15</td></tr></tbody></table>
 <h3 id="第三篇-案例实践">第三篇 · 案例实践</h3>
@@ -1610,8 +1622,8 @@ html.focus-mode .focus-exit-dot{
 <h3 id="专项模块-差异化核心">专项模块（差异化核心）</h3>
 <table><thead><tr><th>学时</th><th>内容</th></tr></thead><tbody><tr><td>H42–H44</td><td><strong>案例分析专项</strong> — 四步答题法 + 题型模板 + 真题演练</td></tr><tr><td>H45–H46</td><td><strong>论文写作专项</strong>（H45 已上线 ✅）— 评分五维度 + 结构骨架 + 项目背景</td></tr><tr><td>H47–H48</td><td><strong>全真模拟与冲刺复盘</strong></td></tr></tbody></table>
 <h2 id="当前-MVP-已上线">当前 MVP 已上线</h2>
-<div class="block tip"><div class="block-title">试读章节</div><ul><li><strong><a href="H01.html">H1 · 绪论与备考总纲</a></strong> — 先搞清考什么、怎么分配时间</li><li><strong><a href="H12.html">H12 · 企业信息化（一）· 信息化规划</a></strong> — 真题占比最高的章（10.1%）</li><li><strong><a href="H13.html">H13 · 企业信息化（二）· 信息系统与商务</a></strong> — 缩写全家桶 + 电商/政务/BPR/EAI</li><li><strong><a href="H19.html">H19 · 信息安全（一）· 安全体系与加密认证</a></strong> — 真题第二大章（8.8%）</li><li><strong><a href="H20.html">H20 · 信息安全（二）· 网络安全与可靠性</a></strong> — 防火墙/协议分层 + 串并联计算</li><li><strong><a href="H23.html">H23 · 软件需求工程</a></strong> — 案例题与论文的共同地基</li><li><strong><a href="H45.html">H45 · 论文写作专项</a></strong> — 评分五维度与结构骨架</li></ul></div>
-<div class="quote"><p><strong>上线顺序按真题权重</strong>：第 6 章（10.1%）→ 第 9 章信息安全（8.8%）→ 第 4 章计算机网络（7.0%）→ 第 7 章软件工程 → 第 12 章架构设计。<br>权重取自课件封面的真题统计（分母 557 题），不是教材的知识点卡标注——<strong>两者差异很大</strong>（如第 6 章知识点卡标"低频 4%"，实际 10.1%）。</p></div>
+<div class="block tip"><div class="block-title">试读章节</div><ul><li><strong><a href="H01.html">H1 · 绪论与备考总纲</a></strong> — 先搞清考什么、怎么分配时间</li><li><strong><a href="H06.html">H6 · 计算机网络（一）· 数据通信与协议体系</a></strong> — 奈氏/香农、海明码、OSI 七层</li><li><strong><a href="H07.html">H7 · 计算机网络（二）· TCP/IP 与网络工程</a></strong> — 子网划分必考计算 + 端口速记</li><li><strong><a href="H08.html">H8 · 分布式系统、构件与云计算</a></strong> — 透明性八种 + 三模型四部署</li><li><strong><a href="H12.html">H12 · 企业信息化（一）· 信息化规划</a></strong> — 真题占比最高的章（10.1%）</li><li><strong><a href="H13.html">H13 · 企业信息化（二）· 信息系统与商务</a></strong> — 缩写全家桶 + 电商/政务/BPR/EAI</li><li><strong><a href="H19.html">H19 · 信息安全（一）· 安全体系与加密认证</a></strong> — 真题第二大章（8.8%）</li><li><strong><a href="H20.html">H20 · 信息安全（二）· 网络安全与可靠性</a></strong> — 防火墙/协议分层 + 串并联计算</li><li><strong><a href="H23.html">H23 · 软件需求工程</a></strong> — 案例题与论文的共同地基</li><li><strong><a href="H45.html">H45 · 论文写作专项</a></strong> — 评分五维度与结构骨架</li></ul></div>
+<div class="quote"><p><strong>上线顺序按真题权重</strong>：第 6 章（10.1%）✅ → 第 9 章信息安全（8.8%）✅ → 第 4 章计算机网络（7.0%）✅ → 第 7 章软件工程 → 第 12 章架构设计。<br>权重取自课件封面的真题统计（分母 557 题），不是教材的知识点卡标注——<strong>两者差异很大</strong>（如第 6 章知识点卡标"低频 4%"，实际 10.1%）。</p></div>
 <hr>
     
     <div class="wrongbook"></div>

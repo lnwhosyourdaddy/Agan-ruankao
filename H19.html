@@ -7,7 +7,7 @@
 <title>第 19 小时 · 信息安全（一）· 安全体系与加密认证 · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
-<meta name="build-stamp" content="2026-10-04 01:07:20">
+<meta name="build-stamp" content="2026-10-04 01:24:26">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -1532,6 +1532,18 @@ html.focus-mode .focus-exit-dot{
 }
 /* mermaid 图单独放开内边距，图本身已有留白 */
 .fig-mermaid{padding:18px 10px 12px;overflow-x:auto}
+/* Slidev 手绘 SVG：颜色为深底黑板调（文字 #f2efe4），
+   放进浅色正文会隐形 → 套深色卡片还原原始配色。
+   ⚠️ 选择器必须带 .main（下文有 `.main .fig{background:var(--bg-card)}`，
+      同为 2 类时后者胜出 → 深色底会被浅色覆盖，字又隐形）。
+      所以这里用 `.main .fig.fig-slidev`（3 类）压住它。 */
+.fig-slidev{padding:14px 10px 10px}
+.main .fig.fig-slidev,
+.fig.fig-slidev{
+  background:#142b20;
+  border-color:#24402f;
+}
+.fig-slidev svg{width:100%;height:auto;max-height:420px}
 .main .fig{background:var(--bg-card)}
 .main .fig figcaption{color:var(--fg-2)}
 
@@ -1558,7 +1570,7 @@ html.focus-mode .focus-exit-dot{
 <body>
 <header class="topbar">
   <a class="brand" href="index.html"><span class="brand-mark">48</span><span>阿甘系分</span><span class="brand-sub">冲刺手册</span></a>
-  <nav class="nav"><a href="index.html" class="">首页</a><a href="H01.html" class="">H01 绪论</a><a href="H12.html" class="">H12 信息化（一）</a><a href="H13.html" class="">H13 信息化（二）</a><a href="H19.html" class="active">H19 信息安全（一）</a><a href="H20.html" class="">H20 信息安全（二）</a><a href="H23.html" class="">H23 需求工程</a><a href="H45.html" class="">H45 论文专项</a></nav>
+  <nav class="nav"><a href="index.html" class="">首页</a><a href="H01.html" class="">H01 绪论</a><a href="H06.html" class="">H06 网络（一）</a><a href="H07.html" class="">H07 网络（二）</a><a href="H08.html" class="">H08 分布式与云</a><a href="H12.html" class="">H12 信息化（一）</a><a href="H13.html" class="">H13 信息化（二）</a><a href="H19.html" class="active">H19 信息安全（一）</a><a href="H20.html" class="">H20 信息安全（二）</a><a href="H23.html" class="">H23 需求工程</a><a href="H45.html" class="">H45 论文专项</a></nav>
   <div class="theme-switch" role="group" aria-label="主题">
     <button class="theme-btn" data-theme="light" type="button">浅</button>
     <button class="theme-btn" data-theme="dark" type="button">深</button>
@@ -1689,7 +1701,13 @@ html.focus-mode .focus-exit-dot{
 <p>口诀：<strong>对称快而不便分发，非对称慢而便于交换</strong>——所以实际系统都是"混合加密"。</p>
 <h3 id="s9-2-混合加密与数字信封">9.2 混合加密与数字信封 ⭐</h3>
 <p>🔀混合加密（实际系统的标准做法）</p>
-<p><svg viewBox="0 0 520 300" class="draw" style="width:100%;max-height:300px"><br><defs><br><marker id="hxAr" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 z" fill="#f2efe4" opacity="0.6"/></marker><br></defs><br><rect x="20" y="30" width="120" height="40" rx="9" fill="rgba(243,205,87,.14)" stroke="#f3cd57" stroke-width="1.5"/><br><text x="80" y="50" font-size="12.5px" fill="#f3cd57" text-anchor="middle">原始数据</text><br><text x="80" y="64" font-size="11px" fill="#f2efe4" opacity="0.6" text-anchor="middle">（可能很大）</text><br><line x1="140" y1="50" x2="190" y2="50" stroke="#f2efe4" stroke-opacity="0.45" stroke-width="1.5" marker-end="url(#hxAr)"/><br><rect x="195" y="30" width="130" height="40" rx="9" fill="rgba(134,216,148,.13)" stroke="#86d894" stroke-width="1.5"/><br><text x="260" y="50" font-size="12.5px" fill="#86d894" text-anchor="middle">对称密钥加密</text><br><text x="260" y="64" font-size="11px" fill="#f2efe4" opacity="0.6" text-anchor="middle">快 · 适合大数据</text><br><line x1="325" y1="50" x2="375" y2="50" stroke="#f2efe4" stroke-opacity="0.45" stroke-width="1.5" marker-end="url(#hxAr)"/><br><rect x="380" y="30" width="120" height="40" rx="9" fill="rgba(99,203,217,.13)" stroke="#63cbd9" stroke-width="1.5"/><br><text x="440" y="55" font-size="12.5px" fill="#63cbd9" text-anchor="middle">密文数据</text><br><rect x="20" y="140" width="120" height="46" rx="9" fill="rgba(243,205,87,.14)" stroke="#f3cd57" stroke-width="1.5"/><br><text x="80" y="160" font-size="12.5px" fill="#f3cd57" text-anchor="middle">会话密钥</text><br><text x="80" y="176" font-size="11px" fill="#f2efe4" opacity="0.6" text-anchor="middle">（很小）</text><br><line x1="140" y1="163" x2="190" y2="163" stroke="#f2efe4" stroke-opacity="0.45" stroke-width="1.5" marker-end="url(#hxAr)"/><br><rect x="195" y="140" width="130" height="46" rx="9" fill="rgba(236,123,123,.13)" stroke="#ec7b7b" stroke-width="1.5"/><br><text x="260" y="160" font-size="12.5px" fill="#ec7b7b" text-anchor="middle">接收方公钥加密</text><br><text x="260" y="176" font-size="11px" fill="#f2efe4" opacity="0.6" text-anchor="middle">慢 · 但数据小无所谓</text><br><line x1="325" y1="163" x2="375" y2="163" stroke="#f2efe4" stroke-opacity="0.45" stroke-width="1.5" marker-end="url(#hxAr)"/><br><rect x="380" y="140" width="120" height="46" rx="9" fill="rgba(236,123,123,.13)" stroke="#ec7b7b" stroke-width="1.5"/><br><text x="440" y="163" font-size="13px" fill="#ec7b7b" text-anchor="middle">数字信封</text><br><text x="440" y="178" font-size="11px" fill="#f2efe4" opacity="0.6" text-anchor="middle">Digital Envelope</text><br><rect x="80" y="230" width="420" height="48" rx="9" fill="rgba(179,154,222,.13)" stroke="#b39ade" stroke-width="1.5"/><br><text x="290" y="250" font-size="13px" fill="#b39ade" text-anchor="middle">两者一起发送 → 接收方先用私钥拆信封得到对称密钥</text><br><text x="290" y="268" font-size="12.5px" fill="#f2efe4" opacity="0.75" text-anchor="middle">→ 再用对称密钥解密数据</text><br><text x="290" y="294" font-size="12px" fill="#86d894" text-anchor="middle">兼得"对称的快"与"非对称的密钥交换便利"</text><br></svg></p>
+<div class="fig fig-mermaid"><div class="mermaid-src" data-src="flowchart LR
+  A[&quot;原始数据&lt;br/&gt;（可能很大）&quot;] --&gt;|&quot;① 对称密钥加密&lt;br/&gt;快 · 适合大数据&quot;| B[&quot;密文数据&quot;]
+  C[&quot;会话密钥&lt;br/&gt;（很小）&quot;] --&gt;|&quot;② 接收方公钥加密&lt;br/&gt;慢 · 但数据量小无所谓&quot;| D[&quot;数字信封&lt;br/&gt;Digital Envelope&quot;]
+  B --&gt; E[&quot;两者一起发送给接收方&quot;]
+  D --&gt; E
+  E --&gt;|&quot;③ 接收方用私钥拆信封&lt;br/&gt;拿到对称密钥&quot;| F[&quot;④ 用对称密钥解密数据&quot;]
+  F --&gt; G[&quot;兼得「对称的快」&lt;br/&gt;与「非对称的密钥交换便利」&quot;]"></div><figcaption>图9-1 数字信封：对称加密大数据 + 非对称加密会话密钥</figcaption></div>
 <p>✉️数字信封（教材定义）</p>
 <p>数字信封是用加密技术来保证<strong>只有规定的特定接收人</strong>才能阅读通信的内容。</p>
 <p><strong>步骤</strong>：</p>
@@ -1711,7 +1729,12 @@ html.focus-mode .focus-exit-dot{
 <p>②<strong>不可否认</strong>——发送者事后<strong>不能抵赖</strong>对数据的签名</p>
 <p>③<strong>完整性</strong>——接收者<strong>不能伪造</strong>对数据的签名</p>
 <p>🔑签名用哪把钥匙？（必考）</p>
-<p><svg viewBox="0 0 500 250" class="draw" style="width:100%;max-height:250px"><br><defs><br><marker id="sgAr" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 z" fill="#f2efe4" opacity="0.6"/></marker><br></defs><br><rect x="30" y="40" width="120" height="52" rx="9" fill="rgba(243,205,87,.14)" stroke="#f3cd57" stroke-width="1.5"/><br><text x="90" y="62" font-size="13px" fill="#f3cd57" text-anchor="middle">发送者</text><br><text x="90" y="79" font-size="11.5px" fill="#f2efe4" opacity="0.65" text-anchor="middle">用自己的私钥签名</text><br><rect x="30" y="150" width="120" height="52" rx="9" fill="rgba(255,255,255,.05)" stroke="#f2efe4" stroke-opacity="0.35" stroke-width="1.4"/><br><text x="90" y="172" font-size="13px" fill="#f2efe4" text-anchor="middle">原文 + 签名</text><br><text x="90" y="189" font-size="11.5px" fill="#f2efe4" opacity="0.6" text-anchor="middle">（原文明文传输！）</text><br><line x1="150" y1="176" x2="210" y2="176" stroke="#f2efe4" stroke-opacity="0.45" stroke-width="1.5" marker-end="url(#sgAr)"/><br><rect x="215" y="150" width="120" height="52" rx="9" fill="rgba(99,203,217,.13)" stroke="#63cbd9" stroke-width="1.5"/><br><text x="275" y="172" font-size="13px" fill="#63cbd9" text-anchor="middle">接收者</text><br><text x="275" y="189" font-size="11.5px" fill="#f2efe4" opacity="0.65" text-anchor="middle">用发送者公钥验证</text><br><rect x="215" y="40" width="120" height="52" rx="9" fill="rgba(134,216,148,.13)" stroke="#86d894" stroke-width="1.5"/><br><text x="275" y="62" font-size="12.5px" fill="#86d894" text-anchor="middle">保证：完整性</text><br><text x="275" y="79" font-size="12.5px" fill="#86d894" text-anchor="middle">+ 不可否认 + 认证</text><br><line x1="90" y1="92" x2="90" y2="148" stroke="#f2efe4" stroke-opacity="0.35" stroke-width="1.3" marker-end="url(#sgAr)"/><br><line x1="275" y1="148" x2="275" y2="94" stroke="#f2efe4" stroke-opacity="0.35" stroke-width="1.3" marker-end="url(#sgAr)"/><br><rect x="370" y="90" width="110" height="110" rx="10" fill="rgba(236,123,123,.12)" stroke="#ec7b7b" stroke-width="1.5"/><br><text x="425" y="115" font-size="12.5px" fill="#ec7b7b" text-anchor="middle">⚠️ 注意</text><br><text x="425" y="136" font-size="11.5px" fill="#f2efe4" opacity="0.75" text-anchor="middle">签名 ≠ 加密</text><br><text x="425" y="154" font-size="11.5px" fill="#f2efe4" opacity="0.75" text-anchor="middle">签名：私钥签</text><br><text x="425" y="171" font-size="11.5px" fill="#f2efe4" opacity="0.75" text-anchor="middle">加密：公钥加</text><br><text x="425" y="191" font-size="11.5px" fill="#ec7b7b" text-anchor="middle">签名不能保密</text><br></svg></p>
+<div class="fig fig-mermaid"><div class="mermaid-src" data-src="flowchart LR
+  A[&quot;发送者&quot;] --&gt;|&quot;用自己的私钥签名&quot;| B[&quot;原文 + 签名&lt;br/&gt;（原文明文传输！）&quot;]
+  B --&gt; C[&quot;接收者&quot;]
+  C --&gt;|&quot;用发送者公钥验证&quot;| D[&quot;保证：完整性&lt;br/&gt;+ 不可否认 + 身份认证&quot;]
+  W[&quot;⚠️ 签名 ≠ 加密&lt;br/&gt;签名：私钥签 · 公钥验&lt;br/&gt;加密：公钥加 · 私钥解&lt;br/&gt;签名不能保密&quot;]
+  B -.-&gt; W"></div><figcaption>图9-2 数字签名：私钥签名、公钥验证 —— 保完整性与不可否认，不保密</figcaption></div>
 <p>⚠️ <strong>三条高频辨析</strong>：① 数字签名用<strong>私钥签、公钥验</strong>；② 签名<strong>不能保证机密性</strong>（原文明文传），只保证完整性与不可否认；③ MD5 / SHA 是<strong>摘要算法</strong>，<strong>不可逆</strong>，不是加密算法。</p>
 <h3 id="s9-2-2-摘要算法-MD5-SHA-MAC">9.2.2 摘要算法 · MD5 / SHA / MAC</h3>
 <p>#️⃣单向 Hash 函数（杂凑函数）</p>

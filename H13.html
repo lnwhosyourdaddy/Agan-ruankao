@@ -7,7 +7,7 @@
 <title>第 13 小时 · 企业信息化（二）· 信息系统与商务 · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
-<meta name="build-stamp" content="2026-10-04 01:07:20">
+<meta name="build-stamp" content="2026-10-04 01:24:26">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -1532,6 +1532,18 @@ html.focus-mode .focus-exit-dot{
 }
 /* mermaid 图单独放开内边距，图本身已有留白 */
 .fig-mermaid{padding:18px 10px 12px;overflow-x:auto}
+/* Slidev 手绘 SVG：颜色为深底黑板调（文字 #f2efe4），
+   放进浅色正文会隐形 → 套深色卡片还原原始配色。
+   ⚠️ 选择器必须带 .main（下文有 `.main .fig{background:var(--bg-card)}`，
+      同为 2 类时后者胜出 → 深色底会被浅色覆盖，字又隐形）。
+      所以这里用 `.main .fig.fig-slidev`（3 类）压住它。 */
+.fig-slidev{padding:14px 10px 10px}
+.main .fig.fig-slidev,
+.fig.fig-slidev{
+  background:#142b20;
+  border-color:#24402f;
+}
+.fig-slidev svg{width:100%;height:auto;max-height:420px}
 .main .fig{background:var(--bg-card)}
 .main .fig figcaption{color:var(--fg-2)}
 
@@ -1558,7 +1570,7 @@ html.focus-mode .focus-exit-dot{
 <body>
 <header class="topbar">
   <a class="brand" href="index.html"><span class="brand-mark">48</span><span>阿甘系分</span><span class="brand-sub">冲刺手册</span></a>
-  <nav class="nav"><a href="index.html" class="">首页</a><a href="H01.html" class="">H01 绪论</a><a href="H12.html" class="">H12 信息化（一）</a><a href="H13.html" class="active">H13 信息化（二）</a><a href="H19.html" class="">H19 信息安全（一）</a><a href="H20.html" class="">H20 信息安全（二）</a><a href="H23.html" class="">H23 需求工程</a><a href="H45.html" class="">H45 论文专项</a></nav>
+  <nav class="nav"><a href="index.html" class="">首页</a><a href="H01.html" class="">H01 绪论</a><a href="H06.html" class="">H06 网络（一）</a><a href="H07.html" class="">H07 网络（二）</a><a href="H08.html" class="">H08 分布式与云</a><a href="H12.html" class="">H12 信息化（一）</a><a href="H13.html" class="active">H13 信息化（二）</a><a href="H19.html" class="">H19 信息安全（一）</a><a href="H20.html" class="">H20 信息安全（二）</a><a href="H23.html" class="">H23 需求工程</a><a href="H45.html" class="">H45 论文专项</a></nav>
   <div class="theme-switch" role="group" aria-label="主题">
     <button class="theme-btn" data-theme="light" type="button">浅</button>
     <button class="theme-btn" data-theme="dark" type="button">深</button>

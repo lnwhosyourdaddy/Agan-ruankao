@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="light dark">
-<title>第 45 小时 · 论文写作专项（一） · 阿甘系分 48 小时冲刺</title>
+<title>第 6 小时 · 计算机网络（一）· 数据通信与协议体系 · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
 <meta name="build-stamp" content="2026-10-04 01:24:26">
@@ -1570,7 +1570,7 @@ html.focus-mode .focus-exit-dot{
 <body>
 <header class="topbar">
   <a class="brand" href="index.html"><span class="brand-mark">48</span><span>阿甘系分</span><span class="brand-sub">冲刺手册</span></a>
-  <nav class="nav"><a href="index.html" class="">首页</a><a href="H01.html" class="">H01 绪论</a><a href="H06.html" class="">H06 网络（一）</a><a href="H07.html" class="">H07 网络（二）</a><a href="H08.html" class="">H08 分布式与云</a><a href="H12.html" class="">H12 信息化（一）</a><a href="H13.html" class="">H13 信息化（二）</a><a href="H19.html" class="">H19 信息安全（一）</a><a href="H20.html" class="">H20 信息安全（二）</a><a href="H23.html" class="">H23 需求工程</a><a href="H45.html" class="active">H45 论文专项</a></nav>
+  <nav class="nav"><a href="index.html" class="">首页</a><a href="H01.html" class="">H01 绪论</a><a href="H06.html" class="active">H06 网络（一）</a><a href="H07.html" class="">H07 网络（二）</a><a href="H08.html" class="">H08 分布式与云</a><a href="H12.html" class="">H12 信息化（一）</a><a href="H13.html" class="">H13 信息化（二）</a><a href="H19.html" class="">H19 信息安全（一）</a><a href="H20.html" class="">H20 信息安全（二）</a><a href="H23.html" class="">H23 需求工程</a><a href="H45.html" class="">H45 论文专项</a></nav>
   <div class="theme-switch" role="group" aria-label="主题">
     <button class="theme-btn" data-theme="light" type="button">浅</button>
     <button class="theme-btn" data-theme="dark" type="button">深</button>
@@ -1581,75 +1581,227 @@ html.focus-mode .focus-exit-dot{
   <aside class="toc"></aside>
   <article class="main">
     
-    <h1 id="第-45-小时-论文写作专项-一">第 45 小时 · 论文写作专项（一）</h1>
-<h2 id="章节考点分析">章节考点分析</h2>
-<p>论文是<strong>唯一一个"考前没定型就必然失败"的科目</strong>——它不能靠临场发挥，120 分钟内既要选题、又要写满 2000 字，<br>还要保证数字口径不自相矛盾。本学时解决三个问题：<strong>评分怎么给、结构怎么定、背景怎么备</strong>。</p>
-<div class="fig fig-mermaid"><div class="mermaid-src" data-src="flowchart TD
-    A[&quot;论文写作&lt;br/&gt;120分钟 · 2选1&quot;] --&gt; B[&quot;&lt;b&gt;评分五维度&lt;/b&gt;&quot;]
-    A --&gt; C[&quot;&lt;b&gt;三段式结构&lt;/b&gt;&quot;]
-    A --&gt; D[&quot;&lt;b&gt;项目背景定型&lt;/b&gt;&quot;]
-    B --&gt; B1[&quot;切合题意 30%&quot;]
-    B --&gt; B2[&quot;应用深度 20%&quot;]
-    B --&gt; B3[&quot;实践性 20%&quot;]
-    B --&gt; B4[&quot;表达能力 15%&quot;]
-    B --&gt; B5[&quot;综合与分析 15%&quot;]
-    C --&gt; C1[&quot;项目概要与角色&lt;br/&gt;400~600字&quot;]
-    C --&gt; C2[&quot;方法/技术清单与特点&lt;br/&gt;800~1200字&quot;]
-    C --&gt; C3[&quot;结合项目的选型与效果&lt;br/&gt;600~800字&quot;]
-    D --&gt; D1[&quot;三大子系统 + 技术栈&lt;br/&gt;数字全文锁死&quot;]
-    B1 --&gt; E[&quot;及格 45 分&quot;]"></div></div>
-<h3 id="导读小贴士">【导读小贴士】</h3>
-<p>三个"<strong>绝对不能犯</strong>"的错：① 摘要不到 120 字 → <strong>直接不及格</strong>；② 正文不到 1200 字 → 踩线；<br>③ <strong>项目数字前后不一致</strong>（今天 800 万明天 900 万）→ "项目不真实"嫌疑。<br>这三条都可以靠<strong>考前定型 + 提前练习</strong>完全规避。</p>
-<hr>
-<h2 id="基础知识点">【基础知识点】</h2>
-<h3 id="s1-评分五维度-权重从高到低">1. 评分五维度（权重从高到低）</h3>
-<table><thead><tr><th>排序</th><th>维度</th><th>权重</th><th>你该怎么用</th></tr></thead><tbody><tr><td>1</td><td><strong>切合题意</strong></td><td><strong>30%</strong></td><td><strong>逐题作答</strong>，把 3 个设问当 3 个小标题，答什么写什么</td></tr><tr><td>2</td><td>应用深度与水平</td><td>20%</td><td>讲<strong>为什么这么选</strong>，不停留在罗列教材</td></tr><tr><td>3</td><td>实践性</td><td>20%</td><td>写<strong>真实项目的痛点与体会</strong>，有具体场景</td></tr><tr><td>4</td><td>表达能力</td><td>15%</td><td>结构清晰、术语首尾一致、段落 ≤8 行</td></tr><tr><td>5</td><td>综合能力与分析能力</td><td>15%</td><td>举一反三、有独立见解、关注行业新趋势</td></tr></tbody></table>
-<div class="quote"><p><strong>切题 30% 是最大权重</strong> —— 这就是"万能模板套所有题目"必然低分的原因：<br>模板再好，答的不是人家问的，这 30% 先丢掉。</p></div>
-<h3 id="s2-硬性字数要求">2. 硬性字数要求</h3>
-<table><thead><tr><th>项</th><th>要求</th><th>红线</th></tr></thead><tbody><tr><td><strong>摘要</strong></td><td>300～400 字（350 以上稳妥）</td><td><strong>< 120 字 = 直接不及格</strong></td></tr><tr><td><strong>正文</strong></td><td>2000～3000 字（最佳约 2500）</td><td><strong>< 1200 字 = 严重扣分/不及格</strong></td></tr></tbody></table>
-<div class="block tip"><div class="block-title">摘要 = 全文的抽象，不是正文的延伸</div><p>好的摘要让人<strong>不看正文就知道全文写了什么</strong>。<br>标准写法 = <strong>一句话项目背景（谁/什么项目/我担任何职）+ 论点 + 结论（成效）</strong>。</p></div>
-<h3 id="s3-三段式标准结构">3. 三段式标准结构</h3>
-<div class="fig fig-mermaid"><div class="mermaid-src" data-src="flowchart LR
-    S1[&quot;&lt;b&gt;第一段&lt;/b&gt;&lt;br/&gt;项目概要与角色&lt;br/&gt;400~600字&quot;] --&gt; S2[&quot;&lt;b&gt;第二段&lt;/b&gt;&lt;br/&gt;方法/技术清单与特点&lt;br/&gt;800~1200字&quot;]
-    S2 --&gt; S3[&quot;&lt;b&gt;第三段&lt;/b&gt;&lt;br/&gt;结合项目的选型与效果&lt;br/&gt;600~800字&quot;]
-    S1 --&gt; S1a[&quot;背景 / 规模 / 体制 /&lt;br/&gt;我担任的角色&quot;]
-    S2 --&gt; S2a[&quot;针对设问给出方法清单&lt;br/&gt;说明各自特点&lt;br/&gt;&lt;b&gt;选 2~3 个深入展开&lt;/b&gt;&quot;]
-    S3 --&gt; S3a[&quot;我是怎么选的&lt;br/&gt;为什么适合这个项目&lt;br/&gt;取得了什么效果&quot;]"></div></div>
-<p><strong>三条操作要点</strong>：</p>
-<ol><li><strong>先定"段字数"再动笔</strong>——防止写到后面段落严重失衡</li><li>第二段<strong>不要面面俱到</strong>：列 5 个方法但每个都浅尝辄水 = 蜻蜓点水，反而失分</li><li>第一段的<strong>项目数字必须从头到尾一致</strong>（见 §5 项目背景卡）</li></ol>
-<h3 id="s4-120-分钟时间分配-必须练到条件反射">4. 120 分钟时间分配（<strong>必须练到条件反射</strong>）</h3>
-<table><thead><tr><th>环节</th><th>时长</th><th>说明</th></tr></thead><tbody><tr><td>选题</td><td>3 min</td><td>选最熟悉的那题，<strong>别忘了写题号考号</strong></td></tr><tr><td>构思</td><td>12 min</td><td>立论点、定摘要内容、列提纲、分配字数</td></tr><tr><td><strong>摘要</strong></td><td><strong>15 min</strong></td><td>先写摘要——若失控会导致灾难性后果</td></tr><tr><td>正文</td><td>80 min</td><td>三段式展开</td></tr><tr><td>检查</td><td>10 min</td><td>字数、数字一致性、术语一致性、笔误</td></tr></tbody></table>
-<div class="block warning"><div class="block-title">最容易出事的地方</div><p><strong>很多人先写正文、最后补摘要</strong> → 时间失控 → 摘要来不及写 → 触发 <120 字不及格红线。<br><strong>正确顺序：摘要在正文之前写。</strong></p></div>
-<h3 id="s5-项目背景定型-唯一口径">5. 项目背景定型（唯一口径）</h3>
-<div class="quote"><p><strong>原则</strong>：考场上只用这一个项目，越写越熟。<strong>所有数字全文锁死，任何一篇论文不得改动</strong>。<br>改一个字就有"项目不真实"嫌疑——这是阅卷人最敏感的扣分点。</p></div>
-<h4 id="背景卡-脱敏版-对外通用口径">背景卡（脱敏版·对外通用口径）</h4>
-<table><thead><tr><th>项</th><th>口径</th><th>用途</th></tr></thead><tbody><tr><td><strong>行业</strong></td><td>某头部<strong>物业服务集团</strong>（覆盖多省，报修/投诉/缴费提醒/满意度回访场景）</td><td>背景段</td></tr><tr><td><strong>公司代称</strong></td><td><strong>阿甘科技</strong>（对外一律用此代称）</td><td>背景段</td></tr><tr><td><strong>投资</strong></td><td><strong>千万级</strong></td><td>摘要</td></tr><tr><td><strong>周期</strong></td><td><strong>11 个月</strong></td><td>摘要</td></tr><tr><td><strong>团队</strong></td><td><strong>20 余人</strong></td><td>背景段</td></tr><tr><td><strong>规模</strong></td><td><strong>三大子系统，40 余个功能模块</strong></td><td>背景段</td></tr></tbody></table>
-<h4 id="三大子系统-背景段套用">三大子系统（背景段套用）</h4>
-<ol><li><strong>AI 智能客服</strong>：400 语音呼入应答 + AI 外呼回访（满意度采集、工单完工回访、超时未上门回访），含话术引擎、知识库、转人工兜底</li><li><strong>人工坐席工作台</strong>：呼入呼出、IVR 导航、呼叫溢出分配、坐席状态管理、通话记录与质检</li><li><strong>运营管理后台</strong>：外呼任务管理、动态报表（接通率/转人工率/A-D 意向）、数据导出、成员权限</li></ol>
-<h4 id="技术栈-一行版">技术栈（一行版）</h4>
-<div class="quote"><p>前后端分离 + 微服务：Vue.js + Spring Boot / Spring Cloud（Nacos、Gateway），MySQL + Redis + MongoDB，<br>RabbitMQ 消息队列，Docker + Kubernetes 私有化部署，对接云厂商 ASR 语音识别能力。</p></div>
-<h4 id="背景段写作骨架-约-500-字">背景段写作骨架（约 500 字）</h4>
-<pre><code>【痛点 3 个】干系人多 / 场景复杂 / 集成点多
-    ↓
-【目标】一句话说清要解决什么
-    ↓
-【规模】三大子系统 + 40 余个模块
-    ↓
-【技术栈】一行
-    ↓
-【我的职责】我作为系统分析师，负责需求管理与系统分析
-</code></pre>
-<h3 id="s6-六条不及格红线-考前逐条自查">6. 六条不及格红线（<strong>考前逐条自查</strong>）</h3>
-<table><thead><tr><th>#</th><th>红线</th><th>后果</th></tr></thead><tbody><tr><td>1</td><td>虚构情节 / 严重失实</td><td>一票否决</td></tr><tr><td>2</td><td>通篇纯理论、无实际经验</td><td>一票否决</td></tr><tr><td>3</td><td>内容方法陈旧或项目水准低下</td><td>扣分</td></tr><tr><td>4</td><td><strong>不切题意 / 空洞泛泛</strong>（30% 权重没了）</td><td>扣分</td></tr><tr><td>5</td><td><strong>正文 < 1200 字</strong></td><td>踩线/不及格</td></tr><tr><td>6</td><td>文理不通、错别字多、字迹潦草</td><td>扣分</td></tr></tbody></table>
-<h3 id="s7-两项加分机会-5-10-分">7. 两项加分机会（5～10 分）</h3>
-<ul><li><strong>独特见解 + 深入体会</strong>（体现分析能力）</li><li><strong>符合当今系统发展的新趋势</strong>（如 AI 辅助、云原生、数据要素等——贴合你的 AI 客服项目天然有优势）</li></ul>
-<hr>
-<h2 id="补充知识点-常见失分模式">补充知识点：常见失分模式</h2>
-<table><thead><tr><th>失分模式</th><th>表现</th><th>纠正</th></tr></thead><tbody><tr><td><strong>走题</strong></td><td>不读 3 个设问，直接套三段论</td><td>先把 3 个设问抄成小标题，逐条作答</td></tr><tr><td><strong>蜻蜓点水</strong></td><td>方法列了七八个，每个两句带过</td><td>选 <strong>2~3 个</strong>结合项目深入写</td></tr><tr><td><strong>数字打架</strong></td><td>前后投资额、人数不一致</td><td>考前把背景卡背成条件反射</td></tr><tr><td><strong>摘要挤占正文</strong></td><td>摘要写太久，正文写不完</td><td>摘要控制 15 分钟，用固定句式快速成稿</td></tr><tr><td><strong>纯罗列</strong></td><td>只说"我用了微服务"，不说为什么</td><td>每个选型补一句"<strong>因为……所以选它</strong>"</td></tr></tbody></table>
+    <h1 id="第-6-小时-计算机网络-一-数据通信与协议体系">第 6 小时 · 计算机网络（一）· 数据通信与协议体系</h1>
+<div class="quote"><p>第 4 章<strong>真题占比 7.0%</strong>（39/557），是全教材第三大章。<br>本学时覆盖 <strong>4.1 数据通信基础 + 4.2 体系结构与协议</strong> —— 定理公式与分层概念的地基。</p></div>
+<div class="block gold"><div class="block-title">考情定位</div><p>三块必拿：① <strong>奈奎斯特与香农定理计算</strong>（给带宽/信噪比求速率）；② <strong>海明码校验位个数</strong>（m+k+1 ≤ 2ᵏ）；③ <strong>OSI 七层与设备归属层</strong>（中继器/交换机/路由器的层级）。</p></div>
+<div class="block warning"><div class="block-title">易错陷阱</div><p><strong>奈氏管无噪、香农管有噪</strong>：奈氏 B = 2W 只给波特率，且<strong>与信噪比无关</strong>；香农 C = W·log₂(1+S/N) 给的是最大数据速率，<strong>与离散值个数无关</strong>。两者混用是最常见的失分点。</p></div>
+<h2 id="第-4-章知识骨架">第 4 章知识骨架</h2>
+<div class="fig fig-mermaid"><div class="mermaid-src" data-src="mindmap
+ root((04上 计算机网络))
+   4.1 数据通信基础
+     通信子网 资源子网
+     奈奎斯特定理 B=2W
+     数据速率 R=B·log₂N
+     香农定理 C=W·log₂（1+S/N）
+     误码率 信道延迟
+     模拟编码 AM FM PM
+     数字编码 NRZ 曼彻斯特
+     4B/5B
+     差错控制 奇偶校验
+     海明码
+     CRC 循环冗余校验
+   4.2 体系结构与协议 ★★
+     协议三要素
+     OSI 七层
+     设备归属层
+     TCP/IP 四层映射
+     TCP UDP
+     三次握手 四次挥手
+     端口号
+     ARP RARP ICMP
+     IP 地址分类
+     子网划分
+     CIDR 路由汇聚
+     IPv6
+   4.3 局域网与广域网 ★
+     LAN 特点
+     四种拓扑结构
+     以太网 CSMA/CD
+     监听算法三种
+     802.3 802.3u 802.3z
+     无线 802.11 CSMA/CA
+     广域网 SONET SDH DDN FR ATM
+   4.4 网络工程
+     规划 需求分析
+     设计 分层模型
+     实施 七步"></div><figcaption>图4-0 第4章（上）网络知识骨架</figcaption></div>
+<h2 id="s4-1-计算机网络基础-两层划分">4.1 计算机网络基础 · 两层划分</h2>
+<p>计算机网络按<strong>数据通信和数据处理</strong>的功能可分为两层：</p>
+<ul><li><strong>内层 = 通信子网</strong>——由<strong>结点计算机和高速通信线路</strong>组成独立的数据系统，承担全网的数据<strong>传输、交换、加工和变换</strong>等通信处理工作</li><li><strong>外层 = 资源子网</strong>——包括<strong>计算机、终端、通信子网接口设备、外部设备及各种软件资源</strong>，负责全网的数据处理和向网络用户提供网络资源及网络服务</li></ul>
+<p><strong>📡通信子网（内层）</strong></p>
+<p><strong>管"传"</strong></p>
+<p>结点计算机 + 高速通信线路</p>
+<p>数据传输 · 交换 · 加工 · 变换</p>
+<p>对应 OSI 下三层（物理/链路/网络）</p>
+<p><strong>🖥️资源子网（外层）</strong></p>
+<p><strong>管"用"</strong></p>
+<p>计算机 · 终端 · 外设 · 软件资源</p>
+<p>数据处理 · 提供资源与服务</p>
+<p>对应 OSI 上三层以上（传输层及以上）</p>
+<p>💡 通信的三要素：<strong>信源</strong>（产生和发送信息）、<strong>信宿</strong>（接收信息）、<strong>信道</strong>（通信线路）。</p>
+<p>信息在传输中受<strong>噪声</strong>干扰——电信号受电磁场干扰，<strong>光纤信道基本不受电磁场干扰</strong>。</p>
+<h3 id="s4-1-1-奈奎斯特定理与数据速率">4.1.1 奈奎斯特定理与数据速率 ⭐</h3>
+<p><strong>📏基本概念</strong></p>
+<ul><li><strong>模拟信道带宽</strong>：<strong>W = f₂ − f₁</strong>（最低频率到最高频率），由信道物理特性决定</li><li><strong>码元</strong>：一个数字脉冲；码元速率 <strong>B = 1/T</strong>（T 为码元宽度），单位<strong>波特 Baud</strong>，也叫<strong>波特率</strong></li><li><strong>码元信息量</strong>：码元取 N 种离散值 → 一个码元携带 <strong>n = log₂N</strong> 位（N = 2ⁿ）</li><li><strong>数据速率</strong>：单位时间在信道上传送的<strong>信息量（位数）</strong>，单位 b/s</li></ul>
+<p><strong>奈奎斯特定理</strong>（1924，无噪声信道极限波特率）：B = 2W（Baud）</p>
+<p>奈奎斯特极限由信道<strong>物理特性</strong>决定——超过它传送脉冲信号是不可能的；要进一步提高波特率必须<strong>改善信道带宽</strong>。</p>
+<p><strong>🧮数据速率公式</strong></p>
+<p><strong>R = B · log₂N = 2W · log₂N</strong></p>
+<p>R：数据速率（b/s）；B：波特率；N：码元种类数</p>
+<p>⚠️ <strong>数据速率 ≠ 波特率</strong>——仅当码元取两个离散值（N=2）时，两者数值才相等。多电平编码可以让一个码元带更多位，数据速率成倍提高。</p>
+<p>✏️例题</p>
+<p>某信道带宽 <strong>W = 3000Hz</strong>，采用 4 种离散值（N=4）调制：</p>
+<ul><li>最大波特率 <strong>B = 2W = 6000 Baud</strong></li><li>一个码元携带 <strong>log₂4 = 2</strong> 位</li><li>最大数据速率 <strong>R = 6000 × 2 = 12000 b/s</strong></li></ul>
+<h3 id="s4-1-1-香农定理-误码率-信道延迟">4.1.1 香农定理 + 误码率 + 信道延迟</h3>
+<p><strong>🔊香农定理（有噪声信道）⭐</strong></p>
+<p><strong>C = W · log₂(1 + S/N)</strong></p>
+<p>W：信道带宽；S：信号平均功率；N：噪声平均功率；S/N：信噪比</p>
+<p><strong>分贝换算</strong>：<strong>dB = 10 · log₁₀(S/N)</strong></p>
+<p>例：S/N = 1000 → 信噪比 = 30dB；反推 30dB → S/N = 1000</p>
+<p><strong>教材例题</strong>：带宽 3000Hz，信噪比 30dB（S/N=1000）：</p>
+<p><strong>C = 3000 × log₂(1+1000) ≈ 3000 × 9.97 ≈ 30000 b/s</strong></p>
+<p>与离散值个数无关——只要信噪比给定，最大信息传输量就确定了；实际电话线能到 9600b/s 就很理想</p>
+<p><strong>⚠️误码率</strong></p>
+<p><strong>P꜀ = Nₑ（出错的位数）/ N（传送的总位数）</strong></p>
+<p>计算机通信网络中，误码率一般要求<strong>低于 10⁻⁶</strong>——即平均每传送 <strong>1Mb 才允许错 1b</strong>。</p>
+<p><strong>⏱️信道延迟</strong></p>
+<ul><li><strong>电信号</strong>：接近光速 <strong>300 m/μs</strong></li><li><strong>电缆中</strong>：约为光速的 77%，即 <strong>200 m/μs</strong> 左右</li><li><strong>500m 同轴电缆</strong>：时延约 <strong>2.5 μs</strong></li><li><strong>卫星信道</strong>：时延约 <strong>270 ms</strong></li></ul>
+<p>口诀：<strong>奈氏管"无噪"，香农管"有噪"；30dB 就是 1000 倍</strong></p>
+<h3 id="s4-1-2-数据编码-模拟编码三调制">4.1.2 数据编码 · 模拟编码三调制</h3>
+<p>📶数字数据 → 模拟信道：三种调制方式</p>
+<p>调幅 AM / ASK</p>
+<p><strong>载波振幅</strong>随基带数字信号变化<br>例：1 = 有载波输出，0 = 无载波输出</p>
+<p>又称<strong>幅移键控</strong><br>容易实现、技术简单，但抗干扰能力差**</p>
+<p>调频 FM / FSK</p>
+<p><strong>载波频率</strong>随基带数字信号变化<br>例：1 用频率 f₁，0 用频率 f₂</p>
+<p>又称<strong>频移键控</strong><br>容易实现、技术简单，抗干扰能力较强**</p>
+<p>调相 PM / PSK</p>
+<p><strong>载波初始相位</strong>随基带数字信号变化<br>例：1 = 相位 180°，0 = 相位 0°</p>
+<p>又称<strong>相移键控</strong><br>抗干扰能力较强，但实现技术比较复杂**</p>
+<p>💡 <strong>调制 = 波形变换 / 频谱变换</strong>：将数字信号的频谱变换成适合模拟信道传输的频谱。三者的差别在<strong>"变的那个参量"</strong>——振幅、频率、相位。</p>
+<p>口诀：<strong>幅易差，频较稳，相抗强但复杂</strong></p>
+<p>⚠️ <strong>常考对比</strong>：抗干扰能力 <strong>PM / FSK 强于 AM</strong>；实现复杂度 <strong>PM 最高</strong>。<br>题干给"抗干扰能力最强/较复杂" → 选<strong>调相 PSK</strong>。</p>
+<h3 id="s4-1-2-数字数据编码-曼彻斯特必考">4.1.2 数字数据编码 ⭐（曼彻斯特必考）</h3>
+<p>🔣基带传输的编码方式</p>
+<p>① 不归零编码 NRZ</p>
+<p><strong>低电平 = 0，高电平 = 1</strong><br>缺点：无法判断每一位的开始与结束，收发双方不能保持同步——必须另用一个信道传送同步信号</p>
+<p>② 曼彻斯特编码 ME ⭐</p>
+<p>用电平的<strong>跳变</strong>表示；<strong>每一比特的中间均有一个跳变</strong>——既作<strong>时钟信号</strong>又作<strong>数据信号</strong><br>电平从高到低跳变 = 1；从低到高跳变 = 0</p>
+<p>③ 差分曼彻斯特编码 DME</p>
+<p>每比特<strong>中间的跳变仅作同步之用</strong>；每比特的值由<strong>开始边界是否发生跳变</strong>决定<br>开始边界无跳变 = 1；有跳变 = 0</p>
+<p>④ 多电平编码</p>
+<p>码元可取 M=2ⁿ 个电平之一，每个码元代表 n 位 → <strong>数据速率大于波特率</strong>，提高频带利用率；但<strong>抗噪声特性不好</strong></p>
+<p>⚡编码效率</p>
+<p><strong>曼彻斯特 / 差分曼彻斯特</strong>：每位中间都有跳变 → 波特率是数据速率的两倍</p>
+<p>传 10Mb/s 数据需要 20MHz 脉冲；100Mb/s 网络需要 200MBaud，硬件成本是 100MBaud 的 5~10 倍</p>
+<ul><li><strong>优点</strong>：无须另发同步信号</li><li><strong>缺点</strong>：编码效率低（50%）</li><li><strong>⑤ 4B/5B 编码</strong>：用 <strong>5bit</strong> 二进制码代表 <strong>4bit</strong> 数据</li></ul>
+<p>→ 编码效率 4/5 = 80%，提高效率、降低电路成本</p>
+<p>口诀：<strong>曼彻斯特"高到低是 1"，差分"不跳是 1"；效率 50%，4B/5B 是 80%</strong></p>
+<h3 id="s4-1-3-差错控制-分类与奇偶校验">4.1.3 差错控制 · 分类与奇偶校验</h3>
+<p>🌪️差错的两大来源</p>
+<p><strong>随机错误（热噪声）</strong></p>
+<p>电子热运动产生，<strong>时刻存在</strong>、频谱宽、幅度小<br>信噪比越高差错越少<br><strong>影响个别位</strong></p>
+<p><strong>突发错误（冲击噪声）</strong></p>
+<p>外界电磁干扰（打雷闪电、电焊机）<br>持续时间短而<strong>幅度大</strong><br><strong>引起一个位串出错</strong></p>
+<p>💡 <strong>突发性差错影响局部，随机性差错断续存在、影响全局</strong>（教材原话）。</p>
+<p>✅奇偶校验 + 校验和</p>
+<p><strong>奇偶校验</strong>（最常用的检错方法）：在 7 位 ASCII 代码后增加一位，使码字中 1 的个数为<strong>奇数（奇校验）或偶数（偶校验）</strong>。</p>
+<p>传输后若<strong>一位（甚至奇数个位）</strong>出错，接收端按同样规则就能发现。</p>
+<p>方法简单实用，但只能对付少量的随机性错误。</p>
+<p><strong>校验和</strong>（为检测突发性位串错误）：把数据块中每个字节当作二进制整数，<strong>按模 256 相加</strong>，得到的和作为校验字节发送；接收端同样求和比较。</p>
+<p>实现时可对累加器取 2 的补码——不出错时接收端加完后累加器中是 0</p>
+<p>口诀：<strong>热噪声随机、冲击噪声突发；奇偶防随机，校验和防突发</strong></p>
+<h3 id="s4-1-3-海明码-必考计算">4.1.3 海明码 ⭐（必考计算）</h3>
+<p><strong>🧮海明距离与纠错能力</strong></p>
+<p><strong>海明距离</strong>：一个码字变成另一个码字时<strong>必须改变的最小位数</strong>。</p>
+<p>若任意两个码字的海明距离为 d：</p>
+<ul><li>所有 <strong>≤ d−1</strong> 位的错误都可以<strong>检测</strong>出来</li><li>所有 <strong>&lt; d/2</strong> 位的错误都可以<strong>纠正</strong></li></ul>
+<p>要纠正它就要用比仅仅检测它多一倍的冗余位</p>
+<p><strong>校验位个数 k 的下界（必背）</strong>：</p>
+<p>m + k + 1 ≤ 2ᵏ</p>
+<p>m：数据位；k：校验位（冗余位）；n = m + k</p>
+<p><strong>📐编码方法（海明方案）</strong></p>
+<ul><li><strong>① 校验位位置</strong>：海明把奇偶校验分配在 <strong>1、2、4、8 等 2 的幂</strong>位置上，其他位放数据</li><li><strong>② 校验位参加规则</strong>：把位号写成二进制：位号二进制中<strong>第 i 位为 1</strong> 的，就参加<strong>第 2^(i−1)</strong> 位校验</li></ul>
+<p>例：6 = 110 → 参加 2、4 位校验，不参加 1 位；9 = 1001 → 参加 1、8 位校验</p>
+<ul><li><strong>③ 校验位取值</strong>：按<strong>偶校验</strong>（或奇校验）计算各校验位</li><li><strong>④ 纠错</strong>：接收端按同样规则重算各校验位，出错校验位的<strong>位号相加</strong> = 错误位置</li></ul>
+<p>例：2 号位和 4 号位错 → 2 + 4 = 6，错在 6 号位</p>
+<p><strong>教材例</strong>：传送信息 <strong>1001011</strong>（m=7），k=4 → 满足 m+k+1=12 ≤ 2⁴=16；数据放 3、5、6、7、9、10、11 位，1、2、4、8 位留作校验位，按偶校验得码字 <strong>10110010011</strong>。若 6 号位出错 → 校验发现 2、4 号位错 → <strong>2+4=6</strong> 立即定位。</p>
+<h3 id="s4-1-3-循环冗余校验码-CRC">4.1.3 循环冗余校验码 CRC</h3>
+<p>♻️CRC 的特点与原理</p>
+<p><strong>循环码</strong>：任一有效码字经过<strong>循环移位</strong>后得到的码字仍然是有效码字。</p>
+<p><strong>CRC</strong> 是一种循环码，检错能力很强，而且容易用硬件实现，在局域网中有广泛应用。</p>
+<ul><li><strong>多项式除法原理（模 2 运算）</strong>：</li><li><strong>数据多项式</strong>：m 个数据位 = m−1 阶多项式的系数（例：00101011 → x⁵+x³+x+1）</li><li><strong>生成多项式</strong>：<strong>G(x)</strong>，对应移位寄存器反馈回路</li><li><strong>发送码字</strong>：<strong>F(x) = xᵏ·D(x) + R(x)</strong>（R(x) 是余式）</li><li><strong>接收端</strong>：对 F(x) 计算校验和应为 <strong>0</strong>；若 <strong>E(x) 也能被 G(x) 整除</strong>则有差错而检测不到</li></ul>
+<p>🔢模 2 运算 + 标准生成多项式</p>
+<p><strong>模 2 运算</strong>：加法和减法一样，都是<strong>异或运算</strong>（1+1=0，0+1=1，−1=1）。</p>
+<p>用 x 乘多项式 = 把系数<strong>左移一位</strong>。</p>
+<p><strong>📋国际标准生成多项式</strong></p>
+<p>CRC-CCITT<strong>x¹⁶+x¹²+x⁵+1</strong></p>
+<p>CRC-16<strong>x¹⁶+x¹⁵+x²+1</strong></p>
+<p>CRC-12<strong>x¹²+x¹¹+x³+x²+x+1</strong></p>
+<p>CRC-32常用于<strong>局域网</strong></p>
+<p>💡 CRC 由 <strong>k 位移位寄存器 + 异或门 + 反馈回路</strong>实现（可按 CCITT-CRC 标准生成 16 位校验和）；寄存器初始化为 0，数据右向左逐位输入，输完数据再输 k 个 0。</p>
+<h2 id="s4-2-网络协议三要素-OSI-概述">4.2 网络协议三要素 + OSI 概述</h2>
+<p><strong>网络体系结构</strong> = 计算机网络的<strong>各层及其协议的集合</strong>。</p>
+<p><strong>网络协议</strong>：用于规定信息的<strong>格式</strong>以及<strong>如何发送和接收信息</strong>的一套规则。</p>
+<p>① 语法</p>
+<p>控制信息或数据的<strong>结构和格式</strong></p>
+<p>② 语义</p>
+<p>需要发出<strong>何种控制信息</strong>、完成<strong>何种动作</strong>以及做出<strong>何种应答</strong></p>
+<p>③ 同步（时序）</p>
+<p><strong>事件实现顺序</strong>的详细说明</p>
+<p><strong>OSI/RM 开放系统互连参考模型</strong>（ISO 推出）：共分 <strong>7 层</strong>，层与层之间在逻辑上对等通信，最后由物理层实现真正的通信；每一层完成相应功能，<strong>下一层为上一层提供服务</strong>——把复杂的通信过程分成多个独立的、比较容易解决的子问题。</p>
+<p>💡 <strong>分层的好处</strong>：不同机器上的<strong>同等功能层</strong>之间采用<strong>相同的协议</strong>；同一机器上的<strong>相邻功能层</strong>之间通过<strong>接口</strong>进行信息传递。</p>
+<p>背景：ARPANET 分组交换网的实践经验表明，复杂的计算机网络结构最好是层次型的。</p>
+<h3 id="s4-2-1-OSI-七层-必背">4.2.1 OSI 七层 ⭐（必背）</h3>
+<div class="fig fig-slidev"><svg viewBox="0 0 1140 330">
+<defs>
+<marker id="osiAr" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 z" fill="#f2efe4" opacity="0.55"/></marker>
+</defs>
+<rect x="20" y="10" width="180" height="38" rx="8" fill="rgba(236,123,123,.13)" stroke="#ec7b7b" stroke-width="1.5"/>
+<text x="110" y="34" font-size="14px" fill="#ec7b7b" text-anchor="middle">7 应用层</text>
+<rect x="215" y="10" width="330" height="38" rx="8" fill="rgba(255,255,255,.05)" stroke="#f2efe4" stroke-opacity="0.22" stroke-width="1.2"/>
+<text x="380" y="34" font-size="12.5px" fill="#f2efe4" opacity="0.8" text-anchor="middle">用户接口与服务：HTTP FTP SMTP DNS Telnet SNMP</text>
+<rect x="20" y="54" width="180" height="38" rx="8" fill="rgba(237,166,104,.13)" stroke="#eda668" stroke-width="1.5"/>
+<text x="110" y="78" font-size="14px" fill="#eda668" text-anchor="middle">6 表示层</text>
+<rect x="215" y="54" width="330" height="38" rx="8" fill="rgba(255,255,255,.05)" stroke="#f2efe4" stroke-opacity="0.22" stroke-width="1.2"/>
+<text x="380" y="78" font-size="12.5px" fill="#f2efe4" opacity="0.8" text-anchor="middle">数据格式转换 · 压缩解压 · 加密解密</text>
+<rect x="20" y="98" width="180" height="38" rx="8" fill="rgba(243,205,87,.13)" stroke="#f3cd57" stroke-width="1.5"/>
+<text x="110" y="122" font-size="14px" fill="#f3cd57" text-anchor="middle">5 会话层</text>
+<rect x="215" y="98" width="330" height="38" rx="8" fill="rgba(255,255,255,.05)" stroke="#f2efe4" stroke-opacity="0.22" stroke-width="1.2"/>
+<text x="380" y="122" font-size="12.5px" fill="#f2efe4" opacity="0.8" text-anchor="middle">建立 / 管理 / 终止会话；数据交换 · 同步 · 异常报告</text>
+<rect x="20" y="142" width="180" height="38" rx="8" fill="rgba(134,216,148,.13)" stroke="#86d894" stroke-width="1.5"/>
+<text x="110" y="166" font-size="14px" fill="#86d894" text-anchor="middle">4 传输层</text>
+<rect x="215" y="142" width="330" height="38" rx="8" fill="rgba(255,255,255,.05)" stroke="#f2efe4" stroke-opacity="0.22" stroke-width="1.2"/>
+<text x="380" y="166" font-size="12.5px" fill="#f2efe4" opacity="0.8" text-anchor="middle">端到端传输：TCP / UDP —— 网关</text>
+<rect x="20" y="186" width="180" height="38" rx="8" fill="rgba(99,203,217,.13)" stroke="#63cbd9" stroke-width="1.5"/>
+<text x="110" y="210" font-size="14px" fill="#63cbd9" text-anchor="middle">3 网络层</text>
+<rect x="215" y="186" width="330" height="38" rx="8" fill="rgba(255,255,255,.05)" stroke="#f2efe4" stroke-opacity="0.22" stroke-width="1.2"/>
+<text x="380" y="210" font-size="12.5px" fill="#f2efe4" opacity="0.8" text-anchor="middle">路由与寻址：IP ICMP OSPF RIP —— 路由器</text>
+<rect x="20" y="230" width="180" height="38" rx="8" fill="rgba(127,196,236,.13)" stroke="#7fc4ec" stroke-width="1.5"/>
+<text x="110" y="254" font-size="14px" fill="#7fc4ec" text-anchor="middle">2 数据链路层</text>
+<rect x="215" y="230" width="330" height="38" rx="8" fill="rgba(255,255,255,.05)" stroke="#f2efe4" stroke-opacity="0.22" stroke-width="1.2"/>
+<text x="380" y="254" font-size="12.5px" fill="#f2efe4" opacity="0.8" text-anchor="middle">帧 · MAC · 差错与流量控制：以太网 PPP —— 交换机 网桥</text>
+<rect x="20" y="274" width="180" height="38" rx="8" fill="rgba(179,154,222,.13)" stroke="#b39ade" stroke-width="1.5"/>
+<text x="110" y="298" font-size="14px" fill="#b39ade" text-anchor="middle">1 物理层</text>
+<rect x="215" y="274" width="330" height="38" rx="8" fill="rgba(255,255,255,.05)" stroke="#f2efe4" stroke-opacity="0.22" stroke-width="1.2"/>
+<text x="380" y="298" font-size="12.5px" fill="#f2efe4" opacity="0.8" text-anchor="middle">比特流 · 电气特性 —— 中继器 集线器 网线</text>
+<rect x="570" y="10" width="540" height="60" rx="9" fill="rgba(243,205,87,.09)" stroke="#f3cd57" stroke-opacity="0.4" stroke-width="1.3"/>
+<text x="840" y="34" font-size="13px" fill="#f3cd57" text-anchor="middle">口诀：物 → 链 → 网 → 传 → 会 → 表 → 应（由下而上）</text>
+<text x="840" y="55" font-size="12px" fill="#f2efe4" opacity="0.65" text-anchor="middle">层与层之间逻辑上对等通信，由物理层实现真正通信</text>
+<rect x="570" y="82" width="540" height="92" rx="9" fill="rgba(99,203,217,.09)" stroke="#63cbd9" stroke-opacity="0.4" stroke-width="1.3"/>
+<text x="840" y="106" font-size="13px" fill="#63cbd9" text-anchor="middle">设备归属层（必考）</text>
+<text x="840" y="128" font-size="12.5px" fill="#f2efe4" opacity="0.8" text-anchor="middle">物理层 = 中继器 / 集线器　｜　数据链路层 = 网桥 / 交换机（按 MAC）</text>
+<text x="840" y="150" font-size="12.5px" fill="#f2efe4" opacity="0.8" text-anchor="middle">网络层 = 路由器（按 IP）　｜　传输层及以上 = 网关</text>
+<rect x="570" y="186" width="540" height="126" rx="9" fill="rgba(134,216,148,.09)" stroke="#86d894" stroke-opacity="0.4" stroke-width="1.3"/>
+<text x="840" y="210" font-size="13px" fill="#86d894" text-anchor="middle">数据单元（必考）</text>
+<text x="840" y="232" font-size="12.5px" fill="#f2efe4" opacity="0.8" text-anchor="middle">物理层 = 比特（位）　｜　数据链路层 = 帧</text>
+<text x="840" y="254" font-size="12.5px" fill="#f2efe4" opacity="0.8" text-anchor="middle">网络层 = 包（分组）　｜　传输层 = 报文（段）</text>
+<text x="840" y="284" font-size="12px" fill="#f2efe4" opacity="0.6" text-anchor="middle">下三层 = 通信子网（管"传"）｜ 上四层 = 资源子网相关（管"用"）</text>
+</svg></div>
 <hr>
 <h2 id="章节练习题">章节练习题</h2>
 <hr>
-    <div class="quiz quiz-js" data-key="H45-论文专项.md">
+    <div class="quiz quiz-js" data-key="H06-计算机网络（一）-数据通信与协议体系.md">
   <div class="quiz-head">
     <span class="quiz-label">章节练习题</span>
     <span class="quiz-progress">已答 0 / 6</span>
@@ -1657,53 +1809,53 @@ html.focus-mode .focus-exit-dot{
     <button class="quiz-btn quiz-reset" type="button">重做</button>
     <div class="quiz-pbar"><div class="quiz-pbar-fill"></div></div>
   </div>
-  <div class="quiz-item" data-answer="A" data-explain="切题 30% 是最高权重，做法就是&quot;逐题作答、围绕 3 个设问展开&quot;。通用模板套用所有题目会因&quot;不切题&quot;先丢这 30%；字数和图表不是该维度的评分点。" data-ref="第22章 · 评分五维度">
-  <div class="quiz-q"><span class="qn">1</span>论文评分中权重最高的维度是切合题意（30%），下列做法最能保证该维度得分的是：</div>
-  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">先把试题的 3 个设问当小标题，逐条对应作答</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">使用一篇准备好的通用论文模板套用所有题目</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">尽量写满 3000 字以展示篇幅</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">多用图表和代码片段体现专业性</span></div></div>
+  <div class="quiz-item" data-answer="A" data-explain="香农定理 C = W·log₂(1+S/N)。30dB → S/N = 10^(30/10) = 1000；C = 3000 × log₂(1001) ≈ 3000 × 9.97 ≈ 30000 b/s。注意奈奎斯特 B = 2W 只适用于&lt;strong&gt;无噪声&lt;/strong&gt;信道。" data-ref="第4章 · 4.1.1 香农定理">
+  <div class="quiz-q"><span class="qn">1</span>某信道的带宽为 3000Hz，信噪比为 30dB，则其最大数据速率约为：</div>
+  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">30000 b/s</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">6000 b/s</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">3000 b/s</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">12000 b/s</span></div></div>
   <div class="reveal" style="display:none">
     <div class="reveal-verdict"></div>
-    <div class="reveal-explain">切题 30% 是最高权重，做法就是"逐题作答、围绕 3 个设问展开"。通用模板套用所有题目会因"不切题"先丢这 30%；字数和图表不是该维度的评分点。</div>
-    <div class="reveal-ref">第22章 · 评分五维度</div>
+    <div class="reveal-explain">香农定理 C = W·log₂(1+S/N)。30dB → S/N = 10^(30/10) = 1000；C = 3000 × log₂(1001) ≈ 3000 × 9.97 ≈ 30000 b/s。注意奈奎斯特 B = 2W 只适用于<strong>无噪声</strong>信道。</div>
+    <div class="reveal-ref">第4章 · 4.1.1 香农定理</div>
   </div>
-</div><div class="quiz-item" data-answer="A" data-explain="摘要应控制在 300~400 字。凡是没有写摘要、摘要过于简略或没有实质性内容的，扣 5~10 分；&lt;strong&gt;如果摘要字数少于 120 字，论文将被&quot;给予不及格&quot;&lt;/strong&gt;——这是一票否决项。" data-ref="第22章 · 摘要要求">
-  <div class="quiz-q"><span class="qn">2</span>论文摘要字数少于 120 字，会导致：</div>
-  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">论文被给予不及格</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">扣 5 分</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">只影响摘要分，不影响正文</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">需重写摘要</span></div></div>
+</div><div class="quiz-item" data-answer="A" data-explain="曼彻斯特编码每个码元中间必有一次跳变（高→低表示 1，低→高表示 0），因此接收方可从信号本身提取时钟实现&lt;strong&gt;自同步&lt;/strong&gt;；代价是每个码元需要两次电平变化，编码效率仅 50%。差分曼彻斯特则看&lt;strong&gt;码元开始处有无跳变&lt;/strong&gt;。" data-ref="第4章 · 4.1.2 数字数据编码">
+  <div class="quiz-q"><span class="qn">2</span>关于曼彻斯特编码，正确的是：</div>
+  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">每个码元中间都有一次电平跳变，可实现自同步，但编码效率只有 50%</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">每两个码元跳变一次，编码效率为 100%</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">高电平表示 1、低电平表示 0，无需跳变</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">它属于模拟数据的调制编码方式</span></div></div>
   <div class="reveal" style="display:none">
     <div class="reveal-verdict"></div>
-    <div class="reveal-explain">摘要应控制在 300~400 字。凡是没有写摘要、摘要过于简略或没有实质性内容的，扣 5~10 分；<strong>如果摘要字数少于 120 字，论文将被"给予不及格"</strong>——这是一票否决项。</div>
-    <div class="reveal-ref">第22章 · 摘要要求</div>
+    <div class="reveal-explain">曼彻斯特编码每个码元中间必有一次跳变（高→低表示 1，低→高表示 0），因此接收方可从信号本身提取时钟实现<strong>自同步</strong>；代价是每个码元需要两次电平变化，编码效率仅 50%。差分曼彻斯特则看<strong>码元开始处有无跳变</strong>。</div>
+    <div class="reveal-ref">第4章 · 4.1.2 数字数据编码</div>
   </div>
-</div><div class="quiz-item" data-answer="A" data-explain="标准顺序：选题 3 分钟 → 构思 12 分钟（立论点、定摘要内容、列提纲、分字数）→ 摘要 15 分钟 → 正文 80 分钟 → 检查 10 分钟。&lt;strong&gt;先写摘要再写正文&lt;/strong&gt;——若先写正文最后补摘要，极易时间失控导致摘要&lt;120字的不及格红线。" data-ref="第22章 · 时间分配">
-  <div class="quiz-q"><span class="qn">3</span>120 分钟论文写作的正确时间顺序是：</div>
-  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">选题 → 构思 → 摘要 → 正文 → 检查</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">构思 → 选题 → 正文 → 摘要 → 检查</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">选题 → 正文 → 摘要 → 检查</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">摘要 → 正文 → 构思 → 检查</span></div></div>
+</div><div class="quiz-item" data-answer="A" data-explain="海明码校验位个数下界：m + k + 1 ≤ 2ᵏ。k=3 时 2³=8 &lt; 7+3+1=11 不满足；k=4 时 2⁴=16 ≥ 12 满足。故 k=4，码字总长 n = m+k = 11。" data-ref="第4章 · 4.1.3 海明码">
+  <div class="quiz-q"><span class="qn">3</span>若传送的数据位 m = 7，采用海明码校验，至少需要的校验位个数 k 是：</div>
+  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">4</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">3</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">5</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">2</span></div></div>
   <div class="reveal" style="display:none">
     <div class="reveal-verdict"></div>
-    <div class="reveal-explain">标准顺序：选题 3 分钟 → 构思 12 分钟（立论点、定摘要内容、列提纲、分字数）→ 摘要 15 分钟 → 正文 80 分钟 → 检查 10 分钟。<strong>先写摘要再写正文</strong>——若先写正文最后补摘要，极易时间失控导致摘要<120字的不及格红线。</div>
-    <div class="reveal-ref">第22章 · 时间分配</div>
+    <div class="reveal-explain">海明码校验位个数下界：m + k + 1 ≤ 2ᵏ。k=3 时 2³=8 < 7+3+1=11 不满足；k=4 时 2⁴=16 ≥ 12 满足。故 k=4，码字总长 n = m+k = 11。</div>
+    <div class="reveal-ref">第4章 · 4.1.3 海明码</div>
   </div>
-</div><div class="quiz-item" data-answer="A" data-explain="原则是&quot;考场只用这一个项目，越写越熟&quot;，加粗数字全文锁死、不得改动——改一个字就有&quot;项目不真实&quot;嫌疑（虚构/失实是六条不及格红线之一）。B 会造成数字前后矛盾；C 虚报规模同样导致失实；D 虚构情节是硬红线。" data-ref="第22章 · 项目背景定型">
-  <div class="quiz-q"><span class="qn">4</span>关于论文项目背景的处理，下列做法最恰当的是：</div>
-  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">固定一套背景与数字，全部论文沿用同一口径，任何数字不改动</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">每篇论文按题目调整投资额与团队规模，以更贴合题意</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">项目规模写得越大越好，以体现项目复杂度</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">为避免与真实经历冲突，改用虚构项目并注明假设</span></div></div>
+</div><div class="quiz-item" data-answer="A" data-explain="两级划分：&lt;strong&gt;内层 = 通信子网&lt;/strong&gt;（结点计算机 + 高速通信线路），承担全网数据传输、交换、加工、变换，对应 OSI 下三层；&lt;strong&gt;外层 = 资源子网&lt;/strong&gt;（主机、终端、外设、软件资源），负责数据处理与向用户提供资源服务。" data-ref="第4章 · 4.1 计算机网络基础">
+  <div class="quiz-q"><span class="qn">4</span>关于通信子网与资源子网，正确的是：</div>
+  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">通信子网管"传"，对应 OSI 下三层；资源子网管"用"，负责数据处理与资源服务</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">通信子网负责数据处理，资源子网负责数据传输</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">两者都由终端设备构成</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">资源子网对应 OSI 的物理层和数据链路层</span></div></div>
   <div class="reveal" style="display:none">
     <div class="reveal-verdict"></div>
-    <div class="reveal-explain">原则是"考场只用这一个项目，越写越熟"，加粗数字全文锁死、不得改动——改一个字就有"项目不真实"嫌疑（虚构/失实是六条不及格红线之一）。B 会造成数字前后矛盾；C 虚报规模同样导致失实；D 虚构情节是硬红线。</div>
-    <div class="reveal-ref">第22章 · 项目背景定型</div>
+    <div class="reveal-explain">两级划分：<strong>内层 = 通信子网</strong>（结点计算机 + 高速通信线路），承担全网数据传输、交换、加工、变换，对应 OSI 下三层；<strong>外层 = 资源子网</strong>（主机、终端、外设、软件资源），负责数据处理与向用户提供资源服务。</div>
+    <div class="reveal-ref">第4章 · 4.1 计算机网络基础</div>
   </div>
-</div><div class="quiz-item" data-answer="A" data-explain="六条不及格红线中包含&quot;正文少于 1200 字&quot;。论文正文要求 2000~3000 字（最佳约 2500），少于 1200 字属严重踩线，基本无法及格。" data-ref="第22章 · 字数红线">
-  <div class="quiz-q"><span class="qn">5</span>论文正文要求 2000~3000 字，若正文少于 1200 字：</div>
-  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">直接被判定不及格（踩红线）</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">仅扣分项，不影响及格</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">只要摘要合格即可</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">与字数无关，看内容质量</span></div></div>
+</div><div class="quiz-item" data-answer="A" data-explain="网络层负责&lt;strong&gt;路由选择、拥塞控制、网际互联&lt;/strong&gt;（设备是路由器，按 IP 寻址）；数据链路层负责成帧与差错控制（交换机/网桥，按 MAC）；传输层负责端到端可靠传输（TCP/UDP）。七层由下而上：物理—数据链路—网络—传输—会话—表示—应用。" data-ref="第4章 · 4.2.1 OSI 七层">
+  <div class="quiz-q"><span class="qn">5</span>OSI 七层模型中，负责路由选择与拥塞控制的层次是：</div>
+  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">网络层</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">数据链路层</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">传输层</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">会话层</span></div></div>
   <div class="reveal" style="display:none">
     <div class="reveal-verdict"></div>
-    <div class="reveal-explain">六条不及格红线中包含"正文少于 1200 字"。论文正文要求 2000~3000 字（最佳约 2500），少于 1200 字属严重踩线，基本无法及格。</div>
-    <div class="reveal-ref">第22章 · 字数红线</div>
+    <div class="reveal-explain">网络层负责<strong>路由选择、拥塞控制、网际互联</strong>（设备是路由器，按 IP 寻址）；数据链路层负责成帧与差错控制（交换机/网桥，按 MAC）；传输层负责端到端可靠传输（TCP/UDP）。七层由下而上：物理—数据链路—网络—传输—会话—表示—应用。</div>
+    <div class="reveal-ref">第4章 · 4.2.1 OSI 七层</div>
   </div>
-</div><div class="quiz-item" data-answer="A" data-explain="项目数字前后不一致（今天 800 万明天 900 万、团队 20 人又变 35 人）是最典型的&quot;项目不真实&quot;信号。这正是&quot;背景卡数字全文锁死&quot;这条规则存在的原因。" data-ref="第22章 · 项目背景定型">
-  <div class="quiz-q"><span class="qn">6</span>下列哪种情况最可能导致论文被判"项目不真实"：</div>
-  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">同一篇论文中前后投资额、团队人数不一致</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">正文使用了真实项目的行业场景</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">摘要中提到了技术栈</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">正文分了五段</span></div></div>
+</div><div class="quiz-item" data-answer="A" data-explain="误码率 P = 出错位数 / 传送总位数。10⁻⁶ 即平均每传送 10⁶ 位（1Mb）才允许错 1 位。它是衡量信道传输质量的指标，与带宽无关。" data-ref="第4章 · 4.1.1 误码率与信道延迟">
+  <div class="quiz-q"><span class="qn">6</span>计算机通信网络中一般要求误码率低于 10⁻⁶，其含义是：</div>
+  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">平均每传送 1Mb 才允许错 1b</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">每秒钟最多错 1 位</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">每传送 1KB 允许错 1 位</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">误码率与带宽成正比</span></div></div>
   <div class="reveal" style="display:none">
     <div class="reveal-verdict"></div>
-    <div class="reveal-explain">项目数字前后不一致（今天 800 万明天 900 万、团队 20 人又变 35 人）是最典型的"项目不真实"信号。这正是"背景卡数字全文锁死"这条规则存在的原因。</div>
-    <div class="reveal-ref">第22章 · 项目背景定型</div>
+    <div class="reveal-explain">误码率 P = 出错位数 / 传送总位数。10⁻⁶ 即平均每传送 10⁶ 位（1Mb）才允许错 1 位。它是衡量信道传输质量的指标，与带宽无关。</div>
+    <div class="reveal-ref">第4章 · 4.1.1 误码率与信道延迟</div>
   </div>
 </div>
 </div>
@@ -1717,7 +1869,7 @@ html.focus-mode .focus-exit-dot{
   <span class="item"><kbd class="kbd">P</kbd> 答下一题</span>
   <span class="item"><kbd class="kbd">0</kbd> 回顶部</span>
 </div>
-    <nav class="pager"><a class="pg pg-prev" href="H23.html"><span class="pg-label">上一学时</span><span class="pg-title">软件需求工程</span></a></nav>
+    <nav class="pager"><a class="pg pg-prev" href="H01.html"><span class="pg-label">上一学时</span><span class="pg-title">绪论与备考总纲</span></a><a class="pg pg-next" href="H07.html"><span class="pg-label">下一学时</span><span class="pg-title">计算机网络（二）· TCP/IP 与网络工程</span></a></nav>
     <footer class="footer">
   <p><strong>阿甘系分 · 48 小时冲刺手册</strong></p>
   <p class="sep">非官方出版物 · 与软考办无隶属关系 · 内容均为独立原创编写</p>
