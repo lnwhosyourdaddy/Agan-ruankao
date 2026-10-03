@@ -886,40 +886,12 @@ main .mermaid-src{ display:none !important }
 @media(max-width:1100px){ .toc{ display:none } }
 
 /* ---------- 23. 专注模式 ---------- */
-html.focus-mode .topbar,
-html.focus-mode .toc,
-html.focus-mode .footer,
-html.focus-mode .pager,
-html.focus-mode .keyhint,
-html.focus-mode .search-panel:not(.open){
-  visibility:hidden;
-}
+/* 注意：不要用 visibility:hidden 兜底 —— 那会把退出按钮一起隐藏，真人点不到。
+   正确做法见文件末尾「专注模式退出按钮修复」段（opacity + pointer-events）。 */
 html.focus-mode .shell{
   max-width:720px;
   margin:0 auto;
   padding:40px 24px 80px;
-}
-html.focus-mode .topbar{
-  /* 隐藏但保留按钮入口 */
-  display:block;
-  opacity:0;
-  position:fixed;
-  top:8px;left:50%;transform:translateX(-50%);
-  background:var(--bg-card);
-  box-shadow:var(--shadow-2);
-  border:1px solid var(--line);
-  border-radius:999px;
-  padding:4px 8px;
-  z-index:60;
-}
-html.focus-mode .topbar:hover{ opacity:1 }
-html.focus-mode .topbar .nav,
-html.focus-mode .topbar .brand,
-html.focus-mode .topbar .theme-switch{ display:none }
-html.focus-mode .topbar .focus-btn{
-  display:inline-flex;align-items:center;gap:6px;
-  font-size:12.5px;color:var(--accent);font-weight:600;
-  padding:6px 12px;margin:0;
 }
 /* 顶栏里的专注按钮常态样式 */
 .focus-btn{
@@ -1394,6 +1366,69 @@ html.focus-mode .nav{ display:none }
 .main .mermaid-wrap .node polygon,
 .main .mermaid-wrap .node circle{
   rx:5px; ry:5px;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   专注模式退出按钮修复
+   Bug：顶栏整体 visibility:hidden → 退出按钮一起隐藏 → 真人点不到
+   修法：顶栏不用 visibility，改用 opacity + pointer-events；
+        退出按钮单独保持可见可点（focus 态常显，hover 展开全栏）
+   ═══════════════════════════════════════════════════════════════ */
+
+/* 隐藏的元素不能兜底 visibility:hidden —— 那样连按钮一起没了 */
+html.focus-mode .toc,
+html.focus-mode .footer,
+html.focus-mode .pager,
+html.focus-mode .keyhint{ display:none !important }
+
+html.focus-mode .topbar{
+  display:block;
+  opacity:0;
+  pointer-events:none;            /* 默认不吃鼠标 */
+  position:fixed;
+  top:8px;left:50%;
+  transform:translateX(-50%);
+  background:var(--bg-card);
+  box-shadow:var(--shadow-2);
+  border:1px solid var(--line);
+  border-radius:999px;
+  padding:5px 9px;
+  z-index:60;
+  transition:opacity .22s var(--ease);
+  min-height:34px;
+}
+html.focus-mode .topbar .nav,
+html.focus-mode .topbar .brand,
+html.focus-mode .topbar .theme-switch,
+html.focus-mode .topbar .overflow-btn{ display:none }
+
+/* 关键：退出按钮永远可见可点，不随顶栏淡出 */
+html.focus-mode .focus-btn-top{
+  display:inline-flex !important;
+  align-items:center;gap:6px;
+  opacity:1 !important;
+  pointer-events:auto !important;
+  background:var(--accent);
+  color:var(--fg-inv);
+  border-color:var(--accent);
+  cursor:pointer;
+  white-space:nowrap;
+}
+html.focus-mode .focus-btn-top::after{
+  content:'退出';
+  font-size:11.5px;
+  opacity:.85;
+}
+html.focus-mode .focus-btn-top:hover{
+  background:var(--accent-2);
+  border-color:var(--accent-2);
+}
+/* 顶栏其余部分 hover 展开（键鼠用户），但不影响退出按钮 */
+html.focus-mode .topbar:hover{ opacity:1 }
+html.focus-mode .topbar:hover .nav{ display:flex }
+
+@media(max-width:640px){
+  html.focus-mode .topbar{ top:6px; padding:4px 7px }
 }
 </style>
 </head>
