@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  发布前请把下面的 your-domain.com 替换成你的真实域名
+  发布前请把下面的 lnwhosyourdaddy.github.io/Agan-ruankao 替换成你的真实域名
   生成日期：2026-10-03
 -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://your-domain.com/</loc>
+    <loc>https://lnwhosyourdaddy.github.io/Agan-ruankao/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://your-domain.com/H01.html</loc>
+    <loc>https://lnwhosyourdaddy.github.io/Agan-ruankao/H01.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://your-domain.com/H23.html</loc>
+    <loc>https://lnwhosyourdaddy.github.io/Agan-ruankao/H23.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://your-domain.com/H45.html</loc>
+    <loc>https://lnwhosyourdaddy.github.io/Agan-ruankao/H45.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
