@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="light dark">
-<title>第 26 小时 · 软件架构设计（一）· 架构定义与 4+1 视图 · 阿甘系分 48 小时冲刺</title>
+<title>第 34 小时 · 系统运行与维护（二）· 系统转换与演进 · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
 <meta name="build-stamp" content="2026-10-05 06:49:22">
@@ -1917,7 +1917,7 @@ html{scroll-padding-top:80px}
 <body>
 <header class="topbar">
   <a class="brand" href="index.html"><span class="brand-mark">48</span><span>阿甘系分</span><span class="brand-sub">冲刺手册</span></a>
-  <nav class="nav"><div class="nav" id="chapnav"><button class="nav-trigger" type="button" id="navTrigger" aria-haspopup="true" aria-expanded="false" aria-controls="navPanel" title="章节导航（Enter / ↓ 打开，Esc 关闭）"><span class="nav-trigger-code">H26</span><span class="nav-trigger-label">架构设计（一）</span><svg class="nav-caret" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5 L6 8 L9.5 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="nav-panel" id="navPanel" hidden><div class="nav-panel-scroll"><div class="nav-group nav-group-solo"><a class="nav-item" href="index.html"><span class="nav-item-code">首页</span><span class="nav-item-label">首页 · 手册总览</span></a></div><div class="nav-group"><div class="nav-group-title">第一篇 · 基础知识</div><a class="nav-item" href="H01.html"><span class="nav-item-code">H01</span><span class="nav-item-label">绪论与备考总纲</span></a><a class="nav-item" href="H02.html"><span class="nav-item-code">H02</span><span class="nav-item-label">数学与工程基础（一）· 概率统计与图论应用</span></a><a class="nav-item" href="H03.html"><span class="nav-item-code">H03</span><span class="nav-item-label">数学与工程基础（二）· 预测决策与工程伦理</span></a><a class="nav-item" href="H04.html"><span class="nav-item-code">H04</span><span class="nav-item-label">计算机系统（一）· 硬件与体系结构</span></a><a class="nav-item" href="H05.html"><span class="nav-item-code">H05</span><span class="nav-item-label">计算机系统（二）· 操作系统</span></a><a class="nav-item" href="H06.html"><span class="nav-item-code">H06</span><span class="nav-item-label">计算机网络（一）· 数据通信与协议体系</span></a><a class="nav-item" href="H07.html"><span class="nav-item-code">H07</span><span class="nav-item-label">计算机网络（二）· TCP/IP 与网络工程</span></a><a class="nav-item" href="H08.html"><span class="nav-item-code">H08</span><span class="nav-item-label">分布式系统、构件与云计算</span></a><a class="nav-item" href="H09.html"><span class="nav-item-code">H09</span><span class="nav-item-label">数据库系统（一）· 三级模式与关系基础</span></a><a class="nav-item" href="H10.html"><span class="nav-item-code">H10</span><span class="nav-item-label">数据库系统（二）· 范式与事务并发控制</span></a><a class="nav-item" href="H11.html"><span class="nav-item-code">H11</span><span class="nav-item-label">数据库系统（三）· 设计、仓库与 NoSQL</span></a><a class="nav-item" href="H12.html"><span class="nav-item-code">H12</span><span class="nav-item-label">企业信息化（一）· 信息化规划</span></a><a class="nav-item" href="H13.html"><span class="nav-item-code">H13</span><span class="nav-item-label">企业信息化（二）· 信息系统与商务</span></a><a class="nav-item" href="H14.html"><span class="nav-item-code">H14</span><span class="nav-item-label">软件工程（一）· 生命周期与开发模型</span></a><a class="nav-item" href="H15.html"><span class="nav-item-code">H15</span><span class="nav-item-label">软件工程（二）· 过程管理与软件重用</span></a><a class="nav-item" href="H16.html"><span class="nav-item-code">H16</span><span class="nav-item-label">软件工程（三）· UML 与形式化方法</span></a><a class="nav-item" href="H17.html"><span class="nav-item-code">H17</span><span class="nav-item-label">项目管理（一）· 范围进度成本与挣值分析</span></a><a class="nav-item" href="H18.html"><span class="nav-item-code">H18</span><span class="nav-item-label">项目管理（二）· 配置质量风险与文档</span></a><a class="nav-item" href="H19.html"><span class="nav-item-code">H19</span><span class="nav-item-label">信息安全（一）· 安全体系与加密认证</span></a><a class="nav-item" href="H20.html"><span class="nav-item-code">H20</span><span class="nav-item-label">信息安全（二）· 网络安全与可靠性</span></a></div><div class="nav-group"><div class="nav-group-title">第二篇 · 关键技术</div><a class="nav-item" href="H21.html"><span class="nav-item-code">H21</span><span class="nav-item-label">系统规划与分析（一）· 需求分析与 DFD 建模</span></a><a class="nav-item" href="H22.html"><span class="nav-item-code">H22</span><span class="nav-item-label">系统规划与分析（二）· 成本效益与可行性论证</span></a><a class="nav-item" href="H23.html"><span class="nav-item-code">H23</span><span class="nav-item-label">软件需求工程</span></a><a class="nav-item active" href="H26.html" aria-current="page"><span class="nav-item-code">H26</span><span class="nav-item-label">软件架构设计（一）· 架构定义与 4+1 视图</span></a><a class="nav-item" href="H27.html"><span class="nav-item-code">H27</span><span class="nav-item-label">软件架构设计（二）· 架构风格与 SOA</span></a><a class="nav-item" href="H28.html"><span class="nav-item-code">H28</span><span class="nav-item-label">软件架构设计（三）· 质量属性与 ATAM 评估</span></a><a class="nav-item" href="H29.html"><span class="nav-item-code">H29</span><span class="nav-item-label">系统设计（一）· 结构化设计与面向对象设计</span></a><a class="nav-item" href="H30.html"><span class="nav-item-code">H30</span><span class="nav-item-label">系统设计（二）· 设计模式与人机交互</span></a><a class="nav-item" href="H31.html"><span class="nav-item-code">H31</span><span class="nav-item-label">软件实现与测试（一）· 测试原则与黑盒白盒方法</span></a><a class="nav-item" href="H32.html"><span class="nav-item-code">H32</span><span class="nav-item-label">软件实现与测试（二）· 测试阶段与部署发布</span></a><a class="nav-item" href="H33.html"><span class="nav-item-code">H33</span><span class="nav-item-label">系统运行与维护（一）· 运维指标与软件维护</span></a><a class="nav-item" href="H34.html"><span class="nav-item-code">H34</span><span class="nav-item-label">系统运行与维护（二）· 系统转换与演进</span></a></div><div class="nav-group nav-group-solo"><a class="nav-item" href="H45.html"><span class="nav-item-code">H45</span><span class="nav-item-label">论文写作专项</span></a></div><div class="nav-group nav-group-pending"><div class="nav-group-title">待上线 · 按真题权重排序</div><div class="nav-pending-row"><span class="nav-pending-ch">第 16–22 章</span><span class="nav-pending-name">案例实践 / 论文要点</span><span class="nav-pending-w">案例与论文</span></div><div class="nav-pending-row"><span class="nav-pending-ch">H42–H44 · H47–H48</span><span class="nav-pending-name">案例专项 / 全真模拟</span><span class="nav-pending-w">专项</span></div></div></div><div class="nav-foot"><span class="nav-foot-tip">↑↓ 选择 · Enter 打开 · Esc 关闭</span><span class="nav-foot-nav"><a class="nav-step" href="H23.html">← 上一章</a><a class="nav-step" href="H27.html">下一章 →</a></span></div></div></div></nav>
+  <nav class="nav"><div class="nav" id="chapnav"><button class="nav-trigger" type="button" id="navTrigger" aria-haspopup="true" aria-expanded="false" aria-controls="navPanel" title="章节导航（Enter / ↓ 打开，Esc 关闭）"><span class="nav-trigger-code">H34</span><span class="nav-trigger-label">系统转换与演进</span><svg class="nav-caret" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5 L6 8 L9.5 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="nav-panel" id="navPanel" hidden><div class="nav-panel-scroll"><div class="nav-group nav-group-solo"><a class="nav-item" href="index.html"><span class="nav-item-code">首页</span><span class="nav-item-label">首页 · 手册总览</span></a></div><div class="nav-group"><div class="nav-group-title">第一篇 · 基础知识</div><a class="nav-item" href="H01.html"><span class="nav-item-code">H01</span><span class="nav-item-label">绪论与备考总纲</span></a><a class="nav-item" href="H02.html"><span class="nav-item-code">H02</span><span class="nav-item-label">数学与工程基础（一）· 概率统计与图论应用</span></a><a class="nav-item" href="H03.html"><span class="nav-item-code">H03</span><span class="nav-item-label">数学与工程基础（二）· 预测决策与工程伦理</span></a><a class="nav-item" href="H04.html"><span class="nav-item-code">H04</span><span class="nav-item-label">计算机系统（一）· 硬件与体系结构</span></a><a class="nav-item" href="H05.html"><span class="nav-item-code">H05</span><span class="nav-item-label">计算机系统（二）· 操作系统</span></a><a class="nav-item" href="H06.html"><span class="nav-item-code">H06</span><span class="nav-item-label">计算机网络（一）· 数据通信与协议体系</span></a><a class="nav-item" href="H07.html"><span class="nav-item-code">H07</span><span class="nav-item-label">计算机网络（二）· TCP/IP 与网络工程</span></a><a class="nav-item" href="H08.html"><span class="nav-item-code">H08</span><span class="nav-item-label">分布式系统、构件与云计算</span></a><a class="nav-item" href="H09.html"><span class="nav-item-code">H09</span><span class="nav-item-label">数据库系统（一）· 三级模式与关系基础</span></a><a class="nav-item" href="H10.html"><span class="nav-item-code">H10</span><span class="nav-item-label">数据库系统（二）· 范式与事务并发控制</span></a><a class="nav-item" href="H11.html"><span class="nav-item-code">H11</span><span class="nav-item-label">数据库系统（三）· 设计、仓库与 NoSQL</span></a><a class="nav-item" href="H12.html"><span class="nav-item-code">H12</span><span class="nav-item-label">企业信息化（一）· 信息化规划</span></a><a class="nav-item" href="H13.html"><span class="nav-item-code">H13</span><span class="nav-item-label">企业信息化（二）· 信息系统与商务</span></a><a class="nav-item" href="H14.html"><span class="nav-item-code">H14</span><span class="nav-item-label">软件工程（一）· 生命周期与开发模型</span></a><a class="nav-item" href="H15.html"><span class="nav-item-code">H15</span><span class="nav-item-label">软件工程（二）· 过程管理与软件重用</span></a><a class="nav-item" href="H16.html"><span class="nav-item-code">H16</span><span class="nav-item-label">软件工程（三）· UML 与形式化方法</span></a><a class="nav-item" href="H17.html"><span class="nav-item-code">H17</span><span class="nav-item-label">项目管理（一）· 范围进度成本与挣值分析</span></a><a class="nav-item" href="H18.html"><span class="nav-item-code">H18</span><span class="nav-item-label">项目管理（二）· 配置质量风险与文档</span></a><a class="nav-item" href="H19.html"><span class="nav-item-code">H19</span><span class="nav-item-label">信息安全（一）· 安全体系与加密认证</span></a><a class="nav-item" href="H20.html"><span class="nav-item-code">H20</span><span class="nav-item-label">信息安全（二）· 网络安全与可靠性</span></a></div><div class="nav-group"><div class="nav-group-title">第二篇 · 关键技术</div><a class="nav-item" href="H21.html"><span class="nav-item-code">H21</span><span class="nav-item-label">系统规划与分析（一）· 需求分析与 DFD 建模</span></a><a class="nav-item" href="H22.html"><span class="nav-item-code">H22</span><span class="nav-item-label">系统规划与分析（二）· 成本效益与可行性论证</span></a><a class="nav-item" href="H23.html"><span class="nav-item-code">H23</span><span class="nav-item-label">软件需求工程</span></a><a class="nav-item" href="H26.html"><span class="nav-item-code">H26</span><span class="nav-item-label">软件架构设计（一）· 架构定义与 4+1 视图</span></a><a class="nav-item" href="H27.html"><span class="nav-item-code">H27</span><span class="nav-item-label">软件架构设计（二）· 架构风格与 SOA</span></a><a class="nav-item" href="H28.html"><span class="nav-item-code">H28</span><span class="nav-item-label">软件架构设计（三）· 质量属性与 ATAM 评估</span></a><a class="nav-item" href="H29.html"><span class="nav-item-code">H29</span><span class="nav-item-label">系统设计（一）· 结构化设计与面向对象设计</span></a><a class="nav-item" href="H30.html"><span class="nav-item-code">H30</span><span class="nav-item-label">系统设计（二）· 设计模式与人机交互</span></a><a class="nav-item" href="H31.html"><span class="nav-item-code">H31</span><span class="nav-item-label">软件实现与测试（一）· 测试原则与黑盒白盒方法</span></a><a class="nav-item" href="H32.html"><span class="nav-item-code">H32</span><span class="nav-item-label">软件实现与测试（二）· 测试阶段与部署发布</span></a><a class="nav-item" href="H33.html"><span class="nav-item-code">H33</span><span class="nav-item-label">系统运行与维护（一）· 运维指标与软件维护</span></a><a class="nav-item active" href="H34.html" aria-current="page"><span class="nav-item-code">H34</span><span class="nav-item-label">系统运行与维护（二）· 系统转换与演进</span></a></div><div class="nav-group nav-group-solo"><a class="nav-item" href="H45.html"><span class="nav-item-code">H45</span><span class="nav-item-label">论文写作专项</span></a></div><div class="nav-group nav-group-pending"><div class="nav-group-title">待上线 · 按真题权重排序</div><div class="nav-pending-row"><span class="nav-pending-ch">第 16–22 章</span><span class="nav-pending-name">案例实践 / 论文要点</span><span class="nav-pending-w">案例与论文</span></div><div class="nav-pending-row"><span class="nav-pending-ch">H42–H44 · H47–H48</span><span class="nav-pending-name">案例专项 / 全真模拟</span><span class="nav-pending-w">专项</span></div></div></div><div class="nav-foot"><span class="nav-foot-tip">↑↓ 选择 · Enter 打开 · Esc 关闭</span><span class="nav-foot-nav"><a class="nav-step" href="H33.html">← 上一章</a><a class="nav-step" href="H45.html">下一章 →</a></span></div></div></div></nav>
   <div class="theme-switch" role="group" aria-label="主题">
     <button class="theme-btn" data-theme="light" type="button">浅</button>
     <button class="theme-btn" data-theme="dark" type="button">深</button>
@@ -1928,135 +1928,154 @@ html{scroll-padding-top:80px}
   <aside class="toc"></aside>
       <article class="main">
     <div class="chapbar" id="chapbar"
-     data-sec-total="8" data-page-index="24" data-page-total="33">
+     data-sec-total="8" data-page-index="32" data-page-total="33">
   <div class="chapbar-top">
-    <span class="chapbar-badge">H26</span>
-    <span class="chapbar-title">软件架构设计（一）· 架构定义与 4+1 视图</span>
+    <span class="chapbar-badge">H34</span>
+    <span class="chapbar-title">系统运行与维护（二）· 系统转换与演进</span>
     <span class="chapbar-spacer"></span>
     <span class="chapbar-sec" id="chapbarSec">1 / 8</span>
   </div>
   <div class="chapbar-track"><div class="chapbar-fill" id="chapbarFill"></div></div>
 </div>
     
-    <h1 id="第-26-小时-软件架构设计-一-架构定义与-4-1-视图">第 26 小时 · 软件架构设计（一）· 架构定义与 4+1 视图</h1>
-<div class="quote"><p>第 12 章<strong>真题占比 5.0%</strong>（28/557，第 7 位）—— 但它的特殊性是 <strong>论文 12 次 · 案例 18%</strong>，<br><strong>是"论文与案例双高频"章</strong>。权重不靠刷题，靠<strong>在论文里写得出架构决策的理由</strong>。<br>本学时覆盖 <strong>12.1 架构定义 + 12.2 五种模型 + "4+1" 视图（Kruchten）</strong>。</p></div>
-<div class="block gold"><div class="block-title">考情定位</div><p>三块必拿：① <strong>"4+1" 视图的四个视图 + 场景视图</strong>（场景视图最重要，它串起并验证其他四个）；② <strong>静态结构 vs 动态结构的分组</strong>（逻辑+开发=静态，进程+物理=动态）；③ <strong>1471 → 42010 的承继关系</strong>。</p></div>
-<div class="block mem"><div class="block-title">记忆口诀</div><p><strong>"4+1" 视图</strong>：逻辑（类图）· 进程（线程）· 开发（模块）· 物理（部署）＋ <strong>场景（用例）</strong>。<br><strong>分组</strong>：逻辑+开发 = <strong>静态结构</strong>；进程+物理 = <strong>动态结构</strong>。<br><strong>标准</strong>：1471（1995）→ 被 <strong>ISO/IEC/IEEE 42010</strong> 取代（2007）。</p></div>
-<div class="block warning"><div class="block-title">易错陷阱</div><p><strong>"4+1" 的"+1"不是第五个视图</strong>，它是<strong>场景视图</strong>——不描述系统结构，只描述典型场景，作用是<strong>串起并验证其他四视图</strong>。<br><strong>静态/动态分组的顺序别记反</strong>：是"<strong>逻辑 + 开发 = 静态</strong>"，不是"逻辑 + 进程"。<br><strong>架构 ≠ 详细设计</strong>：架构是系统级宏观结构与关键决策，构件内部算法是详细设计。</p></div>
-<h2 id="第-12-章知识骨架">第 12 章知识骨架</h2>
+    <h1 id="第-34-小时-系统运行与维护-二-系统转换与演进">第 34 小时 · 系统运行与维护（二）· 系统转换与演进</h1>
+<div class="quote"><p>本学时覆盖 <strong>15.7 新旧系统转换（三策略 + 数据迁移）+ 15.8 系统演进 + 冲刺补充（高可用 / 可观测性）</strong>，<br>并附<strong>全章易错辨析 + 速记卡 + 自测清单</strong>。<br><strong>至此第二篇「关键技术」15 章全部收官。</strong></p></div>
+<div class="block gold"><div class="block-title">考情定位</div><p>四块必拿：① <strong>转换三策略</strong>（直接=风险高成本最低 / <strong>并行=风险最低成本最高</strong> / 分段=最常用）；② <strong>ETL 三步</strong>（抽取 → <strong>转换清洗</strong> → 装载，<strong>转换最易出错</strong>）；③ <strong>高可用</strong>（消除单点 + 自动故障转移，<strong>不是堆硬件</strong>）；④ <strong>可观测性三支柱</strong>（<strong>Metrics + Logs + Traces</strong>）。</p></div>
+<div class="block mem"><div class="block-title">记忆口诀</div><p><strong>转换三策略</strong>：<strong>直接</strong>（一刀切，风险<strong>高</strong>成本<strong>低</strong>）｜<strong>并行</strong>（双跑，风险<strong>低</strong>成本<strong>高</strong>）｜<strong>分段</strong>（分批，最常用）。<br><strong>ETL</strong>：<strong>E</strong> 抽取 → <strong>T</strong> 转换清洗（<strong>最耗时易错</strong>）→ <strong>L</strong> 装载；迁移必做<strong>比对校验 + 备份 + 回滚预案</strong>。<br><strong>高可用</strong>：<strong>消单点 + 自动切流 + 快速恢复</strong>（限流/降级/熔断/回滚）——<strong>不是堆服务器</strong>。<br><strong>可观测三支柱</strong>：<strong>Metrics</strong>（指标告警）· <strong>Logs</strong>（日志定位）· <strong>Traces</strong>（链路追踪找瓶颈）。</p></div>
+<div class="block warning"><div class="block-title">易错陷阱</div><p><strong>并行转换风险最低但成本最高</strong>（两套系统双份人力），直接转换反之。<br><strong>"堆硬件冗余"不等于高可用</strong>——有单点或 MTTR 过长，再多服务器也到不了 99.99%。<br><strong>监控 ≠ 可观测性</strong>：监控是"看护已知问题"，可观测性是"探索未知问题的能力"。</p></div>
+<div class="block gold"><div class="block-title">论文可用句</div><p>在系统切换上，考虑到该系统承载全省 200 万用户的实时交易，我<strong>否掉了直接转换</strong>（风险不可接受），也<strong>未采用全量并行转换</strong>（两套系统并行 3 个月的人力成本超出预算），最终选择<strong>分段转换</strong>：先按业务域将查询类功能（只读、无写风险）切换至新系统，运行两周无异常后，再按地市批次逐步切换交易类功能，每批切换后保留 72 小时观察窗并保留快速回切开关。数据迁移采用 <strong>ETL</strong> 方式，重点投入在<strong>转换清洗环节</strong>（统一了 17 类历史脏数据的编码映射），并完成三轮试迁移与全量比对校验，最终切换期间业务零中断、数据零丢失。</p></div>
+<h2 id="第-15-章知识骨架">第 15 章知识骨架</h2>
 <div class="fig fig-mermaid"><div class="mermaid-src" data-src="mindmap
- root((12 软件架构设计))
-   12.1 概述
-     构件+连接件+约束
-     架构的意义
-     架构/架构模式/设计模式
-   12.2 架构建模 ★
-     五种模型
-     4+1 视图
-       逻辑 进程 开发 物理
-       +1 场景
-     静态 vs 动态
-   12.3 架构风格 ★★
-     六大类
-       数据流
-       调用/返回
-       以数据为中心
-       虚拟机
-       独立构件
-       面向服务 SOA
-     C/S 二层三层 B/S
-     SOA 关键技术
-       UDDI WSDL SOAP REST
-     SOA 实现
-       WebService 注册表 ESB
-   12.4 架构标准
-     IEEE 1471
-     ISO/IEC/IEEE 42010
-   12.5 架构开发 ★
-     ABSDM 六子过程
-     需求 设计 文档化
-     复审 实现 演化
-   12.6 质量属性 ★★
-     开发期 vs 运行期
-     面向架构评估八属性
-     质量属性场景六要素
-     ATAM 四阶段五输出"></div><figcaption>图12-0 第12章软件架构设计知识骨架</figcaption></div>
-<h2 id="s12-1-软件架构-定义与意义">12.1 软件架构 · 定义与意义</h2>
-<p>🏛️架构三要素 ⭐</p>
-<p><strong>软件架构 ＝ 构件（Component）＋ 连接件（Connector）＋ 约束/配置（Constraint）</strong></p>
-<ul><li><strong>构件</strong>：系统中的<strong>计算单元或数据存储</strong>（功能模块、对象、服务…）</li><li><strong>连接件</strong>：构件之间的<strong>交互机制</strong>（调用、消息、管道、协议…）</li><li><strong>约束</strong>：构件与连接件<strong>如何组合</strong>的规则（配置、拓扑约束）</li></ul>
-<p>架构是"系统的最高层分解"，决定系统的质量属性（性能、可用性、可修改性等）——功能属性靠各构件实现，<strong>质量属性靠架构保证</strong>。</p>
-<p>⚖️架构 vs 架构模式 vs 设计模式 ⭐</p>
-<table><thead><tr><th>层次</th><th>范围</th><th>例子</th></tr></thead><tbody><tr><td><strong>软件架构</strong></td><td><strong>系统级</strong>（构件/连接件/风格）</td><td>分层、微服务、C/S</td></tr><tr><td><strong>架构模式</strong></td><td><strong>介于两者之间</strong></td><td>MVC、微内核、管道-过滤器</td></tr><tr><td><strong>设计模式</strong></td><td><strong>代码/类级</strong>（局部关系）</td><td>单例、策略、观察者</td></tr></tbody></table>
-<p>💡 <strong>判断标准</strong>：影响<strong>整个系统骨架</strong> → 架构；<strong>局部可复用的中等粒度方案</strong> → 架构模式；<strong>类与对象之间的协作套路</strong> → 设计模式。</p>
-<p><strong>架构的意义（教材）</strong>：架构是<strong>降低复杂度</strong>的手段、是<strong>技术复用与知识传播</strong>的载体、<strong>早期决策</strong>影响深远（难以更改）、是<strong>利益相关者交流</strong>的基础。</p>
-<h2 id="s12-2-软件架构建模-五种模型">12.2 软件架构建模 · 五种模型</h2>
-<p>🗺️按建模侧重点不同，架构模型分 5 种</p>
-<p>① 结构模型</p>
-<p><strong>最直观、最普遍</strong>；以构件、连接件刻画架构，反映配置、约束、风格等<br><strong>核心 = 架构描述语言 ADL</strong></p>
-<p>② 框架模型</p>
-<p>与结构模型类似，但<strong>不侧重细节、更侧重整体结构</strong>；针对特殊问题建立专属架构</p>
-<p>③ 动态模型</p>
-<p>结构/框架模型的<strong>补充</strong>；研究<strong>粗粒度行为性质</strong>（重新配置、演化）；多为<strong>激励型</strong>系统</p>
-<p>④ 过程模型</p>
-<p>研究<strong>构建系统的步骤和过程</strong></p>
-<p>⑤ 功能模型</p>
-<p>架构由<strong>一组功能构件按层次组成</strong>，下层向上层提供服务；<strong>可看作特殊的框架模型</strong></p>
-<p>💡 五种模型中<strong>最常用的是结构模型和动态模型</strong>；五种各有所长，有机统一成完整模型更合适——例如 Kruchten 1995 年提出的 <strong>"4+1" 视图模型</strong>。</p>
-<p>口诀：<strong>结构框架动态，过程加功能</strong>；<strong>结构最常用、ADL 是核心</strong></p>
-<h3 id="s4-1-视图模型-Kruchten-1995">"4+1" 视图模型 ⭐（Kruchten, 1995）</h3>
-<div class="fig fig-mermaid"><div class="mermaid-src" data-src="flowchart TB
-  SC[&quot;＋1 场景视图（用例）&lt;br/&gt;最重要的视图 · 需求抽象&lt;br/&gt;串起并验证其他四视图&quot;]
-  LOG[&quot;逻辑视图&lt;br/&gt;功能需求 · 类图&quot;]
-  PRC[&quot;进程视图&lt;br/&gt;并发 · 性能 · 线程&quot;]
-  DEV[&quot;开发视图&lt;br/&gt;模块组织 · 子系统&quot;]
-  PHY[&quot;物理视图&lt;br/&gt;部署 · 拓扑 · 硬件&quot;]
-  SC -.-&gt;|&quot;驱动&quot;| LOG
-  SC -.-&gt;|&quot;驱动&quot;| PRC
-  SC -.-&gt;|&quot;驱动&quot;| DEV
-  SC -.-&gt;|&quot;驱动&quot;| PHY
-  LOG --&gt; DEV
-  PRC --&gt; PHY"></div><figcaption>图12-1 "4+1" 视图模型（Kruchten, 1995）：四个视图 + 一个验证用的场景视图</figcaption></div>
-<p>📋五视图 · 各自侧重与面向</p>
-<table><thead><tr><th>视图</th><th>关注什么</th><th>面向谁</th></tr></thead><tbody><tr><td><strong>逻辑视图</strong></td><td><strong>功能需求</strong>（系统分解为功能抽象）；OO 中用<strong>类图</strong>描述</td><td>最终用户</td></tr><tr><td><strong>开发视图</strong>（模块/实现视图）</td><td><strong>软件模块的组织和管理</strong>；开发容易性、复用、通用性</td><td>开发人员</td></tr><tr><td><strong>进程视图</strong></td><td>运行特性、<strong>非功能需求</strong>（性能、可用性）；强调<strong>并发性、分布性、容错</strong></td><td>系统集成人员</td></tr><tr><td><strong>物理视图</strong>（部署视图）</td><td>软件<strong>映射到硬件</strong>；拓扑结构、系统安装、通信</td><td>系统工程师</td></tr><tr><td><strong>＋1 场景视图</strong>（用例）</td><td><strong>使 4 个视图有机联系起来</strong>；<strong>最重要的需求抽象</strong>；帮助找到构件及相互关系</td><td>所有</td></tr></tbody></table>
-<h3 id="s4-1-视图的应用侧重-冲刺补充">4+1 视图的应用侧重 + 冲刺补充</h3>
-<p><strong>🎯不同系统的侧重（教材原话）</strong></p>
-<p><strong>MIS 系统</strong></p>
-<p>比较侧重于从<strong>逻辑视图</strong>和<strong>开发视图</strong>来描述系统<br>（功能与模块组织为主）</p>
-<p><strong>实时控制系统</strong></p>
-<p>比较注重于从<strong>进程视图</strong>和<strong>物理视图</strong>来描述系统<br>（并发性能与部署为主）</p>
-<p><strong>场景的两种表示</strong>：<strong>文本</strong>表示 或 <strong>图形</strong>表示。</p>
-<p>教材例：小型电话呼叫系统场景片段——控制器检测摘机 → 终端分配资源发拨号音 → 接收所拨号码 → 分析号码 → 打开会话</p>
-<p>🧷冲刺补充 · 4+1 高频考点</p>
-<p>①"<strong>+1</strong>"是<strong>场景/用例视图</strong>——作用是<strong>驱动与校验</strong>其他四个视图（不是"第五个并列视图"）</p>
-<p>②<strong>逻辑视图用类图</strong>（OO 风格）；<strong>开发视图 = UML 实现视图</strong>；<strong>物理视图 = UML 部署视图</strong></p>
-<p>③每个视图只关心系统的<strong>一个侧面</strong>；5 个视图结合才能反映架构的全部内容</p>
-<p>④场景可以<strong>分析某个特定视图</strong>，也可以描述<strong>不同视图的构件如何相互作用</strong></p>
-<p>⚠️ <strong>易错</strong>：把"+1"当成并列的第五视图、把进程视图当成"功能需求"视图（那是<strong>逻辑视图</strong>）——两个都是历年错误选项的设计套路。</p>
-<h2 id="s12-3-架构风格-定义与六大类总览">12.3 架构风格 · 定义与六大类总览 ⭐</h2>
-<p><strong>架构风格定义</strong>：描述某一特定应用领域中<strong>系统组织方式的惯用模式</strong>。体系结构风格定义<strong>一个系统家族</strong>——即定义一个<strong>词汇表</strong>（包含构件和连接件类型）和<strong>一组约束</strong>（指出如何组合构件和连接件）。</p>
-<p>架构设计的一个核心目标 = 重复的体系结构模式，达到体系结构级的软件重用</p>
-<p>① 数据流</p>
-<p><strong>批处理</strong>（每步独立程序、数据整体传递）<br><strong>管道-过滤器</strong>（数据源源不断、序贯处理）<br>典型：编译器、传统数据处理</p>
-<p>② 调用/返回</p>
-<p><strong>主程序/子程序</strong>（单线程、层次调用）<br><strong>面向对象</strong>（数据抽象 + 封装）<br><strong>层次型</strong>（每层为上层服务）<br><strong>客户端/服务器</strong>（二层/三层/B/S）<br>分而治之策略</p>
-<p>③ 以数据为中心</p>
-<p><strong>仓库风格</strong>（中央数据结构 + 独立构件）<br><strong>黑板风格</strong>（复杂非结构化问题）<br>典型：语音识别、模式识别</p>
-<p>④ 虚拟机</p>
-<p><strong>解释器</strong>（虚拟机弥合语义差异，<strong>效率较低</strong>）<br><strong>规则系统</strong>（规则集+解释器+选择器+工作内存）<br>典型：专家系统</p>
-<p>⑤ 独立构件</p>
-<p><strong>进程通信</strong>（独立过程 + 消息传递）<br><strong>事件系统</strong>（隐式调用，触发/广播事件）<br>强调构件相对独立、不直接通信</p>
-<p>⑥ 面向服务 SOA</p>
-<p>服务提供者 / 请求者 / 注册中心<br><strong>WSDL / SOAP / UDDI</strong>；<strong>ESB</strong> 企业服务总线<br>典型：企业集成</p>
-<p>六类口诀：<strong>「数据流里跑管道，调用返回分层次，数据中心黑仓库，虚拟机里解释器，独立构件靠事件，面向服务 SOA」</strong></p>
-<h2 id="s12-3-架构风格-六大类总览-先看全景">12.3 架构风格 · 六大类总览（先看全景）</h2>
-<p>架构风格描述<strong>一类系统</strong>的通用组织方式与组合规则。教材按构件与数据的交互方式分为<strong>六大类</strong>，<br>本学时先给全景，下个学时（<a href="H27.html">H27</a>）逐类展开：</p>
-<table><thead><tr><th>类别</th><th>核心特征</th><th>典型风格</th></tr></thead><tbody><tr><td><strong>① 数据流风格</strong></td><td>数据在加工单元间流动，前驱后自动推进</td><td>批处理 · 管道—过滤器</td></tr><tr><td><strong>② 调用/返回风格</strong></td><td>构件间显式调用，有调用栈</td><td>主程序—子程序 · 面向对象 · 层次型 · 客户端/服务器</td></tr><tr><td><strong>③ 以数据为中心风格</strong></td><td>围绕中央数据存储协作</td><td>仓库 · <strong>黑板</strong></td></tr><tr><td><strong>④ 虚拟机风格</strong></td><td>用虚拟机提供抽象运行环境</td><td>解释器 · 规则系统</td></tr><tr><td><strong>⑤ 独立构件风格</strong></td><td>构件独立部署、消息传递</td><td>消息传递 · 管道</td></tr><tr><td><strong>⑥ SOA 与微服务</strong></td><td>服务化、松耦合、可复用</td><td><strong>SOA</strong> · 微服务架构</td></tr></tbody></table>
-<div class="block warning"><div class="block-title">辨析提示</div><p><strong>「管道—过滤器」归数据流风格，不归独立构件风格</strong> —— 虽然都带"管道"二字，<br>但独立构件风格强调"构件独立部署 + 消息传递"，管道—过滤器强调"数据在过滤器链中加工流转"。<br>这是本章最高频的分类陷阱。</p></div>
+ root((15 运行与维护))
+   15.1 运维指标 ★★
+     MTTR 修复
+     MTBF 间隔
+     MTTF 无故障
+     MTTA 应答
+     可用度公式
+     几个9换算
+   15.2 运行管理
+     统一用户管理
+     认证四方式
+     网络管理五功能
+     软件资源管理
+   15.3 故障管理 ★★★
+     五活动
+       监视 调查 排查 收尾
+     故障原因七类
+     恢复三类
+   15.4 软件维护 ★★★
+     维护性六子特性
+     可维护性度量
+     维护四类占比
+     影响因素与对策
+     维护组织与流程
+   15.5 系统评价
+     评价流程
+     性能 效益 建设
+     权重三法
+   15.6 遗留系统 ★★
+     评价五活动
+     四象限四策略
+   15.7 新旧转换
+     转换三策略
+     数据迁移 ETL
+   15.8 系统演进
+     扩展 vs 集成"></div><figcaption>图15-0 第15章知识骨架（复述）</figcaption></div>
+<h2 id="s15-7-新旧系统转换-三策略-数据迁移">15.7 新旧系统转换 · 三策略 + 数据迁移 ⭐</h2>
+<p><strong>🔀三种转换策略</strong></p>
+<p>① 直接转换</p>
+<p>旧停新立即上，<strong>无过渡</strong>；<strong>人力费用最省</strong>；适用新系统不复杂/旧系统完全不能用；风险最大——转换前<strong>必须详细严格测试</strong> + 应急措施</p>
+<p>② 并行转换 ★最常用</p>
+<p>新旧<strong>并行一段时间</strong>（2~3 个月到 1 年），旧系统结果作<strong>校核</strong>；<strong>风险小</strong>、可比较性能、人员得到培训；缺点 = <strong>人力费用消耗大</strong>、周期长、<strong>难控制新旧数据变化</strong></p>
+<p>③ 分段转换</p>
+<p>直接 + 并行结合，<strong>分期分批</strong>；大系统适用、平稳费用不高；按<strong>功能/部门/机器设备</strong>分阶段；缺点 = 周期过长、需求变化影响新系统稳定、需开发<strong>新旧系统接口</strong></p>
+<p>💡 转换前准备：数据准备 · 文档准备 · 人员培训 · 设备安装 · <strong>系统试运行</strong>（输入真实数据比对输出）。</p>
+<p><strong>📦数据转换和迁移（原则：数据不丢失）</strong></p>
+<ul><li><strong>三方法</strong>：<strong>① 切换前工具迁移</strong>（ETL 抽取转换装载——<strong>最主要最快捷</strong>；一次迁移风险低强度大、分次迁移解决数据量大与宕机时间短的矛盾但需同步）· <strong>② 切换前手工录入</strong>（期初数据无历史来源时；耗人力出错率高）· <strong>③ 切换后新系统生成</strong>（按已迁原始数据生成结果数据，减少迁移量）</li><li><strong>三阶段</strong>：迁移前准备（<strong>7 项</strong>：数据源说明/数据字典/差异分析/表映射/ETL 工具/测试计划/应急措施）→ 转换与迁移（<strong>ETL = 抽取 → 转换（含清洗）→ 装载</strong>）→ 迁移后校验</li><li><strong>清洗</strong>：清二义性/重复/不完整/违反业务逻辑规则的垃圾数据（抽取前清洗为主）；<strong>校验</strong> = 质量分析（完整性/一致性/总分平衡/记录条数/特殊样本）+ <strong>新旧系统查询对比</strong></li></ul>
+<h2 id="s15-8-系统演进-冲刺补充-高可用-可观测性">15.8 系统演进 + 冲刺补充（高可用/可观测性）⭐</h2>
+<p>🧗系统扩展 vs 系统集成</p>
+<p><strong>可扩展性</strong> = 添加新功能的能力；<strong>动态可扩展</strong>（运行中加功能不影响其他部分）/<strong>静态可扩展</strong>（须停机重启）；提高方法 = <strong>架构中减少构件间耦合</strong></p>
+<p><strong>扩展</strong> = <strong>深度维护</strong>——重点在<strong>设计阶段</strong>（研究扩展点附近环境、细致回归测试）；延伸型扩展/新建型扩展<br><strong>集成</strong> = <strong>广度维护</strong>——重点在<strong>分析阶段</strong>（业务关联点、避免过度耦合）；需<strong>高层协调</strong>、重<strong>接口与全流程测试</strong></p>
+<p>回归测试不能<strong>"改头测头，改脚测脚"</strong>——要全面回归</p>
+<p>🔭冲刺补充 · 2026 论文新方向落点</p>
+<p>可观测性三支柱</p>
+<p><strong>Logging 日志</strong>（发生了什么；EFK/ELK）· <strong>Metrics 指标</strong>（聚合数值；Prometheus+Grafana）· <strong>Tracing 链路追踪</strong>（请求走了哪些环节；SkyWalking/Jaeger）——口诀"<strong>日志·指标·链路</strong>"；<strong>MTTR 的核心是快速定位，靠可观测性</strong></p>
+<p>监控四层 + 高可用手段</p>
+<p>基础设施 → 中间件 → 应用 → 用户体验（APM/首屏）；告警分级 P0~P3<br>高可用 = <strong>冗余（主备/双活/多活）· 心跳检测 · 熔断（断路器三态：闭合/打开/半开）· 降级 · 限流 · 弹性伸缩 · 灰度发布</strong></p>
+<p>容灾与备份</p>
+<p><strong>RPO = 容忍丢多少数据（决定备份频率）</strong>· <strong>RTO = 容忍停多久（决定恢复速度）</strong>；灾备等级 = 本地 → 同城 → 异地 → <strong>两地三中心</strong>；备份 = <strong>全量/增量/差异</strong></p>
+<p>DevOps / DevSecOps / 信创</p>
+<p><strong>DevOps</strong> = 开发运维一体化（CI/CD/IaC/GitOps/容器化）；<strong>DevSecOps = 安全左移</strong>；ITIL 五管理 = 事件/问题/变更/配置/发布<br>信创迁移四层 = <strong>芯片（鲲鹏/海光/飞腾）→ OS（麒麟/统信）→ 数据库（达梦/人大金仓）→ 中间件（东方通）</strong>；迁移六步 = 评估→设计→迁移→双轨→灰度→回滚预案</p>
+<h2 id="全章易错辨析-TOP-10">全章易错辨析 TOP 10</h2>
+<p>1<strong>MTTF vs MTBF</strong>：MTBF = MTTF + MTTR（间隔含修复时间）</p>
+<p>2<strong>可用度 A = MTBF/(MTBF+MTTR)</strong>；几个 9 换算 99.9%≈8.76h/年</p>
+<p>3<strong>MTTA</strong> = 告警触发到<strong>确认</strong>的时间（响应能力），不是修复时间</p>
+<p>4<strong>故障管理五活动</strong>：监视（基础，大多数故障在此发现）→调查→排查恢复→收尾（+预防）</p>
+<p>5<strong>维护四类占比</strong>：<strong>完善性 ~50% 最大</strong>；预防性 = "今天方法学用于昨天系统满足明天需要"</p>
+<p>6<strong>可维护性度量</strong>：外部 = MTTR；内部 = McCabe 环路数（复杂性间接度量）</p>
+<p>7<strong>遗留系统四策略</strong>：高高改造｜低高继承（并行切换）｜高低集成（封装孤岛）｜低低淘汰</p>
+<p>8<strong>转换三策略</strong>：直接最省风险最大｜并行最常用（校核旧系统）｜分段按功能/部门/设备</p>
+<p>9<strong>RPO vs RTO</strong>：RPO = 丢多少数据；RTO = 停多久</p>
+<p>10<strong>扩展 vs 集成</strong>：深度维护重点在设计 vs 广度维护重点在分析（需高层协调）</p>
+<p>💡 补充三陷阱：<strong>MTBF 不含计划内维护停机</strong> · <strong>数据迁移原则 = 数据不丢失（三方法 ETL/手工/生成）</strong> · <strong>DevSecOps = 安全左移</strong>。</p>
+<h2 id="全章速记卡-考前-5-分钟">全章速记卡 · 考前 5 分钟</h2>
+<p><strong>🧮公式卡（必背）</strong></p>
+<ul><li><strong>MTBF = MTTF + MTTR</strong>（间隔 = 无故障 + 修复）</li><li><strong>可用度 A = MTBF / (MTBF + MTTR)</strong></li><li><strong>MTTR</strong> = 修复总时间 ÷ 维修次数（例：120min/6 = 20min）</li><li><strong>MTBF</strong> = 总运行时间 ÷ 故障数（例：1000h/2 = 500h）</li><li><strong>MTTF</strong> = 正常运行总时间 ÷ 故障数（不可修复件寿命）</li><li><strong>MTTA</strong> = 告警到确认总时间 ÷ 事件数（响应能力）</li><li>几个 9：<strong>99%≈87.6h｜99.9%≈8.76h｜99.99%≈52.6min｜99.999%≈5.26min</strong>/年</li><li>失效率 R(t) = e^(−λt)，MTTF = 1/λ</li><li>遗留系统技术水平：<strong>OR =（P₁ORH+P₂ORS+P₃OAF+P₄ORA）/4</strong></li></ul>
+<p><strong>🔢数字卡</strong></p>
+<ul><li>运维占生命周期 <strong>60%~80%</strong>；<strong>50%</strong> 维护工作量花在理解软件上</li><li>认证 <strong>4</strong> 方式：用户名密码/IC 卡/动态密码/USB Key（强双因子）</li><li>网络管理 <strong>5</strong> 功能：性能/故障/配置/计费/安全</li><li>故障管理 <strong>5</strong> 活动：监视/调查/排查恢复/收尾（+预防）；原因 <strong>7</strong> 类</li><li>数据库故障 <strong>3</strong> 类：事务/系统/介质（副本+日志恢复）</li><li>维护性 <strong>6</strong> 子特性；维护 <strong>4</strong> 类占比：<strong>20/25/50/5%</strong>（完善性最大）</li><li>评价 <strong>3</strong> 方面：性能/效益/建设；权重 <strong>3</strong> 法：主观/客观/组合</li><li>遗留系统 <strong>4</strong> 象限 <strong>4</strong> 策略：淘汰/继承/改造/集成</li><li>转换 <strong>3</strong> 策略：直接/并行（最常用）/分段；迁移 <strong>3</strong> 方法；ETL = 抽取转换装载</li><li>高可用 <strong>7</strong> 手段；断路器 <strong>3</strong> 态；可观测 <strong>3</strong> 支柱；监控 <strong>4</strong> 层；信创 <strong>4</strong> 层</li></ul>
+<p><strong>🔗场景对应卡</strong></p>
+<ul><li>"修 bug" → <strong>改正性</strong>；"换新 OS/数据库" → 适应性；"加新功能" → <strong>完善性</strong>；"提高未来可维护性" → 预防性</li><li>"告警到确认" → <strong>MTTA</strong>；"两次故障之间" → MTBF；"不可修复件寿命" → MTTF</li><li>"技术落后但业务离不开" → <strong>继承</strong>（并行切换）</li><li>"局部良好但信息孤岛" → <strong>集成（封装）</strong></li><li>"大系统平稳切换" → <strong>分段转换</strong>；"新旧并行校核" → 并行转换</li><li>"期初数据无历史来源" → <strong>手工录入</strong>；"减少迁移量" → 切换后生成</li><li>"容忍丢多少数据" → <strong>RPO</strong>；"容忍停多久" → <strong>RTO</strong></li><li>"请求走了哪些环节" → <strong>Tracing</strong>；"聚合数值" → Metrics；"发生了什么" → Logging</li><li>"断路器三态" → 闭合/打开/半开；"两地三中心" = 生产+同城+异地</li></ul>
+<p><strong>⚖️对比卡</strong></p>
+<ul><li><strong>MTTF（不可修复件）</strong> vs <strong>MTBF（可修复系统间隔）</strong> vs <strong>MTTR（修复）</strong> vs <strong>MTTA（应答）</strong></li><li><strong>改正性（修 bug）</strong> vs <strong>适应性（换环境）</strong> vs <strong>完善性（加功能最大）</strong> vs <strong>预防性（防未来）</strong></li><li><strong>直接转换（最省最险）</strong> vs <strong>并行（最常用费人）</strong> vs <strong>分段（平稳周期长）</strong></li><li><strong>一次迁移（风险低强度大）</strong> vs <strong>分次迁移（解决量大宕机短、需同步）</strong></li><li><strong>RPO（数据丢失容忍）</strong> vs <strong>RTO（时间容忍）</strong></li><li><strong>全量/增量/差异备份</strong></li><li><strong>扩展（深度/设计/回归测试）</strong> vs <strong>集成（广度/分析/高层协调）</strong></li><li><strong>动态可扩展（不停机）</strong> vs <strong>静态可扩展（停机重启）</strong></li><li><strong>DevOps（CI/CD 自动化）</strong> vs <strong>DevSecOps（安全左移）</strong></li><li><strong>经济效益（直接）</strong> vs <strong>社会效益（间接难评）</strong></li></ul>
+<p>本章最核心三句话：<strong>① A = MTBF/(MTBF+MTTR)，MTBF = MTTF + MTTR，MTTA 只管告警到确认　② 维护四类完善性占比最大 ~50%，预防性 = 今天方法学用于昨天系统满足明天需要　③ 遗留系统四象限：高高改造、低高继承、高低集成、低低淘汰</strong></p>
+<h2 id="全章自测清单-能答出即过关">全章自测清单 · 能答出即过关</h2>
+<p>□MTTR/MTBF/MTTF/MTTA 定义与教材例会算</p>
+<p>□MTBF = MTTF + MTTR；可用度公式</p>
+<p>□"几个 9" 年中断换算</p>
+<p>□MTBF 不含计划内维护停机</p>
+<p>□统一用户管理三好处；认证四方式及风险</p>
+<p>□网络管理五功能</p>
+<p>□软件可复用程度 = 能力成熟度指标；分发三任务</p>
+<p>□故障管理五活动及各活动要点</p>
+<p>□故障监视四重点（人/操作规范/硬件/软件）</p>
+<p>□故障原因七类；数据库故障三类与恢复</p>
+<p>□维护性六子特性；可维护性度量（MTTR/McCabe）</p>
+<p>□维护四类定义与占比（完善性最大）</p>
+<p>□预防性维护金句</p>
+<p>□五大影响因素（50% 花在理解上）</p>
+<p>□文档比源码重要；测试文档是回归基础</p>
+<p>□维护三角色；维护流程；救火队例外</p>
+<p>□维护记录与评价七指标</p>
+<p>□系统评价流程四步；三大评价方面</p>
+<p>□经济效益（直接）vs 社会效益（间接）</p>
+<p>□权重三法；指标设计四驱动</p>
+<p>□遗留系统特点（无文档难理解）</p>
+<p>□评价五活动；OR 加权公式</p>
+<p>□四象限四策略及判断锚</p>
+<p>□转换三策略优缺点（并行最常用）</p>
+<p>□转换前五准备（含试运行）</p>
+<p>□数据迁移三方法；ETL 三过程；原则数据不丢失</p>
+<p>□迁移后校验两方式</p>
+<p>□扩展 vs 集成（深度/设计 vs 广度/分析）</p>
+<p>□动态 vs 静态可扩展性</p>
+<p>□可观测性三支柱；监控四层</p>
+<p>□高可用七手段；断路器三态；RPO/RTO；灾备等级</p>
+<p>□DevOps/DevSecOps/ITIL；信创四层与迁移六步</p>
+<p>💡 <strong>用法</strong>：可用度公式会算教材例；维护四类与四象限脱口而出。全打勾，第 15 章过关。</p>
+<h2 id="本章回炉任务-下一份预告">本章回炉任务 + 下一份预告</h2>
+<p><strong>🔁三个必须动手的任务</strong></p>
+<p><strong>① 可用度计算三连</strong>——① MTTF=990h、MTTR=10h，求 MTBF 与可用度（<strong>答案 99%</strong>）；② 要达到 99.9% 可用度，MTTR=8.76h 时 MTBF 需多少？③ 99.99% 意味着一年最多停多少分钟？</p>
+<p><strong>② 维护场景归类</strong>——写 8 个场景（修崩溃 bug/换新操作系统/用户要报表导出/重构提高可维护性/适配新数据格式/优化查询性能/补文档/升级防未来缺陷），各归入维护四类。</p>
+<p><strong>③ 遗留系统模拟决策</strong>——假设公司 10 年前的呼叫中心话单系统（技术老旧但业务核心），画四象限图定位并写 3 句处置策略论证（提示：<strong>继承</strong>——新系统兼容 + 并行切换）。</p>
+<p>➡️进度与预告</p>
+<p>已完成 <strong>17 / 22</strong> 份课件（合计 <strong>537 页</strong>）<br>批次 3 还剩：<strong>CH17 嵌入式系统</strong></p>
+<p><strong>下一份：CH17 嵌入式系统分析与设计</strong>——嵌入式特点/RTOS/交叉开发，批次 3 收官之战。</p>
+<p>💡 本章是 2026 论文新方向「高可用与可观测性」「信创迁移」的素材库——三支柱 + RPO/RTO + 迁移六步直接进论文。</p>
 <hr>
 <h2 id="章节练习题">章节练习题</h2>
 <hr>
-    <div class="quiz quiz-js" data-key="H26-软件架构设计（一）-架构定义与4加1视图.md">
+    <div class="quiz quiz-js" data-key="H34-系统运行与维护（二）-系统转换与演进.md">
   <div class="quiz-head">
     <span class="quiz-label">章节练习题</span>
     <span class="quiz-progress">已答 0 / 6</span>
@@ -2064,53 +2083,53 @@ html{scroll-padding-top:80px}
     <button class="quiz-btn quiz-reset" type="button">重做</button>
     <div class="quiz-pbar"><div class="quiz-pbar-fill"></div></div>
   </div>
-  <div class="quiz-item" data-answer="A" data-explain="&lt;strong&gt;&quot;4+1&quot; = 四个视图 + 一个场景视图&lt;/strong&gt;。四视图：&lt;strong&gt;逻辑视图&lt;/strong&gt;（功能需求 · 类图）｜&lt;strong&gt;进程视图&lt;/strong&gt;（并发 · 性能 · 线程）｜&lt;strong&gt;开发视图&lt;/strong&gt;（模块组织 · 子系统）｜&lt;strong&gt;物理视图&lt;/strong&gt;（部署 · 拓扑 · 硬件）。&lt;strong&gt;&quot;+1&quot; 是场景视图（用例视图）&lt;/strong&gt;，它&lt;strong&gt;不描述系统结构，只描述&quot;典型场景&quot;&lt;/strong&gt;，作用是&lt;strong&gt;把其他四个视图串起来并做验证&lt;/strong&gt;。⚠️ 场景视图是最重要的视图，架构师首先关注它。" data-ref="第12章 · 12.2 &quot;4+1&quot; 视图模型">
-  <div class="quiz-q"><span class="qn">1</span>Kruchten 提出的 "4+1" 视图模型中，"+1" 指的是：</div>
-  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">场景视图（Scenario View）—— 串起并验证其他四个视图</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">逻辑视图</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">进程视图</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">物理视图</span></div></div>
+  <div class="quiz-item" data-answer="A" data-explain="&lt;strong&gt;三种转换策略&lt;/strong&gt;：&lt;strong&gt;① 直接转换（一刀切）&lt;/strong&gt;——某时刻&lt;strong&gt;直接停用旧系统启用新系统&lt;/strong&gt;；&lt;strong&gt;成本最低、最简单，但风险最高&lt;/strong&gt;（一旦新系统出问题没有退路）；适用于&lt;strong&gt;小系统或低风险场景&lt;/strong&gt;。&lt;strong&gt;② 并行转换&lt;/strong&gt;——&lt;strong&gt;新旧系统并行运行一段时间&lt;/strong&gt;（数周至数月），比对结果一致后再停用旧系统；&lt;strong&gt;风险最低&lt;/strong&gt;（有旧系统兜底），但&lt;strong&gt;成本最高&lt;/strong&gt;（两套系统同时维护、双倍人力）。&lt;strong&gt;③ 分段转换（渐进式）&lt;/strong&gt;——&lt;strong&gt;按模块/按区域/按用户分批切换&lt;/strong&gt;；&lt;strong&gt;风险与成本居中&lt;/strong&gt;，是&lt;strong&gt;大型系统最常用&lt;/strong&gt;的方式。" data-ref="第15章 · 15.7 新旧系统转换 · 三策略">
+  <div class="quiz-q"><span class="qn">1</span>新旧系统转换的三种策略中，风险最低但成本最高的是：</div>
+  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">并行转换（新旧系统并行运行一段时间）</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">直接转换（某一时刻直接切换）</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">分段转换（分模块逐步切换）</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">三者风险相同</span></div></div>
   <div class="reveal" style="display:none">
     <div class="reveal-verdict"></div>
-    <div class="reveal-explain"><strong>"4+1" = 四个视图 + 一个场景视图</strong>。四视图：<strong>逻辑视图</strong>（功能需求 · 类图）｜<strong>进程视图</strong>（并发 · 性能 · 线程）｜<strong>开发视图</strong>（模块组织 · 子系统）｜<strong>物理视图</strong>（部署 · 拓扑 · 硬件）。<strong>"+1" 是场景视图（用例视图）</strong>，它<strong>不描述系统结构，只描述"典型场景"</strong>，作用是<strong>把其他四个视图串起来并做验证</strong>。⚠️ 场景视图是最重要的视图，架构师首先关注它。</div>
-    <div class="reveal-ref">第12章 · 12.2 "4+1" 视图模型</div>
+    <div class="reveal-explain"><strong>三种转换策略</strong>：<strong>① 直接转换（一刀切）</strong>——某时刻<strong>直接停用旧系统启用新系统</strong>；<strong>成本最低、最简单，但风险最高</strong>（一旦新系统出问题没有退路）；适用于<strong>小系统或低风险场景</strong>。<strong>② 并行转换</strong>——<strong>新旧系统并行运行一段时间</strong>（数周至数月），比对结果一致后再停用旧系统；<strong>风险最低</strong>（有旧系统兜底），但<strong>成本最高</strong>（两套系统同时维护、双倍人力）。<strong>③ 分段转换（渐进式）</strong>——<strong>按模块/按区域/按用户分批切换</strong>；<strong>风险与成本居中</strong>，是<strong>大型系统最常用</strong>的方式。</div>
+    <div class="reveal-ref">第15章 · 15.7 新旧系统转换 · 三策略</div>
   </div>
-</div><div class="quiz-item" data-answer="A" data-explain="&lt;strong&gt;静态结构 = 逻辑视图 + 开发视图&lt;/strong&gt;（关注&quot;系统由什么构成、怎么组织&quot;）；&lt;strong&gt;动态结构 = 进程视图 + 物理视图&lt;/strong&gt;（关注&quot;运行时怎么协作、部署在哪&quot;）。这一组划分是本章高频考点，答题时要能立刻对上号。" data-ref="第12章 · 12.2 &quot;4+1&quot; 视图模型">
-  <div class="quiz-q"><span class="qn">2</span>"4+1" 视图中，"逻辑视图 + 开发视图"共同描述的是系统的：</div>
-  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">静态结构</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">动态结构</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">物理拓扑</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">功能需求</span></div></div>
+</div><div class="quiz-item" data-answer="A" data-explain="&lt;strong&gt;ETL = Extract（抽取）→ Transform（转换/清洗）→ Load（装载）&lt;/strong&gt;：&lt;strong&gt;① 抽取&lt;/strong&gt;——从旧系统/多种数据源读取原始数据；&lt;strong&gt;② 转换&lt;/strong&gt;——&lt;strong&gt;清洗、去重、格式统一、编码映射、业务规则换算&lt;/strong&gt;（&lt;strong&gt;这是数据迁移中最耗时、最容易出错的环节&lt;/strong&gt;）；&lt;strong&gt;③ 装载&lt;/strong&gt;——写入新系统。&lt;strong&gt;数据迁移关键步骤&lt;/strong&gt;：数据盘点 → 字段映射 → 清洗转换 → &lt;strong&gt;试迁移 + 比对校验&lt;/strong&gt; → 正式迁移 → &lt;strong&gt;回滚预案&lt;/strong&gt;。⚠️ 必做：&lt;strong&gt;迁移前后的数据核对&lt;/strong&gt;（总量、关键字段、抽样比对），以及&lt;strong&gt;保留旧数据备份&lt;/strong&gt;。" data-ref="第15章 · 15.7 数据迁移">
+  <div class="quiz-q"><span class="qn">2</span>新旧系统转换中的数据迁移，"ETL" 三个字母分别代表：</div>
+  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">抽取（Extract）→ 转换（Transform）→ 装载（Load）</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">加密 → 传输 → 加载</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">导出 → 测试 → 上线</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">评估 → 测试 → 上线</span></div></div>
   <div class="reveal" style="display:none">
     <div class="reveal-verdict"></div>
-    <div class="reveal-explain"><strong>静态结构 = 逻辑视图 + 开发视图</strong>（关注"系统由什么构成、怎么组织"）；<strong>动态结构 = 进程视图 + 物理视图</strong>（关注"运行时怎么协作、部署在哪"）。这一组划分是本章高频考点，答题时要能立刻对上号。</div>
-    <div class="reveal-ref">第12章 · 12.2 "4+1" 视图模型</div>
+    <div class="reveal-explain"><strong>ETL = Extract（抽取）→ Transform（转换/清洗）→ Load（装载）</strong>：<strong>① 抽取</strong>——从旧系统/多种数据源读取原始数据；<strong>② 转换</strong>——<strong>清洗、去重、格式统一、编码映射、业务规则换算</strong>（<strong>这是数据迁移中最耗时、最容易出错的环节</strong>）；<strong>③ 装载</strong>——写入新系统。<strong>数据迁移关键步骤</strong>：数据盘点 → 字段映射 → 清洗转换 → <strong>试迁移 + 比对校验</strong> → 正式迁移 → <strong>回滚预案</strong>。⚠️ 必做：<strong>迁移前后的数据核对</strong>（总量、关键字段、抽样比对），以及<strong>保留旧数据备份</strong>。</div>
+    <div class="reveal-ref">第15章 · 15.7 数据迁移</div>
   </div>
-</div><div class="quiz-item" data-answer="A" data-explain="软件架构是&lt;strong&gt;面向系统整体、关注宏观结构与关键决策&lt;/strong&gt;的设计（Wikipedia 定义）。它决定系统的&lt;strong&gt;模块划分、职责分配、交互方式、技术选型方向&lt;/strong&gt;，为后续详细设计与编码建立&lt;strong&gt;约束与蓝图&lt;/strong&gt;。⚠️ 架构&lt;strong&gt;不是详细设计&lt;/strong&gt;（那是构件内部算法），也&lt;strong&gt;不是实现&lt;/strong&gt;。" data-ref="第12章 · 12.1 软件架构 · 定义与意义">
-  <div class="quiz-q"><span class="qn">3</span>软件架构的核心作用是：</div>
-  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">在技术实现之前决定系统的总体结构与关键设计决策，为后续开发建立约束与蓝图</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">把代码写完</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">优化数据库性能</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">编写用户手册</span></div></div>
+</div><div class="quiz-item" data-answer="A" data-explain="&lt;strong&gt;高可用（HA）的核心公式仍然是 A = MTBF/(MTBF+MTTR)&lt;/strong&gt;，所以只有两条路：&lt;strong&gt;延长无故障时间（MTBF）&lt;/strong&gt; + &lt;strong&gt;缩短修复时间（MTTR）&lt;/strong&gt;。&lt;strong&gt;关键手段&lt;/strong&gt;：&lt;strong&gt;① 消除单点故障 SPOF&lt;/strong&gt;——任何组件都要有冗余（多实例、多机房、多活）；&lt;strong&gt;② 故障自动转移&lt;/strong&gt;（健康检查 + 自动切流）；&lt;strong&gt;③ 快速恢复机制&lt;/strong&gt;（限流、降级、熔断、回滚）；&lt;strong&gt;④ 容量与演练&lt;/strong&gt;。⚠️ &lt;strong&gt;&quot;堆硬件&quot;只能解决部分冗余问题&lt;/strong&gt;：如果架构存在单点（如单点数据库写、单点网关）、或 MTTR 很长（无自动化恢复），&lt;strong&gt;再多服务器也达不到 99.99%&lt;/strong&gt;。" data-ref="第15章 · 15.8 冲刺补充 · 高可用">
+  <div class="quiz-q"><span class="qn">3</span>关于"高可用"设计，下列说法错误的是：</div>
+  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">高可用就是堆硬件冗余，只要服务器足够多就一定能达到 99.99%</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">高可用需要消除单点故障（SPOF），并结合冗余、故障转移与健康检查</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">可用度通常用"9"的个数衡量（如 3 个 9 = 99.9%）</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">缩短 MTTR 与延长 MTBF 都能提高可用度</span></div></div>
   <div class="reveal" style="display:none">
     <div class="reveal-verdict"></div>
-    <div class="reveal-explain">软件架构是<strong>面向系统整体、关注宏观结构与关键决策</strong>的设计（Wikipedia 定义）。它决定系统的<strong>模块划分、职责分配、交互方式、技术选型方向</strong>，为后续详细设计与编码建立<strong>约束与蓝图</strong>。⚠️ 架构<strong>不是详细设计</strong>（那是构件内部算法），也<strong>不是实现</strong>。</div>
-    <div class="reveal-ref">第12章 · 12.1 软件架构 · 定义与意义</div>
+    <div class="reveal-explain"><strong>高可用（HA）的核心公式仍然是 A = MTBF/(MTBF+MTTR)</strong>，所以只有两条路：<strong>延长无故障时间（MTBF）</strong> + <strong>缩短修复时间（MTTR）</strong>。<strong>关键手段</strong>：<strong>① 消除单点故障 SPOF</strong>——任何组件都要有冗余（多实例、多机房、多活）；<strong>② 故障自动转移</strong>（健康检查 + 自动切流）；<strong>③ 快速恢复机制</strong>（限流、降级、熔断、回滚）；<strong>④ 容量与演练</strong>。⚠️ <strong>"堆硬件"只能解决部分冗余问题</strong>：如果架构存在单点（如单点数据库写、单点网关）、或 MTTR 很长（无自动化恢复），<strong>再多服务器也达不到 99.99%</strong>。</div>
+    <div class="reveal-ref">第15章 · 15.8 冲刺补充 · 高可用</div>
   </div>
-</div><div class="quiz-item" data-answer="A" data-explain="五种模型：&lt;strong&gt;结构模型&lt;/strong&gt;（描述系统的&lt;strong&gt;静态结构&lt;/strong&gt;，如结构图/结构图与结构表）｜&lt;strong&gt;行为模型&lt;/strong&gt;（描述系统的&lt;strong&gt;动态行为&lt;/strong&gt;，如状态图、活动图）｜&lt;strong&gt;数据模型&lt;/strong&gt;（描述数据组织与关系，如 E-R 图、类图）｜&lt;strong&gt;部署模型&lt;/strong&gt;（描述硬件节点与软件构件的物理分布）｜&lt;strong&gt;视图模型&lt;/strong&gt;（从不同利益相关者视角投影，如 4+1 视图）。&lt;strong&gt;记忆：&quot;结构=长什么样，行为=怎么动，数据=装什么，部署=放哪里，视图=谁在看&quot;&lt;/strong&gt;。" data-ref="第12章 · 12.2 软件架构建模 · 五种模型">
-  <div class="quiz-q"><span class="qn">4</span>软件架构建模的五种模型中，"结构图"（结构模型）主要描述：</div>
-  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">系统的静态结构——模块与模块之间的组织关系</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">系统的动态行为——事件触发的状态转移</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">系统的部署拓扑——硬件与节点的物理分布</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">系统的接口契约——每个构件提供什么服务</span></div></div>
+</div><div class="quiz-item" data-answer="A" data-explain="&lt;strong&gt;可观测性三大支柱&lt;/strong&gt;：&lt;strong&gt;① Metrics 指标&lt;/strong&gt;——&lt;strong&gt;聚合的数值型时间序列&lt;/strong&gt;（QPS、响应时间、错误率、资源使用率），适合&lt;strong&gt;告警与趋势分析&lt;/strong&gt;；&lt;strong&gt;② Logs 日志&lt;/strong&gt;——&lt;strong&gt;离散的事件记录&lt;/strong&gt;（带上下文的请求日志、错误堆栈），适合&lt;strong&gt;定位具体个案&lt;/strong&gt;；&lt;strong&gt;③ Traces 链路追踪&lt;/strong&gt;——&lt;strong&gt;一次请求在分布式系统中流经各服务的完整路径&lt;/strong&gt;（TraceId / SpanId），适合&lt;strong&gt;定位跨服务的性能瓶颈与故障点&lt;/strong&gt;。⚠️ 与&quot;&lt;strong&gt;监控&lt;/strong&gt;&quot;的区别：&lt;strong&gt;监控&lt;/strong&gt;是&quot;&lt;strong&gt;已知问题的看护&lt;/strong&gt;&quot;（预先定义指标与阈值），&lt;strong&gt;可观测性&lt;/strong&gt;是&quot;&lt;strong&gt;未知问题的探索能力&lt;/strong&gt;&quot;（能在没预想到的故障中快速找到根因）。" data-ref="第15章 · 15.8 冲刺补充 · 可观测性">
+  <div class="quiz-q"><span class="qn">4</span>关于"可观测性"（Observability）三大支柱，正确的是：</div>
+  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">指标（Metrics）+ 日志（Logs）+ 链路追踪（Traces）</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">CPU + 内存 + 磁盘</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">监控 + 告警 + 值班</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">日志 + 告警 + 报表</span></div></div>
   <div class="reveal" style="display:none">
     <div class="reveal-verdict"></div>
-    <div class="reveal-explain">五种模型：<strong>结构模型</strong>（描述系统的<strong>静态结构</strong>，如结构图/结构图与结构表）｜<strong>行为模型</strong>（描述系统的<strong>动态行为</strong>，如状态图、活动图）｜<strong>数据模型</strong>（描述数据组织与关系，如 E-R 图、类图）｜<strong>部署模型</strong>（描述硬件节点与软件构件的物理分布）｜<strong>视图模型</strong>（从不同利益相关者视角投影，如 4+1 视图）。<strong>记忆："结构=长什么样，行为=怎么动，数据=装什么，部署=放哪里，视图=谁在看"</strong>。</div>
-    <div class="reveal-ref">第12章 · 12.2 软件架构建模 · 五种模型</div>
+    <div class="reveal-explain"><strong>可观测性三大支柱</strong>：<strong>① Metrics 指标</strong>——<strong>聚合的数值型时间序列</strong>（QPS、响应时间、错误率、资源使用率），适合<strong>告警与趋势分析</strong>；<strong>② Logs 日志</strong>——<strong>离散的事件记录</strong>（带上下文的请求日志、错误堆栈），适合<strong>定位具体个案</strong>；<strong>③ Traces 链路追踪</strong>——<strong>一次请求在分布式系统中流经各服务的完整路径</strong>（TraceId / SpanId），适合<strong>定位跨服务的性能瓶颈与故障点</strong>。⚠️ 与"<strong>监控</strong>"的区别：<strong>监控</strong>是"<strong>已知问题的看护</strong>"（预先定义指标与阈值），<strong>可观测性</strong>是"<strong>未知问题的探索能力</strong>"（能在没预想到的故障中快速找到根因）。</div>
+    <div class="reveal-ref">第15章 · 15.8 冲刺补充 · 可观测性</div>
   </div>
-</div><div class="quiz-item" data-answer="A" data-explain="&lt;strong&gt;逻辑视图（Logical View）&lt;/strong&gt;：面向&lt;strong&gt;问题域与需求&lt;/strong&gt;，用&lt;strong&gt;类图&lt;/strong&gt;表达关键抽象——关注&quot;系统要对什么建模&quot;。&lt;strong&gt;开发视图（Development View）&lt;/strong&gt;：面向&lt;strong&gt;软件实现&lt;/strong&gt;，用&lt;strong&gt;模块图/包图/构件图&lt;/strong&gt;表达代码的组织与依赖——关注&quot;代码怎么组织与分层&quot;。两者&lt;strong&gt;都是静态结构&lt;/strong&gt;，但面向的问题域不同：前者给分析人员看，后者给开发人员看。" data-ref="第12章 · 12.2 &quot;4+1&quot; 视图模型">
-  <div class="quiz-q"><span class="qn">5</span>在 "4+1" 视图模型中，逻辑视图与开发视图的差别体现在：</div>
-  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">逻辑视图面向分析（用类图描述问题域的对象与关系）；开发视图面向实现（用模块/子系统的组织图描述代码结构）</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">两者完全相同</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">逻辑视图是动态的，开发视图是静态的</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">开发视图只面向最终用户</span></div></div>
+</div><div class="quiz-item" data-answer="A" data-explain="&lt;strong&gt;系统演进的驱动因素&lt;/strong&gt;（为什么系统要变）：&lt;strong&gt;① 业务需求变化&lt;/strong&gt;（新功能、新渠道、新合规要求）｜&lt;strong&gt;② 技术平台升级&lt;/strong&gt;（框架/中间件/数据库版本迭代、信创替代）｜&lt;strong&gt;③ 性能与容量瓶颈&lt;/strong&gt;（用户量增长导致现有架构撑不住）｜&lt;strong&gt;④ 技术债累积&lt;/strong&gt;（可维护性下降，改不动了）｜&lt;strong&gt;⑤ 安全与合规要求&lt;/strong&gt;。⚠️ &quot;&lt;strong&gt;团队人员离职&lt;/strong&gt;&quot;属于&lt;strong&gt;项目管理/人力资源&lt;/strong&gt;范畴，不是系统演进的&lt;strong&gt;技术驱动因素&lt;/strong&gt;（虽然它可能间接导致技术债，但不是演进的直接原因）。" data-ref="第15章 · 15.8 系统演进">
+  <div class="quiz-q"><span class="qn">5</span>系统演进（System Evolution）的驱动因素通常不包括：</div>
+  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">开发团队的人员离职</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">业务需求变化</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">技术平台升级</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">性能与容量瓶颈</span></div></div>
   <div class="reveal" style="display:none">
     <div class="reveal-verdict"></div>
-    <div class="reveal-explain"><strong>逻辑视图（Logical View）</strong>：面向<strong>问题域与需求</strong>，用<strong>类图</strong>表达关键抽象——关注"系统要对什么建模"。<strong>开发视图（Development View）</strong>：面向<strong>软件实现</strong>，用<strong>模块图/包图/构件图</strong>表达代码的组织与依赖——关注"代码怎么组织与分层"。两者<strong>都是静态结构</strong>，但面向的问题域不同：前者给分析人员看，后者给开发人员看。</div>
-    <div class="reveal-ref">第12章 · 12.2 "4+1" 视图模型</div>
+    <div class="reveal-explain"><strong>系统演进的驱动因素</strong>（为什么系统要变）：<strong>① 业务需求变化</strong>（新功能、新渠道、新合规要求）｜<strong>② 技术平台升级</strong>（框架/中间件/数据库版本迭代、信创替代）｜<strong>③ 性能与容量瓶颈</strong>（用户量增长导致现有架构撑不住）｜<strong>④ 技术债累积</strong>（可维护性下降，改不动了）｜<strong>⑤ 安全与合规要求</strong>。⚠️ "<strong>团队人员离职</strong>"属于<strong>项目管理/人力资源</strong>范畴，不是系统演进的<strong>技术驱动因素</strong>（虽然它可能间接导致技术债，但不是演进的直接原因）。</div>
+    <div class="reveal-ref">第15章 · 15.8 系统演进</div>
   </div>
-</div><div class="quiz-item" data-answer="A" data-explain="&lt;strong&gt;IEEE 1471（1995）&lt;/strong&gt; 是架构描述的奠基标准，&lt;strong&gt;2007 年被 ISO/IEC/IEEE 42010 取代&lt;/strong&gt;。42010 继承并扩展了它的核心概念：&lt;strong&gt;架构描述（AD）= 文档（Documentation）+ 视图（Views）+ 模型（Models）&lt;/strong&gt;。记忆：&lt;strong&gt;&quot;1471 是前朝、42010 是本朝&quot;&lt;/strong&gt;。" data-ref="第12章 · 12.4 软件架构标准">
-  <div class="quiz-q"><span class="qn">6</span>关于 IEEE 1471 与 ISO/IEC/IEEE 42010，下列说法正确的是：</div>
-  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">1471 是 1995 年的标准，后被 42010 取代；两者核心概念一致（架构描述 = 文档 + 视图 + 模型）</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">ISO 42010 是 1471 的前身</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">两者是完全无关的两套体系</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">1471 定义的是架构风格，42010 定义的是架构师资质</span></div></div>
+</div><div class="quiz-item" data-answer="A" data-explain="&lt;strong&gt;可用度与允许停机时间的换算&lt;/strong&gt;（一年 365 天 = 8760 小时）：&lt;strong&gt;99%（两个 9）&lt;/strong&gt; → 允许停机 &lt;strong&gt;1% × 8760 = 87.6 小时/年&lt;/strong&gt;；&lt;strong&gt;99.9%（三个 9）&lt;/strong&gt; → &lt;strong&gt;0.1% × 8760 = 8.76 小时/年&lt;/strong&gt;；&lt;strong&gt;99.99%（四个 9）&lt;/strong&gt; → &lt;strong&gt;0.01% × 8760 = 0.876 小时 ≈ 52.6 分钟/年&lt;/strong&gt;；&lt;strong&gt;99.999%（五个 9）&lt;/strong&gt; → &lt;strong&gt;≈ 5.26 分钟/年&lt;/strong&gt;。⚠️ 记忆锚点：&lt;strong&gt;每多一个 9，允许停机时间缩小 10 倍&lt;/strong&gt;。这是运维题最常见的换算。" data-ref="第15章 · 15.1 可用度计算">
+  <div class="quiz-q"><span class="qn">6</span>某系统年可用度目标为 99.9%（三个 9），一年按 365 天计，允许的年停机时间约为：</div>
+  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">约 8.76 小时</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">约 52.6 分钟</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">约 5.26 分钟</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">约 87.6 小时</span></div></div>
   <div class="reveal" style="display:none">
     <div class="reveal-verdict"></div>
-    <div class="reveal-explain"><strong>IEEE 1471（1995）</strong> 是架构描述的奠基标准，<strong>2007 年被 ISO/IEC/IEEE 42010 取代</strong>。42010 继承并扩展了它的核心概念：<strong>架构描述（AD）= 文档（Documentation）+ 视图（Views）+ 模型（Models）</strong>。记忆：<strong>"1471 是前朝、42010 是本朝"</strong>。</div>
-    <div class="reveal-ref">第12章 · 12.4 软件架构标准</div>
+    <div class="reveal-explain"><strong>可用度与允许停机时间的换算</strong>（一年 365 天 = 8760 小时）：<strong>99%（两个 9）</strong> → 允许停机 <strong>1% × 8760 = 87.6 小时/年</strong>；<strong>99.9%（三个 9）</strong> → <strong>0.1% × 8760 = 8.76 小时/年</strong>；<strong>99.99%（四个 9）</strong> → <strong>0.01% × 8760 = 0.876 小时 ≈ 52.6 分钟/年</strong>；<strong>99.999%（五个 9）</strong> → <strong>≈ 5.26 分钟/年</strong>。⚠️ 记忆锚点：<strong>每多一个 9，允许停机时间缩小 10 倍</strong>。这是运维题最常见的换算。</div>
+    <div class="reveal-ref">第15章 · 15.1 可用度计算</div>
   </div>
 </div>
 </div>
@@ -2126,7 +2145,7 @@ html{scroll-padding-top:80px}
   <span class="item"><kbd class="kbd">J</kbd>/<kbd class="kbd">K</kbd> 快滚</span>
   <span class="item"><kbd class="kbd">0</kbd> 回顶部</span>
 </div>
-    <nav class="pager"><a class="pg pg-prev" href="H23.html"><span class="pg-label">上一学时</span><span class="pg-title">软件需求工程</span></a><a class="pg pg-next" href="H27.html"><span class="pg-label">下一学时</span><span class="pg-title">软件架构设计（二）· 架构风格与 SOA</span></a></nav>
+    <nav class="pager"><a class="pg pg-prev" href="H33.html"><span class="pg-label">上一学时</span><span class="pg-title">系统运行与维护（一）· 运维指标与软件维护</span></a><a class="pg pg-next" href="H45.html"><span class="pg-label">下一学时</span><span class="pg-title">论文专项</span></a></nav>
     <footer class="footer">
   <p><strong>阿甘系分 · 48 小时冲刺手册</strong></p>
   <p class="sep">非官方出版物 · 与软考办无隶属关系 · 内容均为独立原创编写</p>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   发布前请把下面的 lnwhosyourdaddy.github.io/Agan-ruankao 替换成你的真实域名
-  更新日期：2026-10-04（新增 H02/H03 数学 4.5%、H04/H05 计算机 13.1%、H09–H11 数据库 9.9%、H17/H18 项目管理 3.8%、H21/H22 系统规划 3.9%、H26–H28 架构 5.0%、H29/H30 系统设计 3.8%、H31/H32 实现与测试 2.9%）
+  更新日期：2026-10-04（第一篇9章+第二篇6章共15章全部上线：H02–H34，含 H31/H32 实现与测试 2.9%、H33/H34 运维 1.1%）
 -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
@@ -156,6 +156,16 @@
   </url>
   <url>
     <loc>https://lnwhosyourdaddy.github.io/Agan-ruankao/H32.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://lnwhosyourdaddy.github.io/Agan-ruankao/H33.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://lnwhosyourdaddy.github.io/Agan-ruankao/H34.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
