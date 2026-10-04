@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="light dark">
-<title>第 27 小时 · 软件架构设计（二）· 架构风格与 SOA · 阿甘系分 48 小时冲刺</title>
+<title>第 32 小时 · 软件实现与测试（二）· 测试阶段与部署发布 · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
 <meta name="build-stamp" content="2026-10-05 01:49:21">
@@ -1917,7 +1917,7 @@ html{scroll-padding-top:80px}
 <body>
 <header class="topbar">
   <a class="brand" href="index.html"><span class="brand-mark">48</span><span>阿甘系分</span><span class="brand-sub">冲刺手册</span></a>
-  <nav class="nav"><div class="nav" id="chapnav"><button class="nav-trigger" type="button" id="navTrigger" aria-haspopup="true" aria-expanded="false" aria-controls="navPanel" title="章节导航（Enter / ↓ 打开，Esc 关闭）"><span class="nav-trigger-code">H27</span><span class="nav-trigger-label">架构风格与 SOA</span><svg class="nav-caret" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5 L6 8 L9.5 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="nav-panel" id="navPanel" hidden><div class="nav-panel-scroll"><div class="nav-group nav-group-solo"><a class="nav-item" href="index.html"><span class="nav-item-code">首页</span><span class="nav-item-label">首页 · 手册总览</span></a></div><div class="nav-group"><div class="nav-group-title">第一篇 · 基础知识</div><a class="nav-item" href="H01.html"><span class="nav-item-code">H01</span><span class="nav-item-label">绪论与备考总纲</span></a><a class="nav-item" href="H02.html"><span class="nav-item-code">H02</span><span class="nav-item-label">数学与工程基础（一）· 概率统计与图论应用</span></a><a class="nav-item" href="H03.html"><span class="nav-item-code">H03</span><span class="nav-item-label">数学与工程基础（二）· 预测决策与工程伦理</span></a><a class="nav-item" href="H04.html"><span class="nav-item-code">H04</span><span class="nav-item-label">计算机系统（一）· 硬件与体系结构</span></a><a class="nav-item" href="H05.html"><span class="nav-item-code">H05</span><span class="nav-item-label">计算机系统（二）· 操作系统</span></a><a class="nav-item" href="H06.html"><span class="nav-item-code">H06</span><span class="nav-item-label">计算机网络（一）· 数据通信与协议体系</span></a><a class="nav-item" href="H07.html"><span class="nav-item-code">H07</span><span class="nav-item-label">计算机网络（二）· TCP/IP 与网络工程</span></a><a class="nav-item" href="H08.html"><span class="nav-item-code">H08</span><span class="nav-item-label">分布式系统、构件与云计算</span></a><a class="nav-item" href="H09.html"><span class="nav-item-code">H09</span><span class="nav-item-label">数据库系统（一）· 三级模式与关系基础</span></a><a class="nav-item" href="H10.html"><span class="nav-item-code">H10</span><span class="nav-item-label">数据库系统（二）· 范式与事务并发控制</span></a><a class="nav-item" href="H11.html"><span class="nav-item-code">H11</span><span class="nav-item-label">数据库系统（三）· 设计、仓库与 NoSQL</span></a><a class="nav-item" href="H12.html"><span class="nav-item-code">H12</span><span class="nav-item-label">企业信息化（一）· 信息化规划</span></a><a class="nav-item" href="H13.html"><span class="nav-item-code">H13</span><span class="nav-item-label">企业信息化（二）· 信息系统与商务</span></a><a class="nav-item" href="H14.html"><span class="nav-item-code">H14</span><span class="nav-item-label">软件工程（一）· 生命周期与开发模型</span></a><a class="nav-item" href="H15.html"><span class="nav-item-code">H15</span><span class="nav-item-label">软件工程（二）· 过程管理与软件重用</span></a><a class="nav-item" href="H16.html"><span class="nav-item-code">H16</span><span class="nav-item-label">软件工程（三）· UML 与形式化方法</span></a><a class="nav-item" href="H17.html"><span class="nav-item-code">H17</span><span class="nav-item-label">项目管理（一）· 范围进度成本与挣值分析</span></a><a class="nav-item" href="H18.html"><span class="nav-item-code">H18</span><span class="nav-item-label">项目管理（二）· 配置质量风险与文档</span></a><a class="nav-item" href="H19.html"><span class="nav-item-code">H19</span><span class="nav-item-label">信息安全（一）· 安全体系与加密认证</span></a><a class="nav-item" href="H20.html"><span class="nav-item-code">H20</span><span class="nav-item-label">信息安全（二）· 网络安全与可靠性</span></a></div><div class="nav-group"><div class="nav-group-title">第二篇 · 关键技术</div><a class="nav-item" href="H21.html"><span class="nav-item-code">H21</span><span class="nav-item-label">系统规划与分析（一）· 需求分析与 DFD 建模</span></a><a class="nav-item" href="H22.html"><span class="nav-item-code">H22</span><span class="nav-item-label">系统规划与分析（二）· 成本效益与可行性论证</span></a><a class="nav-item" href="H23.html"><span class="nav-item-code">H23</span><span class="nav-item-label">软件需求工程</span></a><a class="nav-item" href="H26.html"><span class="nav-item-code">H26</span><span class="nav-item-label">软件架构设计（一）· 架构定义与 4+1 视图</span></a><a class="nav-item active" href="H27.html" aria-current="page"><span class="nav-item-code">H27</span><span class="nav-item-label">软件架构设计（二）· 架构风格与 SOA</span></a><a class="nav-item" href="H28.html"><span class="nav-item-code">H28</span><span class="nav-item-label">软件架构设计（三）· 质量属性与 ATAM 评估</span></a><a class="nav-item" href="H29.html"><span class="nav-item-code">H29</span><span class="nav-item-label">系统设计（一）· 结构化设计与面向对象设计</span></a><a class="nav-item" href="H30.html"><span class="nav-item-code">H30</span><span class="nav-item-label">系统设计（二）· 设计模式与人机交互</span></a><a class="nav-item" href="H31.html"><span class="nav-item-code">H31</span><span class="nav-item-label">软件实现与测试（一）· 测试原则与黑盒白盒方法</span></a><a class="nav-item" href="H32.html"><span class="nav-item-code">H32</span><span class="nav-item-label">软件实现与测试（二）· 测试阶段与部署发布</span></a></div><div class="nav-group nav-group-solo"><a class="nav-item" href="H45.html"><span class="nav-item-code">H45</span><span class="nav-item-label">论文写作专项</span></a></div><div class="nav-group nav-group-pending"><div class="nav-group-title">待上线 · 按真题权重排序</div><div class="nav-pending-row"><span class="nav-pending-ch">第 15 章</span><span class="nav-pending-name">系统运行与维护</span><span class="nav-pending-w">1.1%</span></div><div class="nav-pending-row"><span class="nav-pending-ch">第 16–22 章</span><span class="nav-pending-name">案例实践 / 论文要点</span><span class="nav-pending-w">案例与论文</span></div><div class="nav-pending-row"><span class="nav-pending-ch">H42–H44 · H47–H48</span><span class="nav-pending-name">案例专项 / 全真模拟</span><span class="nav-pending-w">专项</span></div></div></div><div class="nav-foot"><span class="nav-foot-tip">↑↓ 选择 · Enter 打开 · Esc 关闭</span><span class="nav-foot-nav"><a class="nav-step" href="H26.html">← 上一章</a><a class="nav-step" href="H28.html">下一章 →</a></span></div></div></div></nav>
+  <nav class="nav"><div class="nav" id="chapnav"><button class="nav-trigger" type="button" id="navTrigger" aria-haspopup="true" aria-expanded="false" aria-controls="navPanel" title="章节导航（Enter / ↓ 打开，Esc 关闭）"><span class="nav-trigger-code">H32</span><span class="nav-trigger-label">测试阶段与部署</span><svg class="nav-caret" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5 L6 8 L9.5 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="nav-panel" id="navPanel" hidden><div class="nav-panel-scroll"><div class="nav-group nav-group-solo"><a class="nav-item" href="index.html"><span class="nav-item-code">首页</span><span class="nav-item-label">首页 · 手册总览</span></a></div><div class="nav-group"><div class="nav-group-title">第一篇 · 基础知识</div><a class="nav-item" href="H01.html"><span class="nav-item-code">H01</span><span class="nav-item-label">绪论与备考总纲</span></a><a class="nav-item" href="H02.html"><span class="nav-item-code">H02</span><span class="nav-item-label">数学与工程基础（一）· 概率统计与图论应用</span></a><a class="nav-item" href="H03.html"><span class="nav-item-code">H03</span><span class="nav-item-label">数学与工程基础（二）· 预测决策与工程伦理</span></a><a class="nav-item" href="H04.html"><span class="nav-item-code">H04</span><span class="nav-item-label">计算机系统（一）· 硬件与体系结构</span></a><a class="nav-item" href="H05.html"><span class="nav-item-code">H05</span><span class="nav-item-label">计算机系统（二）· 操作系统</span></a><a class="nav-item" href="H06.html"><span class="nav-item-code">H06</span><span class="nav-item-label">计算机网络（一）· 数据通信与协议体系</span></a><a class="nav-item" href="H07.html"><span class="nav-item-code">H07</span><span class="nav-item-label">计算机网络（二）· TCP/IP 与网络工程</span></a><a class="nav-item" href="H08.html"><span class="nav-item-code">H08</span><span class="nav-item-label">分布式系统、构件与云计算</span></a><a class="nav-item" href="H09.html"><span class="nav-item-code">H09</span><span class="nav-item-label">数据库系统（一）· 三级模式与关系基础</span></a><a class="nav-item" href="H10.html"><span class="nav-item-code">H10</span><span class="nav-item-label">数据库系统（二）· 范式与事务并发控制</span></a><a class="nav-item" href="H11.html"><span class="nav-item-code">H11</span><span class="nav-item-label">数据库系统（三）· 设计、仓库与 NoSQL</span></a><a class="nav-item" href="H12.html"><span class="nav-item-code">H12</span><span class="nav-item-label">企业信息化（一）· 信息化规划</span></a><a class="nav-item" href="H13.html"><span class="nav-item-code">H13</span><span class="nav-item-label">企业信息化（二）· 信息系统与商务</span></a><a class="nav-item" href="H14.html"><span class="nav-item-code">H14</span><span class="nav-item-label">软件工程（一）· 生命周期与开发模型</span></a><a class="nav-item" href="H15.html"><span class="nav-item-code">H15</span><span class="nav-item-label">软件工程（二）· 过程管理与软件重用</span></a><a class="nav-item" href="H16.html"><span class="nav-item-code">H16</span><span class="nav-item-label">软件工程（三）· UML 与形式化方法</span></a><a class="nav-item" href="H17.html"><span class="nav-item-code">H17</span><span class="nav-item-label">项目管理（一）· 范围进度成本与挣值分析</span></a><a class="nav-item" href="H18.html"><span class="nav-item-code">H18</span><span class="nav-item-label">项目管理（二）· 配置质量风险与文档</span></a><a class="nav-item" href="H19.html"><span class="nav-item-code">H19</span><span class="nav-item-label">信息安全（一）· 安全体系与加密认证</span></a><a class="nav-item" href="H20.html"><span class="nav-item-code">H20</span><span class="nav-item-label">信息安全（二）· 网络安全与可靠性</span></a></div><div class="nav-group"><div class="nav-group-title">第二篇 · 关键技术</div><a class="nav-item" href="H21.html"><span class="nav-item-code">H21</span><span class="nav-item-label">系统规划与分析（一）· 需求分析与 DFD 建模</span></a><a class="nav-item" href="H22.html"><span class="nav-item-code">H22</span><span class="nav-item-label">系统规划与分析（二）· 成本效益与可行性论证</span></a><a class="nav-item" href="H23.html"><span class="nav-item-code">H23</span><span class="nav-item-label">软件需求工程</span></a><a class="nav-item" href="H26.html"><span class="nav-item-code">H26</span><span class="nav-item-label">软件架构设计（一）· 架构定义与 4+1 视图</span></a><a class="nav-item" href="H27.html"><span class="nav-item-code">H27</span><span class="nav-item-label">软件架构设计（二）· 架构风格与 SOA</span></a><a class="nav-item" href="H28.html"><span class="nav-item-code">H28</span><span class="nav-item-label">软件架构设计（三）· 质量属性与 ATAM 评估</span></a><a class="nav-item" href="H29.html"><span class="nav-item-code">H29</span><span class="nav-item-label">系统设计（一）· 结构化设计与面向对象设计</span></a><a class="nav-item" href="H30.html"><span class="nav-item-code">H30</span><span class="nav-item-label">系统设计（二）· 设计模式与人机交互</span></a><a class="nav-item" href="H31.html"><span class="nav-item-code">H31</span><span class="nav-item-label">软件实现与测试（一）· 测试原则与黑盒白盒方法</span></a><a class="nav-item active" href="H32.html" aria-current="page"><span class="nav-item-code">H32</span><span class="nav-item-label">软件实现与测试（二）· 测试阶段与部署发布</span></a></div><div class="nav-group nav-group-solo"><a class="nav-item" href="H45.html"><span class="nav-item-code">H45</span><span class="nav-item-label">论文写作专项</span></a></div><div class="nav-group nav-group-pending"><div class="nav-group-title">待上线 · 按真题权重排序</div><div class="nav-pending-row"><span class="nav-pending-ch">第 15 章</span><span class="nav-pending-name">系统运行与维护</span><span class="nav-pending-w">1.1%</span></div><div class="nav-pending-row"><span class="nav-pending-ch">第 16–22 章</span><span class="nav-pending-name">案例实践 / 论文要点</span><span class="nav-pending-w">案例与论文</span></div><div class="nav-pending-row"><span class="nav-pending-ch">H42–H44 · H47–H48</span><span class="nav-pending-name">案例专项 / 全真模拟</span><span class="nav-pending-w">专项</span></div></div></div><div class="nav-foot"><span class="nav-foot-tip">↑↓ 选择 · Enter 打开 · Esc 关闭</span><span class="nav-foot-nav"><a class="nav-step" href="H31.html">← 上一章</a><a class="nav-step" href="H45.html">下一章 →</a></span></div></div></div></nav>
   <div class="theme-switch" role="group" aria-label="主题">
     <button class="theme-btn" data-theme="light" type="button">浅</button>
     <button class="theme-btn" data-theme="dark" type="button">深</button>
@@ -1928,170 +1928,219 @@ html{scroll-padding-top:80px}
   <aside class="toc"></aside>
       <article class="main">
     <div class="chapbar" id="chapbar"
-     data-sec-total="11" data-page-index="25" data-page-total="31">
+     data-sec-total="13" data-page-index="30" data-page-total="31">
   <div class="chapbar-top">
-    <span class="chapbar-badge">H27</span>
-    <span class="chapbar-title">软件架构设计（二）· 架构风格与 SOA</span>
+    <span class="chapbar-badge">H32</span>
+    <span class="chapbar-title">软件实现与测试（二）· 测试阶段与部署发布</span>
     <span class="chapbar-spacer"></span>
-    <span class="chapbar-sec" id="chapbarSec">1 / 11</span>
+    <span class="chapbar-sec" id="chapbarSec">1 / 13</span>
   </div>
   <div class="chapbar-track"><div class="chapbar-fill" id="chapbarFill"></div></div>
 </div>
     
-    <h1 id="第-27-小时-软件架构设计-二-架构风格与-SOA">第 27 小时 · 软件架构设计（二）· 架构风格与 SOA</h1>
-<div class="quote"><p>本学时覆盖 <strong>12.3 架构风格六大类 + SOA 关键技术与实现三方法</strong> —— 本章<strong>主体</strong>，也是<strong>风格辨识题</strong>的来源。<br>风格类题目几乎每年出现在案例里，题干给场景问"属于哪种风格"。</p></div>
-<div class="block gold"><div class="block-title">考情定位</div><p>六类风格必须能一句话说出代表：① <strong>数据流</strong>（批处理、管道-过滤器）② <strong>调用/返回</strong>（主程序、面向对象、层次型、C/S）③ <strong>以数据为中心</strong>（仓库、黑板）④ <strong>虚拟机</strong>（解释器、规则系统）⑤ <strong>独立构件</strong>（消息传递、管道）⑥ <strong>SOA/微服务</strong>。<br>SOA 三技术必背：<strong>UDDI 找人 · WSDL 说事 · SOAP 送信</strong>。</p></div>
-<div class="block mem"><div class="block-title">记忆口诀</div><p><strong>六大类</strong>：数据流 · 调用返回 · 数据中心 · 虚拟机 · 独立构件 · SOA。<br><strong>SOA 三技术</strong>：<strong>UDDI</strong>（注册中心，找人）· <strong>WSDL</strong>（描述接口，说事）· <strong>SOAP</strong>（消息格式，送信）。<br><strong>SOA 三实现</strong>：Web Service（标准方式）· 注册表（解耦）· <strong>ESB</strong>（企业服务总线，协议转换+路由+安全）。<br><strong>黑板风格</strong>：共享黑板 + 独立知识源，<strong>黑板不知道知识源存在</strong>（控制反转）。</p></div>
-<div class="block warning"><div class="block-title">易错陷阱</div><p><strong>「管道-过滤器」属数据流，不属独立构件</strong>——虽然都叫"管道"，但考点分类是<strong>数据流风格</strong>。<br><strong>「黑板」是以数据为中心，不是虚拟机</strong>。<br><strong>SOAP 不是 REST 的升级版</strong>——两者定位不同：SOAP 强契约企业级集成，REST 互联网开放接口。<br><strong>三层 C/S 相比二层的核心改进 = 客户端不再直接访问数据库</strong>。</p></div>
-<div class="block gold"><div class="block-title">论文可用句</div><p>在架构风格选型上，我选择了<strong>分层风格 + 管道—过滤器</strong>的组合：分层保证业务边界清晰、团队可分工并行开发；管道—过滤器用于日志清洗链路，各过滤器的处理逻辑可独立测试、独立替换。<strong>代价是</strong>跨层事务需要额外机制（如最终一致性），这一取舍已在架构决策记录（ADR）中登记。</p></div>
-<h3 id="本学时路线图-六类风格逐个拆">本学时路线图：六类风格逐个拆</h3>
-<p>上一学时给了六大类的<strong>全景对照表</strong>，本学时按<strong>数据流 → 调用/返回 → 以数据为中心 → 虚拟机 → 独立构件 → SOA</strong> 的顺序逐类展开。<br>每类都按「<strong>核心特征 → 典型风格 → 适用场景 → 辨析陷阱</strong>」四段写，案例题通常就考最后一段。</p>
-<hr>
-<h2 id="s12-3-2-数据流风格-批处理-管道-过滤器">12.3.2 数据流风格 · 批处理 + 管道-过滤器 ⭐</h2>
-<p><strong>📦批处理风格</strong></p>
-<p>每个<strong>处理步骤是一个单独的程序</strong>；每一步必须在前一步结束后才能开始；数据必须是<strong>完整的、以整体方式传递</strong>。</p>
-<p>· 基本构件 = <strong>独立的应用程序</strong></p>
-<p>· 连接件 = 某种类型的<strong>媒介</strong>（定义数据流图、表达拓扑）</p>
-<p>数据流体系<strong>没有概念上的程序计数器</strong>，指令执行顺序不可预测（行为不确定）</p>
-<p>🚰管道-过滤器风格 ⭐</p>
-<p>系统分解为几个<strong>序贯的处理步骤</strong>，步骤间通过<strong>数据流</strong>连接——<strong>一个步骤的输出是另一个步骤的输入</strong>。</p>
-<p>· 基本构件 = <strong>过滤器 Filter</strong>（从管道读取输入流 → 内部处理 → 产生输出流写入管道）</p>
-<p>· 连接件 = <strong>管道 Pipe</strong>（把一个过滤器的输出传到另一过滤器的输入）</p>
-<p>⚙️管道-过滤器 · 优点与缺点（必背）</p>
-<p>优点</p>
-<p><strong>可重用</strong>（过滤器独立、无状态、<strong>不知上下游</strong>）<br><strong>可并发</strong>（过滤器可并行执行）<br><strong>易维护</strong>、支持<strong>过滤器替换</strong>与组合<br>允许对输入数据<strong>吞吐量分析</strong></p>
-<p>缺点</p>
-<p><strong>不适合交互式应用</strong>（数据必须全部流过）<br><strong>数据格式转换开销大</strong><br><strong>难以共享状态</strong>（过滤器无状态）<br>可能导致处理性能瓶颈</p>
-<p>口诀：<strong>过滤器"独立无状态不知邻"，优点重用加并发，缺点不交互难共享</strong></p>
-<p>⚠️ <strong>高频辨析</strong>：题干出现"<strong>编译器 / 数据转换 / 批量处理</strong>" → 管道-过滤器；出现"<strong>交互式 / 用户频繁输入</strong>" → <strong>不选</strong>管道-过滤器。</p>
-<h3 id="s12-3-3-调用-返回风格-主程序-子程序-面向对象-层次型">12.3.3 调用/返回风格 · 主程序/子程序 + 面向对象 + 层次型</h3>
-<p><strong>调用/返回风格</strong>：采用<strong>调用与返回机制</strong>，实质是<strong>分而治之</strong>的策略——把复杂大系统分解为若干子系统以<strong>降低复杂度、增加可修改性</strong>。程序从执行起点开始执行构件代码，执行结束<strong>将控制返回给调用构件</strong>。</p>
-<p><strong>🧩主程序/子程序</strong></p>
-<ul><li>一般采用<strong>单线程控制</strong>，把问题划分为若干<strong>处理步骤</strong></li><li>构件 = <strong>主程序和子程序</strong>（子程序可合成为<strong>模块</strong>）</li><li>连接件 = <strong>过程调用</strong>，调用关系具有<strong>层次性</strong></li><li>语义逻辑：子程序的正确性取决于它调用的子程序的正确性</li></ul>
-<p><strong>🧬面向对象</strong></p>
-<p>建立在<strong>数据抽象和面向对象</strong>的基础上；<strong>数据的表示方法和相应操作封装</strong>在一个抽象数据类型或对象中。</p>
-<ul><li>构件 = <strong>对象</strong>（抽象数据类型的实例）</li><li>连接件 = <strong>对象间的方法调用</strong></li></ul>
-<p>封装增强了信息隐藏与可维护性</p>
-<p>🪜层次型 ⭐</p>
-<p>组成一个<strong>层次结构</strong>：每一层为上层提供服务，并作为下层的客户；除精心挑选的输出函数外，<strong>内部层接口只对相邻层可见</strong>。</p>
-<ul><li>构件 = 层上实现的<strong>虚拟机</strong></li><li>连接件 = <strong>决定层间如何交互的协议</strong></li><li>每一层最多只影响两层 + 相邻层提供相同接口即可换实现 → <strong>软件重用支持强大</strong></li></ul>
-<p>⚠️ <strong>层次型的缺点</strong>（冲刺高频）：<strong>性能损耗（层层转发）</strong>；可能形成<strong>"污水池反模式"</strong>——某层只做透传、不含业务逻辑。</p>
-<h3 id="s12-3-3-客户端-服务器-二层-C-S-架构">12.3.3 客户端/服务器 · 二层 C/S 架构 ⭐</h3>
-<p><strong>C/S 架构</strong>基于<strong>资源不对等</strong>且为实现<strong>共享</strong>而提出（20 世纪 90 年代成熟）。</p>
-<ul><li><strong>服务器</strong>：有效管理系统资源，任务集中于对 <strong>DBMS 的管理和控制</strong>、数据备份与恢复</li><li><strong>客户应用程序</strong>：提供<strong>用户与数据库交互的界面</strong>、提交请求并接收信息、对客户端数据执行应用逻辑</li></ul>
-<p>这是一种"胖客户机（fat client）、瘦服务器（thin server）"的架构</p>
-<p>✅C/S 的优点</p>
-<p>①客户应用与服务器构件<strong>分别运行在不同计算机</strong>上 → 适应性和灵活性大</p>
-<p>②<strong>易于扩充和缩小</strong></p>
-<p>③功能构件<strong>充分隔离</strong>：客户端集中<strong>数据显示分析</strong>，服务器集中<strong>数据管理</strong>（不必每个应用都写 DBMS）</p>
-<p>④把大处理任务分布到<strong>低成本计算机</strong>上，节约费用；<strong>数据操作与事务处理能力强</strong>、模型思想简单</p>
-<p>❌C/S 的八个缺点（教材列举，必背）</p>
-<p>①<strong>开发成本较高</strong>——客户端软硬件配置要求高</p>
-<p>②<strong>客户端程序设计复杂</strong>——工作量大多在客户端</p>
-<p>③<strong>界面风格不一</strong>，使用繁杂，不利推广</p>
-<p>④<strong>软件移植困难</strong>——不同开发工具互不兼容</p>
-<p>⑤<strong>维护和升级困难</strong>——每个客户端都要更新</p>
-<p>⑥<strong>新技术不能轻易应用</strong>——平台选定难更改</p>
-<p>⑦<strong>可扩展性差</strong>——单一服务器、以局域网为中心，难扩展到广域网/Internet</p>
-<p>⑧<strong>安全性难以保证</strong>——客户端程序可<strong>直接访问数据库服务器</strong></p>
-<p>💡 正因这八个缺点，<strong>三层 C/S 架构应运而生</strong>（传统 C/S 称为二层 C/S 架构）。</p>
-<h3 id="s12-3-3-三层-C-S-架构-B-S">12.3.3 三层 C/S 架构 + B/S ⭐</h3>
-<p>🥪三层 C/S 架构（增加应用服务器）</p>
-<p>表示层（客户机）</p>
-<p>系统<strong>用户接口</strong>部分，担负用户与系统的<strong>对话功能</strong>；检查键盘输入数据、显示输出；检查内容只限数据形式与取值范围，不含业务逻辑</p>
-<p>功能层（应用服务器）</p>
-<p>也称<strong>业务逻辑层</strong>——具体业务处理逻辑编入程序（如计算合同金额、格式配置、打印）</p>
-<p>数据层（数据库服务器）</p>
-<p>相当于二层 C/S 中的服务器；负责对 <strong>DBMS 进行管理和控制</strong></p>
-<p><strong>关键</strong>：将<strong>表示层和功能层分离成各自独立的程序</strong>，两层间接口简洁明了（通常只将表示层放在客户机 → <strong>瘦客户机</strong>）。三层 C/S 架构中，中间件是最重要的构件。</p>
-<p>✅三层 C/S 的四个优点 + 一个关键问题</p>
-<p>①三层功能<strong>合理划分、逻辑相对独立</strong> → 逻辑结构清晰，<strong>可维护性和可扩展性</strong>提高</p>
-<p>②可<strong>灵活选用平台和硬件</strong>，各层可并行开发、各选最适合的语言，性价比高</p>
-<p>③功能层<strong>有效隔离表示层与数据层</strong> → 未授权用户难以绕过功能层访问数据层 → <strong>安全管理基础</strong></p>
-<p>④功能层与数据层可放<strong>不同服务器</strong> → 灵活性很高，适应<strong>客户机数目增加和负荷变动</strong>（追加业务时可增加应用服务器）</p>
-<p>⚠️ <strong>设计关键</strong>：若<strong>各层间通信效率不高</strong>，即使硬件很强整体也达不到要求性能 → <strong>三层间的通信方法、通信频度和数据量</strong>是三层 C/S 架构设计的关键问题。</p>
-<ul><li><strong>B/S 架构</strong>：三层 C/S 架构的一种<strong>实现方式</strong>——"<strong>浏览器 / Web 服务器 / 数据库服务器</strong>"。应用程序以<strong>网页形式</strong>存于 Web 服务器；系统安装、修改和维护全在服务器端解决，"零客户端"，很容易在运行时自动升级。</li><li><strong>不足</strong>：缺乏<strong>动态页面</strong>支持能力、没有集成有效的数据库处理功能；<strong>安全性难以控制</strong>；数据查询等<strong>响应速度远低于 C/S</strong>；数据提交以<strong>页面为单位</strong>、动态交互性不强，<strong>不利于 OLTP 应用</strong>。</li></ul>
-<h3 id="s12-3-4-以数据为中心-仓库-黑板">12.3.4 以数据为中心 · 仓库 + 黑板 ⭐</h3>
-<p><strong>🗄️仓库风格</strong></p>
-<p><strong>仓库（repository）是存储和维护数据的中心场所</strong>。</p>
-<p>两种不同构件：</p>
-<p>· <strong>中央数据结构</strong>——说明<strong>当前数据的状态</strong></p>
-<p>· <strong>一组独立构件</strong>——对中央数据进行操作</p>
-<p>连接件 = <strong>仓库与独立构件之间的交互</strong></p>
-<p>🧠黑板风格 ⭐</p>
-<p>适用于解决<strong>复杂的非结构化问题</strong>——在求解过程中<strong>综合运用多种不同的知识源</strong>，使问题的表达、组织和求解比较容易。</p>
-<p>· 问题解空间组织成<strong>一个或多个分级结构</strong>（每层由唯一词汇描述，代表问题的<strong>部分解</strong>）</p>
-<p>· 领域知识分成<strong>独立的知识模块</strong>（将某层信息转换成同层或相邻层信息）</p>
-<p>传统应用：信号处理领域（语音识别、模式识别）；另一应用是<strong>松耦合代理数据共享存取</strong></p>
-<p>💡 <strong>黑板 = 中央数据结构（黑板）＋ 多个独立知识源</strong>（＋控制模块）；适合<strong>无确定解法的问题</strong>——AI 推理、语音识别、模式识别。</p>
-<p><strong>影响黑板系统设计的最大因素是应用问题本身的特性</strong>（教材原话）。</p>
-<p>口诀：<strong>仓库存数据，黑板解难题；语音识别找黑板</strong></p>
-<p>⚠️ <strong>辨析</strong>：题干出现"<strong>语音识别 / 模式识别 / AI 推理 / 无确定解法</strong>" → <strong>黑板风格</strong>；出现"<strong>数据库为中心、构件操作中央数据</strong>" → 仓库风格（一般情形）。</p>
-<h3 id="s12-3-5-虚拟机-12-3-6-独立构件">12.3.5 虚拟机 + 12.3.6 独立构件 ⭐</h3>
-<p><strong>🖥️虚拟机风格（两大类）</strong></p>
-<ul><li><strong>基本思想</strong>：人为构建一个<strong>运行环境</strong>，在此环境上<strong>解析与运行自定义的语言</strong>，增加架构的<strong>灵活性</strong>。</li><li><strong>① 解释器风格</strong>：</li><li>含有一个虚拟机，<strong>仿真硬件的执行过程和一些关键应用</strong></li><li>弥合程序语义与硬件语义之间的差异；缺点：<strong>执行效率较低</strong></li><li>组成：解释引擎 + 存储被解释代码的存储区 + 记录引擎当前工作状态的数据结构 + 记录解释执行进度的数据结构</li><li>典型例子：<strong>专家系统</strong></li></ul>
-<p><strong>② 规则系统风格</strong>：包括<strong>规则集、规则解释器、规则/数据选择器、工作内存</strong>四部分（伪代码执行专家系统思路）</p>
-<p>📡独立构件风格（两大类）</p>
-<p><strong>强调每个构件都是相对独立的个体，它们之间不直接通信</strong>，以<strong>降低耦合度、提升灵活性</strong>。</p>
-<p><strong>① 进程通信风格</strong>：</p>
-<ul><li>构件 = <strong>独立的过程</strong>；连接件 = <strong>消息传递</strong></li><li>构件通常是<strong>命名过程</strong>；消息传递方式：<strong>点到点、异步/同步、远程过程调用</strong></li></ul>
-<p><strong>② 事件系统风格（隐式调用）⭐</strong>：</p>
-<ul><li>构件<strong>不直接调用过程，而是触发或广播一个或多个事件</strong></li><li>其他构件的过程在事件中<strong>注册</strong>；事件被触发时，系统<strong>自动调用注册的所有过程</strong></li><li>事件触发者并不知道哪些构件会被影响——不能假定处理顺序，甚至不知道哪些过程会被调用 → <strong>许多隐式调用系统也包含显式调用作为补充</strong></li></ul>
-<p>💡 <strong>事件系统的应用</strong>（教材举例）：编程环境中集成各种工具 · DBMS 中确保数据一致性约束 · 用户界面系统管理数据 · <strong>编辑器中语法检查</strong>（Debugger 断点事件 → 编辑器卷屏、变量监视器刷新，Debugger 只声明事件、不关心谁响应）。</p>
-<p>口诀：<strong>虚拟机求灵活但低效；独立构件"不直呼、发事件"；隐式调用难保序</strong></p>
-<h3 id="s12-3-7-SOA-定义与参考模型">12.3.7 SOA · 定义与参考模型 ⭐</h3>
-<p>🧭SOA 的三个典型定义</p>
-<p>W3C</p>
-<p>一种应用程序架构：所有功能都定义为<strong>独立的服务</strong>，带有<strong>定义明确的可调用接口</strong>，能以定义好的顺序<strong>调用这些服务来形成业务流程</strong></p>
-<p>Service-architecture.com</p>
-<p>服务是<strong>精确定义、封装完善、独立于其他服务所处环境和状态</strong>的函数；SOA 本质上是<strong>服务的集合</strong>，服务之间彼此通信</p>
-<p>Gartner</p>
-<p>一种 <strong>C/S 架构</strong>的软件设计方法；着重强调构件的<strong>松散耦合</strong>，并使用<strong>独立的标准接口</strong></p>
-<p>🏗️SOA 概述要点</p>
-<p>①SOA 是一种在计算环境中<strong>设计、开发、部署和管理离散逻辑单元（服务）模型</strong>的方法</p>
-<p>②SOA <strong>并不是新鲜事物</strong>，只是<strong>面向对象模型的一种替代</strong>；SOA 基于对象，但作为一个整体却不是面向对象的</p>
-<p>③SOA 系统原型的典型例子是 <strong>CORBA</strong>（概念与 SOA 相似）</p>
-<p>④SOA 建立在 <strong>XML</strong> 等新技术基础上，用基于 XML 的语言描述接口 → 服务转到<strong>更动态且更灵活</strong>的接口系统（CORBA 的 IDL 无法相比）</p>
-<p>⑤SOA 用<strong>本地计算模型实现分布式计算应用</strong>——"本地化设计，分布式工作"（CORBA、DCOM、EJB 都属此列）</p>
-<p>💡 Gartner 定义 = "松散耦合 + 独立标准接口"，是选择题里最好认的一句。</p>
-<h3 id="s12-3-7-SOA-关键技术-UDDI-WSDL-SOAP-REST">12.3.7 SOA 关键技术 · UDDI / WSDL / SOAP / REST ⭐</h3>
-<p>📇UDDI · 统一描述、发现和集成</p>
-<p>提供一种<strong>服务发布、查找和定位</strong>的方法，是<strong>服务的信息注册规范</strong>。</p>
-<p><strong>三部分内容</strong>：</p>
-<ul><li><strong>数据模型</strong>——描述业务组织和服务的 <strong>XML Schema</strong></li><li><strong>API</strong>——用于查找或发布 UDDI 数据的方法，<strong>基于 SOAP</strong></li><li><strong>注册服务</strong>——SOA 中的基础设施，对应<strong>服务注册中心</strong>角色</li></ul>
-<p>📄WSDL · Web 服务描述语言</p>
-<p>对<strong>服务进行描述</strong>的语言，<strong>基于 XML</strong> 的语法定义；描述重点 = <strong>服务</strong>。</p>
-<ul><li><strong>服务接口定义</strong>——<strong>抽象的、可重用</strong>的定义；行业标准组织用它规定<strong>标准的服务类型</strong></li><li><strong>服务实现定义</strong>——描述给定提供者如何实现特定接口；包含<strong>服务和端口</strong>描述（端口 = 服务访问入口的<strong>部署细节</strong>：访问地址、消息调用模式）</li></ul>
-<p>✉️SOAP · 简单对象访问协议</p>
-<p>定义服务请求者和提供者之间的<strong>消息传输规范</strong>——用 <strong>XML 格式化消息</strong>、用 <strong>HTTP 承载消息</strong>；可在网络中进行数据交换和 <strong>RPC</strong>。</p>
-<ul><li><strong>四个部分</strong>：<strong>封装</strong>（整体框架：包含什么/谁处理/可选还是必须）· <strong>编码规则</strong>（序列化机制）· <strong>RPC 表示</strong>（远程过程调用和应答的协议）· <strong>绑定</strong>（底层传输协议交换封装的约定）</li><li><strong>消息三个部分</strong>：<strong>封装 Envelope</strong>（<strong>必须出现</strong>，顶层元素）· <strong>SOAP 头 Header</strong>（<strong>可选</strong>，出现则必须是封装的<strong>第一个直接子元素</strong>）· <strong>SOAP 体 Body</strong>（<strong>必须出现</strong>，紧跟头之后）</li></ul>
-<p>🪶REST · 表述性状态转移</p>
-<p>只使用 <strong>HTTP 和 XML</strong> 进行基于 Web 通信；<strong>降低开发复杂性、提高系统可伸缩性</strong>；简单性 + 缺少严格配置文件 → 与 SOAP 很好地隔离开。</p>
-<p>只支持几个操作：<strong>POST、GET、PUT、DELETE</strong>（适用于所有消息）。</p>
-<p><strong>设计概念与准则（5 条）</strong>：① 网络上所有事物都被<strong>抽象为资源</strong> ② 每个资源对应一个<strong>唯一的资源标识</strong> ③ 通过<strong>通用的连接件接口</strong>对资源进行操作 ④ 对资源的各种操作<strong>不会改变资源标识</strong> ⑤ 所有的操作都是<strong>无状态</strong>的</p>
-<p>💡 这些技术都<strong>以 XML 为基础</strong>发展起来；<strong>SOAP 消息必考</strong>：Envelope 必须 / Header 可选（第一子元素）/ Body 必须紧跟 Header。</p>
-<h3 id="s12-3-7-SOA-实现三方法-Web-Service-注册表-ESB">12.3.7 SOA 实现三方法 · Web Service / 注册表 / ESB ⭐</h3>
-<p>🌐① Web Service</p>
-<ul><li><strong>三角色</strong>：服务提供者 / 服务请求者（<strong>必须</strong>）+ 服务注册中心（<strong>可选</strong>）；<strong>三操作</strong>：发布、查找、绑定（<strong>动态绑定 / 静态绑定</strong>）</li><li><strong>应用系统 6 个层次</strong>：</li></ul>
-<p>① <strong>底层传输层</strong>——消息传输（<strong>HTTP 最广</strong>、JMS、SMTP）</p>
-<p>② <strong>服务通信协议层</strong>——<strong>SOAP 和 REST</strong></p>
-<p>③ <strong>服务描述层</strong>——<strong>WSDL</strong></p>
-<p>④ <strong>服务层</strong>——包装遗留系统，通过 WSDL 定位调用</p>
-<p>⑤ <strong>业务流程层</strong>——服务发现/调用/点到点；标准 <strong>WSBPEL</strong></p>
-<p>⑥ <strong>服务注册层</strong>——<strong>UDDI</strong></p>
-<p>📇② 服务注册表</p>
-<p>主要在 <strong>SOA 设计</strong>时使用（也有运行时功能）；提供<strong>策略执行点 PEP</strong>。</p>
-<p><strong>三个功能</strong>：</p>
-<ul><li><strong>服务注册</strong>——发布服务功能（服务合约）：身份、位置、方法、绑定、配置、方案、策略；要<strong>限制谁能发布、谁批准</strong></li><li><strong>服务位置</strong>——帮助使用者<strong>查询已注册服务</strong>（检索服务合约）；规定谁能访问注册表、哪些属性可暴露</li><li><strong>服务绑定</strong>——用查到的服务合约<strong>开发代码并绑定调用</strong></li></ul>
-<p>🚌③ 企业服务总线 ESB ⭐</p>
-<p>从 SOA 发展而来；<strong>标准化通信基础结构</strong>；<strong>传统中间件技术与 XML、Web Service 结合的产物</strong>。</p>
-<ul><li><strong>核心价值</strong>：消除服务请求者与提供者之间的<strong>直接连接</strong>（避免网状结构的高维护费）→ <strong>进一步解耦</strong>。</li><li><strong>功能（6 条）</strong>：支持<strong>异构环境</strong>中服务/消息/基于事件的交互 · <strong>几乎不更改代码</strong>使现有系统具有全新服务接口（<strong>无缝非侵入</strong>）· <strong>缓冲器</strong>（转换业务逻辑和数据格式）与服务逻辑分离 · <strong>服务代理和协议转换</strong>（HTTP/SOAP/JMS 多种传输）· <strong>可配置的消息转换翻译 + 基于消息内容的消息路由</strong> · <strong>安全和拥有者机制</strong>（认证授权完整性）</li></ul>
-<p>💡 <strong>ESB 的四点优势</strong>：扩展的基于标准的连接 · 灵活的服务导向应用组合 · <strong>提高复用率降低成本</strong> · 减少市场反应时间提高生产率。</p>
-<p>口诀：<strong>Web Service 六层栈，注册表管设计期，ESB 消除直连解耦</strong></p>
+    <h1 id="第-32-小时-软件实现与测试-二-测试阶段与部署发布">第 32 小时 · 软件实现与测试（二）· 测试阶段与部署发布</h1>
+<div class="quote"><p>本学时覆盖 **14.4 测试分类（按对象 / 按阶段 / 七种新形态 / 回归-冒烟）+ 14.5 测试过程与管理<br>+ 14.6 软件部署<strong>，并附</strong>全章易错辨析 + 速记卡 + 自测清单**。<br><strong>测试四阶段（单元→集成→系统→验收）</strong>与<strong>四种发布方式</strong>是案例与论文的高频素材。</p></div>
+<div class="block gold"><div class="block-title">考情定位</div><p>四块必拿：① <strong>四阶段顺序</strong>（单元 → 集成 → 系统 → 验收，含各阶段<strong>谁来做、用什么方法</strong>）；② <strong>α vs β 测试</strong>（α 在开发场地有指导，β 在用户真实环境无指导）；③ <strong>回归 vs 冒烟</strong>（回归验证"没改坏"，冒烟验证"能跑起来"）；④ <strong>四种发布</strong>（蓝绿秒回滚但资源翻倍 / 灰度最常用 / 滚动无停机 / 影子不影响用户）。</p></div>
+<div class="block mem"><div class="block-title">记忆口诀</div><p><strong>四阶段</strong>：<strong>单元</strong>（白盒，开发做）→ <strong>集成</strong>（接口，黑+白）→ <strong>系统</strong>（完整，<strong>纯黑盒</strong>，测试团队）→ <strong>验收</strong>（用户主导，<strong>α 开发场地 / β 用户场地</strong>）。<br><strong>集成策略</strong>：一次性 · <strong>自顶向下</strong> · <strong>自底向上</strong> · <strong>三明治</strong>。<br><strong>回归 vs 冒烟</strong>：回归<strong>防改坏</strong>，冒烟<strong>验能跑</strong>（先冒烟 → 详细 → 回归）。<br><strong>四发布</strong>：<strong>蓝绿</strong>（双环境，秒回滚）· <strong>灰度/金丝雀</strong>（放量观察，最常用）· <strong>滚动</strong>（逐批替换）· <strong>影子</strong>（流量副本，不影响用户）。</p></div>
+<div class="block warning"><div class="block-title">易错陷阱</div><p><strong>α 在开发场地</strong>（用户在开发方指导下），<strong>β 在用户场地</strong>（用户自行使用）——方向别记反，两者都属<strong>验收测试</strong>。<br><strong>蓝绿部署资源开销翻倍</strong>（两套完整环境），换来的是<strong>秒级回滚</strong>。<br><strong>回滚预案必须在"制定部署计划"这一步就写好</strong>，不能等出问题才想。</p></div>
+<div class="block gold"><div class="block-title">论文可用句</div><p>在上线发布上，我采用<strong>灰度发布 + 蓝绿部署</strong>的组合：先通过蓝绿方式将新版本部署到绿环境并用影子流量验证核心链路（不影响真实用户），确认无误后将 5% 的真实流量切至绿环境观察 30 分钟，监控响应时间、错误率与业务指标无异常后，再按 20% → 50% → 100% 逐步放量；全程保留蓝环境，一旦关键指标劣化可在 1 分钟内整体切回。上线后按<strong>回归测试</strong>集对存量功能做一轮全量验证，确认未因本次变更引入功能回退。</p></div>
+<h2 id="第-14-章知识骨架">第 14 章知识骨架</h2>
+<div class="fig fig-mermaid"><div class="mermaid-src" data-src="mindmap
+ root((14 实现与测试))
+   14.1 软件实现
+     结构化程序设计
+     面向对象 可视化
+     语言选择与风格
+     编码规范
+     代码生成与重用
+   14.2 测试概述 ★★★
+     IEEE 定义
+     三个误解
+     测试对象与目的
+     测试八原则
+   14.3 测试方法 ★★★
+     黑盒六法
+       等价类 边界值
+       因果图 场景法
+     白盒覆盖六级
+       语句判定条件组合路径
+     静态 动态
+     自动化测试
+   14.4 测试类型 ★★★
+     按对象七类
+       功能 性能 安全
+       兼容 界面 易用 稳定
+     按阶段四步
+       单元 集成 系统 验收
+     按被测软件七种
+     回归与冒烟
+   14.5 测试组织
+     过程六阶段
+     配置 过程 缺陷 风险
+   14.6 软件部署
+     部署四步
+     四种发布方式"></div><figcaption>图14-0 第14章知识骨架（复述）</figcaption></div>
+<h2 id="s14-4-按测试对象-功能-性能-安全">14.4 按测试对象 · 功能/性能/安全 ⭐</h2>
+<p>⚡功能测试 + 性能测试家族</p>
+<p><strong>功能测试</strong>：又来<strong>数据驱动测试</strong>——只考虑功能不考虑内部结构；6 步 = <strong>预期编写 → 编案例 → 备数据 → 执行 → 比对报告 → 判断是否满足用户需要</strong></p>
+<p><strong>性能测试</strong> = 模拟多种<strong>正常/峰值/异常负载</strong>测性能指标，含五类：</p>
+<p>负载测试</p>
+<p>各项性能指标<strong>已达到瓶颈</strong>的情况下<strong>继续运行一段时间</strong>，观察指标</p>
+<p>压力测试</p>
+<p><strong>不断加压</strong>直到某些指标达到瓶颈（如 CPU 100%）</p>
+<p>并发测试</p>
+<p>负载+压力结合——<strong>逐渐增加负载</strong>找瓶颈，分析交易与资源指标</p>
+<p>容量测试</p>
+<p>预先分析<strong>极限值</strong>（最大并发用户数/数据库记录数），极限下不出故障</p>
+<p>🛡️安全测试 + 指标</p>
+<p><strong>安全测试</strong>：验证<strong>保护机制能否防非法侵入</strong>；两个层面 = <strong>应用程序本身的安全性（漏洞/后门）</strong> + <strong>数据安全</strong>（存储 + 传输）</p>
+<p>手段：<strong>渗透测试 · 流量攻击 · SQL 注入 · 跨域攻击</strong>；须能经受<strong>正面/侧面/背后</strong>的攻击</p>
+<ul><li><strong>可靠性测试</strong>：最有效发现<strong>对可靠性影响大的缺陷</strong>；也是评估/验证可靠性水平的途径</li><li><strong>性能指标五件套</strong>：<strong>TPS（每秒事务数）· 响应时间 · 并发用户数 · 资源利用率 · 错误率</strong></li></ul>
+<p>⚡ 辨析锚：负载 = "到瓶颈后继续跑"；压力 = "不断加压直到瓶颈"；容量 = "找极限值"。</p>
+<h3 id="按测试对象-兼容-界面-易用-稳定性">按测试对象 · 兼容/界面/易用/稳定性</h3>
+<p><strong>🧩兼容性测试（核心五内容）</strong></p>
+<p>① 不同<strong>操作系统平台</strong>兼容 ② 同平台<strong>不同版本</strong>兼容 ③ <strong>向前/向后兼容</strong> ④ 与<strong>其他相关软件</strong>兼容 ⑤ <strong>数据兼容</strong>（数据共享）</p>
+<p>最常见 = <strong>浏览器兼容</strong>——CSS/JS 解析差异导致页面显示不同</p>
+<p>🖥️界面测试 + 易用性测试</p>
+<p><strong>界面测试</strong>：布局合理 · 风格一致 · 控件位置符合<strong>客户使用习惯</strong> · 便捷性 · 导航易懂 · 文字正确 · 美观</p>
+<p><strong>易用性测试</strong>（= 用户体验测试）：交互的<strong>适应性、功能性、有效性</strong>集中体现；流程 = 裁剪<strong>易用性检查清单</strong> → 达成一致 → 按表排查 → 评估记入报告</p>
+<p>⏳稳定性测试（长时间运行）</p>
+<p>通过<strong>长时间运行</strong>测试软件是否出现问题；常用测试点：</p>
+<p>① <strong>长时间运行</strong>观察是否正常 ② <strong>反复开启关闭</strong> ③ 长时间执行某业务后<strong>切换业务</strong> ④ <strong>长时间挂起不操作</strong>后能否正常执行 ⑤ 长时间日常用户数运行观察<strong>内存占用/是否溢出</strong></p>
+<p>💡 记忆锚：稳定性 = "时间维度"的压力测试（疲劳测试）；易用性 = "用户体验"；界面 = "长相与习惯"。</p>
+<h3 id="按阶段-单元测试-集成测试">按阶段 · 单元测试 → 集成测试 ⭐⭐⭐</h3>
+<p><strong>🧪单元测试（白盒为主）</strong></p>
+<p>对<strong>最小可测单元</strong>检查验证（C = 函数、Java = 类、GUI = 窗口/菜单）；与程序其他部分<strong>隔离</strong>测试</p>
+<p>六项规定</p>
+<p>阶段 = 编码后/中；对象 = <strong>模块</strong>；人员 = <strong>白盒工程师或开发</strong>；依据 = <strong>代码 + 详细文档</strong>；方法 = <strong>白盒为主黑盒为辅</strong>；内容 = <strong>模块接口 · 局部数据 · 路径 · 错误处理 · 边界</strong></p>
+<p>通常不用真实数据（或用<strong>正式数据的小样本</strong>）</p>
+<p>🧷集成测试（模块间接口）</p>
+<p>又称<strong>子系统/组装/部件测试</strong>；对象 = <strong>模块间的接口</strong>；三层次 = 模块内集成 → 子系统内集成 → 系统集成</p>
+<p>一次性集成</p>
+<p>全部模块一次组装——<strong>发现问题难定位</strong></p>
+<p>自顶向下增量</p>
+<p>需要<strong>桩模块</strong>（Stub）——模拟<strong>下层</strong>模块</p>
+<p>自底向上增量</p>
+<p>需要<strong>驱动模块</strong>（Driver）——模拟<strong>上层</strong>调用</p>
+<p>三明治 / 混合式</p>
+<p>两者结合，<strong>同时使用桩和驱动</strong></p>
+<p>⚡ 高频辨析：<strong>桩 = 替身在下（模拟被调用者）；驱动 = 替身在上（模拟调用者）</strong>——自顶向下要桩、自底向上要驱动。</p>
+<h3 id="按阶段-系统测试-验收测试">按阶段 · 系统测试 → 验收测试 ⭐⭐⭐</h3>
+<p>🌐系统测试（整体 · 黑盒）</p>
+<p>将<strong>硬件、软件、操作人员看作整体</strong>；在实际运行环境测试；<strong>黑盒测试工程师</strong>按<strong>需求规格说明书</strong>执行</p>
+<p>典型系统测试：<strong>恢复测试</strong>（导致失败的条件 + 验证<strong>恢复过程</strong>；系统须有<strong>容错</strong>）· <strong>安全测试</strong>（扮演入侵者突破防线；设计准则 = <strong>使侵入代价更昂贵</strong>）· <strong>压力测试</strong>（异常访问量/频率/数据量）</p>
+<p>测试内容：功能 · 界面 · 可靠性 · 易用性 · 性能 · 兼容性 · 安全性等</p>
+<p>✅验收测试（交付测试 · 用户参与）</p>
+<p>部署前<strong>最后一个测试</strong>；人员 = <strong>最终用户/需求方</strong>；依据 = <strong>用户需求 + 验收标准</strong>；方法 = 黑盒</p>
+<p>① 正式验收</p>
+<p>管理严格，系统测试的延续——用例是系统测试的<strong>子集</strong>；用户代表参与或独立小组</p>
+<p>② 非正式验收（α 测试）</p>
+<p><strong>开发环境下</strong>、无特定用例、内容由测试员决定；较主观</p>
+<p>③ Beta 测试</p>
+<p><strong>多个用户在实际使用环境</strong>下测试；<strong>开发者不在现场</strong>；<strong>不能由程序员或测试员完成</strong>；控制最少、<strong>最主观</strong></p>
+<p>⚡ 辨析：<strong>α = 内测（开发环境）；β = 公测（用户实际环境、开发者不在场）</strong>。</p>
+<h3 id="按被测软件-七种新形态-回归-冒烟">按被测软件（七种新形态）+ 回归/冒烟</h3>
+<p><strong>🚀七种新形态测试</strong></p>
+<ul><li><strong>App</strong>：逻辑/功能/界面/兼容/漏洞/压力/<strong>中断/弱网</strong>测试</li><li><strong>Web</strong>：分布、异构、并发、平台无关 → 比<strong>普通程序复杂</strong></li><li><strong>物联网</strong>：围绕<strong>安全、设备、网络、平台、标准</strong></li><li><strong>车联网 V2X</strong>：V2V / V2P / V2N / V2I 互联互通</li><li><strong>大数据</strong>：数据维度 + 系统/应用维度；含<strong>基准测试</strong>（对比框架性能）</li><li><strong>AI</strong>：不确定性/概率性/大数据依赖/自我学习 → 传统方法不够；测<strong>算法健壮性、模型评估、模型安全</strong></li><li><strong>小程序</strong>：权限/UI/功能/兼容；与 App 区别 = <strong>免安装、周期短审核快</strong></li></ul>
+<p>🔁回归测试 + 冒烟测试</p>
+<p><strong>回归测试</strong>：修改旧代码后<strong>重新测试</strong>——确认修改<strong>没引入新错误</strong>；迭代开发中更频繁（XP 每天多次）；<strong>自动化</strong>大幅降成本</p>
+<p>四策略</p>
+<p><strong>再测试全部用例</strong>（最安全、成本最高）· <strong>基于风险选择</strong>（先测关键可疑）· <strong>基于操作剖面</strong>（按使用频率；预算内最有效提升可靠性）· <strong>再测试修改的部分</strong>（依赖性分析；信心足时用）</p>
+<p><strong>冒烟测试</strong>：源自<strong>硬件行业</strong>（加电没冒烟就通过）；对象 = <strong>每个新编译需正式测试的版本</strong>；执行者 = <strong>版本编译人员</strong>；<strong>预测试</strong>——确认更改不破坏版本<strong>完整性与稳定性</strong>；特点是<strong>注重通过性、轻细节</strong></p>
+<h2 id="s14-5-测试过程与管理">14.5 测试过程与管理</h2>
+<p>🧭测试过程六阶段</p>
+<p><strong>① 需求分析</strong>（确定测什么 + 预期结果）→ <strong>② 制订测试计划</strong>（测哪些/用什么方法/人员安排）→ <strong>③ 设计测试文档</strong>（<strong>核心阶段</strong>——编写测试用例）→ <strong>④ 搭建测试环境</strong> → <strong>⑤ 执行测试</strong>（单元/集成/系统/验收/回归）→ <strong>⑥ 缺陷管理</strong>（收集/管理/沟通缺陷）</p>
+<p>过程管理五阶段：<strong>启动 → 计划（范围/策略/风险/日程）→ 设计（方案/用例/工具/脚本+评审）→ 执行（环境/数据/缺陷跟踪）→ 结果审查与分析</strong></p>
+<p><strong>🗃️四大管理域</strong></p>
+<p>配置管理</p>
+<p>测试配置管理是<strong>软件配置管理的子集</strong>；对象 = <strong>测试计划/方案（用例）/测试版本/工具环境/测试结果</strong>；目标 = <strong>控制审计变更 · 里程碑建基线 · 记录跟踪变更请求</strong></p>
+<p>缺陷管理</p>
+<p>按严重程度 = <strong>严重 · 一般 · 次要 · 建议</strong>；按优先级 = <strong>立即解决/高/正常排队/低</strong>；评估维度 = <strong>影响范围 + 严重级别</strong>；修复完<strong>及时同步状态</strong></p>
+<p>风险管理</p>
+<p><strong>识别 → 评估 → 应对 → 上报</strong>（超能力时上报）；应对 = <strong>规避（裁剪特性）/ 转移（外包第三方）/ 减轻（回退合入）/ 接受（低优先级）</strong>——与 CH08 四应对同源</p>
+<h2 id="s14-6-软件部署-四步-四种发布方式">14.6 软件部署 · 四步 + 四种发布方式 ⭐</h2>
+<p>🚀部署定义 · 目标 · 步骤</p>
+<p><strong>部署</strong> = 将软件项目（含<strong>配置文件、用户手册、帮助文档</strong>）进行<strong>收集、打包、安装、配置、发布</strong>的过程</p>
+<ul><li><strong>四目标</strong>：保障正常运行 · <strong>简化操作提高效率</strong> · 满足个性化需求 · <strong>支持运行可直接使用</strong></li><li><strong>四步骤</strong>：<strong>环境准备</strong>（依赖项/运行环境/网络）→ <strong>软件安装</strong>（组件复制+权限配置）→ <strong>数据库和文件配置</strong> → <strong>测试和验证</strong></li></ul>
+<p>🕊️四种发布方式（冲刺补充·高频）</p>
+<p>灰度发布</p>
+<p>先放<strong>一部分流量</strong>给新版本</p>
+<p>金丝雀 Canary</p>
+<p>先放<strong>少量</strong>用户/流量验证（比灰度更小步）</p>
+<p>蓝绿部署</p>
+<p><strong>两套环境</strong>（蓝旧绿新），<strong>整体切换</strong>流量——回滚快</p>
+<p>滚动更新</p>
+<p><strong>逐批替换</strong>实例，节约资源</p>
+<p>⚡ 辨析：蓝绿 = <strong>两套环境一键切换</strong>；滚动 = <strong>逐批替换同一套环境</strong>；金丝雀 = <strong>小流量先探路</strong>。</p>
+<h2 id="全章易错辨析-TOP-10">全章易错辨析 TOP 10</h2>
+<p>1<strong>测试目的 = 发现错误</strong>，不是证明无错；"证明无错"是<strong>错误理解</strong></p>
+<p>2<strong>好测试用例</strong> = 能发现<strong>尚未发现的错误</strong>的用例</p>
+<p>3<strong>白盒覆盖强度</strong>：语句&lt;判定&lt;条件&lt;判定条件&lt;条件组合&lt;路径</p>
+<p>4<strong>边界值五点</strong>：min / min+1 / 正常 / max−1 / max</p>
+<p>5<strong>桩 vs 驱动</strong>：桩在下模拟被调用者；驱动在上模拟调用者</p>
+<p>6<strong>α vs β</strong>：α 内测（开发环境）；β 公测（用户环境，开发者不在场）</p>
+<p>7<strong>负载 vs 压力</strong>：到瓶颈后<strong>继续跑</strong> vs 不断加压<strong>到瓶颈</strong></p>
+<p>8<strong>静态测试不运行程序</strong>（代码检查 + 静态分析）；对象含<strong>文档</strong></p>
+<p>9<strong>蓝绿 vs 滚动</strong>：两套环境切换 vs 逐批替换</p>
+<p>10<strong>缺陷严重度 ≠ 优先级</strong>（严重程度 vs 修复紧急度）</p>
+<p>💡 补充三陷阱：<strong>自动化不适用探索性/一次性/频繁变更</strong> · <strong>冒烟测试 = 预测试（编译人员执行）</strong> · <strong>回归四策略全量最安全但成本最高</strong>。</p>
+<h2 id="全章速记卡-考前-5-分钟">全章速记卡 · 考前 5 分钟</h2>
+<p><strong>🔑清单卡（必背）</strong></p>
+<ul><li>测试目的 = <strong>发现错误</strong>，不能证明无错；好用例 = <strong>发现尚未发现的错误</strong></li><li><strong>八原则</strong>：尽早持续 / 含预期输出 / 不测自己程序 / 组织不测自己 / 无效输入也测 / 避免重设计用例 / 不假定无错 / 不穷举（+追溯需求）</li><li>冲刺版：<strong>缺陷集群（二八）· 杀虫剂悖论</strong></li><li><strong>三分类</strong>：黑盒/白盒/灰盒（看内部）｜静态/动态（跑不跑）｜手工/自动</li><li><strong>黑盒六法</strong>：等价类 / 边界值 / 错误推测 / 因果图 / 判定表 / 正交试验</li><li><strong>边界值五点</strong>：min·min+1·正常·max−1·max</li><li><strong>白盒六级</strong>：语句&lt;判定&lt;条件&lt;判定条件&lt;条件组合&lt;路径</li><li>静态 = <strong>代码检查+静态结构分析+质量度量</strong>（发现 30%~70% 缺陷）</li><li>自动化：✅回归/性能/重复；❌探索/一次性/频繁变更</li></ul>
+<p><strong>🔢数字卡</strong></p>
+<ul><li>结构化三结构：顺序/选择/循环（<strong>单入口单出口</strong>）</li><li>可视化 <strong>5</strong> 概念：表单/部件/属性/事件/方法</li><li>代码重用 <strong>3</strong> 层次：代码/设计结果/分析结果</li><li>测试对象 = <strong>程序 + 文档 + 配置数据</strong></li><li>性能 <strong>5</strong> 类：负载/压力/并发/容量/可靠性；指标 <strong>5</strong>：TPS/响应时间/并发数/资源利用率/错误率</li><li>兼容 <strong>5</strong> 内容；稳定性 <strong>5</strong> 测试点</li><li><strong>四阶段</strong>：单元（白盒/模块）→ 集成（接口）→ 系统（整体/黑盒）→ 验收（用户）</li><li>集成 <strong>4</strong> 策略：一次性/自顶向下（桩）/自底向上（驱动）/三明治</li><li>验收 <strong>3</strong> 策略：正式/非正式（α）/Beta</li><li>回归 <strong>4</strong> 策略：全量/风险/操作剖面/修改部分</li><li>部署 <strong>4</strong> 步；发布 <strong>4</strong> 方式：灰度/金丝雀/蓝绿/滚动</li></ul>
+<p><strong>🔗场景对应卡</strong></p>
+<ul><li>"C=函数 Java=类" → <strong>单元测试</strong>；"模块间接口" → 集成</li><li>"软硬件人员整体" → <strong>系统测试</strong>；"用户参与" → 验收</li><li>"开发环境内测" → <strong>α</strong>；"用户环境公测开发者不在" → β</li><li>"验证恢复过程/容错" → <strong>恢复测试</strong>；"扮演入侵者" → 安全测试</li><li>"CPU 到 100% 继续观察" → 负载；"不断加压" → 压力</li><li>"最大并发用户数极限" → <strong>容量测试</strong></li><li>"易用性测试" = <strong>用户体验测试</strong></li><li>"新编译版本预测试" → <strong>冒烟测试</strong>（编译人员执行）</li><li>"XP 每天多次" → <strong>回归测试</strong></li><li>"两套环境一键切" → 蓝绿；"逐批替换" → 滚动；"小流量探路" → 金丝雀</li></ul>
+<p><strong>⚖️对比卡</strong></p>
+<ul><li><strong>黑盒（功能/用户角度）</strong> vs <strong>白盒（结构/逻辑路径）</strong> vs <strong>灰盒（集成阶段）</strong></li><li><strong>静态（不运行/查文档代码）</strong> vs <strong>动态（运行/构造用例执行分析）</strong></li><li><strong>桩（在下模拟被调用者）</strong> vs <strong>驱动（在上模拟调用者）</strong></li><li><strong>单元（白盒为主）</strong> vs <strong>系统（黑盒）</strong> vs <strong>验收（黑盒+用户）</strong></li><li><strong>负载（瓶颈后继续跑）</strong> vs <strong>压力（加压到瓶颈）</strong> vs <strong>容量（找极限）</strong></li><li><strong>严重度（影响大小）</strong> vs <strong>优先级（修复紧急度）</strong></li><li><strong>正式验收（系统测试子集）</strong> vs <strong>非正式（无特定用例）</strong> vs <strong>Beta（最主观）</strong></li><li><strong>全量回归（最安全最贵）</strong> vs <strong>风险/剖面/修改部分</strong></li><li><strong>蓝绿（两套切换）</strong> vs <strong>滚动（逐批替换）</strong></li><li><strong>冒烟（重通过轻细节）</strong> vs <strong>回归（确认无新错）</strong></li></ul>
+<p>本章最核心三句话：<strong>① 测试为发现错误而非证明无错，好用例能发现尚未发现的错误　② 白盒覆盖六级：语句判定条件判定条件组合路径，路径最强用例爆炸　③ 单元集成系统验收四阶段，桩在下驱动在上，α 内测 β 公测</strong></p>
+<h2 id="全章自测清单-能答出即过关">全章自测清单 · 能答出即过关</h2>
+<p>□结构化三结构单入口单出口；OOP 定位；可视化五概念</p>
+<p>□语言选择条件；设计风格四维度（先测试后优化）</p>
+<p>□编码规范四方面；代码重用三层次与方法</p>
+<p>□IEEE 定义；三个"本末倒置"的误解</p>
+<p>□测试对象含文档；目的三视角</p>
+<p>□测试八原则（教材版）+ 二八法则 + 杀虫剂悖论</p>
+<p>□"不能证明无错"；"好用例 = 发现尚未发现的错误"</p>
+<p>□三分类维度（看内部/跑不跑/自动否）</p>
+<p>□黑盒六法；边界值五点</p>
+<p>□白盒方法与四原则；高可靠性领域应用</p>
+<p>□白盒覆盖六级强度顺序（默写）</p>
+<p>□条件覆盖不一定满足判定覆盖</p>
+<p>□白盒三步法</p>
+<p>□灰盒定位（集成测试阶段）</p>
+<p>□静态测试三手段；代码检查 30%~70%</p>
+<p>□动态测试三部分</p>
+<p>□自动化适用/不适用；三层工具链</p>
+<p>□功能测试 6 步</p>
+<p>□负载/压力/并发/容量辨析；指标五件套</p>
+<p>□安全测试两层与手段；可靠性测试定位</p>
+<p>□兼容五内容；界面/易用性/稳定性要点</p>
+<p>□单元测试六项规定；隔离测试</p>
+<p>□集成测试三层次与四策略</p>
+<p>□桩 vs 驱动（方向别背反）</p>
+<p>□系统测试典型三类（恢复/安全/压力）</p>
+<p>□验收三策略；α vs β</p>
+<p>□七种新形态测试各一句</p>
+<p>□回归测试四策略；冒烟测试定位</p>
+<p>□测试过程六阶段；四大管理域</p>
+<p>□缺陷严重度 vs 优先级</p>
+<p>□部署定义/目标/四步骤</p>
+<p>□四种发布方式辨析（灰度/金丝雀/蓝绿/滚动）</p>
+<p>💡 <strong>用法</strong>：覆盖六级与四阶段必须<strong>默写排序</strong>；三对辨析（桩驱动/αβ/负载压力）脱口而出。全打勾，第 14 章过关。</p>
+<h2 id="本章回炉任务-下一份预告">本章回炉任务 + 下一份预告</h2>
+<p><strong>🔁三个必须动手的任务</strong></p>
+<p><strong>① 默写两条链</strong>——白盒覆盖六级（弱→强）+ 测试四阶段（各自的对象/人员/方法/依据一张表）。目标：90 秒默写完。</p>
+<p><strong>② 挣值式演算</strong>——自画含两个判定（各含两个条件）的流程片段，分别设计满足<strong>语句覆盖 / 判定覆盖 / 条件覆盖 / 条件组合覆盖</strong>的最少用例，体会用例数增长。</p>
+<p><strong>③ 测试方案一句话</strong>——给"呼叫中心 Web 工作站"写测试清单：至少覆盖功能/性能（含并发）/兼容（浏览器）/易用性/安全（SQL 注入）五类，各配一句测什么。</p>
+<p>➡️进度与预告</p>
+<p>已完成 <strong>16 / 22</strong> 份课件（合计 <strong>516 页</strong>）<br>批次 3 还剩：<strong>CH15 系统运行与维护</strong> · <strong>CH17 嵌入式系统</strong></p>
+<p><strong>下一份：CH15 系统运行与维护</strong>——可维护性/维护类型四分类/系统评价，与本章部署衔接。</p>
+<p>💡 本章论文方向考过 <strong>11 次</strong>——"五层测试策略 + 自动化 + CI/CD"是测试类论文的骨架素材。</p>
 <hr>
 <h2 id="章节练习题">章节练习题</h2>
 <hr>
-    <div class="quiz quiz-js" data-key="H27-软件架构设计（二）-架构风格与SOA.md">
+    <div class="quiz quiz-js" data-key="H32-软件实现与测试（二）-测试阶段与部署发布.md">
   <div class="quiz-head">
     <span class="quiz-label">章节练习题</span>
     <span class="quiz-progress">已答 0 / 6</span>
@@ -2099,53 +2148,53 @@ html{scroll-padding-top:80px}
     <button class="quiz-btn quiz-reset" type="button">重做</button>
     <div class="quiz-pbar"><div class="quiz-pbar-fill"></div></div>
   </div>
-  <div class="quiz-item" data-answer="A" data-explain="架构风格六大类：&lt;strong&gt;① 数据流风格&lt;/strong&gt;（过滤器/管道-过滤器、批处理）｜&lt;strong&gt;② 调用/返回风格&lt;/strong&gt;（主程序-子程序、面向对象、层次型、客户端/服务器）｜&lt;strong&gt;③ 以数据为中心风格&lt;/strong&gt;（仓库、黑板）｜&lt;strong&gt;④ 虚拟机风格&lt;/strong&gt;（解释器、规则系统）｜&lt;strong&gt;⑤ 独立构件风格&lt;/strong&gt;（消息传递、管道）｜&lt;strong&gt;⑥ SOA 与微服务&lt;/strong&gt;。&lt;strong&gt;管道-过滤器&lt;/strong&gt;把处理单元串成流水线，数据前驱后自动流过，典型如 Unix 管道、编译器、图像处理。" data-ref="第12章 · 12.3.2 数据流风格">
-  <div class="quiz-q"><span class="qn">1</span>"管道—过滤器"（Pipe-Filter）风格属于下列哪一类架构风格？</div>
-  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">数据流风格</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">调用/返回风格</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">以数据为中心风格</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">虚拟机风格</span></div></div>
+  <div class="quiz-item" data-answer="A" data-explain="&lt;strong&gt;四阶段（由小到大、由早到晚）&lt;/strong&gt;：&lt;strong&gt;① 单元测试&lt;/strong&gt;——测&lt;strong&gt;单个模块/函数&lt;/strong&gt;，主要用&lt;strong&gt;白盒&lt;/strong&gt;方法，由开发人员做；&lt;strong&gt;② 集成测试&lt;/strong&gt;——测&lt;strong&gt;模块间接口与集成&lt;/strong&gt;，策略有&lt;strong&gt;一次性集成 / 自顶向下 / 自底向上 / 三明治&lt;/strong&gt;，常用&lt;strong&gt;黑盒 + 白盒&lt;/strong&gt;结合；&lt;strong&gt;③ 系统测试&lt;/strong&gt;——测&lt;strong&gt;完整系统&lt;/strong&gt;是否满足需求（功能/性能/安全/兼容等），由独立测试团队做，&lt;strong&gt;纯黑盒&lt;/strong&gt;；&lt;strong&gt;④ 验收测试&lt;/strong&gt;——由&lt;strong&gt;用户/客户&lt;/strong&gt;主导，确认是否满足业务需求（&lt;strong&gt;α 测试&lt;/strong&gt;在开发场地、&lt;strong&gt;β 测试&lt;/strong&gt;在用户场地）。" data-ref="第14章 · 14.4 按阶段 · 单元→集成→系统→验收">
+  <div class="quiz-q"><span class="qn">1</span>按测试阶段，由小到大、由早到晚的正确顺序是：</div>
+  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">单元测试 → 集成测试 → 系统测试 → 验收测试</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">验收 → 系统 → 集成 → 单元</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">系统 → 单元 → 集成 → 验收</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">集成 → 单元 → 系统 → 验收</span></div></div>
   <div class="reveal" style="display:none">
     <div class="reveal-verdict"></div>
-    <div class="reveal-explain">架构风格六大类：<strong>① 数据流风格</strong>（过滤器/管道-过滤器、批处理）｜<strong>② 调用/返回风格</strong>（主程序-子程序、面向对象、层次型、客户端/服务器）｜<strong>③ 以数据为中心风格</strong>（仓库、黑板）｜<strong>④ 虚拟机风格</strong>（解释器、规则系统）｜<strong>⑤ 独立构件风格</strong>（消息传递、管道）｜<strong>⑥ SOA 与微服务</strong>。<strong>管道-过滤器</strong>把处理单元串成流水线，数据前驱后自动流过，典型如 Unix 管道、编译器、图像处理。</div>
-    <div class="reveal-ref">第12章 · 12.3.2 数据流风格</div>
+    <div class="reveal-explain"><strong>四阶段（由小到大、由早到晚）</strong>：<strong>① 单元测试</strong>——测<strong>单个模块/函数</strong>，主要用<strong>白盒</strong>方法，由开发人员做；<strong>② 集成测试</strong>——测<strong>模块间接口与集成</strong>，策略有<strong>一次性集成 / 自顶向下 / 自底向上 / 三明治</strong>，常用<strong>黑盒 + 白盒</strong>结合；<strong>③ 系统测试</strong>——测<strong>完整系统</strong>是否满足需求（功能/性能/安全/兼容等），由独立测试团队做，<strong>纯黑盒</strong>；<strong>④ 验收测试</strong>——由<strong>用户/客户</strong>主导，确认是否满足业务需求（<strong>α 测试</strong>在开发场地、<strong>β 测试</strong>在用户场地）。</div>
+    <div class="reveal-ref">第14章 · 14.4 按阶段 · 单元→集成→系统→验收</div>
   </div>
-</div><div class="quiz-item" data-answer="A" data-explain="&lt;strong&gt;以数据为中心（Data-Centered）风格&lt;/strong&gt;有两个典型：&lt;strong&gt;仓库风格&lt;/strong&gt;（Repository，构件统一访问中央数据仓库，构件之间不直接通信）｜&lt;strong&gt;黑板风格&lt;/strong&gt;（Blackboard，由一个&lt;strong&gt;共享黑板&lt;/strong&gt; + 多个&lt;strong&gt;互相独立的知识源（专家模块）&lt;/strong&gt;组成；知识源观察黑板、发现自己能解决的问题就认领并求解，&lt;strong&gt;黑板不知道知识源的存在&lt;/strong&gt;，控制反转）。黑板风格常用于语音识别、图像识别、专家系统。" data-ref="第12章 · 12.3.4 以数据为中心 · 仓库 + 黑板">
-  <div class="quiz-q"><span class="qn">2</span>"黑板"（Blackboard）架构风格属于：</div>
-  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">以数据为中心风格</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">数据流风格</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">调用/返回风格</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">独立构件风格</span></div></div>
+</div><div class="quiz-item" data-answer="A" data-explain="&lt;strong&gt;回归测试&lt;/strong&gt;：在软件&lt;strong&gt;发生变更后&lt;/strong&gt;（修 bug、加功能、改配置）&lt;strong&gt;重新执行&lt;/strong&gt;已有的测试用例，目的是&lt;strong&gt;确认变更没有破坏原有功能、也没引入新缺陷&lt;/strong&gt;。⚠️ &lt;strong&gt;冒烟测试（Smoke Test）&lt;/strong&gt;与它不同：冒烟是&lt;strong&gt;对新构建版本的&quot;基本可用性&quot;做快速验证&lt;/strong&gt;（先确认&quot;能跑起来&quot;，再决定是否开展详细测试），&lt;strong&gt;通过后才进入回归/详细测试&lt;/strong&gt;。两者常配套：&lt;strong&gt;冒烟 → 详细测试 → 回归&lt;/strong&gt;。" data-ref="第14章 · 14.4 回归/冒烟测试">
+  <div class="quiz-q"><span class="qn">2</span>"回归测试"的主要目的是：</div>
+  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">验证修改后的软件未引入新缺陷，且原有功能仍正常</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">测试新功能</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">测试性能瓶颈</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">测试安全性</span></div></div>
   <div class="reveal" style="display:none">
     <div class="reveal-verdict"></div>
-    <div class="reveal-explain"><strong>以数据为中心（Data-Centered）风格</strong>有两个典型：<strong>仓库风格</strong>（Repository，构件统一访问中央数据仓库，构件之间不直接通信）｜<strong>黑板风格</strong>（Blackboard，由一个<strong>共享黑板</strong> + 多个<strong>互相独立的知识源（专家模块）</strong>组成；知识源观察黑板、发现自己能解决的问题就认领并求解，<strong>黑板不知道知识源的存在</strong>，控制反转）。黑板风格常用于语音识别、图像识别、专家系统。</div>
-    <div class="reveal-ref">第12章 · 12.3.4 以数据为中心 · 仓库 + 黑板</div>
+    <div class="reveal-explain"><strong>回归测试</strong>：在软件<strong>发生变更后</strong>（修 bug、加功能、改配置）<strong>重新执行</strong>已有的测试用例，目的是<strong>确认变更没有破坏原有功能、也没引入新缺陷</strong>。⚠️ <strong>冒烟测试（Smoke Test）</strong>与它不同：冒烟是<strong>对新构建版本的"基本可用性"做快速验证</strong>（先确认"能跑起来"，再决定是否开展详细测试），<strong>通过后才进入回归/详细测试</strong>。两者常配套：<strong>冒烟 → 详细测试 → 回归</strong>。</div>
+    <div class="reveal-ref">第14章 · 14.4 回归/冒烟测试</div>
   </div>
-</div><div class="quiz-item" data-answer="A" data-explain="SOA 三项核心技术：&lt;strong&gt;UDDI（Universal Description, Discovery and Integration）&lt;/strong&gt;——&lt;strong&gt;服务注册中心&lt;/strong&gt;，提供服务的描述与查询规范，支撑&lt;strong&gt;服务注册、发现与集成&lt;/strong&gt;｜&lt;strong&gt;WSDL（Web Services Description Language）&lt;/strong&gt;——&lt;strong&gt;服务描述语言&lt;/strong&gt;，描述&quot;服务提供什么、怎么调用&quot;（用 WSDL 生成的 SOAP 服务才可被 UDDI 注册）｜&lt;strong&gt;SOAP（Simple Object Access Protocol）&lt;/strong&gt;——&lt;strong&gt;消息传输格式&lt;/strong&gt;，规定 XML 消息如何在网络上传送。⚠️ 记忆：&lt;strong&gt;&quot;UDDI 找人、WSDL 说事、SOAP 送信&quot;&lt;/strong&gt;。" data-ref="第12章 · 12.3.7 SOA 关键技术">
-  <div class="quiz-q"><span class="qn">3</span>SOA（面向服务架构）的三项关键技术中，"UDDI" 的作用是：</div>
-  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">服务注册与发现（提供服务的描述与查询规范）</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">描述服务如何被调用（WSDL）</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">消息在网络中的传输格式（SOAP）</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">缓存加速</span></div></div>
+</div><div class="quiz-item" data-answer="A" data-explain="&lt;strong&gt;α 测试&lt;/strong&gt;：在&lt;strong&gt;开发方的场地&lt;/strong&gt;，由&lt;strong&gt;用户在开发人员的指导下&lt;/strong&gt;进行（可控环境，问题能及时反馈修复）。&lt;strong&gt;β 测试&lt;/strong&gt;：软件交付&lt;strong&gt;候选版本&lt;/strong&gt;后，在&lt;strong&gt;一个或多个用户的实际使用环境&lt;/strong&gt;中由&lt;strong&gt;最终用户&lt;/strong&gt;自行测试（不可控、真实场景），开发方通常不在场；β 测试收集到的反馈用于正式发布前的最后修正。⚠️ 二者都属于&lt;strong&gt;验收测试&lt;/strong&gt;范畴。" data-ref="第14章 · 14.4 验收测试">
+  <div class="quiz-q"><span class="qn">3</span>关于 α 测试与 β 测试，下列说法正确的是：</div>
+  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">α 测试在开发场地由用户在开发方指导下进行；β 测试在用户实际使用环境中由最终用户进行</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">α 测试在用户场地，β 测试在开发场地</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">两者都由开发人员完成</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">α 测试就是单元测试</span></div></div>
   <div class="reveal" style="display:none">
     <div class="reveal-verdict"></div>
-    <div class="reveal-explain">SOA 三项核心技术：<strong>UDDI（Universal Description, Discovery and Integration）</strong>——<strong>服务注册中心</strong>，提供服务的描述与查询规范，支撑<strong>服务注册、发现与集成</strong>｜<strong>WSDL（Web Services Description Language）</strong>——<strong>服务描述语言</strong>，描述"服务提供什么、怎么调用"（用 WSDL 生成的 SOAP 服务才可被 UDDI 注册）｜<strong>SOAP（Simple Object Access Protocol）</strong>——<strong>消息传输格式</strong>，规定 XML 消息如何在网络上传送。⚠️ 记忆：<strong>"UDDI 找人、WSDL 说事、SOAP 送信"</strong>。</div>
-    <div class="reveal-ref">第12章 · 12.3.7 SOA 关键技术</div>
+    <div class="reveal-explain"><strong>α 测试</strong>：在<strong>开发方的场地</strong>，由<strong>用户在开发人员的指导下</strong>进行（可控环境，问题能及时反馈修复）。<strong>β 测试</strong>：软件交付<strong>候选版本</strong>后，在<strong>一个或多个用户的实际使用环境</strong>中由<strong>最终用户</strong>自行测试（不可控、真实场景），开发方通常不在场；β 测试收集到的反馈用于正式发布前的最后修正。⚠️ 二者都属于<strong>验收测试</strong>范畴。</div>
+    <div class="reveal-ref">第14章 · 14.4 验收测试</div>
   </div>
-</div><div class="quiz-item" data-answer="A" data-explain="&lt;strong&gt;REST（Representational State Transfer，表述性状态转移）&lt;/strong&gt;：&lt;strong&gt;面向资源&lt;/strong&gt;架构风格，用 &lt;strong&gt;HTTP 动词（GET/POST/PUT/DELETE）&lt;/strong&gt; 表达对资源的操作，用 URL 标识资源，&lt;strong&gt;轻量、无状态、只需 HTTP 协议&lt;/strong&gt;。&lt;strong&gt;SOAP&lt;/strong&gt;：&lt;strong&gt;面向服务&lt;/strong&gt;，用 &lt;strong&gt;WSDL 定义接口契约&lt;/strong&gt;，用 &lt;strong&gt;XML&lt;/strong&gt; 作为消息格式，&lt;strong&gt;规范严谨但笨重&lt;/strong&gt;。⚠️ 常见误区：&quot;SOAP 比 REST 先进&quot;——两者定位不同，SOAP 适合强契约的企业级集成，REST 适合互联网开放接口。" data-ref="第12章 · 12.3.7 SOA 关键技术">
-  <div class="quiz-q"><span class="qn">4</span>关于 REST 与 SOAP，下列说法正确的是：</div>
-  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">REST 面向资源、用 HTTP 动词表达操作、轻量易用；SOAP 面向服务、用 XML 定义接口契约、适合企业级复杂交互</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">REST 必须用 XML 传输，比 SOAP 更重</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">SOAP 是 REST 的升级版本</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">两者都是消息中间件协议</span></div></div>
+</div><div class="quiz-item" data-answer="A" data-explain="四种发布方式：&lt;strong&gt;① 蓝绿部署&lt;/strong&gt;——&lt;strong&gt;准备两套完全相同&lt;/strong&gt;的环境（蓝=当前线上、绿=新版本），&lt;strong&gt;发布时把流量整体切换&lt;/strong&gt;到绿；&lt;strong&gt;回滚只需把流量切回蓝，秒级完成&lt;/strong&gt;；&lt;strong&gt;代价是资源开销翻倍&lt;/strong&gt;。&lt;strong&gt;② 金丝雀/灰度发布&lt;/strong&gt;——&lt;strong&gt;先放一小部分流量&lt;/strong&gt;到新版本，观察无异常再逐步放大，风险最小、最常用。&lt;strong&gt;③ 滚动发布&lt;/strong&gt;——&lt;strong&gt;逐批替换&lt;/strong&gt;实例，无停机但回滚较慢。&lt;strong&gt;④ 影子/暗部署&lt;/strong&gt;——新版本&lt;strong&gt;接收真实流量副本但不返回给用户&lt;/strong&gt;，只用于验证（&lt;strong&gt;不影响用户体验&lt;/strong&gt;）。" data-ref="第14章 · 14.6 软件部署 · 四种发布方式">
+  <div class="quiz-q"><span class="qn">4</span>软件部署的四种发布方式中，"蓝绿部署"的特点是：</div>
+  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">同时运行新旧两套环境，切换时把流量整体从旧（蓝）切到新（绿），可瞬间回滚</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">逐步把流量从旧版本切到新版本</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">先发布给一小部分用户试用</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">直接停机替换</span></div></div>
   <div class="reveal" style="display:none">
     <div class="reveal-verdict"></div>
-    <div class="reveal-explain"><strong>REST（Representational State Transfer，表述性状态转移）</strong>：<strong>面向资源</strong>架构风格，用 <strong>HTTP 动词（GET/POST/PUT/DELETE）</strong> 表达对资源的操作，用 URL 标识资源，<strong>轻量、无状态、只需 HTTP 协议</strong>。<strong>SOAP</strong>：<strong>面向服务</strong>，用 <strong>WSDL 定义接口契约</strong>，用 <strong>XML</strong> 作为消息格式，<strong>规范严谨但笨重</strong>。⚠️ 常见误区："SOAP 比 REST 先进"——两者定位不同，SOAP 适合强契约的企业级集成，REST 适合互联网开放接口。</div>
-    <div class="reveal-ref">第12章 · 12.3.7 SOA 关键技术</div>
+    <div class="reveal-explain">四种发布方式：<strong>① 蓝绿部署</strong>——<strong>准备两套完全相同</strong>的环境（蓝=当前线上、绿=新版本），<strong>发布时把流量整体切换</strong>到绿；<strong>回滚只需把流量切回蓝，秒级完成</strong>；<strong>代价是资源开销翻倍</strong>。<strong>② 金丝雀/灰度发布</strong>——<strong>先放一小部分流量</strong>到新版本，观察无异常再逐步放大，风险最小、最常用。<strong>③ 滚动发布</strong>——<strong>逐批替换</strong>实例，无停机但回滚较慢。<strong>④ 影子/暗部署</strong>——新版本<strong>接收真实流量副本但不返回给用户</strong>，只用于验证（<strong>不影响用户体验</strong>）。</div>
+    <div class="reveal-ref">第14章 · 14.6 软件部署 · 四种发布方式</div>
   </div>
-</div><div class="quiz-item" data-answer="A" data-explain="SOA 三种实现方式：&lt;strong&gt;Web Service&lt;/strong&gt;（用 WSDL 描述接口、SOAP 通信，是&lt;strong&gt;标准方式&lt;/strong&gt;）｜&lt;strong&gt;注册表方式&lt;/strong&gt;（用&lt;strong&gt;注册中心统一管理服务的发布/查找/绑定&lt;/strong&gt;，服务提供者与消费者解耦）｜&lt;strong&gt;ESB（企业服务总线）&lt;/strong&gt;（用&lt;strong&gt;消息总线&lt;/strong&gt;统一做协议转换、路由、安全控制，是企业级整合的主流）。" data-ref="第12章 · 12.3.7 SOA 实现三方法">
-  <div class="quiz-q"><span class="qn">5</span>SOA 的实现方式中，"注册表（Registry）"方式指的是：</div>
-  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">通过注册中心管理服务的发布、查找与绑定</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">在客户端代码里硬编码服务地址</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">用消息队列削峰</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">把服务打包成独立进程</span></div></div>
+</div><div class="quiz-item" data-answer="A" data-explain="&lt;strong&gt;软件部署四步&lt;/strong&gt;：&lt;strong&gt;① 制定部署计划&lt;/strong&gt;（确定版本、时间窗、责任人、回滚预案、影响范围）→ &lt;strong&gt;② 环境准备&lt;/strong&gt;（服务器/中间件/配置/数据迁移脚本就绪，确认依赖）→ &lt;strong&gt;③ 部署实施&lt;/strong&gt;（按计划安装/配置/数据迁移/灰度切流）→ &lt;strong&gt;④ 部署验证&lt;/strong&gt;（功能验证、性能验证、&lt;strong&gt;监控对账&lt;/strong&gt;，异常则按预案回滚）。⚠️ &lt;strong&gt;回滚预案必须在第①步就写好&lt;/strong&gt;，不能等到出问题才想。" data-ref="第14章 · 14.6 软件部署 · 四步">
+  <div class="quiz-q"><span class="qn">5</span>软件部署的四个步骤，正确顺序是：</div>
+  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">部署计划 → 环境准备 → 部署实施 → 部署验证（及回滚预案）</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">部署实施 → 部署计划 → 环境准备 → 部署验证</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">环境准备 → 部署实施 → 部署计划 → 部署验证</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">部署验证 → 部署计划 → 环境准备 → 部署实施</span></div></div>
   <div class="reveal" style="display:none">
     <div class="reveal-verdict"></div>
-    <div class="reveal-explain">SOA 三种实现方式：<strong>Web Service</strong>（用 WSDL 描述接口、SOAP 通信，是<strong>标准方式</strong>）｜<strong>注册表方式</strong>（用<strong>注册中心统一管理服务的发布/查找/绑定</strong>，服务提供者与消费者解耦）｜<strong>ESB（企业服务总线）</strong>（用<strong>消息总线</strong>统一做协议转换、路由、安全控制，是企业级整合的主流）。</div>
-    <div class="reveal-ref">第12章 · 12.3.7 SOA 实现三方法</div>
+    <div class="reveal-explain"><strong>软件部署四步</strong>：<strong>① 制定部署计划</strong>（确定版本、时间窗、责任人、回滚预案、影响范围）→ <strong>② 环境准备</strong>（服务器/中间件/配置/数据迁移脚本就绪，确认依赖）→ <strong>③ 部署实施</strong>（按计划安装/配置/数据迁移/灰度切流）→ <strong>④ 部署验证</strong>（功能验证、性能验证、<strong>监控对账</strong>，异常则按预案回滚）。⚠️ <strong>回滚预案必须在第①步就写好</strong>，不能等到出问题才想。</div>
+    <div class="reveal-ref">第14章 · 14.6 软件部署 · 四步</div>
   </div>
-</div><div class="quiz-item" data-answer="A" data-explain="&lt;strong&gt;二层 C/S&lt;/strong&gt;：客户端直接访问数据库（胖客户端），&lt;strong&gt;数据库连接数受限、扩展性差&lt;/strong&gt;。&lt;strong&gt;三层 C/S&lt;/strong&gt;：&lt;strong&gt;表示层（客户端）→ 应用层（服务器）→ 数据层（数据库）&lt;/strong&gt;，客户端&lt;strong&gt;不再直接连数据库&lt;/strong&gt;，好处是&lt;strong&gt;连接数降低、扩展性提升、安全性更好、便于集中管理&lt;/strong&gt;。&lt;strong&gt;B/S 架构是三层 C/S 的特例&lt;/strong&gt;（表示层用浏览器）。" data-ref="第12章 · 12.3.3 三层 C/S 架构 + B/S">
-  <div class="quiz-q"><span class="qn">6</span>三层 C/S 架构与二层 C/S 架构相比，主要增加的是：</div>
-  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">表示层与应用层分离，客户端不直接访问数据库</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">客户端数量增加</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">网络带宽要求提高</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">数据库服务器数量减少</span></div></div>
+</div><div class="quiz-item" data-answer="A" data-explain="&lt;strong&gt;负载测试&lt;/strong&gt;：&lt;strong&gt;逐步增加&lt;/strong&gt;并发用户/数据量，观察系统&lt;strong&gt;在不同负载下&lt;/strong&gt;的响应时间、吞吐、资源占用，找到&lt;strong&gt;性能拐点&lt;/strong&gt;。&lt;strong&gt;压力测试&lt;/strong&gt;：在&lt;strong&gt;极限甚至超负荷&lt;/strong&gt;（超出预期最大负载）条件下运行，考察系统的&lt;strong&gt;极限承受能力、稳定性与故障后的恢复能力&lt;/strong&gt;（会不会崩、崩了能不能自愈）。此外还有&lt;strong&gt;容量测试&lt;/strong&gt;（系统能支持的最大用户数/数据量）与&lt;strong&gt;可靠性/稳定性测试&lt;/strong&gt;（长时间运行的稳定性）。" data-ref="第14章 · 14.4 按测试对象 · 性能测试">
+  <div class="quiz-q"><span class="qn">6</span>按测试对象划分，"压力测试"与"负载测试"的主要区别是：</div>
+  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">负载测试是逐步增加负载看系统在各类负载下的表现；压力测试是在极限/超负荷下看系统的极限与恢复能力</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">两者完全相同</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">压力测试只测网络设备</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">负载测试只测数据库</span></div></div>
   <div class="reveal" style="display:none">
     <div class="reveal-verdict"></div>
-    <div class="reveal-explain"><strong>二层 C/S</strong>：客户端直接访问数据库（胖客户端），<strong>数据库连接数受限、扩展性差</strong>。<strong>三层 C/S</strong>：<strong>表示层（客户端）→ 应用层（服务器）→ 数据层（数据库）</strong>，客户端<strong>不再直接连数据库</strong>，好处是<strong>连接数降低、扩展性提升、安全性更好、便于集中管理</strong>。<strong>B/S 架构是三层 C/S 的特例</strong>（表示层用浏览器）。</div>
-    <div class="reveal-ref">第12章 · 12.3.3 三层 C/S 架构 + B/S</div>
+    <div class="reveal-explain"><strong>负载测试</strong>：<strong>逐步增加</strong>并发用户/数据量，观察系统<strong>在不同负载下</strong>的响应时间、吞吐、资源占用，找到<strong>性能拐点</strong>。<strong>压力测试</strong>：在<strong>极限甚至超负荷</strong>（超出预期最大负载）条件下运行，考察系统的<strong>极限承受能力、稳定性与故障后的恢复能力</strong>（会不会崩、崩了能不能自愈）。此外还有<strong>容量测试</strong>（系统能支持的最大用户数/数据量）与<strong>可靠性/稳定性测试</strong>（长时间运行的稳定性）。</div>
+    <div class="reveal-ref">第14章 · 14.4 按测试对象 · 性能测试</div>
   </div>
 </div>
 </div>
@@ -2161,7 +2210,7 @@ html{scroll-padding-top:80px}
   <span class="item"><kbd class="kbd">J</kbd>/<kbd class="kbd">K</kbd> 快滚</span>
   <span class="item"><kbd class="kbd">0</kbd> 回顶部</span>
 </div>
-    <nav class="pager"><a class="pg pg-prev" href="H26.html"><span class="pg-label">上一学时</span><span class="pg-title">软件架构设计（一）· 架构定义与 4+1 视图</span></a><a class="pg pg-next" href="H28.html"><span class="pg-label">下一学时</span><span class="pg-title">软件架构设计（三）· 质量属性与 ATAM 评估</span></a></nav>
+    <nav class="pager"><a class="pg pg-prev" href="H31.html"><span class="pg-label">上一学时</span><span class="pg-title">软件实现与测试（一）· 测试原则与黑盒白盒方法</span></a><a class="pg pg-next" href="H45.html"><span class="pg-label">下一学时</span><span class="pg-title">论文专项</span></a></nav>
     <footer class="footer">
   <p><strong>阿甘系分 · 48 小时冲刺手册</strong></p>
   <p class="sep">非官方出版物 · 与软考办无隶属关系 · 内容均为独立原创编写</p>
