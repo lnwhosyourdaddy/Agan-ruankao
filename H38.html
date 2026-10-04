@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="light dark">
-<title>第 27 小时 · 软件架构设计（二）· 架构风格与 SOA · 阿甘系分 48 小时冲刺</title>
+<title>第 38 小时 · 大数据处理系统分析与设计 · Lambda/Kappa 架构 · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
 <meta name="build-stamp" content="2026-10-05 07:22:32">
@@ -1932,7 +1932,7 @@ html{scroll-padding-top:80px}
 <body>
 <header class="topbar">
   <a class="brand" href="index.html"><span class="brand-mark">48</span><span>阿甘系分</span><span class="brand-sub">冲刺手册</span></a>
-  <nav class="nav"><div class="nav" id="chapnav"><button class="nav-trigger" type="button" id="navTrigger" aria-haspopup="true" aria-expanded="false" aria-controls="navPanel" title="章节导航（Enter / ↓ 打开，Esc 关闭）"><span class="nav-trigger-code">H27</span><span class="nav-trigger-label">架构风格与 SOA</span><svg class="nav-caret" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5 L6 8 L9.5 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="nav-panel" id="navPanel" hidden><div class="nav-panel-scroll"><div class="nav-group nav-group-solo"><a class="nav-item" href="index.html"><span class="nav-item-code">首页</span><span class="nav-item-label">首页 · 手册总览</span></a></div><div class="nav-group"><div class="nav-group-title">第一篇 · 基础知识</div><a class="nav-item" href="H01.html"><span class="nav-item-code">H01</span><span class="nav-item-label">绪论与备考总纲</span></a><a class="nav-item" href="H02.html"><span class="nav-item-code">H02</span><span class="nav-item-label">数学与工程基础（一）· 概率统计与图论应用</span></a><a class="nav-item" href="H03.html"><span class="nav-item-code">H03</span><span class="nav-item-label">数学与工程基础（二）· 预测决策与工程伦理</span></a><a class="nav-item" href="H04.html"><span class="nav-item-code">H04</span><span class="nav-item-label">计算机系统（一）· 硬件与体系结构</span></a><a class="nav-item" href="H05.html"><span class="nav-item-code">H05</span><span class="nav-item-label">计算机系统（二）· 操作系统</span></a><a class="nav-item" href="H06.html"><span class="nav-item-code">H06</span><span class="nav-item-label">计算机网络（一）· 数据通信与协议体系</span></a><a class="nav-item" href="H07.html"><span class="nav-item-code">H07</span><span class="nav-item-label">计算机网络（二）· TCP/IP 与网络工程</span></a><a class="nav-item" href="H08.html"><span class="nav-item-code">H08</span><span class="nav-item-label">分布式系统、构件与云计算</span></a><a class="nav-item" href="H09.html"><span class="nav-item-code">H09</span><span class="nav-item-label">数据库系统（一）· 三级模式与关系基础</span></a><a class="nav-item" href="H10.html"><span class="nav-item-code">H10</span><span class="nav-item-label">数据库系统（二）· 范式与事务并发控制</span></a><a class="nav-item" href="H11.html"><span class="nav-item-code">H11</span><span class="nav-item-label">数据库系统（三）· 设计、仓库与 NoSQL</span></a><a class="nav-item" href="H12.html"><span class="nav-item-code">H12</span><span class="nav-item-label">企业信息化（一）· 信息化规划</span></a><a class="nav-item" href="H13.html"><span class="nav-item-code">H13</span><span class="nav-item-label">企业信息化（二）· 信息系统与商务</span></a><a class="nav-item" href="H14.html"><span class="nav-item-code">H14</span><span class="nav-item-label">软件工程（一）· 生命周期与开发模型</span></a><a class="nav-item" href="H15.html"><span class="nav-item-code">H15</span><span class="nav-item-label">软件工程（二）· 过程管理与软件重用</span></a><a class="nav-item" href="H16.html"><span class="nav-item-code">H16</span><span class="nav-item-label">软件工程（三）· UML 与形式化方法</span></a><a class="nav-item" href="H17.html"><span class="nav-item-code">H17</span><span class="nav-item-label">项目管理（一）· 范围进度成本与挣值分析</span></a><a class="nav-item" href="H18.html"><span class="nav-item-code">H18</span><span class="nav-item-label">项目管理（二）· 配置质量风险与文档</span></a><a class="nav-item" href="H19.html"><span class="nav-item-code">H19</span><span class="nav-item-label">信息安全（一）· 安全体系与加密认证</span></a><a class="nav-item" href="H20.html"><span class="nav-item-code">H20</span><span class="nav-item-label">信息安全（二）· 网络安全与可靠性</span></a></div><div class="nav-group"><div class="nav-group-title">第二篇 · 关键技术</div><a class="nav-item" href="H21.html"><span class="nav-item-code">H21</span><span class="nav-item-label">系统规划与分析（一）· 需求分析与 DFD 建模</span></a><a class="nav-item" href="H22.html"><span class="nav-item-code">H22</span><span class="nav-item-label">系统规划与分析（二）· 成本效益与可行性论证</span></a><a class="nav-item" href="H23.html"><span class="nav-item-code">H23</span><span class="nav-item-label">软件需求工程</span></a><a class="nav-item" href="H26.html"><span class="nav-item-code">H26</span><span class="nav-item-label">软件架构设计（一）· 架构定义与 4+1 视图</span></a><a class="nav-item active" href="H27.html" aria-current="page"><span class="nav-item-code">H27</span><span class="nav-item-label">软件架构设计（二）· 架构风格与 SOA</span></a><a class="nav-item" href="H28.html"><span class="nav-item-code">H28</span><span class="nav-item-label">软件架构设计（三）· 质量属性与 ATAM 评估</span></a><a class="nav-item" href="H29.html"><span class="nav-item-code">H29</span><span class="nav-item-label">系统设计（一）· 结构化设计与面向对象设计</span></a><a class="nav-item" href="H30.html"><span class="nav-item-code">H30</span><span class="nav-item-label">系统设计（二）· 设计模式与人机交互</span></a><a class="nav-item" href="H31.html"><span class="nav-item-code">H31</span><span class="nav-item-label">软件实现与测试（一）· 测试原则与黑盒白盒方法</span></a><a class="nav-item" href="H32.html"><span class="nav-item-code">H32</span><span class="nav-item-label">软件实现与测试（二）· 测试阶段与部署发布</span></a><a class="nav-item" href="H33.html"><span class="nav-item-code">H33</span><span class="nav-item-label">系统运行与维护（一）· 运维指标与软件维护</span></a><a class="nav-item" href="H34.html"><span class="nav-item-code">H34</span><span class="nav-item-label">系统运行与维护（二）· 系统转换与演进</span></a></div><div class="nav-group"><div class="nav-group-title">第三篇 · 案例实践</div><a class="nav-item" href="H35.html"><span class="nav-item-code">H35</span><span class="nav-item-label">Web 应用系统分析与设计 · 架构、缓存与测试</span></a><a class="nav-item" href="H36.html"><span class="nav-item-code">H36</span><span class="nav-item-label">嵌入式系统分析与设计 · 实时调度与低功耗</span></a><a class="nav-item" href="H37.html"><span class="nav-item-code">H37</span><span class="nav-item-label">移动应用系统分析与设计 · 架构演进与开发方式选型</span></a><a class="nav-item" href="H38.html"><span class="nav-item-code">H38</span><span class="nav-item-label">大数据处理系统分析与设计 · Lambda/Kappa 架构</span></a></div><div class="nav-group nav-group-solo"><a class="nav-item" href="H45.html"><span class="nav-item-code">H45</span><span class="nav-item-label">论文写作专项</span></a></div><div class="nav-group nav-group-pending"><div class="nav-group-title">待上线 · 按真题权重排序</div><div class="nav-pending-row"><span class="nav-pending-ch">第 16–22 章</span><span class="nav-pending-name">案例实践 / 论文要点</span><span class="nav-pending-w">案例与论文</span></div><div class="nav-pending-row"><span class="nav-pending-ch">H42–H44 · H47–H48</span><span class="nav-pending-name">案例专项 / 全真模拟</span><span class="nav-pending-w">专项</span></div></div></div><div class="nav-foot"><span class="nav-foot-tip">↑↓ 选择 · Enter 打开 · Esc 关闭</span><span class="nav-foot-nav"><a class="nav-step" href="H26.html">← 上一章</a><a class="nav-step" href="H28.html">下一章 →</a></span></div></div></div></nav>
+  <nav class="nav"><div class="nav" id="chapnav"><button class="nav-trigger" type="button" id="navTrigger" aria-haspopup="true" aria-expanded="false" aria-controls="navPanel" title="章节导航（Enter / ↓ 打开，Esc 关闭）"><span class="nav-trigger-code">H38</span><span class="nav-trigger-label">大数据与 Lambda</span><svg class="nav-caret" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5 L6 8 L9.5 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="nav-panel" id="navPanel" hidden><div class="nav-panel-scroll"><div class="nav-group nav-group-solo"><a class="nav-item" href="index.html"><span class="nav-item-code">首页</span><span class="nav-item-label">首页 · 手册总览</span></a></div><div class="nav-group"><div class="nav-group-title">第一篇 · 基础知识</div><a class="nav-item" href="H01.html"><span class="nav-item-code">H01</span><span class="nav-item-label">绪论与备考总纲</span></a><a class="nav-item" href="H02.html"><span class="nav-item-code">H02</span><span class="nav-item-label">数学与工程基础（一）· 概率统计与图论应用</span></a><a class="nav-item" href="H03.html"><span class="nav-item-code">H03</span><span class="nav-item-label">数学与工程基础（二）· 预测决策与工程伦理</span></a><a class="nav-item" href="H04.html"><span class="nav-item-code">H04</span><span class="nav-item-label">计算机系统（一）· 硬件与体系结构</span></a><a class="nav-item" href="H05.html"><span class="nav-item-code">H05</span><span class="nav-item-label">计算机系统（二）· 操作系统</span></a><a class="nav-item" href="H06.html"><span class="nav-item-code">H06</span><span class="nav-item-label">计算机网络（一）· 数据通信与协议体系</span></a><a class="nav-item" href="H07.html"><span class="nav-item-code">H07</span><span class="nav-item-label">计算机网络（二）· TCP/IP 与网络工程</span></a><a class="nav-item" href="H08.html"><span class="nav-item-code">H08</span><span class="nav-item-label">分布式系统、构件与云计算</span></a><a class="nav-item" href="H09.html"><span class="nav-item-code">H09</span><span class="nav-item-label">数据库系统（一）· 三级模式与关系基础</span></a><a class="nav-item" href="H10.html"><span class="nav-item-code">H10</span><span class="nav-item-label">数据库系统（二）· 范式与事务并发控制</span></a><a class="nav-item" href="H11.html"><span class="nav-item-code">H11</span><span class="nav-item-label">数据库系统（三）· 设计、仓库与 NoSQL</span></a><a class="nav-item" href="H12.html"><span class="nav-item-code">H12</span><span class="nav-item-label">企业信息化（一）· 信息化规划</span></a><a class="nav-item" href="H13.html"><span class="nav-item-code">H13</span><span class="nav-item-label">企业信息化（二）· 信息系统与商务</span></a><a class="nav-item" href="H14.html"><span class="nav-item-code">H14</span><span class="nav-item-label">软件工程（一）· 生命周期与开发模型</span></a><a class="nav-item" href="H15.html"><span class="nav-item-code">H15</span><span class="nav-item-label">软件工程（二）· 过程管理与软件重用</span></a><a class="nav-item" href="H16.html"><span class="nav-item-code">H16</span><span class="nav-item-label">软件工程（三）· UML 与形式化方法</span></a><a class="nav-item" href="H17.html"><span class="nav-item-code">H17</span><span class="nav-item-label">项目管理（一）· 范围进度成本与挣值分析</span></a><a class="nav-item" href="H18.html"><span class="nav-item-code">H18</span><span class="nav-item-label">项目管理（二）· 配置质量风险与文档</span></a><a class="nav-item" href="H19.html"><span class="nav-item-code">H19</span><span class="nav-item-label">信息安全（一）· 安全体系与加密认证</span></a><a class="nav-item" href="H20.html"><span class="nav-item-code">H20</span><span class="nav-item-label">信息安全（二）· 网络安全与可靠性</span></a></div><div class="nav-group"><div class="nav-group-title">第二篇 · 关键技术</div><a class="nav-item" href="H21.html"><span class="nav-item-code">H21</span><span class="nav-item-label">系统规划与分析（一）· 需求分析与 DFD 建模</span></a><a class="nav-item" href="H22.html"><span class="nav-item-code">H22</span><span class="nav-item-label">系统规划与分析（二）· 成本效益与可行性论证</span></a><a class="nav-item" href="H23.html"><span class="nav-item-code">H23</span><span class="nav-item-label">软件需求工程</span></a><a class="nav-item" href="H26.html"><span class="nav-item-code">H26</span><span class="nav-item-label">软件架构设计（一）· 架构定义与 4+1 视图</span></a><a class="nav-item" href="H27.html"><span class="nav-item-code">H27</span><span class="nav-item-label">软件架构设计（二）· 架构风格与 SOA</span></a><a class="nav-item" href="H28.html"><span class="nav-item-code">H28</span><span class="nav-item-label">软件架构设计（三）· 质量属性与 ATAM 评估</span></a><a class="nav-item" href="H29.html"><span class="nav-item-code">H29</span><span class="nav-item-label">系统设计（一）· 结构化设计与面向对象设计</span></a><a class="nav-item" href="H30.html"><span class="nav-item-code">H30</span><span class="nav-item-label">系统设计（二）· 设计模式与人机交互</span></a><a class="nav-item" href="H31.html"><span class="nav-item-code">H31</span><span class="nav-item-label">软件实现与测试（一）· 测试原则与黑盒白盒方法</span></a><a class="nav-item" href="H32.html"><span class="nav-item-code">H32</span><span class="nav-item-label">软件实现与测试（二）· 测试阶段与部署发布</span></a><a class="nav-item" href="H33.html"><span class="nav-item-code">H33</span><span class="nav-item-label">系统运行与维护（一）· 运维指标与软件维护</span></a><a class="nav-item" href="H34.html"><span class="nav-item-code">H34</span><span class="nav-item-label">系统运行与维护（二）· 系统转换与演进</span></a></div><div class="nav-group"><div class="nav-group-title">第三篇 · 案例实践</div><a class="nav-item" href="H35.html"><span class="nav-item-code">H35</span><span class="nav-item-label">Web 应用系统分析与设计 · 架构、缓存与测试</span></a><a class="nav-item" href="H36.html"><span class="nav-item-code">H36</span><span class="nav-item-label">嵌入式系统分析与设计 · 实时调度与低功耗</span></a><a class="nav-item" href="H37.html"><span class="nav-item-code">H37</span><span class="nav-item-label">移动应用系统分析与设计 · 架构演进与开发方式选型</span></a><a class="nav-item active" href="H38.html" aria-current="page"><span class="nav-item-code">H38</span><span class="nav-item-label">大数据处理系统分析与设计 · Lambda/Kappa 架构</span></a></div><div class="nav-group nav-group-solo"><a class="nav-item" href="H45.html"><span class="nav-item-code">H45</span><span class="nav-item-label">论文写作专项</span></a></div><div class="nav-group nav-group-pending"><div class="nav-group-title">待上线 · 按真题权重排序</div><div class="nav-pending-row"><span class="nav-pending-ch">第 16–22 章</span><span class="nav-pending-name">案例实践 / 论文要点</span><span class="nav-pending-w">案例与论文</span></div><div class="nav-pending-row"><span class="nav-pending-ch">H42–H44 · H47–H48</span><span class="nav-pending-name">案例专项 / 全真模拟</span><span class="nav-pending-w">专项</span></div></div></div><div class="nav-foot"><span class="nav-foot-tip">↑↓ 选择 · Enter 打开 · Esc 关闭</span><span class="nav-foot-nav"><a class="nav-step" href="H37.html">← 上一章</a><a class="nav-step" href="H45.html">下一章 →</a></span></div></div></div></nav>
   <div class="theme-switch" role="group" aria-label="主题">
     <button class="theme-btn" data-theme="light" type="button">浅</button>
     <button class="theme-btn" data-theme="dark" type="button">深</button>
@@ -1943,170 +1943,121 @@ html{scroll-padding-top:80px}
   <aside class="toc"></aside>
       <article class="main">
     <div class="chapbar" id="chapbar"
-     data-sec-total="11" data-page-index="25" data-page-total="37">
+     data-sec-total="8" data-page-index="36" data-page-total="37">
   <div class="chapbar-top">
-    <span class="chapbar-badge">H27</span>
-    <span class="chapbar-title">软件架构设计（二）· 架构风格与 SOA</span>
+    <span class="chapbar-badge">H38</span>
+    <span class="chapbar-title">大数据处理系统分析与设计 · Lambda/Kappa 架构</span>
     <span class="chapbar-spacer"></span>
-    <span class="chapbar-sec" id="chapbarSec">1 / 11</span>
+    <span class="chapbar-sec" id="chapbarSec">1 / 8</span>
   </div>
   <div class="chapbar-track"><div class="chapbar-fill" id="chapbarFill"></div></div>
 </div>
     
-    <h1 id="第-27-小时-软件架构设计-二-架构风格与-SOA">第 27 小时 · 软件架构设计（二）· 架构风格与 SOA</h1>
-<div class="quote"><p>本学时覆盖 <strong>12.3 架构风格六大类 + SOA 关键技术与实现三方法</strong> —— 本章<strong>主体</strong>，也是<strong>风格辨识题</strong>的来源。<br>风格类题目几乎每年出现在案例里，题干给场景问"属于哪种风格"。</p></div>
-<div class="block gold"><div class="block-title">考情定位</div><p>六类风格必须能一句话说出代表：① <strong>数据流</strong>（批处理、管道-过滤器）② <strong>调用/返回</strong>（主程序、面向对象、层次型、C/S）③ <strong>以数据为中心</strong>（仓库、黑板）④ <strong>虚拟机</strong>（解释器、规则系统）⑤ <strong>独立构件</strong>（消息传递、管道）⑥ <strong>SOA/微服务</strong>。<br>SOA 三技术必背：<strong>UDDI 找人 · WSDL 说事 · SOAP 送信</strong>。</p></div>
-<div class="block mem"><div class="block-title">记忆口诀</div><p><strong>六大类</strong>：数据流 · 调用返回 · 数据中心 · 虚拟机 · 独立构件 · SOA。<br><strong>SOA 三技术</strong>：<strong>UDDI</strong>（注册中心，找人）· <strong>WSDL</strong>（描述接口，说事）· <strong>SOAP</strong>（消息格式，送信）。<br><strong>SOA 三实现</strong>：Web Service（标准方式）· 注册表（解耦）· <strong>ESB</strong>（企业服务总线，协议转换+路由+安全）。<br><strong>黑板风格</strong>：共享黑板 + 独立知识源，<strong>黑板不知道知识源存在</strong>（控制反转）。</p></div>
-<div class="block warning"><div class="block-title">易错陷阱</div><p><strong>「管道-过滤器」属数据流，不属独立构件</strong>——虽然都叫"管道"，但考点分类是<strong>数据流风格</strong>。<br><strong>「黑板」是以数据为中心，不是虚拟机</strong>。<br><strong>SOAP 不是 REST 的升级版</strong>——两者定位不同：SOAP 强契约企业级集成，REST 互联网开放接口。<br><strong>三层 C/S 相比二层的核心改进 = 客户端不再直接访问数据库</strong>。</p></div>
-<div class="block gold"><div class="block-title">论文可用句</div><p>在架构风格选型上，我选择了<strong>分层风格 + 管道—过滤器</strong>的组合：分层保证业务边界清晰、团队可分工并行开发；管道—过滤器用于日志清洗链路，各过滤器的处理逻辑可独立测试、独立替换。<strong>代价是</strong>跨层事务需要额外机制（如最终一致性），这一取舍已在架构决策记录（ADR）中登记。</p></div>
-<h3 id="本学时路线图-六类风格逐个拆">本学时路线图：六类风格逐个拆</h3>
-<p>上一学时给了六大类的<strong>全景对照表</strong>，本学时按<strong>数据流 → 调用/返回 → 以数据为中心 → 虚拟机 → 独立构件 → SOA</strong> 的顺序逐类展开。<br>每类都按「<strong>核心特征 → 典型风格 → 适用场景 → 辨析陷阱</strong>」四段写，案例题通常就考最后一段。</p>
-<hr>
-<h2 id="s12-3-2-数据流风格-批处理-管道-过滤器">12.3.2 数据流风格 · 批处理 + 管道-过滤器 ⭐</h2>
-<p><strong>📦批处理风格</strong></p>
-<p>每个<strong>处理步骤是一个单独的程序</strong>；每一步必须在前一步结束后才能开始；数据必须是<strong>完整的、以整体方式传递</strong>。</p>
-<p>· 基本构件 = <strong>独立的应用程序</strong></p>
-<p>· 连接件 = 某种类型的<strong>媒介</strong>（定义数据流图、表达拓扑）</p>
-<p>数据流体系<strong>没有概念上的程序计数器</strong>，指令执行顺序不可预测（行为不确定）</p>
-<p>🚰管道-过滤器风格 ⭐</p>
-<p>系统分解为几个<strong>序贯的处理步骤</strong>，步骤间通过<strong>数据流</strong>连接——<strong>一个步骤的输出是另一个步骤的输入</strong>。</p>
-<p>· 基本构件 = <strong>过滤器 Filter</strong>（从管道读取输入流 → 内部处理 → 产生输出流写入管道）</p>
-<p>· 连接件 = <strong>管道 Pipe</strong>（把一个过滤器的输出传到另一过滤器的输入）</p>
-<p>⚙️管道-过滤器 · 优点与缺点（必背）</p>
-<p>优点</p>
-<p><strong>可重用</strong>（过滤器独立、无状态、<strong>不知上下游</strong>）<br><strong>可并发</strong>（过滤器可并行执行）<br><strong>易维护</strong>、支持<strong>过滤器替换</strong>与组合<br>允许对输入数据<strong>吞吐量分析</strong></p>
-<p>缺点</p>
-<p><strong>不适合交互式应用</strong>（数据必须全部流过）<br><strong>数据格式转换开销大</strong><br><strong>难以共享状态</strong>（过滤器无状态）<br>可能导致处理性能瓶颈</p>
-<p>口诀：<strong>过滤器"独立无状态不知邻"，优点重用加并发，缺点不交互难共享</strong></p>
-<p>⚠️ <strong>高频辨析</strong>：题干出现"<strong>编译器 / 数据转换 / 批量处理</strong>" → 管道-过滤器；出现"<strong>交互式 / 用户频繁输入</strong>" → <strong>不选</strong>管道-过滤器。</p>
-<h3 id="s12-3-3-调用-返回风格-主程序-子程序-面向对象-层次型">12.3.3 调用/返回风格 · 主程序/子程序 + 面向对象 + 层次型</h3>
-<p><strong>调用/返回风格</strong>：采用<strong>调用与返回机制</strong>，实质是<strong>分而治之</strong>的策略——把复杂大系统分解为若干子系统以<strong>降低复杂度、增加可修改性</strong>。程序从执行起点开始执行构件代码，执行结束<strong>将控制返回给调用构件</strong>。</p>
-<p><strong>🧩主程序/子程序</strong></p>
-<ul><li>一般采用<strong>单线程控制</strong>，把问题划分为若干<strong>处理步骤</strong></li><li>构件 = <strong>主程序和子程序</strong>（子程序可合成为<strong>模块</strong>）</li><li>连接件 = <strong>过程调用</strong>，调用关系具有<strong>层次性</strong></li><li>语义逻辑：子程序的正确性取决于它调用的子程序的正确性</li></ul>
-<p><strong>🧬面向对象</strong></p>
-<p>建立在<strong>数据抽象和面向对象</strong>的基础上；<strong>数据的表示方法和相应操作封装</strong>在一个抽象数据类型或对象中。</p>
-<ul><li>构件 = <strong>对象</strong>（抽象数据类型的实例）</li><li>连接件 = <strong>对象间的方法调用</strong></li></ul>
-<p>封装增强了信息隐藏与可维护性</p>
-<p>🪜层次型 ⭐</p>
-<p>组成一个<strong>层次结构</strong>：每一层为上层提供服务，并作为下层的客户；除精心挑选的输出函数外，<strong>内部层接口只对相邻层可见</strong>。</p>
-<ul><li>构件 = 层上实现的<strong>虚拟机</strong></li><li>连接件 = <strong>决定层间如何交互的协议</strong></li><li>每一层最多只影响两层 + 相邻层提供相同接口即可换实现 → <strong>软件重用支持强大</strong></li></ul>
-<p>⚠️ <strong>层次型的缺点</strong>（冲刺高频）：<strong>性能损耗（层层转发）</strong>；可能形成<strong>"污水池反模式"</strong>——某层只做透传、不含业务逻辑。</p>
-<h3 id="s12-3-3-客户端-服务器-二层-C-S-架构">12.3.3 客户端/服务器 · 二层 C/S 架构 ⭐</h3>
-<p><strong>C/S 架构</strong>基于<strong>资源不对等</strong>且为实现<strong>共享</strong>而提出（20 世纪 90 年代成熟）。</p>
-<ul><li><strong>服务器</strong>：有效管理系统资源，任务集中于对 <strong>DBMS 的管理和控制</strong>、数据备份与恢复</li><li><strong>客户应用程序</strong>：提供<strong>用户与数据库交互的界面</strong>、提交请求并接收信息、对客户端数据执行应用逻辑</li></ul>
-<p>这是一种"胖客户机（fat client）、瘦服务器（thin server）"的架构</p>
-<p>✅C/S 的优点</p>
-<p>①客户应用与服务器构件<strong>分别运行在不同计算机</strong>上 → 适应性和灵活性大</p>
-<p>②<strong>易于扩充和缩小</strong></p>
-<p>③功能构件<strong>充分隔离</strong>：客户端集中<strong>数据显示分析</strong>，服务器集中<strong>数据管理</strong>（不必每个应用都写 DBMS）</p>
-<p>④把大处理任务分布到<strong>低成本计算机</strong>上，节约费用；<strong>数据操作与事务处理能力强</strong>、模型思想简单</p>
-<p>❌C/S 的八个缺点（教材列举，必背）</p>
-<p>①<strong>开发成本较高</strong>——客户端软硬件配置要求高</p>
-<p>②<strong>客户端程序设计复杂</strong>——工作量大多在客户端</p>
-<p>③<strong>界面风格不一</strong>，使用繁杂，不利推广</p>
-<p>④<strong>软件移植困难</strong>——不同开发工具互不兼容</p>
-<p>⑤<strong>维护和升级困难</strong>——每个客户端都要更新</p>
-<p>⑥<strong>新技术不能轻易应用</strong>——平台选定难更改</p>
-<p>⑦<strong>可扩展性差</strong>——单一服务器、以局域网为中心，难扩展到广域网/Internet</p>
-<p>⑧<strong>安全性难以保证</strong>——客户端程序可<strong>直接访问数据库服务器</strong></p>
-<p>💡 正因这八个缺点，<strong>三层 C/S 架构应运而生</strong>（传统 C/S 称为二层 C/S 架构）。</p>
-<h3 id="s12-3-3-三层-C-S-架构-B-S">12.3.3 三层 C/S 架构 + B/S ⭐</h3>
-<p>🥪三层 C/S 架构（增加应用服务器）</p>
-<p>表示层（客户机）</p>
-<p>系统<strong>用户接口</strong>部分，担负用户与系统的<strong>对话功能</strong>；检查键盘输入数据、显示输出；检查内容只限数据形式与取值范围，不含业务逻辑</p>
-<p>功能层（应用服务器）</p>
-<p>也称<strong>业务逻辑层</strong>——具体业务处理逻辑编入程序（如计算合同金额、格式配置、打印）</p>
-<p>数据层（数据库服务器）</p>
-<p>相当于二层 C/S 中的服务器；负责对 <strong>DBMS 进行管理和控制</strong></p>
-<p><strong>关键</strong>：将<strong>表示层和功能层分离成各自独立的程序</strong>，两层间接口简洁明了（通常只将表示层放在客户机 → <strong>瘦客户机</strong>）。三层 C/S 架构中，中间件是最重要的构件。</p>
-<p>✅三层 C/S 的四个优点 + 一个关键问题</p>
-<p>①三层功能<strong>合理划分、逻辑相对独立</strong> → 逻辑结构清晰，<strong>可维护性和可扩展性</strong>提高</p>
-<p>②可<strong>灵活选用平台和硬件</strong>，各层可并行开发、各选最适合的语言，性价比高</p>
-<p>③功能层<strong>有效隔离表示层与数据层</strong> → 未授权用户难以绕过功能层访问数据层 → <strong>安全管理基础</strong></p>
-<p>④功能层与数据层可放<strong>不同服务器</strong> → 灵活性很高，适应<strong>客户机数目增加和负荷变动</strong>（追加业务时可增加应用服务器）</p>
-<p>⚠️ <strong>设计关键</strong>：若<strong>各层间通信效率不高</strong>，即使硬件很强整体也达不到要求性能 → <strong>三层间的通信方法、通信频度和数据量</strong>是三层 C/S 架构设计的关键问题。</p>
-<ul><li><strong>B/S 架构</strong>：三层 C/S 架构的一种<strong>实现方式</strong>——"<strong>浏览器 / Web 服务器 / 数据库服务器</strong>"。应用程序以<strong>网页形式</strong>存于 Web 服务器；系统安装、修改和维护全在服务器端解决，"零客户端"，很容易在运行时自动升级。</li><li><strong>不足</strong>：缺乏<strong>动态页面</strong>支持能力、没有集成有效的数据库处理功能；<strong>安全性难以控制</strong>；数据查询等<strong>响应速度远低于 C/S</strong>；数据提交以<strong>页面为单位</strong>、动态交互性不强，<strong>不利于 OLTP 应用</strong>。</li></ul>
-<h3 id="s12-3-4-以数据为中心-仓库-黑板">12.3.4 以数据为中心 · 仓库 + 黑板 ⭐</h3>
-<p><strong>🗄️仓库风格</strong></p>
-<p><strong>仓库（repository）是存储和维护数据的中心场所</strong>。</p>
-<p>两种不同构件：</p>
-<p>· <strong>中央数据结构</strong>——说明<strong>当前数据的状态</strong></p>
-<p>· <strong>一组独立构件</strong>——对中央数据进行操作</p>
-<p>连接件 = <strong>仓库与独立构件之间的交互</strong></p>
-<p>🧠黑板风格 ⭐</p>
-<p>适用于解决<strong>复杂的非结构化问题</strong>——在求解过程中<strong>综合运用多种不同的知识源</strong>，使问题的表达、组织和求解比较容易。</p>
-<p>· 问题解空间组织成<strong>一个或多个分级结构</strong>（每层由唯一词汇描述，代表问题的<strong>部分解</strong>）</p>
-<p>· 领域知识分成<strong>独立的知识模块</strong>（将某层信息转换成同层或相邻层信息）</p>
-<p>传统应用：信号处理领域（语音识别、模式识别）；另一应用是<strong>松耦合代理数据共享存取</strong></p>
-<p>💡 <strong>黑板 = 中央数据结构（黑板）＋ 多个独立知识源</strong>（＋控制模块）；适合<strong>无确定解法的问题</strong>——AI 推理、语音识别、模式识别。</p>
-<p><strong>影响黑板系统设计的最大因素是应用问题本身的特性</strong>（教材原话）。</p>
-<p>口诀：<strong>仓库存数据，黑板解难题；语音识别找黑板</strong></p>
-<p>⚠️ <strong>辨析</strong>：题干出现"<strong>语音识别 / 模式识别 / AI 推理 / 无确定解法</strong>" → <strong>黑板风格</strong>；出现"<strong>数据库为中心、构件操作中央数据</strong>" → 仓库风格（一般情形）。</p>
-<h3 id="s12-3-5-虚拟机-12-3-6-独立构件">12.3.5 虚拟机 + 12.3.6 独立构件 ⭐</h3>
-<p><strong>🖥️虚拟机风格（两大类）</strong></p>
-<ul><li><strong>基本思想</strong>：人为构建一个<strong>运行环境</strong>，在此环境上<strong>解析与运行自定义的语言</strong>，增加架构的<strong>灵活性</strong>。</li><li><strong>① 解释器风格</strong>：</li><li>含有一个虚拟机，<strong>仿真硬件的执行过程和一些关键应用</strong></li><li>弥合程序语义与硬件语义之间的差异；缺点：<strong>执行效率较低</strong></li><li>组成：解释引擎 + 存储被解释代码的存储区 + 记录引擎当前工作状态的数据结构 + 记录解释执行进度的数据结构</li><li>典型例子：<strong>专家系统</strong></li></ul>
-<p><strong>② 规则系统风格</strong>：包括<strong>规则集、规则解释器、规则/数据选择器、工作内存</strong>四部分（伪代码执行专家系统思路）</p>
-<p>📡独立构件风格（两大类）</p>
-<p><strong>强调每个构件都是相对独立的个体，它们之间不直接通信</strong>，以<strong>降低耦合度、提升灵活性</strong>。</p>
-<p><strong>① 进程通信风格</strong>：</p>
-<ul><li>构件 = <strong>独立的过程</strong>；连接件 = <strong>消息传递</strong></li><li>构件通常是<strong>命名过程</strong>；消息传递方式：<strong>点到点、异步/同步、远程过程调用</strong></li></ul>
-<p><strong>② 事件系统风格（隐式调用）⭐</strong>：</p>
-<ul><li>构件<strong>不直接调用过程，而是触发或广播一个或多个事件</strong></li><li>其他构件的过程在事件中<strong>注册</strong>；事件被触发时，系统<strong>自动调用注册的所有过程</strong></li><li>事件触发者并不知道哪些构件会被影响——不能假定处理顺序，甚至不知道哪些过程会被调用 → <strong>许多隐式调用系统也包含显式调用作为补充</strong></li></ul>
-<p>💡 <strong>事件系统的应用</strong>（教材举例）：编程环境中集成各种工具 · DBMS 中确保数据一致性约束 · 用户界面系统管理数据 · <strong>编辑器中语法检查</strong>（Debugger 断点事件 → 编辑器卷屏、变量监视器刷新，Debugger 只声明事件、不关心谁响应）。</p>
-<p>口诀：<strong>虚拟机求灵活但低效；独立构件"不直呼、发事件"；隐式调用难保序</strong></p>
-<h3 id="s12-3-7-SOA-定义与参考模型">12.3.7 SOA · 定义与参考模型 ⭐</h3>
-<p>🧭SOA 的三个典型定义</p>
-<p>W3C</p>
-<p>一种应用程序架构：所有功能都定义为<strong>独立的服务</strong>，带有<strong>定义明确的可调用接口</strong>，能以定义好的顺序<strong>调用这些服务来形成业务流程</strong></p>
-<p>Service-architecture.com</p>
-<p>服务是<strong>精确定义、封装完善、独立于其他服务所处环境和状态</strong>的函数；SOA 本质上是<strong>服务的集合</strong>，服务之间彼此通信</p>
-<p>Gartner</p>
-<p>一种 <strong>C/S 架构</strong>的软件设计方法；着重强调构件的<strong>松散耦合</strong>，并使用<strong>独立的标准接口</strong></p>
-<p>🏗️SOA 概述要点</p>
-<p>①SOA 是一种在计算环境中<strong>设计、开发、部署和管理离散逻辑单元（服务）模型</strong>的方法</p>
-<p>②SOA <strong>并不是新鲜事物</strong>，只是<strong>面向对象模型的一种替代</strong>；SOA 基于对象，但作为一个整体却不是面向对象的</p>
-<p>③SOA 系统原型的典型例子是 <strong>CORBA</strong>（概念与 SOA 相似）</p>
-<p>④SOA 建立在 <strong>XML</strong> 等新技术基础上，用基于 XML 的语言描述接口 → 服务转到<strong>更动态且更灵活</strong>的接口系统（CORBA 的 IDL 无法相比）</p>
-<p>⑤SOA 用<strong>本地计算模型实现分布式计算应用</strong>——"本地化设计，分布式工作"（CORBA、DCOM、EJB 都属此列）</p>
-<p>💡 Gartner 定义 = "松散耦合 + 独立标准接口"，是选择题里最好认的一句。</p>
-<h3 id="s12-3-7-SOA-关键技术-UDDI-WSDL-SOAP-REST">12.3.7 SOA 关键技术 · UDDI / WSDL / SOAP / REST ⭐</h3>
-<p>📇UDDI · 统一描述、发现和集成</p>
-<p>提供一种<strong>服务发布、查找和定位</strong>的方法，是<strong>服务的信息注册规范</strong>。</p>
-<p><strong>三部分内容</strong>：</p>
-<ul><li><strong>数据模型</strong>——描述业务组织和服务的 <strong>XML Schema</strong></li><li><strong>API</strong>——用于查找或发布 UDDI 数据的方法，<strong>基于 SOAP</strong></li><li><strong>注册服务</strong>——SOA 中的基础设施，对应<strong>服务注册中心</strong>角色</li></ul>
-<p>📄WSDL · Web 服务描述语言</p>
-<p>对<strong>服务进行描述</strong>的语言，<strong>基于 XML</strong> 的语法定义；描述重点 = <strong>服务</strong>。</p>
-<ul><li><strong>服务接口定义</strong>——<strong>抽象的、可重用</strong>的定义；行业标准组织用它规定<strong>标准的服务类型</strong></li><li><strong>服务实现定义</strong>——描述给定提供者如何实现特定接口；包含<strong>服务和端口</strong>描述（端口 = 服务访问入口的<strong>部署细节</strong>：访问地址、消息调用模式）</li></ul>
-<p>✉️SOAP · 简单对象访问协议</p>
-<p>定义服务请求者和提供者之间的<strong>消息传输规范</strong>——用 <strong>XML 格式化消息</strong>、用 <strong>HTTP 承载消息</strong>；可在网络中进行数据交换和 <strong>RPC</strong>。</p>
-<ul><li><strong>四个部分</strong>：<strong>封装</strong>（整体框架：包含什么/谁处理/可选还是必须）· <strong>编码规则</strong>（序列化机制）· <strong>RPC 表示</strong>（远程过程调用和应答的协议）· <strong>绑定</strong>（底层传输协议交换封装的约定）</li><li><strong>消息三个部分</strong>：<strong>封装 Envelope</strong>（<strong>必须出现</strong>，顶层元素）· <strong>SOAP 头 Header</strong>（<strong>可选</strong>，出现则必须是封装的<strong>第一个直接子元素</strong>）· <strong>SOAP 体 Body</strong>（<strong>必须出现</strong>，紧跟头之后）</li></ul>
-<p>🪶REST · 表述性状态转移</p>
-<p>只使用 <strong>HTTP 和 XML</strong> 进行基于 Web 通信；<strong>降低开发复杂性、提高系统可伸缩性</strong>；简单性 + 缺少严格配置文件 → 与 SOAP 很好地隔离开。</p>
-<p>只支持几个操作：<strong>POST、GET、PUT、DELETE</strong>（适用于所有消息）。</p>
-<p><strong>设计概念与准则（5 条）</strong>：① 网络上所有事物都被<strong>抽象为资源</strong> ② 每个资源对应一个<strong>唯一的资源标识</strong> ③ 通过<strong>通用的连接件接口</strong>对资源进行操作 ④ 对资源的各种操作<strong>不会改变资源标识</strong> ⑤ 所有的操作都是<strong>无状态</strong>的</p>
-<p>💡 这些技术都<strong>以 XML 为基础</strong>发展起来；<strong>SOAP 消息必考</strong>：Envelope 必须 / Header 可选（第一子元素）/ Body 必须紧跟 Header。</p>
-<h3 id="s12-3-7-SOA-实现三方法-Web-Service-注册表-ESB">12.3.7 SOA 实现三方法 · Web Service / 注册表 / ESB ⭐</h3>
-<p>🌐① Web Service</p>
-<ul><li><strong>三角色</strong>：服务提供者 / 服务请求者（<strong>必须</strong>）+ 服务注册中心（<strong>可选</strong>）；<strong>三操作</strong>：发布、查找、绑定（<strong>动态绑定 / 静态绑定</strong>）</li><li><strong>应用系统 6 个层次</strong>：</li></ul>
-<p>① <strong>底层传输层</strong>——消息传输（<strong>HTTP 最广</strong>、JMS、SMTP）</p>
-<p>② <strong>服务通信协议层</strong>——<strong>SOAP 和 REST</strong></p>
-<p>③ <strong>服务描述层</strong>——<strong>WSDL</strong></p>
-<p>④ <strong>服务层</strong>——包装遗留系统，通过 WSDL 定位调用</p>
-<p>⑤ <strong>业务流程层</strong>——服务发现/调用/点到点；标准 <strong>WSBPEL</strong></p>
-<p>⑥ <strong>服务注册层</strong>——<strong>UDDI</strong></p>
-<p>📇② 服务注册表</p>
-<p>主要在 <strong>SOA 设计</strong>时使用（也有运行时功能）；提供<strong>策略执行点 PEP</strong>。</p>
-<p><strong>三个功能</strong>：</p>
-<ul><li><strong>服务注册</strong>——发布服务功能（服务合约）：身份、位置、方法、绑定、配置、方案、策略；要<strong>限制谁能发布、谁批准</strong></li><li><strong>服务位置</strong>——帮助使用者<strong>查询已注册服务</strong>（检索服务合约）；规定谁能访问注册表、哪些属性可暴露</li><li><strong>服务绑定</strong>——用查到的服务合约<strong>开发代码并绑定调用</strong></li></ul>
-<p>🚌③ 企业服务总线 ESB ⭐</p>
-<p>从 SOA 发展而来；<strong>标准化通信基础结构</strong>；<strong>传统中间件技术与 XML、Web Service 结合的产物</strong>。</p>
-<ul><li><strong>核心价值</strong>：消除服务请求者与提供者之间的<strong>直接连接</strong>（避免网状结构的高维护费）→ <strong>进一步解耦</strong>。</li><li><strong>功能（6 条）</strong>：支持<strong>异构环境</strong>中服务/消息/基于事件的交互 · <strong>几乎不更改代码</strong>使现有系统具有全新服务接口（<strong>无缝非侵入</strong>）· <strong>缓冲器</strong>（转换业务逻辑和数据格式）与服务逻辑分离 · <strong>服务代理和协议转换</strong>（HTTP/SOAP/JMS 多种传输）· <strong>可配置的消息转换翻译 + 基于消息内容的消息路由</strong> · <strong>安全和拥有者机制</strong>（认证授权完整性）</li></ul>
-<p>💡 <strong>ESB 的四点优势</strong>：扩展的基于标准的连接 · 灵活的服务导向应用组合 · <strong>提高复用率降低成本</strong> · 减少市场反应时间提高生产率。</p>
-<p>口诀：<strong>Web Service 六层栈，注册表管设计期，ESB 消除直连解耦</strong></p>
+    <h1 id="第-38-小时-大数据处理系统分析与设计-Lambda-Kappa-架构">第 38 小时 · 大数据处理系统分析与设计 · Lambda/Kappa 架构</h1>
+<div class="quote"><p>第 19 章大数据是<strong>案例核心章</strong>——<strong>Lambda / Kappa 架构的辨析几乎年年出现</strong>，<br>技术组件全家桶也是综合知识的"辨识题"来源。<br>本学时覆盖 <strong>19.1 大数据 5V + 19.2 Lambda/Kappa/IOTA 架构与技术组件 + 19.3 数仓分层与 ETL + 19.4 大数据测试</strong>。</p></div>
+<div class="block gold"><div class="block-title">考情定位</div><p>四块必拿：① <strong>5V</strong>（Volume 体量 · Velocity 速度 · Variety 多样 · Veracity 真实性 · <strong>Value 价值密度低</strong>）；② <strong>Lambda 架构</strong>（<strong>批处理层 + 速度层</strong>双层并存，准确性 + 实时性折中）；③ <strong>Kappa vs Lambda</strong>（<strong>Kappa 取消批处理层，只留一条流</strong>）；④ <strong>数仓四层</strong>（<strong>ODS 贴源 → DWD 明细 → DWS 汇总 → ADS 应用</strong>）与 <strong>Hadoop 三大核心</strong>（<strong>HDFS 存储 / YARN 资源 / MapReduce 计算</strong>）。</p></div>
+<div class="block mem"><div class="block-title">记忆口诀</div><p><strong>5V</strong>：<strong>体量 · 速度 · 多样 · 真实 · 价值密度低</strong>。<br><strong>Lambda</strong>：<strong>批处理层（准确、慢）+ 速度层（实时、可能不准）→ 服务层合并</strong>。<br><strong>Kappa</strong>：<strong>一条流打通</strong>（取消批处理层，避免维护两套代码）。<br><strong>数仓四层</strong>：<strong>ODS 贴源 · DWD 明细 · DWS 汇总 · ADS 应用</strong>。<br><strong>Hadoop 三核心</strong>：<strong>HDFS 管存储 · YARN 管资源 · MapReduce 管计算</strong>。<br><strong>大数据测试特点</strong>：<strong>数据质量优先 + 批流一致性 + 节点故障 + 数据倾斜</strong>。</p></div>
+<div class="block warning"><div class="block-title">易错陷阱</div><p><strong>MapReduce 是"计算"框架不是存储</strong> —— 三大核心别配错：<strong>HDFS 存 / YARN 调度资源 / MR 算</strong>。<br><strong>Lambda 不是"两层各自独立返回"</strong> —— 它是<strong>服务层把两层结果合并</strong>后返回。<br><strong>Kappa 的前提是"历史数据可重放"</strong> —— 靠消息中间件保留全量日志，否则无法回溯重算。<br><strong>大数据测试不是"不测功能"</strong> —— 功能测试仍要做，只是更侧重<strong>数据质量与集群容错场景</strong>。</p></div>
+<div class="block gold"><div class="block-title">论文可用句</div><p>在大数据平台选型上，我采用 <strong>Lambda + Kappa 混合</strong>方案：历史批处理与增量计算走 <strong>Kappa 的统一流链路</strong>（以 Kafka 保留全量日志支撑回溯重算），而对准确率要求极高的核心报表（如财务结算）额外保留 <strong>Lambda 的批处理层</strong>做双路校验，两者结果不一致时告警。数据分层按 <strong>ODS → DWD → DWS → ADS</strong> 四层组织，ODS 贴源保留全量明细以支持口径回溯，DWD 做清洗去重，DWS 按主题域轻度汇总，ADS 直接服务看板；这一分层使上游表结构变更时，<strong>仅需重跑受影响的下游任务，不影响 ADS 层对外接口</strong>。</p></div>
+<h2 id="第-19-章知识骨架">第 19 章知识骨架</h2>
+<div class="fig fig-mermaid"><div class="mermaid-src" data-src="mindmap
+ root((19 大数据))
+   19.1 概述
+     5V 特征
+     六设计指标
+     处理流程五步
+   19.2 架构 ★★★
+     批 vs 流 有界判据
+     批处理 流处理 混合
+     Lambda 批加流
+     Kappa 只流
+     IOTA 边缘计算
+     技术组件全家桶
+   19.3 开发 ★★
+     数仓分层 ODS DWD DWS ADS
+     ETL 采集清洗转换
+     元数据 数据图谱
+     机器学习 搜索推荐
+   19.4 测试 ★★
+     数据质量五性
+     ETL测试 四阶段
+     安全测试"></div><figcaption>图19-0 第19章大数据处理系统知识骨架</figcaption></div>
+<h2 id="s19-1-大数据概述-5V-与设计指标">19.1 大数据概述 · 5V 与设计指标 ⭐</h2>
+<p>📊5V 特征 + 处理流程</p>
+<ul><li><strong>5V</strong>：<strong>Volume 量大 · Velocity 快</strong>（生成与处理速度）<strong>· Variety 多样</strong>（结构/半结构/非结构）<strong>· Value 价值密度低 · Veracity 真实性</strong></li><li><strong>处理流程五步</strong>：<strong>数据采集 → 预处理/清洗 → 数据存储 → 处理与分析 → 可视化/应用</strong></li><li><strong>批 vs 流第一判据 ⭐</strong>：<strong>数据是否有界</strong>——<strong>有界（有限数据集）= 批处理</strong>；<strong>无界（持续产生）= 流处理</strong></li></ul>
+<p><strong>📐架构设计六指标</strong></p>
+<p>六设计指标</p>
+<p><strong>可扩展</strong>（横向扩容）· <strong>可管理</strong>（运维自动化）· <strong>数据安全</strong>（脱敏/权限）· <strong>高性能</strong>（低延迟高吞吐）· <strong>高可用</strong>（冗余容错）· <strong>稳定性</strong></p>
+<p>数仓 vs 数据湖 ⭐</p>
+<p><strong>数仓</strong> = 结构化、<strong>Schema-on-Write（写入时定义模式）</strong>、面向主题、高质量<br><strong>数据湖</strong> = <strong>原始格式全量存、Schema-on-Read（读取时定义）</strong>、成本低灵活（易变"数据沼泽"）<br>趋势 = <strong>湖仓一体 Lakehouse</strong></p>
+<h2 id="s19-2-Lambda-Kappa-IOTA-架构-案例核心">19.2 Lambda / Kappa / IOTA 架构 ⭐⭐⭐（案例核心）</h2>
+<p>⚡Lambda 架构（批+流）</p>
+<ul><li>三层：<strong>批处理层</strong>（Batch，Hadoop/MapReduce——<strong>准确但慢</strong>）+ <strong>速度层</strong>（Speed，Storm/Flink 流处理——<strong>快但近似</strong>）+ <strong>服务层</strong>（合并两者结果）</li><li>优点 = <strong>兼顾准确与实时</strong></li><li>缺点 = <strong>两套代码（批/流逻辑各写一遍）、维护复杂</strong></li></ul>
+<p>🌊Kappa 架构（只流）</p>
+<ul><li><strong>只保留流处理层</strong>——批处理 = "<strong>重跑历史流</strong>"</li><li><strong>简化架构（一套代码）</strong></li><li>前提 = <strong>流引擎支持重放</strong>（<strong>Kafka + Flink</strong> 典型组合）</li><li>⚡ 对比：<strong>Lambda = 批+流两套；Kappa = 只流一套</strong></li></ul>
+<p>🧩IOTA 架构（新兴）</p>
+<ul><li>强调<strong>数据流连续性与一致性</strong>——一致性要求更高的场景</li><li>思路 = <strong>设定标准数据模型（通用数据模型，如"主—谓—宾"）</strong>，通过<strong>边缘计算</strong>把计算分散在数据产生/计算/查询全过程</li><li>支持<strong>即时查询 Ad-hoc Query</strong></li><li>核心 = <strong>SDK 到存储到处理统一一个通用数据模型</strong></li></ul>
+<p>⚡ 选型锚：历史报表准确优先 → <strong>Lambda</strong>；团队能维护一套流代码 → <strong>Kappa</strong>；IoT 边缘场景 + 强一致性 → <strong>IOTA</strong>。</p>
+<h3 id="技术组件全家桶-辨识题">技术组件全家桶 ⭐（辨识题）</h3>
+<p>🧰五类组件 · 给场景认组件</p>
+<p>存储</p>
+<p><strong>HDFS</strong>（分布式文件）<br><strong>HBase</strong>（<strong>列族</strong> NoSQL）<br>对象存储<br><strong>数据湖</strong></p>
+<p>计算</p>
+<p><strong>MapReduce</strong>（批，<strong>慢</strong>）<br><strong>Spark</strong>（<strong>内存计算快</strong>，批+微批流）<br><strong>Flink</strong>（<strong>真流处理低延迟</strong>）<br>Storm</p>
+<p>采集/传输</p>
+<p><strong>Flume</strong>（日志采集）<br><strong>Kafka</strong>（<strong>高吞吐消息队列</strong>）<br><strong>Sqoop</strong>（<strong>关系库↔Hadoop</strong>）</p>
+<p>查询/分析</p>
+<p><strong>Hive</strong>（<strong>SQL on Hadoop</strong>）<br>Spark SQL<br>Presto<br><strong>ClickHouse</strong>（OLAP）</p>
+<p>调度/治理</p>
+<p><strong>Yarn</strong>（资源调度）<br>Airflow/DolphinScheduler<br>Atlas（<strong>数据治理/血缘</strong>）</p>
+<p>⚡ 辨析锚：<strong>MapReduce 慢 → Spark 内存快 → Flink 真流低延迟</strong>；<strong>Kafka 传、Hive 查、Sqoop 搬、HBase 列族存</strong>。</p>
+<p>💡 三种计算形态：<strong>实时计算</strong>（Flink/Storm 流）· <strong>离线计算</strong>（MapReduce/Spark 批）· <strong>图计算</strong>（关系网络分析）；应用 = <strong>机器学习 · 搜索推荐 · 数据可视化</strong>。</p>
+<h2 id="s19-3-开发-数仓分层-ETL">19.3 开发 · 数仓分层 + ETL ⭐⭐</h2>
+<p>🏢数仓四层分层 ⭐（必背）</p>
+<p>ODS 原始层</p>
+<p><strong>原始数据贴源存储</strong>——不做清洗</p>
+<p>DWD 明细层</p>
+<p><strong>明细数据清洗</strong>（去重/空值/格式标准化）</p>
+<p>DWS 汇总层</p>
+<p><strong>轻度汇总</strong>（按主题聚合宽表）</p>
+<p>ADS 应用层</p>
+<p><strong>面向应用/报表的最终结果</strong></p>
+<p>💡 记法：<strong>原始 → 明细 → 汇总 → 应用</strong>（自下而上加工，自上而下服务）。</p>
+<p>🔧开发流程 + ETL + 治理</p>
+<ul><li><strong>开发流程</strong>：<strong>需求（业务指标）→ 数据建模（分层）→ ETL 开发 → 任务调度 → 数据质量监控 → 血缘管理</strong></li><li><strong>ETL 三步</strong>：<strong>抽取 → 转换（清洗/标准化）→ 装载</strong>（呼应 CH15 数据迁移）；数据清洗对象 = <strong>二义性/重复/不完整/违反业务规则</strong></li><li><strong>治理四件套</strong>：<strong>元数据管理 · 数据关系图谱 · 数据安全（脱敏）· 资源监控</strong></li><li><strong>数据挖掘技术</strong>：<strong>分类 · 聚类（K-Means）· 关联规则（Apriori）· 回归 · 异常检测 · 时序预测</strong>；算法 = 决策树/随机森林/SVM/朴素贝叶斯/神经网络</li></ul>
+<h2 id="s19-4-大数据测试-与传统测试最大区别">19.4 大数据测试 ⭐⭐（与传统测试最大区别）</h2>
+<p>🧪数据质量五性 + 测试四阶段</p>
+<p><strong>⚡ 与传统测试最大区别：重点在"数据正确性"而非"功能正确"，且难以构造等价测试集</strong></p>
+<ul><li><strong>数据质量五性</strong>：<strong>完整性 · 准确性 · 一致性 · 及时性 · 唯一性</strong></li><li><strong>测试四阶段</strong>：<strong>数据提取测试 · 数据处理测试 · 数据存储测试 · 数据迁移测试</strong>（性能与容量测试在海量下做；容错与恢复测试）</li></ul>
+<p>🔐安全测试 + 治理三层</p>
+<ul><li><strong>安全测试八项</strong>：<strong>访问控制 · 数据保护（</strong>脱敏<strong>）· 漏洞扫描与渗透 · 弱密码 · 防火墙与网络安全 · 安全日志与监控 · 安全策略与合规性 · 社会工程学</strong></li><li><strong>兼容性</strong>：硬件/操作系统/数据库三层面</li></ul>
+<p>数据治理三层逻辑框架 ⭐</p>
+<p><strong>战略层</strong>（目标/组织/制度）→ <strong>管理层</strong>（标准/质量/安全/生命周期）→ <strong>执行层</strong>（平台/工具/流程）；核心对象 = <strong>主数据 MDM · 元数据 · 数据标准 · 数据质量</strong></p>
+<h2 id="易错辨析-速记卡-回炉">易错辨析 + 速记卡 + 回炉</h2>
+<p>1<strong>批 vs 流判据</strong>：数据<strong>有界 = 批</strong>（MapReduce/Spark）；<strong>无界 = 流</strong>（Flink/Storm）</p>
+<p>2<strong>Lambda = 批+流两套代码</strong>（准+快，维护复杂）；<strong>Kappa = 只流一套</strong>（依赖重放：Kafka+Flink）</p>
+<p>3<strong>IOTA</strong> = 统一数据模型 + <strong>边缘计算</strong> + 即时查询（强一致性场景）</p>
+<p>4<strong>数仓 Schema-on-Write</strong> vs <strong>数据湖 Schema-on-Read</strong>；趋势 = <strong>湖仓一体</strong></p>
+<p>5<strong>数仓四层</strong>：ODS 原始 → DWD 明细 → DWS 汇总 → ADS 应用</p>
+<p>6<strong>MapReduce 慢</strong> vs <strong>Spark 内存快</strong> vs <strong>Flink 真流低延迟</strong></p>
+<p>7<strong>Kafka 高吞吐传输 · Sqoop 关系库搬 · Hive SQL 查 · HBase 列族存</strong></p>
+<p>8<strong>5V</strong>：量大/快/多样/<strong>价值密度低</strong>/真实</p>
+<p>9<strong>大数据测试重点 = 数据正确性</strong>（五性），非功能正确；难构造等价测试集</p>
+<p>10<strong>数据治理三层</strong>：战略 → 管理 → 执行；对象 = MDM/元数据/标准/质量</p>
+<p><strong>🔑速记卡</strong></p>
+<ul><li><strong>5V</strong>：Volume/Velocity/Variety/Value/Veracity</li><li>流程：<strong>采集→清洗→存储→计算→可视化</strong></li><li>判据：<strong>有界=批，无界=流</strong></li><li><strong>Lambda</strong>：批层+速度层+服务层（两套代码）</li><li><strong>Kappa</strong>：只流，重跑历史流（Kafka+Flink）</li><li><strong>IOTA</strong>：通用数据模型+边缘计算+Ad-hoc</li><li>组件：<strong>HDFS 存/Spark 快/Flink 流/Kafka 传/Hive 查/Sqoop 搬/HBase 列族</strong></li><li>数仓：<strong>ODS→DWD→DWS→ADS</strong>；湖=Schema-on-Read</li><li>质量五性：<strong>完整/准确/一致/及时/唯一</strong></li><li>治理三层：<strong>战略→管理→执行</strong></li></ul>
+<p>🔁回炉 + 进度</p>
+<p><strong>回炉任务</strong>：</p>
+<p>① 架构选型题——"实时风控 + 历史报表"系统选 Lambda 还是 Kappa？写论证（提示：<strong>Lambda</strong>——报表要准、风控要快，两路并行）；</p>
+<p>② 默写数仓四层及各层职责；</p>
+<p>③ 给"通话记录数据湖"写数据质量五性的检查点。</p>
+<p><strong>批次 5 进度：3 / 5</strong>（CH16 ✅ CH18 ✅ CH19 ✅）</p>
+<p>还剩：<strong>CH20 微服务 · CH21 信息物理</strong></p>
+<p>💡 论文联动：「大模型与 AI 应用」的技术底座 = 本章组件栈。</p>
 <hr>
 <h2 id="章节练习题">章节练习题</h2>
 <hr>
-    <div class="quiz quiz-js" data-key="H27-软件架构设计（二）-架构风格与SOA.md">
+    <div class="quiz quiz-js" data-key="H38-大数据处理系统分析与设计-Lambda与Kappa架构.md">
   <div class="quiz-head">
     <span class="quiz-label">章节练习题</span>
     <span class="quiz-progress">已答 0 / 6</span>
@@ -2114,53 +2065,53 @@ html{scroll-padding-top:80px}
     <button class="quiz-btn quiz-reset" type="button">重做</button>
     <div class="quiz-pbar"><div class="quiz-pbar-fill"></div></div>
   </div>
-  <div class="quiz-item" data-answer="A" data-explain="架构风格六大类：&lt;strong&gt;① 数据流风格&lt;/strong&gt;（过滤器/管道-过滤器、批处理）｜&lt;strong&gt;② 调用/返回风格&lt;/strong&gt;（主程序-子程序、面向对象、层次型、客户端/服务器）｜&lt;strong&gt;③ 以数据为中心风格&lt;/strong&gt;（仓库、黑板）｜&lt;strong&gt;④ 虚拟机风格&lt;/strong&gt;（解释器、规则系统）｜&lt;strong&gt;⑤ 独立构件风格&lt;/strong&gt;（消息传递、管道）｜&lt;strong&gt;⑥ SOA 与微服务&lt;/strong&gt;。&lt;strong&gt;管道-过滤器&lt;/strong&gt;把处理单元串成流水线，数据前驱后自动流过，典型如 Unix 管道、编译器、图像处理。" data-ref="第12章 · 12.3.2 数据流风格">
-  <div class="quiz-q"><span class="qn">1</span>"管道—过滤器"（Pipe-Filter）风格属于下列哪一类架构风格？</div>
-  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">数据流风格</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">调用/返回风格</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">以数据为中心风格</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">虚拟机风格</span></div></div>
+  <div class="quiz-item" data-answer="A" data-explain="&lt;strong&gt;大数据 5V&lt;/strong&gt;：&lt;strong&gt;① Volume（体量巨大）&lt;/strong&gt;——从 TB 级到 PB/EB/ZB 级；&lt;strong&gt;② Velocity（处理速度快）&lt;/strong&gt;——数据持续流入，需&lt;strong&gt;流式/实时处理&lt;/strong&gt;；&lt;strong&gt;③ Variety（类型多样）&lt;/strong&gt;——结构化 + 半结构化 + 非结构化（文本、图像、音视频、JSON、日志）；&lt;strong&gt;④ Veracity（真实性/质量）&lt;/strong&gt;——数据质量参差不齐，需清洗、去重、纠错；&lt;strong&gt;⑤ Value（价值密度低）&lt;/strong&gt;——&lt;strong&gt;海量数据中有效信息占比很小&lt;/strong&gt;，需挖掘才能产生价值。⚠️ 常见考法：&quot;&lt;strong&gt;海量数据中价值密度低&lt;/strong&gt;&quot;对应 &lt;strong&gt;Value&lt;/strong&gt;；&quot;&lt;strong&gt;数据质量难以保证&lt;/strong&gt;&quot;对应 &lt;strong&gt;Veracity&lt;/strong&gt;。" data-ref="第19章 · 19.1 大数据概述 · 5V">
+  <div class="quiz-q"><span class="qn">1</span>大数据的 5V 特征中，通常被表述为 "数据量大但价值密度低" 的是：</div>
+  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">Volume（体量大）与 Value（价值密度低）</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">Velocity（速度快）与 Volume</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">Variety（类型多样）与 Veracity（真实性）</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">Visibility 与 Value</span></div></div>
   <div class="reveal" style="display:none">
     <div class="reveal-verdict"></div>
-    <div class="reveal-explain">架构风格六大类：<strong>① 数据流风格</strong>（过滤器/管道-过滤器、批处理）｜<strong>② 调用/返回风格</strong>（主程序-子程序、面向对象、层次型、客户端/服务器）｜<strong>③ 以数据为中心风格</strong>（仓库、黑板）｜<strong>④ 虚拟机风格</strong>（解释器、规则系统）｜<strong>⑤ 独立构件风格</strong>（消息传递、管道）｜<strong>⑥ SOA 与微服务</strong>。<strong>管道-过滤器</strong>把处理单元串成流水线，数据前驱后自动流过，典型如 Unix 管道、编译器、图像处理。</div>
-    <div class="reveal-ref">第12章 · 12.3.2 数据流风格</div>
+    <div class="reveal-explain"><strong>大数据 5V</strong>：<strong>① Volume（体量巨大）</strong>——从 TB 级到 PB/EB/ZB 级；<strong>② Velocity（处理速度快）</strong>——数据持续流入，需<strong>流式/实时处理</strong>；<strong>③ Variety（类型多样）</strong>——结构化 + 半结构化 + 非结构化（文本、图像、音视频、JSON、日志）；<strong>④ Veracity（真实性/质量）</strong>——数据质量参差不齐，需清洗、去重、纠错；<strong>⑤ Value（价值密度低）</strong>——<strong>海量数据中有效信息占比很小</strong>，需挖掘才能产生价值。⚠️ 常见考法："<strong>海量数据中价值密度低</strong>"对应 <strong>Value</strong>；"<strong>数据质量难以保证</strong>"对应 <strong>Veracity</strong>。</div>
+    <div class="reveal-ref">第19章 · 19.1 大数据概述 · 5V</div>
   </div>
-</div><div class="quiz-item" data-answer="A" data-explain="&lt;strong&gt;以数据为中心（Data-Centered）风格&lt;/strong&gt;有两个典型：&lt;strong&gt;仓库风格&lt;/strong&gt;（Repository，构件统一访问中央数据仓库，构件之间不直接通信）｜&lt;strong&gt;黑板风格&lt;/strong&gt;（Blackboard，由一个&lt;strong&gt;共享黑板&lt;/strong&gt; + 多个&lt;strong&gt;互相独立的知识源（专家模块）&lt;/strong&gt;组成；知识源观察黑板、发现自己能解决的问题就认领并求解，&lt;strong&gt;黑板不知道知识源的存在&lt;/strong&gt;，控制反转）。黑板风格常用于语音识别、图像识别、专家系统。" data-ref="第12章 · 12.3.4 以数据为中心 · 仓库 + 黑板">
-  <div class="quiz-q"><span class="qn">2</span>"黑板"（Blackboard）架构风格属于：</div>
-  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">以数据为中心风格</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">数据流风格</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">调用/返回风格</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">独立构件风格</span></div></div>
+</div><div class="quiz-item" data-answer="A" data-explain="&lt;strong&gt;Lambda 架构 = 批处理层 + 速度层 + 服务层&lt;/strong&gt;：&lt;strong&gt;① 批处理层（Batch Layer）&lt;/strong&gt;——数据先&lt;strong&gt;落盘&lt;/strong&gt;（HDFS），用 &lt;strong&gt;MapReduce/Spark&lt;/strong&gt; 做&lt;strong&gt;全量&lt;/strong&gt;计算，&lt;strong&gt;保证准确性&lt;/strong&gt;，但&lt;strong&gt;延迟高（小时级）&lt;/strong&gt;；&lt;strong&gt;② 速度层（Speed Layer）&lt;/strong&gt;——数据&lt;strong&gt;同时&lt;/strong&gt;流入内存（Redis/流引擎）做&lt;strong&gt;增量/实时&lt;/strong&gt;计算，&lt;strong&gt;保证时效性&lt;/strong&gt;（秒级），但&lt;strong&gt;可能因数据不完整而不准确&lt;/strong&gt;；&lt;strong&gt;③ 服务层&lt;/strong&gt;——查询时&lt;strong&gt;合并两层结果&lt;/strong&gt;返回。&lt;strong&gt;核心矛盾：实时性与准确性不可兼得，Lambda 用&quot;两层各取所长&quot;来折中。&lt;/strong&gt; ⚠️ &lt;strong&gt;痛点：同一套业务逻辑要写两遍&lt;/strong&gt;（批处理 + 实时各一份），运维成本高——这正是 &lt;strong&gt;Kappa 架构&lt;/strong&gt;要解决的问题。" data-ref="第19章 · 19.2 Lambda/Kappa/IOTA 架构">
+  <div class="quiz-q"><span class="qn">2</span>Lambda 架构的核心设计思想是：</div>
+  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">批处理层（Batch Layer）+ 速度层（Speed Layer）双层并存，分别保证准确性与实时性，查询时合并结果</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">只有批处理层，保证准确性</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">只有速度层，保证实时性</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">把数据全部存进内存实时计算</span></div></div>
   <div class="reveal" style="display:none">
     <div class="reveal-verdict"></div>
-    <div class="reveal-explain"><strong>以数据为中心（Data-Centered）风格</strong>有两个典型：<strong>仓库风格</strong>（Repository，构件统一访问中央数据仓库，构件之间不直接通信）｜<strong>黑板风格</strong>（Blackboard，由一个<strong>共享黑板</strong> + 多个<strong>互相独立的知识源（专家模块）</strong>组成；知识源观察黑板、发现自己能解决的问题就认领并求解，<strong>黑板不知道知识源的存在</strong>，控制反转）。黑板风格常用于语音识别、图像识别、专家系统。</div>
-    <div class="reveal-ref">第12章 · 12.3.4 以数据为中心 · 仓库 + 黑板</div>
+    <div class="reveal-explain"><strong>Lambda 架构 = 批处理层 + 速度层 + 服务层</strong>：<strong>① 批处理层（Batch Layer）</strong>——数据先<strong>落盘</strong>（HDFS），用 <strong>MapReduce/Spark</strong> 做<strong>全量</strong>计算，<strong>保证准确性</strong>，但<strong>延迟高（小时级）</strong>；<strong>② 速度层（Speed Layer）</strong>——数据<strong>同时</strong>流入内存（Redis/流引擎）做<strong>增量/实时</strong>计算，<strong>保证时效性</strong>（秒级），但<strong>可能因数据不完整而不准确</strong>；<strong>③ 服务层</strong>——查询时<strong>合并两层结果</strong>返回。<strong>核心矛盾：实时性与准确性不可兼得，Lambda 用"两层各取所长"来折中。</strong> ⚠️ <strong>痛点：同一套业务逻辑要写两遍</strong>（批处理 + 实时各一份），运维成本高——这正是 <strong>Kappa 架构</strong>要解决的问题。</div>
+    <div class="reveal-ref">第19章 · 19.2 Lambda/Kappa/IOTA 架构</div>
   </div>
-</div><div class="quiz-item" data-answer="A" data-explain="SOA 三项核心技术：&lt;strong&gt;UDDI（Universal Description, Discovery and Integration）&lt;/strong&gt;——&lt;strong&gt;服务注册中心&lt;/strong&gt;，提供服务的描述与查询规范，支撑&lt;strong&gt;服务注册、发现与集成&lt;/strong&gt;｜&lt;strong&gt;WSDL（Web Services Description Language）&lt;/strong&gt;——&lt;strong&gt;服务描述语言&lt;/strong&gt;，描述&quot;服务提供什么、怎么调用&quot;（用 WSDL 生成的 SOAP 服务才可被 UDDI 注册）｜&lt;strong&gt;SOAP（Simple Object Access Protocol）&lt;/strong&gt;——&lt;strong&gt;消息传输格式&lt;/strong&gt;，规定 XML 消息如何在网络上传送。⚠️ 记忆：&lt;strong&gt;&quot;UDDI 找人、WSDL 说事、SOAP 送信&quot;&lt;/strong&gt;。" data-ref="第12章 · 12.3.7 SOA 关键技术">
-  <div class="quiz-q"><span class="qn">3</span>SOA（面向服务架构）的三项关键技术中，"UDDI" 的作用是：</div>
-  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">服务注册与发现（提供服务的描述与查询规范）</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">描述服务如何被调用（WSDL）</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">消息在网络中的传输格式（SOAP）</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">缓存加速</span></div></div>
+</div><div class="quiz-item" data-answer="A" data-explain="&lt;strong&gt;Kappa 架构&lt;/strong&gt;：&lt;strong&gt;只保留一条流处理链路&lt;/strong&gt;，所有数据（历史的 + 实时的）&lt;strong&gt;都通过同一套流计算重新处理&lt;/strong&gt;，&lt;strong&gt;取消独立的批处理层&lt;/strong&gt;。&lt;strong&gt;核心改进&lt;/strong&gt;：&lt;strong&gt;避免维护两套代码&lt;/strong&gt;（Lambda 的批 + 实时两套逻辑）、&lt;strong&gt;降低运维复杂度&lt;/strong&gt;。&lt;strong&gt;代价&lt;/strong&gt;：需要&lt;strong&gt;历史数据可重放&lt;/strong&gt;（消息中间件保留足够长的日志，如 Kafka 保留全量数据），且&lt;strong&gt;全量重算资源开销大&lt;/strong&gt;。&lt;strong&gt;记忆：Lambda 两层各取所长，Kappa 一条流打通。&lt;/strong&gt;" data-ref="第19章 · 19.2 Lambda/Kappa/IOTA 架构">
+  <div class="quiz-q"><span class="qn">3</span>Kappa 架构与 Lambda 架构的关键差异是：</div>
+  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">Kappa 取消批处理层，只保留统一的一套流处理链路，避免了维护两套代码的代价</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">Kappa 同时保留批处理层和速度层</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">Kappa 精度高于 Lambda</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">Kappa 不需要消息队列</span></div></div>
   <div class="reveal" style="display:none">
     <div class="reveal-verdict"></div>
-    <div class="reveal-explain">SOA 三项核心技术：<strong>UDDI（Universal Description, Discovery and Integration）</strong>——<strong>服务注册中心</strong>，提供服务的描述与查询规范，支撑<strong>服务注册、发现与集成</strong>｜<strong>WSDL（Web Services Description Language）</strong>——<strong>服务描述语言</strong>，描述"服务提供什么、怎么调用"（用 WSDL 生成的 SOAP 服务才可被 UDDI 注册）｜<strong>SOAP（Simple Object Access Protocol）</strong>——<strong>消息传输格式</strong>，规定 XML 消息如何在网络上传送。⚠️ 记忆：<strong>"UDDI 找人、WSDL 说事、SOAP 送信"</strong>。</div>
-    <div class="reveal-ref">第12章 · 12.3.7 SOA 关键技术</div>
+    <div class="reveal-explain"><strong>Kappa 架构</strong>：<strong>只保留一条流处理链路</strong>，所有数据（历史的 + 实时的）<strong>都通过同一套流计算重新处理</strong>，<strong>取消独立的批处理层</strong>。<strong>核心改进</strong>：<strong>避免维护两套代码</strong>（Lambda 的批 + 实时两套逻辑）、<strong>降低运维复杂度</strong>。<strong>代价</strong>：需要<strong>历史数据可重放</strong>（消息中间件保留足够长的日志，如 Kafka 保留全量数据），且<strong>全量重算资源开销大</strong>。<strong>记忆：Lambda 两层各取所长，Kappa 一条流打通。</strong></div>
+    <div class="reveal-ref">第19章 · 19.2 Lambda/Kappa/IOTA 架构</div>
   </div>
-</div><div class="quiz-item" data-answer="A" data-explain="&lt;strong&gt;REST（Representational State Transfer，表述性状态转移）&lt;/strong&gt;：&lt;strong&gt;面向资源&lt;/strong&gt;架构风格，用 &lt;strong&gt;HTTP 动词（GET/POST/PUT/DELETE）&lt;/strong&gt; 表达对资源的操作，用 URL 标识资源，&lt;strong&gt;轻量、无状态、只需 HTTP 协议&lt;/strong&gt;。&lt;strong&gt;SOAP&lt;/strong&gt;：&lt;strong&gt;面向服务&lt;/strong&gt;，用 &lt;strong&gt;WSDL 定义接口契约&lt;/strong&gt;，用 &lt;strong&gt;XML&lt;/strong&gt; 作为消息格式，&lt;strong&gt;规范严谨但笨重&lt;/strong&gt;。⚠️ 常见误区：&quot;SOAP 比 REST 先进&quot;——两者定位不同，SOAP 适合强契约的企业级集成，REST 适合互联网开放接口。" data-ref="第12章 · 12.3.7 SOA 关键技术">
-  <div class="quiz-q"><span class="qn">4</span>关于 REST 与 SOAP，下列说法正确的是：</div>
-  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">REST 面向资源、用 HTTP 动词表达操作、轻量易用；SOAP 面向服务、用 XML 定义接口契约、适合企业级复杂交互</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">REST 必须用 XML 传输，比 SOAP 更重</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">SOAP 是 REST 的升级版本</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">两者都是消息中间件协议</span></div></div>
+</div><div class="quiz-item" data-answer="A" data-explain="&lt;strong&gt;数据仓库标准四层（由底到顶）&lt;/strong&gt;：&lt;strong&gt;① ODS（Operational Data Store，操作数据存储）&lt;/strong&gt;——&lt;strong&gt;原始数据贴源层&lt;/strong&gt;，&lt;strong&gt;基本不做加工&lt;/strong&gt;，保留全量明细，是数仓的&lt;strong&gt;唯一数据源&lt;/strong&gt;；&lt;strong&gt;② DWD（Data Warehouse Detail，明细数据层）&lt;/strong&gt;——&lt;strong&gt;清洗、去重、规范化后的一层明细&lt;/strong&gt;（一个业务过程一张宽表）；&lt;strong&gt;③ DWS（Data Warehouse Summary，汇总数据层）&lt;/strong&gt;——按&lt;strong&gt;主题域&lt;/strong&gt;做&lt;strong&gt;轻度汇总&lt;/strong&gt;（如&quot;用户 7 日访问统计&quot;）；&lt;strong&gt;④ ADS（Application Data Store，应用数据层）&lt;/strong&gt;——面向&lt;strong&gt;具体应用/报表&lt;/strong&gt;的&lt;strong&gt;最终结果表&lt;/strong&gt;（如&quot;某看板的最终指标&quot;）。&lt;strong&gt;记忆：&quot;ODS 贴源、DWD 明细、DWS 汇总、ADS 应用&quot;。&lt;/strong&gt; 分层的意义：&lt;strong&gt;解耦上游变动对下游的影响&lt;/strong&gt;。" data-ref="第19章 · 19.3 数仓分层 + ETL">
+  <div class="quiz-q"><span class="qn">4</span>数据仓库的 ODS / DWD / DWS / ADS 四层分层中，原始数据未经加工的最底层是：</div>
+  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">ODS（操作数据存储层）</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">DWD（明细数据层）</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">DWS（汇总数据层）</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">ADS（应用数据层）</span></div></div>
   <div class="reveal" style="display:none">
     <div class="reveal-verdict"></div>
-    <div class="reveal-explain"><strong>REST（Representational State Transfer，表述性状态转移）</strong>：<strong>面向资源</strong>架构风格，用 <strong>HTTP 动词（GET/POST/PUT/DELETE）</strong> 表达对资源的操作，用 URL 标识资源，<strong>轻量、无状态、只需 HTTP 协议</strong>。<strong>SOAP</strong>：<strong>面向服务</strong>，用 <strong>WSDL 定义接口契约</strong>，用 <strong>XML</strong> 作为消息格式，<strong>规范严谨但笨重</strong>。⚠️ 常见误区："SOAP 比 REST 先进"——两者定位不同，SOAP 适合强契约的企业级集成，REST 适合互联网开放接口。</div>
-    <div class="reveal-ref">第12章 · 12.3.7 SOA 关键技术</div>
+    <div class="reveal-explain"><strong>数据仓库标准四层（由底到顶）</strong>：<strong>① ODS（Operational Data Store，操作数据存储）</strong>——<strong>原始数据贴源层</strong>，<strong>基本不做加工</strong>，保留全量明细，是数仓的<strong>唯一数据源</strong>；<strong>② DWD（Data Warehouse Detail，明细数据层）</strong>——<strong>清洗、去重、规范化后的一层明细</strong>（一个业务过程一张宽表）；<strong>③ DWS（Data Warehouse Summary，汇总数据层）</strong>——按<strong>主题域</strong>做<strong>轻度汇总</strong>（如"用户 7 日访问统计"）；<strong>④ ADS（Application Data Store，应用数据层）</strong>——面向<strong>具体应用/报表</strong>的<strong>最终结果表</strong>（如"某看板的最终指标"）。<strong>记忆："ODS 贴源、DWD 明细、DWS 汇总、ADS 应用"。</strong> 分层的意义：<strong>解耦上游变动对下游的影响</strong>。</div>
+    <div class="reveal-ref">第19章 · 19.3 数仓分层 + ETL</div>
   </div>
-</div><div class="quiz-item" data-answer="A" data-explain="SOA 三种实现方式：&lt;strong&gt;Web Service&lt;/strong&gt;（用 WSDL 描述接口、SOAP 通信，是&lt;strong&gt;标准方式&lt;/strong&gt;）｜&lt;strong&gt;注册表方式&lt;/strong&gt;（用&lt;strong&gt;注册中心统一管理服务的发布/查找/绑定&lt;/strong&gt;，服务提供者与消费者解耦）｜&lt;strong&gt;ESB（企业服务总线）&lt;/strong&gt;（用&lt;strong&gt;消息总线&lt;/strong&gt;统一做协议转换、路由、安全控制，是企业级整合的主流）。" data-ref="第12章 · 12.3.7 SOA 实现三方法">
-  <div class="quiz-q"><span class="qn">5</span>SOA 的实现方式中，"注册表（Registry）"方式指的是：</div>
-  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">通过注册中心管理服务的发布、查找与绑定</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">在客户端代码里硬编码服务地址</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">用消息队列削峰</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">把服务打包成独立进程</span></div></div>
+</div><div class="quiz-item" data-answer="A" data-explain="&lt;strong&gt;大数据测试的特点（案例常考）&lt;/strong&gt;：&lt;strong&gt;① 数据质量优先&lt;/strong&gt;——除了功能，还要验证&lt;strong&gt;准确性 · 完整性 · 一致性 · 及时性 · 有效性&lt;/strong&gt;（处理环节多，误差会累积）；&lt;strong&gt;② 场景特殊&lt;/strong&gt;——&lt;strong&gt;批处理与流处理混合&lt;/strong&gt;（同一份数据两条链路结果要一致）、&lt;strong&gt;节点故障与恢复&lt;/strong&gt;（HDFS 副本、Kafka 消费者重平衡）、&lt;strong&gt;数据倾斜与热点 Key&lt;/strong&gt;（并行计算的性能杀手）、&lt;strong&gt;上游延迟&lt;/strong&gt;（数据未到时下游如何处理）；&lt;strong&gt;③ 测试规模不同&lt;/strong&gt;——数据量 TB 级，&lt;strong&gt;不能用全量数据测试，要用&quot;小数据集验证逻辑 + 大数据集验证性能&quot;&lt;/strong&gt; 的分层策略。" data-ref="第19章 · 19.4 大数据测试">
+  <div class="quiz-q"><span class="qn">5</span>大数据测试与传统软件测试相比，最大的区别在于：</div>
+  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">大数据测试除了功能测试外，更侧重数据质量（准确性/完整性/一致性）与批流混合、集群节点故障场景的验证</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">大数据测试不需要功能测试</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">大数据测试只测性能</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">大数据测试更简单</span></div></div>
   <div class="reveal" style="display:none">
     <div class="reveal-verdict"></div>
-    <div class="reveal-explain">SOA 三种实现方式：<strong>Web Service</strong>（用 WSDL 描述接口、SOAP 通信，是<strong>标准方式</strong>）｜<strong>注册表方式</strong>（用<strong>注册中心统一管理服务的发布/查找/绑定</strong>，服务提供者与消费者解耦）｜<strong>ESB（企业服务总线）</strong>（用<strong>消息总线</strong>统一做协议转换、路由、安全控制，是企业级整合的主流）。</div>
-    <div class="reveal-ref">第12章 · 12.3.7 SOA 实现三方法</div>
+    <div class="reveal-explain"><strong>大数据测试的特点（案例常考）</strong>：<strong>① 数据质量优先</strong>——除了功能，还要验证<strong>准确性 · 完整性 · 一致性 · 及时性 · 有效性</strong>（处理环节多，误差会累积）；<strong>② 场景特殊</strong>——<strong>批处理与流处理混合</strong>（同一份数据两条链路结果要一致）、<strong>节点故障与恢复</strong>（HDFS 副本、Kafka 消费者重平衡）、<strong>数据倾斜与热点 Key</strong>（并行计算的性能杀手）、<strong>上游延迟</strong>（数据未到时下游如何处理）；<strong>③ 测试规模不同</strong>——数据量 TB 级，<strong>不能用全量数据测试，要用"小数据集验证逻辑 + 大数据集验证性能"</strong> 的分层策略。</div>
+    <div class="reveal-ref">第19章 · 19.4 大数据测试</div>
   </div>
-</div><div class="quiz-item" data-answer="A" data-explain="&lt;strong&gt;二层 C/S&lt;/strong&gt;：客户端直接访问数据库（胖客户端），&lt;strong&gt;数据库连接数受限、扩展性差&lt;/strong&gt;。&lt;strong&gt;三层 C/S&lt;/strong&gt;：&lt;strong&gt;表示层（客户端）→ 应用层（服务器）→ 数据层（数据库）&lt;/strong&gt;，客户端&lt;strong&gt;不再直接连数据库&lt;/strong&gt;，好处是&lt;strong&gt;连接数降低、扩展性提升、安全性更好、便于集中管理&lt;/strong&gt;。&lt;strong&gt;B/S 架构是三层 C/S 的特例&lt;/strong&gt;（表示层用浏览器）。" data-ref="第12章 · 12.3.3 三层 C/S 架构 + B/S">
-  <div class="quiz-q"><span class="qn">6</span>三层 C/S 架构与二层 C/S 架构相比，主要增加的是：</div>
-  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">表示层与应用层分离，客户端不直接访问数据库</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">客户端数量增加</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">网络带宽要求提高</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">数据库服务器数量减少</span></div></div>
+</div><div class="quiz-item" data-answer="A" data-explain="&lt;strong&gt;Hadoop 三大核心组件（辨析题）&lt;/strong&gt;：&lt;strong&gt;① HDFS&lt;/strong&gt;——&lt;strong&gt;分布式文件系统&lt;/strong&gt;，负责&lt;strong&gt;数据存储&lt;/strong&gt;（分块存储 + 多副本容错，主从架构：NameNode 管元数据 / DataNode 存数据块）；&lt;strong&gt;② YARN&lt;/strong&gt;——&lt;strong&gt;资源管理器&lt;/strong&gt;，负责&lt;strong&gt;CPU/内存等资源的分配与调度&lt;/strong&gt;（含 ResourceManager / NodeManager / ApplicationMaster）；&lt;strong&gt;③ MapReduce&lt;/strong&gt;——&lt;strong&gt;批处理计算框架&lt;/strong&gt;，负责&lt;strong&gt;分布式计算&lt;/strong&gt;（Map 并行处理 / Shuffle / Reduce 汇总）。⚠️ &lt;strong&gt;常见错配&lt;/strong&gt;：MapReduce 是&lt;strong&gt;计算&lt;/strong&gt;不是存储；Spark 是&lt;strong&gt;内存计算引擎&lt;/strong&gt;（比 MapReduce 快，但不是 Hadoop 三大核心之一）；Hive 是&lt;strong&gt;数据仓库工具&lt;/strong&gt;（把 HDFS 上的文件映射成表，提供 SQL 接口）。" data-ref="第19章 · 19.2 技术组件全家桶">
+  <div class="quiz-q"><span class="qn">6</span>Hadoop 生态中，负责分布式数据存储与资源管理的是：</div>
+  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">HDFS（Hadoop Distributed File System）+ YARN（Yet Another Resource Negotiator）</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">MapReduce</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">Spark</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">Hive</span></div></div>
   <div class="reveal" style="display:none">
     <div class="reveal-verdict"></div>
-    <div class="reveal-explain"><strong>二层 C/S</strong>：客户端直接访问数据库（胖客户端），<strong>数据库连接数受限、扩展性差</strong>。<strong>三层 C/S</strong>：<strong>表示层（客户端）→ 应用层（服务器）→ 数据层（数据库）</strong>，客户端<strong>不再直接连数据库</strong>，好处是<strong>连接数降低、扩展性提升、安全性更好、便于集中管理</strong>。<strong>B/S 架构是三层 C/S 的特例</strong>（表示层用浏览器）。</div>
-    <div class="reveal-ref">第12章 · 12.3.3 三层 C/S 架构 + B/S</div>
+    <div class="reveal-explain"><strong>Hadoop 三大核心组件（辨析题）</strong>：<strong>① HDFS</strong>——<strong>分布式文件系统</strong>，负责<strong>数据存储</strong>（分块存储 + 多副本容错，主从架构：NameNode 管元数据 / DataNode 存数据块）；<strong>② YARN</strong>——<strong>资源管理器</strong>，负责<strong>CPU/内存等资源的分配与调度</strong>（含 ResourceManager / NodeManager / ApplicationMaster）；<strong>③ MapReduce</strong>——<strong>批处理计算框架</strong>，负责<strong>分布式计算</strong>（Map 并行处理 / Shuffle / Reduce 汇总）。⚠️ <strong>常见错配</strong>：MapReduce 是<strong>计算</strong>不是存储；Spark 是<strong>内存计算引擎</strong>（比 MapReduce 快，但不是 Hadoop 三大核心之一）；Hive 是<strong>数据仓库工具</strong>（把 HDFS 上的文件映射成表，提供 SQL 接口）。</div>
+    <div class="reveal-ref">第19章 · 19.2 技术组件全家桶</div>
   </div>
 </div>
 </div>
@@ -2176,7 +2127,7 @@ html{scroll-padding-top:80px}
   <span class="item"><kbd class="kbd">J</kbd>/<kbd class="kbd">K</kbd> 快滚</span>
   <span class="item"><kbd class="kbd">0</kbd> 回顶部</span>
 </div>
-    <nav class="pager"><a class="pg pg-prev" href="H26.html"><span class="pg-label">上一学时</span><span class="pg-title">软件架构设计（一）· 架构定义与 4+1 视图</span></a><a class="pg pg-next" href="H28.html"><span class="pg-label">下一学时</span><span class="pg-title">软件架构设计（三）· 质量属性与 ATAM 评估</span></a></nav>
+    <nav class="pager"><a class="pg pg-prev" href="H37.html"><span class="pg-label">上一学时</span><span class="pg-title">架构演进与开发方式选型</span></a><a class="pg pg-next" href="H45.html"><span class="pg-label">下一学时</span><span class="pg-title">论文专项</span></a></nav>
     <footer class="footer">
   <p><strong>阿甘系分 · 48 小时冲刺手册</strong></p>
   <p class="sep">非官方出版物 · 与软考办无隶属关系 · 内容均为独立原创编写</p>
