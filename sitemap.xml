@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   发布前请把下面的 lnwhosyourdaddy.github.io/Agan-ruankao 替换成你的真实域名
-  更新日期：2026-10-04（新增 H14 / H15 / H16 软件工程 = 全教材第一大章 19.6%）
+  更新日期：2026-10-04（新增 H04/H05 计算机系统 13.1% + H09/H10/H11 数据库系统 9.9%）
 -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
@@ -11,6 +11,16 @@
   </url>
   <url>
     <loc>https://lnwhosyourdaddy.github.io/Agan-ruankao/H01.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://lnwhosyourdaddy.github.io/Agan-ruankao/H04.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://lnwhosyourdaddy.github.io/Agan-ruankao/H05.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -26,6 +36,21 @@
   </url>
   <url>
     <loc>https://lnwhosyourdaddy.github.io/Agan-ruankao/H08.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://lnwhosyourdaddy.github.io/Agan-ruankao/H09.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://lnwhosyourdaddy.github.io/Agan-ruankao/H10.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://lnwhosyourdaddy.github.io/Agan-ruankao/H11.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
