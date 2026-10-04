@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   发布前请把下面的 lnwhosyourdaddy.github.io/Agan-ruankao 替换成你的真实域名
-  更新日期：2026-10-04（第一篇9章+第二篇6章共15章全部上线：H02–H34，含 H31/H32 实现与测试 2.9%、H33/H34 运维 1.1%）
+  更新日期：2026-10-04（第一篇9章+第二篇6章全部上线 + 第三篇开篇 H35 Web应用；共 35 页）
 -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
@@ -166,6 +166,11 @@
   </url>
   <url>
     <loc>https://lnwhosyourdaddy.github.io/Agan-ruankao/H34.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://lnwhosyourdaddy.github.io/Agan-ruankao/H35.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
