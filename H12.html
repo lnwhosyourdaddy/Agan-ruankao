@@ -7,7 +7,7 @@
 <title>第 12 小时 · 企业信息化（一）· 信息化规划 · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
-<meta name="build-stamp" content="2026-10-04 08:24:55">
+<meta name="build-stamp" content="2026-10-04 08:58:14">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -1191,6 +1191,51 @@ html[data-theme="dark"] mark.search-mark{
 }
 
 /* ── 2. 标题：衬线体 + 短横线，替代通栏分割线 ── */
+/* ---------- 章首进度条（22 章 × 每章几十节时的定位锚）----------
+   ⚠️ sticky top 必须 = 顶栏实际高度。顶栏是 `position:sticky; height:54px`，
+   这里写小了会被顶栏盖住（截图里只剩进度条贴着顶栏下沿、"9 / 20" 灰在下面）。
+   宽度也留出顶栏投影的落点，避免滚动时内容从下方"顶穿"。 */
+.chapbar{
+  position:sticky;top:53px;z-index:110;
+  margin:0 0 34px;
+  padding:11px 0 10px;
+  background:linear-gradient(180deg,var(--bg) 74%,transparent);
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+}
+.chapbar-top{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.chapbar-badge{
+  flex-shrink:0;
+  padding:2px 9px;border-radius:999px;
+  background:var(--accent);color:var(--fg-inv);
+  font-size:11.5px;font-weight:700;letter-spacing:.02em;
+}
+.chapbar-title{
+  font-size:13px;color:var(--fg-2);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.chapbar-spacer{flex:1}
+.chapbar-sec{
+  flex-shrink:0;
+  font-size:12px;color:var(--fg-3);
+  font-variant-numeric:tabular-nums;
+}
+.chapbar-track{
+  height:3px;border-radius:2px;
+  background:var(--bg-deep);overflow:hidden;
+}
+.chapbar-fill{
+  height:100%;width:0;border-radius:2px;
+  background:linear-gradient(90deg,var(--accent) 0%,var(--accent-3) 100%);
+  transition:width .18s var(--ease);
+}
+@media(max-width:760px){
+  /* 窄屏顶栏实际高度是 57px（flex-wrap 后实测），这里跟着改 */
+  .chapbar{top:56px;margin-bottom:26px;padding:10px 0 8px}
+  .chapbar-title{display:none}
+}
+/* 专注模式：进度条是"定位锚"，保留但变淡 */
+html.focus-mode .chapbar{opacity:.35;pointer-events:none}
+
 .main h1,.main h2,.main h3,.main h4{
   font-family:var(--serif);
   font-weight:600;
@@ -1349,12 +1394,18 @@ html[data-theme="dark"] mark.search-mark{
 .main .block{
   margin:1.7em 0;
   padding:1.05em 1.35em;
-  border-radius:0 var(--radius) var(--radius) 0;
-  border:0;
-  border-left:3.5px solid;
-  font-family:var(--sans);
+  border-radius:var(--radius);
+  border:1px solid var(--line);
+  /* ⚠️ 这里原来有 `border-left:3.5px solid` + `border-radius:0 R R 0`（左侧色条版式）。
+     设计 v6 改成「左侧 4px 色条 = ::before 伪元素 + 四周圆角」后必须去掉这条：
+     它是 2 个类（.main .block），比第 10 节的 .block（1 个类）优先级高，
+     会把 ::before 色条往左挤 —— 表现为"色条贴在边框外侧"。
+     顺带把 sans 补回变量名（下面 font-family:var(--sans) 引用了一个不存在的变量）。 */
+  font-family:var(--font);
   font-size:.97em;
   line-height:1.85;
+  background:var(--bg-card);
+  box-shadow:var(--shadow-1);
 }
 .main .block-title{
   font-family:var(--serif);
@@ -1783,7 +1834,17 @@ html.focus-mode .focus-exit-dot{
 </header>
 <main class="shell">
   <aside class="toc"></aside>
-  <article class="main">
+      <article class="main">
+    <div class="chapbar" id="chapbar"
+     data-sec-total="28" data-page-index="5" data-page-total="13">
+  <div class="chapbar-top">
+    <span class="chapbar-badge">H12</span>
+    <span class="chapbar-title">企业信息化（一）· 信息化规划</span>
+    <span class="chapbar-spacer"></span>
+    <span class="chapbar-sec" id="chapbarSec">1 / 28</span>
+  </div>
+  <div class="chapbar-track"><div class="chapbar-fill" id="chapbarFill"></div></div>
+</div>
     
     <h1 id="第-12-小时-企业信息化-一-信息化规划">第 12 小时 · 企业信息化（一）· 信息化规划</h1>
 <div class="quote"><p>第 6 章是<strong>综合知识真题占比最高的章</strong>（10.1%，56/557），也是案例与论文的联动章。<br>本学时覆盖 <strong>6.1 概述、6.2 信息资源管理、6.3 信息化规划</strong> —— 全章最难记的「方法辨识」集中在这里。</p></div>
@@ -2590,6 +2651,43 @@ html.focus-mode .focus-exit-dot{
   // ══════════════════════════════════════════
   // 6. 快捷键
   // ══════════════════════════════════════════
+  /* ---------- 章首进度条：随滚动更新「读到第几节 / 全书第几学时」 ---------- */
+  const ChapBar = {
+    init() {
+      const bar = document.getElementById('chapbar')
+      if (!bar) return
+      this.bar = bar
+      this.fill = document.getElementById('chapbarFill')
+      this.sec = document.getElementById('chapbarSec')
+      this.secs = [...document.querySelectorAll('.main h2[id], .main h3[id]')]
+      this.total = Number(bar.dataset.secTotal) || this.secs.length
+      if (!this.secs.length) return
+      this.cur = -1
+      this.onScroll = this.update.bind(this)
+      window.addEventListener('scroll', this.onScroll, { passive: true })
+      this.update()
+    },
+    update() {
+      // 以"视口上沿往下 120px"为判定线，取该位置之后最近的标题
+      const line = 140
+      let idx = 0
+      for (let i = 0; i < this.secs.length; i++) {
+        const t = this.secs[i].getBoundingClientRect().top
+        if (t - line <= 0) idx = i
+        else break
+      }
+      if (idx !== this.cur) {
+        this.cur = idx
+        if (this.sec) this.sec.textContent = (idx + 1) + ' / ' + this.total
+      }
+      // 整页滚动进度（含末尾）
+      const doc = document.documentElement
+      const max = doc.scrollHeight - doc.clientHeight
+      const p = max > 0 ? Math.min(1, Math.max(0, doc.scrollTop / max)) : 0
+      if (this.fill) this.fill.style.width = (p * 100).toFixed(2) + '%'
+    }
+  }
+
   /* ---------- 章节导航：胶囊触发器 + 分组下拉面板 ---------- */
   const ChapNav = {
     root: null, trigger: null, panel: null, items: [], cursor: -1,
@@ -2980,6 +3078,7 @@ html.focus-mode .focus-exit-dot{
     Theme.init()
     FontSize.init()
     Progress.init()
+    ChapBar.init()
     document.querySelectorAll('.quiz-js').forEach(r => Quiz.init(r))
     WrongBook.init()
     Search.init()
