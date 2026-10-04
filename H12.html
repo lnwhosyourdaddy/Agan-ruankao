@@ -7,7 +7,7 @@
 <title>第 12 小时 · 企业信息化（一）· 信息化规划 · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
-<meta name="build-stamp" content="2026-10-04 08:58:14">
+<meta name="build-stamp" content="2026-10-05 00:05:51">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -76,8 +76,10 @@
   --shadow-3:0 12px 32px rgba(28,34,29,.10);
 
   --font:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Noto Sans SC","Microsoft YaHei",sans-serif;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
   --mono:ui-monospace,"SF Mono","JetBrains Mono","Fira Code",Menlo,Consolas,monospace;
-  --serif:"Songti SC","SimSun","Noto Serif SC",serif;
+  --serif:"Songti SC","STSong","Source Han Serif SC","Noto Serif CJK SC","Source Han Serif CN","Times New Roman",SimSun,serif;
+  --measure:760px;
 
   --ease:cubic-bezier(.4,0,.2,1);
 }
@@ -706,20 +708,18 @@ pre{
   flex:0 0 21px;height:21px;
   border-radius:5px;
   background:var(--bg-alt);border:1px solid var(--line-2);
-  display:inel;display:flex;align-items:center;justify-content:center;
+  display:flex;align-items:center;justify-content:center;
   font-size:11px;font-weight:700;color:var(--fg-3);
   margin-top:2px;
 }
 .opt .txt{flex:1;min-width:0}
 .opt.picked{border-color:var(--accent);background:var(--accent-soft-2)}
 .opt.right{border-color:var(--tip-line);background:var(--tip-bg);font-weight:600}
-/opt.right .letter{background:var(--tip-line);color:#fff;border-color:var(--tip-line)}
-.opt.right .letter-icon{...}
+.opt.right .letter{background:var(--tip-line);color:#fff;border-color:var(--tip-line)}
+.opt.wrong-pick .letter{background:var(--danger-line);color:#fff;border-color:var(--danger-line)}
 .mark{font-weight:700;margin-left:auto;font-size:15px;flex-shrink:0}
 .mark.ok{color:var(--tip-line)}
-.mark.ok .letter-iconsvg{...}
 .mark.no{color:var(--danger-line)}
-.mark.no .letter-iconsvg{...}
 
 .quiz-item.correct{background:var(--tip-bg)}
 .quiz-item.wrong{background:var(--danger-bg)}
@@ -863,10 +863,7 @@ pre{
   .footer{margin-top:50px;padding:28px 16px 36px}
 }
 @media(max-width:480px){
-  .theme-switch{display:none}  /* 极窄屏用快捷键 T 键 */
-}
-@media(max-width:480px){
-  .theme-switch{display:inline-flex}  /* 恢复：深浅色是刚需 */
+  .theme-switch{display:inline-flex}  /* 极窄屏仍需主题切换（深浅色刚需），依赖⋯浮层收纳 */
 }
 
 /* ---------- 18. 打印样式 ---------- */
@@ -1170,13 +1167,7 @@ html[data-theme="dark"] mark.search-mark{
    ═══════════════════════════════════════════════════════════════ */
 
 /* ── 1. 正文排版：衬线标题 + 更合适的行宽与行距 ── */
-:root{
-  --serif:"Songti SC","STSong","Source Han Serif SC","Noto Serif CJK SC",
-          "Source Han Serif CN","Times New Roman",SimSun,serif;
-  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC",
-         "Hiragino Sans GB","Microsoft YaHei",sans-serif;
-  --measure:760px;          /* 行宽：中文正文 34–40 字/行最舒适 */
-}
+/* 合并到顶部 :root（避免重复定义导致后者覆盖前者） */
 
 .main{ max-width:var(--measure) }
 .main p{
@@ -1380,7 +1371,7 @@ html.focus-mode .chapbar{opacity:.35;pointer-events:none}
 /* ── 6. mermaid 容器：去掉边框阴影，改成"插图"质感 ── */
 .main .mermaid-wrap{
   margin:2em 0;
-  padding:1.8em 1.4em;
+  padding:1.6em 1em;
   background:var(--bg-alt);
   border:0;
   border-top:1px solid var(--line);
@@ -1388,6 +1379,7 @@ html.focus-mode .chapbar{opacity:.35;pointer-events:none}
   border-radius:0;
   box-shadow:none;
   text-align:center;
+  overflow-x:auto;
 }
 
 /* ── 7. 提示框：左侧色条加粗 + 标题衬线体 ── */
@@ -1787,6 +1779,19 @@ html.focus-mode .focus-exit-dot{
 }
 /* mermaid 图单独放开内边距，图本身已有留白 */
 .fig-mermaid{padding:18px 10px 12px;overflow-x:auto}
+
+/* ── 7. mermaid 图表：防止宽图溢出 + 节点文字截断 ── */
+.main .mermaid-wrap{
+  overflow-x:auto;
+  padding:1.6em 1em;
+}
+.main .mermaid-wrap svg{
+  max-width:100%;
+  height:auto;
+  min-width:0;
+}
+/* 图表比容器宽时，允许横向滚动而不是截缩 */
+.fig-mermaid{min-width:0}
 /* Slidev 手绘 SVG：颜色为深底黑板调（文字 #f2efe4），
    放进浅色正文会隐形 → 套深色卡片还原原始配色。
    ⚠️ 选择器必须带 .main（下文有 `.main .fig{background:var(--bg-card)}`，
@@ -1820,12 +1825,99 @@ html.focus-mode .focus-exit-dot{
 .tag.exam{background:var(--gold-bg);color:var(--gold);border-color:var(--gold)}
 .tag.mem{background:var(--mem-bg);color:var(--mem-line);border-color:var(--mem-line)}
 .main .tag{font-family:var(--sans)}
+
+/* ═══════════════════════════════════════════════════════════════
+   增强 v1：返回顶部 / 外链指示器 / 代码复制 / 阅读时长
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── 返回顶部按钮 ── */
+.back-top{
+  position:fixed;right:24px;bottom:80px;z-index:85;
+  width:42px;height:42px;
+  border-radius:50%;
+  background:var(--bg-card);
+  border:1.5px solid var(--line);
+  box-shadow:var(--shadow-2);
+  color:var(--fg-3);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;line-height:1;
+  opacity:0;transform:translateY(12px);
+  pointer-events:none;
+  transition:opacity .25s var(--ease),transform .25s var(--ease),color .18s var(--ease),border-color .18s var(--ease);
+}
+.back-top.show{opacity:1;transform:none;pointer-events:auto}
+.back-top:hover{color:var(--accent);border-color:var(--accent);transform:translateY(-2px)}
+.back-top:active{transform:translateY(0)}
+@media(max-width:760px){
+  .back-top{right:14px;bottom:70px;width:38px;height:38px;font-size:16px}
+}
+
+/* ── 外链指示器 ── */
+a[href^="http"]:not(.cta):not(.pg)::after{
+  content:'↗';
+  display:inline-block;
+  margin-left:2px;
+  font-size:.82em;
+  opacity:.6;
+  vertical-align:.05em;
+  transition:opacity .15s var(--ease);
+}
+a[href^="http"]:not(.cta):not(.pg):hover::after{opacity:1}
+
+/* ── 代码块复制按钮 ── */
+.code-wrap{position:relative;margin:1.3em 0}
+.copy-btn{
+  position:absolute;top:8px;right:8px;
+  padding:5px 11px;
+  font-size:11.5px;font-family:var(--sans);
+  background:var(--bg-card);
+  border:1px solid var(--line);
+  border-radius:5px;
+  color:var(--fg-3);cursor:pointer;
+  opacity:0;
+  transition:all .18s var(--ease);
+  z-index:2;
+}
+.code-wrap:hover .copy-btn,
+.copy-btn:focus{opacity:1}
+.copy-btn:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+.copy-btn.copied{border-color:var(--tip-line);color:var(--tip);background:var(--tip-bg)}
+.code-wrap pre{margin:0;border-radius:var(--radius)}
+
+/* ── 阅读时长（章节页标题下方） ── */
+.read-time{
+  display:flex;align-items:center;gap:7px;
+  font-size:12px;color:var(--fg-3);
+  margin-top:-8px;margin-bottom:18px;
+  padding-bottom:14px;
+  border-bottom:1px solid var(--line);
+}
+.read-time::before{content:'🕐';font-size:13px;filter:saturate(.7)}
+
+/* ── Quiz 答错时给错误选项加红色标记 ── */
+.opt.wrong-pick{border-color:var(--danger-line);background:var(--danger-bg)}
+.opt.wrong-pick .letter{background:var(--danger-line);color:#fff;border-color:var(--danger-line)}
+
+/* ── 表格斑马纹（可选，通过 class 控制） ── */
+table.zebra tbody tr:nth-child(even){background:var(--accent-soft)}
+table.zebra tbody tr:hover{background:var(--accent-soft-2)}
+
+/* ── 统计卡 hover 微动 ── */
+.stat{transition:transform .2s var(--ease),box-shadow .2s var(--ease)}
+.stat:hover{transform:translateY(-3px);box-shadow:var(--shadow-3)}
+
+/* ── 封面 CTA 按钮点击反馈 ── */
+.cta:active{transform:translateY(0) scale(.97)}
+
+/* ── 平滑滚动偏移（锚点跳转不卡顶栏下） ── */
+html{scroll-padding-top:80px}
+@media(max-width:760px){html{scroll-padding-top:70px}}
 </style>
 </head>
 <body>
 <header class="topbar">
   <a class="brand" href="index.html"><span class="brand-mark">48</span><span>阿甘系分</span><span class="brand-sub">冲刺手册</span></a>
-  <nav class="nav"><div class="nav" id="chapnav"><button class="nav-trigger" type="button" id="navTrigger" aria-haspopup="true" aria-expanded="false" aria-controls="navPanel" title="章节导航（Enter / ↓ 打开，Esc 关闭）"><span class="nav-trigger-code">H12</span><span class="nav-trigger-label">企业信息化（一）</span><svg class="nav-caret" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5 L6 8 L9.5 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="nav-panel" id="navPanel" hidden><div class="nav-panel-scroll"><div class="nav-group nav-group-solo"><a class="nav-item" href="index.html"><span class="nav-item-code">首页</span><span class="nav-item-label">首页 · 手册总览</span></a></div><div class="nav-group"><div class="nav-group-title">第一篇 · 基础知识</div><a class="nav-item" href="H01.html"><span class="nav-item-code">H01</span><span class="nav-item-label">绪论与备考总纲</span></a><a class="nav-item" href="H06.html"><span class="nav-item-code">H06</span><span class="nav-item-label">计算机网络（一）· 数据通信与协议体系</span></a><a class="nav-item" href="H07.html"><span class="nav-item-code">H07</span><span class="nav-item-label">计算机网络（二）· TCP/IP 与网络工程</span></a><a class="nav-item" href="H08.html"><span class="nav-item-code">H08</span><span class="nav-item-label">分布式系统、构件与云计算</span></a><a class="nav-item active" href="H12.html" aria-current="page"><span class="nav-item-code">H12</span><span class="nav-item-label">企业信息化（一）· 信息化规划</span></a><a class="nav-item" href="H13.html"><span class="nav-item-code">H13</span><span class="nav-item-label">企业信息化（二）· 信息系统与商务</span></a><a class="nav-item" href="H14.html"><span class="nav-item-code">H14</span><span class="nav-item-label">软件工程（一）· 生命周期与开发模型</span></a><a class="nav-item" href="H15.html"><span class="nav-item-code">H15</span><span class="nav-item-label">软件工程（二）· 过程管理与软件重用</span></a><a class="nav-item" href="H16.html"><span class="nav-item-code">H16</span><span class="nav-item-label">软件工程（三）· UML 与形式化方法</span></a><a class="nav-item" href="H19.html"><span class="nav-item-code">H19</span><span class="nav-item-label">信息安全（一）· 安全体系与加密认证</span></a><a class="nav-item" href="H20.html"><span class="nav-item-code">H20</span><span class="nav-item-label">信息安全（二）· 网络安全与可靠性</span></a><a class="nav-item" href="H23.html"><span class="nav-item-code">H23</span><span class="nav-item-label">软件需求工程</span></a></div><div class="nav-group nav-group-solo"><a class="nav-item" href="H45.html"><span class="nav-item-code">H45</span><span class="nav-item-label">论文写作专项</span></a></div><div class="nav-group nav-group-pending"><div class="nav-group-title">待上线 · 按真题权重排序</div><div class="nav-pending-row"><span class="nav-pending-ch">第 2·3 章</span><span class="nav-pending-name">数学与工程基础 / 计算机系统</span><span class="nav-pending-w">13.1%</span></div><div class="nav-pending-row"><span class="nav-pending-ch">第 5 章</span><span class="nav-pending-name">数据库系统</span><span class="nav-pending-w">计算最密集</span></div><div class="nav-pending-row"><span class="nav-pending-ch">第 8 章</span><span class="nav-pending-name">项目管理</span><span class="nav-pending-w">3.8%</span></div><div class="nav-pending-row"><span class="nav-pending-ch">第 10 章</span><span class="nav-pending-name">系统规划与分析</span><span class="nav-pending-w">3.9%</span></div><div class="nav-pending-row"><span class="nav-pending-ch">第 12 章</span><span class="nav-pending-name">软件架构设计</span><span class="nav-pending-w">5.0%</span></div><div class="nav-pending-row"><span class="nav-pending-ch">第 13 章</span><span class="nav-pending-name">系统设计</span><span class="nav-pending-w">3.8%</span></div><div class="nav-pending-row"><span class="nav-pending-ch">第 14 章</span><span class="nav-pending-name">软件实现与测试</span><span class="nav-pending-w">2.9%</span></div><div class="nav-pending-row"><span class="nav-pending-ch">第 15 章</span><span class="nav-pending-name">系统运行与维护</span><span class="nav-pending-w">1.1%</span></div><div class="nav-pending-row"><span class="nav-pending-ch">第 16–22 章</span><span class="nav-pending-name">案例实践 / 论文要点</span><span class="nav-pending-w">案例与论文</span></div><div class="nav-pending-row"><span class="nav-pending-ch">H42–H44 · H47–H48</span><span class="nav-pending-name">案例专项 / 全真模拟</span><span class="nav-pending-w">专项</span></div></div></div><div class="nav-foot"><span class="nav-foot-tip">↑↓ 选择 · Enter 打开 · Esc 关闭</span><span class="nav-foot-nav"><a class="nav-step" href="H08.html">← 上一章</a><a class="nav-step" href="H13.html">下一章 →</a></span></div></div></div></nav>
+  <nav class="nav"><div class="nav" id="chapnav"><button class="nav-trigger" type="button" id="navTrigger" aria-haspopup="true" aria-expanded="false" aria-controls="navPanel" title="章节导航（Enter / ↓ 打开，Esc 关闭）"><span class="nav-trigger-code">H12</span><span class="nav-trigger-label">企业信息化（一）</span><svg class="nav-caret" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5 L6 8 L9.5 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="nav-panel" id="navPanel" hidden><div class="nav-panel-scroll"><div class="nav-group nav-group-solo"><a class="nav-item" href="index.html"><span class="nav-item-code">首页</span><span class="nav-item-label">首页 · 手册总览</span></a></div><div class="nav-group"><div class="nav-group-title">第一篇 · 基础知识</div><a class="nav-item" href="H01.html"><span class="nav-item-code">H01</span><span class="nav-item-label">绪论与备考总纲</span></a><a class="nav-item" href="H04.html"><span class="nav-item-code">H04</span><span class="nav-item-label">计算机系统（一）· 硬件与体系结构</span></a><a class="nav-item" href="H05.html"><span class="nav-item-code">H05</span><span class="nav-item-label">计算机系统（二）· 操作系统</span></a><a class="nav-item" href="H06.html"><span class="nav-item-code">H06</span><span class="nav-item-label">计算机网络（一）· 数据通信与协议体系</span></a><a class="nav-item" href="H07.html"><span class="nav-item-code">H07</span><span class="nav-item-label">计算机网络（二）· TCP/IP 与网络工程</span></a><a class="nav-item" href="H08.html"><span class="nav-item-code">H08</span><span class="nav-item-label">分布式系统、构件与云计算</span></a><a class="nav-item" href="H09.html"><span class="nav-item-code">H09</span><span class="nav-item-label">数据库系统（一）· 三级模式与关系基础</span></a><a class="nav-item" href="H10.html"><span class="nav-item-code">H10</span><span class="nav-item-label">数据库系统（二）· 范式与事务并发控制</span></a><a class="nav-item" href="H11.html"><span class="nav-item-code">H11</span><span class="nav-item-label">数据库系统（三）· 设计、仓库与 NoSQL</span></a><a class="nav-item active" href="H12.html" aria-current="page"><span class="nav-item-code">H12</span><span class="nav-item-label">企业信息化（一）· 信息化规划</span></a><a class="nav-item" href="H13.html"><span class="nav-item-code">H13</span><span class="nav-item-label">企业信息化（二）· 信息系统与商务</span></a><a class="nav-item" href="H14.html"><span class="nav-item-code">H14</span><span class="nav-item-label">软件工程（一）· 生命周期与开发模型</span></a><a class="nav-item" href="H15.html"><span class="nav-item-code">H15</span><span class="nav-item-label">软件工程（二）· 过程管理与软件重用</span></a><a class="nav-item" href="H16.html"><span class="nav-item-code">H16</span><span class="nav-item-label">软件工程（三）· UML 与形式化方法</span></a><a class="nav-item" href="H19.html"><span class="nav-item-code">H19</span><span class="nav-item-label">信息安全（一）· 安全体系与加密认证</span></a><a class="nav-item" href="H20.html"><span class="nav-item-code">H20</span><span class="nav-item-label">信息安全（二）· 网络安全与可靠性</span></a></div><div class="nav-group"><div class="nav-group-title">第二篇 · 关键技术</div><a class="nav-item" href="H23.html"><span class="nav-item-code">H23</span><span class="nav-item-label">软件需求工程</span></a><a class="nav-item" href="H26.html"><span class="nav-item-code">H26</span><span class="nav-item-label">软件架构设计（一）· 架构定义与 4+1 视图</span></a><a class="nav-item" href="H27.html"><span class="nav-item-code">H27</span><span class="nav-item-label">软件架构设计（二）· 架构风格与 SOA</span></a><a class="nav-item" href="H28.html"><span class="nav-item-code">H28</span><span class="nav-item-label">软件架构设计（三）· 质量属性与 ATAM 评估</span></a></div><div class="nav-group nav-group-solo"><a class="nav-item" href="H45.html"><span class="nav-item-code">H45</span><span class="nav-item-label">论文写作专项</span></a></div><div class="nav-group nav-group-pending"><div class="nav-group-title">待上线 · 按真题权重排序</div><div class="nav-pending-row"><span class="nav-pending-ch">第 2 章</span><span class="nav-pending-name">数学与工程基础</span><span class="nav-pending-w">4.5%</span></div><div class="nav-pending-row"><span class="nav-pending-ch">第 8 章</span><span class="nav-pending-name">项目管理</span><span class="nav-pending-w">3.8%</span></div><div class="nav-pending-row"><span class="nav-pending-ch">第 10 章</span><span class="nav-pending-name">系统规划与分析</span><span class="nav-pending-w">3.9%</span></div><div class="nav-pending-row"><span class="nav-pending-ch">第 13 章</span><span class="nav-pending-name">系统设计</span><span class="nav-pending-w">3.8%</span></div><div class="nav-pending-row"><span class="nav-pending-ch">第 14 章</span><span class="nav-pending-name">软件实现与测试</span><span class="nav-pending-w">2.9%</span></div><div class="nav-pending-row"><span class="nav-pending-ch">第 15 章</span><span class="nav-pending-name">系统运行与维护</span><span class="nav-pending-w">1.1%</span></div><div class="nav-pending-row"><span class="nav-pending-ch">第 16–22 章</span><span class="nav-pending-name">案例实践 / 论文要点</span><span class="nav-pending-w">案例与论文</span></div><div class="nav-pending-row"><span class="nav-pending-ch">H42–H44 · H47–H48</span><span class="nav-pending-name">案例专项 / 全真模拟</span><span class="nav-pending-w">专项</span></div></div></div><div class="nav-foot"><span class="nav-foot-tip">↑↓ 选择 · Enter 打开 · Esc 关闭</span><span class="nav-foot-nav"><a class="nav-step" href="H11.html">← 上一章</a><a class="nav-step" href="H13.html">下一章 →</a></span></div></div></div></nav>
   <div class="theme-switch" role="group" aria-label="主题">
     <button class="theme-btn" data-theme="light" type="button">浅</button>
     <button class="theme-btn" data-theme="dark" type="button">深</button>
@@ -1836,7 +1928,7 @@ html.focus-mode .focus-exit-dot{
   <aside class="toc"></aside>
       <article class="main">
     <div class="chapbar" id="chapbar"
-     data-sec-total="28" data-page-index="5" data-page-total="13">
+     data-sec-total="28" data-page-index="10" data-page-total="21">
   <div class="chapbar-top">
     <span class="chapbar-badge">H12</span>
     <span class="chapbar-title">企业信息化（一）· 信息化规划</span>
@@ -2314,11 +2406,13 @@ html.focus-mode .focus-exit-dot{
   <span class="item"><kbd class="kbd">/</kbd> 搜索本页</span>
   <span class="item"><kbd class="kbd">T</kbd> 深/浅色</span>
   <span class="item"><kbd class="kbd">F</kbd> 专注模式</span>
-  <span class="item"><kbd class="kbd">-</kbd><kbd class="kbd">+</kbd> 字号</span>
+  <span class="item"><kbd class="kbd">-</kbd>/<kbd class="kbd">+</kbd> 字号</span>
   <span class="item"><kbd class="kbd">P</kbd> 答下一题</span>
+  <span class="item"><kbd class="kbd">G</kbd> 上一已答</span>
+  <span class="item"><kbd class="kbd">J</kbd>/<kbd class="kbd">K</kbd> 快滚</span>
   <span class="item"><kbd class="kbd">0</kbd> 回顶部</span>
 </div>
-    <nav class="pager"><a class="pg pg-prev" href="H08.html"><span class="pg-label">上一学时</span><span class="pg-title">分布式系统、构件与云计算</span></a><a class="pg pg-next" href="H13.html"><span class="pg-label">下一学时</span><span class="pg-title">企业信息化（二）· 信息系统与商务</span></a></nav>
+    <nav class="pager"><a class="pg pg-prev" href="H11.html"><span class="pg-label">上一学时</span><span class="pg-title">数据库系统（三）· 设计、仓库与 NoSQL</span></a><a class="pg pg-next" href="H13.html"><span class="pg-label">下一学时</span><span class="pg-title">企业信息化（二）· 信息系统与商务</span></a></nav>
     <footer class="footer">
   <p><strong>阿甘系分 · 48 小时冲刺手册</strong></p>
   <p class="sep">非官方出版物 · 与软考办无隶属关系 · 内容均为独立原创编写</p>
@@ -2342,10 +2436,24 @@ html.focus-mode .focus-exit-dot{
   // 1. 存储层
   // ══════════════════════════════════════════
   const NS = 'xifen48'
+  // ⚠️ 多用户隔离：GitHub Pages 部署下所有用户共享同一个源（origin），
+  // localStorage 是按源隔离的 → A 用户的答题记录会覆盖 B 用户的。
+  // 方案：为每个浏览器档案生成一个随机 UUID，用它做 key 命名空间。
+  // 不同 Chrome 档案/不同浏览器 → 不同 UUID → 数据互相隔离。
+  // ⚠️ 清浏览器缓存 = 丢失 UUID = 答题记录清零（属正常，和重置功能语义一致）
+  function getUserId() {
+    let id = localStorage.getItem(NS + ':uid')
+    if (!id) {
+      id = 'u_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 10)
+      localStorage.setItem(NS + ':uid', id)
+    }
+    return id
+  }
+  const UID = getUserId()
   const store = {
-    get(k, d) { try { const v = localStorage.getItem(NS + ':' + k); return v ? JSON.parse(v) : d } catch { return d } },
-    set(k, v) { try { localStorage.setItem(NS + ':' + k, JSON.stringify(v)) } catch {} },
-    del(k) { try { localStorage.removeItem(NS + ':' + k) } catch {} }
+    get(k, d) { try { const v = localStorage.getItem(NS + ':' + UID + ':' + k); return v ? JSON.parse(v) : d } catch { return d } },
+    set(k, v) { try { localStorage.setItem(NS + ':' + UID + ':' + k, JSON.stringify(v)) } catch {} },
+    del(k) { try { localStorage.removeItem(NS + ':' + UID + ':' + k) } catch {} }
   }
 
   // ══════════════════════════════════════════
@@ -2539,7 +2647,10 @@ html.focus-mode .focus-exit-dot{
             item.querySelector('.reveal-verdict').innerHTML = ok
               ? '✅ 回答正确<span class="answer">正确答案 ' + correct + '</span>'
               : '❌ 回答错误<span class="answer">正确答案 ' + correct + '</span>'
-            if (!ok) item.querySelector('.opt[data-letter="' + correct + '"]').classList.add('right')
+            if (!ok) {
+              item.querySelector('.opt[data-letter="' + correct + '"]').classList.add('right')
+              opt.classList.add('wrong-pick')
+            }
 
             // 错题本
             const cur = store.get(this.answersKey(page), {})
@@ -2613,10 +2724,11 @@ html.focus-mode .focus-exit-dot{
   const WrongBook = {
     collect() {
       const idx = []
+      const prefix = NS + ':' + UID + ':wrong:'
       for (let i = 0; i < localStorage.length; i++) {
         const k = localStorage.key(i)
-        if (k && k.startsWith(NS + ':wrong:')) {
-          const page = k.slice((NS + ':wrong:').length)
+        if (k && k.startsWith(prefix)) {
+          const page = k.slice(prefix.length)
           const arr = store.get('wrong:' + page, [])
           if (arr.length) idx.push({ page, count: arr.length, items: arr })
         }
@@ -2641,6 +2753,7 @@ html.focus-mode .focus-exit-dot{
         '<button class="wb-clear" data-act="wb-clear">清空错题本</button>'
 
       panel.querySelector('[data-act="wb-clear"]')?.addEventListener('click', () => {
+        if (!confirm('确定要清空当前浏览器的错题本吗？此操作不可恢复。')) return
         idx.forEach(x => store.del('wrong:' + x.page))
         this.render()
       })
@@ -2799,6 +2912,7 @@ html.focus-mode .focus-exit-dot{
           Theme.set(cur === 'dark' ? 'light' : 'dark')
           e.preventDefault()
         } else if (k === 'p') {
+          // P：跳到下一未答题并选中第一选项
           const next = [...document.querySelectorAll('.quiz-item')]
             .find(it => !it.classList.contains('done'))
           if (next) {
@@ -2807,7 +2921,20 @@ html.focus-mode .focus-exit-dot{
           }
           e.preventDefault()
         } else if (k === '0') {
+          // 0：回顶部
           window.scrollTo({ top: 0, behavior: 'smooth' })
+          e.preventDefault()
+        } else if (k === 'g') {
+          // g：上一未答题（与 P 反方向）
+          const items = [...document.querySelectorAll('.quiz-item.done')]
+          if (items.length) {
+            items[items.length - 1].scrollIntoView({ behavior: 'smooth', block: 'center' })
+          }
+          e.preventDefault()
+        } else if (k === 'j' || k === 'k') {
+          // j/k：快速滚动 1/3 页
+          const d = k === 'j' ? 1 : -1
+          window.scrollBy({ top: window.innerHeight * d * 0.6, behavior: 'smooth' })
           e.preventDefault()
         }
       })
@@ -3058,16 +3185,89 @@ html.focus-mode .focus-exit-dot{
   }
 
   // ══════════════════════════════════════════
-  // 11. 启动
+  // 11. 返回顶部 + 代码复制 + 阅读时长
   // ══════════════════════════════════════════
+  const BackTop = {
+    init() {
+      const btn = document.createElement('button')
+      btn.className = 'back-top'
+      btn.type = 'button'
+      btn.title = '返回顶部'
+      btn.setAttribute('aria-label', '返回顶部')
+      btn.textContent = '↑'
+      document.body.appendChild(btn)
+      btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }))
+      let last = 0
+      window.addEventListener('scroll', () => {
+        const y = window.scrollY
+        if (y > 500 && y !== last) btn.classList.add('show')
+        else if (y <= 500) btn.classList.remove('show')
+        last = y
+      }, { passive: true })
+    }
+  }
+
+  const CopyCode = {
+    init() {
+      document.querySelectorAll('pre').forEach(pre => {
+        // 跳过 mermaid fallback pre
+        if (pre.closest('.mermaid-err')) return
+        const wrap = document.createElement('div')
+        wrap.className = 'code-wrap'
+        pre.parentNode.insertBefore(wrap, pre)
+        wrap.appendChild(pre)
+        const btn = document.createElement('button')
+        btn.className = 'copy-btn'
+        btn.type = 'button'
+        btn.textContent = '复制'
+        btn.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(pre.textContent)
+            btn.textContent = '已复制 ✓'
+            btn.classList.add('copied')
+            setTimeout(() => { btn.textContent = '复制'; btn.classList.remove('copied') }, 1500)
+          } catch {
+            // 降级：老浏览器用 execCommand
+            const ta = document.createElement('textarea')
+            ta.value = pre.textContent
+            document.body.appendChild(ta)
+            ta.select()
+            try { document.execCommand('copy') } catch {}
+            document.body.removeChild(ta)
+            btn.textContent = '已复制 ✓'
+            setTimeout(() => { btn.textContent = '复制' }, 1500)
+          }
+        })
+        wrap.appendChild(btn)
+      })
+    }
+  }
+
+  const ReadTime = {
+    init() {
+      const h1 = document.querySelector('.main h1')
+      if (!h1) return
+      const main = document.querySelector('.main')
+      if (!main) return
+      const text = main.textContent || ''
+      // 中文阅读速度约 400 字/分钟
+      const minutes = Math.max(1, Math.round(text.length / 400))
+      const el = document.createElement('div')
+      el.className = 'read-time'
+      el.textContent = '预计阅读 ' + minutes + ' 分钟 · ' + text.length + ' 字'
+      h1.insertAdjacentElement('afterend', el)
+    }
+  }
+
   function updateAnsweredStat() {
     const el = document.getElementById('stat-answered')
     if (!el) return
     let n = 0
+    const prefix = NS + ':' + UID + ':ans:'
     for (let i = 0; i < localStorage.length; i++) {
       const k = localStorage.key(i)
-      if (k && k.startsWith(NS + ':ans:')) {
-        const a = store.get('ans:' + k.slice((NS + ':ans:').length), {})
+      if (k && k.startsWith(prefix)) {
+        const a = store.get('ans:' + k.slice(prefix.length), {})
         n += Object.keys(a).filter(x => a[x]).length
       }
     }
@@ -3086,6 +3286,9 @@ html.focus-mode .focus-exit-dot{
     Focus.init()
     Overflow.init()
     Keys.init()
+    BackTop.init()
+    CopyCode.init()
+    ReadTime.init()
     updateAnsweredStat()
     window.addEventListener('quiz:update', updateAnsweredStat)
     renderMermaid()
