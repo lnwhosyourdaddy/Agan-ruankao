@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   发布前请把下面的 lnwhosyourdaddy.github.io/Agan-ruankao 替换成你的真实域名
-  更新日期：2026-10-04（22章全覆盖 + 案例分析专项 H42-H44；共 44 页）
+  更新日期：2026-10-04（🎉 48 学时全部上线：22 章全覆盖 + 专项 7 学时；共 47 页）
 -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
@@ -223,5 +223,20 @@
     <loc>https://lnwhosyourdaddy.github.io/Agan-ruankao/H45.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://lnwhosyourdaddy.github.io/Agan-ruankao/H46.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://lnwhosyourdaddy.github.io/Agan-ruankao/H47.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://lnwhosyourdaddy.github.io/Agan-ruankao/H48.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
   </url>
 </urlset>

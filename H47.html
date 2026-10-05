@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="light dark">
-<title>第 30 小时 · 系统设计（二）· 设计模式与人机交互 · 阿甘系分 48 小时冲刺</title>
+<title>第 47 小时 · 全真模拟（一）· 上午场综合知识 + 案例 · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
 <meta name="build-stamp" content="2026-10-05 08:06:29">
@@ -1932,7 +1932,7 @@ html{scroll-padding-top:80px}
 <body>
 <header class="topbar">
   <a class="brand" href="index.html"><span class="brand-mark">48</span><span>阿甘系分</span><span class="brand-sub">冲刺手册</span></a>
-  <nav class="nav"><div class="nav" id="chapnav"><button class="nav-trigger" type="button" id="navTrigger" aria-haspopup="true" aria-expanded="false" aria-controls="navPanel" title="章节导航（Enter / ↓ 打开，Esc 关闭）"><span class="nav-trigger-code">H30</span><span class="nav-trigger-label">设计模式与人机</span><svg class="nav-caret" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5 L6 8 L9.5 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="nav-panel" id="navPanel" hidden><div class="nav-panel-scroll"><div class="nav-group nav-group-solo"><a class="nav-item" href="index.html"><span class="nav-item-code">首页</span><span class="nav-item-label">首页 · 手册总览</span></a></div><div class="nav-group"><div class="nav-group-title">第一篇 · 基础知识</div><a class="nav-item" href="H01.html"><span class="nav-item-code">H01</span><span class="nav-item-label">绪论与备考总纲</span></a><a class="nav-item" href="H02.html"><span class="nav-item-code">H02</span><span class="nav-item-label">数学与工程基础（一）· 概率统计与图论应用</span></a><a class="nav-item" href="H03.html"><span class="nav-item-code">H03</span><span class="nav-item-label">数学与工程基础（二）· 预测决策与工程伦理</span></a><a class="nav-item" href="H04.html"><span class="nav-item-code">H04</span><span class="nav-item-label">计算机系统（一）· 硬件与体系结构</span></a><a class="nav-item" href="H05.html"><span class="nav-item-code">H05</span><span class="nav-item-label">计算机系统（二）· 操作系统</span></a><a class="nav-item" href="H06.html"><span class="nav-item-code">H06</span><span class="nav-item-label">计算机网络（一）· 数据通信与协议体系</span></a><a class="nav-item" href="H07.html"><span class="nav-item-code">H07</span><span class="nav-item-label">计算机网络（二）· TCP/IP 与网络工程</span></a><a class="nav-item" href="H08.html"><span class="nav-item-code">H08</span><span class="nav-item-label">分布式系统、构件与云计算</span></a><a class="nav-item" href="H09.html"><span class="nav-item-code">H09</span><span class="nav-item-label">数据库系统（一）· 三级模式与关系基础</span></a><a class="nav-item" href="H10.html"><span class="nav-item-code">H10</span><span class="nav-item-label">数据库系统（二）· 范式与事务并发控制</span></a><a class="nav-item" href="H11.html"><span class="nav-item-code">H11</span><span class="nav-item-label">数据库系统（三）· 设计、仓库与 NoSQL</span></a><a class="nav-item" href="H12.html"><span class="nav-item-code">H12</span><span class="nav-item-label">企业信息化（一）· 信息化规划</span></a><a class="nav-item" href="H13.html"><span class="nav-item-code">H13</span><span class="nav-item-label">企业信息化（二）· 信息系统与商务</span></a><a class="nav-item" href="H14.html"><span class="nav-item-code">H14</span><span class="nav-item-label">软件工程（一）· 生命周期与开发模型</span></a><a class="nav-item" href="H15.html"><span class="nav-item-code">H15</span><span class="nav-item-label">软件工程（二）· 过程管理与软件重用</span></a><a class="nav-item" href="H16.html"><span class="nav-item-code">H16</span><span class="nav-item-label">软件工程（三）· UML 与形式化方法</span></a><a class="nav-item" href="H17.html"><span class="nav-item-code">H17</span><span class="nav-item-label">项目管理（一）· 范围进度成本与挣值分析</span></a><a class="nav-item" href="H18.html"><span class="nav-item-code">H18</span><span class="nav-item-label">项目管理（二）· 配置质量风险与文档</span></a><a class="nav-item" href="H19.html"><span class="nav-item-code">H19</span><span class="nav-item-label">信息安全（一）· 安全体系与加密认证</span></a><a class="nav-item" href="H20.html"><span class="nav-item-code">H20</span><span class="nav-item-label">信息安全（二）· 网络安全与可靠性</span></a></div><div class="nav-group"><div class="nav-group-title">第二篇 · 关键技术</div><a class="nav-item" href="H21.html"><span class="nav-item-code">H21</span><span class="nav-item-label">系统规划与分析（一）· 需求分析与 DFD 建模</span></a><a class="nav-item" href="H22.html"><span class="nav-item-code">H22</span><span class="nav-item-label">系统规划与分析（二）· 成本效益与可行性论证</span></a><a class="nav-item" href="H23.html"><span class="nav-item-code">H23</span><span class="nav-item-label">软件需求工程</span></a><a class="nav-item" href="H26.html"><span class="nav-item-code">H26</span><span class="nav-item-label">软件架构设计（一）· 架构定义与 4+1 视图</span></a><a class="nav-item" href="H27.html"><span class="nav-item-code">H27</span><span class="nav-item-label">软件架构设计（二）· 架构风格与 SOA</span></a><a class="nav-item" href="H28.html"><span class="nav-item-code">H28</span><span class="nav-item-label">软件架构设计（三）· 质量属性与 ATAM 评估</span></a><a class="nav-item" href="H29.html"><span class="nav-item-code">H29</span><span class="nav-item-label">系统设计（一）· 结构化设计与面向对象设计</span></a><a class="nav-item active" href="H30.html" aria-current="page"><span class="nav-item-code">H30</span><span class="nav-item-label">系统设计（二）· 设计模式与人机交互</span></a><a class="nav-item" href="H31.html"><span class="nav-item-code">H31</span><span class="nav-item-label">软件实现与测试（一）· 测试原则与黑盒白盒方法</span></a><a class="nav-item" href="H32.html"><span class="nav-item-code">H32</span><span class="nav-item-label">软件实现与测试（二）· 测试阶段与部署发布</span></a><a class="nav-item" href="H33.html"><span class="nav-item-code">H33</span><span class="nav-item-label">系统运行与维护（一）· 运维指标与软件维护</span></a><a class="nav-item" href="H34.html"><span class="nav-item-code">H34</span><span class="nav-item-label">系统运行与维护（二）· 系统转换与演进</span></a></div><div class="nav-group"><div class="nav-group-title">第三篇 · 案例实践</div><a class="nav-item" href="H35.html"><span class="nav-item-code">H35</span><span class="nav-item-label">Web 应用系统分析与设计 · 架构、缓存与测试</span></a><a class="nav-item" href="H36.html"><span class="nav-item-code">H36</span><span class="nav-item-label">嵌入式系统分析与设计 · 实时调度与低功耗</span></a><a class="nav-item" href="H37.html"><span class="nav-item-code">H37</span><span class="nav-item-label">移动应用系统分析与设计 · 架构演进与开发方式选型</span></a><a class="nav-item" href="H38.html"><span class="nav-item-code">H38</span><span class="nav-item-label">大数据处理系统分析与设计 · Lambda/Kappa 架构</span></a><a class="nav-item" href="H39.html"><span class="nav-item-code">H39</span><span class="nav-item-label">微服务系统分析与设计 · 组件、事务与反模式</span></a><a class="nav-item" href="H40.html"><span class="nav-item-code">H40</span><span class="nav-item-label">信息物理系统 CPS · 闭环架构与边缘计算</span></a><a class="nav-item" href="H41.html"><span class="nav-item-code">H41</span><span class="nav-item-label">系统分析师论文写作要点 · 结构、字数与评分</span></a></div><div class="nav-group"><div class="nav-group-title">专项模块 · 案例专项</div><a class="nav-item" href="H42.html"><span class="nav-item-code">H42</span><span class="nav-item-label">案例分析专项（一）· 四步答题法与设问模板</span></a><a class="nav-item" href="H43.html"><span class="nav-item-code">H43</span><span class="nav-item-label">案例分析专项（二）· 考点地图与真题精讲</span></a><a class="nav-item" href="H44.html"><span class="nav-item-code">H44</span><span class="nav-item-label">案例分析专项（三）· 六大方向专项与场景实战</span></a></div><div class="nav-group"><div class="nav-group-title">专项模块</div><a class="nav-item" href="H45.html"><span class="nav-item-code">H45</span><span class="nav-item-label">论文写作专项</span></a><a class="nav-item" href="H46.html"><span class="nav-item-code">H46</span><span class="nav-item-label">论文写作专项（二）· 万能素材卡与考点落点</span></a><a class="nav-item" href="H47.html"><span class="nav-item-code">H47</span><span class="nav-item-label">全真模拟（一）· 上午场综合知识与案例</span></a><a class="nav-item" href="H48.html"><span class="nav-item-code">H48</span><span class="nav-item-label">全真模拟（二）· 下午场论文与复盘方法论</span></a></div><div class="nav-group nav-group-pending"><div class="nav-group-title">待上线 · 按真题权重排序</div><div class="nav-pending-row"><span class="nav-pending-ch">✅ 48 学时已全部上线</span><span class="nav-pending-name">第一篇 9 章 + 第二篇 6 章 + 第三篇 7 章</span><span class="nav-pending-w">22 章</span></div><div class="nav-pending-row"><span class="nav-pending-ch">✅ 专项模块</span><span class="nav-pending-name">案例分析 H42–H44 · 论文 H45–H46 · 全真模拟 H47–H48</span><span class="nav-pending-w">7 学时</span></div></div></div><div class="nav-foot"><span class="nav-foot-tip">↑↓ 选择 · Enter 打开 · Esc 关闭</span><span class="nav-foot-nav"><a class="nav-step" href="H29.html">← 上一章</a><a class="nav-step" href="H31.html">下一章 →</a></span></div></div></div></nav>
+  <nav class="nav"><div class="nav" id="chapnav"><button class="nav-trigger" type="button" id="navTrigger" aria-haspopup="true" aria-expanded="false" aria-controls="navPanel" title="章节导航（Enter / ↓ 打开，Esc 关闭）"><span class="nav-trigger-code">H47</span><span class="nav-trigger-label">全真模拟·上午</span><svg class="nav-caret" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5 L6 8 L9.5 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="nav-panel" id="navPanel" hidden><div class="nav-panel-scroll"><div class="nav-group nav-group-solo"><a class="nav-item" href="index.html"><span class="nav-item-code">首页</span><span class="nav-item-label">首页 · 手册总览</span></a></div><div class="nav-group"><div class="nav-group-title">第一篇 · 基础知识</div><a class="nav-item" href="H01.html"><span class="nav-item-code">H01</span><span class="nav-item-label">绪论与备考总纲</span></a><a class="nav-item" href="H02.html"><span class="nav-item-code">H02</span><span class="nav-item-label">数学与工程基础（一）· 概率统计与图论应用</span></a><a class="nav-item" href="H03.html"><span class="nav-item-code">H03</span><span class="nav-item-label">数学与工程基础（二）· 预测决策与工程伦理</span></a><a class="nav-item" href="H04.html"><span class="nav-item-code">H04</span><span class="nav-item-label">计算机系统（一）· 硬件与体系结构</span></a><a class="nav-item" href="H05.html"><span class="nav-item-code">H05</span><span class="nav-item-label">计算机系统（二）· 操作系统</span></a><a class="nav-item" href="H06.html"><span class="nav-item-code">H06</span><span class="nav-item-label">计算机网络（一）· 数据通信与协议体系</span></a><a class="nav-item" href="H07.html"><span class="nav-item-code">H07</span><span class="nav-item-label">计算机网络（二）· TCP/IP 与网络工程</span></a><a class="nav-item" href="H08.html"><span class="nav-item-code">H08</span><span class="nav-item-label">分布式系统、构件与云计算</span></a><a class="nav-item" href="H09.html"><span class="nav-item-code">H09</span><span class="nav-item-label">数据库系统（一）· 三级模式与关系基础</span></a><a class="nav-item" href="H10.html"><span class="nav-item-code">H10</span><span class="nav-item-label">数据库系统（二）· 范式与事务并发控制</span></a><a class="nav-item" href="H11.html"><span class="nav-item-code">H11</span><span class="nav-item-label">数据库系统（三）· 设计、仓库与 NoSQL</span></a><a class="nav-item" href="H12.html"><span class="nav-item-code">H12</span><span class="nav-item-label">企业信息化（一）· 信息化规划</span></a><a class="nav-item" href="H13.html"><span class="nav-item-code">H13</span><span class="nav-item-label">企业信息化（二）· 信息系统与商务</span></a><a class="nav-item" href="H14.html"><span class="nav-item-code">H14</span><span class="nav-item-label">软件工程（一）· 生命周期与开发模型</span></a><a class="nav-item" href="H15.html"><span class="nav-item-code">H15</span><span class="nav-item-label">软件工程（二）· 过程管理与软件重用</span></a><a class="nav-item" href="H16.html"><span class="nav-item-code">H16</span><span class="nav-item-label">软件工程（三）· UML 与形式化方法</span></a><a class="nav-item" href="H17.html"><span class="nav-item-code">H17</span><span class="nav-item-label">项目管理（一）· 范围进度成本与挣值分析</span></a><a class="nav-item" href="H18.html"><span class="nav-item-code">H18</span><span class="nav-item-label">项目管理（二）· 配置质量风险与文档</span></a><a class="nav-item" href="H19.html"><span class="nav-item-code">H19</span><span class="nav-item-label">信息安全（一）· 安全体系与加密认证</span></a><a class="nav-item" href="H20.html"><span class="nav-item-code">H20</span><span class="nav-item-label">信息安全（二）· 网络安全与可靠性</span></a></div><div class="nav-group"><div class="nav-group-title">第二篇 · 关键技术</div><a class="nav-item" href="H21.html"><span class="nav-item-code">H21</span><span class="nav-item-label">系统规划与分析（一）· 需求分析与 DFD 建模</span></a><a class="nav-item" href="H22.html"><span class="nav-item-code">H22</span><span class="nav-item-label">系统规划与分析（二）· 成本效益与可行性论证</span></a><a class="nav-item" href="H23.html"><span class="nav-item-code">H23</span><span class="nav-item-label">软件需求工程</span></a><a class="nav-item" href="H26.html"><span class="nav-item-code">H26</span><span class="nav-item-label">软件架构设计（一）· 架构定义与 4+1 视图</span></a><a class="nav-item" href="H27.html"><span class="nav-item-code">H27</span><span class="nav-item-label">软件架构设计（二）· 架构风格与 SOA</span></a><a class="nav-item" href="H28.html"><span class="nav-item-code">H28</span><span class="nav-item-label">软件架构设计（三）· 质量属性与 ATAM 评估</span></a><a class="nav-item" href="H29.html"><span class="nav-item-code">H29</span><span class="nav-item-label">系统设计（一）· 结构化设计与面向对象设计</span></a><a class="nav-item" href="H30.html"><span class="nav-item-code">H30</span><span class="nav-item-label">系统设计（二）· 设计模式与人机交互</span></a><a class="nav-item" href="H31.html"><span class="nav-item-code">H31</span><span class="nav-item-label">软件实现与测试（一）· 测试原则与黑盒白盒方法</span></a><a class="nav-item" href="H32.html"><span class="nav-item-code">H32</span><span class="nav-item-label">软件实现与测试（二）· 测试阶段与部署发布</span></a><a class="nav-item" href="H33.html"><span class="nav-item-code">H33</span><span class="nav-item-label">系统运行与维护（一）· 运维指标与软件维护</span></a><a class="nav-item" href="H34.html"><span class="nav-item-code">H34</span><span class="nav-item-label">系统运行与维护（二）· 系统转换与演进</span></a></div><div class="nav-group"><div class="nav-group-title">第三篇 · 案例实践</div><a class="nav-item" href="H35.html"><span class="nav-item-code">H35</span><span class="nav-item-label">Web 应用系统分析与设计 · 架构、缓存与测试</span></a><a class="nav-item" href="H36.html"><span class="nav-item-code">H36</span><span class="nav-item-label">嵌入式系统分析与设计 · 实时调度与低功耗</span></a><a class="nav-item" href="H37.html"><span class="nav-item-code">H37</span><span class="nav-item-label">移动应用系统分析与设计 · 架构演进与开发方式选型</span></a><a class="nav-item" href="H38.html"><span class="nav-item-code">H38</span><span class="nav-item-label">大数据处理系统分析与设计 · Lambda/Kappa 架构</span></a><a class="nav-item" href="H39.html"><span class="nav-item-code">H39</span><span class="nav-item-label">微服务系统分析与设计 · 组件、事务与反模式</span></a><a class="nav-item" href="H40.html"><span class="nav-item-code">H40</span><span class="nav-item-label">信息物理系统 CPS · 闭环架构与边缘计算</span></a><a class="nav-item" href="H41.html"><span class="nav-item-code">H41</span><span class="nav-item-label">系统分析师论文写作要点 · 结构、字数与评分</span></a></div><div class="nav-group"><div class="nav-group-title">专项模块 · 案例专项</div><a class="nav-item" href="H42.html"><span class="nav-item-code">H42</span><span class="nav-item-label">案例分析专项（一）· 四步答题法与设问模板</span></a><a class="nav-item" href="H43.html"><span class="nav-item-code">H43</span><span class="nav-item-label">案例分析专项（二）· 考点地图与真题精讲</span></a><a class="nav-item" href="H44.html"><span class="nav-item-code">H44</span><span class="nav-item-label">案例分析专项（三）· 六大方向专项与场景实战</span></a></div><div class="nav-group"><div class="nav-group-title">专项模块</div><a class="nav-item" href="H45.html"><span class="nav-item-code">H45</span><span class="nav-item-label">论文写作专项</span></a><a class="nav-item" href="H46.html"><span class="nav-item-code">H46</span><span class="nav-item-label">论文写作专项（二）· 万能素材卡与考点落点</span></a><a class="nav-item active" href="H47.html" aria-current="page"><span class="nav-item-code">H47</span><span class="nav-item-label">全真模拟（一）· 上午场综合知识与案例</span></a><a class="nav-item" href="H48.html"><span class="nav-item-code">H48</span><span class="nav-item-label">全真模拟（二）· 下午场论文与复盘方法论</span></a></div><div class="nav-group nav-group-pending"><div class="nav-group-title">待上线 · 按真题权重排序</div><div class="nav-pending-row"><span class="nav-pending-ch">✅ 48 学时已全部上线</span><span class="nav-pending-name">第一篇 9 章 + 第二篇 6 章 + 第三篇 7 章</span><span class="nav-pending-w">22 章</span></div><div class="nav-pending-row"><span class="nav-pending-ch">✅ 专项模块</span><span class="nav-pending-name">案例分析 H42–H44 · 论文 H45–H46 · 全真模拟 H47–H48</span><span class="nav-pending-w">7 学时</span></div></div></div><div class="nav-foot"><span class="nav-foot-tip">↑↓ 选择 · Enter 打开 · Esc 关闭</span><span class="nav-foot-nav"><a class="nav-step" href="H46.html">← 上一章</a><a class="nav-step" href="H48.html">下一章 →</a></span></div></div></div></nav>
   <div class="theme-switch" role="group" aria-label="主题">
     <button class="theme-btn" data-theme="light" type="button">浅</button>
     <button class="theme-btn" data-theme="dark" type="button">深</button>
@@ -1943,244 +1943,58 @@ html{scroll-padding-top:80px}
   <aside class="toc"></aside>
       <article class="main">
     <div class="chapbar" id="chapbar"
-     data-sec-total="13" data-page-index="28" data-page-total="46">
+     data-sec-total="7" data-page-index="45" data-page-total="46">
   <div class="chapbar-top">
-    <span class="chapbar-badge">H30</span>
-    <span class="chapbar-title">系统设计（二）· 设计模式与人机交互</span>
+    <span class="chapbar-badge">H47</span>
+    <span class="chapbar-title">全真模拟（一）· 上午场综合知识与案例</span>
     <span class="chapbar-spacer"></span>
-    <span class="chapbar-sec" id="chapbarSec">1 / 13</span>
+    <span class="chapbar-sec" id="chapbarSec">1 / 7</span>
   </div>
   <div class="chapbar-track"><div class="chapbar-fill" id="chapbarFill"></div></div>
 </div>
     
-    <h1 id="第-30-小时-系统设计-二-设计模式与人机交互">第 30 小时 · 系统设计（二）· 设计模式与人机交互</h1>
-<div class="quote"><p>本学时覆盖 **13.5 设计模式（创建型 5 / 结构型 7 / 行为型 11）+ 13.6 输入输出设计<br>+ 13.7 人机交互<strong>，并附</strong>全章易错辨析 + 速记卡 + 自测清单**。<br><strong>23 种设计模式的分类与选型</strong>是下午案例题的高频素材，<strong>人机交互黄金三原则</strong>是综合知识常客。</p></div>
-<div class="block gold"><div class="block-title">考情定位</div><p>四块必拿：① <strong>三类划分与数量</strong>（创建型 5 / 结构型 7 / 行为型 11）；② <strong>易混模式辨析</strong>（装饰器 vs 代理 vs 桥接；策略 vs 模板方法 vs 状态）；③ <strong>人机交互黄金三原则</strong>（置于用户控制之下 · 减少记忆负担 · 保持一致性）；④ <strong>用户体验五层</strong>（战略 → 范围 → 结构 → 框架 → 表现，<strong>自下而上约束</strong>）。</p></div>
-<div class="block mem"><div class="block-title">记忆口诀</div><p><strong>模式三分类</strong>：<strong>创建型 5</strong>（单例·工厂方法·抽象工厂·建造者·原型）｜<strong>结构型 7</strong>（适配器·装饰器·代理·外观·桥接·组合·享元）｜<strong>行为型 11</strong>（策略·观察者·命令·责任链·模板方法·状态·迭代器·访问者·中介者·备忘录·解释器）。<br><strong>易混辨析</strong>：<strong>装饰器</strong>加职责 ｜ <strong>代理</strong>控访问 ｜ <strong>桥接</strong>分离抽象与实现。<br><strong>策略</strong>换算法 ｜ <strong>模板方法</strong>定骨架填步骤 ｜ <strong>状态</strong>状态变行为变。<br><strong>黄金三原则</strong>：<strong>用户控制</strong> · <strong>减少记忆</strong> · <strong>保持一致</strong>。<br><strong>UX 五层</strong>：战略 → 范围 → 结构 → 框架 → 表现（自下而上）。</p></div>
-<div class="block warning"><div class="block-title">易错陷阱</div><p><strong>"追求视觉效果最大化"不在黄金三原则里</strong> —— 可用性优先于视觉。<br><strong>策略 vs 状态</strong>：都是"换实现"，但<strong>状态模式的状态之间有转移关系</strong>，策略之间是平等可替换的。<br><strong>输入设计要"减少输入量"</strong>，不是"越多越好"（多余输入增加出错概率）。</p></div>
-<div class="block gold"><div class="block-title">论文可用句</div><p>在人机交互设计上，我遵循 <strong>Theo Mandel 黄金三原则</strong>：一是<strong>置于用户控制之下</strong>，所有批量操作均可中断并回滚，不设强制流程；二是<strong>减少用户记忆负担</strong>，关键表单提供历史记录与默认值，专业术语附悬浮解释；三是<strong>保持界面一致性</strong>，统一了 40 余个页面的按钮位置、术语与反馈样式。同时按<strong>用户体验五层</strong>自下而上推进：战略层明确"坐席 3 秒内完成一次外呼"，范围层据此裁剪掉 11 项低频功能，最终首屏关键操作路径由 5 步缩短至 2 步。</p></div>
-<h2 id="第-13-章知识骨架">第 13 章知识骨架</h2>
-<div class="fig fig-mermaid"><div class="mermaid-src" data-src="mindmap
- root((13 系统设计))
-   13.1 设计概述
-     概要设计 总体结构
-     详细设计 七项内容
-     代码设计 线面分类
-   13.2 处理流程设计 ★★
-     流程六要素
-     流程定义与实例
-     WFMS 三功能
-     WRM 六模块五接口
-     工具三分类
-       PFD IPO NS PAD
-       判定表 判定树 PDL
-   13.3 结构化设计 ★★★
-     信息隐蔽与抽象
-     模块化三原则
-       扇入扇出3到4
-     耦合七级 越低越好
-     内聚七级 越高越好
-     SC 四种模块
-     变换型 事务型 混合型
-   13.4 面向对象设计 ★★★
-     三类设计类
-     持久化与ORM
-       CMP Hibernate iBatis JDO
-     SOLID 五原则
-     组合复用 迪米特
-   13.5 设计模式 ★★★
-     GoF 23 种
-       创建型5
-       结构型7
-       行为型11
-     三对易混模式
-   13.6 输入输出设计
-     输入五原则
-     输出七原则
-   13.7 人机交互设计
-     黄金三原则
-     用户体验五层"></div><figcaption>图13-0 第13章知识骨架（复述）</figcaption></div>
-<h2 id="s13-5-设计模式-概述与分类">13.5 设计模式 · 概述与分类</h2>
-<p><strong>🏛️起源与关键元素</strong></p>
-<p>模式起源于<strong>建筑业</strong>（亚历山大，253 个建筑模式）；软件界 = <strong>GoF 四人组 1994 年 23 种设计模式</strong></p>
-<p><strong>设计模式四关键元素</strong>：<strong>模式名称 · 问题（何时用）· 解决方案（抽象描述，非具体实现）· 效果（优缺点权衡）</strong></p>
-<p>目的：提高<strong>可重用性</strong>、让代码更易理解、保证可靠性；每种模式都是<strong>某一种或多种 OOD 原则的体现</strong></p>
-<p><strong>🗂️两种分类维度</strong></p>
-<p>按目的（三分法）</p>
-<p><strong>创建型</strong>（对象的创建）· <strong>结构型</strong>（类/对象的<strong>组合</strong>）· <strong>行为型</strong>（<strong>交互与职责分配</strong>）</p>
-<p>按范围</p>
-<ul><li><strong>类模式</strong>：处理<strong>类与子类</strong>关系（继承；<strong>编译时</strong>确定，静态）</li><li><strong>对象模式</strong>：处理<strong>对象间</strong>关系（运行时变化，动态）</li></ul>
-<p>💡 考点：创建型抽象<strong>实例化过程</strong>；结构型"组合成更大结构"；行为型"交互 + 职责分配"——三句话对号。</p>
-<h3 id="创建型模式-5-种">创建型模式（5 种）⭐</h3>
-<p>🏭抽象实例化过程 · 隐藏对象如何创建与组合</p>
-<p>单例 Singleton</p>
-<p><strong>只有一个实例</strong>，自行实例化，<strong>提供全局访问点</strong><br>连接池/配置对象</p>
-<p>工厂方法 Factory Method</p>
-<p>又称<strong>虚拟构造器/多态工厂</strong>；父类定接口，<strong>子类决定实例化哪个类</strong>；类创建型<br>多种数据库驱动</p>
-<p>抽象工厂 Abstract Factory</p>
-<p>又称 <strong>Kit</strong>；提供创建<strong>一系列相关对象（产品族）</strong>的接口；最抽象最具一般性<br>跨平台 UI 组件族</p>
-<p>建造者 Builder</p>
-<p><strong>分步构造</strong>复杂对象；<strong>构建与表示分离</strong>——同样构建过程可建不同表示<br>复杂配置对象</p>
-<p>原型 Prototype</p>
-<p>通过<strong>复制原型</strong>创建新对象；分<strong>浅克隆</strong>（不复制引用对象）/ <strong>深克隆</strong>（连引用一起复制）<br>创建成本高的对象</p>
-<p>💡 辨析：<strong>工厂方法 = 一个产品等级结构</strong>；<strong>抽象工厂 = 多个产品等级结构 + 产品族</strong>——抽象工厂退化为一个等级结构时就变成工厂方法。</p>
-<h3 id="结构型模式-7-种">结构型模式（7 种）⭐</h3>
-<p><strong>🏗️类或对象组合成更大的结构</strong></p>
-<p>适配器 Adapter</p>
-<p><strong>转换接口</strong>使不兼容的类一起工作；类适配器（继承）/对象适配器（组合）<br>兼容旧系统</p>
-<p>桥接 Bridge</p>
-<p><strong>抽象与实现分离</strong>，各自独立变化；又称柄体/接口模式；比多重继承更好<br>多维度变化</p>
-<p>组合 Composite</p>
-<p>又称<strong>整体-部分</strong>模式；<strong>树形结构</strong>；叶子与容器<strong>使用一致</strong><br>文件系统/菜单树</p>
-<p>装饰 Decorator</p>
-<p><strong>动态添加职责</strong>，比生成子类更灵活；可再<strong>动态撤销</strong><br>IO 流包装</p>
-<p>外观 Facade</p>
-<p><strong>统一外观对象</strong>为子系统提供一致的高层接口——<strong>子系统更易使用</strong><br>API 网关思想</p>
-<p>享元 Flyweight</p>
-<p><strong>共享技术</strong>支持大量<strong>细粒度对象</strong>；区分<strong>内部状态（可共享）/外部状态（客户端保存）</strong><br>棋子/字符</p>
-<p>代理 Proxy</p>
-<p>代理对象<strong>控制对原对象的引用</strong>；协调调用者与被调用者、降耦合；缺点 = 处理速度变慢<br>懒加载/权限/远程</p>
-<p>结构型口诀</p>
-<p><strong>适桥组装外享代</strong>——七字排序背下来</p>
-<p>⚡ 装饰 vs 代理：<strong>装饰 = 加功能</strong>；<strong>代理 = 控制访问</strong>——结构最像、语义不同，案例高频辨析。</p>
-<h3 id="行为型模式-11-种">行为型模式（11 种）⭐</h3>
-<p><strong>🎭对象交互与职责分配</strong></p>
-<p>责任链 Chain</p>
-<p>请求沿<strong>链传递</strong>直到被处理；<strong>不保证被接受</strong><br>审批流/过滤器</p>
-<p>命令 Command</p>
-<p>请求<strong>封装为对象</strong>；支持排队/日志/<strong>可撤销</strong>；发送者接收者<strong>解耦</strong><br>撤销重做/任务队列</p>
-<p>解释器 Interpreter</p>
-<p>为语言<strong>定义文法</strong>并解释句子；<strong>类行为型</strong>；主要用在<strong>编译器</strong>，应用少<br>表达式/SQL 解析</p>
-<p>迭代器 Iterator</p>
-<p><strong>顺序访问</strong>聚合对象<strong>不暴露内部表示</strong>；可多遍历并存<br>遍历容器</p>
-<p>中介者 Mediator</p>
-<p><strong>中介对象封装一系列对象交互</strong>；对象不显式引用 → <strong>耦合松散</strong>；保证结构稳定<br>聊天室</p>
-<p>备忘录 Memento</p>
-<p><strong>不破坏封装</strong>捕获内部状态并在对象之外保存，<strong>恢复历史状态</strong><br>撤销/快照</p>
-<p>观察者 Observer</p>
-<p>又称<strong>发布-订阅/模型-视图/源-监听器</strong>；<strong>一对多依赖</strong>，状态变化自动<strong>通知更新</strong><br>事件通知/消息订阅</p>
-<p>状态 State</p>
-<p>内部状态改变时<strong>改变行为</strong>；封装状态转换；<strong>需事先枚举状态</strong>（加新状态类<strong>违反开闭</strong>）<br>订单状态机</p>
-<p>策略 Strategy</p>
-<p>定义<strong>一系列算法</strong>封装起来<strong>可相互替换</strong>；算法独立于客户变化<br>支付方式/折扣</p>
-<p>模板方法 Template</p>
-<p><strong>类行为型</strong>；定义<strong>算法骨架</strong>，步骤延迟到子类；提高内聚<br>流程框架</p>
-<p>访问者 Visitor</p>
-<p><strong>不改变元素类</strong>的前提下定义<strong>新操作</strong>；加操作容易但<strong>破坏封装</strong><br>报表生成</p>
-<p>记忆锚</p>
-<p>解释器/模板方法是<strong>类行为型</strong>；其余多为<strong>对象行为型</strong></p>
-<p>⚡ 策略 vs 状态：<strong>策略 = 主动选择算法</strong>（客户决定用哪个）；<strong>状态 = 状态驱动行为变化</strong>（自动切换）——第二高频辨析。</p>
-<h2 id="s13-6-输入-输出设计">13.6 输入/输出设计</h2>
-<p>⌨️输入设计（目的：完整性/正确性/一致性）</p>
-<p>⭐ <strong>五原则</strong>：<strong>① 输入数据最少</strong>（越少出错越少）· <strong>② 简单性</strong>（选择项代替输入）· <strong>③ 尽早验证</strong>（检验接近输入点）· <strong>④ 少转换</strong>（用原始格式，避免转换出错）· <strong>⑤ 减少输入错误</strong></p>
-<p>关键考虑：<strong>输入方式</strong>（键盘/鼠标/触摸屏/语音/扫描）· <strong>输入格式</strong> · <strong>输入验证</strong>（类型/格式/范围/安全——防 <strong>SQL 注入</strong>）· <strong>输入反馈</strong> · <strong>输入历史</strong> · <strong>输入安全</strong>（加密/访问控制）</p>
-<p>输入存储：数据库/文件系统/云存储 + 存储结构 + 存储安全</p>
-<p>📤输出设计</p>
-<p><strong>三方面</strong>：<strong>确定输出内容</strong> · <strong>选择输出设备与介质</strong>（显示终端/打印机/绘图仪；纸/磁带/磁盘/光盘）· <strong>确定输出格式</strong></p>
-<p>⭐ 两种最终输出：<strong>报表输出</strong>（业务人员/数据管理者——详细记录）vs <strong>图形输出</strong>（<strong>高层领导/综合管理</strong>——比例与趋势，柱状/饼状/曲线）</p>
-<p><strong>输出七原则</strong>：<strong>简洁性 · 一致性 · 可用性 · 可访问性 · 可维护性 · 安全性 · 可扩展性</strong>（多语言支持/无障碍属于可访问性）</p>
-<p>💡 判断题锚：给"领导看趋势图"选图形输出；给"录入员录数据"对应最少量+尽早验证。</p>
-<h2 id="s13-7-人机交互设计-黄金三原则-用户体验五层">13.7 人机交互设计 · 黄金三原则 + 用户体验五层</h2>
-<p>🥇黄金三原则（Theo Mandel）</p>
-<p>① 置于用户控制之下</p>
-<p>不强迫操作方式；<strong>允许交互中断和撤销</strong>；允许定制；用户直接操作屏幕对象</p>
-<p>② 减轻用户记忆负担</p>
-<p><strong>有意义的默认值</strong> · 符合直觉的访问途径 · 快捷方式 · 视觉布局贴近<strong>真实世界</strong> · <strong>"望文知意"</strong>（不看帮助就会用）</p>
-<p>③ 保持界面一致性</p>
-<p>按钮位置/提示信息/颜色风格一致；<strong>降低培训与支持成本</strong>；熟悉交互模型不随意改</p>
-<p>🥞用户体验五层模型（Garrett《用户体验要素》）</p>
-<p>⑤ 表现层 Surface</p>
-<p><strong>用户看得见的一切</strong>——字体大小/导航颜色/整体感觉；内容、功能与美学汇集</p>
-<p>④ 框架层 Skeleton</p>
-<p>按钮放哪——<strong>界面设计 · 导航设计 · 信息设计</strong>（遵循用户习惯 + 恰当比喻）</p>
-<p>③ 结构层 Structure</p>
-<p><strong>交互设计</strong>（可能的用户行为 + 系统如何响应；含<strong>概念模型与错误处理</strong>）+ <strong>信息架构</strong>（组织分类与导航；上到下/下到上分类体系）</p>
-<p>② 范围层 Scope</p>
-<p>提供什么<strong>功能和内容</strong>（工具型 vs 内容型产品）</p>
-<p>① 战略层 Strategy</p>
-<p><strong>用户需求 + 产品目标</strong>；确定目标用户三步 = <strong>用户细分 · 用户研究 · 人物角色</strong></p>
-<p>💡 从下往上建：战略 → 范围 → 结构 → 框架 → 表现——<strong>排序题</strong>。</p>
-<h3 id="设计良好人机交互-十法精选">设计良好人机交互（十法精选）</h3>
-<p>①<strong>了解用户</strong>——群体划分/需求调研/使用场景分析/竞品分析</p>
-<p>②<strong>设计交互界面</strong>——简单/自然/统一的操作方式（手势、图标、文件夹）</p>
-<p>③<strong>即时反馈</strong>——准确简洁、明显颜色形状动画、及时、适配不同用户（视觉障碍给语音）</p>
-<p>④<strong>辅助功能</strong>——视觉/听觉/肢体障碍；易用、体验一致、适用多种障碍</p>
-<p>⑤<strong>用户测试</strong>——有代表性用户、多场景、详细反馈</p>
-<p>⑥<strong>迭代优化</strong>——不可能一步到位，按反馈持续改进</p>
-<p>⑦<strong>多语言支持</strong>——翻译与本地化，扩大用户群体</p>
-<p>⑧<strong>结合实际应用场景</strong>——移动端手势、帮助文档（在线帮助/手册/FAQ/视频教程）</p>
-<p>⑨<strong>适度使用动画</strong>——渐变转场/波纹反馈；过度渲染反而伤体验</p>
-<p>⑩<strong>适度使用新理念新技术</strong>——AI 个性化推荐/NLP 智能客服；注意<strong>可解释性</strong>与<strong>隐私安全</strong></p>
-<p>💡 人机交互设计目标：<strong>切实满足用户需求（有用性是基础）· 易上手易学（降低用户成本）· 降低错误率与学习成本</strong>；全程重视<strong>用户隐私与数据安全</strong>。</p>
-<h2 id="全章易错辨析-TOP-10">全章易错辨析 TOP 10</h2>
-<p>1<strong>耦合理想 = 数据耦合</strong>（传基本类型）；<strong>最差 = 内容耦合</strong>（直访内部）</p>
-<p>2<strong>内聚理想 = 功能内聚</strong>（单一功能）；<strong>最差 = 偶然内聚</strong>（无关任务）</p>
-<p>3<strong>数据 vs 标记耦合</strong>：传<strong>基本类型</strong> vs 传<strong>数据结构/记录</strong></p>
-<p>4<strong>开闭 = 目标，依赖倒置 = 机制</strong>（针对接口编程）</p>
-<p>5<strong>里氏替换</strong>：子类换父类行为不变；<strong>反过来不成立</strong></p>
-<p>6<strong>装饰 vs 代理</strong>：加功能 vs 控访问；<strong>策略 vs 状态</strong>：主动选 vs 状态驱动</p>
-<p>7<strong>外观 vs 中介者</strong>：单向<strong>简化接口</strong> vs 双向<strong>协调对象</strong></p>
-<p>8<strong>客户端应用（调服务）vs 被调用应用（被服务调）</strong>——方向相反</p>
-<p>9<strong>工厂方法 vs 抽象工厂</strong>：一个产品等级结构 vs 多等级+产品族（退化即变身）</p>
-<p>10<strong>组合复用</strong>：Has-A 组合（黑盒）/ Is-A 继承（白盒，破坏封装）</p>
-<p>💡 补充三陷阱：<strong>扇入扇出平均 3~4 不超 7</strong> · <strong>类行为型只有解释器/模板方法</strong> · <strong>用户体验五层从下往上：战略→范围→结构→框架→表现</strong>。</p>
-<h2 id="全章速记卡-考前-5-分钟">全章速记卡 · 考前 5 分钟</h2>
-<p><strong>🔑排序卡（必背）</strong></p>
-<ul><li><strong>耦合（低→高）</strong>：非直接 → 数据 → 标记 → 控制 → 外部 → 公共 → 内容</li><li><strong>内聚（高→低）</strong>：功能 → 顺序 → 通信 → 过程 → 瞬时 → 逻辑 → 偶然</li><li>口诀：<strong>非数标控外公内</strong> ｜ <strong>功顺通过瞬逻偶</strong></li><li>目标 = <strong>高内聚、低耦合</strong>（不绝对等价）</li><li><strong>扇入扇出</strong>：平均 3~4，不超 7；顶层扇出大/底层扇入大</li><li>模块大小：<strong>50~200 行 / 1~2 页</strong></li><li><strong>SOLID</strong>：单一职责/开闭/里氏替换/接口隔离/依赖倒置</li><li>设计模式：<strong>创建 5｜结构 7｜行为 11</strong> = GoF 23</li><li>结构型口诀：<strong>适桥组装外享代</strong></li><li>用户体验：<strong>战略→范围→结构→框架→表现</strong></li><li>黄金三原则：<strong>用户可控｜减记忆｜一致</strong></li></ul>
-<p><strong>🔢数字卡</strong></p>
-<ul><li>系统设计 <strong>2</strong> 阶段：概要（结构图）→ 详细（算法界面）</li><li>流程 <strong>6</strong> 要素：输入资源/活动/相互作用/输出/用户/价值</li><li>WFMS <strong>3</strong> 功能：<strong>6</strong> 模块（执行服务核心+引擎）+ <strong>5</strong> 接口</li><li>工具 <strong>3</strong> 类：图形 <strong>5</strong>（PFD/IPO/N-S/PAD/判定树）+ 表格（判定表）+ 语言（PDL）</li><li>判定表 <strong>4</strong> 部分：条件说明/行动说明/条件组合/对应动作</li><li>模块 <strong>3</strong> 属性：功能/逻辑/状态；SC 模块 <strong>4</strong> 种：传入/传出/变换/协调</li><li>SC <strong>3</strong> 型：变换（三段）/事务（三层）/混合</li><li>设计类 <strong>3</strong> 种：实体（必有属性）/控制（必有方法）/边界（都有）</li><li>持久化 <strong>4</strong> 框架：CMP/Hibernate/iBatis/JDO</li><li>PDL：外层语法（结构）+ 内层语法（操作），<strong>不可执行</strong></li></ul>
-<p><strong>🔗场景对应卡</strong></p>
-<ul><li>"传基本类型参数" → <strong>数据耦合</strong>；"传结构体" → 标记；"传开关" → 控制</li><li>"初始化一堆变量" → <strong>时间内聚</strong>；"前输出喂后输入" → 顺序内聚</li><li>"连接池/配置" → <strong>单例</strong>；"多种数据库驱动" → 工厂方法</li><li>"兼容旧接口" → <strong>适配器</strong>；"IO 流加功能" → 装饰</li><li>"API 网关" → <strong>外观</strong>；"审批流" → 责任链；"撤销重做" → 命令/备忘录</li><li>"支付方式切换" → <strong>策略</strong>；"订单状态机" → 状态</li><li>"固定流程骨架" → <strong>模板方法</strong>；"报表加新操作" → 访问者</li><li>"聊天室" → 中介者；"事件订阅" → 观察者；"棋子共享" → 享元</li><li>"跨平台 UI 族" → 抽象工厂；"分步构建" → 建造者</li><li>"编译器文法" → 解释器；"树形菜单" → 组合</li></ul>
-<p><strong>⚖️对比卡</strong></p>
-<ul><li><strong>概要设计（模块+接口+数据库结构）</strong> vs <strong>详细设计（算法+界面）</strong></li><li><strong>数据耦合（基本类型）</strong> vs <strong>标记耦合（数据结构）</strong></li><li><strong>流程定义（形式化表示）</strong> vs <strong>流程实例（一次运行）</strong></li><li><strong>客户端应用（调服务）</strong> vs <strong>被调用应用（被服务调）</strong></li><li><strong>判定树（直观少条件）</strong> vs <strong>判定表（紧凑多组合）</strong></li><li><strong>类模式（编译时静态）</strong> vs <strong>对象模式（运行时动态）</strong></li><li><strong>装饰（加功能）</strong> vs <strong>代理（控访问）</strong></li><li><strong>策略（主动选算法）</strong> vs <strong>状态（状态驱动）</strong></li><li><strong>外观（单向简化）</strong> vs <strong>中介者（双向协调）</strong></li><li><strong>组合（Has-A 黑盒）</strong> vs <strong>继承（Is-A 白盒）</strong></li></ul>
-<p>本章最核心三句话：<strong>① 耦合越低越好（数据理想要内容最差），内聚越高越好（功能理想要偶然最差）　② 开闭是目标、依赖倒置是机制，SOLID 五原则对号入座　③ GoF 23 = 创建 5 + 结构 7 + 行为 11，装饰代理策略状态三对辨析必拿分</strong></p>
-<h2 id="全章自测清单-能答出即过关">全章自测清单 · 能答出即过关</h2>
-<p>□概要设计 vs 详细设计；分析"做什么"设计"怎么做"</p>
-<p>□详细设计七项内容；代码设计三化与线面分类</p>
-<p>□流程六要素；流程定义 vs 流程实例</p>
-<p>□活动所有者 vs 流程所有者；工作项</p>
-<p>□WFMS 三功能；WRM 六模块五接口；客户端/被调用方向</p>
-<p>□七种流程工具各自特点；判定表四部分</p>
-<p>□SD 基础（SRS+DFD+DD）；模块三属性</p>
-<p>□信息隐蔽与三种抽象</p>
-<p>□模块划分三原则；扇入扇出 3~4 不超 7</p>
-<p>□耦合七级顺序与场景判断</p>
-<p>□内聚七级顺序与场景判断</p>
-<p>□高内聚低耦合（不绝对等价）</p>
-<p>□SC 四组成；四种模块；原子模块</p>
-<p>□变换型/事务型/混合型 SC 特征</p>
-<p>□三类设计类属性/方法记忆锚</p>
-<p>□持久层与 ORM 存在原因</p>
-<p>□CMP/Hibernate/iBatis/JDO 定位</p>
-<p>□SOLID 五原则含义与关系链</p>
-<p>□组合复用 Has-A/Is-A；白盒黑盒</p>
-<p>□迪米特法则与四注意</p>
-<p>□GoF 23 三分类（5/7/11）；类模式 vs 对象模式</p>
-<p>□创建型 5 种用途；浅克隆深克隆</p>
-<p>□结构型 7 种用途；享元内外状态</p>
-<p>□行为型 11 种用途；类行为型两个</p>
-<p>□装饰 vs 代理；策略 vs 状态；外观 vs 中介者</p>
-<p>□输入五原则；输入验证与安全（SQL 注入）</p>
-<p>□输出三方面；报表 vs 图形的对象</p>
-<p>□输出七原则</p>
-<p>□黄金三原则及要点</p>
-<p>□用户体验五层顺序与各层内容</p>
-<p>□战略层确定目标用户三步</p>
-<p>□设计良好人机交互十法（反馈/辅助/测试/迭代）</p>
-<p>💡 <strong>用法</strong>：耦合内聚七级必须<strong>默写排序</strong>；23 种模式看名字说用途。全打勾，第 13 章过关。</p>
-<h2 id="本章回炉任务-批次-2-收官">本章回炉任务 + 批次 2 收官</h2>
-<p><strong>🔁三个必须动手的任务</strong></p>
-<p><strong>① 默写两条排序</strong>——耦合 7 级（低→高）与内聚 7 级（高→低），并给每个级别配一句场景例子（如"传开关量 = 控制耦合"）。</p>
-<p><strong>② 模式对号 15 连</strong>——遮住速记卡场景列，只看模式名说用途；再反过来只看场景说模式名。目标：23 种全部条件反射。</p>
-<p><strong>③ SC 小图</strong>——把"在线购课"DFD（CH11 回炉题）分别按<strong>变换型</strong>和<strong>事务型</strong>各导出一次系统结构图，体会两种映射的差别。</p>
-<p>🎉批次 2 收官</p>
-<p>已完成 <strong>15 / 22</strong> 份课件（合计 <strong>491 页</strong>）<br><strong>批次 2 全部完成</strong>（CH12/CH02/CH10/CH11/CH08/CH13）</p>
-<p><strong>批次 3 下一份：CH14 软件实现与测试</strong>——测试基础/白盒黑盒/面向对象测试，承接本章 QC 手段与 CH11 概念测试用例。</p>
-<p>💡 本章论文方向考过 <strong>10 次</strong>——耦合内聚、SOLID、设计模式选型是设计类论文的骨架素材。</p>
+    <h1 id="第-47-小时-全真模拟-一-上午场综合知识-案例">第 47 小时 · 全真模拟（一）· 上午场综合知识 + 案例</h1>
+<div class="quote"><p><strong>48 学时的收官第一站：把 22 章的知识压缩进一次真实的上午。</strong><br>⚠️ <strong>本时学的定位</strong>：不是"刷题"，是<strong>"计时演练 + 发现短板"</strong>。<br>做完必须<strong>对答案 + 记录错题 + 定位到具体学时</strong>，否则等于白做。</p></div>
+<h2 id="一-上午场的三个关键机制-先搞清规则再练">一、上午场的三个关键机制（先搞清规则再练）</h2>
+<div class="block danger"><div class="block-title">上午连考的真实玩法（多数人不知道）</div><p>上午 <strong>8:30—12:30</strong> 连考两场，中间<strong>不休息</strong>：<br><strong>关键机制：若综合知识 100 分钟内交卷，结余时间全部计入案例。</strong><br>→ <strong>这不是技巧，是战术</strong>：上午主动提速（综合知识目标 100 分钟），<br>→ <strong>下午案例就有 140 分钟而不是 90 分钟</strong>，多出的 50 分钟足以多答一题半。</p></div>
+<table><thead><tr><th>时段</th><th>科目</th><th>时长</th><th>题量</th><th>及格</th></tr></thead><tbody><tr><td>8:30—11:00</td><td><strong>综合知识</strong></td><td>150 分钟</td><td>75 题（含英文 5 题在 <strong>71~75</strong>）</td><td>45/75</td></tr><tr><td>11:00—12:30</td><td><strong>案例分析</strong></td><td>90 分钟</td><td>5 题<strong>选 3</strong>（第 1 题必答）</td><td>45/75</td></tr></tbody></table>
+<div class="block gold"><div class="block-title">上午场的答题节奏（按 100 分钟交卷设计）</div><p><strong>⚠️ 单题超过 90 秒就跳</strong> —— 这是上午场最重要的纪律。<br>75 题平均每题只有 2 分钟，<strong>一道卡 3 分钟就等于放弃后面 1.5 道题</strong>。</p></div>
+<table><thead><tr><th>阶段</th><th>时长</th><th>目标</th></tr></thead><tbody><tr><td><strong>第一轮通读</strong></td><td>20 分钟</td><td>75 题过一遍，<strong>标记会做的与不会做的</strong>，不做深究</td></tr><tr><td><strong>第二轮攻会做的</strong></td><td>60 分钟</td><td>从第 1 题顺序做，<strong>遇到卡壳超过 90 秒就跳过并标记</strong></td></tr><tr><td><strong>第三轮攻标记题</strong></td><td>20 分钟</td><td>回头做标记题；仍不会的<strong>猜最接近的</strong>（不留空必得 0）</td></tr><tr><td><strong>检查</strong></td><td>10 分钟</td><td>重点查<strong>答题卡涂写</strong>、<strong>英文 5 题</strong>、<strong>被跳过的题是否都填了</strong></td></tr></tbody></table>
+<h2 id="二-综合知识模拟卷-按真题权重分布-30-题节选-5-题英文">二、综合知识模拟卷（按真题权重分布，30 题节选 + 5 题英文）</h2>
+<div class="block warning"><div class="block-title">怎么用这份模拟卷</div><p><strong>限时 100 分钟</strong>（对应"提前交卷换案例时间"的战术），<strong>不要边做边查答案</strong>。<br>做完后对照 H48 的答案与复盘表。<br><strong>这份卷子的价值不在"对几题"，而在"暴露你在哪些章节不熟"。</strong></p></div>
+<h3 id="一-单选与多选-节选-12-题-覆盖第-3-5-7-9-章高权重考点">（一）单选与多选（节选 12 题，覆盖第 3/5/7/9 章高权重考点）</h3>
+<p><strong>1.</strong> 冯·诺依曼体系中"运算器 + 控制器"合称为什么？<br>A. 主存储器　B. <strong>CPU（中央处理单元）</strong>　C. 输入输出设备　D. 总线</p>
+<p><strong>2.</strong> 关于 Cache 的平均访问时间，命中率为 h、Cache 周期 t_c、主存周期 t，正确的计算是：<br>A. h·t_c + (1−h)·t　　B. h·t + (1−h)·t_c<br>C. (h + t_c) / (1 + t)　　D. h·t_c + t</p>
+<p><strong>3.</strong> 关系模式 R(A,B,C,D)，F = {A→B, C→D}，其候选键是：<br>A. AB　　B. CD　　C. <strong>AC</strong>　　D. BC</p>
+<p><strong>4.</strong> 三级模式结构中，允许有多个的是：<br>A. 内模式　　B. 概念模式　　C. <strong>外模式</strong>　　D. 三者都唯一</p>
+<p><strong>5.</strong> 白盒测试的逻辑覆盖中，覆盖强度最强的是：<br>A. 语句覆盖　　B. 判定覆盖　　C. 条件组合覆盖　　D. <strong>路径覆盖</strong></p>
+<p><strong>6.</strong> 关键路径指的是：<br>A. 耗时最短的路径　　B. <strong>总时长最长、决定总工期的路径</strong>　　C. 活动最多的路径　　D. 资源消耗最大的路径</p>
+<p><strong>7.</strong> 某项目 PV=100 万、EV=90 万、AC=110 万，则成本偏差 CV 是：<br>A. +20 万　　B. −10 万　　C. <strong>−20 万</strong>　　D. 0</p>
+<p><strong>8.</strong> 嵌入式实时调度中，RMS 的优先级分配规则是：<br>A. 截止期越早优先级越高　　B. <strong>周期越短优先级越高</strong>　　C. 先到先服务　　D. 由用户指定</p>
+<p><strong>9.</strong> 缓存穿透、击穿、雪崩分别对应：<br>A. 热点过期 / 查不存在 / 集体过期<br>B. <strong>查不存在 / 热点过期 / 集体过期</strong><br>C. 集体过期 / 查不存在 / 热点过期<br>D. 三者同义</p>
+<p><strong>10.</strong> CAP 理论中，实践共识是：<br>A. 必保 C　　B. 必保 A　　C. <strong>必保 P（分区容错）</strong>　　D. 三者全保</p>
+<p><strong>11.</strong> 需求获取阶段，联机分析（CRC 卡片法）属于：<br>A. 静态验证　　B. <strong>动态验证（获取过程）</strong>　　C. 评审　　D. 部署</p>
+<p><strong>12.</strong> 数字信封技术要解决的问题是：<br>A. 身份认证　　B. <strong>数据保密 + 数字签名（不可否认）</strong>　　C. 数据完整性　　D. 访问控制</p>
+<h3 id="二-英文题-5-题-对应-71-75-位">（二）英文题（5 题，对应 71—75 位）</h3>
+<div class="block warning"><div class="block-title">英文题的战略：不要空着</div><p><strong>英文 5 题通常不难</strong>，多是术语翻译与概念判断。<br>⚠️ <strong>即使看不懂也要猜</strong>——<strong>留空必得 0 分，猜有 20% 概率对</strong>。<br>常见考点方向：<strong>software engineering / requirements / testing / quality / project management</strong> 的<br>基本术语（对应 <a href="H14.html">H14</a>·<a href="H23.html">H23</a>·<a href="H31.html">H31</a>·<a href="H08.html">H08</a>）。</p></div>
+<h3 id="三-案例分析模拟-90-分钟-5-题选-3-实际做-3-题">（三）案例分析模拟（90 分钟，5 题选 3 —— 实际做 3 题）</h3>
+<div class="block danger"><div class="block-title">案例模拟的做题要求</div><p><strong>限时 90 分钟，只做 3 题</strong>（第 1 题必答 + 选 2 题），<br><strong>用 H42 的四步答题法 + 三色标记法</strong>，做完保留草稿供 H48 复盘。</p></div>
+<p><strong>案例 1（本模拟必答）· 需求获取与需求冲突</strong></p>
+<div class="quote"><p>某市燃气集团客服中心要建设智能客服平台。客服部洪经理要求"尽快上线 AI 减���人力"；<br>信息部徐总监要求"先统一主数据"；合规部郑专员提出"数据必须不出域"；<br>十年老坐席老陶反馈"新系统会降低我们的效率"。<strong>你是甘工（系统分析师）。</strong><br><strong>问题 1</strong>（10 分）：需求获取有哪些主要方法？本例中你打算重点用哪几种？为什么？（<strong>列出 5 种以上方法并说明选择理由</strong>）<br><strong>问题 2</strong>（10 分）：针对上述四方的诉求冲突，提出你的化解方案（<strong>至少 4 条</strong>）。<br><strong>问题 3</strong>（10 分）：为避免需求返工，你会建立什么机制？（<strong>至少 3 条</strong>）</p></div>
+<p><strong>案例 2（备选）· 数据库与缓存</strong></p>
+<div class="quote"><p>平台上线后话务量暴增，数据库 CPU 常达 90%，且出现缓存失效导致的大量回源查询。<br><strong>问题 1</strong>（8 分）：数据库 CPU 高的原因可能有哪些？<strong>至少 4 条</strong>。<br><strong>问题 2</strong>（8 分）：针对缓存失效问题，给出三种具体做法并说明各自效果（<strong>结合业务场景</strong>）。<br><strong>问题 3</strong>（8 分）：若用 MySQL 优化，给出索引与分区的注意事项（<strong>至少 4 条</strong>）。</p></div>
+<p><strong>案例 3（备选）· 微服务与分布式事务</strong></p>
+<div class="quote"><p>平台拆为客户服务、订单服务、支付服务三个微服务，各自独立数据库。订单创建与支付需保持一致。<br><strong>问题 1</strong>（8 分）：订单服务使用 NoSQL、支付服务使用关系库，能否用 2PC 保证一致？<strong>为什么</strong>？<br><strong>问题 2</strong>（8 分）：改用 Saga 方案，简述其基本步骤（<strong>至少 4 步</strong>）。<br><strong>问题 3</strong>（8 分）：如何处理跨服务的数据同步与"主数据四编码"问题？（<strong>至少 3 条</strong>）</p></div>
+<p><strong>案例 4（备选，优先选做）· Web 与安全</strong></p>
+<div class="quote"><p>平台需要提供移动端工作台，语音数据涉及个人信息保护。<br><strong>问题 1</strong>：移动端选择哪种开发方式？说明理由与风险。<br><strong>问题 2</strong>：如何做个人信息保护？（<strong>至少 4 条</strong>，需覆盖加密、权限、审计、脱敏）<br><strong>问题 3</strong>：如何做到 99.9% 的可用性？（<strong>至少 4 条</strong>）</p></div>
+<p><strong>案例 5（备选）· 项目管理与运维</strong></p>
+<div class="quote"><p>项目预算 800 万、工期 11 个月，团队 20 人。2025-11 压测不达标，2026-01 必须上线。<br><strong>问题 1</strong>：用三点估算法计算关键活动工期，说明关键路径的意义。<br><strong>问题 2</strong>：出现进度落后与质量门禁冲突，你会如何处理？<br><strong>问题 3</strong>：上线后出现故障，你的应急处理流程是什么？</p></div>
+<h2 id="三-上午场的常见丢分点-自查清单">三、上午场的常见丢分点（自查清单）</h2>
+<div class="block warning"><div class="block-title">交卷前 10 分钟必查</div><ul><li>[ ] <strong>答题卡涂写</strong>：错行、漏涂、涂改不彻底（<strong>机读卡最易失分</strong>）</li><li>[ ] <strong>被跳过的题</strong>：是否都填了（<strong>猜也要填</strong>）</li><li>[ ] <strong>英文 5 题</strong>：71~75 是否都作答</li><li>[ ] <strong>案例题</strong>：是否漏答了某问（<strong>漏一问丢 5~8 分，最大低级失分</strong>）</li><li>[ ] <strong>案例题术语</strong>：「耦合」不是「偶联」，「分区」不是「分片」</li><li>[ ] <strong>案例字数限制</strong>：31 处实测有字数约束，超字不加分</li><li>[ ] <strong>时间</strong>：综合知识是否在 100 分钟内交卷（<strong>为案例留出 50 分钟</strong>）</li></ul></div>
 <hr>
 <h2 id="章节练习题">章节练习题</h2>
 <hr>
-    <div class="quiz quiz-js" data-key="H30-系统设计（二）-设计模式与人机交互.md">
+    <div class="quiz quiz-js" data-key="H47-全真模拟（一）-上午场综合知识与案例.md">
   <div class="quiz-head">
     <span class="quiz-label">章节练习题</span>
     <span class="quiz-progress">已答 0 / 6</span>
@@ -2188,53 +2002,53 @@ html{scroll-padding-top:80px}
     <button class="quiz-btn quiz-reset" type="button">重做</button>
     <div class="quiz-pbar"><div class="quiz-pbar-fill"></div></div>
   </div>
-  <div class="quiz-item" data-answer="A" data-explain="GoF 23 种模式按&lt;strong&gt;目的&lt;/strong&gt;分三类：&lt;strong&gt;① 创建型（5 种）&lt;/strong&gt;——解决&quot;&lt;strong&gt;怎么创建对象&lt;/strong&gt;&quot;：单例 Singleton · 工厂方法 Factory Method · 抽象工厂 Abstract Factory · 建造者 Builder · 原型 Prototype。&lt;strong&gt;② 结构型（7 种）&lt;/strong&gt;——解决&quot;&lt;strong&gt;类或对象怎么组合&lt;/strong&gt;&quot;：&lt;strong&gt;适配器 Adapter&lt;/strong&gt; · 装饰器 Decorator · 代理 Proxy · 外观 Facade · 桥接 Bridge · 组合 Composite · 享元 Flyweight。&lt;strong&gt;③ 行为型（11 种）&lt;/strong&gt;——解决&quot;&lt;strong&gt;对象间怎么交互与职责分配&lt;/strong&gt;&quot;：策略 · 观察者 · 命令 · 责任链 · 模板方法 · 状态 · 迭代器 · 访问者 · 中介者 · 备忘录 · 解释器。" data-ref="第13章 · 13.5 设计模式分类">
-  <div class="quiz-q"><span class="qn">1</span>设计模式按目的分为三类，其中"适配器（Adapter）模式"属于：</div>
-  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">结构型模式</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">创建型模式</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">行为型模式</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">架构模式</span></div></div>
+  <div class="quiz-item" data-answer="A" data-explain="这是&lt;strong&gt;上午连考的战术核心&lt;/strong&gt;：上午 8:30—12:30 连考两场&lt;strong&gt;中间不休息&lt;/strong&gt;，综合知识 150 分钟 + 案例 90 分钟。&lt;strong&gt;若综合知识 100 分钟内交卷，结余的 50 分钟全部计入案例&lt;/strong&gt;——意味着下午案例实际可用 &lt;strong&gt;140 分钟&lt;/strong&gt;。&lt;strong&gt;这 50 分钟足以多答一题半&lt;/strong&gt;，是及格与不及格的分界线。⚠️ 所以&quot;上午主动提速&quot;不是作弊技巧，是&lt;strong&gt;必须执行的战术&lt;/strong&gt;。" data-ref="第47小时 · 一、上午场的三个关键机制">
+  <div class="quiz-q"><span class="qn">1</span>上午连考机制中，若综合知识在 100 分钟内交卷，结余时间如何处理：</div>
+  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">结余时间全部计入案例分析，下午案例可用 140 分钟</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">结余时间作废</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">结余时间计入下午论文</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">可以提前离场</span></div></div>
   <div class="reveal" style="display:none">
     <div class="reveal-verdict"></div>
-    <div class="reveal-explain">GoF 23 种模式按<strong>目的</strong>分三类：<strong>① 创建型（5 种）</strong>——解决"<strong>怎么创建对象</strong>"：单例 Singleton · 工厂方法 Factory Method · 抽象工厂 Abstract Factory · 建造者 Builder · 原型 Prototype。<strong>② 结构型（7 种）</strong>——解决"<strong>类或对象怎么组合</strong>"：<strong>适配器 Adapter</strong> · 装饰器 Decorator · 代理 Proxy · 外观 Facade · 桥接 Bridge · 组合 Composite · 享元 Flyweight。<strong>③ 行为型（11 种）</strong>——解决"<strong>对象间怎么交互与职责分配</strong>"：策略 · 观察者 · 命令 · 责任链 · 模板方法 · 状态 · 迭代器 · 访问者 · 中介者 · 备忘录 · 解释器。</div>
-    <div class="reveal-ref">第13章 · 13.5 设计模式分类</div>
+    <div class="reveal-explain">这是<strong>上午连考的战术核心</strong>：上午 8:30—12:30 连考两场<strong>中间不休息</strong>，综合知识 150 分钟 + 案例 90 分钟。<strong>若综合知识 100 分钟内交卷，结余的 50 分钟全部计入案例</strong>——意味着下午案例实际可用 <strong>140 分钟</strong>。<strong>这 50 分钟足以多答一题半</strong>，是及格与不及格的分界线。⚠️ 所以"上午主动提速"不是作弊技巧，是<strong>必须执行的战术</strong>。</div>
+    <div class="reveal-ref">第47小时 · 一、上午场的三个关键机制</div>
   </div>
-</div><div class="quiz-item" data-answer="A" data-explain="&lt;strong&gt;装饰器模式（Decorator）&lt;/strong&gt;：&lt;strong&gt;动态&lt;/strong&gt;地给一个对象添加额外职责，通过&lt;strong&gt;组合而非继承&lt;/strong&gt;实现，&lt;strong&gt;比生成子类更灵活&lt;/strong&gt;（避免&quot;类爆炸&quot;）。典型：Java I/O 流（`BufferedInputStream` 包装 `FileInputStream`）。⚠️ 与&lt;strong&gt;代理模式&lt;/strong&gt;的区别：装饰器&lt;strong&gt;增强功能&lt;/strong&gt;，代理&lt;strong&gt;控制访问&lt;/strong&gt;（装饰器关注加职责，代理关注加控制）。与&lt;strong&gt;桥接模式&lt;/strong&gt;的区别：桥接是&lt;strong&gt;抽象与实现分离&lt;/strong&gt;（多维变化），装饰器是&lt;strong&gt;同维度叠加&lt;/strong&gt;。" data-ref="第13章 · 13.5 结构型模式">
-  <div class="quiz-q"><span class="qn">2</span>某系统需要在运行时动态地给对象增加职责，且不希望用继承导致类爆炸，最适合使用：</div>
-  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">装饰器（Decorator）模式</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">单例模式</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">策略模式</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">享元模式</span></div></div>
+</div><div class="quiz-item" data-answer="A" data-explain="&lt;strong&gt;75 题平均每题只有 2 分钟&lt;/strong&gt;（150 分钟），&lt;strong&gt;一道题卡 3 分钟就等于放弃后面 1.5 道题&lt;/strong&gt;。所以核心纪律是&lt;strong&gt;&quot;单题超 90 秒就跳过并标记&quot;&lt;/strong&gt;。三轮节奏：① &lt;strong&gt;20 分钟通读&lt;/strong&gt;——不深究、只标记会做/不会做；② &lt;strong&gt;60 分钟攻会做的&lt;/strong&gt;——顺序做、卡壳即跳；③ &lt;strong&gt;20 分钟攻标记题&lt;/strong&gt;——仍不会的&lt;strong&gt;猜最接近的&lt;/strong&gt;（不留空必得 0）；④ &lt;strong&gt;10 分钟检查&lt;/strong&gt;——重点查答题卡涂写。⚠️ &lt;strong&gt;选项 D&quot;挑 40 题做&quot;看似聪明，实则危险&lt;/strong&gt;：综合知识 75 题中单选 60 + 多选 10 + 英语 5，&lt;strong&gt;答题卡必须全部作答&lt;/strong&gt;，大量空着必然低分。" data-ref="第47小时 · 一、上午场的答题节奏">
+  <div class="quiz-q"><span class="qn">2</span>综合知识 75 题的答题节奏，最合理的是：</div>
+  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">第一轮 20 分钟通读标记 → 第二轮 60 分钟攻会做的 → 第三轮 20 分钟攻标记题 → 检查 10 分钟；单题超 90 秒即跳过</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">按顺序从第 1 题做到最后一题，每题不限时</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">先做英文 5 题热身，再做后面的</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">直接挑有把握的 40 题做完，剩下的猜</span></div></div>
   <div class="reveal" style="display:none">
     <div class="reveal-verdict"></div>
-    <div class="reveal-explain"><strong>装饰器模式（Decorator）</strong>：<strong>动态</strong>地给一个对象添加额外职责，通过<strong>组合而非继承</strong>实现，<strong>比生成子类更灵活</strong>（避免"类爆炸"）。典型：Java I/O 流（`BufferedInputStream` 包装 `FileInputStream`）。⚠️ 与<strong>代理模式</strong>的区别：装饰器<strong>增强功能</strong>，代理<strong>控制访问</strong>（装饰器关注加职责，代理关注加控制）。与<strong>桥接模式</strong>的区别：桥接是<strong>抽象与实现分离</strong>（多维变化），装饰器是<strong>同维度叠加</strong>。</div>
-    <div class="reveal-ref">第13章 · 13.5 结构型模式</div>
+    <div class="reveal-explain"><strong>75 题平均每题只有 2 分钟</strong>（150 分钟），<strong>一道题卡 3 分钟就等于放弃后面 1.5 道题</strong>。所以核心纪律是<strong>"单题超 90 秒就跳过并标记"</strong>。三轮节奏：① <strong>20 分钟通读</strong>——不深究、只标记会做/不会做；② <strong>60 分钟攻会做的</strong>——顺序做、卡壳即跳；③ <strong>20 分钟攻标记题</strong>——仍不会的<strong>猜最接近的</strong>（不留空必得 0）；④ <strong>10 分钟检查</strong>——重点查答题卡涂写。⚠️ <strong>选项 D"挑 40 题做"看似聪明，实则危险</strong>：综合知识 75 题中单选 60 + 多选 10 + 英语 5，<strong>答题卡必须全部作答</strong>，大量空着必然低分。</div>
+    <div class="reveal-ref">第47小时 · 一、上午场的答题节奏</div>
   </div>
-</div><div class="quiz-item" data-answer="A" data-explain="&lt;strong&gt;策略模式（Strategy）&lt;/strong&gt;：定义&lt;strong&gt;一组算法族&lt;/strong&gt;并分别封装，使它们&lt;strong&gt;可互换&lt;/strong&gt;（客户端针对抽象策略编程，运行时注入具体策略）。典型：支付方式（微信/支付宝/银行卡）、折扣计算、排序算法。⚠️ 区分：&lt;strong&gt;策略&lt;/strong&gt;是&quot;&lt;strong&gt;替换整个算法&lt;/strong&gt;&quot;（行为型）；&lt;strong&gt;模板方法&lt;/strong&gt;是&quot;&lt;strong&gt;固定骨架、子类填步骤&lt;/strong&gt;&quot;（也是行为型，但靠继承）；&lt;strong&gt;状态&lt;/strong&gt;模式是&quot;&lt;strong&gt;状态改变导致行为改变&lt;/strong&gt;&quot;（看起来像策略，但状态间有转移关系）。" data-ref="第13章 · 13.5 行为型模式">
-  <div class="quiz-q"><span class="qn">3</span>"定义一系列算法，把它们封装起来并使它们可相互替换，让算法独立于使用它的客户而变化"，这描述的是：</div>
-  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">策略（Strategy）模式</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">观察者模式</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">责任链模式</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">命令模式</span></div></div>
+</div><div class="quiz-item" data-answer="A" data-explain="⚠️ &lt;strong&gt;题干问&quot;留空&quot;的判断是错的&lt;/strong&gt;——&lt;strong&gt;英文 5 题通常不难&lt;/strong&gt;，多是&lt;strong&gt;术语翻译与概念判断&lt;/strong&gt;（software engineering / requirements / testing / quality / project management 的基本术语）。&lt;strong&gt;留空必得 0 分，猜有约 20% 概率对&lt;/strong&gt;，所以&lt;strong&gt;即使看不懂也要猜&lt;/strong&gt;。更有效的方法是：① 认出是哪个章节的术语（看到 regression 就想到 &lt;a href=&quot;H08.html&quot;&gt;H08&lt;/a&gt;）；② 排除法——读不懂题干就找&lt;strong&gt;最符合常识的那个选项&lt;/strong&gt;；③ &lt;strong&gt;不要在英文上花超过 10 分钟&lt;/strong&gt;，把时间留给专业题才是正解。&lt;strong&gt;但绝对不要留空。&lt;/strong&gt;" data-ref="第47小时 · 二、英文题战略">
+  <div class="quiz-q"><span class="qn">3</span>英文 5 题（71~75 位）遇到完全看不懂的，正确策略是：</div>
+  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">留空不做，把时间留给专业题</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">根据上下文与术语结构猜（留空必得 0，猜有 20% 概率对）</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">全部选 A</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">放弃检查专业题来死磕英文</span></div></div>
   <div class="reveal" style="display:none">
     <div class="reveal-verdict"></div>
-    <div class="reveal-explain"><strong>策略模式（Strategy）</strong>：定义<strong>一组算法族</strong>并分别封装，使它们<strong>可互换</strong>（客户端针对抽象策略编程，运行时注入具体策略）。典型：支付方式（微信/支付宝/银行卡）、折扣计算、排序算法。⚠️ 区分：<strong>策略</strong>是"<strong>替换整个算法</strong>"（行为型）；<strong>模板方法</strong>是"<strong>固定骨架、子类填步骤</strong>"（也是行为型，但靠继承）；<strong>状态</strong>模式是"<strong>状态改变导致行为改变</strong>"（看起来像策略，但状态间有转移关系）。</div>
-    <div class="reveal-ref">第13章 · 13.5 行为型模式</div>
+    <div class="reveal-explain">⚠️ <strong>题干问"留空"的判断是错的</strong>——<strong>英文 5 题通常不难</strong>，多是<strong>术语翻译与概念判断</strong>（software engineering / requirements / testing / quality / project management 的基本术语）。<strong>留空必得 0 分，猜有约 20% 概率对</strong>，所以<strong>即使看不懂也要猜</strong>。更有效的方法是：① 认出是哪个章节的术语（看到 regression 就想到 <a href="H08.html">H08</a>）；② 排除法——读不懂题干就找<strong>最符合常识的那个选项</strong>；③ <strong>不要在英文上花超过 10 分钟</strong>，把时间留给专业题才是正解。<strong>但绝对不要留空。</strong></div>
+    <div class="reveal-ref">第47小时 · 二、英文题战略</div>
   </div>
-</div><div class="quiz-item" data-answer="A" data-explain="&lt;strong&gt;人机交互黄金三原则（Theo Mandel）&lt;/strong&gt;：&lt;strong&gt;① 置于用户控制之下&lt;/strong&gt;（用户能自主发起/中断操作，不被强制流程绑架）｜&lt;strong&gt;② 减少用户的记忆负担&lt;/strong&gt;（界面提供默认值、历史记录、可视化提示，不要求用户背命令）｜&lt;strong&gt;③ 保持界面的一致性&lt;/strong&gt;（同一系统内操作方式、术语、布局风格统一）。⚠️ &quot;&lt;strong&gt;追求视觉效果最大化&lt;/strong&gt;&quot;不在三原则里——美观是加分项，但&lt;strong&gt;可用性优先于视觉&lt;/strong&gt;。" data-ref="第13章 · 13.7 人机交互设计 · 黄金三原则">
-  <div class="quiz-q"><span class="qn">4</span>人机交互设计的"黄金三原则"（Theo Mandel）不包括：</div>
-  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">追求视觉效果最大化</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">置于用户控制之下</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">减少用户的记忆负担</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">保持界面的一致性</span></div></div>
+</div><div class="quiz-item" data-answer="A" data-explain="&lt;strong&gt;漏答一问是案例科最大的低级失分&lt;/strong&gt;——案例按&lt;strong&gt;踩分点给分&lt;/strong&gt;，漏一问等于把该问的全部分丢掉（5~8 分），而这一问的分数本可以靠&quot;多写几句相关术语&quot;拿到。&lt;strong&gt;交卷前 10 分钟必须逐问打勾核对&lt;/strong&gt;。⚠️ 其次是&lt;strong&gt;答题卡涂写错误&lt;/strong&gt;（机读卡错行/漏涂是硬伤）。至于字迹、字数——&lt;strong&gt;主观题扫描件，字迹潦草但可辨认是常态&lt;/strong&gt;；字数不够是&quot;少拿几个采分点&quot;，比漏答一問轻。&lt;strong&gt;所以自查优先级：漏答 &gt; 答题卡 &gt; 术语错 &gt; 字数&lt;/strong&gt;。" data-ref="第47小时 · 三、常见丢分点自查">
+  <div class="quiz-q"><span class="qn">4</span>案例分析交卷前自查，最严重的失分是：</div>
+  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">字迹不够工整</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">漏答了某一问（丢 5~8 分）</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">没有写项目背景</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">字数偏少</span></div></div>
   <div class="reveal" style="display:none">
     <div class="reveal-verdict"></div>
-    <div class="reveal-explain"><strong>人机交互黄金三原则（Theo Mandel）</strong>：<strong>① 置于用户控制之下</strong>（用户能自主发起/中断操作，不被强制流程绑架）｜<strong>② 减少用户的记忆负担</strong>（界面提供默认值、历史记录、可视化提示，不要求用户背命令）｜<strong>③ 保持界面的一致性</strong>（同一系统内操作方式、术语、布局风格统一）。⚠️ "<strong>追求视觉效果最大化</strong>"不在三原则里——美观是加分项，但<strong>可用性优先于视觉</strong>。</div>
-    <div class="reveal-ref">第13章 · 13.7 人机交互设计 · 黄金三原则</div>
+    <div class="reveal-explain"><strong>漏答一问是案例科最大的低级失分</strong>——案例按<strong>踩分点给分</strong>，漏一问等于把该问的全部分丢掉（5~8 分），而这一问的分数本可以靠"多写几句相关术语"拿到。<strong>交卷前 10 分钟必须逐问打勾核对</strong>。⚠️ 其次是<strong>答题卡涂写错误</strong>（机读卡错行/漏涂是硬伤）。至于字迹、字数——<strong>主观题扫描件，字迹潦草但可辨认是常态</strong>；字数不够是"少拿几个采分点"，比漏答一問轻。<strong>所以自查优先级：漏答 > 答题卡 > 术语错 > 字数</strong>。</div>
+    <div class="reveal-ref">第47小时 · 三、常见丢分点自查</div>
   </div>
-</div><div class="quiz-item" data-answer="A" data-explain="&lt;strong&gt;用户体验五层（从底到顶，Jesse James Garrett）&lt;/strong&gt;：&lt;strong&gt;① 战略层&lt;/strong&gt;（产品目标 + 用户需求，&quot;&lt;strong&gt;为什么做、为谁做&lt;/strong&gt;&quot;）→ &lt;strong&gt;② 范围层&lt;/strong&gt;（功能规格 + 内容需求，&quot;&lt;strong&gt;做什么&lt;/strong&gt;&quot;）→ &lt;strong&gt;③ 结构层&lt;/strong&gt;（交互设计 + 信息架构，&quot;&lt;strong&gt;怎么组织&lt;/strong&gt;&quot;）→ &lt;strong&gt;④ 框架层&lt;/strong&gt;（界面设计 + 导航设计 + 信息设计，&quot;&lt;strong&gt;怎么布局&lt;/strong&gt;&quot;）→ &lt;strong&gt;⑤ 表现层&lt;/strong&gt;（视觉设计，&quot;&lt;strong&gt;长什么样&lt;/strong&gt;&quot;）。⚠️ &lt;strong&gt;自下而上逐层约束&lt;/strong&gt;：上层决策必须在下层确定的框架内进行，战略层错了后面全白搭。" data-ref="第13章 · 13.7 用户体验五层">
-  <div class="quiz-q"><span class="qn">5</span>用户体验（UX）五要素模型中，位于最底层（决定"产品目标与用户需求"）的是：</div>
-  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">战略层（Strategy）</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">范围层（Scope）</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">结构层（Structure）</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">表现层（Surface）</span></div></div>
+</div><div class="quiz-item" data-answer="A" data-explain="&lt;strong&gt;总浮动时间（总时差）= LS − ES = 8 − 5 = 3&lt;/strong&gt;。含义：该活动&lt;strong&gt;最多可延误 3 天&lt;/strong&gt;而不影响项目总工期。⚠️ &lt;strong&gt;总时差为 0 的活动即关键活动&lt;/strong&gt;（在关键路径上）。另有&quot;&lt;strong&gt;自由浮动时间&lt;/strong&gt;= 紧后活动的 ES − 本活动的 EF&quot;，含义是不影响紧后活动最早开始的前提下可延误的时间，它&lt;strong&gt;不超过总时差&lt;/strong&gt;。&lt;strong&gt;关联：&lt;a href=&quot;H02.html&quot;&gt;H02&lt;/a&gt; 的关键路径与 PERT 章节。&lt;/strong&gt;" data-ref="第47小时 · 案例 5 关联 H02 关键路径">
+  <div class="quiz-q"><span class="qn">5</span>某活动 ES=5、LS=8，则其总浮动时间（总时差）是：</div>
+  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">3</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">13</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">−3</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">40</span></div></div>
   <div class="reveal" style="display:none">
     <div class="reveal-verdict"></div>
-    <div class="reveal-explain"><strong>用户体验五层（从底到顶，Jesse James Garrett）</strong>：<strong>① 战略层</strong>（产品目标 + 用户需求，"<strong>为什么做、为谁做</strong>"）→ <strong>② 范围层</strong>（功能规格 + 内容需求，"<strong>做什么</strong>"）→ <strong>③ 结构层</strong>（交互设计 + 信息架构，"<strong>怎么组织</strong>"）→ <strong>④ 框架层</strong>（界面设计 + 导航设计 + 信息设计，"<strong>怎么布局</strong>"）→ <strong>⑤ 表现层</strong>（视觉设计，"<strong>长什么样</strong>"）。⚠️ <strong>自下而上逐层约束</strong>：上层决策必须在下层确定的框架内进行，战略层错了后面全白搭。</div>
-    <div class="reveal-ref">第13章 · 13.7 用户体验五层</div>
+    <div class="reveal-explain"><strong>总浮动时间（总时差）= LS − ES = 8 − 5 = 3</strong>。含义：该活动<strong>最多可延误 3 天</strong>而不影响项目总工期。⚠️ <strong>总时差为 0 的活动即关键活动</strong>（在关键路径上）。另有"<strong>自由浮动时间</strong>= 紧后活动的 ES − 本活动的 EF"，含义是不影响紧后活动最早开始的前提下可延误的时间，它<strong>不超过总时差</strong>。<strong>关联：<a href="H02.html">H02</a> 的关键路径与 PERT 章节。</strong></div>
+    <div class="reveal-ref">第47小时 · 案例 5 关联 H02 关键路径</div>
   </div>
-</div><div class="quiz-item" data-answer="A" data-explain="&lt;strong&gt;输入设计原则&lt;/strong&gt;：&lt;strong&gt;减少输入量&lt;/strong&gt;（只采集必要数据）· &lt;strong&gt;避免重复录入&lt;/strong&gt;（可复用/可推导的不让用户再输）· &lt;strong&gt;提供默认值与联想&lt;/strong&gt;· &lt;strong&gt;输入校验&lt;/strong&gt;（尽早发现错误、给出明确提示）· &lt;strong&gt;简化输入方式&lt;/strong&gt;（选择代替输入）。&lt;strong&gt;输出设计原则&lt;/strong&gt;：满足用户需求 · 格式清晰 · 便于理解与使用 · 考虑输出介质。⚠️ &lt;strong&gt;&quot;输入量越大越好&quot;明显错误&lt;/strong&gt;——多余输入会&lt;strong&gt;增加出错概率、降低效率、加重用户负担&lt;/strong&gt;，是设计原则明确反对的。" data-ref="第13章 · 13.6 输入/输出设计">
-  <div class="quiz-q"><span class="qn">6</span>关于输入/输出设计，下列说法错误的是：</div>
-  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">输入设计应追求"输入量越大越好"，以便系统掌握更多信息</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">输入设计要减少输入量、避免重复录入、提供校验与默认值</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">输出设计要满足用户需求、格式清晰、便于理解与使用</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">输入输出设计都要考虑效率与准确性</span></div></div>
+</div><div class="quiz-item" data-answer="A" data-explain="需求获取是&lt;strong&gt;动态验证&lt;/strong&gt;过程（与技术评审、质量控制的&lt;strong&gt;静态验证&lt;/strong&gt;相对）。&lt;strong&gt;需求获取的主要方法&lt;/strong&gt;：&lt;strong&gt;访谈&lt;/strong&gt;（一对一/群体）· &lt;strong&gt;问卷调查&lt;/strong&gt; · &lt;strong&gt;观察&lt;/strong&gt;（跟班/情境调查）· &lt;strong&gt;文档与资料审阅&lt;/strong&gt;（需求文档、数据流图、报表）· &lt;strong&gt;联合开发&lt;/strong&gt;（原型法、JRP 快速原型需求联合研讨会）· &lt;strong&gt;KJ 法&lt;/strong&gt;（问题导向归纳法）· &lt;strong&gt;头脑风暴&lt;/strong&gt;。⚠️ &lt;strong&gt;原型法要注意区分&lt;/strong&gt;：原型是&lt;strong&gt;获取需求的方法&lt;/strong&gt;，原型化开发是&lt;strong&gt;开发方法&lt;/strong&gt;，两个概念不要混。**关联：&lt;a href=&quot;H23.html&quot;&gt;H23&lt;/a&gt;。" data-ref="第47小时 · 案例 1 关联 H23 需求获取">
+  <div class="quiz-q"><span class="qn">6</span>需求获取方法中，"联合开发（原型法 / JRP 研讨会）"的性质是：</div>
+  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">静态验证</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">动态验证（获取过程）</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">质量控制</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">部署</span></div></div>
   <div class="reveal" style="display:none">
     <div class="reveal-verdict"></div>
-    <div class="reveal-explain"><strong>输入设计原则</strong>：<strong>减少输入量</strong>（只采集必要数据）· <strong>避免重复录入</strong>（可复用/可推导的不让用户再输）· <strong>提供默认值与联想</strong>· <strong>输入校验</strong>（尽早发现错误、给出明确提示）· <strong>简化输入方式</strong>（选择代替输入）。<strong>输出设计原则</strong>：满足用户需求 · 格式清晰 · 便于理解与使用 · 考虑输出介质。⚠️ <strong>"输入量越大越好"明显错误</strong>——多余输入会<strong>增加出错概率、降低效率、加重用户负担</strong>，是设计原则明确反对的。</div>
-    <div class="reveal-ref">第13章 · 13.6 输入/输出设计</div>
+    <div class="reveal-explain">需求获取是<strong>动态验证</strong>过程（与技术评审、质量控制的<strong>静态验证</strong>相对）。<strong>需求获取的主要方法</strong>：<strong>访谈</strong>（一对一/群体）· <strong>问卷调查</strong> · <strong>观察</strong>（跟班/情境调查）· <strong>文档与资料审阅</strong>（需求文档、数据流图、报表）· <strong>联合开发</strong>（原型法、JRP 快速原型需求联合研讨会）· <strong>KJ 法</strong>（问题导向归纳法）· <strong>头脑风暴</strong>。⚠️ <strong>原型法要注意区分</strong>：原型是<strong>获取需求的方法</strong>，原型化开发是<strong>开发方法</strong>，两个概念不要混。**关联：<a href="H23.html">H23</a>。</div>
+    <div class="reveal-ref">第47小时 · 案例 1 关联 H23 需求获取</div>
   </div>
 </div>
 </div>
@@ -2250,7 +2064,7 @@ html{scroll-padding-top:80px}
   <span class="item"><kbd class="kbd">J</kbd>/<kbd class="kbd">K</kbd> 快滚</span>
   <span class="item"><kbd class="kbd">0</kbd> 回顶部</span>
 </div>
-    <nav class="pager"><a class="pg pg-prev" href="H29.html"><span class="pg-label">上一学时</span><span class="pg-title">系统设计（一）· 结构化设计与面向对象设计</span></a><a class="pg pg-next" href="H31.html"><span class="pg-label">下一学时</span><span class="pg-title">软件实现与测试（一）· 测试原则与黑盒白盒方法</span></a></nav>
+    <nav class="pager"><a class="pg pg-prev" href="H46.html"><span class="pg-label">上一学时</span><span class="pg-title">论文写作专项（二）· 万能素材卡与考点落点</span></a><a class="pg pg-next" href="H48.html"><span class="pg-label">下一学时</span><span class="pg-title">全真模拟（二）· 下午场论文与复盘方法论</span></a></nav>
     <footer class="footer">
   <p><strong>阿甘系分 · 48 小时冲刺手册</strong></p>
   <p class="sep">非官方出版物 · 与软考办无隶属关系 · 内容均为独立原创编写</p>
