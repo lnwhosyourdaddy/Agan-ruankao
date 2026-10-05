@@ -7,7 +7,7 @@
 <title>第 37 小时 · 移动应用系统分析与设计 · 架构演进与开发方式选型 · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
-<meta name="build-stamp" content="2026-10-05 08:06:29">
+<meta name="build-stamp" content="2026-10-05 11:44:51">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -1927,6 +1927,166 @@ table.zebra tbody tr:hover{background:var(--accent-soft-2)}
 /* ── 平滑滚动偏移（锚点跳转不卡顶栏下） ── */
 html{scroll-padding-top:80px}
 @media(max-width:760px){html{scroll-padding-top:70px}}
+
+/* ═══════════════════════════════════════════════════════════════
+   历年真题区块 · 三级折叠（原生 details，零 JS）
+   ═══════════════════════════════════════════════════════════════ */
+.exam{margin:2.2em 0 1.6em}
+
+/* ── 统计条：常驻不折叠，避免"用户不知道里面有真题"而白做 ── */
+.exam-bar{
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  padding:12px 16px;margin-bottom:10px;
+  background:linear-gradient(180deg,var(--bg-card) 0%,var(--bg-alt) 100%);
+  border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow-1);
+}
+.exam-bar-label{font-weight:700;font-size:14px;color:var(--accent)}
+.exam-bar-stat{font-size:12.5px;color:var(--fg-3);flex:1;min-width:140px}
+.exam-bar-stat b{color:var(--fg-2);font-variant-numeric:tabular-nums}
+.exam-bar-ops{display:flex;gap:6px}
+.exam-op{
+  padding:4px 11px;font:inherit;font-size:12px;cursor:pointer;
+  background:var(--bg-card);border:1px solid var(--line-2);
+  border-radius:999px;color:var(--fg-2);
+  transition:border-color .18s var(--ease),color .18s var(--ease),background .18s var(--ease);
+}
+.exam-op:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+
+/* ── 科目级折叠 ── */
+.exam-subject{
+  border:1px solid var(--line);border-radius:var(--radius);
+  background:var(--bg-card);overflow:hidden;
+}
+.exam-subject>summary{
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  padding:12px 16px;cursor:pointer;list-style:none;
+  font-weight:600;color:var(--fg-2);
+  transition:background .18s var(--ease),color .18s var(--ease);
+}
+.exam-subject>summary::-webkit-details-marker{display:none}
+.exam-subject>summary:hover{background:var(--accent-soft);color:var(--accent)}
+.exam-subject[open]>summary{border-bottom:1px solid var(--line);background:var(--bg-alt)}
+.exam-subject-name::before{content:'▸ ';display:inline-block;transition:transform .2s var(--ease)}
+.exam-subject[open] .exam-subject-name::before{transform:rotate(90deg)}
+.exam-subject-n{font-size:12px;color:var(--fg-3);font-variant-numeric:tabular-nums}
+.exam-subject-tip{margin-left:auto;font-size:11.5px;color:var(--fg-3);opacity:.8}
+
+/* ── 年份级折叠 ── */
+.exam-year{border-bottom:1px solid var(--line)}
+.exam-year:last-child{border-bottom:0}
+.exam-year>summary{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 16px 9px 30px;cursor:pointer;list-style:none;
+  font-size:13.5px;color:var(--fg-2);
+  transition:background .16s var(--ease),color .16s var(--ease);
+}
+.exam-year>summary::-webkit-details-marker{display:none}
+.exam-year>summary:hover{background:var(--accent-soft);color:var(--accent)}
+.exam-year[open]>summary{background:var(--bg-alt)}
+.exam-year-name::before{content:'▸ ';display:inline-block;transition:transform .2s var(--ease);color:var(--fg-3)}
+.exam-year[open] .exam-year-name::before{transform:rotate(90deg)}
+.exam-year-n{font-size:11.5px;color:var(--fg-3);font-variant-numeric:tabular-nums}
+
+/* ── 单题折叠 ── */
+.exam-q{border-top:1px solid var(--line)}
+.exam-q>summary{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:9px 16px 9px 46px;cursor:pointer;list-style:none;
+  font-size:13.5px;line-height:1.6;color:var(--fg-2);
+  transition:background .16s var(--ease);
+}
+.exam-q>summary::-webkit-details-marker{display:none}
+.exam-q>summary:hover{background:var(--accent-soft)}
+.exam-q[open]>summary{background:var(--bg-alt)}
+.exam-q>summary::before{
+  content:'＋';flex-shrink:0;width:1.1em;text-align:center;
+  color:var(--fg-3);font-size:12px;line-height:1.5;
+}
+.exam-q[open]>summary::before{content:'－';color:var(--accent)}
+.exam-no{
+  flex-shrink:0;font-size:11px;color:var(--fg-3);
+  font-variant-numeric:tabular-nums;padding-top:2px;min-width:44px;
+}
+.exam-tag{
+  flex-shrink:0;font-size:10.5px;padding:1px 6px;border-radius:4px;
+  background:var(--warn-bg);color:var(--warn-fg);border:1px solid var(--warn-line);
+}
+.exam-stem-peek{
+  flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  color:var(--fg-2);
+}
+.exam-q[open] .exam-stem-peek{color:var(--fg)}
+.exam-q-body{padding:4px 16px 16px 46px}
+.exam-stem{margin:.6em 0;font-size:14.5px;line-height:1.8;color:var(--fg)}
+.exam-blank{color:var(--danger);padding:0 1px}
+.exam-opts{list-style:none;margin:.5em 0 .9em;padding:0}
+/* ⚠️ 必须清掉全局 `ul>li::before` 的圆点（本站正文列表有项目符号），
+   否则真题选项前会多出一个小圆点，位置还和字母块错开 */
+.exam-opts>li::before{content:none !important}
+.exam-opts li{
+  position:relative;padding:4px 0 4px 26px;font-size:14px;line-height:1.7;
+  border-bottom:1px dashed var(--line);
+}
+.exam-opts li:last-child{border-bottom:0}
+.exam-opts b{
+  position:absolute;left:0;top:4px;
+  display:inline-flex;align-items:center;justify-content:center;
+  width:19px;height:19px;border-radius:5px;
+  background:var(--bg-alt);border:1px solid var(--line-2);
+  font-size:11px;font-weight:700;color:var(--fg-3);
+}
+
+/* ── 答案（默认再折叠一层）── */
+.exam-ans{margin-top:.6em}
+.exam-ans>summary{
+  display:inline-flex;align-items:center;gap:6px;cursor:pointer;list-style:none;
+  padding:4px 12px;font-size:12px;
+  background:var(--accent-soft);border:1px solid var(--line-2);
+  border-radius:999px;color:var(--accent);
+  transition:background .18s var(--ease),border-color .18s var(--ease);
+}
+.exam-ans>summary::-webkit-details-marker{display:none}
+.exam-ans>summary:hover{background:var(--accent-soft-2);border-color:var(--accent)}
+.exam-ans[open]>summary{margin-bottom:8px}
+.exam-ans-line{margin:.4em 0;font-size:14px;color:var(--fg)}
+.exam-ans-line b{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:26px;height:24px;padding:0 8px;margin-left:4px;
+  border-radius:6px;background:var(--tip-bg);color:var(--tip-fg);
+  border:1px solid var(--tip-line);font-weight:700;
+}
+.exam-exp{margin:.4em 0;font-size:13.5px;line-height:1.8;color:var(--fg-2)}
+
+/* ── 窄屏 ── */
+@media(max-width:760px){
+  .exam-bar{padding:10px 12px;gap:8px}
+  .exam-bar-label{font-size:13px}
+  .exam-bar-stat{font-size:11.5px;flex-basis:100%;order:3;min-width:0}
+  .exam-bar-ops{margin-left:auto}
+  .exam-subject-tip{display:none}
+  .exam-q>summary{padding-left:16px;flex-wrap:wrap}
+  .exam-q>summary::before{display:none}
+  .exam-no{min-width:0}
+  .exam-q-body{padding-left:16px}
+  .exam-year>summary{padding-left:20px}
+  .exam-stem-peek{white-space:normal;flex-basis:100%}
+  .exam-opts li{font-size:13.5px}
+}
+
+/* ── 打印：全部自动展开（服务"可打印带水印"卖点）── */
+@media print{
+  .exam-bar,.exam-op,.exam-ans>summary{display:none !important}
+  .exam-subject,.exam-year,.exam-q{border:0 !important;background:none !important}
+  .exam-subject>summary,.exam-year>summary{
+    padding:6pt 0;background:none !important;border-bottom:1pt solid #999;
+  }
+  .exam-subject-name::before,.exam-year-name::before,.exam-q>summary::before{content:'' !important}
+  .exam-q-body,.exam-ans[open] > div,.exam-ans > div{display:block !important}
+  .exam-q{break-inside:avoid;page-break-inside:avoid}
+  .exam-stem,.exam-opts li{font-size:9.5pt}
+  .exam-exp{font-size:8.5pt;color:#333}
+}
 </style>
 </head>
 <body>
@@ -2126,6 +2286,7 @@ html{scroll-padding-top:80px}
   </div>
 </div>
 </div>
+    <section class="exam exam-subj-only" id="exam" data-exam-hour="H37"></section>
     <div class="wrongbook"></div>
     <div class="keyhint">
   <span class="keyhint-title">键盘快捷键</span>
@@ -3000,6 +3161,77 @@ html{scroll-padding-top:80px}
     el.textContent = n
   }
 
+  // ══════════════════════════════════════════
+  // 12. 历年真题：批量展开 + 记忆展开状态
+  // ══════════════════════════════════════════
+  const Exam = {
+    KEY: 'examOpen',
+    init() {
+      const root = document.querySelector('.exam')
+      if (!root) return
+      const chapter = root.dataset.examChapter || 'x'
+
+      // 恢复上次展开状态：{ "H07": { "2025年5月": true, ... } }
+      const saved = store.get(this.KEY, {}) || {}
+      const mine = saved[chapter] || {}
+      root.querySelectorAll('.exam-year').forEach(y => {
+        const name = y.dataset.examYear
+        // 默认：展开最近 1 套（新年优先），其余收起
+        const open = (name in mine) ? mine[name] : false
+        if (open) y.open = true
+        y.addEventListener('toggle', () => {
+          mine[name] = y.open
+          saved[chapter] = mine
+          store.set(this.KEY, saved)
+        })
+      })
+      // 单题的"看过答案"状态也要记（避免重复点开）
+      const seen = store.get('examSeen', {}) || {}
+      root.querySelectorAll('.exam-q').forEach(qd => {
+        const qid = qd.dataset.examId
+        if (seen[qid]) {
+          const a = qd.querySelector('.exam-ans')
+          if (a) a.open = true
+        }
+        const ans = qd.querySelector('.exam-ans')
+        if (ans) ans.addEventListener('toggle', () => {
+          if (ans.open) { seen[qid] = 1; store.set('examSeen', seen) }
+        })
+      })
+
+      // 批量展开/收起按钮
+      root.querySelectorAll('.exam-op').forEach(btn => {
+        btn.addEventListener('click', e => {
+          e.preventDefault()
+          const openAll = btn.dataset.examAll === '1'
+          root.querySelectorAll('.exam-subject,.exam-year').forEach(d => { d.open = openAll })
+          root.querySelectorAll('.exam-ans').forEach(d => {
+            d.open = openAll
+            if (openAll && d.parentElement.dataset.examId) seen[d.parentElement.dataset.examId] = 1
+          })
+          if (openAll) store.set('examSeen', seen)
+          // 同步年份级记忆
+          root.querySelectorAll('.exam-year').forEach(y => { mine[y.dataset.examYear] = y.open })
+          saved[chapter] = mine
+          store.set(this.KEY, saved)
+        })
+      })
+
+      // 快捷键：E = 跳到真题区块（不与既有键冲突）
+      document.addEventListener('keydown', e => {
+        const t = e.target
+        if (t && t.nodeType === 1 && t.matches('input,textarea,select,[contenteditable]')) return
+        if (e.metaKey || e.ctrlKey || e.altKey) return
+        if (e.key.toLowerCase() === 'e') {
+          e.preventDefault()
+          root.scrollIntoView({ behavior: 'smooth', block: 'start' })
+          const y = root.querySelector('.exam-year')
+          if (y) y.open = true
+        }
+      })
+    }
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
     Theme.init()
     FontSize.init()
@@ -3015,6 +3247,7 @@ html{scroll-padding-top:80px}
     BackTop.init()
     CopyCode.init()
     ReadTime.init()
+    Exam.init()
     updateAnsweredStat()
     window.addEventListener('quiz:update', updateAnsweredStat)
     renderMermaid()

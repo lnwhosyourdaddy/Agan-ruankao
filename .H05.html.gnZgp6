@@ -1,0 +1,3706 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>第 5 小时 · 计算机系统（二）· 操作系统 · 阿甘系分 48 小时冲刺</title>
+<meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
+<meta name="build-stamp" content="2026-10-05 09:05:06">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<style>/* ═══════════════════════════════════════════════════
+   阿甘系分 48 小时冲刺 · 设计系统
+   风格：暖墨绿调 / 教科书质感 / 现代极简
+   ═══════════════════════════════════════════════════ */
+
+/* ---------- 1. 设计令牌 ---------- */
+:root{
+  /* 暖墨绿调 —— 沉稳、书卷气，区别于技术文档的"文档蓝" */
+  --bg:#fbfaf6;
+  --bg-alt:#f2f0e9;
+  --bg-card:#fffdf9;
+  --bg-deep:#edeae1;
+
+  --fg:#1b211c;
+  --fg-2:#4d574e;
+  --fg-3:#7d877f;
+  --fg-inv:#fbfaf6;
+
+  --line:#e0ddd4;
+  --line-2:#cdc9bd;
+
+  --accent:#3d5a40;
+  --fs-base:16.5px;
+  --accent-2:#5a8a62;
+  --accent-3:#7ea888;
+  --accent-soft:rgba(61,90,64,.075);
+  --accent-soft-2:rgba(61,90,64,.14);
+  --accent-glow:rgba(90,138,98,.25);
+
+  --warn:#b8860b;
+  --warn-bg:#fdf7e6;
+  --warn-line:#e0b252;
+  --warn-fg:#6b4e06;
+
+  --tip:#2d6a4f;
+  --tip-bg:#e9f4ec;
+  --tip-line:#4a8a63;
+  --tip-fg:#1d4630;
+
+  --danger:#b33636;
+  --danger-bg:#fbeeee;
+  --danger-line:#dd7d7d;
+
+--gold:#a67c00;
+--gold-bg:#fbf6e3;
+/* 记忆口诀框（紫）——与墨绿主色同属低饱和冷调，不抢主色 */
+--mem:#6d4a8f;
+--mem-bg:#f4f1f8;
+--mem-line:#8b6bb0;
+--mem-fg:#4a3460;
+
+  --radius:10px;
+  --radius-lg:16px;
+  --radius-sm:7px;
+  /* 布局宽度：正文栏要够宽才不会在大屏上显得"空而窄"。
+     1440px 视口下 = 236(toc) + 56(gap) + 700(main) + 2×40(padding) ≈ 1072，居中留白更均衡。 */
+  --maxw:1180px;
+  --toc-w:236px;
+  --gap:56px;
+  --pad-x:40px;
+  --shadow-1:0 1px 2px rgba(28,34,29,.04), 0 2px 8px rgba(28,34,29,.03);
+  --shadow-2:0 4px 16px rgba(28,34,29,.07), 0 1px 3px rgba(28,34,29,.04);
+  --shadow-3:0 12px 32px rgba(28,34,29,.10);
+
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Noto Sans SC","Microsoft YaHei",sans-serif;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  --mono:ui-monospace,"SF Mono","JetBrains Mono","Fira Code",Menlo,Consolas,monospace;
+  --serif:"Songti SC","STSong","Source Han Serif SC","Noto Serif CJK SC","Source Han Serif CN","Times New Roman",SimSun,serif;
+  --measure:760px;
+
+  --ease:cubic-bezier(.4,0,.2,1);
+}
+
+html[data-theme="dark"]{
+  --bg:#141715;
+  --bg-alt:#1c201d;
+  --bg-card:#191d1a;
+  --bg-deep:#232824;
+
+  --fg:#dde5de;
+  --fg-2:#a0aaa2;
+  --fg-3:#6c766e;
+  --fg-inv:#141715;
+
+  --line:#2b302c;
+  --line-2:#3a413b;
+
+  --accent:#8bb195;
+  --accent-2:#a9c9b1;
+  --accent-3:#c3dcc8;
+  --accent-soft:rgba(139,177,149,.10);
+  --accent-soft-2:rgba(139,177,149,.18);
+  --accent-glow:rgba(139,177,149,.25);
+
+  --warn:#d9b04a;
+  --warn-bg:#252010;
+  --warn-line:#7d6428;
+  --warn-fg:#e8d08a;
+
+  --tip:#7fc79b;
+  --tip-bg:#16241c;
+  --tip-line:#3d7a55;
+  --tip-fg:#a8dcbd;
+
+  --danger:#e08585;
+  --danger-bg:#251818;
+  --danger-line:#8a4545;
+
+--gold:#d9bb6a;
+--gold-bg:#262210;
+--mem:#c9b0e0;
+--mem-bg:#221a2c;
+--mem-line:#7d5fa0;
+--mem-fg:#dccdf0;
+
+  --shadow-1:0 1px 2px rgba(0,0,0,.16);
+  --shadow-2:0 4px 16px rgba(0,0,0,.26);
+  --shadow-3:0 12px 32px rgba(0,0,0,.36);
+}
+
+/* ---------- 2. 基础重置 ---------- */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+html{
+  scroll-behavior:smooth;
+  -webkit-text-size-adjust:100%;
+  scroll-padding-top:80px;
+  font-size:var(--fs-base);     /* 字号可调（- / + 快捷键），默认 16.5px */
+}
+
+body{
+  font-family:var(--font);
+  background:var(--bg);
+  color:var(--fg);
+  font-size:16.5px;
+  line-height:1.88;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  font-variant-numeric:tabular-nums;
+}
+
+::selection{background:var(--accent-soft-2);color:var(--accent)}
+
+img{max-width:100%;height:auto}
+
+/* 焦点可见性（键盘导航） */
+:focus-visible{outline:2px solid var(--accent-2);outline-offset:2px;border-radius:4px}
+
+/* ---------- 3. 阅读进度条 ---------- */
+.read-progress{
+  position:fixed;top:0;left:0;right:0;height:2.5px;
+  background:var(--accent-2);
+  transform-origin:left;transform:scaleX(0);
+  width:100%;
+  z-index:1000;
+  transition:transform .1s linear;
+}
+
+/* ---------- 4. 顶部导航 ---------- */
+.topbar{
+  position:sticky;top:0;z-index:500;
+  height:54px;
+  display:flex;align-items:center;gap:24px;
+  padding:0 28px;
+  background:color-mix(in srgb, var(--bg) 85%, transparent);
+  backdrop-filter:saturate(180%) blur(14px);
+  -webkit-backdrop-filter:saturate(180%) blur(14px);
+  border-bottom:1px solid var(--line);
+}
+.topbar::after{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  box-shadow:0 1px 0 var(--line);
+}
+@media (prefers-reduced-motion:reduce){
+  .read-progress{transition:none}
+  *{animation-duration:.01ms!important;transition-duration:.01ms!important}
+}
+
+.brand{
+  display:flex;align-items:baseline;gap:8px;
+  font-weight:700;font-size:15.5px;letter-spacing:-.2px;
+  color:var(--accent);text-decoration:none;white-space:nowrap;
+  flex-shrink:0;
+}
+.brand-mark{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:22px;height:22px;border-radius:6px;
+  background:var(--accent);color:var(--fg-inv);
+  font-size:12px;font-weight:700;
+  align-self:center;
+}
+.brand-sub{color:var(--fg-3);font-weight:400;font-size:13px}
+
+/* ---------- 顶栏导航：胶囊触发器 + 分组下拉面板 ----------
+   14 个学时平铺会挤爆顶栏（尤其 1280px 以下），改成「当前页胶囊 + 分组面板」。
+   面板按模块分组（第一篇/第二篇/专项），底部给出待上线进度与上一章/下一章。 */
+.nav{position:relative;margin-left:auto;flex-shrink:0}
+.nav-trigger{
+  display:inline-flex;align-items:center;gap:8px;
+  max-width:min(46vw,340px);
+  padding:6px 12px 6px 8px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  background:var(--bg-card);
+  color:var(--fg-2);font:inherit;font-size:13.5px;
+  cursor:pointer;
+  transition:border-color .18s var(--ease), background .18s var(--ease), color .18s var(--ease);
+}
+.nav-trigger:hover{border-color:var(--accent);color:var(--accent)}
+.nav-trigger:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.nav-trigger-code{
+  flex-shrink:0;
+  padding:2px 8px;border-radius:999px;
+  background:var(--accent);color:var(--fg-inv);
+  font-size:11.5px;font-weight:700;letter-spacing:.02em;
+}
+.nav-trigger-label{
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.nav-caret{width:12px;height:12px;flex-shrink:0;transition:transform .2s var(--ease)}
+.nav.open .nav-caret{transform:rotate(180deg)}
+
+.nav-panel{
+  position:absolute;top:calc(100% + 10px);right:0;
+  width:min(88vw,392px);
+  max-height:min(74vh,620px);
+  display:flex;flex-direction:column;
+  background:var(--bg-card);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow-2);
+  overflow:hidden;
+  z-index:520;
+}
+.nav-panel[hidden]{display:none}
+.nav-panel-scroll{
+  overflow-y:auto;overscroll-behavior:contain;
+  padding:10px 8px 12px;
+  flex:1;
+  -webkit-overflow-scrolling:touch;
+}
+.nav-group + .nav-group{margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+.nav-group-solo{padding-bottom:2px}
+.nav-group-solo + .nav-group{margin-top:8px;padding-top:8px}
+.nav-group-title{
+  padding:0 10px 6px;
+  font-size:11.5px;font-weight:700;letter-spacing:.06em;
+  color:var(--fg-3);text-transform:none;
+}
+.nav-item{
+  display:flex;align-items:center;gap:9px;
+  padding:6px 10px;border-radius:var(--radius-sm);
+  font-size:13.5px;color:var(--fg-2);text-decoration:none;
+  transition:background .15s var(--ease), color .15s var(--ease);
+}
+.nav-item:hover{background:var(--accent-soft);color:var(--accent)}
+.nav-item:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.nav-item.active{background:var(--accent-soft-2);color:var(--accent);font-weight:600}
+.nav-item-code{
+  flex-shrink:0;min-width:38px;
+  font-size:11px;font-weight:700;color:var(--fg-3);
+  font-variant-numeric:tabular-nums;
+}
+.nav-item.active .nav-item-code{color:var(--accent)}
+.nav-item-label{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* 待上线：只做进度提示，不可点 */
+.nav-group-pending .nav-group-title{color:var(--fg-3)}
+.nav-pending-row{
+  display:flex;align-items:center;gap:9px;
+  padding:4px 10px;font-size:12.5px;color:var(--fg-3);
+}
+.nav-pending-row + .nav-pending-row{border-top:1px dashed var(--line)}
+.nav-pending-ch{flex-shrink:0;min-width:104px;font-weight:600}
+.nav-pending-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nav-pending-w{flex-shrink:0;font-size:11px;opacity:.8}
+
+.nav-foot{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:8px 12px;border-top:1px solid var(--line);
+  background:var(--bg);
+  font-size:11.5px;color:var(--fg-3);
+}
+.nav-foot-nav{display:inline-flex;gap:6px}
+.nav-step{
+  padding:4px 10px;border-radius:999px;
+  border:1px solid var(--line);
+  color:var(--fg-2);text-decoration:none;font-size:12px;
+  transition:border-color .15s var(--ease), color .15s var(--ease);
+}
+.nav-step:hover{border-color:var(--accent);color:var(--accent)}
+.nav-step.is-off{opacity:.4;pointer-events:none}
+
+@media(max-width:860px){
+  .nav-trigger{max-width:52vw;padding:5px 10px 5px 6px}
+  .nav-trigger-label{font-size:12.5px}
+  .nav-panel{width:min(92vw,360px)}
+  .nav-foot-tip{display:none}
+}
+@media(max-width:760px){
+  /* 手机上再收一档：只留「章号 + 短标题」，保证顶栏单行不换行 */
+  .topbar{gap:8px;padding:8px 12px}
+  .nav-trigger-code{padding:2px 6px;font-size:11px}
+  .nav-caret{display:none}
+  .nav-pending-ch{min-width:88px}
+
+  /* ⚠️ 窄屏必须把面板改成「贴顶栏左右边缘」，不能继续以 .nav 为锚点右对齐：
+     .nav 右边还有「专注 / ⋯」按钮，面板向左溢出会有一部分跑到屏幕外。
+     做法：.nav 退回 static（面板的包含块变回 position:sticky 的 .topbar），
+     再用 left/right 撑满。不能用 position:fixed —— .topbar 有 backdrop-filter，
+     会成为 fixed 的包含块，坐标会错位。 */
+  .nav{position:static}
+  .nav-panel{
+    left:8px;right:8px;width:auto;
+    top:calc(100% + 6px);
+    max-height:calc(100vh - 84px);
+  }
+}
+
+/* 主题切换按钮组 */
+.theme-switch{
+  display:flex;gap:2px;padding:3px;
+  background:var(--bg-alt);border-radius:var(--radius-sm);
+  border:1px solid var(--line);
+  flex-shrink:0;
+}
+.theme-btn{
+  border:none;background:transparent;cursor:pointer;
+  padding:4px 9px;border-radius:5px;
+  font-size:11.5px;font-family:inherit;color:var(--fg-3);
+  transition:all .18s var(--ease);
+}
+.theme-btn:hover{color:var(--fg-2)}
+.theme-btn.active{background:var(--bg-card);color:var(--accent);font-weight:600;box-shadow:var(--shadow-1)}
+
+/* ---------- 5. 页面布局 ---------- */
+.shell{
+  display:flex;gap:var(--gap);
+  max-width:var(--maxw);margin:0 auto;
+  padding:0 var(--pad-x);
+  align-items:flex-start;
+}
+.main{flex:1;min-width:0;padding:52px 0 100px}
+
+/* 侧边目录 */
+.toc{
+  position:sticky;top:78px;
+  width:var(--toc-w);flex-shrink:0;
+  padding:52px 0 40px;
+  font-size:13px;
+  max-height:calc(100vh - 100px);
+  overflow-y:auto;
+  scrollbar-width:thin;
+}
+.toc-title{
+  font-size:11px;font-weight:700;letter-spacing:.6px;
+  text-transform:uppercase;color:var(--fg-3);
+  margin-bottom:12px;padding-left:11px;
+  display:flex;align-items:center;gap:8px;
+}
+/* 目录标题右侧加一条渐隐细线，视觉上把目录框住 */
+.toc-title::after{
+  content:'';flex:1;height:1px;
+  background:linear-gradient(90deg,var(--line) 0%,transparent 100%);
+}
+.toc-item{
+  display:block;padding:5px 11px;margin:1px 0;
+  color:var(--fg-2);text-decoration:none;
+  border-left:2px solid transparent;
+  border-radius:0 var(--radius-sm) var(--radius-sm) 0;
+  transition:all .18s var(--ease);
+  line-height:1.5;
+}
+.toc-item:hover{color:var(--accent);background:var(--accent-soft)}
+.toc-item.active{
+  color:var(--accent);border-left-color:var(--accent);
+  background:linear-gradient(90deg,var(--accent-soft) 0%,transparent 100%);
+  font-weight:600;
+}
+
+/* ---------- 6. 封面（首页） ---------- */
+.cover{
+  padding:76px 0 60px;
+  text-align:center;
+  border-bottom:1px solid var(--line);
+  margin-bottom:56px;
+}
+.cover-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:6px 16px;margin-bottom:28px;
+  background:var(--accent-soft);border:1px solid var(--accent-soft-2);
+  border-radius:100px;
+  font-size:12.5px;color:var(--accent);font-weight:600;
+}
+.cover h1{
+  font-size:3.5em;font-weight:800;letter-spacing:-1.6px;
+  color:var(--accent);line-height:1.14;margin-bottom:16px;
+}
+/* ⚠️ 封面 h1 也继承 `.main h1::after` 那道 56px 短横线，但它是 display:block 的
+   固定宽块级元素 —— 文字居中不代表块级元素居中，会贴到左边。
+   修法：给封面这条短横线加 margin-left/right:auto 让它真正居中。 */
+.cover h1::after{
+  margin-left:auto;margin-right:auto;
+  width:72px;height:3px;
+}
+.cover .sub{
+  font-size:1.2em;color:var(--fg-2);
+  margin-bottom:32px;max-width:620px;
+  margin-left:auto;margin-right:auto;line-height:1.75;
+}
+.cover-stats{
+  display:flex;justify-content:center;gap:14px;flex-wrap:wrap;
+  margin-bottom:36px;
+}
+/* 数据卡：之前是"白框+黑字"，质感很弱。
+   改成微渐变底 + 顶部一道主色细线 + 更深的投影，卡片有了"浮起来"的层次。 */
+.stat{
+  position:relative;
+  background:linear-gradient(180deg,var(--bg-card) 0%,var(--bg-alt) 100%);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:14px 22px 13px;
+  min-width:104px;
+  box-shadow:var(--shadow-2);
+  overflow:hidden;
+}
+.stat::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--accent) 0%,var(--accent-3) 100%);
+}
+.stat-num{
+  display:block;font-size:2.05em;font-weight:700;
+  color:var(--accent);line-height:1.14;letter-spacing:-.6px;
+}
+.stat-num small{font-size:.5em;font-weight:600;color:var(--fg-3);margin-left:1px}
+.stat-label{display:block;font-size:11.5px;color:var(--fg-3);margin-top:4px;letter-spacing:.3px}
+
+/* CTA 按钮 */
+.cta-row{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+.cta{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:11px 24px;border-radius:var(--radius);
+  font-size:14px;font-weight:600;text-decoration:none;
+  border:1px solid var(--accent);background:var(--accent);color:var(--fg-inv);
+  transition:all .2s var(--ease);
+  box-shadow:var(--shadow-1);
+}
+.cta:hover{transform:translateY(-1px);box-shadow:var(--shadow-2);background:var(--accent-2)}
+.cta-ghost{background:transparent;color:var(--accent);border-color:var(--line-2)}
+.cta-ghost:hover{background:var(--accent-soft);border-color:var(--accent)}
+
+/* ---------- 7. 标题与正文 ---------- */
+h1{
+  font-size:2.3em;font-weight:750;letter-spacing:-.6px;
+  margin:1.5em 0 .55em;line-height:1.26;
+}
+h2{
+  font-size:1.72em;font-weight:700;letter-spacing:-.3px;
+  margin:2em 0 .5em;line-height:1.32;
+  padding-bottom:.4em;border-bottom:1.5px solid var(--line);
+}
+h3{font-size:1.3em;font-weight:650;margin:1.8em 0 .42em;line-height:1.42}
+h4{font-size:1.08em;font-weight:650;margin:1.5em 0 .35em}
+h1:first-child,h2:first-child,h3:first-child,h4:first-child{margin-top:0}
+
+p{margin:.95em 0}
+p:first-child{margin-top:0}
+
+strong{color:var(--accent);font-weight:650}
+em{font-style:italic}
+
+a{
+  color:var(--accent);
+  border-bottom:1px solid var(--accent-soft-2);
+  text-decoration:none;
+  transition:border-color .18s var(--ease), color .18s var(--ease);
+}
+a:hover{border-bottom-color:var(--accent-2)}
+
+/* ---------- 8. 列表 ---------- */
+ul,ol{margin:.85em 0 .85em 1.5em;padding:0}
+li{margin:.32em 0;line-height:1.8}
+li::marker{color:var(--fg-3)}
+ul{list-style:none}
+ul>li{position:relative}
+ul>li::before{
+  content:'';position:absolute;left:-1.1em;top:.78em;
+  width:5px;height:5px;border-radius:50%;
+  background:var(--accent-2);opacity:.75;
+}
+ol{list-style:decimal}
+ol>li::marker{color:var(--accent-2);font-weight:600;font-size:.92em}
+
+ul ul,ol ol,ul ol,ol ul{margin:.3em 0 .3em .2em}
+
+/* ---------- 9. 表格 ---------- */
+table{
+  width:100%;border-collapse:separate;border-spacing:0;
+  margin:1.5em 0;font-size:14.5px;
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  overflow:hidden;
+  box-shadow:var(--shadow-1);
+}
+th{
+  background:linear-gradient(180deg,var(--bg-alt) 0%,var(--bg-deep) 100%);
+  font-weight:700;font-size:12px;
+  text-align:left;letter-spacing:.5px;
+  padding:.78em 1em;
+  border-bottom:1.5px solid var(--line-2);
+  color:var(--accent);white-space:nowrap;
+}
+td{
+  padding:.78em 1em;
+  border-bottom:1px solid var(--line);
+  line-height:1.7;
+}
+tr:last-child td{border-bottom:none}
+tbody tr{transition:background .15s var(--ease)}
+tbody tr:hover{background:var(--accent-soft)}
+td strong{color:var(--accent)}
+
+/* 数字/居中列 */
+td[align="center"],th[align="center"]{text-align:center}
+
+/* ---------- 10. 提示框 ----------
+   优化要点：之前四种提示框各自带**整块饱和底色**，一页里绿/黄/紫连续堆叠，
+   看起来像表单而不是书。改成「统一米白底 + 左侧粗色条 + 标题着色」，
+   靠色条而不是靠大色块区分，页面立刻安静下来。 */
+.block{
+  position:relative;
+  margin:1.6em 0;
+  padding:1.05em 1.3em 1.1em 1.4em;
+  border-radius:var(--radius);
+  font-size:14.8px;line-height:1.78;
+  border:1px solid var(--line);
+  border-left:none;
+  background:var(--bg-card);
+  box-shadow:var(--shadow-1);
+}
+.block::before{
+  content:'';position:absolute;left:0;top:10px;bottom:10px;
+  width:4px;border-radius:0 4px 4px 0;
+  background:var(--accent-2);
+}
+.block-title{
+  font-weight:700;font-size:11.5px;
+  letter-spacing:.7px;
+  margin-bottom:7px;
+  display:flex;align-items:center;gap:6px;
+  color:var(--accent);
+}
+/* 每类只保留「标题色 + 色条色」，底色统一由 .block 提供 */
+.warning::before{background:var(--warn-line)}
+.warning .block-title{color:var(--warn-fg)}
+.tip::before{background:var(--tip-line)}
+.tip .block-title{color:var(--tip)}
+.info::before{background:var(--accent-2)}
+.info .block-title{color:var(--accent)}
+.danger::before{background:var(--danger-line)}
+.danger .block-title{color:var(--danger)}
+.gold::before{background:var(--gold)}
+.gold .block-title{color:var(--gold)}
+.mem::before{background:var(--mem-line)}
+.mem .block-title{color:var(--mem)}
+.block p{margin:.55em 0}
+.block p:last-child{margin-bottom:0}
+.block ul{margin:.5em 0}
+.block strong{color:inherit;font-weight:700}
+.block{color:var(--fg-2)}
+.warning{color:var(--warn-fg)}
+.tip{color:var(--tip-fg)}
+.mem{color:var(--mem-fg)}
+.gold{color:var(--fg)}
+
+/* ---------- 11. 引用（记忆点/口诀） ---------- */
+.quote{
+  margin:1.4em 0;
+  padding:1em 1.3em 1em 1.5em;
+  background:var(--bg-alt);
+  border-radius:var(--radius);
+  border:1px solid var(--line);
+  font-size:15px;line-height:1.82;
+  position:relative;
+}
+.quote:before{
+  content:'';position:absolute;left:0;top:.9em;bottom:.9em;
+  width:3px;border-radius:2px;background:var(--accent-2);
+}
+.quote p{margin:.35em 0}
+.quote strong{color:var(--accent)}
+
+/* ---------- 12. 表格内 mermaid / 代码 ---------- */
+.mermaid-wrap{
+  margin:1.7em 0;
+  padding:22px 18px;
+  background:var(--bg-card);
+  border:1px solid var(--line);
+  border-radius:var(--radius-lg);
+  text-align:center;
+  overflow-x:auto;
+  box-shadow:var(--shadow-1);
+}
+.mermaid-wrap svg{max-width:100%;height:auto;display:block;margin:0 auto}
+.mermaid-wrap.mermaid-err{
+  text-align:left;font-size:13px;color:var(--danger);
+  background:var(--danger-bg);border-color:var(--danger-line);
+}
+
+pre{
+  margin:1.3em 0;
+  padding:1em 1.2em;
+  background:var(--bg-deep);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  font-family:var(--mono);
+  font-size:13px;line-height:1.68;
+  overflow-x:auto;
+  color:var(--fg-2);
+}
+
+/* ---------- 13. Quiz 答题模块 ---------- */
+.quiz{
+  margin:2.6em 0;
+  background:var(--bg-card);
+  border:1.5px solid var(--line-2);
+  border-radius:var(--radius-lg);
+  overflow:hidden;
+  box-shadow:var(--shadow-2);
+}
+.quiz-head{
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+  padding:15px 22px;
+  background:var(--bg-alt);
+  border-bottom:1.5px solid var(--line);
+}
+.quiz-label{
+  font-weight:700;font-size:14px;color:var(--accent);
+  display:flex;align-items:center;gap:7px;
+}
+.quiz-progress{
+  font-size:12.5px;color:var(--fg-3);flex:1;min-width:120px;
+}
+.quiz-progress b{color:var(--accent);font-weight:700}
+.quiz-pbar{
+  height:4px;background:var(--line);border-radius:3px;
+  width:100%;margin-top:10px;overflow:hidden;
+}
+.quiz-pbar-fill{
+  height:100%;background:var(--accent-2);
+  transform-origin:left;width:0;
+  transition:width .35s var(--ease);
+}
+.quiz-btn{
+  font-size:12px;padding:5px 12px;
+  border:1px solid var(--line-2);background:var(--bg-card);
+  color:var(--fg-2);border-radius:var(--radius-sm);
+  cursor:pointer;font-family:inherit;
+  transition:all .18s var(--ease);
+  white-space:nowrap;
+}
+.quiz-btn:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+.quiz-btn:active{transform:scale(.97)}
+
+/* 题目卡 */
+.quiz-item{
+  padding:20px 24px;
+  border-bottom:1px solid var(--line);
+  transition:background .25s var(--ease);
+}
+.quiz-item:last-child{border-bottom:none}
+.quiz-q{
+  font-size:15px;font-weight:600;line-height:1.72;
+  margin-bottom:14px;
+}
+.quiz-q .qn{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:22px;height:22px;border-radius:6px;
+  background:var(--accent-soft);color:var(--accent);
+  font-size:12px;font-weight:700;margin-right:8px;
+  vertical-align:1px;
+}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{
+  display:flex;align-items:flex-start;gap:11px;
+  padding:11px 15px;
+  border:1.5px solid var(--line);
+  border-radius:var(--radius);
+  cursor:pointer;font-size:14.5px;line-height:1.68;
+  transition:all .2s var(--ease);
+  user-select:none;
+}
+.opt:hover{border-color:var(--accent-2);background:var(--accent-soft);transform:translateX(3px)}
+.opt .letter{
+  flex:0 0 21px;height:21px;
+  border-radius:5px;
+  background:var(--bg-alt);border:1px solid var(--line-2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;color:var(--fg-3);
+  margin-top:2px;
+}
+.opt .txt{flex:1;min-width:0}
+.opt.picked{border-color:var(--accent);background:var(--accent-soft-2)}
+.opt.right{border-color:var(--tip-line);background:var(--tip-bg);font-weight:600}
+.opt.right .letter{background:var(--tip-line);color:#fff;border-color:var(--tip-line)}
+.opt.wrong-pick .letter{background:var(--danger-line);color:#fff;border-color:var(--danger-line)}
+.mark{font-weight:700;margin-left:auto;font-size:15px;flex-shrink:0}
+.mark.ok{color:var(--tip-line)}
+.mark.no{color:var(--danger-line)}
+
+.quiz-item.correct{background:var(--tip-bg)}
+.quiz-item.wrong{background:var(--danger-bg)}
+
+/* 解析区 */
+.reveal{
+  margin-top:16px;padding-top:16px;
+  border-top:1px dashed var(--line-2);
+  animation:fadeUp .3s var(--ease);
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+.reveal-verdict{
+  font-weight:700;font-size:14.5px;margin-bottom:9px;
+  display:flex;align-items:center;gap:10px;
+}
+.reveal-verdict .answer{
+  font-weight:500;font-size:13px;color:var(--fg-2);
+  background:var(--bg-alt);padding:2px 10px;border-radius:5px;
+}
+.reveal-explain{
+  font-size:14px;color:var(--fg-2);line-height:1.82;
+}
+.reveal-ref{
+  font-size:12.5px;color:var(--fg-3);
+  margin-top:8px;font-style:italic;
+}
+
+/* ---------- 14. 错题本 ---------- */
+.wrongbook{
+  margin:2.6em 0;
+  background:var(--bg-card);
+  border:1.5px solid var(--line-2);
+  border-radius:var(--radius-lg);
+  overflow:hidden;
+  box-shadow:var(--shadow-1);
+}
+.wb-head{
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+  padding:15px 22px;
+  background:var(--bg-alt);
+  border-bottom:1.5px solid var(--line);
+  font-weight:700;font-size:14px;color:var(--accent);
+}
+.wb-total{font-size:12.5px;color:var(--fg-3);font-weight:400;margin-left:auto}
+.wb-empty{
+  padding:26px 22px;text-align:center;
+  font-size:13.5px;color:var(--fg-3);
+}
+.wb-row{
+  display:flex;align-items:center;gap:14px;
+  padding:12px 22px;
+  border-bottom:1px solid var(--line);
+  transition:background .15s var(--ease);
+}
+.wb-row:hover{background:var(--accent-soft)}
+.wb-row a{font-size:14px;color:var(--accent);font-weight:600}
+.wb-row a:hover{background:none;border-bottom-color:var(--accent)}
+.wb-count{
+  font-size:12px;color:var(--fg-3);
+  background:var(--bg-alt);padding:3px 10px;border-radius:5px;
+  margin-left:auto;
+}
+.wb-clear{
+  width:100%;padding:11px;
+  border:none;background:transparent;
+  color:var(--fg-3);font-size:12.5px;cursor:pointer;
+  font-family:inherit;
+  transition:all .18s var(--ease);
+}
+.wb-clear:hover{background:var(--danger-bg);color:var(--danger)}
+
+/* ---------- 15. 页脚 ---------- */
+.footer{
+  margin-top:70px;
+  padding:36px 28px 44px;
+  text-align:center;
+  border-top:1px solid var(--line);
+  font-size:12.5px;color:var(--fg-3);
+}
+.footer p{margin:.4em 0}
+.footer strong{color:var(--fg-2);font-weight:600}
+.footer .sep{margin:.9em 0;font-size:11.5px}
+
+/* ---------- 16. 快捷键面板 ---------- */
+.keyhint{
+  margin:2.4em 0;
+  padding:16px 20px;
+  background:var(--bg-alt);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  font-size:13px;color:var(--fg-2);
+  display:flex;flex-wrap:wrap;gap:8px 22px;align-items:center;
+}
+.keyhint-title{font-weight:700;color:var(--accent);font-size:12.5px}
+.kbd{
+  display:inline-flex;align-items:center;justify-content:center;
+  key-order:0;
+  min-width:22px;height:22px;padding:0 6px;
+  background:var(--bg-card);border:1px solid var(--line-2);
+  border-bottom-width:2px;
+  border-radius:5px;
+  font-family:var(--mono);font-size:11px;
+  font-weight:600;color:var(--fg-2);
+}
+.keyhint span.item{display:flex;align-items:center;gap:6px}
+
+/* ---------- 17. 响应式 ---------- */
+@media(max-width:1240px){
+  /* 目录还在，但正文让出宽度给两侧留白 */
+  .shell{max-width:1000px;gap:40px;--pad-x:28px}
+  .toc{width:200px}
+}
+@media(max-width:1100px){
+  .shell{max-width:820px;gap:0;--pad-x:24px}
+  .toc{display:none}
+}
+@media(max-width:760px){
+  body{font-size:16px;line-height:1.82}
+  .topbar{height:auto;min-height:52px;padding:10px 16px;flex-wrap:wrap;gap:10px}
+  .brand-sub{display:none}
+  /* 窄屏：品牌只留图标，标题在触发器里显示，顶栏保持单行 */
+  .brand span:not(.brand-mark){display:none}
+  .nav{margin-left:auto;gap:2px}
+  .main{padding:32px 0 80px}
+  .cover{padding:48px 0 40px;margin-bottom:40px}
+  .cover h1{font-size:2.4em;letter-spacing:-.8px}
+  .cover .sub{font-size:1.05em;margin-bottom:24px}
+  .cover-stats{gap:10px;margin-bottom:28px}
+  .stat{min-width:76px;padding:10px 14px}
+  .stat-num{font-size:1.5em}
+  h1{font-size:1.85em;margin:1.4em 0 .5em}
+  h2{font-size:1.5em;margin:1.8em 0 .45em}
+  h3{font-size:1.18em}
+  table{font-size:13.5px}
+  th{padding:.6em .8em;white-space:normal}
+  td{padding:.68em .8em}
+  .quiz-item{padding:16px 18px}
+  .quiz-q{font-size:14.5px}
+  .opt{padding:10px 13px;font-size:14px}
+  .mermaid-wrap{padding:16px 12px}
+  .footer{margin-top:50px;padding:28px 16px 36px}
+}
+@media(max-width:480px){
+  .theme-switch{display:inline-flex}  /* 极窄屏仍需主题切换（深浅色刚需），依赖⋯浮层收纳 */
+}
+
+/* ---------- 18. 打印样式 ---------- */
+@media print{
+  .read-progress,
+  .topbar,
+  .toc,
+  .theme-switch,
+  .quiz-btn,
+  .cta-row,
+  .wrongbook,
+  .keyhint,
+  .pager,
+  .focus-btn,
+  .search-panel,
+  .search-box,
+  .search-results,
+  .mermaid-wrap .lang{
+    display:none !important;
+  }
+
+  body{
+    font-size:11pt;
+    line-height:1.62;
+    background:#fff;
+    color:#000;
+  }
+  .shell{max-width:100%;padding:0;gap:0}
+  .main{padding:0}
+
+  h1{font-size:19pt;margin:1.2em 0 .4em}
+  h2{font-size:15pt;margin:1.5em 0 .4em}
+  h3{font-size:12.5pt}
+  h4{font-size:11pt}
+  h1,h2,h3,h4{break-after:avoid;page-break-after:avoid}
+
+  .cover{padding:0 0 18px;margin-bottom:18px;text-align:left}
+  .cover h1{font-size:24pt}
+  .cover-stats,.cover-badge,.cta-row{display:none !important}
+
+  a[href^="http"]:after{
+    content:" (" attr(href) ")";
+    font-size:8pt;color:#666;word-break:break-all;
+  }
+
+  table{
+    font-size:9.5pt;margin:1em 0;
+    box-shadow:none;border:1px solid #ccc;
+  }
+  th{background:#f0f0f0 !important;color:#000 !important}
+  th,td{padding:.5em .7em}
+  thead{display:table-header-group}
+  tr{break-inside:avoid;page-break-inside:avoid}
+
+  .quiz-item{
+    break-inside:avoid;
+    page-break-inside:avoid;
+    background:#fff !important;
+  }
+  .quiz{border:1px solid #ccc;box-shadow:none}
+  .quiz-head{background:#f6f6f6 !important}
+
+  .block,.quote,.mermaid-wrap{
+    break-inside:avoid;
+    page-break-inside:avoid;
+  }
+  .mermaid-wrap svg{max-height:220mm;height:auto}
+
+  strong{color:#000 !important}
+  .footer{page-break-before:always;margin-top:0;padding-top:20px}
+}
+
+/* ---------- 19. 上下页导航 ---------- */
+.pager{
+  display:flex;gap:14px;
+  margin:44px 0 0;
+}
+.pg{
+  flex:1;min-width:0;
+  display:flex;flex-direction:column;gap:3px;
+  padding:15px 18px;
+  background:var(--bg-card);
+  border:1.5px solid var(--line);
+  border-radius:var(--radius);
+  text-decoration:none;
+  transition:all .2s var(--ease);
+}
+.pg:hover{
+  border-color:var(--accent-2);
+  background:var(--accent-soft);
+  transform:translateY(-2px);
+  box-shadow:var(--shadow-2);
+}
+.pg-label{
+  font-size:11.5px;letter-spacing:.5px;
+  color:var(--fg-3);font-weight:600;
+  text-transform:uppercase;
+}
+.pg-title{
+  font-size:14.5px;font-weight:650;color:var(--accent);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.pg-next{text-align:right}
+.pg-next .pg-label::after{content:""}
+@media(max-width:640px){
+  .pager{flex-direction:column;gap:10px}
+  .pg-next{text-align:left}
+}
+
+/* ---------- 20. mermaid 降级提示 ---------- */
+.mmd-note{
+  font-size:12px;font-weight:600;letter-spacing:.4px;
+  color:var(--danger);margin-bottom:8px;
+  display:flex;align-items:center;gap:6px;
+}
+.mmd-note::before{
+  content:'';width:7px;height:7px;border-radius:50%;
+  background:var(--danger);flex:0 0 auto;
+}
+.mermaid-wrap.mermaid-err pre{
+  margin:0;text-align:left;
+  font-size:12px;max-height:340px;overflow:auto;
+}
+
+/* ---------- 21. 移动端表格横向滚动 ---------- */
+@media(max-width:760px){
+  .vp-doc table,
+  main table{
+    display:block;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    max-width:100%;
+  }
+  main table tbody{min-width:520px}
+  /* 让表头保持可读 */
+  main th{white-space:nowrap}
+}
+
+/* mermaid 源码占位（未渲染前隐藏；源码在 data-src 属性里） */
+.vp-doc .mermaid-src,
+main .mermaid-src{ display:none !important }
+
+/* ---------- 22. 多级目录（4 级） ---------- */
+.toc{ font-size:12.5px }
+.toc-tree{ margin-top:2px }
+.toc-item{
+  display:block;
+  padding:3.5px 10px 3.5px calc(11px + var(--depth,0) * 13px);
+  margin:0;
+  border-left:2px solid transparent;
+  border-radius:0 5px 5px 0;
+  line-height:1.45;
+  color:var(--fg-3);
+  position:relative;
+  transition:color .15s var(--ease), background .15s var(--ease), border-color .15s var(--ease);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+/* 层级视觉：h2 加粗深色，h3/h4/h5 逐级变浅变小 */
+.toc-l1{ font-weight:650;font-size:13px;color:var(--fg-2);margin-top:8px }
+.toc-l1:first-child{ margin-top:0 }
+.toc-l2{ font-weight:500 }
+.toc-l3{ padding-left:calc(11px + var(--depth,0)*13px); font-size:12px }
+.toc-l4{ font-size:11.5px;opacity:.9 }
+/* 子级左侧引导线 */
+.toc-item[style*="--depth:1"]::before,
+.toc-item[style*="--depth:2"]::before,
+.toc-item[style*="--depth:3"]::before{
+  content:'';position:absolute;left:calc(4px + (var(--depth) - 1) * 13px);
+  top:0;bottom:0;width:1px;background:var(--line);
+}
+.toc-item:hover{ color:var(--accent);background:var(--accent-soft) }
+.toc-item.active{
+  color:var(--accent);font-weight:600;
+  background:var(--accent-soft);
+  border-left-color:var(--accent);
+}
+.toc-item.active.toc-l2,
+.toc-item.active.toc-l3,
+.toc-item.active.toc-l4{ background:var(--accent-soft-2) }
+
+/* 目录项过多时滚动 */
+.toc{ max-height:calc(100vh - 110px);overflow-y:auto;overscroll-behavior:contain }
+.toc::-webkit-scrollbar{width:4px }
+.toc::-webkit-scrollbar-thumb{background:var(--line-2);border-radius:4px }
+
+/* 折叠按钮（只在有子节点时显示） */
+.toc-toggle{
+  position:absolute;left:0;top:0;width:16px;height:100%;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:var(--fg-3);
+}
+.toc-toggle::before{
+  content:'';width:0;height:0;
+  border-left:4px solid currentColor;
+  border-top:3.5px solid transparent;
+  border-bottom:3.5px solid transparent;
+  transition:transform .18s var(--ease);
+}
+.toc-group.collapsed > .toc-toggle::before{ transform:rotate(-90deg) }
+.toc-group.collapsed > .toc-sub{ display:none }
+
+@media(max-width:1100px){ .toc{ display:none } }
+
+/* ---------- 23. 专注模式 ---------- */
+/* 注意：不要用 visibility:hidden 兜底 —— 那会把退出按钮一起隐藏，真人点不到。
+   正确做法见文件末尾「专注模式退出按钮修复」段（opacity + pointer-events）。 */
+html.focus-mode .shell{
+  max-width:720px;
+  margin:0 auto;
+  padding:40px 24px 80px;
+}
+/* 顶栏里的专注按钮常态样式 */
+.focus-btn{
+  background:var(--bg-card);border:1px solid var(--line);
+  border-radius:999px;padding:5px 12px;
+  font-size:12px;font-weight:600;color:var(--fg-3);
+  cursor:pointer;transition:all .18s var(--ease);
+  display:inline-flex;align-items:center;gap:5px;
+}
+.focus-btn::before{ content:'◐'; font-size:11px;opacity:.7 }
+.focus-btn:hover{ color:var(--accent);border-color:var(--accent);background:var(--accent-soft) }
+.focus-btn.active{ color:#fff;background:var(--accent);border-color:var(--accent) }
+.focus-btn.active::before{ opacity:1 }
+
+/* ---------- 24. 全文搜索面板 ---------- */
+.search-panel{
+  position:fixed;inset:0;z-index:80;
+  display:none;
+  background:rgba(0,0,0,.28);
+  backdrop-filter:blur(3px);
+}
+.search-panel.open{ display:block }
+.search-box{
+  position:absolute;top:12%;left:50%;transform:translateX(-50%);
+  width:min(640px,90vw);
+  background:var(--bg-card);
+  border:1.5px solid var(--line);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow-3,0 20px 60px rgba(0,0,0,.25));
+  padding:14px 18px;
+  display:flex;align-items:center;gap:12px;
+}
+.search-input{
+  flex:1;border:none;background:transparent;outline:none;
+  font-size:16px;font-family:var(--font);color:var(--fg);
+}
+.search-input::placeholder{ color:var(--fg-3) }
+.search-count{
+  font-size:11.5px;color:var(--fg-3);white-space:nowrap;
+  font-variant-numeric:tabular-nums;
+}
+.search-results{
+  position:absolute;top:calc(12% + 76px);left:50%;transform:translateX(-50%);
+  width:min(640px,90vw);
+  max-height:52vh;overflow:auto;
+  background:var(--bg-card);
+  border:1.5px solid var(--line);border-top:none;
+  border-radius:0 0 var(--radius) var(--radius);
+  box-shadow:var(--shadow-3,0 20px 60px rgba(0,0,0,.25));
+  list-style:none;margin:0;padding:6px;
+}
+.search-results:empty{ display:none }
+.search-hit{
+  display:flex;gap:10px;align-items:baseline;
+  padding:9px 12px;border-radius:6px;cursor:pointer;
+  font-size:13px;line-height:1.5;
+}
+.search-hit:hover{ background:var(--bg-soft) }
+.search-hit.cur{ background:var(--accent-soft) }
+.hit-kind{
+  flex:0 0 auto;
+  font-size:10.5px;font-weight:700;letter-spacing:.4px;
+  padding:2px 7px;border-radius:4px;
+  background:var(--accent-soft);color:var(--accent);
+}
+.hit-kind:has(+ .hit-text:has(mark)){ }
+.hit-text{ color:var(--fg-2);flex:1;min-width:0 }
+mark.search-mark{
+  background:rgba(255,196,0,.4);
+  color:inherit;border-radius:3px;padding:0 2px;
+  box-shadow:0 0 0 2px rgba(255,196,0,.25);
+}
+html[data-theme="dark"] mark.search-mark{
+  background:rgba(255,196,0,.28)
+}
+.flash-hit{
+  animation:flashHit 1.1s var(--ease);
+}
+@keyframes flashHit{
+  0%{ background:rgba(255,196,0,.35) }
+  100%{ background:transparent }
+}
+
+/* ---------- 25. 快捷键提示更新（含 / 与 F） ---------- */
+/* 字号调节无 UI，仅键盘 - / + */
+
+/* ═══════════════════════════════════════════════════════════════
+   ��五版 · 出版物排版（A 方案）
+   改动目标：换掉"技术文档站"气质，走教材/杂志的阅读质感
+   关键约束：全部用系统字体，零外部请求 → 部署后与本地完全一致
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── 1. 正文排版：衬线标题 + 更合适的行宽与行距 ── */
+/* 合并到顶部 :root（避免重复定义导致后者覆盖前者） */
+
+.main{ max-width:var(--measure) }
+.main p{
+  font-family:var(--sans);
+  font-size:1.02em;
+  line-height:1.95;
+  letter-spacing:.01em;
+  color:var(--fg);
+  margin:1.15em 0;
+  text-align:justify;          /* 两端对齐，中文排版更整齐 */
+  text-justify:inter-ideograph;
+}
+
+/* ⚠️ 全局断行保护（H35 踩坑后补）：
+   正文里常出现"无空格长串"（如 HTTP 状态码 `200/301/302/400/...`、
+   长 URL、驼峰标识符），浏览器默认**不会在斜杠/点号处断行**，
+   这类串在 375px 窄屏会把文档撑宽并产生横向滚动（实测溢出 27px）。
+   `overflow-wrap:anywhere` 只在"单词本身放不下"时才断，
+   不影响中英文正常排版 —— 比 `word-break:break-all` 安全得多
+   （后者会在任意字符处断，中文正文会被切得很难看）。 */
+.main{
+  overflow-wrap:anywhere;
+}
+.main p, .main li, .main td, .main th, .main strong, .main em, .main code{
+  overflow-wrap:anywhere;
+}
+.main a{ overflow-wrap:anywhere }
+
+/* ── 2. 标题：衬线体 + 短横线，替代通栏分割线 ── */
+/* ---------- 章首进度条（22 章 × 每章几十节时的定位锚）----------
+   ⚠️ sticky top 必须 = 顶栏实际高度。顶栏是 `position:sticky; height:54px`，
+   这里写小了会被顶栏盖住（截图里只剩进度条贴着顶栏下沿、"9 / 20" 灰在下面）。
+   宽度也留出顶栏投影的落点，避免滚动时内容从下方"顶穿"。 */
+.chapbar{
+  position:sticky;top:53px;z-index:110;
+  margin:0 0 34px;
+  padding:11px 0 10px;
+  background:linear-gradient(180deg,var(--bg) 74%,transparent);
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+}
+.chapbar-top{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.chapbar-badge{
+  flex-shrink:0;
+  padding:2px 9px;border-radius:999px;
+  background:var(--accent);color:var(--fg-inv);
+  font-size:11.5px;font-weight:700;letter-spacing:.02em;
+}
+.chapbar-title{
+  font-size:13px;color:var(--fg-2);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.chapbar-spacer{flex:1}
+.chapbar-sec{
+  flex-shrink:0;
+  font-size:12px;color:var(--fg-3);
+  font-variant-numeric:tabular-nums;
+}
+.chapbar-track{
+  height:3px;border-radius:2px;
+  background:var(--bg-deep);overflow:hidden;
+}
+.chapbar-fill{
+  height:100%;width:0;border-radius:2px;
+  background:linear-gradient(90deg,var(--accent) 0%,var(--accent-3) 100%);
+  transition:width .18s var(--ease);
+}
+@media(max-width:760px){
+  /* 窄屏顶栏实际高度是 57px（flex-wrap 后实测），这里跟着改 */
+  .chapbar{top:56px;margin-bottom:26px;padding:10px 0 8px}
+  .chapbar-title{display:none}
+}
+/* 专注模式：进度条是"定位锚"，保留但变淡 */
+html.focus-mode .chapbar{opacity:.35;pointer-events:none}
+
+.main h1,.main h2,.main h3,.main h4{
+  font-family:var(--serif);
+  font-weight:600;
+  letter-spacing:.01em;
+  color:var(--fg);
+}
+.main h1{
+  font-size:2.15em;line-height:1.3;
+  margin:.5em 0 .7em;           /* 页面顶部无大间距 */
+  padding-bottom:0;             /* 去掉通栏 border */
+  position:relative;
+}
+/* 章首横幅：h1 上方加一条"章号 + 主色渐变"的装饰带，
+   让每页开头有一个明确的"进入新章"仪式感（原来 h1 直接浮在正文里）。
+   ⚠️ 必须排除 .cover —— 封面 h1 自己已有顶部留白与居中布局，
+   加上横幅会与下方分隔线叠成双线（首页曾出现两条横线紧挨）。 */
+.main h1:not(.cover h1)::before{
+  content:'';display:block;
+  width:100%;height:4px;
+  background:linear-gradient(90deg,var(--accent) 0%,var(--accent-3) 42%,transparent 88%);
+  border-radius:2px;
+  margin-bottom:.62em;
+}
+.cover h1::before{content:none}
+.main h1::after{
+  content:'';display:block;
+  width:56px;height:3px;
+  background:var(--accent);
+  margin-top:.5em;              /* 短横线，比通栏线优雅 */
+  border-radius:2px;
+}
+.main h2{
+  font-size:1.62em;line-height:1.38;
+  margin:2.2em 0 .62em;
+  padding:0 0 .45em 0;
+  border:0;
+  position:relative;
+}
+/* h2 左侧加一道竖锚：强化"大章节"的层级感，替代原来那条渐变横线 */
+.main h2::before{
+  content:'';position:absolute;
+  left:-18px;top:.34em;bottom:.5em;
+  width:3px;border-radius:2px;
+  background:linear-gradient(180deg,var(--accent) 0%,var(--accent-3) 100%);
+  opacity:.75;
+}
+.main h2::after{
+  content:'';position:absolute;
+  left:0;bottom:0;width:100%;height:1px;
+  background:linear-gradient(90deg,var(--line) 0%,var(--line) 26%,transparent 100%);
+}
+.main h3{
+  font-size:1.26em;line-height:1.5;
+  margin:1.9em 0 .5em;
+}
+.main h3::before{               /* h3 前缀小方块，建立视觉锚点 */
+  content:'';display:inline-block;
+  width:.46em;height:.46em;
+  background:var(--accent-3);
+  border-radius:2px;
+  margin-right:.5em;
+  vertical-align:.06em;
+}
+.main h4{
+  font-size:1.06em;
+  margin:1.6em 0 .4em;
+  color:var(--fg-2);
+}
+
+/* 首段导语：h1 之后的第一段用稍大、稍淡的引言体，形成"开篇"感。
+   用 :first-of-type 而不是 .lead —— 内容是 markdown 转出来的，
+   h1 后面紧跟的通常是 blockquote 或提示框，不一定有 <p>。 */
+.main h1 + p,
+.main h1 + blockquote + p{
+  font-size:1.06em;
+  color:var(--fg-2);
+  line-height:1.82;
+}
+/* 正文里的第一条列表：去掉与标题之间多余的视觉间隔 */
+.main h2 + ul,.main h3 + ul,.main h2 + ol,.main h3 + ol{margin-top:.3em}
+
+/* ── 3. 引用块：加深底 + 左侧色条（原来几乎不可见）── */
+.main .quote{
+  position:relative;
+  margin:1.7em 0;
+  padding:1.1em 1.4em 1.1em 1.5em;
+  background:linear-gradient(135deg,var(--accent-soft) 0%,transparent 60%);
+  border-left:3px solid var(--accent-2);
+  border-radius:0 var(--radius) var(--radius) 0;
+  font-family:var(--sans);
+  font-size:.98em;
+  line-height:1.9;
+}
+.main .quote::before{ content:none }     /* 覆盖旧的 ::before */
+.main .quote p{ margin:.4em 0; text-align:left }
+.main .quote strong{ color:var(--accent);font-weight:700 }
+
+/* ── 4. 列表：改为方形标记 + 更松的间距 ── */
+.main ul>li::before{
+  content:'';position:absolute;
+  left:-1.15em;top:.82em;
+  width:5px;height:5px;
+  background:var(--accent-3);
+  border-radius:1px;              /* 方点，比圆点更书卷 */
+  transform:rotate(45deg);        /* 菱形 */
+  opacity:.85;
+}
+.main li{ margin:.42em 0 }
+.main ol>li::marker{ color:var(--accent-2);font-weight:700;font-size:.9em }
+
+/* ── 5. 表格：去掉阴影，改用衬线表头 + 更轻的分隔 ── */
+.main table{
+  box-shadow:none;
+  border:0;
+  border-top:2px solid var(--accent-2);
+  border-bottom:1px solid var(--line-2);
+  border-radius:0;
+  margin:1.8em 0;
+  font-family:var(--sans);
+}
+.main thead{ border-bottom:1px solid var(--line) }
+.main th{
+  background:transparent;
+  font-family:var(--serif);
+  font-weight:600;
+  font-size:13px;
+  color:var(--accent);
+  letter-spacing:.04em;
+  padding:.85em 1em;
+  border-bottom:1px solid var(--line);
+  text-transform:none;            /* 中文不需要uppercase */
+}
+.main td{
+  padding:.85em 1em;
+  border-bottom:1px solid var(--line);
+  font-size:.96em;
+}
+.main tbody tr:last-child td{ border-bottom:none }
+.main tbody tr:hover{ background:var(--accent-soft) }
+.main td strong{ color:var(--accent);font-weight:700 }
+
+/* ── 6. mermaid 容器：去掉边框阴影，改成"插图"质感 ── */
+.main .mermaid-wrap{
+  margin:2em 0;
+  padding:1.6em 1em;
+  background:var(--bg-alt);
+  border:0;
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+  border-radius:0;
+  box-shadow:none;
+  text-align:center;
+  overflow-x:auto;
+}
+
+/* ── 7. 提示框：左侧色条加粗 + 标题衬线体 ── */
+.main .block{
+  margin:1.7em 0;
+  padding:1.05em 1.35em;
+  border-radius:var(--radius);
+  border:1px solid var(--line);
+  /* ⚠️ 这里原来有 `border-left:3.5px solid` + `border-radius:0 R R 0`（左侧色条版式）。
+     设计 v6 改成「左侧 4px 色条 = ::before 伪元素 + 四周圆角」后必须去掉这条：
+     它是 2 个类（.main .block），比第 10 节的 .block（1 个类）优先级高，
+     会把 ::before 色条往左挤 —— 表现为"色条贴在边框外侧"。
+     顺带把 sans 补回变量名（下面 font-family:var(--sans) 引用了一个不存在的变量）。 */
+  font-family:var(--font);
+  font-size:.97em;
+  line-height:1.85;
+  background:var(--bg-card);
+  box-shadow:var(--shadow-1);
+}
+.main .block-title{
+  font-family:var(--serif);
+  font-weight:600;
+  font-size:12.5px;
+  letter-spacing:.08em;
+  text-transform:none;
+  margin-bottom:.55em;
+  display:flex;align-items:center;gap:.5em;
+}
+.main .block-title::before{ content:'';width:4px;height:4px;border-radius:50%;background:currentColor;flex:0 0 auto }
+/* ⚠️ 这组覆盖已废弃：提示框改为「统一米白底 + 左侧色条」后，
+   各类型只保留标题色与色条色（见第 10 节），不要再在这里给整块上底色。
+   留着它们会让绿/黄/紫大色块重新回来，页面又变回表单样。 */
+.main .block p{ margin:.5em 0 }
+
+/* ── 8. Quiz 卡片（B 方案局部借用）：题块更立体 ── */
+.main .quiz{
+  margin:2.4em 0;
+  border:0;
+  border-top:2px solid var(--accent-2);
+  border-radius:0;
+  background:transparent;
+  box-shadow:none;
+  overflow:visible;
+}
+.main .quiz-head{
+  background:var(--bg-alt);
+  border:0;
+  border-bottom:1px solid var(--line);
+  border-radius:var(--radius) var(--radius) 0 0;
+  padding:1em 1.3em;
+}
+.main .quiz-label{
+  font-family:var(--serif);
+  font-size:1.02em;
+  font-weight:600;
+  letter-spacing:.04em;
+}
+.main .quiz-item{
+  background:var(--bg-card);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  margin-bottom:.9em;
+  padding:1.35em 1.5em;
+}
+.main .quiz-item.correct{
+  background:var(--tip-bg);
+  border-color:var(--tip-line);
+  border-left-width:3.5px;
+}
+.main .quiz-item.wrong{
+  background:var(--danger-bg);
+  border-color:var(--danger-line);
+  border-left-width:3.5px;
+}
+.main .quiz-q{
+  font-family:var(--serif);
+  font-size:1.04em;
+  font-weight:600;
+  line-height:1.72;
+  color:var(--fg);
+}
+.main .quiz-q .qn{
+  background:var(--accent);color:var(--fg-inv);
+  border-radius:3px;
+  font-family:var(--sans);
+  font-size:11.5px;
+}
+.main .opt{
+  font-family:var(--sans);
+  border-radius:var(--radius-sm);
+  border-color:var(--line);
+  background:var(--bg);
+}
+.main .opt:hover{ background:var(--accent-soft);border-color:var(--accent-2) }
+.main .opt.right{ background:var(--tip-bg);border-color:var(--tip-line) }
+.main .reveal-explain{ font-family:var(--sans);line-height:1.88 }
+.main .reveal-ref{ font-style:normal;opacity:.75 }
+
+/* ── 9. 上下页导航 / 错题本：与新风格对齐 ── */
+.main .pg{
+  background:var(--bg-card);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+}
+.main .pg-title{ font-family:var(--serif) }
+.main .wrongbook{
+  border:0;
+  border-top:2px solid var(--danger-line);
+  border-radius:0;
+  background:transparent;
+  box-shadow:none;
+}
+.main .wrongbook .wb-head{
+  background:var(--danger-bg);
+  border-bottom:1px solid var(--line);
+  font-family:var(--serif);
+  border-radius:var(--radius) var(--radius) 0 0;
+}
+.main .wb-row{ border-bottom:1px solid var(--line) }
+.main .wb-row a{ font-family:var(--serif);font-weight:600 }
+
+/* ── 10. 页脚：更像版权页 ── */
+.main .footer{
+  margin-top:3.5em;
+  padding-top:2em;
+  border-top:1px solid var(--line);
+  font-size:12.5px;
+}
+.main .footer strong{ font-family:var(--serif);font-size:14px }
+
+/* ═══════════════════════════════════════════════════════════════
+   顶栏溢出菜单 + 目录层级强化
+   ═══════════════════════════════════════════════════════════════ */
+
+/* 顶栏：控件收进⋯ 浮层 */
+.overflow-btn{
+  background:var(--bg-card);
+  border:1px solid var(--line);
+  border-radius:999px;
+  width:30px;height:30px;
+  font-size:16px;line-height:1;
+  color:var(--fg-3);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .18s var(--ease);
+  flex-shrink:0;
+}
+.overflow-btn:hover{ color:var(--accent);border-color:var(--accent-2) }
+.overflow-btn.active{ color:#fff;background:var(--accent);border-color:var(--accent) }
+
+.overflow-panel{
+  position:absolute;top:calc(100% + 8px);right:28px;
+  background:var(--bg-card);
+  border:1.5px solid var(--line);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow-2);
+  padding:10px;
+  display:none;
+  z-index:120;
+}
+.overflow-panel.open{ display:block }
+.overflow-panel .theme-switch{
+  background:var(--bg-alt);
+  border:1px solid var(--line);
+  padding:3px;
+  border-radius:var(--radius-sm);
+  display:flex;gap:2px;
+}
+.overflow-panel .theme-btn{
+  border:none;background:transparent;cursor:pointer;
+  padding:5px 11px;border-radius:5px;
+  font-size:12px;font-family:var(--serif);font-weight:600;
+  color:var(--fg-3);transition:all .18s var(--ease);
+}
+.overflow-panel .theme-btn:hover{ color:var(--fg-2) }
+.overflow-panel .theme-btn.active{
+  background:var(--bg-card);color:var(--accent);
+  box-shadow:var(--shadow-1);
+}
+
+/* 专注模式：顶栏只留一个圆钮 */
+.focus-btn-top{ padding:5px 13px }
+html.focus-mode .focus-btn-top{ display:inline-flex !important }
+html.focus-mode .overflow-btn,
+html.focus-mode .nav{ display:none }
+
+/* 目录：加大缩进 + 层级色差，让4 级看得出来 */
+.toc{ width:236px; font-size:12.5px }
+.toc-item{
+  padding:4px 10px 4px calc(12px + var(--depth,0) * 17px);
+  line-height:1.5;
+}
+.toc-l1{
+  font-family:var(--serif);
+  font-size:13.5px;font-weight:600;
+  color:var(--fg);
+  margin-top:12px;
+  padding-top:6px;
+  border-top:1px solid var(--line);
+}
+.toc-l1:first-child{ margin-top:0;padding-top:0;border-top:none }
+.toc-l2{ color:var(--fg-2);font-weight:500;margin-top:4px }
+.toc-l3{ color:var(--fg-3);font-size:12px }
+.toc-l4{ color:var(--fg-3);font-size:11.5px;opacity:.85 }
+.toc-item:hover{ background:var(--accent-soft);color:var(--accent) }
+.toc-item.active{
+  color:var(--accent);
+  font-weight:700;
+  background:var(--accent-soft-2);
+  border-left-color:var(--accent);
+}
+.toc-title{
+  font-family:var(--serif);
+  font-size:11.5px;letter-spacing:.1em;
+  color:var(--fg-3);
+  padding-bottom:.6em;
+  border-bottom:1px solid var(--line);
+  margin-bottom:.7em;
+}
+
+/* ── 11. 修h1 换行 + mermaid 节点间距 ── */
+.main h1{
+  font-size:1.95em;                 /* 略降，避免长标题折行 */
+  text-wrap:balance;                /* 浏览器自动平衡两行宽度 */
+  line-height:1.28;
+}
+.main h1 br{ display:none }         /* 源 md 里的换行不强制断 */
+.main h1 br::after{ content:' ' }
+
+/* 图表节点：加宽间距，<br/> 换行才不堆叠 */
+.main .mermaid-wrap svg{
+  max-width:100%;
+  height:auto;
+}
+.main .mermaid-wrap .nodeLabel,
+.main .mermaid-wrap .labelText,
+.main .mermaid-wrap text{
+  font-family:var(--sans)!important;
+  font-size:13px!important;
+  line-height:1.5!important;
+}
+.main .mermaid-wrap .node rect,
+.main .mermaid-wrap .node polygon,
+.main .mermaid-wrap .node circle{
+  rx:5px; ry:5px;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   专注模式退出按钮修复
+   Bug：顶栏整体 visibility:hidden → 退出按钮一起隐藏 → 真人点不到
+   修法：顶栏不用 visibility，改用 opacity + pointer-events；
+        退出按钮单独保持可见可点（focus 态常显，hover 展开全栏）
+   ═══════════════════════════════════════════════════════════════ */
+
+/* 隐藏的元素不能兜底 visibility:hidden —— 那样连按钮一起没了 */
+html.focus-mode .toc,
+html.focus-mode .footer,
+html.focus-mode .pager,
+html.focus-mode .keyhint{ display:none !important }
+
+html.focus-mode .topbar{
+  display:block;
+  opacity:0;
+  pointer-events:none;            /* 默认不吃鼠标 */
+  position:fixed;
+  top:8px;left:50%;
+  transform:translateX(-50%);
+  background:var(--bg-card);
+  box-shadow:var(--shadow-2);
+  border:1px solid var(--line);
+  border-radius:999px;
+  padding:5px 9px;
+  z-index:60;
+  transition:opacity .22s var(--ease);
+  min-height:34px;
+}
+html.focus-mode .topbar .nav,
+html.focus-mode .topbar .brand,
+html.focus-mode .topbar .theme-switch,
+html.focus-mode .topbar .overflow-btn{ display:none }
+
+/* 关键：退出按钮永远可见可点，不随顶栏淡出 */
+html.focus-mode .focus-btn-top{
+  display:inline-flex !important;
+  align-items:center;gap:6px;
+  opacity:1 !important;
+  pointer-events:auto !important;
+  background:var(--accent);
+  color:var(--fg-inv);
+  border-color:var(--accent);
+  cursor:pointer;
+  white-space:nowrap;
+}
+html.focus-mode .focus-btn-top::after{
+  content:'退出';
+  font-size:11.5px;
+  opacity:.85;
+}
+html.focus-mode .focus-btn-top:hover{
+  background:var(--accent-2);
+  border-color:var(--accent-2);
+}
+/* 顶栏其余部分 hover 展开（键鼠用户），但不影响退出按钮 */
+html.focus-mode .topbar:hover{ opacity:1 }
+/* ⚠️ 导航已从「平铺链接」改成「胶囊 + 面板」，默认 display 是 block，
+   这里不能用 flex（会把胶囊挤成一行）。 */
+html.focus-mode .topbar:hover .nav{ display:block }
+
+@media(max-width:640px){
+  html.focus-mode .topbar{ top:6px; padding:4px 7px }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   专注模式退出浮标（右下角常驻）
+   设计动机：退出入口原本藏在屏幕正上方中间的顶栏里，用户找不到/点不到，
+   误以为"退不出去"。这里做一个完全脱离 .topbar 的常驻浮标，
+   只受 html.focus-mode 控制，不受任何 visibility/display 隐藏规则波及。
+   ═══════════════════════════════════════════════════════════════ */
+
+.focus-exit-fab{ display:none }
+
+html.focus-mode .focus-exit-fab{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  position:fixed;
+  right:24px;
+  bottom:26px;
+  z-index:90;                 /* 高于 topbar(60) 与搜索面板，确保永远在最上层 */
+  padding:11px 18px;
+  border-radius:999px;
+  background:var(--accent);
+  color:var(--fg-inv);
+  border:1px solid var(--accent);
+  box-shadow:var(--shadow-2);
+  font-family:inherit;
+  font-size:13px;
+  font-weight:600;
+  line-height:1;
+  cursor:pointer;
+  opacity:.94;
+  transition:opacity .18s var(--ease), transform .18s var(--ease);
+}
+html.focus-mode .focus-exit-fab:hover{
+  opacity:1;
+  transform:translateY(-2px);
+}
+html.focus-mode .focus-exit-fab:active{ transform:translateY(0) }
+html.focus-mode .focus-exit-fab:focus-visible{
+  outline:2px solid var(--accent);
+  outline-offset:3px;
+}
+html.focus-mode .focus-exit-dot{
+  width:7px;height:7px;border-radius:50%;
+  background:var(--fg-inv);
+  opacity:.75;
+  flex:none;
+}
+@media(max-width:640px){
+  html.focus-mode .focus-exit-fab{
+    right:14px; bottom:16px;
+    padding:10px 15px; font-size:12.5px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   整合自外部笔记模板（蓝白风 → 转译为本项目墨绿设计系统）
+   借用其「结构」，颜色全部走本项目语义变量：
+     · .block.mem      记忆口诀框（紫）
+     · .fig/.figcaption 图容器 + 图题（含 mermaid 图 .fig-mermaid）
+     · .tag            行内小标签
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ---------- 记忆口诀框（紫）---------- */
+/* 紫色只用在标题与色条上，正文保持统一米白底 */
+.mem{color:var(--mem-fg)}
+.mem .block-title{color:var(--mem)}
+.main .block.mem .block-title{color:var(--mem)}
+/* 口诀正文加重，方便朗读记忆 */
+.mem strong{color:var(--mem-fg);font-weight:700}
+
+/* ---------- 图容器 + 图题 ---------- */
+.fig{
+  margin:1.8em 0;
+  padding:16px 18px 12px;
+  background:var(--bg-card);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  text-align:center;
+}
+.fig svg{max-width:100%;height:auto}
+.fig figcaption{
+  margin-top:10px;
+  font-size:12.8px;
+  line-height:1.6;
+  color:var(--fg-2);
+  letter-spacing:.02em;
+}
+/* mermaid 图单独放开内边距，图本身已有留白 */
+.fig-mermaid{padding:18px 10px 12px;overflow-x:auto}
+
+/* ── 7. mermaid 图表：防止宽图溢出 + 节点文字截断 ── */
+.main .mermaid-wrap{
+  overflow-x:auto;
+  padding:1.6em 1em;
+}
+.main .mermaid-wrap svg{
+  max-width:100%;
+  height:auto;
+  min-width:0;
+}
+/* 图表比容器宽时，允许横向滚动而不是截缩 */
+.fig-mermaid{min-width:0}
+/* Slidev 手绘 SVG：颜色为深底黑板调（文字 #f2efe4），
+   放进浅色正文会隐形 → 套深色卡片还原原始配色。
+   ⚠️ 选择器必须带 .main（下文有 `.main .fig{background:var(--bg-card)}`，
+      同为 2 类时后者胜出 → 深色底会被浅色覆盖，字又隐形）。
+      所以这里用 `.main .fig.fig-slidev`（3 类）压住它。 */
+.fig-slidev{padding:14px 10px 10px}
+.main .fig.fig-slidev,
+.fig.fig-slidev{
+  background:#142b20;
+  border-color:#24402f;
+}
+.fig-slidev svg{width:100%;height:auto;max-height:420px}
+.main .fig{background:var(--bg-card)}
+.main .fig figcaption{color:var(--fg-2)}
+
+/* ---------- 行内小标签 ---------- */
+.tag{
+  display:inline-block;
+  padding:1px 9px;
+  margin-right:5px;
+  border-radius:999px;
+  font-size:11.5px;
+  font-weight:600;
+  line-height:1.7;
+  background:var(--accent-soft);
+  color:var(--accent);
+  border:1px solid var(--accent-soft-2);
+  white-space:nowrap;
+}
+.tag.warn{background:var(--warn-bg);color:var(--warn-fg);border-color:var(--warn-line)}
+.tag.exam{background:var(--gold-bg);color:var(--gold);border-color:var(--gold)}
+.tag.mem{background:var(--mem-bg);color:var(--mem-line);border-color:var(--mem-line)}
+.main .tag{font-family:var(--sans)}
+
+/* ═══════════════════════════════════════════════════════════════
+   增强 v1：返回顶部 / 外链指示器 / 代码复制 / 阅读时长
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── 返回顶部按钮 ── */
+.back-top{
+  position:fixed;right:24px;bottom:80px;z-index:85;
+  width:42px;height:42px;
+  border-radius:50%;
+  background:var(--bg-card);
+  border:1.5px solid var(--line);
+  box-shadow:var(--shadow-2);
+  color:var(--fg-3);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;line-height:1;
+  opacity:0;transform:translateY(12px);
+  pointer-events:none;
+  transition:opacity .25s var(--ease),transform .25s var(--ease),color .18s var(--ease),border-color .18s var(--ease);
+}
+.back-top.show{opacity:1;transform:none;pointer-events:auto}
+.back-top:hover{color:var(--accent);border-color:var(--accent);transform:translateY(-2px)}
+.back-top:active{transform:translateY(0)}
+@media(max-width:760px){
+  .back-top{right:14px;bottom:70px;width:38px;height:38px;font-size:16px}
+}
+
+/* ── 外链指示器 ── */
+a[href^="http"]:not(.cta):not(.pg)::after{
+  content:'↗';
+  display:inline-block;
+  margin-left:2px;
+  font-size:.82em;
+  opacity:.6;
+  vertical-align:.05em;
+  transition:opacity .15s var(--ease);
+}
+a[href^="http"]:not(.cta):not(.pg):hover::after{opacity:1}
+
+/* ── 代码块复制按钮 ── */
+.code-wrap{position:relative;margin:1.3em 0}
+.copy-btn{
+  position:absolute;top:8px;right:8px;
+  padding:5px 11px;
+  font-size:11.5px;font-family:var(--sans);
+  background:var(--bg-card);
+  border:1px solid var(--line);
+  border-radius:5px;
+  color:var(--fg-3);cursor:pointer;
+  opacity:0;
+  transition:all .18s var(--ease);
+  z-index:2;
+}
+.code-wrap:hover .copy-btn,
+.copy-btn:focus{opacity:1}
+.copy-btn:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+.copy-btn.copied{border-color:var(--tip-line);color:var(--tip);background:var(--tip-bg)}
+.code-wrap pre{margin:0;border-radius:var(--radius)}
+
+/* ── 阅读时长（章节页标题下方） ── */
+.read-time{
+  display:flex;align-items:center;gap:7px;
+  font-size:12px;color:var(--fg-3);
+  margin-top:-8px;margin-bottom:18px;
+  padding-bottom:14px;
+  border-bottom:1px solid var(--line);
+}
+.read-time::before{content:'🕐';font-size:13px;filter:saturate(.7)}
+
+/* ── Quiz 答错时给错误选项加红色标记 ── */
+.opt.wrong-pick{border-color:var(--danger-line);background:var(--danger-bg)}
+.opt.wrong-pick .letter{background:var(--danger-line);color:#fff;border-color:var(--danger-line)}
+
+/* ── 表格斑马纹（可选，通过 class 控制） ── */
+table.zebra tbody tr:nth-child(even){background:var(--accent-soft)}
+table.zebra tbody tr:hover{background:var(--accent-soft-2)}
+
+/* ── 统计卡 hover 微动 ── */
+.stat{transition:transform .2s var(--ease),box-shadow .2s var(--ease)}
+.stat:hover{transform:translateY(-3px);box-shadow:var(--shadow-3)}
+
+/* ── 封面 CTA 按钮点击反馈 ── */
+.cta:active{transform:translateY(0) scale(.97)}
+
+/* ── 平滑滚动偏移（锚点跳转不卡顶栏下） ── */
+html{scroll-padding-top:80px}
+@media(max-width:760px){html{scroll-padding-top:70px}}
+
+/* ═══════════════════════════════════════════════════════════════
+   历年真题区块 · 三级折叠（原生 details，零 JS）
+   ═══════════════════════════════════════════════════════════════ */
+.exam{margin:2.2em 0 1.6em}
+
+/* ── 统计条：常驻不折叠，避免"用户不知道里面有真题"而白做 ── */
+.exam-bar{
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  padding:12px 16px;margin-bottom:10px;
+  background:linear-gradient(180deg,var(--bg-card) 0%,var(--bg-alt) 100%);
+  border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow-1);
+}
+.exam-bar-label{font-weight:700;font-size:14px;color:var(--accent)}
+.exam-bar-stat{font-size:12.5px;color:var(--fg-3);flex:1;min-width:140px}
+.exam-bar-stat b{color:var(--fg-2);font-variant-numeric:tabular-nums}
+.exam-bar-ops{display:flex;gap:6px}
+.exam-op{
+  padding:4px 11px;font:inherit;font-size:12px;cursor:pointer;
+  background:var(--bg-card);border:1px solid var(--line-2);
+  border-radius:999px;color:var(--fg-2);
+  transition:border-color .18s var(--ease),color .18s var(--ease),background .18s var(--ease);
+}
+.exam-op:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+
+/* ── 科目级折叠 ── */
+.exam-subject{
+  border:1px solid var(--line);border-radius:var(--radius);
+  background:var(--bg-card);overflow:hidden;
+}
+.exam-subject>summary{
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  padding:12px 16px;cursor:pointer;list-style:none;
+  font-weight:600;color:var(--fg-2);
+  transition:background .18s var(--ease),color .18s var(--ease);
+}
+.exam-subject>summary::-webkit-details-marker{display:none}
+.exam-subject>summary:hover{background:var(--accent-soft);color:var(--accent)}
+.exam-subject[open]>summary{border-bottom:1px solid var(--line);background:var(--bg-alt)}
+.exam-subject-name::before{content:'▸ ';display:inline-block;transition:transform .2s var(--ease)}
+.exam-subject[open] .exam-subject-name::before{transform:rotate(90deg)}
+.exam-subject-n{font-size:12px;color:var(--fg-3);font-variant-numeric:tabular-nums}
+.exam-subject-tip{margin-left:auto;font-size:11.5px;color:var(--fg-3);opacity:.8}
+
+/* ── 年份级折叠 ── */
+.exam-year{border-bottom:1px solid var(--line)}
+.exam-year:last-child{border-bottom:0}
+.exam-year>summary{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 16px 9px 30px;cursor:pointer;list-style:none;
+  font-size:13.5px;color:var(--fg-2);
+  transition:background .16s var(--ease),color .16s var(--ease);
+}
+.exam-year>summary::-webkit-details-marker{display:none}
+.exam-year>summary:hover{background:var(--accent-soft);color:var(--accent)}
+.exam-year[open]>summary{background:var(--bg-alt)}
+.exam-year-name::before{content:'▸ ';display:inline-block;transition:transform .2s var(--ease);color:var(--fg-3)}
+.exam-year[open] .exam-year-name::before{transform:rotate(90deg)}
+.exam-year-n{font-size:11.5px;color:var(--fg-3);font-variant-numeric:tabular-nums}
+
+/* ── 单题折叠 ── */
+.exam-q{border-top:1px solid var(--line)}
+.exam-q>summary{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:9px 16px 9px 46px;cursor:pointer;list-style:none;
+  font-size:13.5px;line-height:1.6;color:var(--fg-2);
+  transition:background .16s var(--ease);
+}
+.exam-q>summary::-webkit-details-marker{display:none}
+.exam-q>summary:hover{background:var(--accent-soft)}
+.exam-q[open]>summary{background:var(--bg-alt)}
+.exam-q>summary::before{
+  content:'＋';flex-shrink:0;width:1.1em;text-align:center;
+  color:var(--fg-3);font-size:12px;line-height:1.5;
+}
+.exam-q[open]>summary::before{content:'－';color:var(--accent)}
+.exam-no{
+  flex-shrink:0;font-size:11px;color:var(--fg-3);
+  font-variant-numeric:tabular-nums;padding-top:2px;min-width:44px;
+}
+.exam-tag{
+  flex-shrink:0;font-size:10.5px;padding:1px 6px;border-radius:4px;
+  background:var(--warn-bg);color:var(--warn-fg);border:1px solid var(--warn-line);
+}
+.exam-stem-peek{
+  flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  color:var(--fg-2);
+}
+.exam-q[open] .exam-stem-peek{color:var(--fg)}
+.exam-q-body{padding:4px 16px 16px 46px}
+.exam-stem{margin:.6em 0;font-size:14.5px;line-height:1.8;color:var(--fg)}
+.exam-blank{color:var(--danger);padding:0 1px}
+.exam-opts{list-style:none;margin:.5em 0 .9em;padding:0}
+/* ⚠️ 必须清掉全局 `ul>li::before` 的圆点（本站正文列表有项目符号），
+   否则真题选项前会多出一个小圆点，位置还和字母块错开 */
+.exam-opts>li::before{content:none !important}
+.exam-opts li{
+  position:relative;padding:4px 0 4px 26px;font-size:14px;line-height:1.7;
+  border-bottom:1px dashed var(--line);
+}
+.exam-opts li:last-child{border-bottom:0}
+.exam-opts b{
+  position:absolute;left:0;top:4px;
+  display:inline-flex;align-items:center;justify-content:center;
+  width:19px;height:19px;border-radius:5px;
+  background:var(--bg-alt);border:1px solid var(--line-2);
+  font-size:11px;font-weight:700;color:var(--fg-3);
+}
+
+/* ── 答案（默认再折叠一层）── */
+.exam-ans{margin-top:.6em}
+.exam-ans>summary{
+  display:inline-flex;align-items:center;gap:6px;cursor:pointer;list-style:none;
+  padding:4px 12px;font-size:12px;
+  background:var(--accent-soft);border:1px solid var(--line-2);
+  border-radius:999px;color:var(--accent);
+  transition:background .18s var(--ease),border-color .18s var(--ease);
+}
+.exam-ans>summary::-webkit-details-marker{display:none}
+.exam-ans>summary:hover{background:var(--accent-soft-2);border-color:var(--accent)}
+.exam-ans[open]>summary{margin-bottom:8px}
+.exam-ans-line{margin:.4em 0;font-size:14px;color:var(--fg)}
+.exam-ans-line b{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:26px;height:24px;padding:0 8px;margin-left:4px;
+  border-radius:6px;background:var(--tip-bg);color:var(--tip-fg);
+  border:1px solid var(--tip-line);font-weight:700;
+}
+.exam-exp{margin:.4em 0;font-size:13.5px;line-height:1.8;color:var(--fg-2)}
+
+/* ── 窄屏 ── */
+@media(max-width:760px){
+  .exam-bar{padding:10px 12px;gap:8px}
+  .exam-bar-label{font-size:13px}
+  .exam-bar-stat{font-size:11.5px;flex-basis:100%;order:3;min-width:0}
+  .exam-bar-ops{margin-left:auto}
+  .exam-subject-tip{display:none}
+  .exam-q>summary{padding-left:16px;flex-wrap:wrap}
+  .exam-q>summary::before{display:none}
+  .exam-no{min-width:0}
+  .exam-q-body{padding-left:16px}
+  .exam-year>summary{padding-left:20px}
+  .exam-stem-peek{white-space:normal;flex-basis:100%}
+  .exam-opts li{font-size:13.5px}
+}
+
+/* ── 打印：全部自动展开（服务"可打印带水印"卖点）── */
+@media print{
+  .exam-bar,.exam-op,.exam-ans>summary{display:none !important}
+  .exam-subject,.exam-year,.exam-q{border:0 !important;background:none !important}
+  .exam-subject>summary,.exam-year>summary{
+    padding:6pt 0;background:none !important;border-bottom:1pt solid #999;
+  }
+  .exam-subject-name::before,.exam-year-name::before,.exam-q>summary::before{content:'' !important}
+  .exam-q-body,.exam-ans[open] > div,.exam-ans > div{display:block !important}
+  .exam-q{break-inside:avoid;page-break-inside:avoid}
+  .exam-stem,.exam-opts li{font-size:9.5pt}
+  .exam-exp{font-size:8.5pt;color:#333}
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="index.html"><span class="brand-mark">48</span><span>阿甘系分</span><span class="brand-sub">冲刺手册</span></a>
+  <nav class="nav"><div class="nav" id="chapnav"><button class="nav-trigger" type="button" id="navTrigger" aria-haspopup="true" aria-expanded="false" aria-controls="navPanel" title="章节导航（Enter / ↓ 打开，Esc 关闭）"><span class="nav-trigger-code">H05</span><span class="nav-trigger-label">计算机系统（二）</span><svg class="nav-caret" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5 L6 8 L9.5 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="nav-panel" id="navPanel" hidden><div class="nav-panel-scroll"><div class="nav-group nav-group-solo"><a class="nav-item" href="index.html"><span class="nav-item-code">首页</span><span class="nav-item-label">首页 · 手册总览</span></a></div><div class="nav-group"><div class="nav-group-title">第一篇 · 基础知识</div><a class="nav-item" href="H01.html"><span class="nav-item-code">H01</span><span class="nav-item-label">绪论与备考总纲</span></a><a class="nav-item" href="H02.html"><span class="nav-item-code">H02</span><span class="nav-item-label">数学与工程基础（一）· 概率统计与图论应用</span></a><a class="nav-item" href="H03.html"><span class="nav-item-code">H03</span><span class="nav-item-label">数学与工程基础（二）· 预测决策与工程伦理</span></a><a class="nav-item" href="H04.html"><span class="nav-item-code">H04</span><span class="nav-item-label">计算机系统（一）· 硬件与体系结构</span></a><a class="nav-item active" href="H05.html" aria-current="page"><span class="nav-item-code">H05</span><span class="nav-item-label">计算机系统（二）· 操作系统</span></a><a class="nav-item" href="H06.html"><span class="nav-item-code">H06</span><span class="nav-item-label">计算机网络（一）· 数据通信与协议体系</span></a><a class="nav-item" href="H07.html"><span class="nav-item-code">H07</span><span class="nav-item-label">计算机网络（二）· TCP/IP 与网络工程</span></a><a class="nav-item" href="H08.html"><span class="nav-item-code">H08</span><span class="nav-item-label">分布式系统、构件与云计算</span></a><a class="nav-item" href="H09.html"><span class="nav-item-code">H09</span><span class="nav-item-label">数据库系统（一）· 三级模式与关系基础</span></a><a class="nav-item" href="H10.html"><span class="nav-item-code">H10</span><span class="nav-item-label">数据库系统（二）· 范式与事务并发控制</span></a><a class="nav-item" href="H11.html"><span class="nav-item-code">H11</span><span class="nav-item-label">数据库系统（三）· 设计、仓库与 NoSQL</span></a><a class="nav-item" href="H12.html"><span class="nav-item-code">H12</span><span class="nav-item-label">企业信息化（一）· 信息化规划</span></a><a class="nav-item" href="H13.html"><span class="nav-item-code">H13</span><span class="nav-item-label">企业信息化（二）· 信息系统与商务</span></a><a class="nav-item" href="H14.html"><span class="nav-item-code">H14</span><span class="nav-item-label">软件工程（一）· 生命周期与开发模型</span></a><a class="nav-item" href="H15.html"><span class="nav-item-code">H15</span><span class="nav-item-label">软件工程（二）· 过程管理与软件重用</span></a><a class="nav-item" href="H16.html"><span class="nav-item-code">H16</span><span class="nav-item-label">软件工程（三）· UML 与形式化方法</span></a><a class="nav-item" href="H17.html"><span class="nav-item-code">H17</span><span class="nav-item-label">项目管理（一）· 范围进度成本与挣值分析</span></a><a class="nav-item" href="H18.html"><span class="nav-item-code">H18</span><span class="nav-item-label">项目管理（二）· 配置质量风险与文档</span></a><a class="nav-item" href="H19.html"><span class="nav-item-code">H19</span><span class="nav-item-label">信息安全（一）· 安全体系与加密认证</span></a><a class="nav-item" href="H20.html"><span class="nav-item-code">H20</span><span class="nav-item-label">信息安全（二）· 网络安全与可靠性</span></a></div><div class="nav-group"><div class="nav-group-title">第二篇 · 关键技术</div><a class="nav-item" href="H21.html"><span class="nav-item-code">H21</span><span class="nav-item-label">系统规划与分析（一）· 需求分析与 DFD 建模</span></a><a class="nav-item" href="H22.html"><span class="nav-item-code">H22</span><span class="nav-item-label">系统规划与分析（二）· 成本效益与可行性论证</span></a><a class="nav-item" href="H23.html"><span class="nav-item-code">H23</span><span class="nav-item-label">软件需求工程</span></a><a class="nav-item" href="H26.html"><span class="nav-item-code">H26</span><span class="nav-item-label">软件架构设计（一）· 架构定义与 4+1 视图</span></a><a class="nav-item" href="H27.html"><span class="nav-item-code">H27</span><span class="nav-item-label">软件架构设计（二）· 架构风格与 SOA</span></a><a class="nav-item" href="H28.html"><span class="nav-item-code">H28</span><span class="nav-item-label">软件架构设计（三）· 质量属性与 ATAM 评估</span></a><a class="nav-item" href="H29.html"><span class="nav-item-code">H29</span><span class="nav-item-label">系统设计（一）· 结构化设计与面向对象设计</span></a><a class="nav-item" href="H30.html"><span class="nav-item-code">H30</span><span class="nav-item-label">系统设计（二）· 设计模式与人机交互</span></a><a class="nav-item" href="H31.html"><span class="nav-item-code">H31</span><span class="nav-item-label">软件实现与测试（一）· 测试原则与黑盒白盒方法</span></a><a class="nav-item" href="H32.html"><span class="nav-item-code">H32</span><span class="nav-item-label">软件实现与测试（二）· 测试阶段与部署发布</span></a><a class="nav-item" href="H33.html"><span class="nav-item-code">H33</span><span class="nav-item-label">系统运行与维护（一）· 运维指标与软件维护</span></a><a class="nav-item" href="H34.html"><span class="nav-item-code">H34</span><span class="nav-item-label">系统运行与维护（二）· 系统转换与演进</span></a></div><div class="nav-group"><div class="nav-group-title">第三篇 · 案例实践</div><a class="nav-item" href="H35.html"><span class="nav-item-code">H35</span><span class="nav-item-label">Web 应用系统分析与设计 · 架构、缓存与测试</span></a><a class="nav-item" href="H36.html"><span class="nav-item-code">H36</span><span class="nav-item-label">嵌入式系统分析与设计 · 实时调度与低功耗</span></a><a class="nav-item" href="H37.html"><span class="nav-item-code">H37</span><span class="nav-item-label">移动应用系统分析与设计 · 架构演进与开发方式选型</span></a><a class="nav-item" href="H38.html"><span class="nav-item-code">H38</span><span class="nav-item-label">大数据处理系统分析与设计 · Lambda/Kappa 架构</span></a><a class="nav-item" href="H39.html"><span class="nav-item-code">H39</span><span class="nav-item-label">微服务系统分析与设计 · 组件、事务与反模式</span></a><a class="nav-item" href="H40.html"><span class="nav-item-code">H40</span><span class="nav-item-label">信息物理系统 CPS · 闭环架构与边缘计算</span></a><a class="nav-item" href="H41.html"><span class="nav-item-code">H41</span><span class="nav-item-label">系统分析师论文写作要点 · 结构、字数与评分</span></a></div><div class="nav-group"><div class="nav-group-title">专项模块 · 案例专项</div><a class="nav-item" href="H42.html"><span class="nav-item-code">H42</span><span class="nav-item-label">案例分析专项（一）· 四步答题法与设问模板</span></a><a class="nav-item" href="H43.html"><span class="nav-item-code">H43</span><span class="nav-item-label">案例分析专项（二）· 考点地图与真题精讲</span></a><a class="nav-item" href="H44.html"><span class="nav-item-code">H44</span><span class="nav-item-label">案例分析专项（三）· 六大方向专项与场景实战</span></a></div><div class="nav-group"><div class="nav-group-title">专项模块</div><a class="nav-item" href="H45.html"><span class="nav-item-code">H45</span><span class="nav-item-label">论文写作专项</span></a><a class="nav-item" href="H46.html"><span class="nav-item-code">H46</span><span class="nav-item-label">论文写作专项（二）· 万能素材卡与考点落点</span></a><a class="nav-item" href="H47.html"><span class="nav-item-code">H47</span><span class="nav-item-label">全真模拟（一）· 上午场综合知识与案例</span></a><a class="nav-item" href="H48.html"><span class="nav-item-code">H48</span><span class="nav-item-label">全真模拟（二）· 下午场论文与复盘方法论</span></a></div><div class="nav-group nav-group-pending"><div class="nav-group-title">待上线 · 按真题权重排序</div><div class="nav-pending-row"><span class="nav-pending-ch">✅ 48 学时已全部上线</span><span class="nav-pending-name">第一篇 9 章 + 第二篇 6 章 + 第三篇 7 章</span><span class="nav-pending-w">22 章</span></div><div class="nav-pending-row"><span class="nav-pending-ch">✅ 专项模块</span><span class="nav-pending-name">案例分析 H42–H44 · 论文 H45–H46 · 全真模拟 H47–H48</span><span class="nav-pending-w">7 学时</span></div></div></div><div class="nav-foot"><span class="nav-foot-tip">↑↓ 选择 · Enter 打开 · Esc 关闭</span><span class="nav-foot-nav"><a class="nav-step" href="H04.html">← 上一章</a><a class="nav-step" href="H06.html">下一章 →</a></span></div></div></div></nav>
+  <div class="theme-switch" role="group" aria-label="主题">
+    <button class="theme-btn" data-theme="light" type="button">浅</button>
+    <button class="theme-btn" data-theme="dark" type="button">深</button>
+    <button class="theme-btn active" data-theme="auto" type="button">跟随</button>
+  </div>
+</header>
+<main class="shell">
+  <aside class="toc"></aside>
+      <article class="main">
+    <div class="chapbar" id="chapbar"
+     data-sec-total="28" data-page-index="5" data-page-total="46">
+  <div class="chapbar-top">
+    <span class="chapbar-badge">H05</span>
+    <span class="chapbar-title">计算机系统（二）· 操作系统</span>
+    <span class="chapbar-spacer"></span>
+    <span class="chapbar-sec" id="chapbarSec">1 / 28</span>
+  </div>
+  <div class="chapbar-track"><div class="chapbar-fill" id="chapbarFill"></div></div>
+</div>
+    
+    <h1 id="第-5-小时-计算机系统-二-操作系统">第 5 小时 · 计算机系统（二）· 操作系统</h1>
+<div class="quote"><p>本学时覆盖 <strong>3.6 操作系统</strong> —— 概述、进程与线程、死锁、存储管理、设备管理、文件管理、国产操作系统（信创）。<br>操作系统是<strong>案例题的绝对富矿</strong>：PV 操作、页面置换、磁盘调度、磁盘调度计算题几乎年年出现。</p></div>
+<div class="block gold"><div class="block-title">考情定位</div><p>五块必拿：① <strong>进程三态/五态转换</strong>（阻塞不能直接回运行）；② <strong>信号量 PV 操作</strong>（P 申请阻塞、V 释放唤醒）；③ <strong>死锁四条件 + 四种处理策略</strong>；④ <strong>页面置换算法 FIFO/LRU/OPT + 抖动</strong>；⑤ <strong>磁盘调度算法计算</strong>（FCFS/SSTF/SCAN）。</p></div>
+<div class="block mem"><div class="block-title">记忆口诀</div><p><strong>PV 操作</strong>：P 申请（S>0 则 S−1 继续；S=0 阻塞），V 释放（S+1 并唤醒一个）。<br><strong>死锁四条件</strong>：互斥 · 占有并等待 · 不可剥夺 · 循环等待——<strong>破坏任一即可预防</strong>。<br><strong>四种处理</strong>：预防（破坏必要条件）· 避免（安全序列/银行家）· 检测（资源分配图化简）· 解除（撤销进程/剥夺资源）。<br><strong>磁盘调度</strong>：SSTF 平均寻道最短（饿死在调），SCAN 电梯（继续服务同向请求）。</p></div>
+<div class="block warning"><div class="block-title">易错陷阱</div><p><strong>「阻塞 → 就绪」只能由外部事件驱动</strong>（I/O 完成、锁释放），不是被调度；被调度是「就绪 → 运行」。<br><strong>页面置换与抖动</strong>：缺页率高不一定是算法差，可能是<strong>分配块数太少</strong>导致抖动。<br><strong>SPOOLing 的本质是"用磁盘当缓冲区，把独占设备改成共享虚拟设备"</strong>，别答成"提高磁盘速度"。</p></div>
+<h2 id="第-3-章下集知识骨架">第 3 章下集知识骨架</h2>
+<div class="fig fig-mermaid"><div class="mermaid-src" data-src="mindmap
+ root((03下 操作系统))
+   3.6.1 概述
+     定义与两大作用
+     四特征 五功能
+     六类操作系统
+     互联网环境五要求
+   3.6.2 进程管理 ★
+     前趋图
+     进程组成 PCB
+     三态 与 五态
+     PV操作 与 信号量
+     高级通信原语
+     死锁 四条件四策略
+     线程
+   3.6.3 存储器管理 ★
+     分区 分页 分段 段页式
+     虚拟存储 与 局部性
+     工作集理论
+     页面置换算法
+   3.6.4 设备管理
+     IO软件四层
+     SPOOLing
+     磁盘调度算法
+   3.6.5 文件管理 ★
+     逻辑 与 物理结构
+     文件目录 FCB
+     空闲空间管理
+     共享 与 保护
+   3.6.6 作业与界面
+     作业状态 JCB
+     调度算法 响应比
+     用户界面四阶段
+   3.6.7 国产操作系统
+     麒麟 深度 统信 等"></div><figcaption>图3-7 第3章下集知识骨架（操作系统）</figcaption></div>
+<h3 id="s3-6-1-操作系统的定义与两大作用">3.6.1 操作系统的定义与两大作用</h3>
+<p><strong>🖥️定义</strong></p>
+<p>操作系统能有效地<strong>组织和管理系统中的各种软/硬件资源</strong>，合理地组织计算机系统工作流程，控制程序的执行，并且向用户提供一个良好的工作环境和友好的接口。</p>
+<p>一句话：操作系统是计算机系统的<strong>资源管理者</strong>，它含有对系统软/硬件资源实施管理的一组程序。</p>
+<p><strong>🎯两大作用（必背）</strong></p>
+<p>① 通过资源管理提高计算机系统的效率</p>
+<p>让硬件资源被充分利用</p>
+<p>② 改善人机界面，向用户提供友好的工作环境</p>
+<p>让用户用得方便</p>
+<p><strong>🧬四大特征</strong></p>
+<p>并发性</p>
+<p>共享性</p>
+<p>虚拟性</p>
+<p>不确定性</p>
+<p>口诀：<strong>并发 · 共享 · 虚拟 · 不确定</strong>（"并发共享"是核心，"虚拟"是手段，"不确定"是结果）</p>
+<p><strong>资源管理范围在扩展</strong>：传统计算机系统资源分<strong>硬件资源</strong>（CPU、存储器、I/O 设备）和<strong>软件资源</strong>（以文件形式保存的程序和数据）。现代计算机系统已扩展到<strong>感知、能源、通信资源和服务资源</strong>。</p>
+<h2 id="操作系统的五大功能">操作系统的五大功能 ⭐</h2>
+<p>① 处理机管理</p>
+<p>对处理机的分配和运行实施有效管理。</p>
+<p>多道程序环境下，处理机的分配和运行<strong>以进程为基本单位</strong>，所以处理机管理<strong>也称为进程管理</strong>。</p>
+<p>② 存储器管理</p>
+<p>主要任务是对内存进行</p>
+<p>分配 · 保护 · 扩充</p>
+<p>③ 设备管理</p>
+<p>应具有三个功能：</p>
+<ul><li><strong>设备分配</strong>：按一定原则分配设备（常需缓冲技术和虚拟技术）</li><li><strong>设备传输控制</strong>：实现物理 I/O 操作（启动设备、中断处理、结束处理）</li><li><strong>设备独立性</strong>：用户申请的设备与实际操作的设备<strong>无关</strong></li></ul>
+<p>④ 文件管理</p>
+<p>负责文件存储空间的管理：</p>
+<ul><li>存储空间的<strong>分配和回收</strong></li><li><strong>目录管理</strong></li><li><strong>文件操作管理</strong></li><li><strong>文件保护</strong></li></ul>
+<p>⑤ 用户界面</p>
+<p>也称用户接口。包括两类：</p>
+<p><strong>程序接口</strong><br>面向开发人员</p>
+<p><strong>操作接口</strong><br>面向普通用户和管理者</p>
+<p>顺序口诀：<strong>处理机 → 存储器 → 设备 → 文件 → 用户界面</strong>（从里到外，从硬件到人）</p>
+<h3 id="s3-6-1-操作系统的分类-六类">3.6.1 操作系统的分类（六类）</h3>
+<p><strong>⏱️分时操作系统</strong></p>
+<p>一个计算机系统与<strong>多个终端设备</strong>连接，把 CPU 工作时间划分为许多很短的<strong>时间片</strong>，轮流为各终端用户服务。</p>
+<p>例：20 个终端，每用户每次 50ms 时间片 → 每隔 1s 即可为所有用户服务一遍。用户感觉整个系统归他一人占用。</p>
+<p><strong>四大特点</strong>：<strong>多路性 · 独立性 · 交互性 · 及时性</strong></p>
+<p>⚡实时操作系统（RTOS）</p>
+<p>对随机发生的外部事件<strong>及时做出响应并处理</strong>。</p>
+<ul><li><strong>分两类</strong>：<strong>实时控制系统</strong>（数据采集、武器控制、飞机自动驾驶、导弹制导）｜<strong>实时信息处理系统</strong>（飞机订票、情报检索）</li><li><strong>与分时的三点区别</strong>：</li></ul>
+<p>① <strong>设计目标</strong>：分时＝多用户通用系统；实时＝<strong>专用系统</strong></p>
+<p>② <strong>交互性</strong>：分时强；实时<strong>弱</strong>（仅允许访问有限专用程序）</p>
+<p>③ <strong>响应时间敏感度</strong>：分时以"用户能接受的等待时间"为依据；实时以"<strong>被控对象能接受的延迟</strong>"为依据 → <strong>实时更敏感</strong></p>
+<p><strong>🌐网络操作系统（三类模式）</strong></p>
+<p>使联网计算机能方便有效地共享网络资源、为网络用户提供各种服务的软件和有关协议的集合。</p>
+<p>功能：网络通信 · 共享资源管理 · 邮件/文件传输/共享硬盘打印机等服务 · 网络安全管理 · 互操作能力</p>
+<p><strong>① 集中模式</strong> — 由分时系统加网络功能演变而来，信息处理和控制集中。<strong>UNIX 是典型</strong></p>
+<p><strong>② 客户端/服务器模式</strong> — 流行的网络工作模式</p>
+<p><strong>③ 对等（P2P）模式</strong> — 各站点对等，<strong>无服务中心也无控制中心</strong>，具有分布处理与分布控制特征</p>
+<p>🕸️分布式操作系统</p>
+<p>分布式系统由多个分散的计算机经连接而成，<strong>各计算机无主次之分</strong>，任意两台可通过通信交换信息。</p>
+<p>能直接对各类资源进行<strong>动态分配和调度</strong>，进行任务划分与信息传输协调，为用户提供<strong>统一界面和标准接口</strong>。</p>
+<p>⭐ <strong>它是网络操作系统的更高级形式</strong>：保持网络 OS 全部功能，同时具有<strong>透明性、可靠性和高性能</strong>。</p>
+<h2 id="嵌入式操作系统-与-互联网环境要求">嵌入式操作系统 与 互联网环境要求</h2>
+<p>📟嵌入式操作系统五特点</p>
+<p>运行在嵌入式智能芯片环境中，对芯片及其操作控制的各种部件装置等资源进行统一协调、处理、指挥和控制。</p>
+<p><strong>① 微型化</strong> — 占用资源少、内存少、字长短、能源少</p>
+<p><strong>② 可定制</strong> — 能运行在不同微处理器平台，针对硬件变化做配置</p>
+<p><strong>③ 实时性</strong> — 过程控制、数据采集、传输通信等要求迅速响应</p>
+<p><strong>④ 可靠性</strong> — 关键要害应用还要提供容错和防故障措施</p>
+<p><strong>⑤ 易移植性</strong> — 采用 <strong>HAL 硬件抽象层</strong> 和 <strong>BSP 板级支撑包</strong></p>
+<p>常见：<strong>VxWorks、μLinux、PalmOS、Windows CE、μC/OS-II、eCos</strong></p>
+<p>🌍互联网环境对 OS 的五方面要求</p>
+<p>① 自主配置和自适应协调</p>
+<p>互联网环境下节点数量在变、节点状态在变、系统需求不断变 → 要求能自主配置、自适应协调</p>
+<p>② 支持跨网络的互连、互通和协作</p>
+<p>有线与无线结合、固定与移动节点动态结合、数据资源与物理传感资源结合、人机交互界面多元化</p>
+<p>③ 管理和协调系统资源的共享</p>
+<p>资源管理范围扩大到感知/能源/通信/服务资源；每个节点的<strong>能源消耗和储备</strong>成为重要内容；<strong>Internet 搜索已成为 OS 基本功能之一</strong></p>
+<p>④ 支持功能、性能和可信性指标动态演化</p>
+<p>对运算结果的控制要综合<strong>能源消耗、运算精度、快速处理</strong>三方面折中</p>
+<p>⑤ 可信赖操作系统</p>
+<p>构造可信赖系统包括<strong>私密性、防卫性、可靠性、安全性、可用性</strong></p>
+<p>💡 <strong>教材总结</strong>：为屏蔽<strong>计算机硬件</strong>的异构性 → 发展了<strong>操作系统</strong>；为屏蔽<strong>操作系统和编程语言</strong>的异构性 → 发展了<strong>支撑软件和中间件</strong>；为弥补<strong>应用软件与开发平台</strong>的距离 → 发展了<strong>软件框架、设计模式</strong>。</p>
+<h3 id="s3-6-2-前趋图-与-进程的组成">3.6.2 前趋图 与 进程的组成</h3>
+<p><strong>🔗前趋图与前趋关系</strong></p>
+<p>前趋图是一个<strong>有向无循环图</strong>，结点代表各程序段的操作，有向边表示两个程序段操作之间的<strong>前趋关系</strong>。</p>
+<p>Pi → Pj 表示：<strong>Pi 执行结束后 Pj 才能执行</strong>。Pi 是直接前趋，Pj 是直接后继。</p>
+<ul><li><strong>顺序执行三特征</strong>：顺序性 · 封闭性 · 可再现性</li><li><strong>并发执行三特征</strong>：<strong>失去封闭性</strong> · 程序与执行活动<strong>不再一一对应</strong> · 并发程序间的<strong>相互制约性</strong></li><li><strong>教材例题</strong>：1 个 CPU＋1 台输入设备＋1 台输出设备，每个作业有输入 Ii、计算 Ci、输出 Pi 三段（i＝1,2,3）。</li></ul>
+<p>可并行：<strong>I2 与 C1</strong>｜<strong>I3、C2 与 P1</strong>｜<strong>C3 与 P2</strong></p>
+<p>受<strong>间接制约</strong>：I2/I3 受 I1、C2/C3 受 C1、P2/P3 受 P1</p>
+<p><strong>🧩进程的组成（三部分）</strong></p>
+<p><strong>定义</strong>：进程是<strong>程序的一次执行</strong>，该程序可以和其他程序并发执行。</p>
+<p>① PCB</p>
+<p>进程控制块。<strong>进程存在的唯一标志</strong> ⭐</p>
+<p>② 程序</p>
+<p>描述进程要完成的功能。若可被多进程共享，应以<strong>可再入（纯）码</strong>形式编制——是<strong>不可修改</strong>的部分</p>
+<p>③ 数据</p>
+<p>程序执行所需的数据及工作区。<strong>只能为一个进程专用</strong>，是<strong>可修改</strong>的部分</p>
+<p>⭐ 高频考点：<strong>PCB 是进程存在的唯一标志</strong>（同理下集作业部分：<strong>JCB 是作业存在的唯一标志</strong>）</p>
+<h2 id="进程的三态模型-与-五态模型">进程的三态模型 与 五态模型 ⭐</h2>
+<div class="fig fig-mermaid"><div class="mermaid-src" data-src="stateDiagram-v2
+  [*] --&gt; 就绪
+  就绪 --&gt; 运行 : 被调度
+  运行 --&gt; 就绪 : 时间片到 / 被抢占
+  运行 --&gt; 阻塞 : 等待事件（请求 I/O）
+  阻塞 --&gt; 就绪 : 事件发生
+  运行 --&gt; [*]"></div><figcaption>图3-3 进程三态模型：阻塞态不能直接回运行态，必须先经过就绪态</figcaption></div>
+<ul><li><strong>运行</strong>：进程在处理机上运行。单处理机系统中，处于运行状态的进程<strong>只有一个</strong>。</li><li><strong>就绪</strong>：已获得<strong>除处理机外的一切所需资源</strong>，一旦得到处理机即可运行。</li></ul>
+<p><strong>阻塞</strong>（等待/睡眠）：正在<strong>等待某一事件发生</strong>（如请求 I/O）而暂停，<strong>即使分配处理机也无法运行</strong>。</p>
+<p><strong>五态模型</strong>：在三态基础上引入 <strong>新建态</strong> 和 <strong>终止态</strong>。</p>
+<ul><li><strong>新建态</strong>：进程刚被创建但<strong>还没被提交</strong>，等待系统完成创建进程的所有必要信息（分两阶段：①创建管理信息 ②进入就绪态）。有了新建态，<strong>可根据系统性能和主存容量限制推迟提交</strong>。</li><li><strong>终止态</strong>：进程终止也分两阶段——①等待操作系统<strong>善后处理</strong> ②<strong>释放主存</strong>。</li></ul>
+<h2 id="信号量与-PV-操作">信号量与 PV 操作 ⭐⭐</h2>
+<p>🚦信号量基础</p>
+<p>荷兰学者 <strong>Dijkstra</strong> 于 <strong>1965 年</strong>提出。主要有<strong>整型信号量、记录型信号量和信号量集机制</strong>。</p>
+<p><strong>公用信号量</strong> — 实现进程间的<strong>互斥</strong>，初值为 <strong>1</strong> 或资源的数目</p>
+<p><strong>私用信号量</strong> — 实现进程间的<strong>同步</strong>，初值为 <strong>0</strong> 或某个正整数</p>
+<p><strong>信号量 S 的物理意义</strong>：</p>
+<p>S ≥ 0 → 表示某资源的<strong>可用数</strong></p>
+<p>S &lt; 0 → 其<strong>绝对值</strong>表示阻塞队列中<strong>等待该资源的进程数</strong></p>
+<p>🔻🔺P 操作 与 V 操作（不可分割的原语）</p>
+<p><strong>P 操作</strong>（申请一个资源）：S := S − 1</p>
+<ul><li>若 <strong>S ≥ 0</strong> → 执行 P 操作的进程<strong>继续执行</strong></li><li>若 <strong>S &lt; 0</strong> → 置该进程为<strong>阻塞状态</strong>（无可用资源），插入阻塞队列</li></ul>
+<p><strong>V 操作</strong>（释放一个资源）：S := S + 1</p>
+<ul><li>若 <strong>S &gt; 0</strong> → 执行 V 操作的进程<strong>继续执行</strong></li><li>若 <strong>S ≤ 0</strong> → 从阻塞队列中<strong>唤醒一个进程</strong>并插入就绪队列，然后 V 操作进程继续</li></ul>
+<p>⚠️ <strong>两组判断符号最容易记反</strong>：</p>
+<p>P 操作判断条件是 <strong>S &lt; 0</strong> 才阻塞（先减再判）；V 操作判断条件是 <strong>S ≤ 0</strong> 才唤醒（先加再判）。</p>
+<p>记忆法：<strong>P 先减，减到负数就阻塞；V 先加，加到非正就唤醒</strong>。</p>
+<h2 id="PV-操作的两个经典应用">PV 操作的两个经典应用</h2>
+<p>🔒① 实现进程互斥</p>
+<p>令信号量 <strong>mutex 初值为 1</strong>：</p>
+<p>P(mutex)</p>
+<p>临界区</p>
+<p>V(mutex)</p>
+<p>进入临界区时执行 P，退出时执行 V —— <strong>P 和 V 必须成对出现且夹住临界区</strong>。</p>
+<p>＋</p>
+<p>🔄② 实现进程同步（生产者-消费者）</p>
+<p><strong>缓冲区可存放 n 件产品</strong>，设 <strong>3 个信号量</strong>：</p>
+<p><strong>S</strong> — 互斥信号量，初值 <strong>1</strong>（缓冲区是互斥资源）</p>
+<p><strong>S₁</strong> — 同步信号量，初值 <strong>n</strong>（缓冲区的<strong>空闲单元数</strong>）</p>
+<p><strong>S₂</strong> — 同步信号量，初值 <strong>0</strong>（缓冲区<strong>是否存有产品</strong>）</p>
+<p>生产者：<strong>P(S₁)</strong> → 放入 → <strong>V(S₂)</strong>；消费者：<strong>P(S₂)</strong> → 取出 → <strong>V(S₁)</strong></p>
+<p>辨析口诀：<strong>互斥看初值 1，同步看资源语义</strong>——S₁ 初始是"有多少空位"（n），S₂ 初始是"已放了几件"（0）。</p>
+<p>⚠️ <strong>常见陷阱</strong>：把 S₁ 初值写成 0、S₂ 初值写成 n —— 正好搞反。想清楚：<strong>一开始缓冲区是空的，所以空位数是 n、已有产品数是 0</strong>。</p>
+<h2 id="高级通信原语-与-死锁的产生">高级通信原语 与 死锁的产生</h2>
+<p>📨进程通信：低级 vs 高级</p>
+<p><strong>PV 操作属于低级通信方式</strong>，存在两个问题：</p>
+<p>① <strong>编程难度大</strong>——通信对用户不透明，使用不当容易引起死锁</p>
+<p>② <strong>效率低</strong>——每次只能送/取一个产品</p>
+<p>🚀三种高级通信方式</p>
+<p>① 共享存储模式</p>
+<p>相互通信的进程共享某些数据结构（或存储区）实现通信</p>
+<p>② 消息传递模式</p>
+<p>数据交换<strong>以消息为单位</strong>，用系统提供的一组通信命令（原语）实现，如 <strong>Send(A)、Receive(A)</strong></p>
+<p>③ 管道通信</p>
+<p>管道＝连接一个读进程和一个写进程的<strong>共享文件（pipe 文件）</strong>。写进程以<strong>字符流</strong>形式把大量数据送入管道，读进程从管道接收</p>
+<p>💀死锁的四个必要条件 ⭐</p>
+<p><strong>死锁</strong>：两个以上的进程<strong>互相都要求使用对方已经占有的资源</strong>而导致无法继续运行下去的现象。</p>
+<p>三个原因：系统缺少足够资源供进程使用；对互斥资源的共享与并发执行顺序不当；资源分配不当。</p>
+<p>① 互斥条件</p>
+<p>任一时刻只允许一个进程使用资源</p>
+<p>② 不剥夺条件</p>
+<p>进程已占用的资源，<strong>不会被强制剥夺</strong></p>
+<p>③ 请求与保持条件</p>
+<p>进程在请求其余资源时，<strong>不主动释放已经占有的资源</strong></p>
+<p>④ 环路条件</p>
+<p>环路中每一条边是进程在<strong>请求另一个进程已经占有的资源</strong></p>
+<h2 id="死锁的四种处理策略">死锁的四种处理策略 ⭐⭐</h2>
+<table><thead><tr><th>策略</th><th>做法</th><th>要点与代价</th></tr></thead><tbody><tr><td>① 鸵鸟策略</td><td>不理睬</td><td>即"不处理"。适用于死锁发生概率很低、且代价可接受的场景</td></tr><tr><td>② 死锁预防</td><td>用某种策略限制并发进程对资源的请求，<strong>破坏 4 个必要条件之一</strong></td><td>· <strong>预先静态分配法</strong> → 破坏"不可剥夺条件"<strong>：预先分配所需资源，保证不等待 问题：降低资源利用率和进程并发程度；有时无法预先知道所需资源 · </strong>资源有序分配法<strong> → 破坏"环路条件"</strong>：把资源分类按顺序排列，保证不形成环路 问题：限制进程对资源的请求；资源排序占用系统开销</td></tr><tr><td>③ 死锁避免</td><td>不那么严格地限制必要条件，<strong>在分配前动态判断是否安全</strong></td><td>· 最著名的是 Dijkstra 提出的 银行家算法 · 对每个可满足的资源请求加以检测：分配后若进入不安全状态则不予分配；仍处于安全状态才分配 · 比预防策略提高了资源利用率，但检测增加系统开销，算法开销很大</td></tr><tr><td>④ 检测与解除</td><td>对资源分配<strong>不加限制</strong>（允许死锁产生），定时运行检测程序</td><td>· <strong>死锁检测</strong>：定时运行检测程序判断系统是否发生死锁 · <strong>解除</strong>：资源剥夺法<strong>（强行剥夺足够资源给死锁进程）｜撤销进程法</strong>（按策略逐个撤销死锁进程直到解除）</td></tr></tbody></table>
+<p>⭐ 最高频辨析：<strong>资源有序分配法破坏的是"环路条件"</strong>（不是互斥、不是不可剥夺）；<strong>预先静态分配法破坏的是"不可剥夺条件"</strong>。</p>
+<p><strong>安全状态的定义</strong>：系统能按某种顺序 &lt;P₁,P₂,…,Pₙ&gt; 为每个进程分配其所需资源直到最大需求，使每个进程都可顺序完成 → 该序列称为<strong>安全序列</strong>；不存在安全序列则系统处于<strong>不安全状态</strong>。</p>
+<h2 id="线程-与进程的分工">线程 · 与进程的分工</h2>
+<p>🧵为什么引入线程</p>
+<p>传统的进程有<strong>两个基本属性</strong>：<strong>可拥有资源的独立单位</strong> + <strong>可独立调度和分配的基本单位</strong>。</p>
+<p>问题：进程在创建、撤销和切换中，系统必须付出<strong>较大的时空开销</strong>，所以进程数目不宜过多、切换频率不宜太高。</p>
+<p><strong>引入线程后把这两个属性分开</strong>：</p>
+<ul><li><strong>线程</strong> = <strong>调度和分配的基本单位</strong></li><li><strong>进程</strong> = <strong>独立分配资源的单位</strong></li></ul>
+<p>💡 教材例子：文件服务进程里设多个服务线程，一个受阻另一个继续跑 → 显著提高<strong>文件系统服务质量</strong>与<strong>系统吞吐量</strong>。有资源的基本单位不用频繁切换，进一步提高并发程度。</p>
+<p>⚖️线程的关键性质</p>
+<p>轻型进程</p>
+<p>线程具有许多传统进程的特性，故称为 <strong>Light-Weight Process</strong></p>
+<p>基本不拥有资源</p>
+<p>只拥有一点运行中必不可少的资源：<strong>程序计数器、一组寄存器、栈</strong></p>
+<p>共享进程资源</p>
+<p>可与<strong>同属一个进程</strong>的其他线程共享该进程拥有的<strong>全部资源</strong></p>
+<p>三态齐全</p>
+<p>线程也有<strong>就绪、运行、阻塞</strong>三种基本状态；可创建另一个线程；同进程内多线程可并发</p>
+<p><strong>🔀两类线程</strong></p>
+<ul><li><strong>用户级线程</strong>：<strong>不依赖内核</strong>，创建/撤销/切换都<strong>不利用系统调用</strong>。</li><li><strong>内核支持线程</strong>：<strong>依赖内核</strong>，无论用户进程中的还是系统中的线程，创建/撤销/切换都<strong>利用系统调用</strong>实现。</li></ul>
+<h3 id="s3-6-3-存储器管理-五种方案总览">3.6.3 存储器管理 · 五种方案总览</h3>
+<p><strong>🎯管理对象与目标</strong></p>
+<p>管理对象是<strong>主存存储器</strong>（内存）。它是计算机系统中的关键性资源。</p>
+<p><strong>主要功能</strong>：</p>
+<ul><li>主存空间的<strong>分配和回收</strong></li><li>提高主存的<strong>利用率</strong></li><li><strong>扩充</strong>主存</li><li>对主存信息实现有效<strong>保护</strong></li></ul>
+<p>主要目的：解决<strong>多个用户使用主存</strong>的问题。</p>
+<p><strong>🗂️五种存储管理方案</strong></p>
+<p>① 分区存储管理</p>
+<p>早期方案，把主存用户区划分成若干区域，每区给一个作业，<strong>限定只能在自己区域内运行</strong></p>
+<p>② 分页存储管理</p>
+<p>地址结构 = <strong>页号 P ＋ 页内地址 W</strong>；用<strong>页表</strong>记录每页对应的物理块号</p>
+<p>③ 分段存储管理</p>
+<p>作业地址空间划分为若干<strong>段</strong>（主程序段/子程序段/数据段/堆栈段），各段<strong>长度不等</strong>；用<strong>段表</strong>记录基址与段长</p>
+<p>④ 段页式存储管理</p>
+<p><strong>先分段，段内再分页</strong>；同时配置段表和页表</p>
+<p>⑤ 虚拟存储管理</p>
+<p>作业<strong>只部分装入主存</strong>即可启动运行，其余留在磁盘，需要时再调入</p>
+<p>演进主线：<strong>分区 → 分页 → 分段 → 段页式 → 虚拟存储</strong>（从整体划分到细粒度离散分配，最后引入"部分装入"）</p>
+<h2 id="分区-分页-分段-存储管理">分区 · 分页 · 分段 存储管理</h2>
+<p>🧱分区存储管理</p>
+<p>按划分方式分三种：</p>
+<p><strong>固定分区</strong> — <strong>静态</strong>分区方式</p>
+<p><strong>可变分区</strong> — <strong>动态</strong>分区方式</p>
+<p><strong>可重定位分区</strong> — 移动已分配分区使之连续，<strong>减少内存碎片</strong></p>
+<p>📄分页存储管理</p>
+<p>地址结构 = <strong>页号 P</strong> ＋ <strong>页内地址 W</strong></p>
+<p>为每个进程建一张<strong>页面映射表（页表）</strong>，记录进程的每个页面<strong>对应的物理块号</strong>。</p>
+<p>页表的作用 = <strong>实现从页号到物理块号的地址映射</strong></p>
+<p><strong>地址变换</strong>：页号与页表长度 L 比较 → <strong>页号 ≥ L 则越界中断</strong>；否则查页表得物理块号，与页内地址拼接。</p>
+<p>教材例：逻辑页号 <strong>4</strong> → 查页表得物理块号 <strong>15</strong> → 与页内地址 <strong>256</strong> 拼接 → 物理地址 <strong>15256</strong></p>
+<p>📚分段存储管理</p>
+<p>作业地址空间划为若干<strong>段</strong>，每段是<strong>一组完整的逻辑信息</strong>（主程序段、子程序段、数据段、堆栈段），<strong>各段长度不等</strong>。</p>
+<p>逻辑地址 = <strong>段号（名）</strong> ＋ <strong>段内地址</strong></p>
+<p>每段分配一个连续分区，各段可<strong>离散</strong>分配到主存不同分区；建<strong>段表</strong>记录<strong>基址和段长</strong>。</p>
+<p><strong>双重越界检查</strong>：① 段号 S ≥ 段表长度 L → 越界；② 段内地址 d ≥ 段长 SL → 越界。都通过则 <strong>基址 S′ ＋ d ＝ 物理地址</strong>。</p>
+<p>⚠️ <strong>关键辨析</strong>：<strong>分页</strong>的页是<strong>定长</strong>的（物理划分，对用户不可见）；<strong>分段</strong>的段是<strong>变长</strong>的（逻辑划分，按程序逻辑，对用户可见）——这是两者的本质区别。</p>
+<h2 id="段页式-与-虚拟存储管理">段页式 与 虚拟存储管理</h2>
+<p><strong>🧩段页式存储管理</strong></p>
+<p><strong>基本原理</strong>：先将整个主存划分成大小相等的存储块（<strong>页框</strong>）；将用户程序按逻辑关系分为若干<strong>段</strong>并赋予段名；再将每个段划分为若干<strong>页</strong>，以页框为单位<strong>离散分配</strong>。</p>
+<p><strong>地址结构 = 段号 ＋ 段内页号 ＋ 页内地址</strong>（三部分）</p>
+<p>同时配置<strong>段表和页表</strong>，<strong>段表中的内容是页表的起始地址和页表长度</strong>。</p>
+<p><strong>变换三步</strong>：① 按段号 S 查段表 → 得页表起始地址；② 按页号 P 查页表 → 得物理块号 b；③ 把 b 与页内地址 W 拼接 → 物理地址。</p>
+<p>🪄虚拟存储管理</p>
+<p>前面的方案都必须为作业分配<strong>足够空间装入全部信息</strong>；虚拟存储让作业<strong>只部分装入主存</strong>便可启动运行，其余部分暂留在磁盘，需要时再调入。</p>
+<p>⭐ <strong>虚存容量</strong>由<strong>计算机的地址结构决定</strong>（不是由主存＋外存实际大小任意决定）。</p>
+<p>它的<strong>逻辑容量</strong>由主存和外存容量之和以及 <strong>CPU 可寻址范围</strong>共同决定；运行速度<strong>接近主存</strong>。</p>
+<p><strong>三种实现方式</strong>：</p>
+<ul><li><strong>请求分页系统</strong> — 分页 + 请求调页 + 页面置换（<strong>最常用</strong>）</li><li><strong>请求分段系统</strong> — 分段 + 请求调段 + 分段置换</li><li><strong>请求段页式系统</strong> — 段页式 + 请求调页 + 页面置换</li></ul>
+<p><strong>程序局限性原理</strong>（1968 年 P. Denning 提出）：</p>
+<ul><li><strong>时间局限性</strong> — 某条指令/存储单元一旦被访问，不久后<strong>可能再次被访问</strong>。典型原因：程序中存在<strong>大量循环操作</strong></li><li><strong>空间局限性</strong> — 访问了某单元，则其<strong>附近单元</strong>也最可能被访问。典型原因：程序的<strong>顺序执行</strong></li></ul>
+<p><strong>工作集理论</strong>（1968 年 P. Denning 提出）：</p>
+<p>把某进程在时间 t 的工作集记为 <strong>W(t, Δ)</strong>，Δ 称为<strong>工作集窗口尺寸</strong>。</p>
+<p>工作集＝在某段时间间隔 Δ 里，进程<strong>实际要访问的页面的集合</strong>。</p>
+<p>正确选择 Δ 的大小，对存储器有效利用和系统吞吐量有重大影响。</p>
+<h2 id="页面置换算法-与-抖动">页面置换算法 ⭐⭐ 与 抖动</h2>
+<table><thead><tr><th>算法</th><th>规则与评价</th></tr></thead><tbody><tr><td>OPT 最佳置换</td><td>选择<strong>永不使用</strong>或<strong>最长时间内不再被访问</strong>的页面置换出去。<strong>性能最好但实际难以实现</strong>（无法预知未来），<strong>通常用来评价其他算法</strong></td></tr><tr><td>FIFO 先进先出</td><td>淘汰最先进入主存、即驻留时间最久的页面。实现简单（队列＋指针）；最直观、性能最差，且有 Belady 异常</td></tr><tr><td>LRU 最近最少使用</td><td>选择<strong>最近最少使用</strong>的页面淘汰。每页设一个<strong>访问字段</strong>记录自上次被访问以来经历的时间 T，淘汰 <strong>T 最大</strong>的页面。<strong>需要硬件支持（寄存器或栈）</strong></td></tr><tr><td>NUR 最近未用</td><td>LRU 的近似算法。每页设一位访问位，所有页面链成循环队列；访问时置 1，淘汰时检查访问位：为 0 则换出，为 1 则置 0 后检查下一页</td></tr></tbody></table>
+<p>口诀：<strong>OPT 最理想不可实现，FIFO 最差有 Belady，LRU 需硬件，NUR 是 LRU 的近似</strong></p>
+<p>📉Belady 异常（高频）</p>
+<p>指对一个进程<strong>未分配它所要求的全部页面</strong>时，有时会出现<strong>分配的页面数增多，但缺页率反而提高</strong>的异常现象。</p>
+<p>只有 <strong>FIFO</strong> 会出现 Belady 异常；<strong>LRU 和 OPT 不会</strong>（它们属于"栈式算法"）。</p>
+<p>🌊抖动 / 颠簸（Thrashing）</p>
+<p>不适当的置换算法会导致：<strong>刚被换出的页很快又被访问</strong>，需重新调入，系统频繁更换页面，以至于进程<strong>把大部分时间花在页面置换上</strong>。</p>
+<p>解决思路：<strong>工作集理论</strong>——让进程的工作集驻留在主存中。</p>
+<h3 id="s3-6-4-设备管理-I-O-软件四层-与-SPOOLing">3.6.4 设备管理 · I/O 软件四层 与 SPOOLing</h3>
+<p>🧱I/O 设备管理软件的四个层次</p>
+<p><strong>① 中断处理程序</strong>（最底层）</p>
+<p><strong>② 设备驱动程序</strong></p>
+<p><strong>③ 与设备无关的系统软件</strong></p>
+<p><strong>④ 用户级软件</strong>（最上层）</p>
+<p>目标：<strong>有利于设备独立</strong>。只要有利于这个目标，就可以为提高效率设计不同的层次结构。</p>
+<p><strong>读硬盘文件的完整流程</strong>：与设备无关软件检查<strong>高速缓存</strong>有无数据 → 没有则调用<strong>设备驱动程序</strong>发请求 → 用户进程<strong>阻塞</strong>等待 → 磁盘完成产生<strong>中断</strong> → 转入<strong>中断处理程序</strong> → 唤醒用户进程取回数据 → 用户进程继续运行。</p>
+<p>🖨️SPOOLing 技术 ⭐</p>
+<p>SPOOLing（Simultaneous Peripheral Operations On Line）也称<strong>外围设备联机操作</strong>。</p>
+<p>⭐ <strong>本质：用一类物理设备模拟另一类物理设备，使"独占使用的设备"变成多台"虚拟设备"。典型场景：打印机。</strong></p>
+<ul><li><strong>组成</strong>：预输入程序 ＋ 缓输出程序 ＋ 井管理程序 ＋ <strong>输入井和输出井</strong>（在<strong>辅助存储器</strong>上开辟的存储区域）。</li><li><strong>工作过程</strong>：初启后激活预输入程序捕获输入请求 → 把作业输入到硬盘的<strong>输入井</strong>并填作业表 → 作业需输出时先送<strong>输出井</strong> → 输出设备空闲时由缓输出程序送到慢速输出设备。</li><li><strong>输入井中作业的四种状态</strong>：<strong>提交状态</strong>（正从输入设备预输入）→ <strong>后备状态</strong>（预输入结束但未被选中）→ <strong>执行状态</strong>(被选中运行，可读输入井、写输出井) → <strong>完成状态</strong>（已撤离，结果等待缓输出）</li></ul>
+<h2 id="磁盘调度算法-要会算">磁盘调度算法 ⭐（要会算）</h2>
+<p><strong>为什么需要调度</strong>：磁盘可被多个进程共享，但每一时刻<strong>只允许一个进程启动磁盘做 I/O</strong>，其余等待。访问磁盘最耗时的是<strong>寻道时间</strong>，所以<strong>磁盘调度的目标是使平均寻道时间最少</strong>。</p>
+<p>调度分<strong>移臂调度</strong>（先）和<strong>旋转调度</strong>（后）两类。</p>
+<table><thead><tr><th>算法</th><th>规则</th><th>评价</th></tr></thead><tbody><tr><td>FCFS 先来先服务</td><td>按进程<strong>请求访问磁盘的先后次序</strong>进行调度</td><td><strong>公平、简单</strong>，每个请求都能依次处理，<strong>不会饥饿</strong>；但未优化寻道，<strong>平均寻道时间可能较长</strong></td></tr><tr><td>SSTF 最短寻道时间优先</td><td>选择要求访问的磁道与<strong>当前磁头所在磁道距离最近</strong>的进程</td><td>每次寻道时间最短；但<strong>不能保证平均寻道时间最短</strong></td></tr><tr><td>SCAN 扫描算法</td><td>既考虑距离，<strong>更优先考虑磁头当前移动方向</strong>：沿当前方向访问到再无更远磁道时才换向</td><td>磁头规律颇似电梯运行，故又称电梯调度算法；避免了饥饿现象</td></tr><tr><td>CSCAN 单向扫描</td><td>规定磁头<strong>只做单向移动</strong>（到头后快速返回起点，再单向扫描）</td><td>解决 SCAN 的问题：刚扫过的磁道又来请求时，在 SCAN 下要等一整轮，<strong>被严重推迟</strong></td></tr></tbody></table>
+<p>口诀：<strong>FCFS 公平但慢，SSTF 贪心不最优，SCAN 像电梯不饿死，CSCAN 只走单程</strong></p>
+<p>⚠️ 计算题套路：按算法列出<strong>访问顺序</strong> → 累加相邻磁道距离 → 除以请求数得<strong>平均寻道长度</strong>。注意问的是"总距离"还是"平均"。</p>
+<h3 id="s3-6-5-文件管理-结构与目录">3.6.5 文件管理 · 结构与目录</h3>
+<p>📑文件的逻辑结构（用户视角）</p>
+<p><strong>有结构的记录式文件</strong> — 由一个以上<strong>记录</strong>构成，又称记录式文件</p>
+<p><strong>无结构的流式文件</strong> — 由一串<strong>顺序字符流</strong>构成</p>
+<p><strong>🗄️文件的物理结构（存储视角）</strong></p>
+<p>即文件在物理存储设备上的<strong>存放方法</strong>，决定了<strong>逻辑块号到物理块号的转换</strong>。</p>
+<p>① 连续结构</p>
+<p>② 链接结构</p>
+<p>③ 索引结构</p>
+<p>④ 多物理块索引表</p>
+<p>⭐ <strong>UNIX 文件系统采用三级索引结构</strong>，<strong>inode</strong> 是基本构件，表示文件系统树状结构的结点。索引表项分 <strong>4 种寻址方式</strong>：直接寻址、一级间接、二级间接、三级间接。</p>
+<p>📁文件目录 与 路径名</p>
+<p>为按名存取，系统为每个文件设置描述和控制文件的数据结构 —— <strong>文件控制块（FCB）</strong>，至少包括<strong>文件名和物理地址</strong>。FCB 的有序集合称为<strong>文件目录</strong>（也称目录项）。</p>
+<ul><li><strong>三种目录结构</strong>：一级目录 · 二级目录 · <strong>多级目录</strong></li><li><strong>路径名</strong>：从根目录开始到该文件的通路上所有各级目录名拼起来。目录名与文件名之间用<strong>分隔符</strong>隔开——<strong>MS-DOS 用 "\"，UNIX 用 "/"</strong>。</li><li><strong>绝对路径名</strong>：从根目录 "/" 开始的完整文件名。</li><li><strong>文件系统的六大功能</strong>：按名存取 · 统一的用户接口 · 并发访问和控制 · 安全性控制 · 性能优化 · 差错恢复</li></ul>
+<h2 id="文件存储空间管理-与-共享保护">文件存储空间管理 与 共享保护</h2>
+<p>🗃️空闲空间管理四法</p>
+<table><thead><tr><th>方法</th><th>要点</th></tr></thead><tbody><tr><td>① 位示图</td><td>建立一张位示图（Bitmap），<strong>每一位对应一个物理块</strong>，0/1 分别表示空闲/占用。大小由<strong>磁盘物理块总数</strong>决定，描述能力强，<strong>适合各种物理结构</strong></td></tr><tr><td>② 空闲区表</td><td>为所有<strong>连续的空闲区</strong>建表，表项含序号、首块号、块数、状态。<strong>适用于连续文件结构</strong></td></tr><tr><td>③ 空闲块链</td><td>每个空闲块中存<strong>指向下一个空闲块的指针</strong>，构成链表。<strong>不需要磁盘分配表，节省空间</strong></td></tr><tr><td>④ 成组链接法</td><td>UNIX 系统采用。空闲块分成若干组（如每 100 块一组），每组第一个空闲块登记下一组的物理盘块号和空闲块总数。某组首块号等于 0 意味该组是最后一组</td></tr></tbody></table>
+<p>速记：<strong>位示图适合各种结构，空闲区表配连续文件，空闲块链省空间，成组链接是 UNIX</strong></p>
+<p><strong>🔗文件的共享：两种链接</strong></p>
+<p><strong>硬链接</strong>（基于索引结点的链接）：将两个文件目录表目<strong>指向同一个索引结点</strong>，从而达到共享。</p>
+<ul><li><strong>符号链接</strong>：建立新的文件或目录，与原路径名进行<strong>映射</strong>；访问时通过映射找到原文件路径再访问。</li><li><strong>优点</strong>：可<strong>跨越文件系统</strong>，甚至通过网络连到任何地方的计算机中的文件</li><li><strong>缺点</strong>：读取符号链接的共享文件比硬链接<strong>增加读盘次数</strong></li></ul>
+<p>🔐文件的保护：四种存取控制</p>
+<p><strong>① 存取控制矩阵</strong> — 二维矩阵，行是用户、列是文件，元素 Aij 表示权限（R/W/X 及组合）。概念清楚，但用户和文件多时<strong>占巨大存储、验证耗系统时间</strong></p>
+<p><strong>② 存取控制表</strong> — 按用户对文件访问权限的差别<strong>对用户分类</strong>，使表大大简化</p>
+<p><strong>③ 用户权限表</strong> — 以用户或用户组为单位，把可存取的文件集中成表（相当于矩阵一行的简化）</p>
+<p><strong>④ 密码</strong> — 创建文件时提供密码，存盘时用密码<strong>对文件内容加密</strong></p>
+<h2 id="文件系统安全-与-3-6-6-作业管理">文件系统安全 与 3.6.6 作业管理</h2>
+<p>🛡️文件系统的安全与可靠性</p>
+<ul><li><strong>安全性管理 4 个级别</strong>：<strong>系统级 · 用户级 · 目录级 · 文件级</strong></li><li><strong>可靠性</strong>：系统抵抗和预防各种<strong>物理性破坏和人为性破坏</strong>的能力。文件系统被破坏往往后果更严重——很多情况下<strong>无法恢复</strong>。</li></ul>
+<p>保护信息的三种主要方法：</p>
+<ul><li><strong>转储和恢复</strong>　· <strong>日志文件</strong>　· <strong>文件系统的一致性检查</strong></li></ul>
+<p>一致性检查包括<strong>块的一致性检查</strong>和<strong>文件的一致性检查</strong></p>
+<p><strong>📋作业的基本概念</strong></p>
+<ul><li><strong>作业</strong>：系统为完成一个用户的<strong>计算任务（或一次事务处理）</strong>所做的工作总和。</li><li><strong>作业步</strong>：如源程序要经过<strong>编译、连接、装入、执行</strong>等步骤，其中每一个步骤称为一个作业步。</li></ul>
+<p>作业的三个组成部分</p>
+<p><strong>程序 ＋ 数据 ＋ 作业说明书</strong><br>说明书含：作业基本情况（用户名/作业名/语言/最大处理时间）· 作业控制描述 · 作业资源要求描述</p>
+<p>两种作业控制方式</p>
+<ul><li><strong>脱机控制</strong>：用<strong>作业控制语言 JCL</strong> 写作业说明书，无需人工干预</li><li><strong>联机控制</strong>：通过终端输入命令控制</li></ul>
+<p>作业四状态</p>
+<p><strong>提交 → 后备（收容）→ 执行 → 完成</strong></p>
+<p>JCB 与后备队列</p>
+<p><strong>JCB（作业控制块）是作业存在的唯一标志</strong>；JCB 排成队列即<strong>作业后备队列</strong></p>
+<h2 id="作业调度算法-与-用户界面">作业调度算法 与 用户界面</h2>
+<p><strong>📐响应比高优先算法</strong></p>
+<p>选择<strong>响应比高的作业优先启动运行</strong>。</p>
+<p>Rp ＝ 作业响应时间 ÷ 作业执行时间</p>
+<p>其中<strong>作业响应时间 ＝ 等待时间 ＋ 作业执行时间</strong>，所以也可写为：</p>
+<p>Rp ＝ 1 ＋ 等待时间 ÷ 作业执行时间</p>
+<p>每次调度前都要<strong>重算所有后备作业的响应比</strong>，选最高的执行 → <strong>算法复杂、系统开销大</strong>。</p>
+<p><strong>其他常用算法</strong>：先来先服务（FCFS）· 短作业优先 · 优先级调度算法</p>
+<p><strong>📊调度性能的衡量指标</strong></p>
+<p>设作业 Ji 的<strong>提交时间 tsi</strong>、<strong>执行时间 tri</strong>、<strong>完成时间 toi</strong>：</p>
+<p>周转时间 Ti ＝ toi − tsi</p>
+<p>带权周转时间 Wi ＝ Ti ÷ tri</p>
+<p>n 个作业的<strong>平均周转时间 T</strong> 和<strong>平均带权周转时间 W</strong> 分别是上述指标的算术平均。</p>
+<p>⭐ <strong>关键结论</strong>：作业的<strong>执行时间 tri 不能直观衡量系统性能</strong>，而<strong>带权周转时间 Wi 能直观反映系统的调度性能</strong>。</p>
+<p>🖱️用户界面的四个发展阶段</p>
+<p>控制面板式→<br>字符用户界面→<br>图形用户界面→<br>新一代用户界面</p>
+<p>新一代特征：<strong>以用户为中心、自然、高效、高带宽、非精确、无地点限制</strong>；技术支持：多媒体、多通道、智能化。虚拟现实把人作为<strong>参与者</strong>。</p>
+<h3 id="s3-6-7-国产操作系统-信创考点">3.6.7 国产操作系统（信创考点）</h3>
+<p>🐉银河麒麟 Kylin OS</p>
+<p>由<strong>国防科技大学</strong>、中国软件与技术服务股份有限公司、联想集团、浪潮集团和民族恒星公司合作研制。</p>
+<p>目标：<strong>打破国外操作系统的垄断</strong>，研发中国自主知识产权的服务器操作系统。</p>
+<p>完全版含<strong>三个版本</strong>：<strong>实时版 · 安全版 · 服务器版</strong></p>
+<p>🌊深度 deepin 与 统信 UOS</p>
+<ul><li><strong>深度操作系统 deepin</strong>：基于 Linux 内核，以<strong>桌面应用为主</strong>的开源 GNU/Linux 系统，支持笔记本、台式机和一体机。含<strong>深度桌面环境 DDE</strong> 和近 30 款原创应用。</li><li><strong>统信 UOS</strong>：统信软件技术有限公司研发，<strong>基于 deepin 进行深度开发</strong>，目前已较为完善。</li></ul>
+<p>🏷️中标麒麟 与 红旗 Linux</p>
+<ul><li><strong>中标麒麟</strong>：上海中标软件有限公司发布，面向<strong>桌面应用</strong>。采用强化的 Linux 内核，分<strong>桌面版 / 通用版 / 高级版 / 安全版</strong>。</li><li><strong>红旗 Linux</strong>：北京中科红旗软件技术有限公司开发，包括桌面版、工作站版、数据中心服务器版、HA 集群版、嵌入式版。<strong>国内较大、较成熟</strong>的 Linux 发行版之一。</li></ul>
+<p>☁️安超 OS 与 中科方德 与 StartOS</p>
+<ul><li><strong>安超 OS 2020</strong>：基于<strong>服务器架构的通用型云操作系统</strong>，特点：软硬件解耦、应用优化、支持混合业务负载。</li><li><strong>中科方德</strong>：基于<strong>核高基</strong>桌面操作系统基础版，采用核高基<strong>安全加固内核</strong>，与国产<strong>兆芯</strong>处理器整机全面适配。</li><li><strong>StartOS 起点操作系统</strong>：前身是雨林木风的 ylmfos，从 Linux 底层构建，<strong>非常符合中国人操作习惯</strong>的桌面 Linux。</li></ul>
+<p>共同点：国产操作系统<strong>主要以开源的 Linux 为基础进行二次开发</strong>。信创方向常与第 15 章"信息化的新技术"联动。</p>
+<h2 id="下集易错辨析-TOP-10-考前必扫">下集易错辨析 TOP 10 ⭐ 考前必扫</h2>
+<table><thead><tr><th>#</th><th>易混</th><th>正确区分</th></tr></thead><tbody><tr><td>1</td><td>进程 vs 线程</td><td>进程＝<strong>资源分配</strong>的基本单位；线程＝<strong>CPU 调度</strong>的基本单位，共享进程资源</td></tr><tr><td>2</td><td>阻塞能否直接变运行</td><td><strong>不能</strong>，必须经过就绪态</td></tr><tr><td>3</td><td>P 与 V 的判断符号</td><td>P：S 减 1 后 <strong>&lt; 0</strong> 才阻塞；V：S 加 1 后 <strong>≤ 0</strong> 才唤醒</td></tr><tr><td>4</td><td>互斥与同步信号量初值</td><td>互斥（公用）初值 <strong>1</strong>；同步（私用）初值 <strong>0</strong> 或正整数</td></tr><tr><td>5</td><td>资源有序分配破坏哪个条件</td><td><strong>环路条件</strong>（不是互斥、不是不可剥夺）；预先静态分配破坏<strong>不可剥夺条件</strong></td></tr><tr><td>6</td><td>死锁预防 vs 避免</td><td>预防＝<strong>破坏必要条件</strong>（静态限制）；避免＝<strong>银行家算法动态判断</strong>是否安全</td></tr><tr><td>7</td><td>分页 vs 分段</td><td>页<strong>定长</strong>（物理划分，用户不可见）；段<strong>变长</strong>（逻辑划分，用户可见）</td></tr><tr><td>8</td><td>FIFO vs LRU</td><td>FIFO 有 <strong>Belady 异常</strong>；LRU 和 OPT <strong>没有</strong></td></tr><tr><td>9</td><td>SCAN vs CSCAN</td><td>SCAN 像电梯来回扫（避免饥饿）；CSCAN <strong>只做单向移动</strong>，解决"刚扫过的磁道要等一整轮"</td></tr><tr><td>10</td><td>PCB vs JCB</td><td>PCB＝<strong>进程</strong>存在的唯一标志；JCB＝<strong>作业</strong>存在的唯一标志</td></tr></tbody></table>
+<p>⚠️ <strong>补充</strong>：<strong>虚存容量由计算机的地址结构决定</strong>，不是由主存＋外存的物理容量随意决定</p>
+<p>⚠️ <strong>补充</strong>：<strong>SPOOLing 是把独占设备变成"虚拟设备"</strong>；<strong>井</strong>开在辅助存储器上</p>
+<p>⚠️ <strong>补充</strong>：<strong>带权周转时间</strong>才能直观反映调度性能，执行时间不能</p>
+<h2 id="下集速记卡-考前-5-分钟">下集速记卡 · 考前 5 分钟</h2>
+<p><strong>🧮计算类</strong></p>
+<ul><li><strong>死锁资源下限</strong>：n 个进程各需 m 个同类资源 → <strong>n×(m−1) + 1</strong></li><li><strong>响应比</strong>：Rp ＝ 1 ＋ 等待时间 ÷ 执行时间</li><li><strong>周转时间</strong> Ti ＝ 完成时间 − 提交时间</li><li><strong>带权周转时间</strong> Wi ＝ Ti ÷ 执行时间</li><li><strong>物理地址</strong> ＝ 物理块号 × 块大小 ＋ 页内地址</li><li><strong>磁盘调度</strong>：按算法列访问顺序 → 累加相邻距离 → 求平均</li></ul>
+<p><strong>🔢数字与初值类</strong></p>
+<ul><li>操作系统 <strong>4 特征</strong>：并发 · 共享 · 虚拟 · 不确定</li><li>操作系统 <strong>5 功能</strong>：处理机 · 存储 · 设备 · 文件 · 用户界面</li><li>进程 <strong>3 态</strong>：运行 · 就绪 · 阻塞；<strong>5 态</strong>加新建 · 终止</li><li><strong>PV 操作</strong>：Dijkstra <strong>1965</strong> 年提出</li><li>生产者消费者设 <strong>3 个信号量</strong>（S＝1、S₁＝n、S₂＝0）</li><li>死锁 <strong>4 条件</strong> / <strong>4 策略</strong>；存储管理 <strong>5 方案</strong></li><li>I/O 软件 <strong>4 层</strong>；作业 <strong>4 状态</strong>；用户界面 <strong>4 阶段</strong></li></ul>
+<p><strong>🔗对应关系类</strong></p>
+<ul><li><strong>PCB</strong> = 进程存在的唯一标志；<strong>JCB</strong> = 作业存在的唯一标志</li><li><strong>进程</strong> = 资源分配单位；<strong>线程</strong> = 调度分配单位</li><li><strong>页式</strong> → 内部碎片；<strong>段式</strong> → 外部碎片</li><li><strong>UNIX</strong>：三级索引结构 + inode + <strong>成组链接法</strong> + 路径分隔符 "/"</li><li><strong>银行家算法</strong> → 死锁避免（Dijkstra）</li><li>时间局限性 → <strong>循环操作</strong>；空间局限性 → <strong>顺序执行</strong></li></ul>
+<p>⚖️对比类</p>
+<ul><li><strong>分时 vs 实时</strong>：通用交互强 vs 专用交互弱；实时对响应时间<strong>更敏感</strong></li><li><strong>网络 OS vs 分布式 OS</strong>：后者是前者的<strong>更高级形式</strong>（多透明性/可靠性/高性能）</li><li><strong>用户级线程 vs 内核支持线程</strong>：不用系统调用 vs 用系统调用</li><li><strong>硬链接 vs 符号链接</strong>：指向同一索引结点 vs 建立路径映射（可跨文件系统、多读盘）</li><li><strong>SCAN vs CSCAN</strong>：来回扫 vs 单向移</li><li><strong>分页 vs 分段</strong>：定长物理 vs 变长逻辑</li></ul>
+<p>本集最核心三句话：<strong>① 进程=资源单位、线程=调度单位　② P 减到负数阻塞、V 加到非正唤醒　③ 资源有序分配破坏环路条件</strong></p>
+<h2 id="下集自测清单-能答出即过关">下集自测清单 · 能答出即过关</h2>
+<p>□操作系统定义、两大作用、四大特征</p>
+<p>□操作系统五大功能，各自的内容</p>
+<p>□六类操作系统；分时与实时的三点区别</p>
+<p>□网络操作系统三模式；分布式 OS 与网络 OS 的关系</p>
+<p>□嵌入式 OS 五特点；HAL 与 BSP 是什么</p>
+<p>□前趋图定义；顺序执行与并发执行的特征对比</p>
+<p>□进程的三部分；PCB 的地位</p>
+<p>□画出进程三态模型；说明阻塞为何不能直接回运行</p>
+<p>□五态模型比三态多了哪两个；各自的作用</p>
+<p>□信号量 S 的物理意义；公用与私用信号量的初值</p>
+<p>□完整写出 P、V 操作的定义与判断条件</p>
+<p>□用 PV 操作实现互斥；写出生产者消费者三信号量及其初值</p>
+<p>□三种高级通信方式；PV 属低级还是高级</p>
+<p>□死锁定义、三个原因、四个必要条件</p>
+<p>□死锁四种处理策略；两种预防方法各破坏哪个条件</p>
+<p>□银行家算法的思路；安全状态与安全序列的定义</p>
+<p>□算死锁资源下限 n×(m−1)+1</p>
+<p>□进程与线程的分工；两类线程的区别</p>
+<p>□存储器管理五种方案及其演进</p>
+<p>□分页的地址结构与地址变换；分页与分段的本质区别</p>
+<p>□段页式的三段地址结构与变换三步</p>
+<p>□虚拟存储的实现方式；虚存容量由什么决定</p>
+<p>□程序局限性两类及其典型原因；工作集理论</p>
+<p>□四种页面置换算法；Belady 异常是什么、谁会有</p>
+<p>□抖动是什么；I/O 软件四层结构</p>
+<p>□SPOOLing 的本质与组成</p>
+<p>□四种磁盘调度算法；算平均寻道长度</p>
+<p>□文件的逻辑结构与物理结构；UNIX 的三级索引</p>
+<p>□FCB 与文件目录；三种目录结构</p>
+<p>□空闲空间管理四法；成组链接法</p>
+<p>□硬链接与符号链接的区别；文件保护四种方法</p>
+<p>□作业四状态；JCB 的地位；响应比公式</p>
+<p>□国产操作系统有哪些；deepin 与 UOS 的关系</p>
+<p>💡 <strong>用法</strong>：合上教材，能脱口而出就打勾；打不出来的回到对应那页。全打勾，第 3 章整章过关。</p>
+<h2 id="第-03-章-完">第 03 章 完</h2>
+<p>上集：硬件资源如何被抽象　｜　下集：操作系统如何管理资源</p>
+<p>回炉任务 · 一</p>
+<p>完整默写 <strong>P、V 操作定义</strong>，并写出<strong>生产者消费者</strong>的三信号量及初值、生产者与消费者各自的 P/V 顺序。</p>
+<p>回炉任务 · 二</p>
+<p>不看书说出 <strong>死锁四条件四策略</strong>，并说清两种预防方法各破坏哪个条件。</p>
+<p>回炉任务 · 三</p>
+<p>用一组访问序列，分别用 <strong>FIFO 和 LRU</strong> 统计缺页次数，并说明 Belady 异常。</p>
+<p>下一章预告：<strong>第 06 章 企业信息化</strong>（10.1%，ERP/SCM/CRM/BI/诺兰模型）</p>
+<hr>
+<h2 id="章节练习题">章节练习题</h2>
+<hr>
+    <div class="quiz quiz-js" data-key="H05-计算机系统（二）-操作系统.md">
+  <div class="quiz-head">
+    <span class="quiz-label">章节练习题</span>
+    <span class="quiz-progress">已答 0 / 6</span>
+    <button class="quiz-btn quiz-export" type="button">导出记录</button>
+    <button class="quiz-btn quiz-reset" type="button">重做</button>
+    <div class="quiz-pbar"><div class="quiz-pbar-fill"></div></div>
+  </div>
+  <div class="quiz-item" data-answer="A" data-explain="&lt;strong&gt;状态转换的判定口诀&lt;/strong&gt;：&quot;阻塞 → 就绪&quot;只能是&lt;strong&gt;外部事件驱动&lt;/strong&gt;（等待的 I/O 完成、锁释放、信号到达）；&quot;就绪 → 运行&quot;是&lt;strong&gt;被调度&lt;/strong&gt;；&quot;运行 → 就绪&quot;是&lt;strong&gt;时间片到 / 被抢占&lt;/strong&gt;；&quot;运行 → 阻塞&quot;是&lt;strong&gt;主动请求等待&lt;/strong&gt;（如请求 I/O、申请资源失败）。⚠️ &lt;strong&gt;陷阱：阻塞态不能直接回到运行态&lt;/strong&gt;——它必须先回到就绪态排队，这是本章最高频的易错点。" data-ref="第3章 · 3.6 进程的三态模型与五态模型">
+  <div class="quiz-q"><span class="qn">1</span>进程三态模型中，进程从"阻塞态"转变为"就绪态"的条件是：</div>
+  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">等待的事件发生（如 I/O 完成）</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">被处理机调度</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">时间片用完</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">主动放弃处理机</span></div></div>
+  <div class="reveal" style="display:none">
+    <div class="reveal-verdict"></div>
+    <div class="reveal-explain"><strong>状态转换的判定口诀</strong>："阻塞 → 就绪"只能是<strong>外部事件驱动</strong>（等待的 I/O 完成、锁释放、信号到达）；"就绪 → 运行"是<strong>被调度</strong>；"运行 → 就绪"是<strong>时间片到 / 被抢占</strong>；"运行 → 阻塞"是<strong>主动请求等待</strong>（如请求 I/O、申请资源失败）。⚠️ <strong>陷阱：阻塞态不能直接回到运行态</strong>——它必须先回到就绪态排队，这是本章最高频的易错点。</div>
+    <div class="reveal-ref">第3章 · 3.6 进程的三态模型与五态模型</div>
+  </div>
+</div><div class="quiz-item" data-answer="A" data-explain="&lt;strong&gt;P 操作（wait / 申请）&lt;/strong&gt;：① 若 S &gt; 0，则 S −= 1，进程&lt;strong&gt;继续执行&lt;/strong&gt;；② 若 S = 0（初值常为资源数），则&lt;strong&gt;进程被阻塞&lt;/strong&gt;（挂入等待队列）。&lt;strong&gt;V 操作（signal / 释放）&lt;/strong&gt;：① S += 1；② 若有进程因 P 被阻塞，则&lt;strong&gt;唤醒其中一个&lt;/strong&gt;（移到就绪态）。所以 S = 0 执行 P 一定阻塞，S = 0 执行 V 一定唤醒一个。" data-ref="第3章 · 3.6 信号量与 PV 操作">
+  <div class="quiz-q"><span class="qn">2</span>信号量 S 的值为 0 时，执行 P(S) 操作的结果是：</div>
+  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">进程被阻塞，进入阻塞态</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">信号量变为 −1，进程继续执行</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">信号量变为 1，进程继续执行</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">进程被抢占进入就绪态</span></div></div>
+  <div class="reveal" style="display:none">
+    <div class="reveal-verdict"></div>
+    <div class="reveal-explain"><strong>P 操作（wait / 申请）</strong>：① 若 S > 0，则 S −= 1，进程<strong>继续执行</strong>；② 若 S = 0（初值常为资源数），则<strong>进程被阻塞</strong>（挂入等待队列）。<strong>V 操作（signal / 释放）</strong>：① S += 1；② 若有进程因 P 被阻塞，则<strong>唤醒其中一个</strong>（移到就绪态）。所以 S = 0 执行 P 一定阻塞，S = 0 执行 V 一定唤醒一个。</div>
+    <div class="reveal-ref">第3章 · 3.6 信号量与 PV 操作</div>
+  </div>
+</div><div class="quiz-item" data-answer="A" data-explain="死锁四必要条件（必须&lt;strong&gt;同时满足&lt;/strong&gt;才可能死锁）：① &lt;strong&gt;互斥&lt;/strong&gt;（资源一次只能一个进程用）；② &lt;strong&gt;占有并等待&lt;/strong&gt;（持有资源的同时又申请新资源）；③ &lt;strong&gt;不可剥夺&lt;/strong&gt;（资源不能被强行收回）；④ &lt;strong&gt;循环等待&lt;/strong&gt;（存在进程—资源的环形等待链）。&lt;strong&gt;破坏任一个即可预防死锁&lt;/strong&gt;，&quot;可剥夺性&quot;本身不是必要条件，它恰恰是死锁的成因之一。" data-ref="第3章 · 3.6 死锁的产生与四种处理策略">
+  <div class="quiz-q"><span class="qn">3</span>死锁的四个必要条件中，哪一个不是死锁的必要条件？</div>
+  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">资源可剥夺性</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">互斥使用资源</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">占有并等待资源</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">循环等待资源</span></div></div>
+  <div class="reveal" style="display:none">
+    <div class="reveal-verdict"></div>
+    <div class="reveal-explain">死锁四必要条件（必须<strong>同时满足</strong>才可能死锁）：① <strong>互斥</strong>（资源一次只能一个进程用）；② <strong>占有并等待</strong>（持有资源的同时又申请新资源）；③ <strong>不可剥夺</strong>（资源不能被强行收回）；④ <strong>循环等待</strong>（存在进程—资源的环形等待链）。<strong>破坏任一个即可预防死锁</strong>，"可剥夺性"本身不是必要条件，它恰恰是死锁的成因之一。</div>
+    <div class="reveal-ref">第3章 · 3.6 死锁的产生与四种处理策略</div>
+  </div>
+</div><div class="quiz-item" data-answer="A" data-explain="&lt;strong&gt;&quot;进程 = 资源分配的基本单位，线程 = CPU 调度的基本单位&quot;&lt;/strong&gt;（教材经典表述）。同一进程内的多个线程&lt;strong&gt;共享&lt;/strong&gt;该进程的地址空间（代码段、数据段、打开的文件、堆），但&lt;strong&gt;各有独立的栈与寄存器&lt;/strong&gt;（私有部分）。这带来两大优势：① 创建/撤销开销小；② 同一进程内线程切换无需切换地址空间、通信方便（但也带来同步与数据竞争问题）。" data-ref="第3章 · 3.6 线程 · 与进程的分工">
+  <div class="quiz-q"><span class="qn">4</span>关于线程与进程的关系，下列说法正确的是：</div>
+  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">线程是 CPU 调度的基本单位，进程是资源分配的基本单位；同一进程的线程共享该进程的地址空间</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">线程与进程都是资源分配的基本单位</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">同一进程内的线程不共享任何资源</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">线程拥有独立的地址空间，进程不拥有</span></div></div>
+  <div class="reveal" style="display:none">
+    <div class="reveal-verdict"></div>
+    <div class="reveal-explain"><strong>"进程 = 资源分配的基本单位，线程 = CPU 调度的基本单位"</strong>（教材经典表述）。同一进程内的多个线程<strong>共享</strong>该进程的地址空间（代码段、数据段、打开的文件、堆），但<strong>各有独立的栈与寄存器</strong>（私有部分）。这带来两大优势：① 创建/撤销开销小；② 同一进程内线程切换无需切换地址空间、通信方便（但也带来同步与数据竞争问题）。</div>
+    <div class="reveal-ref">第3章 · 3.6 线程 · 与进程的分工</div>
+  </div>
+</div><div class="quiz-item" data-answer="A" data-explain="&lt;strong&gt;抖动&lt;/strong&gt;：进程分到的物理块数不足 → 频繁缺页 → 刚调入的页又被换出 → CPU 大部分时间在页面换入换出，有效利用率骤降。&lt;strong&gt;解决办法&lt;/strong&gt;：① 调整页面大小（先增后减试探）；② 增加物理块数；③ &lt;strong&gt;采用局部替换策略&lt;/strong&gt;（改 LRU 为 FIFO，或用工作集/抖动检测控制）。判定方法：统计&quot;缺页率&quot;曲线，如果它随分配块数增加反而上升，说明已进入抖动区。" data-ref="第3章 · 3.6 页面置换算法与抖动">
+  <div class="quiz-q"><span class="qn">5</span>页面置换算法中，"缺页率"随进程访问的页数增加而上升，这种现象称为：</div>
+  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">抖动（Thrashing）</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">死锁</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">饥饿</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">中断风暴</span></div></div>
+  <div class="reveal" style="display:none">
+    <div class="reveal-verdict"></div>
+    <div class="reveal-explain"><strong>抖动</strong>：进程分到的物理块数不足 → 频繁缺页 → 刚调入的页又被换出 → CPU 大部分时间在页面换入换出，有效利用率骤降。<strong>解决办法</strong>：① 调整页面大小（先增后减试探）；② 增加物理块数；③ <strong>采用局部替换策略</strong>（改 LRU 为 FIFO，或用工作集/抖动检测控制）。判定方法：统计"缺页率"曲线，如果它随分配块数增加反而上升，说明已进入抖动区。</div>
+    <div class="reveal-ref">第3章 · 3.6 页面置换算法与抖动</div>
+  </div>
+</div><div class="quiz-item" data-answer="A" data-explain="SPOOLing（Simultaneous Peripheral Operations On-Line）= &lt;strong&gt;假脱机 / 不联机操作&lt;/strong&gt;：用&lt;strong&gt;磁盘上的&quot;井&quot;区作为缓冲区&lt;/strong&gt;，把&lt;strong&gt;独占设备（如打印机）改造为可共享的虚拟设备&lt;/strong&gt;。实现方式是增加两个进程：&lt;strong&gt;预输入进程&lt;/strong&gt;（把作业从输入设备送到磁盘输入井）+ &lt;strong&gt;缓输出进程&lt;/strong&gt;（从磁盘输出井送到输出设备）。它与通道、DMA 一起是 I/O 控制的三大技术。" data-ref="第3章 · 3.6 设备管理 · SPOOLing">
+  <div class="quiz-q"><span class="qn">6</span>SPOOLing（假脱机）技术的核心作用是：</div>
+  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">把独占设备改造为共享设备，利用磁盘作为缓冲区实现虚拟设备</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">提高磁盘的寻道速度</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">压缩文件的存储空间</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">加密打印数据防止泄露</span></div></div>
+  <div class="reveal" style="display:none">
+    <div class="reveal-verdict"></div>
+    <div class="reveal-explain">SPOOLing（Simultaneous Peripheral Operations On-Line）= <strong>假脱机 / 不联机操作</strong>：用<strong>磁盘上的"井"区作为缓冲区</strong>，把<strong>独占设备（如打印机）改造为可共享的虚拟设备</strong>。实现方式是增加两个进程：<strong>预输入进程</strong>（把作业从输入设备送到磁盘输入井）+ <strong>缓输出进程</strong>（从磁盘输出井送到输出设备）。它与通道、DMA 一起是 I/O 控制的三大技术。</div>
+    <div class="reveal-ref">第3章 · 3.6 设备管理 · SPOOLing</div>
+  </div>
+</div>
+</div>
+    <section class="exam" id="exam" data-exam-chapter="3" data-exam-hour="H05"><div class="exam-bar"><span class="exam-bar-label">📚 历年真题</span><span class="exam-bar-stat">本章共 <b>85</b> 题 · 本学时 <b>42</b> 题（其余见同章其他学时）</span><span class="exam-bar-ops"><button type="button" class="exam-op" data-exam-all="1">全部展开</button><button type="button" class="exam-op" data-exam-all="0">全部收起</button></span></div><details class="exam-subject" data-exam-subject="综合知识"><summary><span class="exam-subject-name">📝 综合知识</span><span class="exam-subject-n">42 题</span><span class="exam-subject-tip">按年份展开 · 单题可点开看答案</span></summary><details class="exam-year" data-exam-year="2026年5月"><summary><span class="exam-year-name">2026年5月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2026年5月-09"><summary><span class="exam-no">第 9 题</span><span class="exam-stem-peek">支持边解释边执行、不生成目标代码的是</span></summary><div class="exam-q-body"><p class="exam-stem">支持边解释边执行、不生成目标代码的是</p><ul class="exam-opts"><li><b>A</b> 编译程序</li><li><b>B</b> 汇编程序</li><li><b>C</b> 解释程序</li><li><b>D</b> 链接程序</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">解释程序逐行解析执行源码,不生成独立目标文件;编译程序会生成目标代码。</p></details></div></details><details class="exam-q" data-exam-id="2026年5月-46"><summary><span class="exam-no">第 46 题</span><span class="exam-stem-peek">存储体系结构中,速度最快的是</span></summary><div class="exam-q-body"><p class="exam-stem">存储体系结构中,速度最快的是</p><ul class="exam-opts"><li><b>A</b> 主存</li><li><b>B</b> Cache</li><li><b>C</b> 寄存器</li><li><b>D</b> 辅存</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">存储速度排序:寄存器 &gt; CPU Cache &gt; 主存 &gt; 辅存。</p></details></div></details></details><details class="exam-year" data-exam-year="2025年5月"><summary><span class="exam-year-name">2025年5月</span><span class="exam-year-n">6 题</span></summary><details class="exam-q" data-exam-id="2025年5月-04"><summary><span class="exam-no">第 4 题</span><span class="exam-stem-peek">()由字符串组成,文件内的信息不再划分结构</span></summary><div class="exam-q-body"><p class="exam-stem">()由字符串组成,文件内的信息不再划分结构</p><ul class="exam-opts"><li><b>A</b> 顺序文件</li><li><b>B</b> 有序文件</li><li><b>C</b> 流式文件</li><li><b>D</b> 记录式文件</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">文件逻辑结构分为记录式文件和流式文件,流式文件由无结构的字符流构成,内部信息不划分结构;记录式文件由多个有结构的记录组成。</p></details></div></details><details class="exam-q" data-exam-id="2025年5月-07"><summary><span class="exam-no">第 7 题</span><span class="exam-stem-peek">()是最适合使用SSD替代HDD的场景</span></summary><div class="exam-q-body"><p class="exam-stem">()是最适合使用SSD替代HDD的场景</p><ul class="exam-opts"><li><b>A</b> 需要大量随机写入读取的时候</li><li><b>B</b> 网络带宽不足的时候</li><li><b>C</b> 存储冷数据的时候</li><li><b>D</b> 需要低成本进行数据存储的时候</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">SSD基于闪存无机械部件,随机读写速度快、延迟低,适合大量随机读写场景;HDD随机读写性能差,但成本低、适合存储冷数据,网络带宽与存储介质选型无关。</p></details></div></details><details class="exam-q" data-exam-id="2025年5月-15"><summary><span class="exam-no">第 15 题</span><span class="exam-stem-peek">关于进程和线程说法不正确的是()</span></summary><div class="exam-q-body"><p class="exam-stem">关于进程和线程说法不正确的是()</p><ul class="exam-opts"><li><b>A</b> 一个进程可以创建一个或多个线程</li><li><b>B</b> 一个进程可以创建一个或多个进程</li><li><b>C</b> 一个线程可以创建一个或多个线程</li><li><b>D</b> 一个线程可以创建一个或多个进程</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">一个进程可以创建一个或多个线程,进程是拥有资源的最小单位,线程是可独立调度的最小单位,进程是包含线程的。</p></details></div></details><details class="exam-q" data-exam-id="2025年5月-27"><summary><span class="exam-no">第 27 题</span><span class="exam-stem-peek">下面()不属于主存</span></summary><div class="exam-q-body"><p class="exam-stem">下面()不属于主存</p><ul class="exam-opts"><li><b>A</b> ROM</li><li><b>B</b> cache</li><li><b>C</b> SRAM</li><li><b>D</b> DRAM</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">cache 是高速缓冲存储器,与主存无关,一般 SRAM 是构成 cache 的材料,DRAM 是构成主存的材料,但 SRAM 也可以用来制作主存。</p></details></div></details><details class="exam-q" data-exam-id="2025年5月-39"><summary><span class="exam-no">第 39 题</span><span class="exam-stem-peek">医院里面的影像文件一般采用下列()进行存储</span></summary><div class="exam-q-body"><p class="exam-stem">医院里面的影像文件一般采用下列()进行存储</p><ul class="exam-opts"><li><b>A</b> 分布式存储</li><li><b>B</b> 文件存储</li><li><b>C</b> 集中存储</li><li><b>D</b> 文件数据库</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">文件存储核心原因: 标准化兼容性: 医疗影像遵循 DICOM(Digital Imaging and Communications in Medicine)标准,该标准原生支持文件系统存储(如目录结构、文件名规范)。文件存储(如 NAS、SAN)可直接管理 DICOM 文件的层级结构(患者→检查序列→单张影像),无需额外转换。 性能与扩展性: 影像文件单个体积大(GB 级),且需高速读写(如调阅历史影像)。文件存储(如 NAS)通过横向扩展存储节点,可满足海量小文件(单张影像)和高吞吐需求,同时支持并发访问。 行业实践: 主流医学影像系统(PACS)底层普遍采用 文件存储 或 对象存储(对象存储可视为文件存储的扩展),而非数据库。 A. 分布式存储 广义分布式存储包含文件存储(如 HDFS),但选项未特指;且医疗场景更倾向成熟的文件存储协议(NFS/SMB)。 C. 集中存储 集中式存储(如传统 SAN)存在单点故障风险,难以应对影像数据的爆炸式增长。 D. 文件数据库 文件数据库(如 MongoDB GridFS)适用于非结构化数据,但 DICOM 的元数据+文件分离架构更倾向文件存储+关系型数据库组合(影像文件存文件系统,元数据存 SQL)。</p></details></div></details><details class="exam-q" data-exam-id="2025年5月-44"><summary><span class="exam-no">第 44 题</span><span class="exam-stem-peek">以下不属于 RISC 特点的是 ()</span></summary><div class="exam-q-body"><p class="exam-stem">以下不属于 RISC 特点的是 ()</p><ul class="exam-opts"><li><b>A</b> 选择较高频率简单指令</li><li><b>B</b> 增加了寄存器,减少使用次数</li><li><b>C</b> 指令长度固定,指令格式种类少</li><li><b>D</b> 寻址方式种类尽量减少,指令功能尽可能强</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">D 后半句错了,指令功能强是 CISC 特点,RISC 强调简单单一,CISC 设计功能复杂指令。</p></details></div></details></details><details class="exam-year" data-exam-year="2024年5月"><summary><span class="exam-year-name">2024年5月</span><span class="exam-year-n">7 题</span></summary><details class="exam-q" data-exam-id="2024年5月-06"><summary><span class="exam-no">第 6 题</span><span class="exam-stem-peek">在磁盘冗余阵列技术中,()没有独立的校验盘,适合高速数据存储</span></summary><div class="exam-q-body"><p class="exam-stem">在磁盘冗余阵列技术中,()没有独立的校验盘,适合高速数据存储</p><ul class="exam-opts"><li><b>A</b> RAID1</li><li><b>B</b> RAID3</li><li><b>C</b> RAID5</li><li><b>D</b> RAID10</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">RAID5的校验数据均匀分布在全部磁盘块中,无需设置独立专用校验盘,兼顾读写性能与容错能力,适配高速数据存储场景。</p></details></div></details><details class="exam-q" data-exam-id="2024年5月-19"><summary><span class="exam-no">第 19 题</span><span class="exam-stem-peek">以下()不属于按功能划分的总线。</span></summary><div class="exam-q-body"><p class="exam-stem">以下()不属于按功能划分的总线。</p><ul class="exam-opts"><li><b>A</b> 服务总线</li><li><b>B</b> 地址总线</li><li><b>C</b> 指令总线</li><li><b>D</b> 数据总线</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">地址总线、数据总线、指令(控制)总线属于计算机硬件功能总线;服务总线是SOA软件架构组件,不属于硬件总线分类。</p></details></div></details><details class="exam-q" data-exam-id="2024年5月-25"><summary><span class="exam-no">第 25 题</span><span class="exam-stem-peek">以下关于精简指令计算集 RISC 的叙述中,不正确的是()。</span></summary><div class="exam-q-body"><p class="exam-stem">以下关于精简指令计算集 RISC 的叙述中,不正确的是()。</p><ul class="exam-opts"><li><b>A</b> 数量少,使用频率接近</li><li><b>B</b> CPU 中设置大量寄存器</li><li><b>C</b> 大部分为单周期指令</li><li><b>D</b> 指令长度不固定,指令简单</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">RISC指令采用统一固定长度的格式,指令长度不固定属于CISC复杂指令集的特点;A、B、C均符合RISC技术规范。</p></details></div></details><details class="exam-q" data-exam-id="2024年5月-36"><summary><span class="exam-no">第 36 题</span><span class="exam-stem-peek">以下总线技术中,()支持热插拔、快速的数据传输。</span></summary><div class="exam-q-body"><p class="exam-stem">以下总线技术中,()支持热插拔、快速的数据传输。</p><ul class="exam-opts"><li><b>A</b> RS232</li><li><b>B</b> IDE</li><li><b>C</b> ATA</li><li><b>D</b> SATA</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">SATA串行接口支持热插拔特性,迭代版本传输速率最高可达4800Mbps;RS232、IDE、传统并行ATA均不支持热插拔,传输速率更低。</p></details></div></details><details class="exam-q" data-exam-id="2024年5月-44"><summary><span class="exam-no">第 44 题</span><span class="exam-stem-peek">以下()不是产生死锁的必要条件</span></summary><div class="exam-q-body"><p class="exam-stem">以下()不是产生死锁的必要条件</p><ul class="exam-opts"><li><b>A</b> 进程资源图为环路</li><li><b>B</b> 资源互斥</li><li><b>C</b> 不可强制剥夺资源</li><li><b>D</b> 资源共享</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">资源共享模式下多个进程可同时使用资源,打破了死锁必备的互斥条件,不会引发死锁;其余三项均是死锁产生的必要前提。</p></details></div></details><details class="exam-q" data-exam-id="2024年5月-51"><summary><span class="exam-no">第 51 题</span><span class="exam-stem-peek">在计算机硬件中,()把内存中的数据传入 CPU 中供运行使用。</span></summary><div class="exam-q-body"><p class="exam-stem">在计算机硬件中,()把内存中的数据传入 CPU 中供运行使用。</p><ul class="exam-opts"><li><b>A</b> 输入设备</li><li><b>B</b> 输出设备</li><li><b>C</b> 运算器</li><li><b>D</b> 控制器</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">控制器会根据指令时序,发起内存读操作,将内存数据读取到CPU内部寄存器,再调度给运算器执行计算;输入输出设备仅处理外设数据交互,运算器仅负责算术逻辑运算。</p></details></div></details><details class="exam-q" data-exam-id="2024年5月-68"><summary><span class="exam-no">第 68 题</span><span class="exam-stem-peek">寄存器之间交换数据可通过以下()方式</span></summary><div class="exam-q-body"><p class="exam-stem">寄存器之间交换数据可通过以下()方式</p><ul class="exam-opts"><li><b>A</b> 使用数据交换指令</li><li><b>B</b> 使用控制指令</li><li><b>C</b> DMA</li><li><b>D</b> 中断</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">CPU架构设计了专门的数据交换指令,可直接完成通用寄存器之间的数据交互;控制指令用于程序流程跳转、权限管控,DMA负责外设与内存的高速批量传输,中断用于处理突发异步事件。</p></details></div></details></details><details class="exam-year" data-exam-year="2023年5月"><summary><span class="exam-year-name">2023年5月</span><span class="exam-year-n">6 题</span></summary><details class="exam-q" data-exam-id="2023年5月-14"><summary><span class="exam-no">第 14 题</span><span class="exam-stem-peek">与单核处理器相比,多核处理器在( )设计等方面面临着巨大的挑战,但也蕴含着巨大的潜能。CMP(单芯片多处理器)和 SMT…</span></summary><div class="exam-q-body"><p class="exam-stem">与单核处理器相比,多核处理器在( )设计等方面面临着巨大的挑战,但也蕴含着巨大的潜能。CMP(单芯片多处理器)和 SMT(同步多线程处理器)是目前较为流行的两种多核体系结构,CMP 相对 SMT 的最大优势还在于其( )设计的简洁性。 (本题为第 1 空)</p><ul class="exam-opts"><li><b>A</b> 体系结构、硬件、软件和封装</li><li><b>B</b> 体系结构、硬件、安全性和封装</li><li><b>C</b> 体系结构、软件、功耗和安全性</li><li><b>D</b> 硬件、软件、功耗和安全性</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">第一空:多核需要攻克体系结构、并行软件适配、功耗控制、安全防护四大设计难点;第二空:CMP采用模块化复制物理核心的方案,架构设计比SMT更简洁直观,能直接通过增加核心提升性能。SMT依靠线程切换提升核心利用率,调度逻辑更复杂。</p></details></div></details><details class="exam-q" data-exam-id="2023年5月-46"><summary><span class="exam-no">第 46 题</span><span class="exam-stem-peek">某系统中有6个并发进程竞争资源R。假设每个进程都需要3个R,那么最少需要有( )个R,才能保证系统不会发生死锁。</span></summary><div class="exam-q-body"><p class="exam-stem">某系统中有6个并发进程竞争资源R。假设每个进程都需要3个R,那么最少需要有( )个R,才能保证系统不会发生死锁。</p><ul class="exam-opts"><li><b>A</b> 12</li><li><b>B</b> 13</li><li><b>C</b> 15</li><li><b>D</b> 16</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">代入公式:6×(3-1)+1=13;最坏情况每个进程都拿到2个资源,共占用12个,再多分配1个就能让其中一个进程完成执行释放资源,彻底打破死锁循环。</p></details></div></details><details class="exam-q" data-exam-id="2023年5月-49"><summary><span class="exam-no">第 49 题</span><span class="exam-stem-peek">49-51.进程P1、P2、P3、P4、P5和P6的前趋图如下所示:若用PV操作控制这6个进程的同步与互斥的程序如下,那…</span></summary><div class="exam-q-body"><p class="exam-stem">49-51.进程P1、P2、P3、P4、P5和P6的前趋图如下所示:若用PV操作控制这6个进程的同步与互斥的程序如下,那么程序中的空1和空2分别为( );空3和空4处应分别为( );空5和空6处应分别为( )。 ```mermaid graph LR P1 --&gt; P2 P1 --&gt; P3 P2 --&gt; P4 P2 --&gt; P3 P3 --&gt; P5 P4 --&gt; P5 P5 --&gt; P6 flowchart TD Init[&quot;程序开始&lt;br/&gt;信号量 S1~S7 初始值=0&lt;br/&gt;CoBegin 并发启动所有进程&quot;] P1_Exec[&quot;P1 执行&quot;] P1_V[&quot;V(S1); V(S2);&quot;] P1_Exec --&gt; P1_V P2_1[&quot;1&quot;] P2_Exec[&quot;P2 执行&quot;] P2_2[&quot;2&quot;] P2_1 --&gt; P2_Exec --&gt; P2_2 P3_1[&quot;3&quot;] P3_Exec[&quot;P3 执行&quot;] P3_2[&quot;4&quot;] P3_1 --&gt; P3_Exec --&gt; P3_2 P4_P[&quot;P(S4);&quot;] P4_Exec[&quot;P4 执行&quot;] P4_V[&quot;V(S6);&quot;] P4_P --&gt; P4_Exec --&gt; P4_V P5_1[&quot;5&quot;] P5_Exec[&quot;P5 执行&quot;] P5_2[&quot;6&quot;] P5_1 --&gt; P5_Exec --&gt; P5_2 P6_P[&quot;P(S7);&quot;] P6_Exec[&quot;P6 执行&quot;] P6_P --&gt; P6_Exec Init -.并发启动.-&gt; P1_Exec Init -.并发启动.-&gt; P2_1 Init -.并发启动.-&gt; P3_1 Init -.并发启动.-&gt; P4_P Init -.并发启动.-&gt; P5_1 Init -.并发启动.-&gt; P6_P ``` ```mermaid graph LR P1 --&gt; P2 P1 --&gt; P3 P2 --&gt; P4 P2 --&gt; P3 P3 --&gt; P5 P4 --&gt; P5 P5 --&gt; P6 flowchart TD Init[&quot;程序开始&lt;br/&gt;信号量 S1~S7 初始值=0&lt;br/&gt;CoBegin 并发启动所有进程&quot;] P1_Exec[&quot;P1 执行&quot;] P1_V[&quot;V(S1); V(S2);&quot;] P1_Exec --&gt; P1_V P2_1[&quot;1&quot;] P2_Exec[&quot;P2 执行&quot;] P2_2[&quot;2&quot;] P2_1 --&gt; P2_Exec --&gt; P2_2 P3_1[&quot;3&quot;] P3_Exec[&quot;P3 执行&quot;] P3_2[&quot;4&quot;] P3_1 --&gt; P3_Exec --&gt; P3_2 P4_P[&quot;P(S4);&quot;] P4_Exec[&quot;P4 执行&quot;] P4_V[&quot;V(S6);&quot;] P4_P --&gt; P4_Exec --&gt; P4_V P5_1[&quot;5&quot;] P5_Exec[&quot;P5 执行&quot;] P5_2[&quot;6&quot;] P5_1 --&gt; P5_Exec --&gt; P5_2 P6_P[&quot;P(S7);&quot;] P6_Exec[&quot;P6 执行&quot;] P6_P --&gt; P6_Exec Init -.并发启动.-&gt; P1_Exec Init -.并发启动.-&gt; P2_1 Init -.并发启动.-&gt; P3_1 Init -.并发启动.-&gt; P4_P Init -.并发启动.-&gt; P5_1 Init -.并发启动.-&gt; P6_P ``` (本题为第 1 空)</p><ul class="exam-opts"><li><b>A</b> V(S1)和V(S3)V(S4)</li><li><b>B</b> P(S1)和V(S3)V(S4)</li><li><b>C</b> V(S1)和P(S3)P(S4)</li><li><b>D</b> P(S1)和P(S3)P(S4)</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">1P2是P1的后继,开头执行P(S1)阻塞等待P1完成;2P2执行结束V(S3)唤醒P3、V(S4)唤醒P4;3P3开头P(S3)等待P2信号;4P3结束V(S5)通知P5;5P5需要等待P3、P4两个信号量,执行P(S5)P(S6);6P5结束V(S7)唤醒P6。</p></details></div></details><details class="exam-q" data-exam-id="2023年5月-51"><summary><span class="exam-no">第 51 题</span><span class="exam-stem-peek">49-51.进程P1、P2、P3、P4、P5和P6的前趋图如下所示:若用PV操作控制这6个进程的同步与互斥的程序如下,那…</span></summary><div class="exam-q-body"><p class="exam-stem">49-51.进程P1、P2、P3、P4、P5和P6的前趋图如下所示:若用PV操作控制这6个进程的同步与互斥的程序如下,那么程序中的空1和空2分别为( );空3和空4处应分别为( );空5和空6处应分别为( )。 ```mermaid graph LR P1 --&gt; P2 P1 --&gt; P3 P2 --&gt; P4 P2 --&gt; P3 P3 --&gt; P5 P4 --&gt; P5 P5 --&gt; P6 flowchart TD Init[&quot;程序开始&lt;br/&gt;信号量 S1~S7 初始值=0&lt;br/&gt;CoBegin 并发启动所有进程&quot;] P1_Exec[&quot;P1 执行&quot;] P1_V[&quot;V(S1); V(S2);&quot;] P1_Exec --&gt; P1_V P2_1[&quot;1&quot;] P2_Exec[&quot;P2 执行&quot;] P2_2[&quot;2&quot;] P2_1 --&gt; P2_Exec --&gt; P2_2 P3_1[&quot;3&quot;] P3_Exec[&quot;P3 执行&quot;] P3_2[&quot;4&quot;] P3_1 --&gt; P3_Exec --&gt; P3_2 P4_P[&quot;P(S4);&quot;] P4_Exec[&quot;P4 执行&quot;] P4_V[&quot;V(S6);&quot;] P4_P --&gt; P4_Exec --&gt; P4_V P5_1[&quot;5&quot;] P5_Exec[&quot;P5 执行&quot;] P5_2[&quot;6&quot;] P5_1 --&gt; P5_Exec --&gt; P5_2 P6_P[&quot;P(S7);&quot;] P6_Exec[&quot;P6 执行&quot;] P6_P --&gt; P6_Exec Init -.并发启动.-&gt; P1_Exec Init -.并发启动.-&gt; P2_1 Init -.并发启动.-&gt; P3_1 Init -.并发启动.-&gt; P4_P Init -.并发启动.-&gt; P5_1 Init -.并发启动.-&gt; P6_P ``` (本题为第 3 空)</p><ul class="exam-opts"><li><b>A</b> P(S5)P(S6)和P(S7)</li><li><b>B</b> V(S5)V(S6) 和V(S7)</li><li><b>C</b> P(S5)P(S6)和V(S7)</li><li><b>D</b> V(S5)V(S6)和P(S7)</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">1P2是P1的后继,开头执行P(S1)阻塞等待P1完成;2P2执行结束V(S3)唤醒P3、V(S4)唤醒P4;3P3开头P(S3)等待P2信号;4P3结束V(S5)通知P5;5P5需要等待P3、P4两个信号量,执行P(S5)P(S6);6P5结束V(S7)唤醒P6。</p></details></div></details><details class="exam-q" data-exam-id="2023年5月-63"><summary><span class="exam-no">第 63 题</span><span class="exam-stem-peek">67-68.FTP服务可以开启匿名登录功能,其用户名是( ),若要上传文件,应使用( )命令。 (本题为第 2 空)</span></summary><div class="exam-q-body"><p class="exam-stem">67-68.FTP服务可以开启匿名登录功能,其用户名是( ),若要上传文件,应使用( )命令。 (本题为第 2 空)</p><ul class="exam-opts"><li><b>A</b> copy</li><li><b>B</b> paste</li><li><b>C</b> put</li><li><b>D</b> get</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">FTP协议标准规定匿名登录统一使用anonymous作为用户名;put命令可将本地文件上传至远程FTP服务器,get用于从服务器拉取文件到本地。</p></details></div></details><details class="exam-q" data-exam-id="2023年5月-65"><summary><span class="exam-no">第 65 题</span><span class="exam-stem-peek">路由器收到一个目标地址为201.46.17.4的数据包,应将该数据包发往( )网。</span></summary><div class="exam-q-body"><p class="exam-stem">路由器收到一个目标地址为201.46.17.4的数据包,应将该数据包发往( )网。</p><ul class="exam-opts"><li><b>A</b> 201.46.0.0/21</li><li><b>B</b> 201.46.16.0/20</li><li><b>C</b> 201.46.8.0/22</li><li><b>D</b> 201.46.20.0/22</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">B选项网段201.46.16.0/20,第三字节前4位固定为0001,地址覆盖区间为16~31,目标IP第三字节为17,落在该网段范围内;其余选项网段均无法覆盖目标IP地址。</p></details></div></details></details><details class="exam-year" data-exam-year="2022年5月"><summary><span class="exam-year-name">2022年5月</span><span class="exam-year-n">7 题</span></summary><details class="exam-q" data-exam-id="2022年5月-03"><summary><span class="exam-no">第 3 题</span><span class="exam-stem-peek">模型驱动的体系结构是一种关注模型的软件设计和实现方法,使用了UML模型的子集描述系统,创建不同抽象层次上的模型,其中不包…</span></summary><div class="exam-q-body"><p class="exam-stem">模型驱动的体系结构是一种关注模型的软件设计和实现方法,使用了UML模型的子集描述系统,创建不同抽象层次上的模型,其中不包括(3)。</p><ul class="exam-opts"><li><b>A</b> 计算无关模型</li><li><b>B</b> 计算相关模型</li><li><b>C</b> 平台无关模型</li><li><b>D</b> 平台相关模型</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">超纲题,而且在某一年案例考过,就是MDA,了解即可。</p></details></div></details><details class="exam-q" data-exam-id="2022年5月-05"><summary><span class="exam-no">第 5 题</span><span class="exam-stem-peek">UML中的(5)主要用于参与者与系统中对象之间的交互,以及这些对象之间交互的建模。</span></summary><div class="exam-q-body"><p class="exam-stem">UML中的(5)主要用于参与者与系统中对象之间的交互,以及这些对象之间交互的建模。</p><ul class="exam-opts"><li><b>A</b> 顺序图</li><li><b>B</b> 活动图</li><li><b>C</b> 用例图</li><li><b>D</b> 状态图</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">这里要注意,是参与者和对象之间而非参与者和用例,并且后面也有对象之间交互,这都是用例图无法实现的,所以应该是顺序图,注意顺序图最上方就是对象。</p></details></div></details><details class="exam-q" data-exam-id="2022年5月-34"><summary><span class="exam-no">第 34 题</span><span class="exam-stem-peek">结构化设计(Structured Design, SD)是一种面向数据流的方法,可进一步细分为(33)两个阶段,它根据(…</span></summary><div class="exam-q-body"><p class="exam-stem">结构化设计(Structured Design, SD)是一种面向数据流的方法,可进一步细分为(33)两个阶段,它根据(34)和系统结构准则,将DFD转换为系统结构图,用系统结构图来建立系统的物理模型,描述系统分层次的模块结构,以及模块之间的通信与控制关系。 (本题为第 2 空)</p><ul class="exam-opts"><li><b>A</b> 模块耦合性原则</li><li><b>B</b> 模块独立性原则</li><li><b>C</b> 自顶向下原则</li><li><b>D</b> 自底向上原则</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">SD可以进一步分为概要设计和详细设计两个阶段,它根据模块独立性原则和系统结构准则,将DFD转换为系统结构图(也称为模块结构图或控制结构图),用系统结构图来建立系统的物理模型,描述系统分层次的模块结构,以及模块之间的通信与控制关系。SD方法给出了一组帮助系统设计人员在模块层次上区分设计质量的原理与技术,它通常与SA方法衔接起来使用,以DFD为基础得到系统的模块结构。SD方法尤其适用于变换型结构和事务型结构的目标系统。</p></details></div></details><details class="exam-q" data-exam-id="2022年5月-39"><summary><span class="exam-no">第 39 题</span><span class="exam-stem-peek">在软件逆向工程的相关概念中,(38)是指借助工具从已有程序中抽象出有关数据设计、总体结构设计和过程设计等方面的信息;(3…</span></summary><div class="exam-q-body"><p class="exam-stem">在软件逆向工程的相关概念中,(38)是指借助工具从已有程序中抽象出有关数据设计、总体结构设计和过程设计等方面的信息;(39)指不仅从现有系统中恢复设计信息,而且使用该信息去改变或重构现有系统,以改善其整体质量。 (1)重构:是指在同一抽象级别上转换系统描述形式; (2)设计恢复:是指借助工具从已有程序中抽象出有关数据设计、总体结构设计和过程设计等方面的信息; (3)再工程:是对现有系统的重新开发过程,包括逆向工程、新需求的考虑过程和正向工程三个步骤,能重构系统提升质量; (4)正向工程:指不仅从现有系统中恢复设计信息,而且使用该信息去改变或重构现有系统,以改善其整体质量。 (本题为第 2 空)</p><ul class="exam-opts"><li><b>A</b> 再工程</li><li><b>B</b> 需求工程</li><li><b>C</b> 正向工程</li><li><b>D</b> 逆向工程</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">与逆向工程相关的概念定义如下:</p></details></div></details><details class="exam-q" data-exam-id="2022年5月-47"><summary><span class="exam-no">第 47 题</span><span class="exam-stem-peek">某文件管理系统在磁盘上建立了位示图(binmap)记录磁盘的使用情况。若磁盘上物理块的编号依次:0、1、2、......…</span></summary><div class="exam-q-body"><p class="exam-stem">某文件管理系统在磁盘上建立了位示图(binmap)记录磁盘的使用情况。若磁盘上物理块的编号依次:0、1、2、......;系统中的字长为32位,字的编号依次为:0、1、2;字中的一位对应文件存储器上的一个物理块,取值0表示该物理块空闲,取值1表示该物理块占用。假设操作系统将256号物理块分配给某文件,那么该物理块的使用情况在位示图中编号为(47)的字中描述;系统应该将(48)。 ```mermaid table 磁盘位示图结构 字号\位号 | 31 | 30 | ... | 3 | 2 | 1 | 0 0 | 0 | 1 | ... | 1 | 0 | 0 | 0 | 1 1 | 1 | 1 | ... | 1 | 0 | 1 | 1 | 0 2 | 0 | 1 | ... | 0 | 1 | 1 | 0 | 1 3 | 0 | 1 | ... | 1 | 0 | 1 | 0 | 1 ... | ... | ... | ... | ... | ... | ... | ... | ... n | 1 | 1 | ... | 0 | 1 | 0 | 0 | 1 ``` ```mermaid table 磁盘位示图结构 字号\位号 | 31 | 30 | ... | 3 | 2 | 1 | 0 0 | 0 | 1 | ... | 1 | 0 | 0 | 0 | 1 1 | 1 | 1 | ... | 1 | 0 | 1 | 1 | 0 2 | 0 | 1 | ... | 0 | 1 | 1 | 0 | 1 3 | 0 | 1 | ... | 1 | 0 | 1 | 0 | 1 ... | ... | ... | ... | ... | ... | ... | ... | ... n | 1 | 1 | ... | 0 | 1 | 0 | 0 | 1 ``` 代入计算:字号=256÷32=8,位号=256%32=0;分配物理块需要将对应位标记为占用,因此把该字位号0的位置设为1。 (本题为第 1 空)</p><ul class="exam-opts"><li><b>A</b> 5</li><li><b>B</b> 6</li><li><b>C</b> 7</li><li><b>D</b> 8</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">位示图计算公式:字号=物理块号//字长,位号=物理块号%字长;</p></details></div></details><details class="exam-q" data-exam-id="2022年5月-49"><summary><span class="exam-no">第 49 题</span><span class="exam-stem-peek">进程P1、P2、P3、P4、P5和P6的前趋图如下所示:若用PV操作控制进程P1、P2、P3、P4、P5和P6并发执行的…</span></summary><div class="exam-q-body"><p class="exam-stem">进程P1、P2、P3、P4、P5和P6的前趋图如下所示:若用PV操作控制进程P1、P2、P3、P4、P5和P6并发执行的过程,则需要设置7个信号量S1、S2、S3、S4、S5、S6和S7,且信号量S1~S7的初值都等于零。进程执行逻辑中,a和b处应分别填写(49),c和d处应分别填写(50),e和f处应分别填写(51)。 ```mermaid flowchart LR P1--&gt;P2 P2--&gt;P4 P2--&gt;P3 P3--&gt;P4 P3--&gt;P5 P4--&gt;P6 P5--&gt;P6 ``` ```mermaid flowchart LR P1--&gt;P2 P2--&gt;P4 P2--&gt;P3 P3--&gt;P4 P3--&gt;P5 P4--&gt;P6 P5--&gt;P6 ``` 1. P2的唯一前驱是P1,因此a处需要P(S1)等待P1完成;P2有P3、P4两个后继,因此b处执行V(S2)V(S3)唤醒两个后继,第一空选A。 2. P3有P4、P5两个后继,因此c处执行V(S4)V(S5);P4的前驱是P2、P3两个,因此d处需要P(S3)P(S4)等待两个前驱完成,第二空选D。 3. P5的后继是P6,因此e处执行V(S7);P6已有来自P4的P(S6),还需要等待P5的信号,因此f处执行P(S7),第三空选C。 (本题为第 1 空)</p><ul class="exam-opts"><li><b>A</b> P(S1)和V(S2)V(S3)</li><li><b>B</b> V(S1)和P(S2)V(S3)</li><li><b>C</b> P(S1)和P(S2)V(S3)</li><li><b>D</b> V(S1)和V(S2)V(S3)</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">每一条前趋连线对应一个独立信号量,遵循「前驱结束V信号量,后继开始P信号量」的规则:</p></details></div></details><details class="exam-q" data-exam-id="2022年5月-51"><summary><span class="exam-no">第 51 题</span><span class="exam-stem-peek">进程P1、P2、P3、P4、P5和P6的前趋图如下所示:若用PV操作控制进程P1、P2、P3、P4、P5和P6并发执行的…</span></summary><div class="exam-q-body"><p class="exam-stem">进程P1、P2、P3、P4、P5和P6的前趋图如下所示:若用PV操作控制进程P1、P2、P3、P4、P5和P6并发执行的过程,则需要设置7个信号量S1、S2、S3、S4、S5、S6和S7,且信号量S1~S7的初值都等于零。进程执行逻辑中,a和b处应分别填写(49),c和d处应分别填写(50),e和f处应分别填写(51)。 ```mermaid flowchart LR P1--&gt;P2 P2--&gt;P4 P2--&gt;P3 P3--&gt;P4 P3--&gt;P5 P4--&gt;P6 P5--&gt;P6 ``` 1. P2的唯一前驱是P1,因此a处需要P(S1)等待P1完成;P2有P3、P4两个后继,因此b处执行V(S2)V(S3)唤醒两个后继,第一空选A。 2. P3有P4、P5两个后继,因此c处执行V(S4)V(S5);P4的前驱是P2、P3两个,因此d处需要P(S3)P(S4)等待两个前驱完成,第二空选D。 3. P5的后继是P6,因此e处执行V(S7);P6已有来自P4的P(S6),还需要等待P5的信号,因此f处执行P(S7),第三空选C。 (本题为第 3 空)</p><ul class="exam-opts"><li><b>A</b> P(S6)和V(S7)</li><li><b>B</b> V(S6)和P(S6)</li><li><b>C</b> V(S7)和P(S7)</li><li><b>D</b> V(S6)和V(S7)</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">每一条前趋连线对应一个独立信号量,遵循「前驱结束V信号量,后继开始P信号量」的规则:</p></details></div></details></details><details class="exam-year" data-exam-year="2021年5月"><summary><span class="exam-year-name">2021年5月</span><span class="exam-year-n">5 题</span></summary><details class="exam-q" data-exam-id="2021年5月-46"><summary><span class="exam-no">第 46 题</span><span class="exam-stem-peek">在支持多线程的操作系统中,假设进程P1创建了线程T1和T2,进程P2创建了线程T3和T4,那么以下说法错误的是( )。 …</span></summary><div class="exam-q-body"><p class="exam-stem">在支持多线程的操作系统中,假设进程P1创建了线程T1和T2,进程P2创建了线程T3和T4,那么以下说法错误的是( )。 进程内线程资源划分对照表: | 线程共享资源 | 线程独享资源 | | ---- | ---- | | 进程地址空间、全局变量 | 程序寄存器、通用寄存器 | | 进程打开的文件、定时器 | 独立栈空间、栈指针 | | 进程内信号量、子进程句柄 | 私有状态字 |</p><ul class="exam-opts"><li><b>A</b> 线程T1和T2可以共享P1的数据段</li><li><b>B</b> 线程T3和T4可以共享P2的数据段</li><li><b>C</b> 线程T1和T2可以共享P1中任何一个线程打开的文件</li><li><b>D</b> 线程T3可以共享线程T4的栈指针</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">同一进程内的线程共享进程级资源,但每个线程拥有独立私有栈空间与栈指针,T3和T4同属P2,T3无法共享T4的栈指针。</p></details></div></details><details class="exam-q" data-exam-id="2021年5月-49"><summary><span class="exam-no">第 49 题</span><span class="exam-stem-peek">进程P1、P2、P3、P4、P5和P6的前趋图如下。若用PV操作控制这6个进程的同步与互斥的程序如下,那么程序中的空1和…</span></summary><div class="exam-q-body"><p class="exam-stem">进程P1、P2、P3、P4、P5和P6的前趋图如下。若用PV操作控制这6个进程的同步与互斥的程序如下,那么程序中的空1和空2处应分别为( )。 ```mermaid flowchart LR P1--&gt;|S1|P2 P2--&gt;|S2|P3 P2--&gt;|S3|P4 P3--&gt;|S5|P5 P4--&gt;|S6|P5 P5--&gt;|S7|P6 ```</p><ul class="exam-opts"><li><b>A</b> V(S1)和 P(S2)P(S3)</li><li><b>B</b> P(S1)和 V(S2)V(S3)</li><li><b>C</b> V(S1)和 V(S2)V(S3)</li><li><b>D</b> P(S1)和 P(S2)P(S3)</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">P1执行完成后需要V(S1)唤醒后继P2;P2执行完成后需要连续V(S2)、V(S3)同时唤醒P3、P4两个后继进程,对应空1为V(S1)、空2为V(S2)V(S3)。</p></details></div></details><details class="exam-q" data-exam-id="2021年5月-51"><summary><span class="exam-no">第 51 题</span><span class="exam-stem-peek">进程P1、P2、P3、P4、P5和P6的前趋图如下。若用PV操作控制这6个进程的同步与互斥的程序如下,那么程序中的空5和…</span></summary><div class="exam-q-body"><p class="exam-stem">进程P1、P2、P3、P4、P5和P6的前趋图如下。若用PV操作控制这6个进程的同步与互斥的程序如下,那么程序中的空5和空6处应分别为( )。 ```mermaid flowchart LR P1--&gt;|S1|P2 P2--&gt;|S2|P3 P2--&gt;|S3|P4 P3--&gt;|S5|P5 P4--&gt;|S6|P5 P5--&gt;|S7|P6 ```</p><ul class="exam-opts"><li><b>A</b> P(S5)和 P(S7)</li><li><b>B</b> P(S6)和 P(S7)</li><li><b>C</b> V(S6)和 V(S7)</li><li><b>D</b> P(S6)和 V(S7)</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">P5启动前需要P(S6)等待P4执行完成;P5执行结束后需要V(S7)唤醒后继P6,因此空5为P(S6)、空6为V(S7)。</p></details></div></details><details class="exam-q" data-exam-id="2021年5月-62"><summary><span class="exam-no">第 62 题</span><span class="exam-stem-peek">组相联映射是常见的Cache映射方法。如果容量为64块的Cache采用组相联方式映射,每块大小为128个字,每4块为一组…</span></summary><div class="exam-q-body"><p class="exam-stem">组相联映射是常见的Cache映射方法。如果容量为64块的Cache采用组相联方式映射,每块大小为128个字,每4块为一组。若主存容量为4096页,且以字编址。根据主存与Cache块的容量需一致,即每个内存页的大小是( )个字。</p><ul class="exam-opts"><li><b>A</b> 128</li><li><b>B</b> 64</li><li><b>C</b> 4096</li><li><b>D</b> 1024</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">组相联映射要求主存页的容量和Cache块容量完全相等,题干明确Cache每块大小为128个字,因此内存单页大小为128个字。</p></details></div></details><details class="exam-q" data-exam-id="2021年5月-64"><summary><span class="exam-no">第 64 题</span><span class="exam-stem-peek">组相联映射是常见的Cache映射方法。如果容量为64块的Cache采用组相联方式映射,每块大小为128个字,每4块为一组…</span></summary><div class="exam-q-body"><p class="exam-stem">组相联映射是常见的Cache映射方法。如果容量为64块的Cache采用组相联方式映射,每块大小为128个字,每4块为一组。若主存容量为4096页,且以字编址,主存组号需( )位。</p><ul class="exam-opts"><li><b>A</b> 8</li><li><b>B</b> 16</li><li><b>C</b> 19</li><li><b>D</b> 4</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">Cache一共划分出16个组,2的4次方等于16,因此用4位二进制就可以完整表示所有主存组的编号。</p></details></div></details></details><details class="exam-year" data-exam-year="2020年11月"><summary><span class="exam-year-name">2020年11月</span><span class="exam-year-n">7 题</span></summary><details class="exam-q" data-exam-id="2020年11月-15"><summary><span class="exam-no">第 15 题</span><span class="exam-stem-peek">IEEE-1394 总线采用菊花链的拓扑结构时,可最多支持 63 个节点。当 1394 总线支持 1023条桥接总线时,…</span></summary><div class="exam-q-body"><p class="exam-stem">IEEE-1394 总线采用菊花链的拓扑结构时,可最多支持 63 个节点。当 1394 总线支持 1023条桥接总线时,最多可以采用菊花链的拓扑结构互连(15)个节点。</p><ul class="exam-opts"><li><b>A</b> 1023</li><li><b>B</b> 1086</li><li><b>C</b> 64449</li><li><b>D</b> 645535</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">单段IEEE-1394菊花链最多支持63个节点,1023段桥接总线可支持的总节点数=1023×63=64449。</p></details></div></details><details class="exam-q" data-exam-id="2020年11月-46"><summary><span class="exam-no">第 46 题</span><span class="exam-stem-peek">在进程资源有向图中,圆圈表示进程,方框表示资源,方框内的小圆数表示资源数。当有向边(请求边)由进程指向资源时,表示申请一…</span></summary><div class="exam-q-body"><p class="exam-stem">在进程资源有向图中,圆圈表示进程,方框表示资源,方框内的小圆数表示资源数。当有向边(请求边)由进程指向资源时,表示申请一个资源;当有向边(分配边)由资源指向进程时,表示获得一个资源。假设系统中有三个进程P1、P2和P3,两种资源R1、R2,且R1的资源数等于3,R2的资源数等于3。如果进程资源图如图(a)所示,那么图(a)中(46); ```mermaid ```mermaid flowchart LR subgraph R1[R1资源 总数量3] end subgraph R2[R2资源 总数量3] end P1((P1)) P2((P2)) P3((P3)) %% R2全部分配给3个进程 R2 --&gt; P1 R2 --&gt; P2 R2 --&gt; P3 %% 所有进程都继续请求R2资源 P1 --&gt; R2 P2 --&gt; R2 P3 --&gt; R2 %% 所有进程都请求R1资源 P1 --&gt; R1 P2 --&gt; R1 P3 --&gt; R1 ``` ``` ```mermaid ```mermaid flowchart LR subgraph R1[R1资源 总数量3] end subgraph R2[R2资源 总数量3] end P1((P1)) P2((P2)) P3((P3)) %% R2全部分配给3个进程 R2 --&gt; P1 R2 --&gt; P2 R2 --&gt; P3 %% 所有进程都继续请求R2资源 P1 --&gt; R2 P2 --&gt; R2 P3 --&gt; R2 %% 所有进程都请求R1资源 P1 --&gt; R1 P2 --&gt; R1 P3 --&gt; R1 ``` ```</p><ul class="exam-opts"><li><b>A</b> P1、P2、P3都是阻塞节点,该图不可以化简,是死锁的</li><li><b>B</b> P1、P2、P3都是非阻塞节点,该图可以化简,是非死锁的</li><li><b>C</b> P3是非阻塞节点,P1、P2是阻塞节点,该图可以化简,是非死锁的</li><li><b>D</b> P1、P2是非阻塞节点,P3是阻塞节点,该图不可以化简,是死锁的</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">R2资源已耗尽,P1、P2、P3的资源申请都无法被满足,全部处于阻塞状态;进程间形成闭环等待,资源图没有可先行执行释放资源的非阻塞节点,无法化简,系统发生死锁。</p></details></div></details><details class="exam-q" data-exam-id="2020年11月-48"><summary><span class="exam-no">第 48 题</span><span class="exam-stem-peek">某文件管理系统在磁盘上建立了位示图(bitmap),记录磁盘的使用情况。若计算机系统的字长为32位(注:每位可以表示一个…</span></summary><div class="exam-q-body"><p class="exam-stem">某文件管理系统在磁盘上建立了位示图(bitmap),记录磁盘的使用情况。若计算机系统的字长为32位(注:每位可以表示一个物理块“使用”还是“未用”的情况),若磁盘的容量为400GB,物理块的大小为4MB,那么位示图的大小需要(48)个字。</p><ul class="exam-opts"><li><b>A</b> 256</li><li><b>B</b> 1024</li><li><b>C</b> 3200</li><li><b>D</b> 4098</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">先算出磁盘一共划分出102400个物理块,位示图每个32位的字可以记录32个块的状态,最终需要的字数为102400÷32=3200。</p></details></div></details><details class="exam-q" data-exam-id="2020年11月-50"><summary><span class="exam-no">第 50 题</span><span class="exam-stem-peek">进程P1、P2、P3、P4和P5的前趋图如下。若用PV操作控制这5个进程的同步与互斥的程序如下,那么程序中的空3和空4处…</span></summary><div class="exam-q-body"><p class="exam-stem">进程P1、P2、P3、P4和P5的前趋图如下。若用PV操作控制这5个进程的同步与互斥的程序如下,那么程序中的空3和空4处应分别为(50); ```mermaid ```mermaid flowchart LR P1 --&gt; P2 P1 --&gt; P3 P2 --&gt; P4 P3 --&gt; P4 P3 --&gt; P5 ``` ``` ```mermaid ```mermaid flowchart LR P1 --&gt; P2 P1 --&gt; P3 P2 --&gt; P4 P3 --&gt; P4 P3 --&gt; P5 ``` ```</p><ul class="exam-opts"><li><b>A</b> V(S4)和 V(S5) P(S3)</li><li><b>B</b> P(S3)和 V(S5) V(S6)</li><li><b>C</b> V(S3)和 V(S4) V(S5)</li><li><b>D</b> P(S4)和 V(S4) P(S3)</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">P3已经执行P(S2)等待P1完成,空3需要执行P(S3)等待P2完成;P3执行结束后,空4需要执行V(S5)、V(S6)分别唤醒后继的P4、P5进程,对应选项B。</p></details></div></details><details class="exam-q" data-exam-id="2020年11月-61"><summary><span class="exam-no">第 61 题</span><span class="exam-stem-peek">磁盘冗余阵列(Redundant Array of Inexpensive Disks, RAID)机制中共分(61)级…</span></summary><div class="exam-q-body"><p class="exam-stem">磁盘冗余阵列(Redundant Array of Inexpensive Disks, RAID)机制中共分(61)级别,RAID应用的主要技术有分块技术、交叉技术和重聚技术。</p><ul class="exam-opts"><li><b>A</b> 7个</li><li><b>B</b> 8个</li><li><b>C</b> 6个</li><li><b>D</b> 9个</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">行业公认的RAID主流标准共有8个规范级别,每个级别有专属的冗余策略、数据分布方案,适配不同业务的可靠性与性能需求。</p></details></div></details><details class="exam-q" data-exam-id="2020年11月-63"><summary><span class="exam-no">第 63 题</span><span class="exam-stem-peek">磁盘冗余阵列机制中,(63)由磁盘对组成,每一个工作盘都有其对应的镜像盘,上面保存着与工作盘完全相同的数据拷贝,具有最高…</span></summary><div class="exam-q-body"><p class="exam-stem">磁盘冗余阵列机制中,(63)由磁盘对组成,每一个工作盘都有其对应的镜像盘,上面保存着与工作盘完全相同的数据拷贝,具有最高的安全性,但磁盘空间利用率只有50%;</p><ul class="exam-opts"><li><b>A</b> RAID 4级</li><li><b>B</b> RAID 1级</li><li><b>C</b> RAID 3级</li><li><b>D</b> RAID 2级</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">RAID1采用磁盘镜像架构,成对磁盘完全冗余备份,容错能力最强,但空间利用率固定为50%,适合高安全要求的业务场景。</p></details></div></details><details class="exam-q" data-exam-id="2020年11月-69"><summary><span class="exam-no">第 69 题</span><span class="exam-stem-peek">在 Linux 系统中,DNS 配置文件的(69)参数,用于确定 DNS 服务器地址。</span></summary><div class="exam-q-body"><p class="exam-stem">在 Linux 系统中,DNS 配置文件的(69)参数,用于确定 DNS 服务器地址。</p><ul class="exam-opts"><li><b>A</b> nameserver</li><li><b>B</b> domain</li><li><b>C</b> search</li><li><b>D</b> sortlist</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">resolv.conf里nameserver字段专门用来声明上游DNS服务器的IP地址,可配置多行实现多DNS冗余。</p></details></div></details></details><details class="exam-year" data-exam-year="2019年5月"><summary><span class="exam-year-name">2019年5月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2019年5月-15"><summary><span class="exam-no">第 15 题</span><span class="exam-stem-peek">某16位AD芯片中标注电压范围是-5V~+5V,请问该款AD芯片的分辨率是()。</span></summary><div class="exam-q-body"><p class="exam-stem">某16位AD芯片中标注电压范围是-5V~+5V,请问该款AD芯片的分辨率是()。</p><ul class="exam-opts"><li><b>A</b> 10V</li><li><b>B</b> 0.0763mV</li><li><b>C</b> 0.1526mV</li><li><b>D</b> 0.3052mV</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">AD分辨率计算公式:总电压跨度 ÷ 2^位数,总跨度为10V,代入计算得10÷2^16≈0.0001526V=0.1526mV。</p></details></div></details><details class="exam-q" data-exam-id="2019年5月-17"><summary><span class="exam-no">第 17 题</span><span class="exam-stem-peek">多核操作系统的设计方法不同于单核操作系统,一般要突破()等方面的关键技术。</span></summary><div class="exam-q-body"><p class="exam-stem">多核操作系统的设计方法不同于单核操作系统,一般要突破()等方面的关键技术。</p><ul class="exam-opts"><li><b>A</b> 总线设计、Cache设计、核间通信、任务调度、中断处理、同步互斥</li><li><b>B</b> 核结构、Cache设计、核间通信、可靠性设计、安全性设计、同步互斥</li><li><b>C</b> 核结构、Cache设计、核间通信、任务调度、中断处理、存储器墙设计</li><li><b>D</b> 核结构、Cache设计、核间通信、任务调度、中断处理、同步互斥</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">多核操作系统需要解决多核心特有难题:核心架构规划、多核Cache一致性维护、核心间数据通信、跨核心任务调度、多核中断分发、多线程同步互斥;总线、通用可靠性安全、存储器墙不属于多核系统专属突破点。</p></details></div></details></details></details></section>
+    <div class="wrongbook"></div>
+    <div class="keyhint">
+  <span class="keyhint-title">键盘快捷键</span>
+  <span class="item"><kbd class="kbd">/</kbd> 搜索本页</span>
+  <span class="item"><kbd class="kbd">T</kbd> 深/浅色</span>
+  <span class="item"><kbd class="kbd">F</kbd> 专注模式</span>
+  <span class="item"><kbd class="kbd">-</kbd>/<kbd class="kbd">+</kbd> 字号</span>
+  <span class="item"><kbd class="kbd">P</kbd> 答下一题</span>
+  <span class="item"><kbd class="kbd">G</kbd> 上一已答</span>
+  <span class="item"><kbd class="kbd">J</kbd>/<kbd class="kbd">K</kbd> 快滚</span>
+  <span class="item"><kbd class="kbd">0</kbd> 回顶部</span>
+</div>
+    <nav class="pager"><a class="pg pg-prev" href="H04.html"><span class="pg-label">上一学时</span><span class="pg-title">计算机系统（一）· 硬件与体系结构</span></a><a class="pg pg-next" href="H06.html"><span class="pg-label">下一学时</span><span class="pg-title">计算机网络（一）· 数据通信与协议体系</span></a></nav>
+    <footer class="footer">
+  <p><strong>阿甘系分 · 48 小时冲刺手册</strong></p>
+  <p class="sep">非官方出版物 · 与软考办无隶属关系 · 内容均为独立原创编写</p>
+  <p>仅供学习参考 · 版权归作者所有 · 禁止以任何形式用于商业培训或二次销售</p>
+</footer>
+  </article>
+</main>
+<button class="focus-exit-fab" type="button" title="退出专注模式（F）">
+  <span class="focus-exit-dot" aria-hidden="true"></span>退出专注
+</button>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"
+        onerror="window.__mermaidFailed=true"></script>
+<script>/**
+ * 阿甘系分 48 小时冲刺 · 独立 HTML 站点
+ * 设计系统 + 交互逻辑（内联进每个 HTML，零依赖）
+ */
+(function () {
+  'use strict'
+
+  // ══════════════════════════════════════════
+  // 1. 存储层
+  // ══════════════════════════════════════════
+  const NS = 'xifen48'
+  // ⚠️ 多用户隔离：GitHub Pages 部署下所有用户共享同一个源（origin），
+  // localStorage 是按源隔离的 → A 用户的答题记录会覆盖 B 用户的。
+  // 方案：为每个浏览器档案生成一个随机 UUID，用它做 key 命名空间。
+  // 不同 Chrome 档案/不同浏览器 → 不同 UUID → 数据互相隔离。
+  // ⚠️ 清浏览器缓存 = 丢失 UUID = 答题记录清零（属正常，和重置功能语义一致）
+  function getUserId() {
+    let id = localStorage.getItem(NS + ':uid')
+    if (!id) {
+      id = 'u_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 10)
+      localStorage.setItem(NS + ':uid', id)
+    }
+    return id
+  }
+  const UID = getUserId()
+  const store = {
+    get(k, d) { try { const v = localStorage.getItem(NS + ':' + UID + ':' + k); return v ? JSON.parse(v) : d } catch { return d } },
+    set(k, v) { try { localStorage.setItem(NS + ':' + UID + ':' + k, JSON.stringify(v)) } catch {} },
+    del(k) { try { localStorage.removeItem(NS + ':' + UID + ':' + k) } catch {} }
+  }
+
+  // ══════════════════════════════════════════
+  // 2. 主题：跟随系统 + 手动覆盖
+  // ══════════════════════════════════════════
+  const Theme = {
+    KEY: 'theme',
+    get() { return store.get('theme', 'auto') },
+    set(v) {
+      store.set('theme', v)
+      Theme.apply()
+      document.querySelectorAll('.theme-btn').forEach(b => b.classList.toggle('active', b.dataset.theme === v))
+    },
+    apply() {
+      const m = store.get('theme', 'auto')
+      const dark = m === 'auto'
+        ? window.matchMedia('(prefers-color-scheme: dark)').matches
+        : m === 'dark'
+      document.documentElement.style.colorScheme = dark ? 'dark' : 'light'
+      document.documentElement.dataset.theme = dark ? 'dark' : 'light'
+    },
+    init() {
+      Theme.apply()
+      const m = store.get('theme', 'auto')
+      document.querySelectorAll('.theme-btn').forEach(b => b.classList.toggle('active', b.dataset.theme === m))
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+        if (store.get('theme', 'auto') === 'auto') Theme.apply()
+      })
+      // 点击切换：跟随 → 浅 → 深 → 跟随
+      document.querySelectorAll('.theme-btn').forEach(btn => {
+        btn.addEventListener('click', () => Theme.set(btn.dataset.theme))
+      })
+    }
+  }
+
+  // ══════════════════════════════════════════
+  // 3. 阅读进度条
+  // ══════════════════════════════════════════
+  const Progress = {
+    init() {
+      const bar = document.createElement('div')
+      bar.className = 'read-progress'
+      document.body.appendChild(bar)
+
+      const toc = document.querySelector('.toc')
+      if (!toc) return
+      // 细化到 4 级：h2（学时/大题）→ h3（小节）→ h4（知识条目）→ h5（细项，若有人写更深）
+      const heads = [...document.querySelectorAll('.main h2, .main h3, .main h4, .main h5')]
+      if (!heads.length) return
+
+      // 必须【先】给每个标题补 id，【再】生成目录链接，
+      // 否则 href="#undefined"，点击全部无效（此前踩过）
+      heads.forEach((h, i) => {
+        if (!h.id) {
+          let slug = (h.textContent || '').replace(/\s+/g, '-')
+            .replace(/[^\w一-鿿-]/g, '').slice(0, 40)
+          if (slug && slug[0].match(/[0-9]/)) slug = 's' + slug   // 数字开头 → CSS 选择器非法
+          h.id = slug || ('h' + (i + 1))
+        }
+        let dup = 0
+        for (const other of document.querySelectorAll('[id]')) {
+          if (other !== h && other.id === h.id) { dup++; break }
+        }
+        if (dup) h.id = h.id + '-' + i          // 去重，锚点必须唯一
+      })
+
+      // 构建层级：按标题顺序压栈，把 h3/h4/h5 挂到上级下面
+      const lvMap = { h2: 0, h3: 1, h4: 2, h5: 3 }
+      const nodes = heads.map(h => ({
+        el: h,
+        lv: lvMap[h.tagName.toLowerCase()],
+        text: h.textContent.replace(/<[^>]*>/g, '').trim(),
+        id: h.id,
+        children: []
+      }))
+      // 先剥掉 h3/h4/h5 开头（没有 h2 父级）的孤儿节点，否则 roots 会漏
+      const roots = []
+      const stack = []
+      nodes.forEach(n => {
+        // 找比自己 lv 小的栈顶作为父
+        while (stack.length && stack[stack.length - 1].lv >= n.lv) stack.pop()
+        if (stack.length) stack[stack.length - 1].children.push(n)
+        else roots.push(n)              // 无父级 → 顶级（本身就是 h2）
+        stack.push(n)
+      })
+
+      const renderTree = (list, depth) =>
+        list.map(n => {
+          const hasSub = n.children.length
+          return `<div class="toc-group${hasSub ? '' : ' leaf'}">
+            <a href="#${n.id}" class="toc-item toc-l${n.lv + 1}" style="--depth:${depth}">${n.text}</a>
+            ${hasSub ? '<div class="toc-sub">' + renderTree(n.children, depth + 1) + '</div>' : ''}
+          </div>`
+        }).join('')
+
+      toc.innerHTML =
+        '<div class="toc-title">本页目录</div>' +
+        '<div class="toc-tree">' + renderTree(roots, 0) + '</div>'
+
+      // 折叠交互：点击有子节点的 a 右侧空白 → 展开/收缩
+      toc.querySelectorAll('.toc-group > .toc-item').forEach(a => {
+        if (!a.parentElement.querySelector('.toc-sub')) return
+        a.style.cursor = 'pointer'
+        a.addEventListener('click', e => {
+          if (e.target !== a) return
+          a.parentElement.classList.toggle('collapsed')
+        })
+      })
+
+      // 高亮：取最近经过的标题，并点亮它到根的整条祖先链
+      const links = [...toc.querySelectorAll('.toc-item')]
+      const linkById = {}
+      links.forEach(a => { linkById[a.getAttribute('href').slice(1)] = a })
+      // 递归找祖先：从根往下走到 node，返回路径
+      const pathOf = (node, chain = []) => {
+        for (const n of roots) {
+          const hit = walk(n, node, [...chain, n])
+          if (hit) return hit
+        }
+        return [node]
+      }
+      function walk(n, target, chain) {
+        if (n === target) return chain
+        for (const c of n.children) {
+          const r = walk(c, target, [...chain, c])
+          if (r) return r
+        }
+        return null
+      }
+      const update = () => {
+        const y = window.scrollY + 130
+        let cur = null
+        heads.forEach(h => { if (h.offsetTop <= y + 1) cur = h })
+        links.forEach(a => a.classList.remove('active'))
+        if (cur) {
+          const node = nodes.find(n => n.el === cur)
+          if (node) {
+            pathOf(node).forEach(n => {
+              const a = linkById[n.id]
+              if (a) a.classList.add('active')
+            })
+          }
+        }
+        const max = document.body.scrollHeight - window.innerHeight
+        bar.style.width = (max > 0 ? Math.min(100, (window.scrollY / max) * 100) : 0) + '%'
+      }
+      window.addEventListener('scroll', update, { passive: true })
+      update()
+    }
+  }
+
+  // ══════════════════════════════════════════
+  // 4. Quiz：答题 + 判分 + 错题本 + 进度
+  // 注意：store.get/set 内部已自动加 "xifen48:" 前缀，
+  //所以这里传的 key 不要再带 NS，否则会出现 "xifen48:xifen48:xxx"
+  // ══════════════════════════════════════════
+  const Quiz = {
+    wrongKey(page) { return 'wrong:' + page },
+    answersKey(page) { return 'ans:' + page },
+
+    init(root) {
+      const page = root.dataset.key
+      const answers = store.get(this.answersKey(page), {})
+      let wrong = store.get(this.wrongKey(page), [])
+
+      const total = root.querySelectorAll('.quiz-item').length
+      const updateBar = () => {
+        const done = root.querySelectorAll('.quiz-item.done').length
+        const right = root.querySelectorAll('.quiz-item.correct').length
+        const pct = total ? Math.round((right / total) * 100) : 0
+        root.querySelector('.quiz-progress').innerHTML =
+          `已答 <b>${done}</b>/${total}` +
+          (done ? ` · 正确 <b>${right}</b> · 正确率 <b>${pct}%</b>` : '')
+        const bar = root.querySelector('.quiz-pbar-fill')
+        if (bar) bar.style.width = pct + '%'
+      }
+
+      root.querySelectorAll('.quiz-item').forEach((item, i) => {
+        const correct = item.dataset.answer
+        const explain = item.dataset.explain || ''
+        const ref = item.dataset.ref || ''
+        item.querySelectorAll('.opt').forEach(opt => {
+          opt.addEventListener('click', () => {
+            if (item.classList.contains('done')) return
+            const letter = opt.dataset.letter
+            item.classList.add('done')
+            opt.classList.add('picked')
+            const ok = letter === correct
+            item.classList.add(ok ? 'correct' : 'wrong')
+            item.querySelector('.reveal').style.display = 'block'
+            item.querySelector('.reveal-verdict').innerHTML = ok
+              ? '✅ 回答正确<span class="answer">正确答案 ' + correct + '</span>'
+              : '❌ 回答错误<span class="answer">正确答案 ' + correct + '</span>'
+            if (!ok) {
+              item.querySelector('.opt[data-letter="' + correct + '"]').classList.add('right')
+              opt.classList.add('wrong-pick')
+            }
+
+            // 错题本
+            const cur = store.get(this.answersKey(page), {})
+            cur[i] = letter
+            store.set(this.answersKey(page), cur)
+            const w = store.get(this.wrongKey(page), [])
+            if (!ok && !w.includes(i)) { w.push(i); store.set(this.wrongKey(page), w) }
+            else if (ok) store.set(this.wrongKey(page), w.filter(x => x !== i))
+
+            updateBar()
+            window.dispatchEvent(new CustomEvent('quiz:update', { detail: { page } }))
+          })
+        })
+
+        // 恢复
+        const picked = answers[i]
+        if (picked) {
+          item.classList.add('done')
+          item.querySelector('.opt[data-letter="' + picked + '"]').classList.add('picked')
+          const ok = picked === correct
+          item.classList.add(ok ? 'correct' : 'wrong')
+          item.querySelector('.reveal').style.display = 'block'
+          item.querySelector('.reveal-verdict').innerHTML = ok
+            ? '✅ 回答正确<span class="answer">正确答案 ' + correct + '</span>'
+            : '❌ 回答错误<span class="answer">正确答案 ' + correct + '</span>'
+          if (!ok) item.querySelector('.opt[data-letter="' + correct + '"]').classList.add('right')
+        }
+      })
+
+      root.querySelector('.quiz-reset').addEventListener('click', () => {
+        store.del(this.answersKey(page))
+        store.del(this.wrongKey(page))
+        root.querySelectorAll('.quiz-item').forEach(it => {
+          it.classList.remove('done', 'correct', 'wrong')
+          it.querySelectorAll('.opt').forEach(o => o.classList.remove('picked', 'right'))
+          it.querySelector('.reveal').style.display = 'none'
+        })
+        updateBar()
+        window.dispatchEvent(new CustomEvent('quiz:update'))
+      })
+
+      // 导出本学时答题记录
+      root.querySelector('.quiz-export')?.addEventListener('click', () => {
+        const cur = store.get(this.answersKey(page), {})
+        const total = root.querySelectorAll('.quiz-item').length
+        const right = root.querySelectorAll('.quiz-item.correct').length
+        const rows = []
+        for (let i = 0; i < total; i++) {
+          rows.push(`${i + 1}. ${cur[i] || '未答'}${cur[i] && cur[i] === root.querySelectorAll('.quiz-item')[i].dataset.answer ? ' ✓' : cur[i] ? ' ✗' : ''}`)
+        }
+        const blob = new Blob([
+          `阿甘系分 48 小时冲刺 · 答题记录\n${page}\n` +
+          `正确 ${right}/${total}（${Math.round((right / total) * 100)}%）\n生成时间：${new Date().toLocaleString('zh-CN')}\n\n` +
+          rows.join('\n')
+        ], { type: 'text/plain;charset=utf-8' })
+        const a = document.createElement('a')
+        a.href = URL.createObjectURL(blob)
+        a.download = page.replace(/\.md$/, '') + '-答题记录.txt'
+        a.click()
+        URL.revokeObjectURL(a.href)
+      })
+
+      updateBar()
+      return { total, page }
+    }
+  }
+
+  // ══════════════════════════════════════════
+  // 5. 全站错题本（跨页汇总）
+  // ══════════════════════════════════════════
+  const WrongBook = {
+    collect() {
+      const idx = []
+      const prefix = NS + ':' + UID + ':wrong:'
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i)
+        if (k && k.startsWith(prefix)) {
+          const page = k.slice(prefix.length)
+          const arr = store.get('wrong:' + page, [])
+          if (arr.length) idx.push({ page, count: arr.length, items: arr })
+        }
+      }
+      return idx.sort((a, b) => b.count - a.count)
+    },
+    render() {
+      const panel = document.querySelector('.wrongbook')
+      if (!panel) return
+      const idx = this.collect()
+      if (!idx.length) {
+        panel.innerHTML = '<div class="wb-empty">暂无错题记录 — 做完练习后这里会自动汇总</div>'
+        return
+      }
+      panel.innerHTML =
+        '<div class="wb-head"><span>📕 错题本</span><span class="wb-total">' +
+        idx.reduce((n, x) => n + x.count, 0) + ' 道错题 · ' + idx.length + ' 个学时</span></div>' +
+        idx.map(x =>
+          `<div class="wb-row"><a href="${x.page.replace(/\.md$/, '.html')}">${x.page.replace(/\.md$/, '')}</a>` +
+          `<span class="wb-count">${x.count} 道</span></div>`
+        ).join('') +
+        '<button class="wb-clear" data-act="wb-clear">清空错题本</button>'
+
+      panel.querySelector('[data-act="wb-clear"]')?.addEventListener('click', () => {
+        if (!confirm('确定要清空当前浏览器的错题本吗？此操作不可恢复。')) return
+        idx.forEach(x => store.del('wrong:' + x.page))
+        this.render()
+      })
+    },
+    init() { this.render(); window.addEventListener('quiz:update', () => this.render()) }
+  }
+
+  // ══════════════════════════════════════════
+  // 6. 快捷键
+  // ══════════════════════════════════════════
+  /* ---------- 章首进度条：随滚动更新「读到第几节 / 全书第几学时」 ---------- */
+  const ChapBar = {
+    init() {
+      const bar = document.getElementById('chapbar')
+      if (!bar) return
+      this.bar = bar
+      this.fill = document.getElementById('chapbarFill')
+      this.sec = document.getElementById('chapbarSec')
+      this.secs = [...document.querySelectorAll('.main h2[id], .main h3[id]')]
+      this.total = Number(bar.dataset.secTotal) || this.secs.length
+      if (!this.secs.length) return
+      this.cur = -1
+      this.onScroll = this.update.bind(this)
+      window.addEventListener('scroll', this.onScroll, { passive: true })
+      this.update()
+    },
+    update() {
+      // 以"视口上沿往下 120px"为判定线，取该位置之后最近的标题
+      const line = 140
+      let idx = 0
+      for (let i = 0; i < this.secs.length; i++) {
+        const t = this.secs[i].getBoundingClientRect().top
+        if (t - line <= 0) idx = i
+        else break
+      }
+      if (idx !== this.cur) {
+        this.cur = idx
+        if (this.sec) this.sec.textContent = (idx + 1) + ' / ' + this.total
+      }
+      // 整页滚动进度（含末尾）
+      const doc = document.documentElement
+      const max = doc.scrollHeight - doc.clientHeight
+      const p = max > 0 ? Math.min(1, Math.max(0, doc.scrollTop / max)) : 0
+      if (this.fill) this.fill.style.width = (p * 100).toFixed(2) + '%'
+    }
+  }
+
+  /* ---------- 章节导航：胶囊触发器 + 分组下拉面板 ---------- */
+  const ChapNav = {
+    root: null, trigger: null, panel: null, items: [], cursor: -1,
+
+    init() {
+      this.root = document.getElementById('chapnav')
+      if (!this.root) return
+      this.trigger = document.getElementById('navTrigger')
+      this.panel = document.getElementById('navPanel')
+      if (!this.trigger || !this.panel) return
+      this.items = [...this.panel.querySelectorAll('.nav-item')]
+
+      this.trigger.addEventListener('click', e => {
+        e.stopPropagation()
+        // ⚠️ 键盘在触发器上按 Enter/Space 时，浏览器会在 keydown 之后**再合成一次 click**。
+        //    若 keydown 里已经打开面板，这次 click 就会立刻把它关掉（表现为"按 Enter 闪一下又没了"）。
+        //    用一次性标记吞掉紧随其后的那次 click。
+        if (this._swallowClick) { this._swallowClick = false; return }
+        this.toggle()
+      })
+      // 面板内点击：跳转交给 <a> 默认行为，但要点空白处不关闭、点链接才关
+      this.panel.addEventListener('click', e => {
+        if (e.target.closest('.nav-item')) this.close()
+      })
+      // 点外部关闭
+      document.addEventListener('click', e => {
+        if (!this.root.contains(e.target)) this.close()
+      })
+      document.addEventListener('keydown', e => this.onKey(e), true)
+      // 视口变窄时自动关掉，避免面板悬在半个屏幕外
+      window.addEventListener('resize', () => { if (this.isOpen()) this.close() })
+    },
+
+    isOpen() { return !this.panel.hasAttribute('hidden') },
+
+    open() {
+      this.panel.removeAttribute('hidden')
+      this.root.classList.add('open')
+      this.trigger.setAttribute('aria-expanded', 'true')
+      // 打开后把当前页滚进视野，并让「当前项」成为键盘游标
+      const act = this.items.findIndex(a => a.classList.contains('active'))
+      this.cursor = act >= 0 ? act : 0
+      const cur = this.items[this.cursor]
+      if (cur) {
+        const box = this.panel.querySelector('.nav-panel-scroll')
+        if (box && cur.offsetTop < box.scrollTop) box.scrollTop = Math.max(0, cur.offsetTop - 12)
+        else if (box && cur.offsetTop + cur.offsetHeight > box.scrollTop + box.clientHeight)
+          box.scrollTop = cur.offsetTop + cur.offsetHeight - box.clientHeight + 12
+      }
+    },
+
+    close() {
+      if (!this.isOpen()) return
+      this.panel.setAttribute('hidden', '')
+      this.root.classList.remove('open')
+      this.trigger.setAttribute('aria-expanded', 'false')
+    },
+
+    toggle() { this.isOpen() ? this.close() : this.open() },
+
+    focusCursor() {
+      const a = this.items[this.cursor]
+      if (a) { a.focus(); return }
+      this.trigger.focus()
+    },
+
+    onKey(e) {
+      if (!this.isOpen()) {
+        // 未打开时：Enter / ↓ / Alt+↓ 直接开面板
+        if (this.root.contains(e.target) && (e.key === 'Enter' || e.key === 'ArrowDown' || e.key === ' ')) {
+          e.preventDefault()
+          this._swallowClick = true          // 吞掉紧随其后的合成 click
+          this.open()
+          this.focusCursor()
+          // 安全阀：若浏览器这次没派发 click，标记要能过期，否则下一次真鼠标点击会被吞
+          setTimeout(() => { this._swallowClick = false }, 120)
+        }
+        return
+      }
+      if (e.key === 'Escape') { e.preventDefault(); this.close(); this.trigger.focus(); return }
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        e.preventDefault()
+        const d = e.key === 'ArrowDown' ? 1 : -1
+        this.cursor = (this.cursor + d + this.items.length) % this.items.length
+        this.focusCursor()
+        return
+      }
+      if (e.key === 'Home') { e.preventDefault(); this.cursor = 0; this.focusCursor(); return }
+      if (e.key === 'End') {
+        e.preventDefault(); this.cursor = this.items.length - 1; this.focusCursor(); return
+      }
+      // Tab 走出面板就自动收起
+      if (e.key === 'Tab') this.close()
+    }
+  }
+
+  const Keys = {
+    init() {
+      document.addEventListener('keydown', e => {
+        // e.target 可能是 document（无 matches 方法），必须先判断
+        const t = e.target
+        if (t && t.nodeType === 1 && t.matches('input,textarea,select,[contenteditable]')) return
+        if (e.metaKey || e.ctrlKey || e.altKey) return
+
+        const k = e.key.toLowerCase()
+        if (k === 't') {
+          // auto 状态下先按当前实际渲染的主题取反，落成明确值
+          const cur = document.documentElement.dataset.theme
+          Theme.set(cur === 'dark' ? 'light' : 'dark')
+          e.preventDefault()
+        } else if (k === 'p') {
+          // P：跳到下一未答题并选中第一选项
+          const next = [...document.querySelectorAll('.quiz-item')]
+            .find(it => !it.classList.contains('done'))
+          if (next) {
+            next.querySelector('.opt')?.click()
+            next.scrollIntoView({ behavior: 'smooth', block: 'center' })
+          }
+          e.preventDefault()
+        } else if (k === '0') {
+          // 0：回顶部
+          window.scrollTo({ top: 0, behavior: 'smooth' })
+          e.preventDefault()
+        } else if (k === 'g') {
+          // g：上一未答题（与 P 反方向）
+          const items = [...document.querySelectorAll('.quiz-item.done')]
+          if (items.length) {
+            items[items.length - 1].scrollIntoView({ behavior: 'smooth', block: 'center' })
+          }
+          e.preventDefault()
+        } else if (k === 'j' || k === 'k') {
+          // j/k：快速滚动 1/3 页
+          const d = k === 'j' ? 1 : -1
+          window.scrollBy({ top: window.innerHeight * d * 0.6, behavior: 'smooth' })
+          e.preventDefault()
+        }
+      })
+    }
+  }
+
+  // ══════════════════════════════════════════
+  // 7. 全文搜索（当前页，Cmd/Ctrl+K 呼出）
+  // ══════════════════════════════════════════
+  const Search = {
+    init() {
+      // 索引：本页所有块级内容（标题/段落/表格行/提示框/题目）
+      const idx = []
+      const push = (text, anchor, kind) => {
+        const t = (text || '').replace(/\s+/g, ' ').trim()
+        if (t.length >= 2) idx.push({ t: t.toLowerCase(), raw: t, anchor, kind })
+      }
+      document.querySelectorAll('.main h2[id], .main h3[id], .main h4[id]').forEach(h => {
+        push(h.textContent, h.id, '标题')
+      })
+      document.querySelectorAll('.main p, .main li').forEach(el => {
+        // 找到最近的上级标题作为锚点
+        let a = null, n = el
+        while (n && n !== document.body) {
+          if (n.previousElementSibling && n.previousElementSibling.id) { a = n.previousElementSibling.id; break }
+          n = n.previousElementSibling
+        }
+        push(el.textContent, a || '', '正文')
+      })
+      document.querySelectorAll('.main tbody tr').forEach(tr => {
+        push(tr.textContent, '', '表格')
+      })
+      document.querySelectorAll('.main .block, .main .quote').forEach(b => {
+        push(b.textContent, '', '提示')
+      })
+      document.querySelectorAll('.quiz-q').forEach(q => push(q.textContent, '', '题目'))
+
+      if (!idx.length) return
+
+      // UI
+      const panel = document.createElement('div')
+      panel.className = 'search-panel'
+      panel.innerHTML = `
+        <div class="search-box">
+          <input class="search-input" type="search" placeholder="搜索本页内容…  (Esc 关闭)" autocomplete="off">
+          <span class="search-count"></span>
+        </div>
+        <ul class="search-results"></ul>`
+      document.body.appendChild(panel)
+      const input = panel.querySelector('.search-input')
+      const list = panel.querySelector('.search-results')
+      const count = panel.querySelector('.search-count')
+
+      let hits = [], cur = -1
+      const open = () => { panel.classList.add('open'); input.focus(); input.select() }
+      const close = () => { panel.classList.remove('open'); input.value = ''; list.innerHTML = ''; hits = []; cur = -1 }
+
+      function run(q) {
+        q = q.trim().toLowerCase()
+        if (!q) { list.innerHTML = ''; count.textContent = ''; hits = []; return }
+        hits = idx.filter(x => x.t.includes(q)).slice(0, 40)
+        count.textContent = hits.length ? `${hits.length} 条` : '无结果'
+        cur = hits.length ? 0 : -1
+        list.innerHTML = hits.map((h, i) => {
+          const p = h.raw.indexOf(q)
+          const snip = p < 0 ? h.raw.slice(0, 90)
+            : (p > 30 ? '…' : '') + h.raw.slice(Math.max(0, p - 30), p + 70) + (p + 70 < h.raw.length ? '…' : '')
+          return `<li class="search-hit${i === cur ? ' cur' : ''}" data-i="${i}">
+            <span class="hit-kind">${h.kind}</span><span class="hit-text">${escapeHtml(snip)}</span></li>`
+        }).join('')
+      }
+
+      function goto(i) {
+        const h = hits[i]
+        if (!h) return
+        if (h.anchor) {
+          const t = document.getElementById(h.anchor)
+          if (t) { t.scrollIntoView({ behavior: 'smooth', block: 'start' }); flash(t) }
+        }
+        // 高亮正文里的命中词
+        document.querySelectorAll('.search-mark').forEach(m => {
+          m.outerHTML = m.textContent
+        })
+        const walker = document.createTreeWalker(document.querySelector('.main'), NodeFilter.SHOW_TEXT)
+        const targets = []
+        let n
+        while ((n = walker.nextNode())) if (n.nodeValue.toLowerCase().includes(input.value.trim().toLowerCase())) targets.push(n)
+        targets.slice(0, 40).forEach(node => {
+          const frag = document.createDocumentFragment()
+          const parts = node.nodeValue.split(new RegExp('(' + escapeRe(input.value.trim()) + ')', 'ig'))
+          parts.forEach(p => {
+            if (p.toLowerCase() === input.value.trim().toLowerCase()) {
+              const m = document.createElement('mark')
+              m.className = 'search-mark'; m.textContent = p; frag.appendChild(m)
+            } else frag.appendChild(document.createTextNode(p))
+          })
+          node.parentNode.replaceChild(frag, node)
+        })
+        if (targets.length) {
+          const first = document.querySelector('.search-mark')
+          if (first) { first.scrollIntoView({ behavior: 'smooth', block: 'center' }); flash(first) }
+        }
+      }
+
+      function flash(el) {
+        el.classList.add('flash-hit')
+        setTimeout(() => el.classList.remove('flash-hit'), 1200)
+      }
+
+      input.addEventListener('input', () => run(input.value))
+      input.addEventListener('keydown', e => {
+        if (e.key === 'Escape') { close(); e.stopPropagation() }
+        else if (e.key === 'ArrowDown') { cur = Math.min(cur + 1, hits.length - 1); renderCur(); e.preventDefault() }
+        else if (e.key === 'ArrowUp') { cur = Math.max(cur - 1, 0); renderCur(); e.preventDefault() }
+        else if (e.key === 'Enter') { goto(cur); e.preventDefault() }
+      })
+      const renderCur = () => {
+        list.querySelectorAll('.search-hit').forEach((el, i) => el.classList.toggle('cur', i === cur))
+      }
+      list.addEventListener('click', e => {
+        const li = e.target.closest('.search-hit')
+        if (li) goto(Number(li.dataset.i))
+      })
+      panel.addEventListener('click', e => { if (e.target === panel) close() })
+
+      // 快捷键：/ 或 Cmd/Ctrl+K
+      document.addEventListener('keydown', e => {
+        if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); panel.classList.contains('open') ? close() : open() }
+        else if (e.key === '/' && !panel.classList.contains('open')) {
+          const t = e.target
+          if (!(t && t.nodeType === 1 && t.matches('input,textarea'))) { e.preventDefault(); open() }
+        }
+      })
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && panel.classList.contains('open')) close()
+      })
+    }
+  }
+
+  function escapeHtml(s) { return String(s).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c])) }
+  function escapeRe(s) { return String(s).replace(/[.*+?^${}()|[\]\\]/g, '\\$&') }
+
+  // ══════════════════════════════════════════
+  // 8. 专注模式：隐藏导航/目录/页脚，只留正文
+  // ══════════════════════════════════════════
+  const Focus = {
+    KEY: 'focus',
+    init() {
+      // 顶栏按钮由 Overflow 模块创建（它负责插入到正确位置），这里只绑行为
+      Focus.sync()
+      document.addEventListener('keydown', e => {
+        const t = e.target
+        if (t && t.nodeType === 1 && t.matches('input,textarea')) return
+        if (e.metaKey || e.ctrlKey || e.altKey) return
+        if (e.key.toLowerCase() === 'f') { Focus.toggle(); e.preventDefault() }
+      })
+      if (store.get(this.KEY, false)) document.documentElement.classList.add('focus-mode')
+      // 右下角退出浮标：独立于顶栏，保证专注模式下永远有一个能点的退出入口
+      const fab = document.querySelector('.focus-exit-fab')
+      if (fab) fab.addEventListener('click', () => Focus.toggle())
+      this.sync()
+    },
+    toggle() {
+      const on = !document.documentElement.classList.contains('focus-mode')
+      if (on) document.documentElement.classList.add('focus-mode')
+      else document.documentElement.classList.remove('focus-mode')
+      store.set(this.KEY, on)
+      this.sync()
+    },
+    sync() {
+      const on = document.documentElement.classList.contains('focus-mode')
+      document.querySelectorAll('.focus-btn').forEach(b => b.classList.toggle('active', on))
+    }
+  }
+
+  // ══════════════════════════════════════════
+  // 9. 字号调节（- / + 或 [ ]）
+  // ══════════════════════════════════════════
+  const FontSize = {
+    KEY: 'fontsize',
+    MIN: 13, MAX: 22, STEP: 1,
+    init() {
+      this.apply(store.get(this.KEY, 16.5))
+      document.addEventListener('keydown', e => {
+        const t = e.target
+        if (t && t.nodeType === 1 && t.matches('input,textarea')) return
+        if (e.metaKey || e.ctrlKey || e.altKey) return
+        const cur = store.get(this.KEY, 16.5)
+        if (e.key === '-' || e.key === '_') { FontSize.set(cur - FontSize.STEP); e.preventDefault() }
+        if (e.key === '=' || e.key === '+') { FontSize.set(cur + FontSize.STEP); e.preventDefault() }
+      })
+    },
+    set(v) { FontSize.apply(Math.min(FontSize.MAX, Math.max(FontSize.MIN, v))) },
+    apply(v) {
+      v = Math.round(v * 10) / 10
+      store.set(FontSize.KEY, v)
+      document.documentElement.style.setProperty('--fs-base', v + 'px')
+    }
+  }
+
+  // ══════════════════════════════════════════
+  // 10. 顶栏溢出菜单（窄屏时把次要控件收进⋯）
+  // ══════════════════════════════════════════
+  const Overflow = {
+    init() {
+      const bar = document.querySelector('.topbar')
+      const sw = document.querySelector('.theme-switch')
+      if (!bar || !sw) return
+
+      const btn = document.createElement('button')
+      btn.className = 'overflow-btn'
+      btn.type = 'button'
+      btn.title = '更多'
+      btn.setAttribute('aria-label', '更多操作')
+      btn.textContent = '⋯'
+
+      const panel = document.createElement('div')
+      panel.className = 'overflow-panel'
+
+      btn.addEventListener('click', e => {
+        e.stopPropagation()
+        const open = panel.classList.toggle('open')
+        btn.classList.toggle('active', open)
+      })
+      document.addEventListener('click', () => {
+        panel.classList.remove('open')
+        btn.classList.remove('active')
+      })
+      panel.addEventListener('click', e => e.stopPropagation())
+
+      // 把主题切换搬进去
+      sw.remove()
+      panel.appendChild(sw)
+      // 专注按钮也放进去（保留顶栏一个 focus-btn 副本给快捷键用）
+      bar.appendChild(btn)
+      bar.appendChild(panel)
+
+      // 专注模式需要顶栏留一个可见按钮
+      const fb = document.createElement('button')
+      fb.className = 'focus-btn focus-btn-top'
+      fb.type = 'button'
+      fb.title = '专注模式（F）'
+      fb.textContent = '专注'
+      fb.addEventListener('click', () => Focus.toggle())
+      bar.insertBefore(fb, btn)
+      Focus.topButton = fb
+    }
+  }
+
+  // ══════════════════════════════════════════
+  // 11. 返回顶部 + 代码复制 + 阅读时长
+  // ══════════════════════════════════════════
+  const BackTop = {
+    init() {
+      const btn = document.createElement('button')
+      btn.className = 'back-top'
+      btn.type = 'button'
+      btn.title = '返回顶部'
+      btn.setAttribute('aria-label', '返回顶部')
+      btn.textContent = '↑'
+      document.body.appendChild(btn)
+      btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }))
+      let last = 0
+      window.addEventListener('scroll', () => {
+        const y = window.scrollY
+        if (y > 500 && y !== last) btn.classList.add('show')
+        else if (y <= 500) btn.classList.remove('show')
+        last = y
+      }, { passive: true })
+    }
+  }
+
+  const CopyCode = {
+    init() {
+      document.querySelectorAll('pre').forEach(pre => {
+        // 跳过 mermaid fallback pre
+        if (pre.closest('.mermaid-err')) return
+        const wrap = document.createElement('div')
+        wrap.className = 'code-wrap'
+        pre.parentNode.insertBefore(wrap, pre)
+        wrap.appendChild(pre)
+        const btn = document.createElement('button')
+        btn.className = 'copy-btn'
+        btn.type = 'button'
+        btn.textContent = '复制'
+        btn.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(pre.textContent)
+            btn.textContent = '已复制 ✓'
+            btn.classList.add('copied')
+            setTimeout(() => { btn.textContent = '复制'; btn.classList.remove('copied') }, 1500)
+          } catch {
+            // 降级：老浏览器用 execCommand
+            const ta = document.createElement('textarea')
+            ta.value = pre.textContent
+            document.body.appendChild(ta)
+            ta.select()
+            try { document.execCommand('copy') } catch {}
+            document.body.removeChild(ta)
+            btn.textContent = '已复制 ✓'
+            setTimeout(() => { btn.textContent = '复制' }, 1500)
+          }
+        })
+        wrap.appendChild(btn)
+      })
+    }
+  }
+
+  const ReadTime = {
+    init() {
+      const h1 = document.querySelector('.main h1')
+      if (!h1) return
+      const main = document.querySelector('.main')
+      if (!main) return
+      const text = main.textContent || ''
+      // 中文阅读速度约 400 字/分钟
+      const minutes = Math.max(1, Math.round(text.length / 400))
+      const el = document.createElement('div')
+      el.className = 'read-time'
+      el.textContent = '预计阅读 ' + minutes + ' 分钟 · ' + text.length + ' 字'
+      h1.insertAdjacentElement('afterend', el)
+    }
+  }
+
+  function updateAnsweredStat() {
+    const el = document.getElementById('stat-answered')
+    if (!el) return
+    let n = 0
+    const prefix = NS + ':' + UID + ':ans:'
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i)
+      if (k && k.startsWith(prefix)) {
+        const a = store.get('ans:' + k.slice(prefix.length), {})
+        n += Object.keys(a).filter(x => a[x]).length
+      }
+    }
+    el.textContent = n
+  }
+
+  // ══════════════════════════════════════════
+  // 12. 历年真题：批量展开 + 记忆展开状态
+  // ══════════════════════════════════════════
+  const Exam = {
+    KEY: 'examOpen',
+    init() {
+      const root = document.querySelector('.exam')
+      if (!root) return
+      const chapter = root.dataset.examChapter || 'x'
+
+      // 恢复上次展开状态：{ "H07": { "2025年5月": true, ... } }
+      const saved = store.get(this.KEY, {}) || {}
+      const mine = saved[chapter] || {}
+      root.querySelectorAll('.exam-year').forEach(y => {
+        const name = y.dataset.examYear
+        // 默认：展开最近 1 套（新年优先），其余收起
+        const open = (name in mine) ? mine[name] : false
+        if (open) y.open = true
+        y.addEventListener('toggle', () => {
+          mine[name] = y.open
+          saved[chapter] = mine
+          store.set(this.KEY, saved)
+        })
+      })
+      // 单题的"看过答案"状态也要记（避免重复点开）
+      const seen = store.get('examSeen', {}) || {}
+      root.querySelectorAll('.exam-q').forEach(qd => {
+        const qid = qd.dataset.examId
+        if (seen[qid]) {
+          const a = qd.querySelector('.exam-ans')
+          if (a) a.open = true
+        }
+        const ans = qd.querySelector('.exam-ans')
+        if (ans) ans.addEventListener('toggle', () => {
+          if (ans.open) { seen[qid] = 1; store.set('examSeen', seen) }
+        })
+      })
+
+      // 批量展开/收起按钮
+      root.querySelectorAll('.exam-op').forEach(btn => {
+        btn.addEventListener('click', e => {
+          e.preventDefault()
+          const openAll = btn.dataset.examAll === '1'
+          root.querySelectorAll('.exam-subject,.exam-year').forEach(d => { d.open = openAll })
+          root.querySelectorAll('.exam-ans').forEach(d => {
+            d.open = openAll
+            if (openAll && d.parentElement.dataset.examId) seen[d.parentElement.dataset.examId] = 1
+          })
+          if (openAll) store.set('examSeen', seen)
+          // 同步年份级记忆
+          root.querySelectorAll('.exam-year').forEach(y => { mine[y.dataset.examYear] = y.open })
+          saved[chapter] = mine
+          store.set(this.KEY, saved)
+        })
+      })
+
+      // 快捷键：E = 跳到真题区块（不与既有键冲突）
+      document.addEventListener('keydown', e => {
+        const t = e.target
+        if (t && t.nodeType === 1 && t.matches('input,textarea,select,[contenteditable]')) return
+        if (e.metaKey || e.ctrlKey || e.altKey) return
+        if (e.key.toLowerCase() === 'e') {
+          e.preventDefault()
+          root.scrollIntoView({ behavior: 'smooth', block: 'start' })
+          const y = root.querySelector('.exam-year')
+          if (y) y.open = true
+        }
+      })
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    Theme.init()
+    FontSize.init()
+    Progress.init()
+    ChapBar.init()
+    document.querySelectorAll('.quiz-js').forEach(r => Quiz.init(r))
+    WrongBook.init()
+    Search.init()
+    ChapNav.init()
+    Focus.init()
+    Overflow.init()
+    Keys.init()
+    BackTop.init()
+    CopyCode.init()
+    ReadTime.init()
+    Exam.init()
+    updateAnsweredStat()
+    window.addEventListener('quiz:update', updateAnsweredStat)
+    renderMermaid()
+  })
+
+  // ══════════════════════════════════════════
+  // 8. mermaid 渲染（自定义墨绿主题，与正文同色系）
+  // ══════════════════════════════════════════
+  // 站点配色（与 design.css 的令牌保持一致）
+  const MERMAID_LIGHT = {
+    bg: '#f2f0e9', fg: '#1b211c', line: '#cdc9bd',
+    accent: '#3d5a40', accent2: '#5a8a62', accent3: '#7ea888',
+    tip: '#2d6a4f', warn: '#b8860b', danger: '#b33636'
+  }
+  const MERMAID_DARK = {
+    bg: '#1c201d', fg: '#dde5de', line: '#3a413b',
+    accent: '#8bb195', accent2: '#a9c9b1', accent3: '#c3dcc8',
+    tip: '#7fc79b', warn: '#d9b04a', danger: '#e08585'
+  }
+
+  function mermaidTheme(dark) {
+    const c = dark ? MERMAID_DARK : MERMAID_LIGHT
+    return {
+      startOnLoad: false, securityLevel: 'strict',
+      fontFamily: 'inherit',
+      theme: 'base',
+      themeVariables: {
+        background: c.bg,
+        primaryColor: c.accent + '18',
+        primaryTextColor: c.fg,
+        primaryBorderColor: c.accent2,
+        secondaryColor: c.accent2 + '20',
+        tertiaryColor: c.bg,
+        lineColor: c.line,
+        textColor: c.fg,
+        mainBkg: c.accent + '18',
+        nodeBorder: c.accent2,
+        clusterBkg: c.accent2 + '14',
+        clusterBorder: c.line,
+        titleColor: c.accent,
+        edgeLabelBackground: c.bg,
+        // 分类色：全部落在墨绿/暖褐区间，不再是默认紫
+        tertiaryColor: c.bg,
+        quaternaryColor: c.accent3 + '22',
+        noteBkgColor: c.warn + '18',
+        noteTextColor: c.fg,
+        noteBorderColor: c.warn,
+        actorBkg: c.accent2 + '28',
+        actorBorder: c.accent,
+        actorTextColor: c.fg,
+        signalColor: c.fg,
+        signalTextColor: c.fg,
+        labelBoxBkgColor: c.bg,
+        labelTextColor: c.fg,
+        loopTextColor: c.fg,
+        activationBkgColor: c.accent3 + '30',
+        pie1: c.accent, pie2: c.accent2, pie3: c.accent3,
+        pie4: c.tip, pie5: c.warn, pie6: c.danger
+      },
+      flowchart: { htmlLabels: true, curve: 'basis', useMaxWidth: true, padding: 14 },
+      sequence: { useMaxWidth: true, actorFontSize: 13, noteFontSize: 12 }
+    }
+  }
+
+  function renderMermaid() {
+    // 覆盖两类节点：未渲染的 .mermaid-src，和已渲染但主题不符的 .mermaid-wrap
+    const nodes = [...document.querySelectorAll('.mermaid-src, .mermaid-wrap[data-src]')]
+    if (!nodes.length) return
+
+    const dark = document.documentElement.dataset.theme === 'dark'
+    const theme = dark ? 'dark' : 'light'
+
+    // ① 图表库未加载（离线 / CDN 挂）→ 优雅降级：把源码摊开显示，别让图凭空消失
+    if (!window.mermaid) {
+      nodes.forEach(node => {
+        const src = node.dataset.src ||
+          (node.classList.contains('mermaid-src') ? node.textContent.trim() : '')
+        if (!src || node.classList.contains('mermaid-fallback')) return
+        node.outerHTML =
+          '<div class="mermaid-wrap mermaid-err" data-src="' + escAttr(src) + '">' +
+          '<div class="mmd-note">图表库未加载（离线）· 以下为图表源码</div>' +
+          '<pre>' + escHtml(src) + '</pre></div>'
+      })
+      return
+    }
+
+    mermaid.initialize(mermaidTheme(dark))
+
+    nodes.forEach((node, i) => {
+      const src = node.dataset.src ||
+        (node.classList.contains('mermaid-src') ? node.textContent.trim() : '')
+      if (!src) return
+      // 已按当前主题渲染过 → 跳过
+      if (node.classList.contains('mermaid-wrap') && node.dataset.theme === theme) return
+
+      const id = 'mmd' + Date.now().toString(36) + i + Math.random().toString(36).slice(2, 6)
+      const mount = (svg) => {
+        const holder = document.createElement('div')
+        holder.className = 'mermaid-wrap'
+        holder.dataset.src = src
+        holder.dataset.theme = theme
+        holder.innerHTML = svg
+        node.replaceWith(holder)
+      }
+      const fail = (err) => {
+        const holder = document.createElement('div')
+        holder.className = 'mermaid-wrap mermaid-err'
+        holder.dataset.src = src
+        holder.dataset.theme = theme
+        holder.innerHTML = '<div class="mmd-note">图表渲染失败 · 源码如下</div><pre>' +
+          escHtml(src) + '</pre>'
+        node.replaceWith(holder)
+        console.warn('[mermaid]', err)
+      }
+      try {
+        const res = mermaid.render(id, src)
+        if (res && typeof res.then === 'function') res.then(r => mount(r.svg)).catch(fail)
+        else mount(res.svg || res)
+      } catch (e) { fail(e) }
+    })
+  }
+
+  function escHtml(s) {
+    return String(s).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]))
+  }
+  function escAttr(s) {
+    return String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]))
+  }
+
+  // 主题切换后重渲染图表
+  const origApply = Theme.apply
+  Theme.apply = function () { origApply(); setTimeout(renderMermaid, 50) }
+})()</script>
+</body>
+</html>

@@ -7,7 +7,7 @@
 <title>第 1 小时 · 绪论与备考总纲 · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
-<meta name="build-stamp" content="2026-10-05 08:06:29">
+<meta name="build-stamp" content="2026-10-05 11:44:51">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -1927,6 +1927,166 @@ table.zebra tbody tr:hover{background:var(--accent-soft-2)}
 /* ── 平滑滚动偏移（锚点跳转不卡顶栏下） ── */
 html{scroll-padding-top:80px}
 @media(max-width:760px){html{scroll-padding-top:70px}}
+
+/* ═══════════════════════════════════════════════════════════════
+   历年真题区块 · 三级折叠（原生 details，零 JS）
+   ═══════════════════════════════════════════════════════════════ */
+.exam{margin:2.2em 0 1.6em}
+
+/* ── 统计条：常驻不折叠，避免"用户不知道里面有真题"而白做 ── */
+.exam-bar{
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  padding:12px 16px;margin-bottom:10px;
+  background:linear-gradient(180deg,var(--bg-card) 0%,var(--bg-alt) 100%);
+  border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow-1);
+}
+.exam-bar-label{font-weight:700;font-size:14px;color:var(--accent)}
+.exam-bar-stat{font-size:12.5px;color:var(--fg-3);flex:1;min-width:140px}
+.exam-bar-stat b{color:var(--fg-2);font-variant-numeric:tabular-nums}
+.exam-bar-ops{display:flex;gap:6px}
+.exam-op{
+  padding:4px 11px;font:inherit;font-size:12px;cursor:pointer;
+  background:var(--bg-card);border:1px solid var(--line-2);
+  border-radius:999px;color:var(--fg-2);
+  transition:border-color .18s var(--ease),color .18s var(--ease),background .18s var(--ease);
+}
+.exam-op:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+
+/* ── 科目级折叠 ── */
+.exam-subject{
+  border:1px solid var(--line);border-radius:var(--radius);
+  background:var(--bg-card);overflow:hidden;
+}
+.exam-subject>summary{
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  padding:12px 16px;cursor:pointer;list-style:none;
+  font-weight:600;color:var(--fg-2);
+  transition:background .18s var(--ease),color .18s var(--ease);
+}
+.exam-subject>summary::-webkit-details-marker{display:none}
+.exam-subject>summary:hover{background:var(--accent-soft);color:var(--accent)}
+.exam-subject[open]>summary{border-bottom:1px solid var(--line);background:var(--bg-alt)}
+.exam-subject-name::before{content:'▸ ';display:inline-block;transition:transform .2s var(--ease)}
+.exam-subject[open] .exam-subject-name::before{transform:rotate(90deg)}
+.exam-subject-n{font-size:12px;color:var(--fg-3);font-variant-numeric:tabular-nums}
+.exam-subject-tip{margin-left:auto;font-size:11.5px;color:var(--fg-3);opacity:.8}
+
+/* ── 年份级折叠 ── */
+.exam-year{border-bottom:1px solid var(--line)}
+.exam-year:last-child{border-bottom:0}
+.exam-year>summary{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 16px 9px 30px;cursor:pointer;list-style:none;
+  font-size:13.5px;color:var(--fg-2);
+  transition:background .16s var(--ease),color .16s var(--ease);
+}
+.exam-year>summary::-webkit-details-marker{display:none}
+.exam-year>summary:hover{background:var(--accent-soft);color:var(--accent)}
+.exam-year[open]>summary{background:var(--bg-alt)}
+.exam-year-name::before{content:'▸ ';display:inline-block;transition:transform .2s var(--ease);color:var(--fg-3)}
+.exam-year[open] .exam-year-name::before{transform:rotate(90deg)}
+.exam-year-n{font-size:11.5px;color:var(--fg-3);font-variant-numeric:tabular-nums}
+
+/* ── 单题折叠 ── */
+.exam-q{border-top:1px solid var(--line)}
+.exam-q>summary{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:9px 16px 9px 46px;cursor:pointer;list-style:none;
+  font-size:13.5px;line-height:1.6;color:var(--fg-2);
+  transition:background .16s var(--ease);
+}
+.exam-q>summary::-webkit-details-marker{display:none}
+.exam-q>summary:hover{background:var(--accent-soft)}
+.exam-q[open]>summary{background:var(--bg-alt)}
+.exam-q>summary::before{
+  content:'＋';flex-shrink:0;width:1.1em;text-align:center;
+  color:var(--fg-3);font-size:12px;line-height:1.5;
+}
+.exam-q[open]>summary::before{content:'－';color:var(--accent)}
+.exam-no{
+  flex-shrink:0;font-size:11px;color:var(--fg-3);
+  font-variant-numeric:tabular-nums;padding-top:2px;min-width:44px;
+}
+.exam-tag{
+  flex-shrink:0;font-size:10.5px;padding:1px 6px;border-radius:4px;
+  background:var(--warn-bg);color:var(--warn-fg);border:1px solid var(--warn-line);
+}
+.exam-stem-peek{
+  flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  color:var(--fg-2);
+}
+.exam-q[open] .exam-stem-peek{color:var(--fg)}
+.exam-q-body{padding:4px 16px 16px 46px}
+.exam-stem{margin:.6em 0;font-size:14.5px;line-height:1.8;color:var(--fg)}
+.exam-blank{color:var(--danger);padding:0 1px}
+.exam-opts{list-style:none;margin:.5em 0 .9em;padding:0}
+/* ⚠️ 必须清掉全局 `ul>li::before` 的圆点（本站正文列表有项目符号），
+   否则真题选项前会多出一个小圆点，位置还和字母块错开 */
+.exam-opts>li::before{content:none !important}
+.exam-opts li{
+  position:relative;padding:4px 0 4px 26px;font-size:14px;line-height:1.7;
+  border-bottom:1px dashed var(--line);
+}
+.exam-opts li:last-child{border-bottom:0}
+.exam-opts b{
+  position:absolute;left:0;top:4px;
+  display:inline-flex;align-items:center;justify-content:center;
+  width:19px;height:19px;border-radius:5px;
+  background:var(--bg-alt);border:1px solid var(--line-2);
+  font-size:11px;font-weight:700;color:var(--fg-3);
+}
+
+/* ── 答案（默认再折叠一层）── */
+.exam-ans{margin-top:.6em}
+.exam-ans>summary{
+  display:inline-flex;align-items:center;gap:6px;cursor:pointer;list-style:none;
+  padding:4px 12px;font-size:12px;
+  background:var(--accent-soft);border:1px solid var(--line-2);
+  border-radius:999px;color:var(--accent);
+  transition:background .18s var(--ease),border-color .18s var(--ease);
+}
+.exam-ans>summary::-webkit-details-marker{display:none}
+.exam-ans>summary:hover{background:var(--accent-soft-2);border-color:var(--accent)}
+.exam-ans[open]>summary{margin-bottom:8px}
+.exam-ans-line{margin:.4em 0;font-size:14px;color:var(--fg)}
+.exam-ans-line b{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:26px;height:24px;padding:0 8px;margin-left:4px;
+  border-radius:6px;background:var(--tip-bg);color:var(--tip-fg);
+  border:1px solid var(--tip-line);font-weight:700;
+}
+.exam-exp{margin:.4em 0;font-size:13.5px;line-height:1.8;color:var(--fg-2)}
+
+/* ── 窄屏 ── */
+@media(max-width:760px){
+  .exam-bar{padding:10px 12px;gap:8px}
+  .exam-bar-label{font-size:13px}
+  .exam-bar-stat{font-size:11.5px;flex-basis:100%;order:3;min-width:0}
+  .exam-bar-ops{margin-left:auto}
+  .exam-subject-tip{display:none}
+  .exam-q>summary{padding-left:16px;flex-wrap:wrap}
+  .exam-q>summary::before{display:none}
+  .exam-no{min-width:0}
+  .exam-q-body{padding-left:16px}
+  .exam-year>summary{padding-left:20px}
+  .exam-stem-peek{white-space:normal;flex-basis:100%}
+  .exam-opts li{font-size:13.5px}
+}
+
+/* ── 打印：全部自动展开（服务"可打印带水印"卖点）── */
+@media print{
+  .exam-bar,.exam-op,.exam-ans>summary{display:none !important}
+  .exam-subject,.exam-year,.exam-q{border:0 !important;background:none !important}
+  .exam-subject>summary,.exam-year>summary{
+    padding:6pt 0;background:none !important;border-bottom:1pt solid #999;
+  }
+  .exam-subject-name::before,.exam-year-name::before,.exam-q>summary::before{content:'' !important}
+  .exam-q-body,.exam-ans[open] > div,.exam-ans > div{display:block !important}
+  .exam-q{break-inside:avoid;page-break-inside:avoid}
+  .exam-stem,.exam-opts li{font-size:9.5pt}
+  .exam-exp{font-size:8.5pt;color:#333}
+}
 </style>
 </head>
 <body>
@@ -2047,6 +2207,7 @@ html{scroll-padding-top:80px}
   </div>
 </div>
 </div>
+    <section class="exam" id="exam" data-exam-chapter="1" data-exam-hour="H01"><div class="exam-bar"><span class="exam-bar-label">📚 历年真题</span><span class="exam-bar-stat">共 <b>22</b> 题 · 来自 5 套真题</span><span class="exam-bar-ops"><button type="button" class="exam-op" data-exam-all="1">全部展开</button><button type="button" class="exam-op" data-exam-all="0">全部收起</button></span></div><details class="exam-subject" data-exam-subject="综合知识"><summary><span class="exam-subject-name">📝 综合知识</span><span class="exam-subject-n">22 题</span><span class="exam-subject-tip">按年份展开 · 单题可点开看答案</span></summary><details class="exam-year" data-exam-year="2024年5月"><summary><span class="exam-year-name">2024年5月</span><span class="exam-year-n">4 题</span></summary><details class="exam-q" data-exam-id="2024年5月-043"><summary><span class="exam-no">第 43 题</span><span class="exam-stem-peek">以下（）可以申请为专利。</span></summary><div class="exam-q-body"><p class="exam-stem">以下（）可以申请为专利。</p><ul class="exam-opts"><li><b>A</b> 一种节能技术</li><li><b>B</b> 一个医药配方</li><li><b>C</b> 一个算法</li><li><b>D</b> 一个房屋设计图</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">工业节能技术属于可落地的技术方案，符合发明专利申请要求；抽象算法、单纯医药配方、美术类设计图不属于发明/实用新型授权范畴。</p></details></div></details><details class="exam-q" data-exam-id="2024年5月-042"><summary><span class="exam-no">第 42 题</span><span class="exam-stem-peek">据《中华人民共和国专利法》第二十二条授予专利权的发明和实用新型，应当具备（）</span></summary><div class="exam-q-body"><p class="exam-stem">据《中华人民共和国专利法》第二十二条授予专利权的发明和实用新型，应当具备（）</p><ul class="exam-opts"><li><b>A</b> 新颖性 创新性 合理性</li><li><b>B</b> 新颖性 合理性 实用性</li><li><b>C</b> 新颖性 创造性 实用性</li><li><b>D</b> 创造性 合理性 实用性</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">我国专利法明确规定，发明、实用新型专利授权必须同时满足新颖性、创造性（创新性）、实用性三个法定条件。</p></details></div></details><details class="exam-q" data-exam-id="2024年5月-002"><summary><span class="exam-no">第 2 题</span><span class="exam-stem-peek">发明专利的保护期从（）开始计算</span></summary><div class="exam-q-body"><p class="exam-stem">发明专利的保护期从（）开始计算</p><ul class="exam-opts"><li><b>A</b> 申请日</li><li><b>B</b> 批准日</li><li><b>C</b> 发表日</li><li><b>D</b> 取证日</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">我国专利法明确规定，发明专利权的保护期限自专利申请日起正式起算。</p></details></div></details><details class="exam-q" data-exam-id="2024年5月-001"><summary><span class="exam-no">第 1 题</span><span class="exam-stem-peek">发明专利的保护期为（）年</span></summary><div class="exam-q-body"><p class="exam-stem">发明专利的保护期为（）年</p><ul class="exam-opts"><li><b>A</b> 10</li><li><b>B</b> 15</li><li><b>C</b> 20</li><li><b>D</b> 30</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">根据我国《专利法》规定，发明专利保护期限为20年，实用新型专利保护期10年，外观设计专利保护期15年。</p></details></div></details></details><details class="exam-year" data-exam-year="2023年5月"><summary><span class="exam-year-name">2023年5月</span><span class="exam-year-n">4 题</span></summary><details class="exam-q" data-exam-id="2023年5月-013"><summary><span class="exam-no">第 13 题</span><span class="exam-stem-peek">目前国际上为保护计算机软件知识产权不受侵犯所采用的主要方式是实施（ ）。</span></summary><div class="exam-q-body"><p class="exam-stem">目前国际上为保护计算机软件知识产权不受侵犯所采用的主要方式是实施（ ）。</p><ul class="exam-opts"><li><b>A</b> 合同法</li><li><b>B</b> 物权法</li><li><b>C</b> 版权法</li><li><b>D</b> 刑法</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">国际通用主流方案是以版权（著作权）法保护计算机软件知识产权，合同法、刑法仅作为补充约束手段。</p></details></div></details><details class="exam-q" data-exam-id="2023年5月-012"><summary><span class="exam-no">第 12 题</span><span class="exam-stem-peek">以下关于计算机软件著作权的叙述中，错误的是（ ）。</span></summary><div class="exam-q-body"><p class="exam-stem">以下关于计算机软件著作权的叙述中，错误的是（ ）。</p><ul class="exam-opts"><li><b>A</b> 软件著作权人可以许可他人行使其软件著作权，并有权获得报酬</li><li><b>B</b> 软件著作权人可以全部或者部分转让其软件著作权，并有权获得报酬</li><li><b>C</b> 软件著作权属于自然人的，该自然人死亡后，在软件著作权的保护期内。继承人将继承到软件著作权的所有权利</li><li><b>D</b> 以学习和研究软件内含的设计思想和原理为目的，通过安装或存储软件方式使用软件的，可以不经软件著作权人许可，不向其支付报酬</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">软件著作权中的署名权等人身权利不可继承，继承人仅能继承财产性权利，无法继承全部著作权，C表述错误。</p></details></div></details><details class="exam-q" data-exam-id="2023年5月-011"><summary><span class="exam-no">第 11 题</span><span class="exam-stem-peek">著作权中，（ ）的保护期不受期限限制。</span></summary><div class="exam-q-body"><p class="exam-stem">著作权中，（ ）的保护期不受期限限制。</p><ul class="exam-opts"><li><b>A</b> 发表权</li><li><b>B</b> 发行权</li><li><b>C</b> 展览权</li><li><b>D</b> 署名权</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">《著作权法》规定，署名权、修改权、保护作品完整权永久保护无期限；发表权、发行权、展览权等有法定保护周期。</p></details></div></details><details class="exam-q" data-exam-id="2023年5月-010"><summary><span class="exam-no">第 10 题</span><span class="exam-stem-peek">以下关于知识产权特点的说法中，错误的是（ ）。</span></summary><div class="exam-q-body"><p class="exam-stem">以下关于知识产权特点的说法中，错误的是（ ）。</p><ul class="exam-opts"><li><b>A</b> 无形性，知识产权是一种没有形体的精神财富</li><li><b>B</b> 地域性，知识产权具有严格的地域性特点</li><li><b>C</b> 时间性，知识产权具有法定的保护期限</li><li><b>D</b> 双重性，知识产权都具有财产权和人身权属性</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">并非所有知识产权都同时具备人身权+财产权，例如商标权仅拥有财产权属性，因此“都具有双重属性”的表述错误。</p></details></div></details></details><details class="exam-year" data-exam-year="2022年5月"><summary><span class="exam-year-name">2022年5月</span><span class="exam-year-n">6 题</span></summary><details class="exam-q" data-exam-id="2022年5月-027"><summary><span class="exam-no">第 27 题</span><span class="exam-stem-peek">ISO 9000定义业务过程（Busines Process）为一组将输入转化为输出的相互关联或相互作用的活动。该过程包…</span></summary><div class="exam-q-body"><p class="exam-stem">ISO 9000定义业务过程（Busines Process）为一组将输入转化为输出的相互关联或相互作用的活动。该过程包括6个基本要素，分别是（27）、活动、活动的相互作用、输出结果、用户和价值。</p><ul class="exam-opts"><li><b>A</b> 输入资源</li><li><b>B</b> 需求说明</li><li><b>C</b> 活动环境</li><li><b>D</b> 活动前提</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">ISO9000 有关业务流程的定义是：业务流程是一组将输入转化为输出的相互关联或相互作用的活动。流程6个要素分别是：输入、活动、活动的相互作用（即结构）、输出、客户、价值，对应题干空缺项为输入资源。</p></details></div></details><details class="exam-q" data-exam-id="2022年5月-026"><summary><span class="exam-no">第 26 题</span><span class="exam-stem-peek">基于模型的系统工程作为一种（26），为了应对基于文档的传统系统工程工作模式在复杂产品和系统研发时面临的挑战，以逻辑连贯一…</span></summary><div class="exam-q-body"><p class="exam-stem">基于模型的系统工程作为一种（26），为了应对基于文档的传统系统工程工作模式在复杂产品和系统研发时面临的挑战，以逻辑连贯一致的多视角系统模型为桥梁和框架，实现跨领域模型的可追踪、可验证和动态关联，驱动人工系统生存周期内各阶段和各层级内的系统工程过程和活动，使其可管理、可复现、可重用，进而打破专业壁垒，破解设计和工艺、研发和制造、研制和使用维护的分离，极大地提高沟通协同效率，实现以模型驱动的方法来采集、捕获和提炼数据、信息和知识。</p><ul class="exam-opts"><li><b>A</b> 形式化的建模方法学</li><li><b>B</b> 非形式化的建模方法学</li><li><b>C</b> 结构化建模方法学</li><li><b>D</b> 面向对象建模方法学</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">纯定义填空，基于模型的系统工程MBSE属于形式化建模方法学，依靠标准化模型实现全生命周期的管控。</p></details></div></details><details class="exam-q" data-exam-id="2022年5月-013"><summary><span class="exam-no">第 13 题</span><span class="exam-stem-peek">韩国甲公司生产的平板电脑在其本国享有“Upad”注册商标专用权，但未在中国申请注册。中国乙公司生产的平板电脑也使用“Up…</span></summary><div class="exam-q-body"><p class="exam-stem">韩国甲公司生产的平板电脑在其本国享有“Upad”注册商标专用权，但未在中国申请注册。中国乙公司生产的平板电脑也使用“Upad”商标，并享有中国注册商标专用权，但未在韩国申请注册。甲公司与乙公司生产的平板电脑都在中国市场上销售，此情形下，依据中国商标法，（13）。</p><ul class="exam-opts"><li><b>A</b> 甲公司侵犯了乙公司的商标权</li><li><b>B</b> 甲公司未侵犯乙公司的商标权</li><li><b>C</b> 乙公司侵犯了甲公司的商标权</li><li><b>D</b> 甲公司与乙公司均未侵犯商标权</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">知识产权具有地域性，在中国市场销售，必须在中国注册商标才享有保护，甲公司未在中国注册商标，属于侵权行为。</p></details></div></details><details class="exam-q" data-exam-id="2022年5月-012"><summary><span class="exam-no">第 12 题</span><span class="exam-stem-peek">郭一在单位运营管理部工作，负责经营报表和统计分析，为便于及时、准确完成报表，郭一利用自身软件开发基础，在下班后的业余时间…</span></summary><div class="exam-q-body"><p class="exam-stem">郭一在单位运营管理部工作，负责经营报表和统计分析，为便于及时、准确完成报表，郭一利用自身软件开发基础，在下班后的业余时间与家人共同开发了一个统计软件。以下说法中，正确的是（12）</p><ul class="exam-opts"><li><b>A</b> 该软件没有商业用途，没有著作权的问题</li><li><b>B</b> 郭一在开发软件的过程中，没有利用企业的物质技术条件，该软件的著作权属于郭一</li><li><b>C</b> 按照软件著作权归属的一般原则，该软件的著作权归属于郭一</li><li><b>D</b> 该软件的著作权属于企业，因其是郭一为完成本职工作而产生的结果</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">职务作品的著作权归属包含D选项，因为完成本职工作而产生的结果，题中郭一正是为了完成自己的工作才开发的。</p></details></div></details><details class="exam-q" data-exam-id="2022年5月-011"><summary><span class="exam-no">第 11 题</span><span class="exam-stem-peek">下列关于计算机软件著作权的叙述，错误的是（11）</span></summary><div class="exam-q-body"><p class="exam-stem">下列关于计算机软件著作权的叙述，错误的是（11）</p><ul class="exam-opts"><li><b>A</b> 为了学习研究软件内涵的设计思想和原理，通过安装、传输或存储软件等方式使用软件，可以不经软件著作权人许可，不向其支付报酬</li><li><b>B</b> 软件著作权属于自然人的，该自然人死亡后，在软件著作权的保护期内，软件著作权的继承人可以继承各项软件著作权</li><li><b>C</b> 软件著作权人可以许可他人行使其软件著作权，并有权获得报酬</li><li><b>D</b> 软件著作权人可以全部或部分转让其软件著作权，并有权获得报酬</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">A选项是正确的。根据《计算机软件保护条例》的第十七条。第十七条 为了学习和研究软件内含有的设计思想和原理，通过安装、显示、传输或者存储软件等方式使用软件的，可以不经软件著作权人许可，不向其支付报酬。B选项是错的。根据《计算机软件保护条例》的第十五条。第十五条 软件著作权属于自然人的，该自然人死亡后，在软件著作权的保护期内，软件著作权的继承人可以依照《中华人民共和国继承法》的有关规定，继承本条例第八条规定的除署名权以外的其他权利。C和D是正确的，属于法规的原文，根据《计算机软件保护条例》的第九条。（九）应当由软件著作权人享有的其他权利。软件著作权人可以许可他人行使其软件著作权，并有权获得报酬。软件著作权人可以全部或者部分转让其软件著作权，并有权获得报酬。第九条 软件著作权属于软件开发者，本条例另有规定的除外。如无相反证明，在软件上署名的自然人、法人或者其他组织为开发者。</p></details></div></details><details class="exam-q" data-exam-id="2022年5月-010"><summary><span class="exam-no">第 10 题</span><span class="exam-stem-peek">以下商标注册申请，经审查，不能获准注册的是（10）。</span></summary><div class="exam-q-body"><p class="exam-stem">以下商标注册申请，经审查，不能获准注册的是（10）。</p><ul class="exam-opts"><li><b>A</b> 青铜</li><li><b>B</b> 华山</li><li><b>C</b> 湖北</li><li><b>D</b> 麒麟</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">曾经考过一个类似的有争议的题目。根据《中华人民共和国商标法》第十条规定：下列标志不得作为商标使用：（一）同中华人民共和国的国家名称、国旗、国徽、国歌、军旗、军徽、军歌、勋章等相同或者近似的，以及同中央国家机关的名称、标志、所在地特定地点的名称或者标志性建筑物的名称、图形相同的；（二）同外国的国家名称、国旗、国徽、军旗等相同或者近似的，但经该国政府同意的除外；（三）同政府间国际组织的名称、旗帜、徽记等相同或者近似的，但经该组织同意或者不易误导公众的除外；（四）与表明实施控制、予以保证的官方标志、检验印记相同或者近似的，但经授权的除外；（五）同“红十字”、“红新月”的名称、标志相同或者近似的；（六）带有民族歧视性的；（七）带有欺骗性，容易使公众对商品的质量等特点或者产地产生误认的；（八）有害于社会主义道德风尚或者有其他不良影响的。县级以上行政区划的地名或者公众知晓的外国地名，不得作为商标。但是，地名具有其他含义或者作为集体商标、证明商标组成部分的除外；已经注册的使用地名的商标继续有效。</p></details></div></details></details><details class="exam-year" data-exam-year="2021年5月"><summary><span class="exam-year-name">2021年5月</span><span class="exam-year-n">4 题</span></summary><details class="exam-q" data-exam-id="2021年5月-013"><summary><span class="exam-no">第 13 题</span><span class="exam-stem-peek">孙某是A物流公司的信息化系统管理员。在任职期间，孙某根据公司的业务要求开发了“物资进销存系统”，并由A公司使用。后来A公…</span></summary><div class="exam-q-body"><p class="exam-stem">孙某是A物流公司的信息化系统管理员。在任职期间，孙某根据公司的业务要求开发了“物资进销存系统”，并由A公司使用。后来A公司将该软件申请了计算机软件著作权，并取得《计算机软件著作登记证书》。证书明确软件著作名称为“物资进销存系统V1.0”，以下说法正确的是（ ）。</p><ul class="exam-opts"><li><b>A</b> 物资进销存系统V1.0著作权属于A物流公司</li><li><b>B</b> 物资进销存系统V1.0著作权属于孙某</li><li><b>C</b> 物资进销存系统V1.0的著作权属于孙某和A物流公司</li><li><b>D</b> 物资进销存系统的软件登记公告以及有关登记文件不予公开</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">孙某在职期间履行岗位职责、依托公司业务需求开发的软件属于职务作品，软件著作权归属任职的A物流公司。</p></details></div></details><details class="exam-q" data-exam-id="2021年5月-012"><summary><span class="exam-no">第 12 题</span><span class="exam-stem-peek">某软件公司参与开发管理系统软件的程序员丁某，辞职到另一公司任职，该公司项目负责人将管理系统软件的开发者署名替换为王某，该…</span></summary><div class="exam-q-body"><p class="exam-stem">某软件公司参与开发管理系统软件的程序员丁某，辞职到另一公司任职，该公司项目负责人将管理系统软件的开发者署名替换为王某，该项目负责人的行为（ ）。</p><ul class="exam-opts"><li><b>A</b> 不构成侵权，因为丁某不是软件著作权人</li><li><b>B</b> 只是行使管理者的权利，不构成侵权</li><li><b>C</b> 侵犯了开发者丁某的署名权</li><li><b>D</b> 不构成侵权，因为丁某已离职</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">署名权是永久受保护的著作人身权，无论开发者是否在职，都不能擅自修改软件的开发者署名，该行为侵犯了丁某的署名权。</p></details></div></details><details class="exam-q" data-exam-id="2021年5月-011"><summary><span class="exam-no">第 11 题</span><span class="exam-stem-peek">以下著作权权利中，（ ）的保护期受时间限制。</span></summary><div class="exam-q-body"><p class="exam-stem">以下著作权权利中，（ ）的保护期受时间限制。</p><ul class="exam-opts"><li><b>A</b> 署名权</li><li><b>B</b> 修改权</li><li><b>C</b> 发表权</li><li><b>D</b> 保护作品完整权</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">著作人身权里，署名权、修改权、保护作品完整权永久受法律保护；发表权的保护期限和著作财产权一致，有明确的时间限制。</p></details></div></details><details class="exam-q" data-exam-id="2021年5月-010"><summary><span class="exam-no">第 10 题</span><span class="exam-stem-peek">下列关于计算机程序的智力成果中，能取得专利权的是（ ）。</span></summary><div class="exam-q-body"><p class="exam-stem">下列关于计算机程序的智力成果中，能取得专利权的是（ ）。</p><ul class="exam-opts"><li><b>A</b> 计算机程序算法</li><li><b>B</b> 计算机程序代码</li><li><b>C</b> 计算机编程规则</li><li><b>D</b> 程序代码的测试用例</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">著作权保护程序代码、测试用例这类代码表达形式；编程规则属于智力活动规则，无法申请专利；具有创新性的程序算法属于技术方案，可以申请专利保护。</p></details></div></details></details><details class="exam-year" data-exam-year="2019年5月"><summary><span class="exam-year-name">2019年5月</span><span class="exam-year-n">4 题</span></summary><details class="exam-q" data-exam-id="2019年5月-013"><summary><span class="exam-no">第 13 题</span><span class="exam-stem-peek">甲公司从市场上购买乙公司生产的软件，作为甲公司计算机产品的部件。丙公司已经取得该软件的发明权，并许可乙公司生产销售该软件…</span></summary><div class="exam-q-body"><p class="exam-stem">甲公司从市场上购买乙公司生产的软件，作为甲公司计算机产品的部件。丙公司已经取得该软件的发明权，并许可乙公司生产销售该软件。下列说法中，正确的是（）。</p><ul class="exam-opts"><li><b>A</b> 甲公司的行为构成对丙公司权利的侵犯</li><li><b>B</b> 甲公司的行为不构成对丙公司权利的侵犯</li><li><b>C</b> 甲公司不侵犯丙公司的权利，乙公司侵犯了丙公司的权利</li><li><b>D</b> 甲公司的行为与乙公司的行为共同构成对丙公司权利的侵犯</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">丙已授权乙合法生产销售该软件，乙的经营行为合规；甲从正规渠道购入授权成品使用，适用专利权利用尽原则，不会构成对丙专利权的侵权。</p></details></div></details><details class="exam-q" data-exam-id="2019年5月-012"><summary><span class="exam-no">第 12 题</span><span class="exam-stem-peek">某教授于2016年6月1日自行将《信息网络传播权保护条例》译成英文，投递给某国家的核心期刊，并于2016年11月1日发表…</span></summary><div class="exam-q-body"><p class="exam-stem">某教授于2016年6月1日自行将《信息网络传播权保护条例》译成英文，投递给某国家的核心期刊，并于2016年11月1日发表。国家相关部门认为该教授的译文质量很高，经与该教授协商，于2017年1月5日发文将该译文定为官方正式译文。下列说法，（）是正确的。</p><ul class="exam-opts"><li><b>A</b> 由于该教授未经相关部门同意而自行翻译官方条例，因此对其译文不享有著作权</li><li><b>B</b> 该教授对其译文自2016年6月1日起一直享有著作权</li><li><b>C</b> 该教授对其译文自2016年6月1日至2017年1月4日期间享有著作权</li><li><b>D</b> 该教授对其译文自2016年11月1日至2017年1月4日期间享有著作权</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">著作权自作品创作完成日（2016年6月1日）自动取得，无需发表或审批；译文被定为官方正式译文后进入公有领域不再受著作权保护，因此教授仅在创作完成到官宣前的时间段享有著作权。</p></details></div></details><details class="exam-q" data-exam-id="2019年5月-011"><summary><span class="exam-no">第 11 题</span><span class="exam-stem-peek">根据《计算机软件保护条例》，下列说法中，错误的是（）</span></summary><div class="exam-q-body"><p class="exam-stem">根据《计算机软件保护条例》，下列说法中，错误的是（）</p><ul class="exam-opts"><li><b>A</b> 受保护的软件必须固化在有形物体上，如硬盘、光盘、软盘等</li><li><b>B</b> 合法复制品所有人的权利包括出于学习研究目的，安装、储存、显示等方式使用复制品，必须经著作权人许可，可不向其支付报酬</li><li><b>C</b> 如果开发者在单位或组织中任职期间，所开发的软件符合一定条件，则软件著作权应归单位或组织所有</li><li><b>D</b> 接受他人委托而进行开发的软件，其著作权的归属应由委托人与受托人签订书面合同约定；如果没有签订合同，或合同中未规定的，则其著作权由受托人享有</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">依据《计算机软件保护条例》，为个人学习、研究目的合法使用已发表软件属于合理使用范畴，无需经过著作权人许可，B选项中“必须经著作权人许可”的表述错误；A、C、D的描述均符合条例规定。</p></details></div></details><details class="exam-q" data-exam-id="2019年5月-010"><summary><span class="exam-no">第 10 题</span><span class="exam-stem-peek">甲公司委托乙公司开发一种工具软件，未约定软件的使用权、转让权及利益分配办法，甲公司按规定支付乙公司开发费用。然而，乙公司…</span></summary><div class="exam-q-body"><p class="exam-stem">甲公司委托乙公司开发一种工具软件，未约定软件的使用权、转让权及利益分配办法，甲公司按规定支付乙公司开发费用。然而，乙公司按约定时间开发该工具软件后，在未向甲公司交付之前，将其转让给丙公司。下列说法中，正确的是（）。</p><ul class="exam-opts"><li><b>A</b> 该工具软件的使用权属于甲公司</li><li><b>B</b> 甲和乙公司均有该工具软件的使用权和转让权</li><li><b>C</b> 乙公司与丙公司的转让合同无效</li><li><b>D</b> 该工具软件的转让权属于乙公司</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">委托开发无权属约定时，软件著作权默认归受托方乙公司，乙有权转让著作权，转让合同有效；甲方已足额支付开发费用，依法获得该软件合法永久使用权。</p></details></div></details></details></details><details class="exam-subject" data-exam-subject="案例"><summary><span class="exam-subject-name">📋 案例分析</span><span class="exam-subject-n">4 题</span><span class="exam-subject-tip">情景简答 · 采分点三色标记</span></summary><div class="exam-bar"><span class="exam-bar-label">📋 案例分析</span><span class="exam-bar-stat">共 <b>4</b> 题 · 情景简答</span></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">1</span>考点：信息的概念与特征 / 系统与信息系统的概念与特征 / 系统分析师的角色定位与任务 / 知识体系<br>📅 时间：2025-03-20 下午 📍 地点：集团总部 12 楼小会议室<br>👤 人物：甘工（乙方·系统分析师）、李工（乙方·项目经理）、洪经理（甲方·客服部经理）、徐总监（甲方·数智化信息部总监）、徐总（甲方·分管副总）<br>⚡ 冲突：客服部要&#x27;先上 AI&#x27;，信息部要&#x27;先统数据&#x27;，徐总只问投入产出<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：项目刚中标第三天，甘工被拉进一场&quot;三方会谈&quot;。 洪经理把去年冬天的话务报表摊在桌上：&quot;排队四百八，放弃率两成一，客户投诉我接得手软。我要 AI 尽快接电话，别的往后放。&quot; 徐总监推了推眼镜：&quot;客服、工单、计费三套系统的客户编码都不一样，同一户人四个手机号。AI 拿什么认客户？&quot; 坐在中间的徐总看向甘工：&quot;小张……哦不，甘工，你们是专业的。这钱花得值吗？多久见效？&quot; 甘工合上手里的调研笔记——120 名坐席、日均 8000 通、AHT 285 秒、系统十年没换过。他知道，今天要定的不是&quot;买什么功能&quot;，而是&quot;这个项目到底要解决什么问题&quot;。<br>补充资料：现有系统为 2015 年建成的老系统，仅支持按键式 IVR 与人工接听，存在话务积压、工单与客服数据不通、无法支撑营销外呼等问题。 项目组由甲方客服部、信息部与乙方共同组成。阿甘科技指派甘工担任系统分析师。项目启动会上出现分歧：客服部希望&quot;先把 AI 机器人上起来&quot;，信息部坚持&quot;先统一客户主数据与接口标准&quot;，而集团分管领导关心&quot;投入多久能见效&quot;。甘工在调研后发现：三个部门对&quot;智能客服&quot;的理解各不相同，且现有流程中存在大量线下环节（纸质派单、电话回访）。<br>问题 1：请说明信息的基本概念与主要特征；并说明系统的概念与主要特性，结合本案例说明&quot;智能客服平台&quot;作为一个系统，其整体性、层次性、相关性、目的性与环境适应性分别体现在哪里。（8分）<br>问题 2：请说明系统分析师的角色定位与主要任务；结合本案例，说明甘工应如何协调客服部、信息部与分管领导三方的分歧。（9分）<br>问题 3：请说明系统工程方法论中霍尔三维结构与切克兰德软系统方法论的基本思想与适用场合；本案例更适合哪一种，为什么？（8分）</p><ul class="exam-questions"><li><b>问题 1</b> 请说明<strong>信息</strong>的基本概念与主要特征；并说明<strong>系统</strong>的概念与主要特性，结合本案例说明&quot;智能客服平台&quot;作为一个系统，其整体性、层次性、相关性、目的性与环境适应性分别体现在哪里。（8分）</li><li><b>问题 2</b> 请说明<strong>系统分析师的角色定位</strong>与<strong>主要任务</strong>；结合本案例，说明甘工应如何协调客服部、信息部与分管领导三方的分歧。（9分）</li><li><b>问题 3</b> 请说明系统工程方法论中霍尔三维结构与切克兰德软系统方法论的基本思想与适用场合；本案例更适合哪一种，为什么？（8分）<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点（8分）：<br>- 🔴 核心：信息是对客观事物状态和特征的描述，是经过加工、对决策有意义的数据；特征包括：普遍性、客观性、可存储性、可传递性、可加工性、共享性、时效性、价值性（依附于接收者的决策）。<br>- 🔴 核心：系统是由若干相互联系、相互作用的要素组成的、具有特定结构和功能的有机整体；主要特性——整体性（整体大于部分之和）、层次性、相关性（要素相互制约）、目的性、环境适应性（与环境交换物质/能量/信息）。<br>- 🟡 支撑：🟡 支撑（本例对应）：；整体性：AI 应答、路由、工单、回访等模块协同，其整体价值（自助解决率提升）不是各模块单独效果的简单相加；；层次性：平台可分为&quot;接入层—能力层（ASR/TTS/大模型）—业务层（工单/质检）—展现层&quot;，各层职责分明；；相关性：工单字段不完整会直接导致派单失败与回访无法触发，要素之间存在强耦合；；目的性：系统目标是&quot;提升自助解决率、降低人工成本、形成可运营的数据资产&quot;；；环境适应性：需适配信创环境、合规法规变化与话务峰谷波动。<br>- 🟢 加分：信息不同于数据——数据是记录，信息是加工后对决策有用的数据。本例中原始话单是数据，&quot;放弃率 21%、意图热点分布&quot;才是信息。<br>- 🟢 加分：解析·方法论对比题要&quot;思想 + 步骤/维度 + 适用 + 本例判断&quot;，本例判断是得分关键。<br>问题 2｜参考答案要点（9分）：<br>- 🔴 核心：系统分析师是用户与开发团队之间的桥梁，是信息系统建设的主导者与组织者：既要理解业务与用户，又要掌握信息技术，负责需求获取与分析、系统规划与架构、方案论证与评价，并在项目全过程起沟通、协调与决策支持作用。（常见定位还有&quot;问题的分析者、解决方案的设计者、业务流程的改进推动者&quot;。）<br>- 🔴 核心：①调查与研究现有系统与业务；②识别与定义问题（而非仅接受需求）；③获取与分析需求并撰写需求规格；④提出并论证候选方案（可行性、成本效益）；⑤建立系统逻辑模型（DFD、用例模型等）；⑥参与系统架构与方案设计；⑦协调各方、推动共识；⑧支持验收与评价。<br>- 🟡 支撑：🟡 支撑（协调分歧）：<br>- 🟡 支撑：1. 先统一问题而非先选方案——组织三方做问题定义共识会，用数据说明现状（放弃率、AHT、重复录入工时），让&quot;上机器人&quot;与&quot;统一主数据&quot;的争论回到&quot;要解决什么问题&quot;；<br>- 🟡 支撑：2. 用 CSF（关键成功因素）对齐目标——与分管领导确认关键成功因素（成本、满意度、合规），把&quot;多久见效&quot;转化为分阶段里程碑；<br>- 🟡 支撑：3. 给出分期方案——一期先建统一客户主数据与工单中心（信息部关切，也是 AI 的数据基础），同期上线高频场景 AI 自助（客服部关切），二期再扩展营销外呼与数据分析；<br>- 🟡 支撑：4. 用结构化分析成果支撑——给出现状 DFD/用例模型与改造后模型，让各方看到&quot;线下纸质派单&quot;等具体断点；<br>- 🟡 支撑：5. 形成书面共识——会议纪要 + 需求基线 + 变更控制机制，避免后续反复。<br>- 🟢 加分：系统分析师不是&quot;需求记录员&quot;，其核心能力是发现真正的问题并给出可论证的方案；本例中&quot;三方理解不一致&quot;正说明需要先做问题分析，而不是直接进设计。<br>问题 3｜参考答案要点（8分）：<br>- 🔴 核心：由 时间维、逻辑维、知识维 构成的三维结构。；时间维（规划→设计→研制→生产→安装→运行→更新，即系统生命周期阶段）；；逻辑维（明确问题→确定目标→系统综合→系统分析→优化→决策→实施，即每个阶段内的思维步骤）；；知识维（各阶段所需的专业知识，如工程、管理、法律、计算机等）。；特点：强调定量、结构化、最优化，适用于目标明确、可量化、结构化良好的工程系统（&quot;硬系统&quot;）。<br>- 🔴 核心：针对目标模糊、涉及人的因素与利益冲突的&quot;软问题&quot;，步骤为：问题情境表达 → 相关系统根定义（CATWOE）→ 建立概念模型 → 与现实比较 → 提出可行且期望的变革 → 实施改进。强调反复比较、学习与参与，不追求唯一最优解，而追求可行且可接受的改进。<br>- 🟡 支撑：本案例更适合软系统方法论为主、霍尔方法为辅。理由：①&quot;智能客服&quot;的目标在三方之间存在分歧（成本 vs 体验 vs 合规），属目标模糊、利益多元的软问题；②现有流程含大量人的因素（坐席习惯、纸质派单），不能纯靠定量优化解决；③但随着方案明确（指标可量化后），进入设计与实施阶段应转为霍尔三维结构，按&quot;逻辑维&quot;逐步做系统分析、优化与决策。<br>- 🟢 加分：判断口诀——&quot;问题说得清、指标能算清 → 霍尔（硬系统）；人说不清、目标不统一 → 切克兰德（软系统）&quot;；实际项目往往是&quot;先软后硬&quot;：先用软系统方法澄清问题与共识，再用霍尔方法做工程化的设计与实施。</div></details></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">2</span>考点：信息系统工程 / 系统分析师的知识体系与能力要求 / 信息的度量与价值<br>📅 时间：2025-03-28 上午 📍 地点：阿甘科技项目部<br>👤 人物：甘工（乙方·系统分析师）、李工（乙方·项目经理）、徐总监（甲方·数智化信息部总监）<br>⚡ 冲突：集团要&#x27;三年一体化 + 对外数据服务&#x27;，远超一个软件项目的范畴<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：方案编制启动前，徐总监把三年规划草案发给甘工：&quot;我们要的不只是客服系统，是三年内覆盖呼入、外呼、工单、质检的一体化平台，还要能对外输出数据服务。&quot; 李工看完直嘬牙花子：&quot;这哪是做软件，这是要给整个客服体系动手术。&quot; 甘工却在草案里圈出了三个词：组织、流程、数据。他清楚，若按普通软件项目来管——只管需求、设计、开发、测试——一定会漏掉流程重组、数据治理和组织变革这三件更要命的事。<br>补充资料：说明：这是一项信息系统工程，涉及组织、流程、技术、数据多方面变革，并需说明项目团队应具备哪些知识与能力。<br>问题 1：（1）请说明信息系统工程的内涵与主要特征，并说明它与一般软件工程项目的区别；<br>问题 2：（2）请说明系统分析师应具备的知识体系；<br>问题 3：（3）结合本案例说明信息系统建设为何必须&quot;技术与管理并重&quot;。</p><ul class="exam-questions"><li><b>问题 1</b> （1）请说明<strong>信息系统工程</strong>的内涵与主要特征，并说明它与一般软件工程项目的区别；</li><li><b>问题 2</b> （2）请说明系统分析师应具备的<strong>知识体系</strong>；</li><li><b>问题 3</b> （3）结合本案例说明信息系统建设为何必须&quot;技术与管理并重&quot;。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）内涵与特征）：信息系统工程是运用系统工程的方法，规划、分析、设计、实施、运行与评价信息系统的工程学科。特征：①跨学科性（管理、业务、计算机技术、行为科学）；②整体性与集成性（技术集成 + 数据与流程集成 + 组织集成）；③目标服务于组织战略；④人是系统的组成部分（人机系统）；⑤生命周期长、持续演化；⑥高风险、高投入、影响面广。<br>- 🟢 加分：解析·本章案例常考&quot;角色 + 知识体系 + 系统工程方法论&quot;，答题要落到项目实际。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🔴 核心（2）知识体系）：①信息技术基础（计算机、网络、数据库、软件工程、信息安全）；②系统方法论与系统分析设计（结构化与面向对象方法、建模、架构设计）；③业务与领域知识（本例为呼叫中心/客服/燃气业务）；④数学与工程基础（图论、概率统计、决策与预测、建模）；⑤项目管理（范围、进度、成本、质量、配置、风险、人力）；⑥企业信息化与管理（ERP/CRM/SCM、信息资源规划、IT 治理）；⑦法律法规与职业伦理（个人信息保护、数据安全、工程伦理）；⑧沟通与协调能力（访谈、JRP、谈判、文档与表达）。<br>问题 3｜参考答案要点：<br>- 🔴 核心：🟡 支撑（3）技术与管理并重）：</div></details></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">3</span>📅 时间：2025-03-18 上午 9:30 📍 地点：集团总部 12 楼第一会议室<br>👤 人物：甘工（阿甘科技系统分析师）、李工（项目经理）、洪经理（客服部）、徐总监（信息部）、徐总（分管副总）<br>⚡ 冲突：客服部要&quot;先把 AI 机器人上起来&quot;，信息部坚持&quot;先统一客户主数据&quot;，徐总只问&quot;多久见效、值不值&quot;<br>难度：★★★　总分：27 分　建议用时：25 分钟<br>背景：会议一开始洪经理就拍了桌子：&quot;去年冬天高峰期，客户打进来排队四百多，放弃率两成多，投诉电话我接得手软。我要的是尽快让机器人替我们接电话，别的先放放。&quot; 徐总监立刻反驳：&quot;客服、工单、计费三套系统的客户信息各有一套编码，同一户人四个手机号。AI 接进来拿什么识别客户？先把主数据和接口标准统一，不然后面全是返工。&quot; 徐总敲了敲桌子，看向甘工：&quot;小张，你们是专业公司，你说说——这钱花得值吗？多久能看到效果？&quot; 李工在旁边小声提醒甘工：&quot;工期只有 11 个月，别承诺太满。&quot; 甘工翻了翻昨天的调研记录：坐席 120 人、日均来话 8000 通、AHT 285 秒、现有系统建成于十年前只支持按键 IVR。他知道，今天这场会定的不是方案，而是&quot;这个项目到底要解决什么问题&quot;。<br>补充资料：坐席规模 → 120 人 → —；日均来话 → 8 000 通（冬季峰值 36 000 通） → —；高峰排队峰值 → 480 通 → ≤150 通；放弃率 → 21% → ≤8%；平均处理时长 AHT → 285 秒 → ≤180 秒；客户满意度 → 76% → ≥88%；工单闭环时长 → 3.5 天（含纸质派单） → ≤8 小时；系统建成年份 → 2015 年（仅按键 IVR） → — 三方诉求对照：洪经理（接通率/满意度/坐席体验）｜徐总监（主数据统一/信创/安全）｜徐总（投入产出/见效周期）。<br>问题 1：假如你是甘工，请说明：什么是信息，什么是数据，二者区别何在？并结合会议中提到的&quot;排队数、放弃率、AHT、客户编码不统一&quot;，说明哪些是数据、哪些是信息、信息具有哪些特征。（9分）<br>问题 2：会上三方对&quot;智能客服&quot;的理解各不相同。假如你是甘工，请说明系统的概念与主要特性，并据此分析：为什么&quot;上一个 AI 机器人&quot;不等于&quot;建成智能客服系统&quot;？（10分）<br>问题 3：徐总追问&quot;多久见效&quot;，李工提醒&quot;别承诺太满&quot;。假如你是甘工，请说明系统分析师的角色定位与主要任务，并给出你在会上应如何回应徐总与李工。（8分）</p><ul class="exam-questions"><li><b>问题 1</b> 假如你是甘工，请说明：什么是<strong>信息</strong>，什么是<strong>数据</strong>，二者区别何在？并结合会议中提到的&quot;排队数、放弃率、AHT、客户编码不统一&quot;，说明哪些是数据、哪些是信息、信息具有哪些特征。（9分）</li><li><b>问题 2</b> 会上三方对&quot;智能客服&quot;的理解各不相同。假如你是甘工，请说明<strong>系统</strong>的概念与主要特性，并据此分析：为什么&quot;上一个 AI 机器人&quot;不等于&quot;建成智能客服系统&quot;？（10分）</li><li><b>问题 3</b> 徐总追问&quot;多久见效&quot;，李工提醒&quot;别承诺太满&quot;。假如你是甘工，请说明系统分析师的角色定位与主要任务，并给出你在会上应如何回应徐总与李工。（8分）<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点（9分）：<br>- 🔴 核心：数据是对客观事物的符号记录（数字、文字、图形等），是信息的载体；信息是经过加工、对决策有意义的数据。二者区别：数据是&quot;原材料&quot;，信息是&quot;加工品&quot;；同一份数据对不同接收者可能不构成信息（决策相关性不同）。<br>- 🔴 核心：普遍性、客观性、可存储性、可传递性、可加工性、共享性、时效性、价值性（依附于接收者）；此外还有层次性（战略/战术/作业级信息）与不完全性。<br>- 🟡 支撑：🟡 支撑（本例区分）：；属于数据：坐席 120 人、日均来话 8000 通、四个客户编码、285 秒——这些是记录下来的原始数值；；属于信息：&quot;放弃率 21% 已超出行业警戒线，需优先治理&quot;、&quot;客户编码不统一导致 AI 无法识别客户&quot;——这些是对数据加工后形成的、能支撑决策的判断；；同一份&quot;排队 480 通&quot;，对徐总是&quot;要不要加预算&quot;的信息，对老陶（坐席）几乎不构成信息。<br>- 🟢 加分：信息的价值取决于准确、及时、完整、相关——本例中&quot;客户编码不统一&quot;使数据失去关联性，即便数据本身准确也无法转化为有效信息，这正是徐总监坚持先治理主数据的原因。<br>- 🟢 加分：解析·角色题要&quot;定位 + 任务 + 本场景下如何做&quot;。<br>问题 2｜参考答案要点（10分）：<br>- 🔴 核心：系统是由若干相互联系、相互作用的要素组成的、具有特定结构和功能的有机整体；系统具有整体性、层次性、相关性、目的性、环境适应性。<br>- 🟡 支撑：🔴 核心（五特性在本例的体现）：；整体性：AI 应答 + 路由 + 工单 + 回访协同产生的&quot;自助解决率提升&quot;，不是各模块效果的简单相加；；层次性：接入层—能力层（ASR/TTS/大模型）—业务层（工单/质检）—展现层；；相关性：客户编码不统一 → AI 无法带出历史工单 → 转人工后坐席重复询问 → 满意度下降，要素环环相扣；；目的性：目标是提升自助解决率、降低人工成本、形成可运营的数据资产；；环境适应性：需适配信创环境、合规要求与话务峰谷。<br>- 🟡 支撑：只上 AI 机器人，只是替换了&quot;接听&quot;这一个要素，没有解决数据（主数据不统一）、流程（纸质派单）、组织（技能组与考核）等要素及其相互关系；按照系统的相关性与整体性，单点优化会被其他要素拖回原状——例如 AI 识别出客户，但工单系统查不到该客户，最终还是要转人工重复询问。<br>- 🟢 加分：这正是&quot;信息系统 = 技术系统 + 管理系统 + 人的系统&quot;的体现——洪经理看到的是技术，徐总监看到的是数据，而徐总关心的是投入产出，三者必须统一到同一个系统目标下。<br>问题 3｜参考答案要点（8分）：<br>- 🔴 核心：系统分析师是业务与技术之间的桥梁与信息系统建设的主导者：既要理解业务与用户，又要掌握信息技术，负责问题识别、需求分析、方案论证与架构设计，并在全过程承担沟通、协调与决策支持职责。<br>- 🔴 核心：①调查与研究现状；②识别并定义真正的问题；③获取与分析需求、编写规格说明；④提出并论证候选方案（可行性、成本效益）；⑤建立系统的逻辑模型；⑥参与架构与方案设计；⑦协调各方、推动共识；⑧支持验收与评价。<br>- 🟡 支撑：🟡 支撑（会上回应）：；对徐总：不直接承诺日期，而是给出分期见效的里程碑——3 个月完成主数据与工单中心（这是 AI 的数据基础），6 个月上线高频场景 AI 自助并给出可量化指标（自助解决率、AHT、放弃率），11 个月完成全面上线与验收；同时给出投入产出（回收期约 3 年）。；对李工：接受提醒，把&quot;别承诺太满&quot;转化为书面假设与前提（甲方需配合数据治理、派专人参与、及时确认需求），并在方案里写清风险与前置条件。；对洪经理与徐总监：把两方诉求排进同一条路径而非二选一——先统一主数据与工单中心（周），同期上线高频场景 AI（陈），用&quot;先做数据底座，再做智能应用&quot;化解对立。<br>- 🟢 加分：系统分析师不是&quot;需求记录员&quot;，其核心价值是发现真正的问题并给出可论证的方案——本例中三方理解不一致，恰恰说明第一步应是问题定义，而非直接选方案。</div></details></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">4</span>📅 时间：2026-03-10 下午 📍 地点：集团总部 3 楼会议室（验收问题讨论会）<br>👤 人物：甘工（乙方·系统分析师）、邓经理（甲方运维）、老陶（甲方·班组长/十年老坐席）、徐总监（甲方·数智化信息部总监）<br>⚡ 冲突：新平台上线后老系统仍在跑，运维要维护两套，老陶坚持&quot;老系统顺手不想换&quot;<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：验收前的最后一次问题梳理会，邓经理先倒苦水：&quot;现在两套系统并行，坐席在老系统查历史工单、在新系统接电话，一天要登两个账号。维护两套的备份、账号、权限，我这边人手根本不够。&quot; 老陶接话：&quot;新系统那个工作台，我找&#x27;转接&#x27;按钮要找半天，还是老系统顺手。再说了，老系统里十年的工单记录，新系统查不全。&quot; 徐总监看向甘工：&quot;老系统到底什么时候下？数据怎么办？&quot; 甘工心里清楚：老系统建成于十年前，技术陈旧但装着十年的业务数据；而老陶的抵触本质不是按钮位置，是流程习惯和培训缺失。<br>补充资料：老呼叫中心（2015） → 低 → 高 → 低技术·高价值 → 改造（再工程 + 包装集成），分期替换；短信网关（2018） → 低 → 低 → 低技术·低价值 → 淘汰（先适配封装再下线）；质检系统（2021） → 中 → 中 → 中技术·中价值 → 集成/继承（API 集成或合并） 切换策略对照：直接转换（风险最高、成本最低）｜并行转换（风险最低、成本最高）｜分段转换（折中，本项目首选）。<br>问题 1：（1）结合本案例说明信息系统工程的内涵与特征，以及它与一般软件工程项目的区别；<br>问题 2：（2）假如你是甘工，请给出老系统的处置方案（含数据迁移与切换策略）；<br>问题 3：（3）针对老陶的抵触，说明信息化建设中&quot;技术与管理并重&quot;的具体做法。</p><ul class="exam-questions"><li><b>问题 1</b> （1）结合本案例说明<strong>信息系统工程</strong>的内涵与特征，以及它与一般软件工程项目的区别；</li><li><b>问题 2</b> （2）假如你是甘工，请给出老系统的<strong>处置方案</strong>（含数据迁移与切换策略）；</li><li><b>问题 3</b> （3）针对老陶的抵触，说明信息化建设中&quot;技术与管理并重&quot;的具体做法。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）内涵与区别）：信息系统工程是运用系统工程方法，规划、分析、设计、实施、运行与评价信息系统的工程学科。特征：跨学科性、整体性与集成性、服务于组织战略、人是系统组成部分、生命周期长且持续演化、高风险高投入。<br>- 🟢 加分：解析·处置题要&quot;评价 → 策略 → 迁移 → 切换&quot;，抵触问题要落到管理动作。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🔴 核心（2）处置方案）：<br>问题 3｜参考答案要点：<br>- 🔴 核心：🟡 支撑（3）技术与管理并重）：</div></details></div></details></section>
     <div class="wrongbook"></div>
     <div class="keyhint">
   <span class="keyhint-title">键盘快捷键</span>
@@ -2921,6 +3082,77 @@ html{scroll-padding-top:80px}
     el.textContent = n
   }
 
+  // ══════════════════════════════════════════
+  // 12. 历年真题：批量展开 + 记忆展开状态
+  // ══════════════════════════════════════════
+  const Exam = {
+    KEY: 'examOpen',
+    init() {
+      const root = document.querySelector('.exam')
+      if (!root) return
+      const chapter = root.dataset.examChapter || 'x'
+
+      // 恢复上次展开状态：{ "H07": { "2025年5月": true, ... } }
+      const saved = store.get(this.KEY, {}) || {}
+      const mine = saved[chapter] || {}
+      root.querySelectorAll('.exam-year').forEach(y => {
+        const name = y.dataset.examYear
+        // 默认：展开最近 1 套（新年优先），其余收起
+        const open = (name in mine) ? mine[name] : false
+        if (open) y.open = true
+        y.addEventListener('toggle', () => {
+          mine[name] = y.open
+          saved[chapter] = mine
+          store.set(this.KEY, saved)
+        })
+      })
+      // 单题的"看过答案"状态也要记（避免重复点开）
+      const seen = store.get('examSeen', {}) || {}
+      root.querySelectorAll('.exam-q').forEach(qd => {
+        const qid = qd.dataset.examId
+        if (seen[qid]) {
+          const a = qd.querySelector('.exam-ans')
+          if (a) a.open = true
+        }
+        const ans = qd.querySelector('.exam-ans')
+        if (ans) ans.addEventListener('toggle', () => {
+          if (ans.open) { seen[qid] = 1; store.set('examSeen', seen) }
+        })
+      })
+
+      // 批量展开/收起按钮
+      root.querySelectorAll('.exam-op').forEach(btn => {
+        btn.addEventListener('click', e => {
+          e.preventDefault()
+          const openAll = btn.dataset.examAll === '1'
+          root.querySelectorAll('.exam-subject,.exam-year').forEach(d => { d.open = openAll })
+          root.querySelectorAll('.exam-ans').forEach(d => {
+            d.open = openAll
+            if (openAll && d.parentElement.dataset.examId) seen[d.parentElement.dataset.examId] = 1
+          })
+          if (openAll) store.set('examSeen', seen)
+          // 同步年份级记忆
+          root.querySelectorAll('.exam-year').forEach(y => { mine[y.dataset.examYear] = y.open })
+          saved[chapter] = mine
+          store.set(this.KEY, saved)
+        })
+      })
+
+      // 快捷键：E = 跳到真题区块（不与既有键冲突）
+      document.addEventListener('keydown', e => {
+        const t = e.target
+        if (t && t.nodeType === 1 && t.matches('input,textarea,select,[contenteditable]')) return
+        if (e.metaKey || e.ctrlKey || e.altKey) return
+        if (e.key.toLowerCase() === 'e') {
+          e.preventDefault()
+          root.scrollIntoView({ behavior: 'smooth', block: 'start' })
+          const y = root.querySelector('.exam-year')
+          if (y) y.open = true
+        }
+      })
+    }
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
     Theme.init()
     FontSize.init()
@@ -2936,6 +3168,7 @@ html{scroll-padding-top:80px}
     BackTop.init()
     CopyCode.init()
     ReadTime.init()
+    Exam.init()
     updateAnsweredStat()
     window.addEventListener('quiz:update', updateAnsweredStat)
     renderMermaid()

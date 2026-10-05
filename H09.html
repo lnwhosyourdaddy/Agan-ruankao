@@ -7,7 +7,7 @@
 <title>第 9 小时 · 数据库系统（一）· 三级模式与关系基础 · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
-<meta name="build-stamp" content="2026-10-05 08:06:29">
+<meta name="build-stamp" content="2026-10-05 11:44:51">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -1927,6 +1927,166 @@ table.zebra tbody tr:hover{background:var(--accent-soft-2)}
 /* ── 平滑滚动偏移（锚点跳转不卡顶栏下） ── */
 html{scroll-padding-top:80px}
 @media(max-width:760px){html{scroll-padding-top:70px}}
+
+/* ═══════════════════════════════════════════════════════════════
+   历年真题区块 · 三级折叠（原生 details，零 JS）
+   ═══════════════════════════════════════════════════════════════ */
+.exam{margin:2.2em 0 1.6em}
+
+/* ── 统计条：常驻不折叠，避免"用户不知道里面有真题"而白做 ── */
+.exam-bar{
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  padding:12px 16px;margin-bottom:10px;
+  background:linear-gradient(180deg,var(--bg-card) 0%,var(--bg-alt) 100%);
+  border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow-1);
+}
+.exam-bar-label{font-weight:700;font-size:14px;color:var(--accent)}
+.exam-bar-stat{font-size:12.5px;color:var(--fg-3);flex:1;min-width:140px}
+.exam-bar-stat b{color:var(--fg-2);font-variant-numeric:tabular-nums}
+.exam-bar-ops{display:flex;gap:6px}
+.exam-op{
+  padding:4px 11px;font:inherit;font-size:12px;cursor:pointer;
+  background:var(--bg-card);border:1px solid var(--line-2);
+  border-radius:999px;color:var(--fg-2);
+  transition:border-color .18s var(--ease),color .18s var(--ease),background .18s var(--ease);
+}
+.exam-op:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+
+/* ── 科目级折叠 ── */
+.exam-subject{
+  border:1px solid var(--line);border-radius:var(--radius);
+  background:var(--bg-card);overflow:hidden;
+}
+.exam-subject>summary{
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  padding:12px 16px;cursor:pointer;list-style:none;
+  font-weight:600;color:var(--fg-2);
+  transition:background .18s var(--ease),color .18s var(--ease);
+}
+.exam-subject>summary::-webkit-details-marker{display:none}
+.exam-subject>summary:hover{background:var(--accent-soft);color:var(--accent)}
+.exam-subject[open]>summary{border-bottom:1px solid var(--line);background:var(--bg-alt)}
+.exam-subject-name::before{content:'▸ ';display:inline-block;transition:transform .2s var(--ease)}
+.exam-subject[open] .exam-subject-name::before{transform:rotate(90deg)}
+.exam-subject-n{font-size:12px;color:var(--fg-3);font-variant-numeric:tabular-nums}
+.exam-subject-tip{margin-left:auto;font-size:11.5px;color:var(--fg-3);opacity:.8}
+
+/* ── 年份级折叠 ── */
+.exam-year{border-bottom:1px solid var(--line)}
+.exam-year:last-child{border-bottom:0}
+.exam-year>summary{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 16px 9px 30px;cursor:pointer;list-style:none;
+  font-size:13.5px;color:var(--fg-2);
+  transition:background .16s var(--ease),color .16s var(--ease);
+}
+.exam-year>summary::-webkit-details-marker{display:none}
+.exam-year>summary:hover{background:var(--accent-soft);color:var(--accent)}
+.exam-year[open]>summary{background:var(--bg-alt)}
+.exam-year-name::before{content:'▸ ';display:inline-block;transition:transform .2s var(--ease);color:var(--fg-3)}
+.exam-year[open] .exam-year-name::before{transform:rotate(90deg)}
+.exam-year-n{font-size:11.5px;color:var(--fg-3);font-variant-numeric:tabular-nums}
+
+/* ── 单题折叠 ── */
+.exam-q{border-top:1px solid var(--line)}
+.exam-q>summary{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:9px 16px 9px 46px;cursor:pointer;list-style:none;
+  font-size:13.5px;line-height:1.6;color:var(--fg-2);
+  transition:background .16s var(--ease);
+}
+.exam-q>summary::-webkit-details-marker{display:none}
+.exam-q>summary:hover{background:var(--accent-soft)}
+.exam-q[open]>summary{background:var(--bg-alt)}
+.exam-q>summary::before{
+  content:'＋';flex-shrink:0;width:1.1em;text-align:center;
+  color:var(--fg-3);font-size:12px;line-height:1.5;
+}
+.exam-q[open]>summary::before{content:'－';color:var(--accent)}
+.exam-no{
+  flex-shrink:0;font-size:11px;color:var(--fg-3);
+  font-variant-numeric:tabular-nums;padding-top:2px;min-width:44px;
+}
+.exam-tag{
+  flex-shrink:0;font-size:10.5px;padding:1px 6px;border-radius:4px;
+  background:var(--warn-bg);color:var(--warn-fg);border:1px solid var(--warn-line);
+}
+.exam-stem-peek{
+  flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  color:var(--fg-2);
+}
+.exam-q[open] .exam-stem-peek{color:var(--fg)}
+.exam-q-body{padding:4px 16px 16px 46px}
+.exam-stem{margin:.6em 0;font-size:14.5px;line-height:1.8;color:var(--fg)}
+.exam-blank{color:var(--danger);padding:0 1px}
+.exam-opts{list-style:none;margin:.5em 0 .9em;padding:0}
+/* ⚠️ 必须清掉全局 `ul>li::before` 的圆点（本站正文列表有项目符号），
+   否则真题选项前会多出一个小圆点，位置还和字母块错开 */
+.exam-opts>li::before{content:none !important}
+.exam-opts li{
+  position:relative;padding:4px 0 4px 26px;font-size:14px;line-height:1.7;
+  border-bottom:1px dashed var(--line);
+}
+.exam-opts li:last-child{border-bottom:0}
+.exam-opts b{
+  position:absolute;left:0;top:4px;
+  display:inline-flex;align-items:center;justify-content:center;
+  width:19px;height:19px;border-radius:5px;
+  background:var(--bg-alt);border:1px solid var(--line-2);
+  font-size:11px;font-weight:700;color:var(--fg-3);
+}
+
+/* ── 答案（默认再折叠一层）── */
+.exam-ans{margin-top:.6em}
+.exam-ans>summary{
+  display:inline-flex;align-items:center;gap:6px;cursor:pointer;list-style:none;
+  padding:4px 12px;font-size:12px;
+  background:var(--accent-soft);border:1px solid var(--line-2);
+  border-radius:999px;color:var(--accent);
+  transition:background .18s var(--ease),border-color .18s var(--ease);
+}
+.exam-ans>summary::-webkit-details-marker{display:none}
+.exam-ans>summary:hover{background:var(--accent-soft-2);border-color:var(--accent)}
+.exam-ans[open]>summary{margin-bottom:8px}
+.exam-ans-line{margin:.4em 0;font-size:14px;color:var(--fg)}
+.exam-ans-line b{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:26px;height:24px;padding:0 8px;margin-left:4px;
+  border-radius:6px;background:var(--tip-bg);color:var(--tip-fg);
+  border:1px solid var(--tip-line);font-weight:700;
+}
+.exam-exp{margin:.4em 0;font-size:13.5px;line-height:1.8;color:var(--fg-2)}
+
+/* ── 窄屏 ── */
+@media(max-width:760px){
+  .exam-bar{padding:10px 12px;gap:8px}
+  .exam-bar-label{font-size:13px}
+  .exam-bar-stat{font-size:11.5px;flex-basis:100%;order:3;min-width:0}
+  .exam-bar-ops{margin-left:auto}
+  .exam-subject-tip{display:none}
+  .exam-q>summary{padding-left:16px;flex-wrap:wrap}
+  .exam-q>summary::before{display:none}
+  .exam-no{min-width:0}
+  .exam-q-body{padding-left:16px}
+  .exam-year>summary{padding-left:20px}
+  .exam-stem-peek{white-space:normal;flex-basis:100%}
+  .exam-opts li{font-size:13.5px}
+}
+
+/* ── 打印：全部自动展开（服务"可打印带水印"卖点）── */
+@media print{
+  .exam-bar,.exam-op,.exam-ans>summary{display:none !important}
+  .exam-subject,.exam-year,.exam-q{border:0 !important;background:none !important}
+  .exam-subject>summary,.exam-year>summary{
+    padding:6pt 0;background:none !important;border-bottom:1pt solid #999;
+  }
+  .exam-subject-name::before,.exam-year-name::before,.exam-q>summary::before{content:'' !important}
+  .exam-q-body,.exam-ans[open] > div,.exam-ans > div{display:block !important}
+  .exam-q{break-inside:avoid;page-break-inside:avoid}
+  .exam-stem,.exam-opts li{font-size:9.5pt}
+  .exam-exp{font-size:8.5pt;color:#333}
+}
 </style>
 </head>
 <body>
@@ -2150,6 +2310,15 @@ html{scroll-padding-top:80px}
   </div>
 </div>
 </div>
+    <section class="exam" id="exam" data-exam-chapter="5" data-exam-hour="H09"><div class="exam-bar"><span class="exam-bar-label">📚 历年真题</span><span class="exam-bar-stat">本章共 <b>52</b> 题 · 本学时 <b>18</b> 题（其余见同章其他学时）</span><span class="exam-bar-ops"><button type="button" class="exam-op" data-exam-all="1">全部展开</button><button type="button" class="exam-op" data-exam-all="0">全部收起</button></span></div><details class="exam-subject" data-exam-subject="综合知识"><summary><span class="exam-subject-name">📝 综合知识</span><span class="exam-subject-n">18 题</span><span class="exam-subject-tip">按年份展开 · 单题可点开看答案</span></summary><details class="exam-year" data-exam-year="2026年5月"><summary><span class="exam-year-name">2026年5月</span><span class="exam-year-n">3 题</span></summary><details class="exam-q" data-exam-id="2026年5月-068"><summary><span class="exam-no">第 68 题</span><span class="exam-stem-peek">电商避免“超卖”适合采用</span></summary><div class="exam-q-body"><p class="exam-stem">电商避免“超卖”适合采用</p><ul class="exam-opts"><li><b>A</b> 乐观并发控制</li><li><b>B</b> 悲观并发控制</li><li><b>C</b> 自动提交</li><li><b>D</b> 无锁机制</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">电商库存属于写敏感场景，悲观并发控制（悲观锁）可有效防止超卖。</p></details></div></details><details class="exam-q" data-exam-id="2026年5月-039"><summary><span class="exam-no">第 39 题</span><span class="exam-stem-peek">“职位、住址”等缓慢变化的数据属性属于</span></summary><div class="exam-q-body"><p class="exam-stem">“职位、住址”等缓慢变化的数据属性属于</p><ul class="exam-opts"><li><b>A</b> 固定值属性</li><li><b>B</b> 固定个体变动属性</li><li><b>C</b> 随机属性</li><li><b>D</b> 静态属性</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">固定个体变动属性：数据主体不变，属性值随时间缓慢变更。</p></details></div></details><details class="exam-q" data-exam-id="2026年5月-003"><summary><span class="exam-no">第 3 题</span><span class="exam-stem-peek">下列属于动态属性的是</span></summary><div class="exam-q-body"><p class="exam-stem">下列属于动态属性的是</p><ul class="exam-opts"><li><b>A</b> 身份证号</li><li><b>B</b> 出生日期</li><li><b>C</b> 库存数量</li><li><b>D</b> 血型</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">动态属性指数值会随业务实时变化的数据，库存数量频繁变动，其余为静态固定属性。</p></details></div></details></details><details class="exam-year" data-exam-year="2025年5月"><summary><span class="exam-year-name">2025年5月</span><span class="exam-year-n">3 题</span></summary><details class="exam-q" data-exam-id="2025年5月-041"><summary><span class="exam-no">第 41 题</span><span class="exam-stem-peek">在事务并发时，会遇到一些错误场景，其中，读脏数据指的是 ()</span></summary><div class="exam-q-body"><p class="exam-stem">在事务并发时，会遇到一些错误场景，其中，读脏数据指的是 ()</p><ul class="exam-opts"><li><b>A</b> 重复读了不一样的数据</li><li><b>B</b> 读了删除的数据</li><li><b>C</b> 读了未提交的数据</li><li><b>D</b> 读了其他事务增加的数据</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">读脏数据的场景文老师视频里有讲解，例子就是 T2 读取了 T1 尚未提交要回滚的中间的数据。</p></details></div></details><details class="exam-q" data-exam-id="2025年5月-029"><summary><span class="exam-no">第 29 题</span><span class="exam-stem-peek">第二范式是在第一范式的基础上消除了 ()</span></summary><div class="exam-q-body"><p class="exam-stem">第二范式是在第一范式的基础上消除了 ()</p><ul class="exam-opts"><li><b>A</b> 部分函数依赖</li><li><b>B</b> 传递函数依赖</li><li><b>C</b> 多值依赖</li><li><b>D</b> 主键依赖</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">2NF 消除部分依赖，3NF 消除传递依赖，BCNF 消除主属性之间的部分和传递依赖，4NF 消除多值依赖。</p></details></div></details><details class="exam-q" data-exam-id="2025年5月-002"><summary><span class="exam-no">第 2 题</span><span class="exam-stem-peek">某电商平台使用分布式锁解决高并发秒杀场景下的超卖问题，最可能采用的锁实现是（）</span></summary><div class="exam-q-body"><p class="exam-stem">某电商平台使用分布式锁解决高并发秒杀场景下的超卖问题，最可能采用的锁实现是（）</p><ul class="exam-opts"><li><b>A</b> 文件系统互斥锁</li><li><b>B</b> 数据库行级锁</li><li><b>C</b> Redis的SETNX命令</li><li><b>D</b> Java的synchronized关键字</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">Redis的SETNX命令基于高性能内存数据库实现分布式锁，具备高吞吐量、低延迟、支持锁自动过期的特性，是高并发秒杀场景下分布式锁的常用实现；文件锁性能不足、数据库锁易成为瓶颈、synchronized仅适用于单机JVM环境，均不满足场景需求。</p></details></div></details></details><details class="exam-year" data-exam-year="2024年5月"><summary><span class="exam-year-name">2024年5月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2024年5月-059"><summary><span class="exam-no">第 59 题</span><span class="exam-stem-peek">设有员工关系Emp（员工号，姓名，性别，年龄，电话，家庭住址，家庭成员，关系，联系电话）。其中，“家庭成员，关系，联系电…</span></summary><div class="exam-q-body"><p class="exam-stem">设有员工关系Emp（员工号，姓名，性别，年龄，电话，家庭住址，家庭成员，关系，联系电话）。其中，“家庭成员，关系，联系电话”分别记录了员工亲属的姓名、与员工的关系以及联系电话，且一个员工允许有多个家庭成员。为使数据库模式设计更合理，对于员工关系Emp（）。</p><ul class="exam-opts"><li><b>A</b> 只允许记录一个亲属的姓名、与员工的关系以及联系电话</li><li><b>B</b> 可以不作任何处理，因为该关系模式达到了3NF</li><li><b>C</b> 增加多个家庭成员、关系及联系电话字段</li><li><b>D</b> 应该将家庭成员、关系及联系电话加上员工号设计成一个独立的模式</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">一名员工可对应多名亲属，属于典型一对多关系，若全部存放于Emp主表会产生大量数据冗余、更新异常，规范的范式优化方案是拆分出亲属独立关系模式，用员工号作为外键关联员工主表。</p></details></div></details><details class="exam-q" data-exam-id="2024年5月-045"><summary><span class="exam-no">第 45 题</span><span class="exam-stem-peek">已知关系 U(A,B,C,D,E)，函数依赖 F={A→B,B→C,B→E,E→D}，请问该关系模式属于（）</span></summary><div class="exam-q-body"><p class="exam-stem">已知关系 U(A,B,C,D,E)，函数依赖 F={A→B,B→C,B→E,E→D}，请问该关系模式属于（）</p><ul class="exam-opts"><li><b>A</b> 1NF</li><li><b>B</b> 2NF</li><li><b>C</b> 3NF</li><li><b>D</b> BCNF</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">主键A可以唯一确定所有属性，消除了部分函数依赖符合2NF要求；存在跨属性的传递函数依赖，无法满足3NF及BCNF的约束。</p></details></div></details></details><details class="exam-year" data-exam-year="2023年5月"><summary><span class="exam-year-name">2023年5月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2023年5月-043"><summary><span class="exam-no">第 43 题</span><span class="exam-stem-peek">43-44.在关系R(A1, A2, A3) 和 S(A3, A4, A5)上进行关系运算的4个等价的表达式E1、E2、…</span></summary><div class="exam-q-body"><p class="exam-stem">43-44.在关系R(A1, A2, A3) 和 S(A3, A4, A5)上进行关系运算的4个等价的表达式E1、E2、E3 和 E4如下所示：
+$E_1 = \pi_{A1,A4} (\sigma_{A2&lt;&#x27;2022&#x27; \land A4=&#x27;95&#x27;} \cdot (R \bowtie S))$
+$E_2 = \pi_{A1,A4} (\sigma_{A2&lt;&#x27;2022&#x27;}(R) \bowtie \sigma_{A4=&#x27;95&#x27;}(S))$
+$E_3 = \pi_{A1,A4} (\sigma_{A2&lt;&#x27;2022&#x27; \land R.A3=S.A3 \land A4=95&#x27;} \cdot (R \times S))$
+$E_4 = \pi_{A1,A4} (\sigma_{R.A3=S.A3}(\sigma_{A2&lt;&#x27;2022&#x27;}(R) \times \sigma_{A4=&#x27;95&#x27;}(S)))$
+如果严格按照表达式运算顺序，则查询效率最高的是（ ），将该查询转换的SQL语句为: SELECT A1, A4 FROM R, S WHERE ( )。
+（本题为第 1 空）</p><ul class="exam-opts"><li><b>A</b> E1</li><li><b>B</b> E2</li><li><b>C</b> E3</li><li><b>D</b> E4</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">E2先分别对R、S执行筛选操作，大幅压缩参与自然连接的数据量，运算量最小、效率最高；FROM R,S代表笛卡尔积，WHERE子句需要同时补充A2筛选、A4筛选、R与S的A3等值连接三个条件，使用AND逻辑连接。</p></details></div></details><details class="exam-q" data-exam-id="2023年5月-040"><summary><span class="exam-no">第 40 题</span><span class="exam-stem-peek">在数据库的安全机制中，通过建立（ ）使用户只能看到部分数据，从而保护了其它数据的安全性。</span></summary><div class="exam-q-body"><p class="exam-stem">在数据库的安全机制中，通过建立（ ）使用户只能看到部分数据，从而保护了其它数据的安全性。</p><ul class="exam-opts"><li><b>A</b> 索引</li><li><b>B</b> 视图</li><li><b>C</b> 触发器</li><li><b>D</b> 存储过程</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">视图可以对底层物理表做数据筛选封装，限定用户仅能访问授权范围内的数据，屏蔽敏感内容，是数据库常用的访问控制安全手段。</p></details></div></details></details><details class="exam-year" data-exam-year="2022年5月"><summary><span class="exam-year-name">2022年5月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2022年5月-043"><summary><span class="exam-no">第 43 题</span><span class="exam-tag">两空单选</span><span class="exam-tag">2 空</span><span class="exam-stem-peek">给定关系模式R（U,F），U={A1,A2,A3,A4}，F={A1→A2A3, A2A3→A4}，那么在关系R中（43…</span></summary><div class="exam-q-body"><p class="exam-stem">给定关系模式R（U,F），U={A1,A2,A3,A4}，F={A1→A2A3, A2A3→A4}，那么在关系R中<b class="exam-blank">（43）</b>。以下说法错误的是<b class="exam-blank">（44）</b>。
+依赖推导：A2A3联合才能推出A4，单独的A2或A3无法推出A4，因此C选项的推导结论错误。
+（本题为第 1 空）</p><ul class="exam-opts"><li><b>A</b> 有1个候选关键字A1</li><li><b>B</b> 有1个候选关键字A2A3</li><li><b>C</b> 有2个候选关键字A2和A3</li><li><b>D</b> 有2个候选关键字A1和A2A3</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">候选键求解：属性A1从未出现在函数依赖的右侧，A1可以推导出A2、A3，再进一步推出A4，能覆盖全集U，因此唯一候选键是A1；</p></details></div></details><details class="exam-q" data-exam-id="2022年5月-040"><summary><span class="exam-no">第 40 题</span><span class="exam-stem-peek">在数据库设计的需求分析、概念结构设计、逻辑结构设计和物理结构设计的四个阶段中，基本 E-R图是（40）。</span></summary><div class="exam-q-body"><p class="exam-stem">在数据库设计的需求分析、概念结构设计、逻辑结构设计和物理结构设计的四个阶段中，基本 E-R图是（40）。</p><ul class="exam-opts"><li><b>A</b> 需求分析阶段形成的文档，并作为概念结构设计阶段的设计依据</li><li><b>B</b> 逻辑结构设计阶段形成的文档，并作为概念结构设计阶段的设计依据</li><li><b>C</b> 概念结构设计阶段形成的文档，并作为逻辑结构设计阶段的设计依据</li><li><b>D</b> 概念结构设计阶段形成的文档，并作为物理设计阶段的设计依据</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">概念结构设计的核心工作是设计业务概念模型，E-R图是该阶段的标志性产出物，后续会以E-R图为依据开展逻辑结构设计，将实体与联系转换为关系模式。</p></details></div></details></details><details class="exam-year" data-exam-year="2021年5月"><summary><span class="exam-year-name">2021年5月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2021年5月-043"><summary><span class="exam-no">第 43 题</span><span class="exam-stem-peek">给定关系模式R(U,F)，其中：属性集U={A,B,C,D,E,G}，函数依赖集F={A→BC,C→D,A→D,E→G}…</span></summary><div class="exam-q-body"><p class="exam-stem">给定关系模式R(U,F)，其中：属性集U={A,B,C,D,E,G}，函数依赖集F={A→BC,C→D,A→D,E→G}。关系R中（ ）。</p><ul class="exam-opts"><li><b>A</b> 有1个候选码A</li><li><b>B</b> 有1个候选码AE</li><li><b>C</b> 有2个候选码AC和AE</li><li><b>D</b> 有2个候选码CE和AE</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">仅A、E出现在函数依赖左部，AE可通过函数依赖推导出U内全部属性，且AE的真子集A、E都无法覆盖全部属性，因此AE是唯一候选码。</p></details></div></details><details class="exam-q" data-exam-id="2021年5月-040"><summary><span class="exam-no">第 40 题</span><span class="exam-stem-peek">在数据库系统中，一般将事务的执行状态分为五种。若“事务的最后一条语句自动执行后”，事务处于（ ）状态。</span></summary><div class="exam-q-body"><p class="exam-stem">在数据库系统中，一般将事务的执行状态分为五种。若“事务的最后一条语句自动执行后”，事务处于（ ）状态。</p><ul class="exam-opts"><li><b>A</b> 活动</li><li><b>B</b> 部分提交</li><li><b>C</b> 提交</li><li><b>D</b> 失败</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">事务执行完最后一条语句后进入部分提交状态，后续完成数据持久化写入磁盘后才会进入最终的提交状态。</p></details></div></details></details><details class="exam-year" data-exam-year="2020年11月"><summary><span class="exam-year-name">2020年11月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2020年11月-043"><summary><span class="exam-no">第 43 题</span><span class="exam-stem-peek">给定关系模式 R、&lt;U,F&gt;，其中：属性集 U={A,B,C,D,E,G}，函数依赖集 F = {A→BC, C→D, …</span></summary><div class="exam-q-body"><p class="exam-stem">给定关系模式 R、&lt;U,F&gt;，其中：属性集 U={A,B,C,D,E,G}，函数依赖集 F = {A→BC, C→D, AE→G}。若将 R 分解为如下两个关系模式（43），则分解后的关系模式保持函数依赖。</p><ul class="exam-opts"><li><b>A</b> R₁(A,B,C)和R₂(D,E,G)</li><li><b>B</b> R₁(B,C,D,E)和R₂(A,E,G)</li><li><b>C</b> R₁(B,C,D)和R₂(A,E,G)</li><li><b>D</b> R₁(A,B,C,D)和R₂(A,E,G)</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">选项D拆分后，R₁(A,B,C,D)可保留函数依赖{A→BC,C→D}，R₂(A,E,G)可保留{AE→G}，合并后的依赖集和原F完全一致；其余选项拆分后都会丢失部分函数依赖，无法保持依赖。</p></details></div></details><details class="exam-q" data-exam-id="2020年11月-040"><summary><span class="exam-no">第 40 题</span><span class="exam-stem-peek">在数据库系统中，数据的并发控制是指在多用户共享的系统中，协调并发事务的执行，保证数据库的(40)不受破坏，避免用户得到不…</span></summary><div class="exam-q-body"><p class="exam-stem">在数据库系统中，数据的并发控制是指在多用户共享的系统中，协调并发事务的执行，保证数据库的(40)不受破坏，避免用户得到不正确的数据。</p><ul class="exam-opts"><li><b>A</b> 安全性</li><li><b>B</b> 可靠性</li><li><b>C</b> 兼容性</li><li><b>D</b> 完整性</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">并发控制的核心目标是管控多用户并发事务的执行顺序，规避脏读、不可重复读、幻读问题，保障数据库数据的完整性不被破坏。</p></details></div></details></details><details class="exam-year" data-exam-year="2019年5月"><summary><span class="exam-year-name">2019年5月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2019年5月-043"><summary><span class="exam-no">第 43 题</span><span class="exam-stem-peek">给定关系模式R＜U，F＞，其中：属性集U={A,B,C,D,E},函数依赖集F={AC→B,B→DE}，关系R分别有（）…</span></summary><div class="exam-q-body"><p class="exam-stem">给定关系模式R＜U，F＞，其中：属性集U={A,B,C,D,E},函数依赖集F={AC→B,B→DE}，关系R分别有（）。</p><ul class="exam-opts"><li><b>A</b> 1个非主属性和4个主属性</li><li><b>B</b> 2个非主属性和3个主属性</li><li><b>C</b> 3个非主属性和2个主属性</li><li><b>D</b> 4个非主属性和1个主属性</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">该关系唯一候选键为AC，主属性是候选键包含的A、C共2个；剩余B、D、E为非主属性，共3个。</p></details></div></details><details class="exam-q" data-exam-id="2019年5月-040"><summary><span class="exam-no">第 40 题</span><span class="exam-stem-peek">描述企业应用中的实体及其联系，属于数据库设计的（）阶段。</span></summary><div class="exam-q-body"><p class="exam-stem">描述企业应用中的实体及其联系，属于数据库设计的（）阶段。</p><ul class="exam-opts"><li><b>A</b> 需求分析</li><li><b>B</b> 概念设计</li><li><b>C</b> 逻辑设计</li><li><b>D</b> 物理设计</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">数据库概念设计阶段通过E-R图抽象业务场景里的实体、属性以及实体间联系，构建脱离具体数据库实现的概念模型；逻辑设计是将E-R图转化为关系数据表结构。</p></details></div></details></details></details><details class="exam-subject" data-exam-subject="案例"><summary><span class="exam-subject-name">📋 案例分析</span><span class="exam-subject-n">2 题</span><span class="exam-subject-tip">情景简答 · 采分点三色标记</span></summary><div class="exam-bar"><span class="exam-bar-label">📋 案例分析</span><span class="exam-bar-stat">共 <b>2</b> 题 · 情景简答</span></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">18</span>考点：三级模式与两级映像 / 数据模型 / ER 模型 / 关系规范化<br>📅 时间：2025-08-18 上午 📍 地点：项目组数据模型评审<br>👤 人物：甘工（乙方·系统分析师）、彭工（乙方·架构设计师）、傅工（乙方·开发）、邓经理（甲方·运维经理）<br>⚡ 冲突：傅工画了一张大表塞下所有字段，被指出冗余与更新异常<br>难度：★★★　总分：9 分　建议用时：25 分钟<br>背景：傅工把 ER 图投影出来，得意地说：&quot;一张工单表搞定，客户姓名、坐席姓名、技能组名称都在里面，查询不用 join，多快。&quot; 彭工当场摇头：&quot;改一次技能组名称，你要更新几万行工单；删掉最后一张工单，客户信息也没了。这叫更新异常和删除异常。&quot; 邓经理补了一刀：&quot;而且坐席姓名在每张工单里重复存，存储也浪费。&quot; 甘工接过话：&quot;这表只满足第一范式，得拆。拆到什么程度、怎么保证拆完不丢数据、依赖关系还在不在——这才是今天要定的。&quot;<br>补充资料：- 客户：客户编号、姓名、所属地市、客户等级（VIP/普通）； - 坐席：坐席工号、姓名、技能组编码、技能组名称、所属职场； - 工单：工单编号、客户编号、受理坐席工号、故障类型、紧急程度、创建时间、完成时间、处理结果、满意度； - 一个客户可有多张工单；一个坐席可受理多张工单；一个技能组包含多名坐席。 甘工初步设计了一张大表：<code>工单表(工单编号, 客户编号, 客户姓名, 客户等级, 坐席工号, 坐席姓名, 技能组编码, 技能组名称, 故障类型, 紧急程度, 创建时间, 完成时间, 处理结果, 满意度)</code>。<br>问题 1：请说明数据库系统的三级模式结构（外模式、模式、内模式）与两级映像，并说明其带来的数据独立性；再说明数据模型的三个层次。（9分）<br>问题 2：（1）请画出/描述本系统的 E-R 模型（实体、属性、联系及基数）；<br>问题 3：（2）指出甘工设计的&quot;工单表&quot;存在哪些问题（从函数依赖与范式角度分析），并将其分解到 BCNF；<br>问题 4：（3）说明分解后是否无损、是否保持函数依赖。</p><ul class="exam-questions"><li><b>问题 1</b> 请说明数据库系统的<strong>三级模式结构</strong>（外模式、模式、内模式）与<strong>两级映像</strong>，并说明其带来的<strong>数据独立性</strong>；再说明<strong>数据模型</strong>的三个层次。（9分）</li><li><b>问题 2</b> （1）请画出/描述本系统的 <strong>E-R 模型</strong>（实体、属性、联系及基数）；</li><li><b>问题 3</b> （2）指出甘工设计的&quot;工单表&quot;存在哪些问题（从函数依赖与范式角度分析），并将其分解到 <strong>BCNF</strong>；</li><li><b>问题 4</b> （3）说明分解后是否无损、是否保持函数依赖。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点（9分）：<br>- 🔴 核心：🔴 核心（三级模式）：；外模式（子模式/用户模式）：某个用户或应用所看到的数据视图，一个数据库可有多个外模式（如坐席只看脱敏后的客户视图，管理员看全量视图）；；模式（逻辑模式）：全体数据的整体逻辑结构与描述，是数据库的核心，只有一个；；内模式（存储模式）：数据在存储介质上的物理结构与存储方式（索引、压缩、分区、文件组织）。<br>- 🟡 支撑：🔴 核心（两级映像与独立性）：；外模式/模式映像：模式改变时，只需调整映像即可保持外模式不变 → 数据的逻辑独立性；；模式/内模式映像：存储结构改变时，只需调整映像即可保持模式不变 → 数据的物理独立性。<br>- 🟡 支撑：坐席工作台只展示脱敏号码（外模式 A），质检系统可查看完整通话明细（外模式 B），二者共享同一逻辑模式；把话单表改为分区表（内模式变化）不影响应用，体现了物理独立性。<br>- 🔴 核心：①概念模型（面向用户与业务，如 E-R 模型）；②逻辑模型（面向 DBMS 实现，如关系模型、层次/网状模型、面向对象模型）；③物理模型（面向存储，描述存储结构与存取方法）。<br>- 🟢 加分：三级模式的价值是&quot;把用户视图、整体逻辑、物理存储三者解耦&quot;，这也是为什么&quot;加一个字段/换存储引擎&quot;不必重写所有应用。<br>- 🟢 加分：解析·范式题要&quot;写依赖 → 判范式 → 列更新异常 → 分解 → 验证无损/依赖&quot;。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）E-R 模型）：<br>问题 3｜参考答案要点：<br>- 🔴 核心：🔴 核心（2）问题与分解）：<br>问题 4｜参考答案要点：<br>- 🔴 核心：🔴 核心（3）无损与依赖）：</div></details></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">21</span>📅 时间：2026-03-05 上午 📍 地点：集团运营分析会<br>👤 人物：甘工（乙方·系统分析师）、洪经理（甲方·客服部经理）、徐总监（甲方·数智化信息部总监）、李工（乙方·项目经理）<br>⚡ 冲突：客服部与运营部各出一份&quot;接通率&quot;报表，数字差了 7 个百分点，会上互相质疑数据造假<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：洪经理把两份报表投影出来：&quot;我这边统计 2 月接通率 92%，运营部给领导报的是 85%。同一个月、同一批电话，差七个点，这不是开玩笑吗？&quot; 运营部同事反驳：&quot;我们按&#x27;呼入量里被接起的&#x27;算，你们是不是把 AI 接的也算进去了？&quot; 徐总监脸色不好看：&quot;数据不准，我怎么向集团汇报？&quot; 甘工心里清楚：这不是造假，是口径不一致——有人算&quot;AI 接起 + 人工接起 / 总呼入&quot;，有人只算人工；有人排除了 3 秒内的早释，有人没排除；还有人把呼损重试算成了两次呼入。<br>补充资料：分子 → AI 接起 + 人工接起 → 仅人工接起 → AI 接起 + 人工接起；分母 → 总呼入量 → 总呼入量 → 有效呼入量；是否排除 3 秒早释 → 未排除 → 未排除 → 排除；是否排除重复呼入 → 未排除 → 未排除 → 排除（同号 5 分钟内计 1 次）；结果 → 92% → 85% → 待重算（预计 88%~89%） 治理要求：指标在 DWD/ADS 层只计算一次，报表标注口径与数据时间。<br>问题 1：（1）说明数据仓库的特征与体系结构，说明为什么需要独立于业务库建仓；<br>问题 2：（2）说明 OLAP 与 OLTP 的区别及 OLAP 基本操作；<br>问题 3：（3）设计本项目的 ETL 与数据分层，解决口径不一致；<br>问题 4：（4）说明数据挖掘在本项目可用于哪些分析。</p><ul class="exam-questions"><li><b>问题 1</b> （1）说明<strong>数据仓库</strong>的特征与体系结构，说明为什么需要独立于业务库建仓；</li><li><b>问题 2</b> （2）说明 <strong>OLAP</strong> 与 <strong>OLTP</strong> 的区别及 <strong>OLAP 基本操作</strong>；</li><li><b>问题 3</b> （3）设计本项目的 <strong>ETL 与数据分层</strong>，解决口径不一致；</li><li><b>问题 4</b> （4）说明数据挖掘在本项目可用于哪些分析。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）数据仓库）：特征——面向主题、集成的、相对稳定（非易失）、反映历史变化。体系结构：数据源 → ETL → 存储与管理（ODS/DWD/DWS/ADS 分层 + 数据集市）→ OLAP 引擎 → 前端展现（报表、看板、即席查询），配套元数据管理。<br>- 🟢 加分：解析·数据仓库题要&quot;特征 + 体系 + OLAP 操作 + 分层 + 指标字典治理&quot;。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🔴 核心（2）OLAP vs OLTP）：OLTP 面向事务——当前的、细节的、可更新的、面向应用，高并发短事务，规范化设计（3NF/BCNF）；OLAP 面向分析——历史的、综合的、只读为主、面向主题，低并发长查询，反规范化（星型/雪花模型）。<br>问题 3｜参考答案要点：<br>- 🔴 核心：🟡 支撑（3）ETL 与分层设计）：<br>问题 4｜参考答案要点：<br>- 🔴 核心：🔴 核心（4）数据挖掘应用）：主要任务——分类、聚类、回归/预测、关联规则、序列模式、异常检测、文本挖掘。</div></details></div></details><details class="exam-subject" data-exam-subject="论文"><summary><span class="exam-subject-name">📄 论文写作</span><span class="exam-subject-n">2 题</span><span class="exam-subject-tip">论述题 · 先写再看题</span></summary><div class="exam-bar"><span class="exam-bar-label">📄 论文写作</span><span class="exam-bar-stat">共 <b>2</b> 题 · 论述题</span></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与转化交接的信息系统项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 阐述数据抽取、数据转换、迁移后数据校验三项活动的内涵与实施要点。</li><li><b>问题 3</b> 说明项目中数据转换迁移的实施过程、遇到的问题以及对应的解决方法。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 数据工程</span><span class="exam-lv">⭐⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与设计、优化的数据库项目（项目的背景、数据规模、性能要求、数据库类型、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细论述数据库建模的方法（ER 模型、关系模型）、索引设计原则、查询优化技巧（执行计划分析、SQL 改写）、分库分表设计要点。</li><li><b>问题 3</b> 结合项目实例，论述数据库优化的实施过程、性能测试方法，分析优化效果及后续改进方向。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 数据工程</span><span class="exam-lv">⭐</span></div></div></details></section>
     <div class="wrongbook"></div>
     <div class="keyhint">
   <span class="keyhint-title">键盘快捷键</span>
@@ -3024,6 +3193,77 @@ html{scroll-padding-top:80px}
     el.textContent = n
   }
 
+  // ══════════════════════════════════════════
+  // 12. 历年真题：批量展开 + 记忆展开状态
+  // ══════════════════════════════════════════
+  const Exam = {
+    KEY: 'examOpen',
+    init() {
+      const root = document.querySelector('.exam')
+      if (!root) return
+      const chapter = root.dataset.examChapter || 'x'
+
+      // 恢复上次展开状态：{ "H07": { "2025年5月": true, ... } }
+      const saved = store.get(this.KEY, {}) || {}
+      const mine = saved[chapter] || {}
+      root.querySelectorAll('.exam-year').forEach(y => {
+        const name = y.dataset.examYear
+        // 默认：展开最近 1 套（新年优先），其余收起
+        const open = (name in mine) ? mine[name] : false
+        if (open) y.open = true
+        y.addEventListener('toggle', () => {
+          mine[name] = y.open
+          saved[chapter] = mine
+          store.set(this.KEY, saved)
+        })
+      })
+      // 单题的"看过答案"状态也要记（避免重复点开）
+      const seen = store.get('examSeen', {}) || {}
+      root.querySelectorAll('.exam-q').forEach(qd => {
+        const qid = qd.dataset.examId
+        if (seen[qid]) {
+          const a = qd.querySelector('.exam-ans')
+          if (a) a.open = true
+        }
+        const ans = qd.querySelector('.exam-ans')
+        if (ans) ans.addEventListener('toggle', () => {
+          if (ans.open) { seen[qid] = 1; store.set('examSeen', seen) }
+        })
+      })
+
+      // 批量展开/收起按钮
+      root.querySelectorAll('.exam-op').forEach(btn => {
+        btn.addEventListener('click', e => {
+          e.preventDefault()
+          const openAll = btn.dataset.examAll === '1'
+          root.querySelectorAll('.exam-subject,.exam-year').forEach(d => { d.open = openAll })
+          root.querySelectorAll('.exam-ans').forEach(d => {
+            d.open = openAll
+            if (openAll && d.parentElement.dataset.examId) seen[d.parentElement.dataset.examId] = 1
+          })
+          if (openAll) store.set('examSeen', seen)
+          // 同步年份级记忆
+          root.querySelectorAll('.exam-year').forEach(y => { mine[y.dataset.examYear] = y.open })
+          saved[chapter] = mine
+          store.set(this.KEY, saved)
+        })
+      })
+
+      // 快捷键：E = 跳到真题区块（不与既有键冲突）
+      document.addEventListener('keydown', e => {
+        const t = e.target
+        if (t && t.nodeType === 1 && t.matches('input,textarea,select,[contenteditable]')) return
+        if (e.metaKey || e.ctrlKey || e.altKey) return
+        if (e.key.toLowerCase() === 'e') {
+          e.preventDefault()
+          root.scrollIntoView({ behavior: 'smooth', block: 'start' })
+          const y = root.querySelector('.exam-year')
+          if (y) y.open = true
+        }
+      })
+    }
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
     Theme.init()
     FontSize.init()
@@ -3039,6 +3279,7 @@ html{scroll-padding-top:80px}
     BackTop.init()
     CopyCode.init()
     ReadTime.init()
+    Exam.init()
     updateAnsweredStat()
     window.addEventListener('quiz:update', updateAnsweredStat)
     renderMermaid()

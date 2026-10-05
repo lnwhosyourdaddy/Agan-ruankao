@@ -7,7 +7,7 @@
 <title>第 11 小时 · 数据库系统（三）· 设计、仓库与 NoSQL · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
-<meta name="build-stamp" content="2026-10-05 08:06:29">
+<meta name="build-stamp" content="2026-10-05 11:44:51">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -1927,6 +1927,166 @@ table.zebra tbody tr:hover{background:var(--accent-soft-2)}
 /* ── 平滑滚动偏移（锚点跳转不卡顶栏下） ── */
 html{scroll-padding-top:80px}
 @media(max-width:760px){html{scroll-padding-top:70px}}
+
+/* ═══════════════════════════════════════════════════════════════
+   历年真题区块 · 三级折叠（原生 details，零 JS）
+   ═══════════════════════════════════════════════════════════════ */
+.exam{margin:2.2em 0 1.6em}
+
+/* ── 统计条：常驻不折叠，避免"用户不知道里面有真题"而白做 ── */
+.exam-bar{
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  padding:12px 16px;margin-bottom:10px;
+  background:linear-gradient(180deg,var(--bg-card) 0%,var(--bg-alt) 100%);
+  border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow-1);
+}
+.exam-bar-label{font-weight:700;font-size:14px;color:var(--accent)}
+.exam-bar-stat{font-size:12.5px;color:var(--fg-3);flex:1;min-width:140px}
+.exam-bar-stat b{color:var(--fg-2);font-variant-numeric:tabular-nums}
+.exam-bar-ops{display:flex;gap:6px}
+.exam-op{
+  padding:4px 11px;font:inherit;font-size:12px;cursor:pointer;
+  background:var(--bg-card);border:1px solid var(--line-2);
+  border-radius:999px;color:var(--fg-2);
+  transition:border-color .18s var(--ease),color .18s var(--ease),background .18s var(--ease);
+}
+.exam-op:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+
+/* ── 科目级折叠 ── */
+.exam-subject{
+  border:1px solid var(--line);border-radius:var(--radius);
+  background:var(--bg-card);overflow:hidden;
+}
+.exam-subject>summary{
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  padding:12px 16px;cursor:pointer;list-style:none;
+  font-weight:600;color:var(--fg-2);
+  transition:background .18s var(--ease),color .18s var(--ease);
+}
+.exam-subject>summary::-webkit-details-marker{display:none}
+.exam-subject>summary:hover{background:var(--accent-soft);color:var(--accent)}
+.exam-subject[open]>summary{border-bottom:1px solid var(--line);background:var(--bg-alt)}
+.exam-subject-name::before{content:'▸ ';display:inline-block;transition:transform .2s var(--ease)}
+.exam-subject[open] .exam-subject-name::before{transform:rotate(90deg)}
+.exam-subject-n{font-size:12px;color:var(--fg-3);font-variant-numeric:tabular-nums}
+.exam-subject-tip{margin-left:auto;font-size:11.5px;color:var(--fg-3);opacity:.8}
+
+/* ── 年份级折叠 ── */
+.exam-year{border-bottom:1px solid var(--line)}
+.exam-year:last-child{border-bottom:0}
+.exam-year>summary{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 16px 9px 30px;cursor:pointer;list-style:none;
+  font-size:13.5px;color:var(--fg-2);
+  transition:background .16s var(--ease),color .16s var(--ease);
+}
+.exam-year>summary::-webkit-details-marker{display:none}
+.exam-year>summary:hover{background:var(--accent-soft);color:var(--accent)}
+.exam-year[open]>summary{background:var(--bg-alt)}
+.exam-year-name::before{content:'▸ ';display:inline-block;transition:transform .2s var(--ease);color:var(--fg-3)}
+.exam-year[open] .exam-year-name::before{transform:rotate(90deg)}
+.exam-year-n{font-size:11.5px;color:var(--fg-3);font-variant-numeric:tabular-nums}
+
+/* ── 单题折叠 ── */
+.exam-q{border-top:1px solid var(--line)}
+.exam-q>summary{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:9px 16px 9px 46px;cursor:pointer;list-style:none;
+  font-size:13.5px;line-height:1.6;color:var(--fg-2);
+  transition:background .16s var(--ease);
+}
+.exam-q>summary::-webkit-details-marker{display:none}
+.exam-q>summary:hover{background:var(--accent-soft)}
+.exam-q[open]>summary{background:var(--bg-alt)}
+.exam-q>summary::before{
+  content:'＋';flex-shrink:0;width:1.1em;text-align:center;
+  color:var(--fg-3);font-size:12px;line-height:1.5;
+}
+.exam-q[open]>summary::before{content:'－';color:var(--accent)}
+.exam-no{
+  flex-shrink:0;font-size:11px;color:var(--fg-3);
+  font-variant-numeric:tabular-nums;padding-top:2px;min-width:44px;
+}
+.exam-tag{
+  flex-shrink:0;font-size:10.5px;padding:1px 6px;border-radius:4px;
+  background:var(--warn-bg);color:var(--warn-fg);border:1px solid var(--warn-line);
+}
+.exam-stem-peek{
+  flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  color:var(--fg-2);
+}
+.exam-q[open] .exam-stem-peek{color:var(--fg)}
+.exam-q-body{padding:4px 16px 16px 46px}
+.exam-stem{margin:.6em 0;font-size:14.5px;line-height:1.8;color:var(--fg)}
+.exam-blank{color:var(--danger);padding:0 1px}
+.exam-opts{list-style:none;margin:.5em 0 .9em;padding:0}
+/* ⚠️ 必须清掉全局 `ul>li::before` 的圆点（本站正文列表有项目符号），
+   否则真题选项前会多出一个小圆点，位置还和字母块错开 */
+.exam-opts>li::before{content:none !important}
+.exam-opts li{
+  position:relative;padding:4px 0 4px 26px;font-size:14px;line-height:1.7;
+  border-bottom:1px dashed var(--line);
+}
+.exam-opts li:last-child{border-bottom:0}
+.exam-opts b{
+  position:absolute;left:0;top:4px;
+  display:inline-flex;align-items:center;justify-content:center;
+  width:19px;height:19px;border-radius:5px;
+  background:var(--bg-alt);border:1px solid var(--line-2);
+  font-size:11px;font-weight:700;color:var(--fg-3);
+}
+
+/* ── 答案（默认再折叠一层）── */
+.exam-ans{margin-top:.6em}
+.exam-ans>summary{
+  display:inline-flex;align-items:center;gap:6px;cursor:pointer;list-style:none;
+  padding:4px 12px;font-size:12px;
+  background:var(--accent-soft);border:1px solid var(--line-2);
+  border-radius:999px;color:var(--accent);
+  transition:background .18s var(--ease),border-color .18s var(--ease);
+}
+.exam-ans>summary::-webkit-details-marker{display:none}
+.exam-ans>summary:hover{background:var(--accent-soft-2);border-color:var(--accent)}
+.exam-ans[open]>summary{margin-bottom:8px}
+.exam-ans-line{margin:.4em 0;font-size:14px;color:var(--fg)}
+.exam-ans-line b{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:26px;height:24px;padding:0 8px;margin-left:4px;
+  border-radius:6px;background:var(--tip-bg);color:var(--tip-fg);
+  border:1px solid var(--tip-line);font-weight:700;
+}
+.exam-exp{margin:.4em 0;font-size:13.5px;line-height:1.8;color:var(--fg-2)}
+
+/* ── 窄屏 ── */
+@media(max-width:760px){
+  .exam-bar{padding:10px 12px;gap:8px}
+  .exam-bar-label{font-size:13px}
+  .exam-bar-stat{font-size:11.5px;flex-basis:100%;order:3;min-width:0}
+  .exam-bar-ops{margin-left:auto}
+  .exam-subject-tip{display:none}
+  .exam-q>summary{padding-left:16px;flex-wrap:wrap}
+  .exam-q>summary::before{display:none}
+  .exam-no{min-width:0}
+  .exam-q-body{padding-left:16px}
+  .exam-year>summary{padding-left:20px}
+  .exam-stem-peek{white-space:normal;flex-basis:100%}
+  .exam-opts li{font-size:13.5px}
+}
+
+/* ── 打印：全部自动展开（服务"可打印带水印"卖点）── */
+@media print{
+  .exam-bar,.exam-op,.exam-ans>summary{display:none !important}
+  .exam-subject,.exam-year,.exam-q{border:0 !important;background:none !important}
+  .exam-subject>summary,.exam-year>summary{
+    padding:6pt 0;background:none !important;border-bottom:1pt solid #999;
+  }
+  .exam-subject-name::before,.exam-year-name::before,.exam-q>summary::before{content:'' !important}
+  .exam-q-body,.exam-ans[open] > div,.exam-ans > div{display:block !important}
+  .exam-q{break-inside:avoid;page-break-inside:avoid}
+  .exam-stem,.exam-opts li{font-size:9.5pt}
+  .exam-exp{font-size:8.5pt;color:#333}
+}
 </style>
 </head>
 <body>
@@ -2400,6 +2560,15 @@ html{scroll-padding-top:80px}
   </div>
 </div>
 </div>
+    <section class="exam" id="exam" data-exam-chapter="5" data-exam-hour="H11"><div class="exam-bar"><span class="exam-bar-label">📚 历年真题</span><span class="exam-bar-stat">本章共 <b>52</b> 题 · 本学时 <b>17</b> 题（其余见同章其他学时）</span><span class="exam-bar-ops"><button type="button" class="exam-op" data-exam-all="1">全部展开</button><button type="button" class="exam-op" data-exam-all="0">全部收起</button></span></div><details class="exam-subject" data-exam-subject="综合知识"><summary><span class="exam-subject-name">📝 综合知识</span><span class="exam-subject-n">17 题</span><span class="exam-subject-tip">按年份展开 · 单题可点开看答案</span></summary><details class="exam-year" data-exam-year="2026年5月"><summary><span class="exam-year-name">2026年5月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2026年5月-049"><summary><span class="exam-no">第 49 题</span><span class="exam-stem-peek">数据库恢复时，用于重做已提交事务的是</span></summary><div class="exam-q-body"><p class="exam-stem">数据库恢复时，用于重做已提交事务的是</p><ul class="exam-opts"><li><b>A</b> Undo Log</li><li><b>B</b> Redo Log</li><li><b>C</b> Binlog</li><li><b>D</b> Checkpoint</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">Redo Log重做已提交事务；Undo Log回滚未提交事务。</p></details></div></details><details class="exam-q" data-exam-id="2026年5月-012"><summary><span class="exam-no">第 12 题</span><span class="exam-stem-peek">在关系代数中，根据条件查找若干元组的操作是</span></summary><div class="exam-q-body"><p class="exam-stem">在关系代数中，根据条件查找若干元组的操作是</p><ul class="exam-opts"><li><b>A</b> 投影</li><li><b>B</b> 连接</li><li><b>C</b> 选择</li><li><b>D</b> 除法</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">选择操作筛选数据表的行（元组），投影筛选列，连接用于多表关联。</p></details></div></details></details><details class="exam-year" data-exam-year="2025年5月"><summary><span class="exam-year-name">2025年5月</span><span class="exam-year-n">3 题</span></summary><details class="exam-q" data-exam-id="2025年5月-057"><summary><span class="exam-no">第 57 题</span><span class="exam-stem-peek">关于数据库事务 ACID 四大特性的描述中，() 属于原子性</span></summary><div class="exam-q-body"><p class="exam-stem">关于数据库事务 ACID 四大特性的描述中，() 属于原子性</p><ul class="exam-opts"><li><b>A</b> 要么全部执行，要么全部不执行。</li><li><b>B</b> 事务发生后数据是一致的</li><li><b>C</b> 任一事务的更新操作直到其成功提交的整个过程对其他事务都是不可见的</li><li><b>D</b> 事务操作的结果是持续性的</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">原子性的核心含义是事务不可分割，事务内操作要么全部执行成功，要么全部回滚不执行；一致性指事务前后数据约束保持一致，隔离性指事务操作互相隔离不可见，持久性指提交后的修改永久生效。</p></details></div></details><details class="exam-q" data-exam-id="2025年5月-030"><summary><span class="exam-no">第 30 题</span><span class="exam-stem-peek">第三范式是在第二范式基础上消除了 ()</span></summary><div class="exam-q-body"><p class="exam-stem">第三范式是在第二范式基础上消除了 ()</p><ul class="exam-opts"><li><b>A</b> 部分函数依赖</li><li><b>B</b> 传递函数依赖</li><li><b>C</b> 多值依赖</li><li><b>D</b> 主键依赖</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">2NF 消除部分依赖，3NF 消除传递依赖，BCNF 消除主属性之间的部分和传递依赖，4NF 消除多值依赖。</p></details></div></details><details class="exam-q" data-exam-id="2025年5月-011"><summary><span class="exam-no">第 11 题</span><span class="exam-stem-peek">关系数据库外键约束，（）说法是错误的。</span></summary><div class="exam-q-body"><p class="exam-stem">关系数据库外键约束，（）说法是错误的。</p><ul class="exam-opts"><li><b>A</b> 外键约束提升数据一致性</li><li><b>B</b> 外键必须引用其它表的主键</li><li><b>C</b> 外键约束会降低插入性能</li><li><b>D</b> 外键字段允许为空</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">外键约束，是指外键应该引用其他表的主键，或者可以为空；B错在绝对了，外键也可以为空。</p></details></div></details></details><details class="exam-year" data-exam-year="2024年5月"><summary><span class="exam-year-name">2024年5月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2024年5月-062"><summary><span class="exam-no">第 62 题</span><span class="exam-stem-peek">在关系代数运算中，（）能够按条件查询出符合条件的元组</span></summary><div class="exam-q-body"><p class="exam-stem">在关系代数运算中，（）能够按条件查询出符合条件的元组</p><ul class="exam-opts"><li><b>A</b> 投影</li><li><b>B</b> 选择</li><li><b>C</b> 自然连接</li><li><b>D</b> 笛卡尔积</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">关系代数里的选择运算会根据筛选条件逐行过滤关系元组，保留符合要求的记录；投影用于选取指定属性列，自然连接实现多表匹配合并，笛卡尔积会生成两张表的全量元组组合。</p></details></div></details><details class="exam-q" data-exam-id="2024年5月-046"><summary><span class="exam-no">第 46 题</span><span class="exam-stem-peek">已知两个元组 R 和 S，那么 R∨S 等价于（）</span></summary><div class="exam-q-body"><p class="exam-stem">已知两个元组 R 和 S，那么 R∨S 等价于（）</p><ul class="exam-opts"><li><b>A</b> ¬R∧¬S</li><li><b>B</b> ¬(R∧¬S)</li><li><b>C</b> ¬(¬R∧S)</li><li><b>D</b> ¬(¬R∧¬S)</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">根据布尔逻辑德摩根定律：R∨S = ¬(¬R ∧ ¬S)，可完成逻辑运算等价转换。</p></details></div></details></details><details class="exam-year" data-exam-year="2023年5月"><summary><span class="exam-year-name">2023年5月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2023年5月-044"><summary><span class="exam-no">第 44 题</span><span class="exam-stem-peek">43-44.在关系R(A1, A2, A3) 和 S(A3, A4, A5)上进行关系运算的4个等价的表达式E1、E2、…</span></summary><div class="exam-q-body"><p class="exam-stem">43-44.在关系R(A1, A2, A3) 和 S(A3, A4, A5)上进行关系运算的4个等价的表达式E1、E2、E3 和 E4如下所示：
+$E_1 = \pi_{A1,A4} (\sigma_{A2&lt;&#x27;2022&#x27; \land A4=&#x27;95&#x27;} \cdot (R \bowtie S))$
+$E_2 = \pi_{A1,A4} (\sigma_{A2&lt;&#x27;2022&#x27;}(R) \bowtie \sigma_{A4=&#x27;95&#x27;}(S))$
+$E_3 = \pi_{A1,A4} (\sigma_{A2&lt;&#x27;2022&#x27; \land R.A3=S.A3 \land A4=95&#x27;} \cdot (R \times S))$
+$E_4 = \pi_{A1,A4} (\sigma_{R.A3=S.A3}(\sigma_{A2&lt;&#x27;2022&#x27;}(R) \times \sigma_{A4=&#x27;95&#x27;}(S)))$
+如果严格按照表达式运算顺序，则查询效率最高的是（ ），将该查询转换的SQL语句为: SELECT A1, A4 FROM R, S WHERE ( )。
+（本题为第 2 空）</p><ul class="exam-opts"><li><b>A</b> R.A2 &lt;&#x27;2022&#x27; OR S.A4 &lt;&#x27;95&#x27;</li><li><b>B</b> R.A2 &lt;&#x27;2022&#x27; AND S.A4 &lt;95</li><li><b>C</b> R.A2 &lt;&#x27;2022&#x27; OR S.A4 &lt;95&#x27; OR R.A3=S.A3</li><li><b>D</b> R.A2 &lt;2022 AND S.A4 &lt;95 AND R.A3=S.A3</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">E2先分别对R、S执行筛选操作，大幅压缩参与自然连接的数据量，运算量最小、效率最高；FROM R,S代表笛卡尔积，WHERE子句需要同时补充A2筛选、A4筛选、R与S的A3等值连接三个条件，使用AND逻辑连接。</p></details></div></details><details class="exam-q" data-exam-id="2023年5月-041"><summary><span class="exam-no">第 41 题</span><span class="exam-stem-peek">事务的（ ）是指“当多个事务并发执行时，任一事务的更新操作直到其成功提交的整个过程，对其他事务都是不可见的”。</span></summary><div class="exam-q-body"><p class="exam-stem">事务的（ ）是指“当多个事务并发执行时，任一事务的更新操作直到其成功提交的整个过程，对其他事务都是不可见的”。</p><ul class="exam-opts"><li><b>A</b> 原子性</li><li><b>B</b> 一致性</li><li><b>C</b> 隔离性</li><li><b>D</b> 持久性</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">隔离性的定义就是并发场景下，事务未提交的更新对其他事务不可见；原子性强调事务要么全部执行成功、要么全部回滚；一致性保证执行前后数据库约束不被破坏；持久性指提交后的修改永久生效。</p></details></div></details></details><details class="exam-year" data-exam-year="2022年5月"><summary><span class="exam-year-name">2022年5月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2022年5月-044"><summary><span class="exam-no">第 44 题</span><span class="exam-tag">两空单选</span><span class="exam-tag">2 空</span><span class="exam-stem-peek">给定关系模式R（U,F），U={A1,A2,A3,A4}，F={A1→A2A3, A2A3→A4}，那么在关系R中（43…</span></summary><div class="exam-q-body"><p class="exam-stem">给定关系模式R（U,F），U={A1,A2,A3,A4}，F={A1→A2A3, A2A3→A4}，那么在关系R中<b class="exam-blank">（43）</b>。以下说法错误的是<b class="exam-blank">（44）</b>。
+依赖推导：A2A3联合才能推出A4，单独的A2或A3无法推出A4，因此C选项的推导结论错误。
+（本题为第 2 空）</p><ul class="exam-opts"><li><b>A</b> 根据F中“A1→A2A3”，可以得出“A1→A2”</li><li><b>B</b> 根据F中“A1→A2A3”，可以得出“A1→A3”</li><li><b>C</b> 根据F中“A2A3→A4”，可以得出“A2→A4，A3→A4”</li><li><b>D</b> 根据F中“A1→A2A3，A2A3→A4”，可以得出“A1→A4”</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">候选键求解：属性A1从未出现在函数依赖的右侧，A1可以推导出A2、A3，再进一步推出A4，能覆盖全集U，因此唯一候选键是A1；</p></details></div></details><details class="exam-q" data-exam-id="2022年5月-041"><summary><span class="exam-no">第 41 题</span><span class="exam-stem-peek">某高校信息系统采用分布式数据库系统，该系统中“当某一场地故障时，系统可以使用其它场地上的副本而不至于使整个系统瘫痪”和“…</span></summary><div class="exam-q-body"><p class="exam-stem">某高校信息系统采用分布式数据库系统，该系统中“当某一场地故障时，系统可以使用其它场地上的副本而不至于使整个系统瘫痪”和“数据在不同场地上的存储”分别称为分布式数据库的（41）。</p><ul class="exam-opts"><li><b>A</b> 共享性和分布性</li><li><b>B</b> 自治性和分布性</li><li><b>C</b> 自治性和可用性</li><li><b>D</b> 可用性和分布性</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">场地故障可通过副本保障系统不瘫痪，体现了分布式数据库的<strong>可用性</strong>；数据分散存储在不同场地，体现了<strong>分布性</strong>。</p></details></div></details></details><details class="exam-year" data-exam-year="2021年5月"><summary><span class="exam-year-name">2021年5月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2021年5月-044"><summary><span class="exam-no">第 44 题</span><span class="exam-stem-peek">给定关系模式R(U,F)，其中：属性集U={A,B,C,D,E,G}，函数依赖集F={A→BC,C→D,A→D,E→G}…</span></summary><div class="exam-q-body"><p class="exam-stem">给定关系模式R(U,F)，其中：属性集U={A,B,C,D,E,G}，函数依赖集F={A→BC,C→D,A→D,E→G}，函数依赖集F中（ ）。</p><ul class="exam-opts"><li><b>A</b> 存在传递依赖，但不存在冗余函数依赖</li><li><b>B</b> 既不存在传递依赖，也不存在冗余函数依赖</li><li><b>C</b> 存在传递依赖，并且存在冗余函数依赖A→D</li><li><b>D</b> 不存在传递依赖，但存在冗余函数依赖A→D</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">由A→C、C→D可推出传递依赖A→D，因此F中直接给出的A→D属于冗余的函数依赖，可通过传递关系推导得到。</p></details></div></details><details class="exam-q" data-exam-id="2021年5月-041"><summary><span class="exam-no">第 41 题</span><span class="exam-stem-peek">某证券公司股票交易系统采用分布式数据库，这样本地客户的交易业务能够在本地正常进行，而不需要依赖于其他场地数据库，这属于分…</span></summary><div class="exam-q-body"><p class="exam-stem">某证券公司股票交易系统采用分布式数据库，这样本地客户的交易业务能够在本地正常进行，而不需要依赖于其他场地数据库，这属于分布式数据库的（ ）特点。</p><ul class="exam-opts"><li><b>A</b> 共享性</li><li><b>B</b> 分布性</li><li><b>C</b> 可用性</li><li><b>D</b> 自治性</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">自治性的核心定义是每个场地节点具备独立处理本地业务、管理本地数据的能力，无需依赖其他场地的数据库，题干场景完全匹配该特性。</p></details></div></details></details><details class="exam-year" data-exam-year="2020年11月"><summary><span class="exam-year-name">2020年11月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2020年11月-044"><summary><span class="exam-no">第 44 题</span><span class="exam-stem-peek">将 Teachers 表的查询权限授予用户 U1 和 U2，并允许该用户将此权限授予其他用户。实现此功能的 SQL 语句…</span></summary><div class="exam-q-body"><p class="exam-stem">将 Teachers 表的查询权限授予用户 U1 和 U2，并允许该用户将此权限授予其他用户。实现此功能的 SQL 语句如下（44）。</p><ul class="exam-opts"><li><b>A</b> GRANT SELECT ON TABLE Teachers TO U1, U2 WITH PUBLIC;</li><li><b>B</b> GRANT SELECT TO TABLE Teachers ON U1,U2 WITH PUBLIC;</li><li><b>C</b> GRANT SELECT ON TABLE Teachers TO U1, U2 WITH GRANT OPTION;</li><li><b>D</b> GRANT SELECT TO TABLE Teachers ON U1, U2 WITH GRANT OPTION;</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">A使用PUBLIC不符合仅授权U1、U2的需求；B、D的`TO/ON`关键字位置存在语法错误；C完全匹配语法要求，可实现授权+转授权限的需求。</p></details></div></details><details class="exam-q" data-exam-id="2020年11月-041"><summary><span class="exam-no">第 41 题</span><span class="exam-stem-peek">若事务T1对数据D1已加排它锁，事务T2对数据D2已加共享锁，那么(41)。</span></summary><div class="exam-q-body"><p class="exam-stem">若事务T1对数据D1已加排它锁，事务T2对数据D2已加共享锁，那么(41)。</p><ul class="exam-opts"><li><b>A</b> 事务T1对数据D2加共享锁成功，加排它锁失败；事务T2对数据D1加共享锁成功、加排它锁失败</li><li><b>B</b> 事务T1对数据D2加排它锁和共享锁都失败；事务T2对数据D1加共享锁成功、加排它锁失败</li><li><b>C</b> 事务T1对数据D2加共享锁失败，加排它锁成功；事务T2对数据D1加共享锁成功、加排它锁失败</li><li><b>D</b> 事务T1对数据D2加共享锁成功，加排它锁失败；事务T2对数据D1加共享锁和排它锁都失败</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">锁兼容规则：已有共享锁（S锁）的数据，允许其他事务加S锁、禁止加排它锁（X锁）；已有X锁的数据，其他事务任何锁都无法添加。D2有T2的S锁，T1可加S锁、不能加X锁；D1有T1的X锁，T2无法加任何锁，对应选项D。</p></details></div></details></details><details class="exam-year" data-exam-year="2019年5月"><summary><span class="exam-year-name">2019年5月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2019年5月-044"><summary><span class="exam-no">第 44 题</span><span class="exam-stem-peek">若要将部门表Demp中name列的修改权限赋予用户Ming，实现的SQL语句：GRANT（） ON TABLE Demp…</span></summary><div class="exam-q-body"><p class="exam-stem">若要将部门表Demp中name列的修改权限赋予用户Ming，实现的SQL语句：GRANT（） ON TABLE Demp TO Ming</p><ul class="exam-opts"><li><b>A</b> SELECT（name)</li><li><b>B</b> UPDATE(name)</li><li><b>C</b> INSERT(name)</li><li><b>D</b> ALL PRIVILEGES(name)</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">SQL中修改数据对应的权限关键字为UPDATE，限定仅修改name列时，需要填写UPDATE(name)。</p></details></div></details><details class="exam-q" data-exam-id="2019年5月-041"><summary><span class="exam-no">第 41 题</span><span class="exam-stem-peek">某企业信息系统采用分布式数据库系统，该系统中“每节点对本地数据都能独立管理”和“当某一场地故障时，系统可以使用其它场地上…</span></summary><div class="exam-q-body"><p class="exam-stem">某企业信息系统采用分布式数据库系统，该系统中“每节点对本地数据都能独立管理”和“当某一场地故障时，系统可以使用其它场地上的副本而不至于使整个系统瘫痪”分别称为分布式数据库的（）。</p><ul class="exam-opts"><li><b>A</b> 共享性和分布性</li><li><b>B</b> 自治性和分布性</li><li><b>C</b> 自治性和可用性</li><li><b>D</b> 分布性和可用性</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">节点独立管控本地数据体现分布式数据库的<strong>自治性</strong>；场地故障时依靠异地副本保障整体系统不中断，体现了系统的<strong>可用性</strong>。</p></details></div></details></details></details><details class="exam-subject" data-exam-subject="案例"><summary><span class="exam-subject-name">📋 案例分析</span><span class="exam-subject-n">1 题</span><span class="exam-subject-tip">情景简答 · 采分点三色标记</span></summary><div class="exam-bar"><span class="exam-bar-label">📋 案例分析</span><span class="exam-bar-stat">共 <b>1</b> 题 · 情景简答</span></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">20</span>考点：数据仓库特征与设计 / OLAP / ETL / 数据挖掘任务与方法<br>📅 时间：2026-05-12 上午 📍 地点：集团运营分析会<br>👤 人物：甘工（乙方·系统分析师）、洪经理（甲方·客服部经理）、徐总监（甲方·数智化信息部总监）、算法团队（乙方·数据运营）<br>⚡ 冲突：三年话务数据要分析趋势、找流失节点、预测话务量，但直接查业务库会拖垮生产<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：洪经理提了三个问题：&quot;话务量明年怎么走？哪些客户要流失？投诉集中在哪个环节？&quot; 算法团队（乙方·数据运营）很兴奋：&quot;把数据给我们，我们跑模型。&quot; 邓经理立刻反对：&quot;直接查生产库？上次有人跑个大查询，把坐席接电话都拖慢了。&quot; 徐总监看向甘工：&quot;那数据从哪来？&quot; 甘工在白板上写下一行字：先建仓，再挖掘——而&quot;建仓&quot;这件事本身，就要讲清楚它和普通的业务数据库到底有什么不同。<br>补充资料：测未来话务量以指导排班。现有数据在多个业务库中，口径不一致，且直接查询影响生产系统性能。<br>问题 1：（1）说明数据仓库的基本特征（与操作型数据库的对比）与体系结构；<br>问题 2：（2）说明 OLTP 与 OLAP 的区别，以及 OLAP 的基本操作；<br>问题 3：（3）说明 ETL 的过程与本项目的数据分层设计；<br>问题 4：（4）说明数据挖掘的主要任务，并给出本项目的三类挖掘应用。</p><ul class="exam-questions"><li><b>问题 1</b> （1）说明<strong>数据仓库</strong>的基本特征（与操作型数据库的对比）与<strong>体系结构</strong>；</li><li><b>问题 2</b> （2）说明 <strong>OLTP 与 OLAP</strong> 的区别，以及 <strong>OLAP 的基本操作</strong>；</li><li><b>问题 3</b> （3）说明 <strong>ETL</strong> 的过程与本项目的数据分层设计；</li><li><b>问题 4</b> （4）说明数据挖掘的主要任务，并给出本项目的三类挖掘应用。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）数据仓库特征）：面向主题（按主题组织而非按业务过程）、集成的（多源数据统一口径与编码）、相对稳定的（非易失）（以查询为主、很少更新）、反映历史变化（随时间变化）（保存历史快照，支持趋势分析）。<br>- 🟢 加分：解析·数据仓库题要&quot;四特征 + 体系 + OLAP 操作 + 分层 + 挖掘任务落地&quot;。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🔴 核心（2）OLTP vs OLAP）：<br>问题 3｜参考答案要点：<br>- 🔴 核心：🔴 核心（3）ETL 与分层）：<br>问题 4｜参考答案要点：<br>- 🔴 核心：🔴 核心（4）挖掘任务与应用）：主要任务——分类、聚类、回归/预测、关联规则、序列/时序模式、异常检测、文本挖掘。</div></details></div></details><details class="exam-subject" data-exam-subject="论文"><summary><span class="exam-subject-name">📄 论文写作</span><span class="exam-subject-n">1 题</span><span class="exam-subject-tip">论述题 · 先写再看题</span></summary><div class="exam-bar"><span class="exam-bar-label">📄 论文写作</span><span class="exam-bar-stat">共 <b>1</b> 题 · 论述题</span></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与设计、建设的数据仓库项目（项目的背景、分析主题、数据来源、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细论述数据仓库的架构设计（操作型数据存储、数据仓库、数据集市）、数据建模方法（星型模型、雪花模型）、ETL 过程的设计与实现要点。</li><li><b>问题 3</b> 结合项目实践，论述数据仓库建设过程中的数据质量问题、性能优化方法，总结项目实施效果。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 数据工程</span><span class="exam-lv">⭐</span></div></div></details></section>
     <div class="wrongbook"></div>
     <div class="keyhint">
   <span class="keyhint-title">键盘快捷键</span>
@@ -3274,6 +3443,77 @@ html{scroll-padding-top:80px}
     el.textContent = n
   }
 
+  // ══════════════════════════════════════════
+  // 12. 历年真题：批量展开 + 记忆展开状态
+  // ══════════════════════════════════════════
+  const Exam = {
+    KEY: 'examOpen',
+    init() {
+      const root = document.querySelector('.exam')
+      if (!root) return
+      const chapter = root.dataset.examChapter || 'x'
+
+      // 恢复上次展开状态：{ "H07": { "2025年5月": true, ... } }
+      const saved = store.get(this.KEY, {}) || {}
+      const mine = saved[chapter] || {}
+      root.querySelectorAll('.exam-year').forEach(y => {
+        const name = y.dataset.examYear
+        // 默认：展开最近 1 套（新年优先），其余收起
+        const open = (name in mine) ? mine[name] : false
+        if (open) y.open = true
+        y.addEventListener('toggle', () => {
+          mine[name] = y.open
+          saved[chapter] = mine
+          store.set(this.KEY, saved)
+        })
+      })
+      // 单题的"看过答案"状态也要记（避免重复点开）
+      const seen = store.get('examSeen', {}) || {}
+      root.querySelectorAll('.exam-q').forEach(qd => {
+        const qid = qd.dataset.examId
+        if (seen[qid]) {
+          const a = qd.querySelector('.exam-ans')
+          if (a) a.open = true
+        }
+        const ans = qd.querySelector('.exam-ans')
+        if (ans) ans.addEventListener('toggle', () => {
+          if (ans.open) { seen[qid] = 1; store.set('examSeen', seen) }
+        })
+      })
+
+      // 批量展开/收起按钮
+      root.querySelectorAll('.exam-op').forEach(btn => {
+        btn.addEventListener('click', e => {
+          e.preventDefault()
+          const openAll = btn.dataset.examAll === '1'
+          root.querySelectorAll('.exam-subject,.exam-year').forEach(d => { d.open = openAll })
+          root.querySelectorAll('.exam-ans').forEach(d => {
+            d.open = openAll
+            if (openAll && d.parentElement.dataset.examId) seen[d.parentElement.dataset.examId] = 1
+          })
+          if (openAll) store.set('examSeen', seen)
+          // 同步年份级记忆
+          root.querySelectorAll('.exam-year').forEach(y => { mine[y.dataset.examYear] = y.open })
+          saved[chapter] = mine
+          store.set(this.KEY, saved)
+        })
+      })
+
+      // 快捷键：E = 跳到真题区块（不与既有键冲突）
+      document.addEventListener('keydown', e => {
+        const t = e.target
+        if (t && t.nodeType === 1 && t.matches('input,textarea,select,[contenteditable]')) return
+        if (e.metaKey || e.ctrlKey || e.altKey) return
+        if (e.key.toLowerCase() === 'e') {
+          e.preventDefault()
+          root.scrollIntoView({ behavior: 'smooth', block: 'start' })
+          const y = root.querySelector('.exam-year')
+          if (y) y.open = true
+        }
+      })
+    }
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
     Theme.init()
     FontSize.init()
@@ -3289,6 +3529,7 @@ html{scroll-padding-top:80px}
     BackTop.init()
     CopyCode.init()
     ReadTime.init()
+    Exam.init()
     updateAnsweredStat()
     window.addEventListener('quiz:update', updateAnsweredStat)
     renderMermaid()

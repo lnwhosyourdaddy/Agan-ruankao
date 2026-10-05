@@ -7,7 +7,7 @@
 <title>第 38 小时 · 大数据处理系统分析与设计 · Lambda/Kappa 架构 · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
-<meta name="build-stamp" content="2026-10-05 08:06:29">
+<meta name="build-stamp" content="2026-10-05 11:44:51">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -1927,6 +1927,166 @@ table.zebra tbody tr:hover{background:var(--accent-soft-2)}
 /* ── 平滑滚动偏移（锚点跳转不卡顶栏下） ── */
 html{scroll-padding-top:80px}
 @media(max-width:760px){html{scroll-padding-top:70px}}
+
+/* ═══════════════════════════════════════════════════════════════
+   历年真题区块 · 三级折叠（原生 details，零 JS）
+   ═══════════════════════════════════════════════════════════════ */
+.exam{margin:2.2em 0 1.6em}
+
+/* ── 统计条：常驻不折叠，避免"用户不知道里面有真题"而白做 ── */
+.exam-bar{
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  padding:12px 16px;margin-bottom:10px;
+  background:linear-gradient(180deg,var(--bg-card) 0%,var(--bg-alt) 100%);
+  border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow-1);
+}
+.exam-bar-label{font-weight:700;font-size:14px;color:var(--accent)}
+.exam-bar-stat{font-size:12.5px;color:var(--fg-3);flex:1;min-width:140px}
+.exam-bar-stat b{color:var(--fg-2);font-variant-numeric:tabular-nums}
+.exam-bar-ops{display:flex;gap:6px}
+.exam-op{
+  padding:4px 11px;font:inherit;font-size:12px;cursor:pointer;
+  background:var(--bg-card);border:1px solid var(--line-2);
+  border-radius:999px;color:var(--fg-2);
+  transition:border-color .18s var(--ease),color .18s var(--ease),background .18s var(--ease);
+}
+.exam-op:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+
+/* ── 科目级折叠 ── */
+.exam-subject{
+  border:1px solid var(--line);border-radius:var(--radius);
+  background:var(--bg-card);overflow:hidden;
+}
+.exam-subject>summary{
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  padding:12px 16px;cursor:pointer;list-style:none;
+  font-weight:600;color:var(--fg-2);
+  transition:background .18s var(--ease),color .18s var(--ease);
+}
+.exam-subject>summary::-webkit-details-marker{display:none}
+.exam-subject>summary:hover{background:var(--accent-soft);color:var(--accent)}
+.exam-subject[open]>summary{border-bottom:1px solid var(--line);background:var(--bg-alt)}
+.exam-subject-name::before{content:'▸ ';display:inline-block;transition:transform .2s var(--ease)}
+.exam-subject[open] .exam-subject-name::before{transform:rotate(90deg)}
+.exam-subject-n{font-size:12px;color:var(--fg-3);font-variant-numeric:tabular-nums}
+.exam-subject-tip{margin-left:auto;font-size:11.5px;color:var(--fg-3);opacity:.8}
+
+/* ── 年份级折叠 ── */
+.exam-year{border-bottom:1px solid var(--line)}
+.exam-year:last-child{border-bottom:0}
+.exam-year>summary{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 16px 9px 30px;cursor:pointer;list-style:none;
+  font-size:13.5px;color:var(--fg-2);
+  transition:background .16s var(--ease),color .16s var(--ease);
+}
+.exam-year>summary::-webkit-details-marker{display:none}
+.exam-year>summary:hover{background:var(--accent-soft);color:var(--accent)}
+.exam-year[open]>summary{background:var(--bg-alt)}
+.exam-year-name::before{content:'▸ ';display:inline-block;transition:transform .2s var(--ease);color:var(--fg-3)}
+.exam-year[open] .exam-year-name::before{transform:rotate(90deg)}
+.exam-year-n{font-size:11.5px;color:var(--fg-3);font-variant-numeric:tabular-nums}
+
+/* ── 单题折叠 ── */
+.exam-q{border-top:1px solid var(--line)}
+.exam-q>summary{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:9px 16px 9px 46px;cursor:pointer;list-style:none;
+  font-size:13.5px;line-height:1.6;color:var(--fg-2);
+  transition:background .16s var(--ease);
+}
+.exam-q>summary::-webkit-details-marker{display:none}
+.exam-q>summary:hover{background:var(--accent-soft)}
+.exam-q[open]>summary{background:var(--bg-alt)}
+.exam-q>summary::before{
+  content:'＋';flex-shrink:0;width:1.1em;text-align:center;
+  color:var(--fg-3);font-size:12px;line-height:1.5;
+}
+.exam-q[open]>summary::before{content:'－';color:var(--accent)}
+.exam-no{
+  flex-shrink:0;font-size:11px;color:var(--fg-3);
+  font-variant-numeric:tabular-nums;padding-top:2px;min-width:44px;
+}
+.exam-tag{
+  flex-shrink:0;font-size:10.5px;padding:1px 6px;border-radius:4px;
+  background:var(--warn-bg);color:var(--warn-fg);border:1px solid var(--warn-line);
+}
+.exam-stem-peek{
+  flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  color:var(--fg-2);
+}
+.exam-q[open] .exam-stem-peek{color:var(--fg)}
+.exam-q-body{padding:4px 16px 16px 46px}
+.exam-stem{margin:.6em 0;font-size:14.5px;line-height:1.8;color:var(--fg)}
+.exam-blank{color:var(--danger);padding:0 1px}
+.exam-opts{list-style:none;margin:.5em 0 .9em;padding:0}
+/* ⚠️ 必须清掉全局 `ul>li::before` 的圆点（本站正文列表有项目符号），
+   否则真题选项前会多出一个小圆点，位置还和字母块错开 */
+.exam-opts>li::before{content:none !important}
+.exam-opts li{
+  position:relative;padding:4px 0 4px 26px;font-size:14px;line-height:1.7;
+  border-bottom:1px dashed var(--line);
+}
+.exam-opts li:last-child{border-bottom:0}
+.exam-opts b{
+  position:absolute;left:0;top:4px;
+  display:inline-flex;align-items:center;justify-content:center;
+  width:19px;height:19px;border-radius:5px;
+  background:var(--bg-alt);border:1px solid var(--line-2);
+  font-size:11px;font-weight:700;color:var(--fg-3);
+}
+
+/* ── 答案（默认再折叠一层）── */
+.exam-ans{margin-top:.6em}
+.exam-ans>summary{
+  display:inline-flex;align-items:center;gap:6px;cursor:pointer;list-style:none;
+  padding:4px 12px;font-size:12px;
+  background:var(--accent-soft);border:1px solid var(--line-2);
+  border-radius:999px;color:var(--accent);
+  transition:background .18s var(--ease),border-color .18s var(--ease);
+}
+.exam-ans>summary::-webkit-details-marker{display:none}
+.exam-ans>summary:hover{background:var(--accent-soft-2);border-color:var(--accent)}
+.exam-ans[open]>summary{margin-bottom:8px}
+.exam-ans-line{margin:.4em 0;font-size:14px;color:var(--fg)}
+.exam-ans-line b{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:26px;height:24px;padding:0 8px;margin-left:4px;
+  border-radius:6px;background:var(--tip-bg);color:var(--tip-fg);
+  border:1px solid var(--tip-line);font-weight:700;
+}
+.exam-exp{margin:.4em 0;font-size:13.5px;line-height:1.8;color:var(--fg-2)}
+
+/* ── 窄屏 ── */
+@media(max-width:760px){
+  .exam-bar{padding:10px 12px;gap:8px}
+  .exam-bar-label{font-size:13px}
+  .exam-bar-stat{font-size:11.5px;flex-basis:100%;order:3;min-width:0}
+  .exam-bar-ops{margin-left:auto}
+  .exam-subject-tip{display:none}
+  .exam-q>summary{padding-left:16px;flex-wrap:wrap}
+  .exam-q>summary::before{display:none}
+  .exam-no{min-width:0}
+  .exam-q-body{padding-left:16px}
+  .exam-year>summary{padding-left:20px}
+  .exam-stem-peek{white-space:normal;flex-basis:100%}
+  .exam-opts li{font-size:13.5px}
+}
+
+/* ── 打印：全部自动展开（服务"可打印带水印"卖点）── */
+@media print{
+  .exam-bar,.exam-op,.exam-ans>summary{display:none !important}
+  .exam-subject,.exam-year,.exam-q{border:0 !important;background:none !important}
+  .exam-subject>summary,.exam-year>summary{
+    padding:6pt 0;background:none !important;border-bottom:1pt solid #999;
+  }
+  .exam-subject-name::before,.exam-year-name::before,.exam-q>summary::before{content:'' !important}
+  .exam-q-body,.exam-ans[open] > div,.exam-ans > div{display:block !important}
+  .exam-q{break-inside:avoid;page-break-inside:avoid}
+  .exam-stem,.exam-opts li{font-size:9.5pt}
+  .exam-exp{font-size:8.5pt;color:#333}
+}
 </style>
 </head>
 <body>
@@ -2115,6 +2275,15 @@ html{scroll-padding-top:80px}
   </div>
 </div>
 </div>
+    <section class="exam" id="exam" data-exam-chapter="19" data-exam-hour="H38"><div class="exam-bar"><span class="exam-bar-label">📚 历年真题</span><span class="exam-bar-stat">共 <b>9</b> 题 · 来自 4 套真题</span><span class="exam-bar-ops"><button type="button" class="exam-op" data-exam-all="1">全部展开</button><button type="button" class="exam-op" data-exam-all="0">全部收起</button></span></div><details class="exam-subject" data-exam-subject="综合知识"><summary><span class="exam-subject-name">📝 综合知识</span><span class="exam-subject-n">9 题</span><span class="exam-subject-tip">按年份展开 · 单题可点开看答案</span></summary><details class="exam-year" data-exam-year="2024年5月"><summary><span class="exam-year-name">2024年5月</span><span class="exam-year-n">4 题</span></summary><details class="exam-q" data-exam-id="2024年5月-075"><summary><span class="exam-no">第 75 题</span><span class="exam-stem-peek">以下关于边缘计算的说法中，错误的是（）</span></summary><div class="exam-q-body"><p class="exam-stem">以下关于边缘计算的说法中，错误的是（）</p><ul class="exam-opts"><li><b>A</b> 海量数据能够就近处理，大量的设备也能实现高效协同的工作</li><li><b>B</b> 因为边缘计算时，边缘节点需要接收云端传输的命令再执行，因此会降低性能</li><li><b>C</b> 边缘计算的业务本质是云计算在数据中心之外汇聚节点的延伸和演进</li><li><b>D</b> 边缘计算经常应用在智慧园区、工业互联网等领域</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">边缘计算把数据处理、业务逻辑下沉到离数据源更近的网络边缘，大部分业务可本地自主决策执行，无需反复和云端交互，能大幅降低网络时延、提升整体性能，B选项描述完全违背技术特性；A、C、D均符合边缘计算的原理与落地场景。</p></details></div></details><details class="exam-q" data-exam-id="2024年5月-047"><summary><span class="exam-no">第 47 题</span><span class="exam-stem-peek">Web3.0 的隐私保护基于以下（）技术？</span></summary><div class="exam-q-body"><p class="exam-stem">Web3.0 的隐私保护基于以下（）技术？</p><ul class="exam-opts"><li><b>A</b> 区块链</li><li><b>B</b> 非对称加密</li><li><b>C</b> 数字签名</li><li><b>D</b> 数字水印</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">Web3.0以区块链为底层基础设施，实现分布式身份、用户自主数据确权与隐私保护；加密、签名是区块链的配套技术，并非Web3.0架构根基。</p></details></div></details><details class="exam-q" data-exam-id="2024年5月-031"><summary><span class="exam-no">第 31 题</span><span class="exam-stem-peek">云原生架构的四个技术体系分别是（）</span></summary><div class="exam-q-body"><p class="exam-stem">云原生架构的四个技术体系分别是（）</p><ul class="exam-opts"><li><b>A</b> 微服务、虚拟化、云计算、容器</li><li><b>B</b> 云计算、无服务、容器、持续交付</li><li><b>C</b> 云计算、DevOps、持续部署、持续交付</li><li><b>D</b> 微服务、容器、DevOps、持续交付</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">云计算是云原生的底层基础设施环境，不属于云原生自身的技术体系；云原生四大核心技术体系为微服务、容器、DevOps、持续交付。</p></details></div></details><details class="exam-q" data-exam-id="2024年5月-027"><summary><span class="exam-no">第 27 题</span><span class="exam-stem-peek">按照存储虚拟化实现的层面来分，以下不属于存储虚拟化的是（）</span></summary><div class="exam-q-body"><p class="exam-stem">按照存储虚拟化实现的层面来分，以下不属于存储虚拟化的是（）</p><ul class="exam-opts"><li><b>A</b> 基于存储设备的虚拟化</li><li><b>B</b> 基于存储网络的虚拟化</li><li><b>C</b> 基于操作系统的虚拟化</li><li><b>D</b> 基于主机的虚拟化</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">操作系统虚拟化属于服务器虚拟化范畴；存储虚拟化官方分层只有主机级、存储设备级、存储网络级三类。</p></details></div></details></details><details class="exam-year" data-exam-year="2023年5月"><summary><span class="exam-year-name">2023年5月</span><span class="exam-year-n">1 题</span></summary><details class="exam-q" data-exam-id="2023年5月-025"><summary><span class="exam-no">第 25 题</span><span class="exam-stem-peek">（ ）是企业数字化运营的统一数据能力平台，能够按照规范汇聚和治理全局数据，为各个业务部门提供标准的数据能力和数据工具。</span></summary><div class="exam-q-body"><p class="exam-stem">（ ）是企业数字化运营的统一数据能力平台，能够按照规范汇聚和治理全局数据，为各个业务部门提供标准的数据能力和数据工具。</p><ul class="exam-opts"><li><b>A</b> 大数据平台</li><li><b>B</b> 传统数据仓库</li><li><b>C</b> 分布式数据库平台</li><li><b>D</b> 数据中台</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">采用排除法解题：传统数据仓库面向历史分析、分布式数据库聚焦存储分片、大数据平台侧重海量数据处理，只有数据中台是面向全业务线的统一数据能力运营平台，符合题干描述。</p></details></div></details></details><details class="exam-year" data-exam-year="2022年5月"><summary><span class="exam-year-name">2022年5月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2022年5月-021"><summary><span class="exam-no">第 21 题</span><span class="exam-stem-peek">云计算可以按需提供弹性资源，它的体系结构由5部分组成。其中，（21）为用户提供对资源层的各项云计算服务的封装，帮助用户构…</span></summary><div class="exam-q-body"><p class="exam-stem">云计算可以按需提供弹性资源，它的体系结构由5部分组成。其中，（21）为用户提供对资源层的各项云计算服务的封装，帮助用户构建所需的应用。</p><ul class="exam-opts"><li><b>A</b> 应用层</li><li><b>B</b> 平台层</li><li><b>C</b> 用户访问层</li><li><b>D</b> 管理层</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">资源层：资源池层是指基础架构层面的云计算服务，这些服务可以提供虚拟化的资源，从而隐藏物理资源的复杂性。如：服务器，存储。
+平台层：为用户提供对资源层服务的封装，使用户可以构建自己的应用。
+应用层：提供软件服务，如：财务管理，客户关系管理，商业智能。
+用户访问层：方便用户使用云计算服务所需的各种支撑服务，针对每个层次的云计算服务都需要提供相应的访问接口。
+管理层：提供对所有层次云计算服务的管理功能。</p></details></div></details><details class="exam-q" data-exam-id="2022年5月-020"><summary><span class="exam-no">第 20 题</span><span class="exam-stem-peek">数据中台依据企业特有的业务模式和组织架构，通过有形的产品和实施方法论支撑，构建了一套持续不断将数据变成资产并服务于业务的…</span></summary><div class="exam-q-body"><p class="exam-stem">数据中台依据企业特有的业务模式和组织架构，通过有形的产品和实施方法论支撑，构建了一套持续不断将数据变成资产并服务于业务的机制。数据中台需要具备的4个核心能力为（20），让企业员工、客户、伙伴能够方便地应用数据。</p><ul class="exam-opts"><li><b>A</b> 数据汇聚整合、数据清洗、数据加密、数据建模</li><li><b>B</b> 数据汇聚整合、数据清洗、数据加密、数据分发</li><li><b>C</b> 数据汇聚整合、数据提纯加工、数据服务可视化、数据价值变现</li><li><b>D</b> 数据清洗、数据加密、数据解密、数据建模</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">数据中台必备的4个核心能力：
+1、数据汇聚整合能力：随着业务的多元化发展，企业内部往往信息部门和数据中心林立，大量系统、功能和应用重复建设，存在巨大的数据资源和人力资源浪费，同时组织壁垒也导致数据孤岛的出现，使得内外部数据难以被全局规划。数据中台需要能够对数据进行整合和完善，提供适用、适配、成熟、完善的一站式大数据平台工具，在简便有效的基础上，实现数据采集、交换等任务配置以及监控管理。
+2、数据提纯加工能力：企业需要完整的数据资产体系，也就必须以客户、产品、业务场景为指导原则进行建设，推动业务数据向数据资产的转化。传统数字化建设往往局限在单个业务流程，而忽视了多业务的关联数据，缺乏对数据的深度理解。
+3、数据服务可视化：为了尽快让数据用起来，数据中台必须提供便捷、快速的数据服务能力，让相关人员能够迅速开发数据应用，支持数据资产场景化能力的快速输出，以响应客户动态的需求。多数受访者还期待数据中台可以提供数据化运营平台，帮助企业快速实现数据资产的可视化分析，提供包括实时流数据分析、预测分析、机器学习等更为高级的服务，为企业数据化运营赋能。
+4、价值变现方面：企业内部的各个部门和团队不应该是数据孤岛，打通不同部门和团队之间数据难以整合、标签不成体系、与业务关联断层的现状，数据中台被寄予厚望。企业期待数据中台能助力跨部门的普适性业务价值能力，更好地管理数据应用，将数据洞察变成直接驱动业务行动的核心动能，跨业务场景推进数据实践。</p></details></div></details></details><details class="exam-year" data-exam-year="2020年11月"><summary><span class="exam-year-name">2020年11月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2020年11月-026"><summary><span class="exam-no">第 26 题</span><span class="exam-stem-peek">BI系统的处理流程主要包括4个阶段，(26)阶段不仅需要进行数据汇总/聚集，同时还提供切片、切块、下钻、上卷和旋转等海量…</span></summary><div class="exam-q-body"><p class="exam-stem">BI系统的处理流程主要包括4个阶段，(26)阶段不仅需要进行数据汇总/聚集，同时还提供切片、切块、下钻、上卷和旋转等海量数据分析功能。</p><ul class="exam-opts"><li><b>A</b> 业务流程分析</li><li><b>B</b> OLTP</li><li><b>C</b> OLAP</li><li><b>D</b> 数据清洗</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">OLAP（在线数据分析）是BI的核心分析阶段，支持数据汇总以及切片、切块、下钻、上卷、旋转这类多维交互式分析操作。</p></details></div></details><details class="exam-q" data-exam-id="2020年11月-025"><summary><span class="exam-no">第 25 题</span><span class="exam-stem-peek">BI系统的处理流程主要包括4个阶段，其中(25)阶段主要包括数据的抽取(extraction)、转换(transform…</span></summary><div class="exam-q-body"><p class="exam-stem">BI系统的处理流程主要包括4个阶段，其中(25)阶段主要包括数据的抽取(extraction)、转换(transformation)和加载(load)三个步骤（即ETL过程）。</p><ul class="exam-opts"><li><b>A</b> 数据预处理</li><li><b>B</b> 数据预加载</li><li><b>C</b> 数据前处理</li><li><b>D</b> 数据后处理</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">ETL（抽取、转换、加载）属于BI流程的数据预处理阶段，该环节完成原始业务数据的清洗、格式转换、入库，为后续分析做准备。</p></details></div></details></details></details><details class="exam-subject" data-exam-subject="案例"><summary><span class="exam-subject-name">📋 案例分析</span><span class="exam-subject-n">5 题</span><span class="exam-subject-tip">情景简答 · 采分点三色标记</span></summary><div class="exam-bar"><span class="exam-bar-label">📋 案例分析</span><span class="exam-bar-stat">共 <b>5</b> 题 · 情景简答</span></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">87</span>考点：大数据特征 / Lambda vs Kappa vs IOTA / 数据分层与治理 / 存储选型<br>📅 时间：2026-05-15 上午 📍 地点：数据平台方案评审<br>👤 人物：甘工（乙方·系统分析师）、彭工（乙方·架构设计师）、邓经理（甲方·运维经理）、算法团队（乙方·数据运营）<br>⚡ 冲突：话单、录音、转写文本、时序数据四类混在一起，实时要 60 秒、离线要分析<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：邓经理先把四类数据摆出来：&quot;结构化话单一亿两千万行、录音一年四个 T、转写文本九亿字、工商表五分钟一条——都往一个库里塞？&quot; 算法团队（乙方·数据运营）关心：&quot;我们要跑模型训练。&quot; 彭工提醒：&quot;还有实时大屏，延迟要小于一分钟。&quot; 甘工知道，这四类数据的读写特征完全不同，而&quot;实时&quot;和&quot;离线&quot;对架构的要求也完全不同——今天要一次把架构类型和存储选型定下来。<br>补充资料：转写文本（约 9 亿字/年，需全文检索）；④工商表远传时序数据（5 分钟/点，1.2 万户，需按时间聚合与异常检测）。需求：实时大屏延迟 ≤60 秒；离线分析按天/周/月输出；话务数据拟作为数据资产对外授权运营，但个人信息不得出域。<br>问题 1：（1）说明大数据的主要特征（4V/5V）；<br>问题 2：（2）比较 Lambda、Kappa、IOTA 架构并给出本项目方案；<br>问题 3：（3）为四类数据选择存储方案并说明理由；<br>问题 4：（4）给出数据分层与数据质量的量化治理措施。</p><ul class="exam-questions"><li><b>问题 1</b> （1）说明<strong>大数据</strong>的主要特征（4V/5V）；</li><li><b>问题 2</b> （2）比较 <strong>Lambda、Kappa、IOTA</strong> 架构并给出本项目方案；</li><li><b>问题 3</b> （3）为四类数据选择<strong>存储方案</strong>并说明理由；</li><li><b>问题 4</b> （4）给出数据分层与数据质量的量化治理措施。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）特征）：Volume 数据量大、Velocity 产生与处理速度快、Variety 类型多样（结构化/半结构化/非结构化）、Value 价值密度低（需挖掘）、Veracity 真实性/准确性（数据质量）；部分表述还有 Variability（可变性）、Visualization（可视化）。<br>- 🟢 加分：解析·架构选型题要&quot;各层做什么 + 优缺点 + 针对本项目哪条需求&quot;。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🔴 核心（2）架构比较与选型）：<br>问题 3｜参考答案要点：<br>- 🔴 核心：🔴 核心（3）存储选型）：<br>问题 4｜参考答案要点：<br>- 🔴 核心：🔴 核心（4）分层与质量）：</div></details></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">88</span>考点：系统部署（资源调度/多租户/弹性）／可靠性与容错测试／安全性测试／测试难点<br>📅 时间：2026-05-28 上午 📍 地点：集群运维评审<br>👤 人物：甘工（乙方·系统分析师）、邓经理（甲方·运维经理）、彭工（乙方·架构设计师）、李工（乙方·项目经理）<br>⚡ 冲突：GPU 被训练任务占满、机房间网络抖动，大屏延迟从 60 秒变 15 分钟<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：邓经理在群里发飙：&quot;大屏延迟十五分钟！客服还以为系统崩了。&quot; 一查：算法团队（乙方·数据运营）的训练任务把四台 GPU 全占了，还把内网带宽吃满。 算法团队（乙方·数据运营）也委屈：&quot;集群是大家一起买的。&quot; 李工问：&quot;那测试怎么做？总不能等出事才发现。&quot; 甘工清楚：这既是部署与多租户的问题，也是容错测试没做到位的问题。<br>问题 1：（1）说明大数据系统部署要点与多租户隔离方案；<br>问题 2：（2）给出可靠性与容错测试方案（故障清单、验证指标、判定标准）；<br>问题 3：（3）说明大数据测试的特点与难点；<br>问题 4：（4）给出安全性测试要点。</p><ul class="exam-questions"><li><b>问题 1</b> （1）说明大数据<strong>系统部署</strong>要点与<strong>多租户隔离</strong>方案；</li><li><b>问题 2</b> （2）给出<strong>可靠性与容错测试</strong>方案（故障清单、验证指标、判定标准）；</li><li><b>问题 3</b> （3）说明大数据<strong>测试的特点与难点</strong>；</li><li><b>问题 4</b> （4）给出安全性测试要点。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）部署与多租户）：<br>- 🟢 加分：解析·大数据题要&quot;部署 + 容错清单 + 难点 + 安全&quot;，对账思想贯穿始终。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🔴 核心（2）容错测试）：目标——在节点故障、网络异常、数据激增、依赖不可用下仍不丢数据、不重复计算、可自动恢复。<br>问题 3｜参考答案要点：<br>- 🔴 核心：🔴 核心（3）测试特点与难点）：特点——数据量大、以对账/聚合校验为主、关注吞吐与延迟、需覆盖容错与数据质量。难点——①无法全量比对（用抽样 + 校验和 + 对账）；②结果不确定/顺序不定（断言用&quot;集合等价/聚合相等&quot;而非&quot;行序相等&quot;）；③实时链路难复现（用流量回放与影子任务）；④环境难 1:1 复制（用脱敏生产副本做压测）；⑤口径易漂移（把指标口径写成可执行的 SQL 断言）。<br>问题 4｜参考答案要点：<br>- 🔴 核心：🔴 核心（4）安全测试）：①权限与越权（分析师只能看脱敏字段）；②脱敏有效性（做重标识攻击测试，验证无法还原个人身份）；③传输与存储加密；④审计留痕（谁何时查了什么）；⑤数据分类分级落地检查（敏感字段未被下放）；⑥对外共享采用隐私计算/密态计算验证。</div></details></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">89</span>📅 时间：2026-06-30 上午 📍 地点：私有云集群运维群 + 紧急会议<br>👤 人物：邓经理（甲方·运维经理）、甘工（乙方·系统分析师）、彭工（乙方·架构设计师）、算法团队（乙方·数据运营）负责人（孙博士）、徐总监（甲方·数智化信息部总监）<br>⚡ 冲突：算法团队（乙方·数据运营）跑模型训练吃满 GPU 与网络，导致线上 ASR 转写排队、大屏延迟从 60 秒涨到 15 分钟<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：邓经理在群里发飙：&quot;大屏延迟十五分钟！客服在问是不是系统崩了。&quot; 一查：算法团队（乙方·数据运营）昨晚提交了一个训练任务，把 4 台 GPU 机全占了，还把训练数据从对象存储往计算节点狂拉，把内网带宽也吃满了。 孙博士很委屈：&quot;模型训练本来就要算力，集群是我们一起买的。&quot; 彭工指出根因：&quot;没有多租户隔离，也没有配额——谁先提交谁占满，这不是人的问题，是平台的问题。&quot; 徐总监拍板：&quot;今天就把资源隔离定下来。&quot;<br>问题 1：（1）说明大数据平台资源调度与多租户的设计要点；<br>问题 2：（2）给出本项目的多租户隔离方案（资源、数据、计算、网络、成本）；<br>问题 3：（3）说明应如何做容量规划与弹性伸缩，兼顾训练与生产；<br>问题 4：（4）说明数据管理（元数据、主数据、质量、安全）在多租户场景下的注意事项。</p><ul class="exam-questions"><li><b>问题 1</b> （1）说明大数据平台<strong>资源调度与多租户</strong>的设计要点；</li><li><b>问题 2</b> （2）给出本项目的<strong>多租户隔离方案</strong>（资源、数据、计算、网络、成本）；</li><li><b>问题 3</b> （3）说明应如何做<strong>容量规划与弹性伸缩</strong>，兼顾训练与生产；</li><li><b>问题 4</b> （4）说明数据管理（元数据、主数据、质量、安全）在多租户场景下的注意事项。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）调度与多租户要点）：资源调度——用 YARN/K8s 统一管理 CPU/内存/GPU，按队列/命名空间划分配额，GPU 单独调度；数据本地性（计算靠近数据）；弹性伸缩（按队列积压与延迟自动扩缩）；高可用（管理节点主备、数据多副本）；监控（作业延迟、Checkpoint、GPU 利用率、数据倾斜）。<br>- 🟢 加分：解析·多租户题要&quot;隔离表 + 容量弹性 + 数据管理&quot;，重点是配额与优先级。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🟡 支撑（2）隔离方案）：<br>问题 3｜参考答案要点：<br>- 🔴 核心：🟡 支撑（3）容量规划与弹性）：①容量规划——按峰值话务（并发 800 路、日均 12 万通）测算 ASR/推理所需的 GPU 数量与吞吐，预留 30%~50%；训练需求单独评估；②分时复用——夜间（低峰）开放更多 GPU 给训练，白天保障生产；③弹性伸缩——生产按队列积压与 P99 自动扩缩，训练按需申请、到期释放；④排队与预约——大额训练任务走预约制并限定时间窗；⑤限流与降级——生产压力大时暂停/降级训练任务；⑥监控与容量预警（GPU 利用率、队列等待时长、带宽水位）。<br>问题 4｜参考答案要点：<br>- 🔴 核心：🔴 核心（4）多租户数据管理）：①元数据——统一元数据与血缘，标明数据的 Owner、敏感级别与用途；②主数据——客户/设备主数据统一，避免各租户各建一套；③数据质量——对各租户的输出也设质量规则（完整、准确、及时），防止污染下游；④数据安全——分类分级 + 脱敏 + 最小权限 + 审计，训练用数据必须脱敏，跨租户共享需审批与留痕；⑤生命周期——临时训练数据设到期清理，避免占用存储；⑥合规——对外共享/出域需评估（呼应第9章）。</div></details></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">90</span>📅 时间：2026-07-20 📍 地点：管理后端验收会<br>👤 人物：洪经理（甲方·客服部经理）、甘工（乙方·系统分析师）、邓经理（甲方·运维经理）、徐总监（甲方·数智化信息部总监）、李工（乙方·项目经理）<br>⚡ 冲突：清单第 48 项要求实时数据统计延迟 ≤1 分钟、第 55/56 项要求动态报表与动态预警，但现有 T+1 报表根本达不到<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：洪经理把清单第 48 项念出来：&quot;数据统计延迟低于 1 分钟，确保管理层实时监控对话量、转人工率、任务完成率。&quot; 邓经理摊手：&quot;我们现在是 T+1，早上八点出昨天的报表。实时要改架构。&quot; 李工担心成本：&quot;实时计算是不是很贵？&quot; 洪经理又补了一条：&quot;还要动态预警——阈值类和趋势类都要，通知对象可配。比如转人工率突然飙高、某技能组排队超时，要能马上通知到人。&quot; 甘工盘了一下：这需要流式链路 + 预聚合 + 预警引擎，并在延迟、成本、准确性之间做取舍。<br>补充资料：数据统计延迟 → ≤1 分钟 → T+1（次日 08:00） → 需流式改造；报表维度 → ≥10 类 → 6 类 → 需扩维；时间粒度 → 天/周/小时/月 → 仅天 → 需支持；报表下钻 → 两级 + 录音追溯 → 无下钻 → 需建设；动态预警 → 阈值类 + 趋势类 → 无 → 需引擎 实时链路目标：采集 ≤5 s → 计算 ≤10 s → 写入查询 ≤5 s，端到端 ≤60 秒；离线 T+1 仍保留用于对账。<br>问题 1：（1）说明批处理与流处理的差异，并给出满足&quot;≤1 分钟&quot;的架构方案；<br>问题 2：（2）说明 Lambda 与 Kappa 的取舍，并说明本项目为何选其一；<br>问题 3：（3）设计动态报表与动态预警（指标、阈值、通知、防抖）；<br>问题 4：（4）说明成本与准确性的权衡及验证方法。</p><ul class="exam-questions"><li><b>问题 1</b> （1）说明<strong>批处理与流处理</strong>的差异，并给出满足&quot;≤1 分钟&quot;的架构方案；</li><li><b>问题 2</b> （2）说明 <strong>Lambda 与 Kappa</strong> 的取舍，并说明本项目为何选其一；</li><li><b>问题 3</b> （3）设计<strong>动态报表与动态预警</strong>（指标、阈值、通知、防抖）；</li><li><b>问题 4</b> （4）说明成本与准确性的权衡及验证方法。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）批处理 vs 流处理）：批处理——对有界数据集周期性计算（如 T+1），吞吐高、延迟高（小时/天级），适合复杂全量计算与对账；流处理——对无界数据流持续计算（如 Flink），延迟低（秒~分钟级），适合实时监控与预警，但需处理乱序、窗口与状态。<br>- 🟢 加分：解析·实时化题要&quot;批流对比 + 架构 + 报表预警设计 + 成本准确性权衡&quot;。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🟡 支撑（2）Lambda vs Kappa 取舍）：Lambda——批层保证准确、速度层保证实时，服务层合并；口径易不一致、维护两套代码。Kappa——全部走流，历史重算靠重放消息队列；一套代码、口径统一，但对消息留存与重放能力要求高。<br>问题 3｜参考答案要点：<br>- 🔴 核心：🟡 支撑（3）动态报表与预警）：<br>问题 4｜参考答案要点：<br>- 🔴 核心：🟡 支撑（4）成本与准确性权衡）：①成本——实时链路常驻资源，可通过窗口合并、增量计算、预聚合、冷热分层（热数据内存、温数据列存、冷数据对象存储）控制成本；离线错峰；②准确性——实时指标允许近似（如近似去重、滑动窗口近似）以换取速度，但对账类、结算类指标以离线批为准，并做实时 vs 离线的对账（误差 ≤1%）；③验证——压测（峰值 3 倍数据注入，验证延迟 ≤60 秒）、故障注入（节点宕机验证恢复）、对账任务（实时与 T+1 结果比对）、演练（注入异常指标验证预警触发与通知）。</div></details></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">91</span>📅 时间：2026-08-20 上午 📍 地点：集团财务部 + 数智化信息部联席会<br>👤 人物：甘工（乙方·系统分析师）、龙工（乙方·数据工程师）、徐总监（甲方·数智化信息部总监）、郑专员（甲方·合规专员）、财务负责人（甲方·财务部）<br>⚡ 冲突：集团要把话务数据作为数据资产入表并对外授权运营，但合规、计量、权属三道关都卡着<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：财务负责人（甲方·财务部）把政策文件放在桌上：&quot;现在鼓励数据资产入表，我们攒了三年话务数据，能不能作价入账？还能对外卖服务。&quot; 郑专员立刻提出三个问题：&quot;这些数据是谁的？用户授权了吗？能对外给吗？&quot; 龙工补了一句：&quot;而且口径还没统一——&#x27;接通率&#x27;两个部门算出两个数，这数据能值多少钱？&quot; 徐总监看向甘工：&quot;你是最了解数据的，说清楚三条线：能不能入表、怎么计量、怎么对外。&quot; 甘工在白板上画了三道门：合规与权属、计量与质量、流通与安全。<br>补充资料：拥有或控制 → 私有化部署 ✔ → 明确持有权/加工使用权/经营权；经济利益可预期 → 拟对外授权运营 → 签约落地、收入可验证；成本可计量 → 部分有台账 → 建数据资源成本台账（采集/存储/标注/治理）；合法合规 → 用户授权部分覆盖 → 补充授权、去标识化、共享安全评估 质量控制：六维达标（完整/准确/一致/及时/唯一/有效），口径唯一（如&quot;接通率&quot;唯一定义）。对外路径：统计型产品 + 可信数据空间 + 隐私计算（数据可用不可见）。<br>问题 1：（1）说明数据资产入表的基本条件与前提；<br>问题 2：（2）说明话务数据要入表需先完成哪些数据治理工作；<br>问题 3：（3）说明对外授权运营的技术与合规方案（含可信数据空间/隐私计算）；<br>问题 4：（4）说明数据资产管理的组织与机制。</p><ul class="exam-questions"><li><b>问题 1</b> （1）说明<strong>数据资产入表</strong>的基本条件与前提；</li><li><b>问题 2</b> （2）说明话务数据要入表需先完成哪些<strong>数据治理</strong>工作；</li><li><b>问题 3</b> （3）说明对外授权运营的技术与合规方案（含<strong>可信数据空间/隐私计算</strong>）；</li><li><b>问题 4</b> （4）说明数据资产管理的组织与机制。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）入表条件与前提）：数据资源要确认为资产，需同时满足：①企业拥有或控制该数据资源（权属清晰：持有权、加工使用权、经营权界定明确；私有化部署与权限体系是&quot;控制&quot;的技术前提）；②预期能带来经济利益（对外授权运营、内部降本增效有可验证的收入或节约）；③成本或价值能够可靠计量（可归集采集、存储、加工、标注、治理成本，或采用收益法/市场法评估）；④合法合规（取得用户授权、履行告知义务，符合《个人信息保护法》《数据安全法》，涉及出域需安全评估）。<br>- 🟢 加分：解析·数据资产题要&quot;入表条件 + 治理前提 + 对外方案（隐私计算/可信空间）+ 组织机制&quot;。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🟡 支撑（2）需先完成的治理工作）：①确权与分类分级——明确数据来源、权属主体，按敏感程度分级（含个人信息的为敏感，须脱敏或匿名化）；②质量治理——统一指标口径与数据标准（如&quot;接通率&quot;唯一定义）、完整/准确/一致/及时/唯一/有效六维达标且有量化阈值；③元数据与血缘——可追溯数据来源、加工过程与责任主体（审计与计价都需要）；④主数据统一——客户、设备、组织编码一致，否则数据无法关联、价值大打折扣；⑤成本归集——建立数据资源成本台账（采集、存储、计算、标注、治理人力）；⑥安全与权限——分类分级、脱敏、加密、审计齐备；⑦资产盘点与目录——形成数据资产目录（名称、来源、规模、质量、权属、用途）。<br>问题 3｜参考答案要点：<br>- 🔴 核心：🟡 支撑（3）对外运营方案）：合规路线——①明确授权范围与用途（用户授权是否覆盖对外运营，必要时重新取得授权）；②去标识化/匿名化（对外提供前做不可逆脱敏或统计聚合）；③安全评估（数据出境与共享的安全评估、合规审查、合同约定用途限制与违约责任）；④审计留痕（谁取了什么数据、用于什么）。<br>问题 4｜参考答案要点：<br>- 🔴 核心：🟢 加分（4）组织与机制）：①设立数据 Owner／数据管家（Data Steward），明确&quot;谁的数、谁负责质量&quot;；②建立数据治理委员会（业务 + 信息 + 合规 + 财务联合决策）；③制度与规范（数据标准、质量规则、共享审批、安全分级、资产管理）；④平台支撑（元数据/质量/权限/审计一体化，避免&quot;制度写在纸上、执行靠人记&quot;）；⑤考核与激励（数据质量纳入部门考核，数据资产化收益与业务共享）；⑥定期盘点与评估（数据资产目录更新、价值复评、无效数据清理与销毁）。</div></details></div></details><details class="exam-subject" data-exam-subject="论文"><summary><span class="exam-subject-name">📄 论文写作</span><span class="exam-subject-n">5 题</span><span class="exam-subject-tip">论述题 · 先写再看题</span></summary><div class="exam-bar"><span class="exam-bar-label">📄 论文写作</span><span class="exam-bar-stat">共 <b>5</b> 题 · 论述题</span></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与分析开发的软件系统项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细阐述三种常用的数据挖掘方法。</li><li><b>问题 3</b> 说明项目中基于对应方法开展数据挖掘的实施过程。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 数据工程</span><span class="exam-lv">⭐⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与的大数据处理项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 阐述大数据系统与传统数据处理系统的差异，列举大数据系统的重要特征。</li><li><b>问题 3</b> 说明项目中大数据处理工作遇到的问题以及对应的解决办法。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 大数据</span><span class="exam-lv">⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与设计、开发的网格计算项目（项目的背景、资源类型、计算需求、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细论述网格计算的核心架构（五层沙漏架构）、资源调度算法、安全机制、网格中间件选型要点。</li><li><b>问题 3</b> 结合项目实践，论述网格计算在项目中的应用场景、性能优化方法，分析应用过程中遇到的问题及解决措施。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 大数据</span><span class="exam-lv">⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与实施的数据挖掘项目（项目的背景、数据来源、业务目标、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细论述数据挖掘的流程（数据预处理、特征工程、模型选择、模型训练、评估）、主流算法（聚类 / 分类 / 关联规则 / 回归）及适用场景。</li><li><b>问题 3</b> 结合项目实践，论述数据挖掘过程中的数据质量问题、模型落地难点及解决方法，总结数据挖掘对企业决策的支撑效果。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 数据工程</span><span class="exam-lv">⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与集成、开发或运维的大模型应用项目（项目的背景、业务场景、建设目标、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细论述大模型选型、私有化部署、提示工程设计、模型微调、系统集成等核心技术与实施流程。</li><li><b>问题 3</b> 结合项目实践，论述大模型应用的落地效果，分析数据安全、模型幻觉、输出精度不足等问题，并给出解决方案与优化思路。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 大模型与AI应用</span><span class="exam-lv">⭐⭐⭐</span></div></div></details></section>
     <div class="wrongbook"></div>
     <div class="keyhint">
   <span class="keyhint-title">键盘快捷键</span>
@@ -2989,6 +3158,77 @@ html{scroll-padding-top:80px}
     el.textContent = n
   }
 
+  // ══════════════════════════════════════════
+  // 12. 历年真题：批量展开 + 记忆展开状态
+  // ══════════════════════════════════════════
+  const Exam = {
+    KEY: 'examOpen',
+    init() {
+      const root = document.querySelector('.exam')
+      if (!root) return
+      const chapter = root.dataset.examChapter || 'x'
+
+      // 恢复上次展开状态：{ "H07": { "2025年5月": true, ... } }
+      const saved = store.get(this.KEY, {}) || {}
+      const mine = saved[chapter] || {}
+      root.querySelectorAll('.exam-year').forEach(y => {
+        const name = y.dataset.examYear
+        // 默认：展开最近 1 套（新年优先），其余收起
+        const open = (name in mine) ? mine[name] : false
+        if (open) y.open = true
+        y.addEventListener('toggle', () => {
+          mine[name] = y.open
+          saved[chapter] = mine
+          store.set(this.KEY, saved)
+        })
+      })
+      // 单题的"看过答案"状态也要记（避免重复点开）
+      const seen = store.get('examSeen', {}) || {}
+      root.querySelectorAll('.exam-q').forEach(qd => {
+        const qid = qd.dataset.examId
+        if (seen[qid]) {
+          const a = qd.querySelector('.exam-ans')
+          if (a) a.open = true
+        }
+        const ans = qd.querySelector('.exam-ans')
+        if (ans) ans.addEventListener('toggle', () => {
+          if (ans.open) { seen[qid] = 1; store.set('examSeen', seen) }
+        })
+      })
+
+      // 批量展开/收起按钮
+      root.querySelectorAll('.exam-op').forEach(btn => {
+        btn.addEventListener('click', e => {
+          e.preventDefault()
+          const openAll = btn.dataset.examAll === '1'
+          root.querySelectorAll('.exam-subject,.exam-year').forEach(d => { d.open = openAll })
+          root.querySelectorAll('.exam-ans').forEach(d => {
+            d.open = openAll
+            if (openAll && d.parentElement.dataset.examId) seen[d.parentElement.dataset.examId] = 1
+          })
+          if (openAll) store.set('examSeen', seen)
+          // 同步年份级记忆
+          root.querySelectorAll('.exam-year').forEach(y => { mine[y.dataset.examYear] = y.open })
+          saved[chapter] = mine
+          store.set(this.KEY, saved)
+        })
+      })
+
+      // 快捷键：E = 跳到真题区块（不与既有键冲突）
+      document.addEventListener('keydown', e => {
+        const t = e.target
+        if (t && t.nodeType === 1 && t.matches('input,textarea,select,[contenteditable]')) return
+        if (e.metaKey || e.ctrlKey || e.altKey) return
+        if (e.key.toLowerCase() === 'e') {
+          e.preventDefault()
+          root.scrollIntoView({ behavior: 'smooth', block: 'start' })
+          const y = root.querySelector('.exam-year')
+          if (y) y.open = true
+        }
+      })
+    }
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
     Theme.init()
     FontSize.init()
@@ -3004,6 +3244,7 @@ html{scroll-padding-top:80px}
     BackTop.init()
     CopyCode.init()
     ReadTime.init()
+    Exam.init()
     updateAnsweredStat()
     window.addEventListener('quiz:update', updateAnsweredStat)
     renderMermaid()

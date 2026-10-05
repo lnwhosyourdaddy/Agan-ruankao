@@ -7,7 +7,7 @@
 <title>第 29 小时 · 系统设计（一）· 结构化设计与面向对象设计 · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
-<meta name="build-stamp" content="2026-10-05 08:06:29">
+<meta name="build-stamp" content="2026-10-05 11:44:51">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -1927,6 +1927,166 @@ table.zebra tbody tr:hover{background:var(--accent-soft-2)}
 /* ── 平滑滚动偏移（锚点跳转不卡顶栏下） ── */
 html{scroll-padding-top:80px}
 @media(max-width:760px){html{scroll-padding-top:70px}}
+
+/* ═══════════════════════════════════════════════════════════════
+   历年真题区块 · 三级折叠（原生 details，零 JS）
+   ═══════════════════════════════════════════════════════════════ */
+.exam{margin:2.2em 0 1.6em}
+
+/* ── 统计条：常驻不折叠，避免"用户不知道里面有真题"而白做 ── */
+.exam-bar{
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  padding:12px 16px;margin-bottom:10px;
+  background:linear-gradient(180deg,var(--bg-card) 0%,var(--bg-alt) 100%);
+  border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow-1);
+}
+.exam-bar-label{font-weight:700;font-size:14px;color:var(--accent)}
+.exam-bar-stat{font-size:12.5px;color:var(--fg-3);flex:1;min-width:140px}
+.exam-bar-stat b{color:var(--fg-2);font-variant-numeric:tabular-nums}
+.exam-bar-ops{display:flex;gap:6px}
+.exam-op{
+  padding:4px 11px;font:inherit;font-size:12px;cursor:pointer;
+  background:var(--bg-card);border:1px solid var(--line-2);
+  border-radius:999px;color:var(--fg-2);
+  transition:border-color .18s var(--ease),color .18s var(--ease),background .18s var(--ease);
+}
+.exam-op:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+
+/* ── 科目级折叠 ── */
+.exam-subject{
+  border:1px solid var(--line);border-radius:var(--radius);
+  background:var(--bg-card);overflow:hidden;
+}
+.exam-subject>summary{
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  padding:12px 16px;cursor:pointer;list-style:none;
+  font-weight:600;color:var(--fg-2);
+  transition:background .18s var(--ease),color .18s var(--ease);
+}
+.exam-subject>summary::-webkit-details-marker{display:none}
+.exam-subject>summary:hover{background:var(--accent-soft);color:var(--accent)}
+.exam-subject[open]>summary{border-bottom:1px solid var(--line);background:var(--bg-alt)}
+.exam-subject-name::before{content:'▸ ';display:inline-block;transition:transform .2s var(--ease)}
+.exam-subject[open] .exam-subject-name::before{transform:rotate(90deg)}
+.exam-subject-n{font-size:12px;color:var(--fg-3);font-variant-numeric:tabular-nums}
+.exam-subject-tip{margin-left:auto;font-size:11.5px;color:var(--fg-3);opacity:.8}
+
+/* ── 年份级折叠 ── */
+.exam-year{border-bottom:1px solid var(--line)}
+.exam-year:last-child{border-bottom:0}
+.exam-year>summary{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 16px 9px 30px;cursor:pointer;list-style:none;
+  font-size:13.5px;color:var(--fg-2);
+  transition:background .16s var(--ease),color .16s var(--ease);
+}
+.exam-year>summary::-webkit-details-marker{display:none}
+.exam-year>summary:hover{background:var(--accent-soft);color:var(--accent)}
+.exam-year[open]>summary{background:var(--bg-alt)}
+.exam-year-name::before{content:'▸ ';display:inline-block;transition:transform .2s var(--ease);color:var(--fg-3)}
+.exam-year[open] .exam-year-name::before{transform:rotate(90deg)}
+.exam-year-n{font-size:11.5px;color:var(--fg-3);font-variant-numeric:tabular-nums}
+
+/* ── 单题折叠 ── */
+.exam-q{border-top:1px solid var(--line)}
+.exam-q>summary{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:9px 16px 9px 46px;cursor:pointer;list-style:none;
+  font-size:13.5px;line-height:1.6;color:var(--fg-2);
+  transition:background .16s var(--ease);
+}
+.exam-q>summary::-webkit-details-marker{display:none}
+.exam-q>summary:hover{background:var(--accent-soft)}
+.exam-q[open]>summary{background:var(--bg-alt)}
+.exam-q>summary::before{
+  content:'＋';flex-shrink:0;width:1.1em;text-align:center;
+  color:var(--fg-3);font-size:12px;line-height:1.5;
+}
+.exam-q[open]>summary::before{content:'－';color:var(--accent)}
+.exam-no{
+  flex-shrink:0;font-size:11px;color:var(--fg-3);
+  font-variant-numeric:tabular-nums;padding-top:2px;min-width:44px;
+}
+.exam-tag{
+  flex-shrink:0;font-size:10.5px;padding:1px 6px;border-radius:4px;
+  background:var(--warn-bg);color:var(--warn-fg);border:1px solid var(--warn-line);
+}
+.exam-stem-peek{
+  flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  color:var(--fg-2);
+}
+.exam-q[open] .exam-stem-peek{color:var(--fg)}
+.exam-q-body{padding:4px 16px 16px 46px}
+.exam-stem{margin:.6em 0;font-size:14.5px;line-height:1.8;color:var(--fg)}
+.exam-blank{color:var(--danger);padding:0 1px}
+.exam-opts{list-style:none;margin:.5em 0 .9em;padding:0}
+/* ⚠️ 必须清掉全局 `ul>li::before` 的圆点（本站正文列表有项目符号），
+   否则真题选项前会多出一个小圆点，位置还和字母块错开 */
+.exam-opts>li::before{content:none !important}
+.exam-opts li{
+  position:relative;padding:4px 0 4px 26px;font-size:14px;line-height:1.7;
+  border-bottom:1px dashed var(--line);
+}
+.exam-opts li:last-child{border-bottom:0}
+.exam-opts b{
+  position:absolute;left:0;top:4px;
+  display:inline-flex;align-items:center;justify-content:center;
+  width:19px;height:19px;border-radius:5px;
+  background:var(--bg-alt);border:1px solid var(--line-2);
+  font-size:11px;font-weight:700;color:var(--fg-3);
+}
+
+/* ── 答案（默认再折叠一层）── */
+.exam-ans{margin-top:.6em}
+.exam-ans>summary{
+  display:inline-flex;align-items:center;gap:6px;cursor:pointer;list-style:none;
+  padding:4px 12px;font-size:12px;
+  background:var(--accent-soft);border:1px solid var(--line-2);
+  border-radius:999px;color:var(--accent);
+  transition:background .18s var(--ease),border-color .18s var(--ease);
+}
+.exam-ans>summary::-webkit-details-marker{display:none}
+.exam-ans>summary:hover{background:var(--accent-soft-2);border-color:var(--accent)}
+.exam-ans[open]>summary{margin-bottom:8px}
+.exam-ans-line{margin:.4em 0;font-size:14px;color:var(--fg)}
+.exam-ans-line b{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:26px;height:24px;padding:0 8px;margin-left:4px;
+  border-radius:6px;background:var(--tip-bg);color:var(--tip-fg);
+  border:1px solid var(--tip-line);font-weight:700;
+}
+.exam-exp{margin:.4em 0;font-size:13.5px;line-height:1.8;color:var(--fg-2)}
+
+/* ── 窄屏 ── */
+@media(max-width:760px){
+  .exam-bar{padding:10px 12px;gap:8px}
+  .exam-bar-label{font-size:13px}
+  .exam-bar-stat{font-size:11.5px;flex-basis:100%;order:3;min-width:0}
+  .exam-bar-ops{margin-left:auto}
+  .exam-subject-tip{display:none}
+  .exam-q>summary{padding-left:16px;flex-wrap:wrap}
+  .exam-q>summary::before{display:none}
+  .exam-no{min-width:0}
+  .exam-q-body{padding-left:16px}
+  .exam-year>summary{padding-left:20px}
+  .exam-stem-peek{white-space:normal;flex-basis:100%}
+  .exam-opts li{font-size:13.5px}
+}
+
+/* ── 打印：全部自动展开（服务"可打印带水印"卖点）── */
+@media print{
+  .exam-bar,.exam-op,.exam-ans>summary{display:none !important}
+  .exam-subject,.exam-year,.exam-q{border:0 !important;background:none !important}
+  .exam-subject>summary,.exam-year>summary{
+    padding:6pt 0;background:none !important;border-bottom:1pt solid #999;
+  }
+  .exam-subject-name::before,.exam-year-name::before,.exam-q>summary::before{content:'' !important}
+  .exam-q-body,.exam-ans[open] > div,.exam-ans > div{display:block !important}
+  .exam-q{break-inside:avoid;page-break-inside:avoid}
+  .exam-stem,.exam-opts li{font-size:9.5pt}
+  .exam-exp{font-size:8.5pt;color:#333}
+}
 </style>
 </head>
 <body>
@@ -2206,6 +2366,24 @@ html{scroll-padding-top:80px}
   </div>
 </div>
 </div>
+    <section class="exam" id="exam" data-exam-chapter="13" data-exam-hour="H29"><div class="exam-bar"><span class="exam-bar-label">📚 历年真题</span><span class="exam-bar-stat">本章共 <b>16</b> 题 · 本学时 <b>8</b> 题（其余见同章其他学时）</span><span class="exam-bar-ops"><button type="button" class="exam-op" data-exam-all="1">全部展开</button><button type="button" class="exam-op" data-exam-all="0">全部收起</button></span></div><details class="exam-subject" data-exam-subject="综合知识"><summary><span class="exam-subject-name">📝 综合知识</span><span class="exam-subject-n">8 题</span><span class="exam-subject-tip">按年份展开 · 单题可点开看答案</span></summary><details class="exam-year" data-exam-year="2026年5月"><summary><span class="exam-year-name">2026年5月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2026年5月-069"><summary><span class="exam-no">第 69 题</span><span class="exam-stem-peek">记录对象状态并支持恢复的设计模式是</span></summary><div class="exam-q-body"><p class="exam-stem">记录对象状态并支持恢复的设计模式是</p><ul class="exam-opts"><li><b>A</b> 状态模式</li><li><b>B</b> 备忘录模式</li><li><b>C</b> 观察者模式</li><li><b>D</b> 适配器模式</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">备忘录模式专门用于保存对象历史状态，并支持状态回滚恢复。</p></details></div></details><details class="exam-q" data-exam-id="2026年5月-017"><summary><span class="exam-no">第 17 题</span><span class="exam-stem-peek">“一个类应当只有一个引起变化的原因”体现的是</span></summary><div class="exam-q-body"><p class="exam-stem">“一个类应当只有一个引起变化的原因”体现的是</p><ul class="exam-opts"><li><b>A</b> 开闭原则</li><li><b>B</b> 单一职责原则</li><li><b>C</b> 迪米特原则</li><li><b>D</b> 组合复用原则</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">单一职责原则核心定义：一个类/模块仅承担一项职责，仅有一个变更理由。</p></details></div></details></details><details class="exam-year" data-exam-year="2025年5月"><summary><span class="exam-year-name">2025年5月</span><span class="exam-year-n">3 题</span></summary><details class="exam-q" data-exam-id="2025年5月-062"><summary><span class="exam-no">第 62 题</span><span class="exam-stem-peek">在面向对象设计中，当多个功能通过继承关系实现（例如，子类直接继承父类的多个具体功能）时，这种做法如果导致高层模块（如使用…</span></summary><div class="exam-q-body"><p class="exam-stem">在面向对象设计中，当多个功能通过继承关系实现（例如，子类直接继承父类的多个具体功能）时，这种做法如果导致高层模块（如使用这些子类的类）直接依赖于低层模块（如父类）的具体实现细节，则主要违反了以下哪个设计原则？</p><ul class="exam-opts"><li><b>A</b> 开闭原则</li><li><b>B</b> 单一职责原则</li><li><b>C</b> 依赖倒置原则</li><li><b>D</b> 接口隔离原则</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">依赖倒置原则核心要求：高层模块不依赖低层具体实现，高低层都应该依赖抽象接口；高层模块直接依赖低层父类的实现细节，直接违反该设计原则。</p></details></div></details><details class="exam-q" data-exam-id="2025年5月-045"><summary><span class="exam-no">第 45 题</span><span class="exam-stem-peek">在设计模式中，单例模式属于 ()</span></summary><div class="exam-q-body"><p class="exam-stem">在设计模式中，单例模式属于 ()</p><ul class="exam-opts"><li><b>A</b> 结构型模式</li><li><b>B</b> 创建型模式</li><li><b>C</b> 行为型模式</li><li><b>D</b> 方法型模式</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">纯记忆送分题。</p></details></div></details><details class="exam-q" data-exam-id="2025年5月-025"><summary><span class="exam-no">第 25 题</span><span class="exam-stem-peek">人机交互设计中，用户体验模型包含了五个层次，其中（25）主要包括用户需求和产品目标</span></summary><div class="exam-q-body"><p class="exam-stem">人机交互设计中，用户体验模型包含了五个层次，其中（25）主要包括用户需求和产品目标</p><ul class="exam-opts"><li><b>A</b> 范围层</li><li><b>B</b> 交互设计层</li><li><b>C</b> 结构层</li><li><b>D</b> 战略层</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">用户体验五层模型：表现层、框架层、结构层、范围层和战略层。
+1.战略层。主要包括用户需求和产品目标。为了确定用户需求，首先要确定产品的目标用户。
+2.范围层。当把用户需求和网站目标转变成网站应该提供给用户什么样的内容和功能时，战略就变成了范围
+3.结构层。在收集完用户需求并将其排列好优先级后，需要将这些分散的片段组成一个整体，这就是结构层,即创建产品功能和内容之间的关系。
+4.框架层。决定某个板块或按钮等交互元素应该放在页面的什么地方。在设计框架层的内容时要遵循两条原则：遵循用户日常使用习惯和恰当使用生活中的比喻。框架层设计包含界面设计、导航设计和信息设计三个方面。
+5.表现层。是用户所能看见的一切，包括字体的大小、导航栏的颜色、整体给人的感觉等。在这一层，内容、功能和美学汇集在一起产生一个最终设计，从而满足其他层面的所有要求。</p></details></div></details></details><details class="exam-year" data-exam-year="2022年5月"><summary><span class="exam-year-name">2022年5月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2022年5月-030"><summary><span class="exam-no">第 30 题</span><span class="exam-tag">两空单选</span><span class="exam-tag">2 空</span><span class="exam-stem-peek">工作流参考模型（Workflow Reference Model，WRM）包含6个基本模块，分别是（29）、工作流引擎、…</span></summary><div class="exam-q-body"><p class="exam-stem">工作流参考模型（Workflow Reference Model，WRM）包含6个基本模块，分别是<b class="exam-blank">（29）</b>、工作流引擎、流程定义工具、<b class="exam-blank">（30）</b>、调用应用和管理监控工具。
+```mermaid
+flowchart TD
+A[流程定义工具] -.接口一.-&gt; B[工作流接口及交换格式&lt;br/&gt;工作流执行服务&lt;br/&gt;工作流引擎]
+C[管理监控工具] -.接口五.-&gt; B
+D[其他工作流执行服务] -.接口四.-&gt; B
+E[客户端应用] -.接口二.-&gt; B
+F[调用应用] -.接口三.-&gt; B
+```
+（本题为第 2 空）</p><ul class="exam-opts"><li><b>A</b> 客户端应用</li><li><b>B</b> 服务端应用</li><li><b>C</b> 部署端应用</li><li><b>D</b> 网络端应用</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">工作流参考模型WRM的6个基本模块为：工作流执行服务、工作流引擎、流程定义工具、客户端应用、调用应用、管理监控工具；流程定义工具通过接口一对接核心工作流执行服务，客户端应用通过接口二对接，调用应用通过接口三对接，跨系统执行服务通过接口四互通，管理监控工具通过接口五对接核心服务。</p></details></div></details><details class="exam-q" data-exam-id="2022年5月-028"><summary><span class="exam-no">第 28 题</span><span class="exam-stem-peek">工作流管理系统（Workflow Management System，WFMS）通过软件定义、创建工作流并管理其执行。其…</span></summary><div class="exam-q-body"><p class="exam-stem">工作流管理系统（Workflow Management System，WFMS）通过软件定义、创建工作流并管理其执行。其中，监控和管理进度完成情况和数据所处状态、工作分配与均衡情况等执行中的业务，体现着工作流管理系统（28）的基本功能。</p><ul class="exam-opts"><li><b>A</b> 工作流执行</li><li><b>B</b> 业务过程的设计和实现</li><li><b>C</b> 业务过程管理和分析</li><li><b>D</b> 对工作流进行建模</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">WFMS 将业务流程中工作如何组织与协调的规则抽象出来，在 WFMS 的协助下，开发人员遵从一定的编程接口和约定，就可以开发出更具灵活性的事务处理系统，用户无需重新开发即可更改工作流程，以适应业务的变更。WFMS 的基本功能体现在以下几个方面：
+（1）对工作流进行建模。即定义工作流，包括具体的活动和规则等，所创建的模型是同时可以被人和计算机所“理解”的，工作流对应现实世界的业务处理过程，不能改变真实业务的处理逻辑。
+（2）工作流执行。遵循工作流模型来创建和执行实际的工作流，即通过 WFMS 可以执行多个工作项。
+（3）业务过程的管理和分析。监控和管理执行中的业务（工作流），例如，进度完成情况和数据所处状态、工作分配与均衡情况等。</p></details></div></details></details><details class="exam-year" data-exam-year="2020年11月"><summary><span class="exam-year-name">2020年11月</span><span class="exam-year-n">1 题</span></summary><details class="exam-q" data-exam-id="2020年11月-028"><summary><span class="exam-no">第 28 题</span><span class="exam-stem-peek">WfMS的基本功能体现在对工作流进行建模、工作流执行和(28)。</span></summary><div class="exam-q-body"><p class="exam-stem">WfMS的基本功能体现在对工作流进行建模、工作流执行和(28)。</p><ul class="exam-opts"><li><b>A</b> 业务过程的实现</li><li><b>B</b> 业务过程的设计和实现</li><li><b>C</b> 业务过程的管理和分析</li><li><b>D</b> 业务过程的监控</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">WfMS三大基础能力分别是工作流建模、流程实例执行、业务全流程的管理与数据分析优化。</p></details></div></details></details></details><details class="exam-subject" data-exam-subject="案例"><summary><span class="exam-subject-name">📋 案例分析</span><span class="exam-subject-n">3 题</span><span class="exam-subject-tip">情景简答 · 采分点三色标记</span></summary><div class="exam-bar"><span class="exam-bar-label">📋 案例分析</span><span class="exam-bar-stat">共 <b>3</b> 题 · 情景简答</span></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">58</span>考点：工作流管理系统 / 流程设计工具（判定表/判定树）/ 耦合与内聚 / 扇入扇出<br>📅 时间：2025-08-20 上午 📍 地点：项目组设计评审<br>👤 人物：甘工（乙方·系统分析师）、彭工（乙方·架构设计师）、傅工（乙方·开发）、邓经理（甲方·运维经理）<br>⚡ 冲突：路由规则复杂（客户等级/意图/紧急程度/排队状态），模块划分耦合严重<br>难度：★★★　总分：9 分　建议用时：25 分钟<br>背景：傅工把路由模块的代码结构贴出来：路由引擎里直接读写工单库、查排队、算技能组，一个模块干了四件事。 彭工当场指出：&quot;这叫公共耦合——工单表结构一改，路由就跟着崩。&quot; 邓经理补了一句：&quot;那个&#x27;公共工具&#x27;包更离谱，日期、日志、加密、排队计算全塞在一起。&quot; 甘工拿起笔：&quot;今天要解决两件事：一是路由规则怎么表达清楚，二是模块怎么拆才不互相拖累。<br>补充资料：接进入优先队列；投诉类直接转人工专席；查询类优先 AI 自助；报修类按紧急程度（Ⅰ~Ⅳ级）决定响应时限并派单。同时，若当前排队人数超过阈值或等待超过 60 秒，则触发溢出策略（转语音留言或转其他技能组）。 项目组初步划分模块：<code>路由引擎</code>（规则加载、技能组查询、排队查询、工单存储）、<code>通知服务</code>、<code>统计报表</code>、<code>公共工具</code>（日期、日志、加密、排队计算）。<br>问题 1：请用判定表表达呼入路由规则（条件桩至少包含客户等级、意图、紧急程度），并说明判定表的化简方法；再说明工作流管理系统（WFMS）的构成与作用。（9分）<br>问题 2：（1）指出上述模块划分中耦合度较高的两处并给出降耦方法；<br>问题 3：（2）指出&quot;公共工具&quot;模块的内聚问题及改进；<br>问题 4：（3）说明扇入扇出的设计原则，并指出本例中高扇入模块应如何设计；<br>问题 5：（4）说明耦合与内聚的类型与强弱排序。</p><ul class="exam-questions"><li><b>问题 1</b> 请用<strong>判定表</strong>表达呼入路由规则（条件桩至少包含客户等级、意图、紧急程度），并说明判定表的化简方法；再说明<strong>工作流管理系统（WFMS）</strong>的构成与作用。（9分）</li><li><b>问题 2</b> （1）指出上述模块划分中<strong>耦合度较高</strong>的两处并给出降耦方法；</li><li><b>问题 3</b> （2）指出&quot;公共工具&quot;模块的<strong>内聚问题</strong>及改进；</li><li><b>问题 4</b> （3）说明<strong>扇入扇出</strong>的设计原则，并指出本例中高扇入模块应如何设计；</li><li><b>问题 5</b> （4）说明耦合与内聚的类型与强弱排序。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点（9分）：<br>- 🔴 核心：🔴 核心（判定表）：<br>- 🟡 支撑：C1 客户等级 = VIP：Y；N；N；N；N；—<br>- 🟡 支撑：C2 意图 = 投诉：—；Y；N；N；N；N<br>- 🟡 支撑：C3 意图 = 报修：—；—；Y；Y；N；N<br>- 🟡 支撑：C4 紧急程度 = Ⅰ/Ⅱ级：—；—；Y；N；—；—<br>- 🟡 支撑：C5 意图 = 查询：—；—；—；—；Y；N<br>- 🟡 支撑：C6 意图 = 预约：—；—；—；—；N；Y<br>- 🟡 支撑：A1 进优先队列 + 优先坐席：✔<br>- 🟡 支撑：A2 直转投诉专席 + 升级提醒：✔<br>- 🟡 支撑：A3 立即派单 + 电话催办（15 分钟/2 小时）：✔<br>- 🟡 支撑：A4 按 24 小时时限生成工单：✔<br>- 🟡 支撑：A5 AI 自助答复（查不到再转人工）：✔；A6 生成预约单 + 短信确认：✔；合并&quot;无关条件&quot;相同的列——若两列的动作完全相同且仅有一个条件取值不同、其余条件均为&quot;无关（—）&quot;，则可合并并把该条件改为&quot;—&quot;（如把 R3 与 R4 按紧急程度合并后仅保留差异条件）；化简后规则数更少、更易于用规则引擎实现。；由工作流引擎（解析流程定义、调度实例、路由与状态推进）、流程定义工具（图形化建模）、任务列表/客户端（待办与已办）、管理与监控工具（实例查询、超时告警、绩效统计）、集成接口组成。作用是把业务流程逻辑从应用代码中分离，实现流程的可配置、可监控、可优化，支持自动分派、超时升级与审计追溯。；本项目把判定表落地为&quot;规则引擎配置 + 策略模式代码&quot;，运营可后台调整阈值而无需发版，正是可修改性质量属性的体现。<br>- 🟢 加分：解析·耦合内聚题必须&quot;先定性（哪一级）再给改法&quot;。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）高耦合与降耦）：<br>问题 3｜参考答案要点：<br>- 🔴 核心：🔴 核心（2）内聚问题）：&quot;公共工具&quot;把日期、日志、加密、排队计算堆在一起，属偶然内聚/逻辑内聚（最低级），任何修改都影响所有调用方。改进：按职责拆为 DateUtil、LogUtil、CryptoUtil（功能内聚）；而&quot;排队计算&quot;属业务规则，应下沉为 QueueService 领域服务，由路由引擎调用。<br>问题 4｜参考答案要点：<br>- 🔴 核心：🔴 核心（3）扇入扇出）：原则是&quot;增加扇入、减少扇出&quot;——扇入高表示该模块被多处复用（好事，但要求接口稳定）；扇出高表示模块调用太多下级（通常 3~4 为宜，过高说明职责过重）。本例中工单服务与通知服务扇入最高，设计要点：①接口稳定且版本化；②接口隔离，避免调用方依赖不需要的方法；③通知服务抽象为 Notifier 接口（短信/推送/站内信分别实现），新增渠道零改动。<br>问题 5｜参考答案要点：<br>- 🔴 核心：🔴 核心（4）强弱排序）：耦合（高→低）：内容耦合 &gt; 公共耦合 &gt; 外部耦合 &gt; 控制耦合 &gt; 标记耦合 &gt; 数据耦合 &gt; 非直接耦合；内聚（低→高）：偶然内聚 &lt; 逻辑内聚 &lt; 时间内聚 &lt; 过程内聚 &lt; 通信内聚 &lt; 顺序内聚 &lt; 功能内聚。目标是低耦合、高内聚。</div></details></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">60</span>考点：输入设计原则与校验 / 输出设计 / 人机交互设计目标与原则<br>📅 时间：2025-10-15 上午 📍 地点：坐席工作台原型评审<br>👤 人物：甘工（乙方·系统分析师）、老陶（甲方·班组长(十年老坐席)）、小黄（甲方·新入职坐席）、洪经理（甲方·客服部经理）<br>⚡ 冲突：批量导入号码、弹屏、话术推荐、大屏——老陶嫌难用，小黄老误操作<br>难度：★★★　总分：10 分　建议用时：25 分钟<br>背景：老陶第一个发言：&quot;这新工作台，我找个&#x27;转接&#x27;按钮找半天，还是老系统顺手。&quot; 小黄更惨：&quot;我昨天把三张工单派错技能组了。&quot; 洪经理看着甘工：&quot;是不是设计有问题？&quot; 甘工没有急着辩解——他注意到&quot;派单&quot;和&quot;改派&quot;两个按钮长得几乎一样，而批量导入号码时没有任何校验提示。这是输入设计与人机交互的典型问题。<br>补充资料：均年龄偏大，部分老员工对新技术接受慢；大屏供班组长远程监控。<br>问题 1：请给出输入设计的原则与本项目的校验规则；说明输出设计的原则与大屏指标选型；并说明人机交互设计的目标与三条落地要求。（10分）</p><ul class="exam-questions"><li><b>问题 1</b> 请给出输入设计的原则与本项目的校验规则；说明输出设计的原则与大屏指标选型；并说明人机交互设计的目标与三条落地要求。（10分）<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点（10分）：<br>- 🔴 核心：①最小量原则（只收集必需信息）；②尽早校验（前端 + 服务端双重）；③简单性（默认值、下拉选择、自动填充）；④少转换（避免手工换算与拼接）；⑤减少操作步骤（快捷键、批量导入、一键复用）。<br>- 🔴 核心：①号码格式校验（手机 11 位、固话带区号）与批量去重；②禁呼时段与黑名单联动校验（命中即拦截并给出明确原因）；③超量发送预警（批量短信超阈值自动拦截并告警）；④地址按&quot;+市/区县&quot;规则规范化；⑤必填与业务规则校验（漏气工单必须填写&quot;是否有异味/是否开窗&quot;）；⑥文件大小与格式限制（仅 Excel/CSV）。<br>- 🔴 核心：①确有必要（先问&quot;谁看、看完做什么决策&quot;）；②格式符合用户习惯（Excel/图表）；③易读性与可视化（饼图占比、折线趋势、地图下钻）；④可追溯（报表可下钻明细、明细可回放录音）；⑤时效与一致（延迟 ≤60 秒、误差 ≤1%）。<br>- 🟡 支撑：当前排队数、放弃率、平均通话时长、服务水平（20 秒接起率）、AI 自助解决率、转人工率、意图热点分布、各技能组负载、异常高亮预警。<br>- 🔴 核心：目标——易学、易用、高效（可表述为&quot;可用性目标：有效性、效率、满意度&quot;）。三条落地要求：①一致性（工作台、App、大屏的术语、配色与操作流程统一）；②及时反馈与容错（每步操作有反馈，错误提示说清&quot;为什么 + 怎么改&quot;，支持撤销，关键操作二次确认）；③减少记忆负担与适老化（关键信息默认展开、字号可调、高频操作一键完成、提供新手引导与速查卡、保留简化视图），并满足无障碍要求。<br>- 🟢 加分：若涉及大模型话术推荐，应提供&quot;可解释 + 可干预&quot;（显示推荐依据、支持一键替换），避免坐席盲信。<br>- 🟢 加分：解析·输入输出与人机交互题要&quot;原则 + 本项目具体化&quot;。</div></details></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">62</span>📅 时间：2025-09-18 📍 地点：项目组设计评审（AI 外呼模块）<br>👤 人物：甘工（乙方·系统分析师）、彭工（乙方·架构设计师）、傅工（乙方·开发）、邓经理（甲方·运维经理）、洪经理（甲方·客服部经理）<br>⚡ 冲突：外呼要支持&quot;外显号码池轮询、接通后 X 秒放音、未接/空号/关机状态码识别、重呼与短信策略&quot;，傅工想用 if-else 一路写下去<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：洪经理列了一串外呼策略要求：&quot;外显号码要轮询，不能老用一个号被标记；接通后不能直接放音，得等个一两秒；未接、空号、关机要能分开统计；未接通的可以按策略重呼，也可以发短信。&quot; 傅工打开 IDE 就开始写：<code>if (status == NO_ANSWER) { ... } else if (status == OFF_HOOK) ...</code> 彭工按住他：&quot;你写三条现在是三行，等甲方再加五种状态码、三种重呼策略、两套短信模板，这一坨 if-else 谁维护？而且外呼时段、节假日、号码池权重都要能改——你打算每次改都发版吗？&quot; 甘工决定用策略模式 + 状态机 + 配置外置重构这一块。<br>问题 1：（1）说明策略模式的结构与适用场景，并用它重构&quot;拨打策略引擎&quot;；<br>问题 2：（2）用状态转换图描述一次外呼呼叫的生命周期（含未接/空号/关机/接通/完成）；<br>问题 3：（3）说明配置外置与热更新的设计（号码池权重、等待秒数、重呼次数、短信模板）；<br>问题 4：（4）说明设计原则（开闭、单一职责、依赖倒置）在本方案中的体现。</p><ul class="exam-questions"><li><b>问题 1</b> （1）说明<strong>策略模式</strong>的结构与适用场景，并用它重构&quot;拨打策略引擎&quot;；</li><li><b>问题 2</b> （2）用<strong>状态转换图</strong>描述一次外呼呼叫的生命周期（含未接/空号/关机/接通/完成）；</li><li><b>问题 3</b> （3）说明<strong>配置外置与热更新</strong>的设计（号码池权重、等待秒数、重呼次数、短信模板）；</li><li><b>问题 4</b> （4）说明设计原则（开闭、单一职责、依赖倒置）在本方案中的体现。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）策略模式）：结构——Strategy（抽象策略，定义算法接口）、ConcreteStrategy（具体策略：号码池轮询策略、延迟放音策略、状态码判定策略、重呼策略、短信策略）、Context（上下文，持有一个策略引用并在运行时调用）。<br>- 🟢 加分：解析·策略模式题要&quot;结构 + 重构清单 + 状态图 + 配置化 + 原则&quot;。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🔴 核心（2）外呼状态图）：<br>问题 3｜参考答案要点：<br>- 🔴 核心：🟡 支撑（3）配置外置与热更新）：①配置项——号码池清单与权重、接通后等待秒数、重呼次数与间隔、状态码—动作映射、短信模板（按渠道/状态码）、服务时段与节假日、并发上限；②存入配置中心，支持版本化、灰度、回滚、审计；③客户端监听变更 + 本地缓存 + 变更失效，实现热更新且不牺牲性能；④校验与防错——阈值上下限、模板变量存在性校验，非法配置不允许保存；异常时自动回退默认配置；⑤敏感配置（号码池）走审批 + 加密存储。<br>问题 4｜参考答案要点：<br>- 🔴 核心：🔴 核心（4）设计原则体现）：</div></details></div></details><details class="exam-subject" data-exam-subject="论文"><summary><span class="exam-subject-name">📄 论文写作</span><span class="exam-subject-n">7 题</span><span class="exam-subject-tip">论述题 · 先写再看题</span></summary><div class="exam-bar"><span class="exam-bar-label">📄 论文写作</span><span class="exam-bar-stat">共 <b>7</b> 题 · 论述题</span></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与管理和开发的软件项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 简要描述面向对象设计的三种设计原则。</li><li><b>问题 3</b> 具体阐述项目中如何遵循相关设计原则开展信息系统设计。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 系统设计</span><span class="exam-lv">⭐⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 简要叙述你参与的软件开发项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 说明处理流程设计工具的类别，并为每类工具列举至少一种实例。</li><li><b>问题 3</b> 说明项目选用的流程设计工具、实施过程以及应用效果。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 系统设计</span><span class="exam-lv">⭐⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与设计、开发的信息系统项目（项目的背景、业务场景、技术架构、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细论述面向对象设计的核心原则（如单一职责、开闭原则、里氏替换等）、类与对象的设计方法、交互机制设计要点。</li><li><b>问题 3</b> 结合项目实践，论述面向对象设计在项目中的具体落地方式、遇到的设计难点及解决思路，总结实施效果。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 系统设计</span><span class="exam-lv">⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与设计、开发的分布式系统项目（项目的背景、业务场景、节点规模、性能要求、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细论述分布式系统的核心设计原则（一致性、可用性、分区容错性）、关键技术（分布式锁、负载均衡、数据同步、一致性协议）及实施要点。</li><li><b>问题 3</b> 结合项目实例，论述分布式系统实现过程中遇到的一致性问题、性能瓶颈及解决方法，总结实施经验。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 专项系统类型</span><span class="exam-lv">⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与设计、开发的嵌入式系统项目（项目的背景、应用场景、实时性要求、硬件平台、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细论述嵌入式系统的架构设计（硬件层、驱动层、操作系统层、应用层）、实时性设计要点、资源优化方法（内存 / 存储 / 功耗）。</li><li><b>问题 3</b> 结合项目实例，论述系统实现过程中的调试难点、稳定性优化措施，总结嵌入式系统开发的经验教训。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 专项系统类型</span><span class="exam-lv">⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与设计、开发的实时系统项目（项目的背景、实时性指标、应用场景、硬件平台、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细论述实时系统的架构设计、任务调度算法（如优先级调度、时间片轮转）、中断处理设计、资源冲突解决方法。</li><li><b>问题 3</b> 结合项目实例，论述系统实现过程中的实时性测试方法、性能优化措施，总结实时系统开发的经验。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 专项系统类型</span><span class="exam-lv">⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与设计、开发的分布式数据库项目（项目的背景、数据分布需求、节点规模、性能要求、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细论述分布式数据库的架构设计（分片 / 复制）、分布式事务处理方法（2PC/3PC/TCC）、数据同步策略、查询优化要点。</li><li><b>问题 3</b> 结合项目实例，论述系统实现过程中的一致性问题、节点故障应对方法，总结分布式数据库实施的经验教训。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 专项系统类型</span><span class="exam-lv">⭐</span></div></div></details></section>
     <div class="wrongbook"></div>
     <div class="keyhint">
   <span class="keyhint-title">键盘快捷键</span>
@@ -3080,6 +3258,77 @@ html{scroll-padding-top:80px}
     el.textContent = n
   }
 
+  // ══════════════════════════════════════════
+  // 12. 历年真题：批量展开 + 记忆展开状态
+  // ══════════════════════════════════════════
+  const Exam = {
+    KEY: 'examOpen',
+    init() {
+      const root = document.querySelector('.exam')
+      if (!root) return
+      const chapter = root.dataset.examChapter || 'x'
+
+      // 恢复上次展开状态：{ "H07": { "2025年5月": true, ... } }
+      const saved = store.get(this.KEY, {}) || {}
+      const mine = saved[chapter] || {}
+      root.querySelectorAll('.exam-year').forEach(y => {
+        const name = y.dataset.examYear
+        // 默认：展开最近 1 套（新年优先），其余收起
+        const open = (name in mine) ? mine[name] : false
+        if (open) y.open = true
+        y.addEventListener('toggle', () => {
+          mine[name] = y.open
+          saved[chapter] = mine
+          store.set(this.KEY, saved)
+        })
+      })
+      // 单题的"看过答案"状态也要记（避免重复点开）
+      const seen = store.get('examSeen', {}) || {}
+      root.querySelectorAll('.exam-q').forEach(qd => {
+        const qid = qd.dataset.examId
+        if (seen[qid]) {
+          const a = qd.querySelector('.exam-ans')
+          if (a) a.open = true
+        }
+        const ans = qd.querySelector('.exam-ans')
+        if (ans) ans.addEventListener('toggle', () => {
+          if (ans.open) { seen[qid] = 1; store.set('examSeen', seen) }
+        })
+      })
+
+      // 批量展开/收起按钮
+      root.querySelectorAll('.exam-op').forEach(btn => {
+        btn.addEventListener('click', e => {
+          e.preventDefault()
+          const openAll = btn.dataset.examAll === '1'
+          root.querySelectorAll('.exam-subject,.exam-year').forEach(d => { d.open = openAll })
+          root.querySelectorAll('.exam-ans').forEach(d => {
+            d.open = openAll
+            if (openAll && d.parentElement.dataset.examId) seen[d.parentElement.dataset.examId] = 1
+          })
+          if (openAll) store.set('examSeen', seen)
+          // 同步年份级记忆
+          root.querySelectorAll('.exam-year').forEach(y => { mine[y.dataset.examYear] = y.open })
+          saved[chapter] = mine
+          store.set(this.KEY, saved)
+        })
+      })
+
+      // 快捷键：E = 跳到真题区块（不与既有键冲突）
+      document.addEventListener('keydown', e => {
+        const t = e.target
+        if (t && t.nodeType === 1 && t.matches('input,textarea,select,[contenteditable]')) return
+        if (e.metaKey || e.ctrlKey || e.altKey) return
+        if (e.key.toLowerCase() === 'e') {
+          e.preventDefault()
+          root.scrollIntoView({ behavior: 'smooth', block: 'start' })
+          const y = root.querySelector('.exam-year')
+          if (y) y.open = true
+        }
+      })
+    }
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
     Theme.init()
     FontSize.init()
@@ -3095,6 +3344,7 @@ html{scroll-padding-top:80px}
     BackTop.init()
     CopyCode.init()
     ReadTime.init()
+    Exam.init()
     updateAnsweredStat()
     window.addEventListener('quiz:update', updateAnsweredStat)
     renderMermaid()

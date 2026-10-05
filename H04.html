@@ -7,7 +7,7 @@
 <title>第 4 小时 · 计算机系统（一）· 硬件与体系结构 · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
-<meta name="build-stamp" content="2026-10-05 08:06:29">
+<meta name="build-stamp" content="2026-10-05 11:44:51">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -1927,6 +1927,166 @@ table.zebra tbody tr:hover{background:var(--accent-soft-2)}
 /* ── 平滑滚动偏移（锚点跳转不卡顶栏下） ── */
 html{scroll-padding-top:80px}
 @media(max-width:760px){html{scroll-padding-top:70px}}
+
+/* ═══════════════════════════════════════════════════════════════
+   历年真题区块 · 三级折叠（原生 details，零 JS）
+   ═══════════════════════════════════════════════════════════════ */
+.exam{margin:2.2em 0 1.6em}
+
+/* ── 统计条：常驻不折叠，避免"用户不知道里面有真题"而白做 ── */
+.exam-bar{
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  padding:12px 16px;margin-bottom:10px;
+  background:linear-gradient(180deg,var(--bg-card) 0%,var(--bg-alt) 100%);
+  border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow-1);
+}
+.exam-bar-label{font-weight:700;font-size:14px;color:var(--accent)}
+.exam-bar-stat{font-size:12.5px;color:var(--fg-3);flex:1;min-width:140px}
+.exam-bar-stat b{color:var(--fg-2);font-variant-numeric:tabular-nums}
+.exam-bar-ops{display:flex;gap:6px}
+.exam-op{
+  padding:4px 11px;font:inherit;font-size:12px;cursor:pointer;
+  background:var(--bg-card);border:1px solid var(--line-2);
+  border-radius:999px;color:var(--fg-2);
+  transition:border-color .18s var(--ease),color .18s var(--ease),background .18s var(--ease);
+}
+.exam-op:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+
+/* ── 科目级折叠 ── */
+.exam-subject{
+  border:1px solid var(--line);border-radius:var(--radius);
+  background:var(--bg-card);overflow:hidden;
+}
+.exam-subject>summary{
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  padding:12px 16px;cursor:pointer;list-style:none;
+  font-weight:600;color:var(--fg-2);
+  transition:background .18s var(--ease),color .18s var(--ease);
+}
+.exam-subject>summary::-webkit-details-marker{display:none}
+.exam-subject>summary:hover{background:var(--accent-soft);color:var(--accent)}
+.exam-subject[open]>summary{border-bottom:1px solid var(--line);background:var(--bg-alt)}
+.exam-subject-name::before{content:'▸ ';display:inline-block;transition:transform .2s var(--ease)}
+.exam-subject[open] .exam-subject-name::before{transform:rotate(90deg)}
+.exam-subject-n{font-size:12px;color:var(--fg-3);font-variant-numeric:tabular-nums}
+.exam-subject-tip{margin-left:auto;font-size:11.5px;color:var(--fg-3);opacity:.8}
+
+/* ── 年份级折叠 ── */
+.exam-year{border-bottom:1px solid var(--line)}
+.exam-year:last-child{border-bottom:0}
+.exam-year>summary{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 16px 9px 30px;cursor:pointer;list-style:none;
+  font-size:13.5px;color:var(--fg-2);
+  transition:background .16s var(--ease),color .16s var(--ease);
+}
+.exam-year>summary::-webkit-details-marker{display:none}
+.exam-year>summary:hover{background:var(--accent-soft);color:var(--accent)}
+.exam-year[open]>summary{background:var(--bg-alt)}
+.exam-year-name::before{content:'▸ ';display:inline-block;transition:transform .2s var(--ease);color:var(--fg-3)}
+.exam-year[open] .exam-year-name::before{transform:rotate(90deg)}
+.exam-year-n{font-size:11.5px;color:var(--fg-3);font-variant-numeric:tabular-nums}
+
+/* ── 单题折叠 ── */
+.exam-q{border-top:1px solid var(--line)}
+.exam-q>summary{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:9px 16px 9px 46px;cursor:pointer;list-style:none;
+  font-size:13.5px;line-height:1.6;color:var(--fg-2);
+  transition:background .16s var(--ease);
+}
+.exam-q>summary::-webkit-details-marker{display:none}
+.exam-q>summary:hover{background:var(--accent-soft)}
+.exam-q[open]>summary{background:var(--bg-alt)}
+.exam-q>summary::before{
+  content:'＋';flex-shrink:0;width:1.1em;text-align:center;
+  color:var(--fg-3);font-size:12px;line-height:1.5;
+}
+.exam-q[open]>summary::before{content:'－';color:var(--accent)}
+.exam-no{
+  flex-shrink:0;font-size:11px;color:var(--fg-3);
+  font-variant-numeric:tabular-nums;padding-top:2px;min-width:44px;
+}
+.exam-tag{
+  flex-shrink:0;font-size:10.5px;padding:1px 6px;border-radius:4px;
+  background:var(--warn-bg);color:var(--warn-fg);border:1px solid var(--warn-line);
+}
+.exam-stem-peek{
+  flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  color:var(--fg-2);
+}
+.exam-q[open] .exam-stem-peek{color:var(--fg)}
+.exam-q-body{padding:4px 16px 16px 46px}
+.exam-stem{margin:.6em 0;font-size:14.5px;line-height:1.8;color:var(--fg)}
+.exam-blank{color:var(--danger);padding:0 1px}
+.exam-opts{list-style:none;margin:.5em 0 .9em;padding:0}
+/* ⚠️ 必须清掉全局 `ul>li::before` 的圆点（本站正文列表有项目符号），
+   否则真题选项前会多出一个小圆点，位置还和字母块错开 */
+.exam-opts>li::before{content:none !important}
+.exam-opts li{
+  position:relative;padding:4px 0 4px 26px;font-size:14px;line-height:1.7;
+  border-bottom:1px dashed var(--line);
+}
+.exam-opts li:last-child{border-bottom:0}
+.exam-opts b{
+  position:absolute;left:0;top:4px;
+  display:inline-flex;align-items:center;justify-content:center;
+  width:19px;height:19px;border-radius:5px;
+  background:var(--bg-alt);border:1px solid var(--line-2);
+  font-size:11px;font-weight:700;color:var(--fg-3);
+}
+
+/* ── 答案（默认再折叠一层）── */
+.exam-ans{margin-top:.6em}
+.exam-ans>summary{
+  display:inline-flex;align-items:center;gap:6px;cursor:pointer;list-style:none;
+  padding:4px 12px;font-size:12px;
+  background:var(--accent-soft);border:1px solid var(--line-2);
+  border-radius:999px;color:var(--accent);
+  transition:background .18s var(--ease),border-color .18s var(--ease);
+}
+.exam-ans>summary::-webkit-details-marker{display:none}
+.exam-ans>summary:hover{background:var(--accent-soft-2);border-color:var(--accent)}
+.exam-ans[open]>summary{margin-bottom:8px}
+.exam-ans-line{margin:.4em 0;font-size:14px;color:var(--fg)}
+.exam-ans-line b{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:26px;height:24px;padding:0 8px;margin-left:4px;
+  border-radius:6px;background:var(--tip-bg);color:var(--tip-fg);
+  border:1px solid var(--tip-line);font-weight:700;
+}
+.exam-exp{margin:.4em 0;font-size:13.5px;line-height:1.8;color:var(--fg-2)}
+
+/* ── 窄屏 ── */
+@media(max-width:760px){
+  .exam-bar{padding:10px 12px;gap:8px}
+  .exam-bar-label{font-size:13px}
+  .exam-bar-stat{font-size:11.5px;flex-basis:100%;order:3;min-width:0}
+  .exam-bar-ops{margin-left:auto}
+  .exam-subject-tip{display:none}
+  .exam-q>summary{padding-left:16px;flex-wrap:wrap}
+  .exam-q>summary::before{display:none}
+  .exam-no{min-width:0}
+  .exam-q-body{padding-left:16px}
+  .exam-year>summary{padding-left:20px}
+  .exam-stem-peek{white-space:normal;flex-basis:100%}
+  .exam-opts li{font-size:13.5px}
+}
+
+/* ── 打印：全部自动展开（服务"可打印带水印"卖点）── */
+@media print{
+  .exam-bar,.exam-op,.exam-ans>summary{display:none !important}
+  .exam-subject,.exam-year,.exam-q{border:0 !important;background:none !important}
+  .exam-subject>summary,.exam-year>summary{
+    padding:6pt 0;background:none !important;border-bottom:1pt solid #999;
+  }
+  .exam-subject-name::before,.exam-year-name::before,.exam-q>summary::before{content:'' !important}
+  .exam-q-body,.exam-ans[open] > div,.exam-ans > div{display:block !important}
+  .exam-q{break-inside:avoid;page-break-inside:avoid}
+  .exam-stem,.exam-opts li{font-size:9.5pt}
+  .exam-exp{font-size:8.5pt;color:#333}
+}
 </style>
 </head>
 <body>
@@ -2375,6 +2535,197 @@ html{scroll-padding-top:80px}
   </div>
 </div>
 </div>
+    <section class="exam" id="exam" data-exam-chapter="3" data-exam-hour="H04"><div class="exam-bar"><span class="exam-bar-label">📚 历年真题</span><span class="exam-bar-stat">本章共 <b>85</b> 题 · 本学时 <b>43</b> 题（其余见同章其他学时）</span><span class="exam-bar-ops"><button type="button" class="exam-op" data-exam-all="1">全部展开</button><button type="button" class="exam-op" data-exam-all="0">全部收起</button></span></div><details class="exam-subject" data-exam-subject="综合知识"><summary><span class="exam-subject-name">📝 综合知识</span><span class="exam-subject-n">43 题</span><span class="exam-subject-tip">按年份展开 · 单题可点开看答案</span></summary><details class="exam-year" data-exam-year="2026年5月"><summary><span class="exam-year-name">2026年5月</span><span class="exam-year-n">3 题</span></summary><details class="exam-q" data-exam-id="2026年5月-058"><summary><span class="exam-no">第 58 题</span><span class="exam-stem-peek">RISC架构的特点不包括</span></summary><div class="exam-q-body"><p class="exam-stem">RISC架构的特点不包括</p><ul class="exam-opts"><li><b>A</b> 指令数量少</li><li><b>B</b> 格式统一</li><li><b>C</b> 大量微程序控制</li><li><b>D</b> 执行效率高</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">微程序控制是CISC复杂指令集特点；RISC采用硬布线控制，指令精简、效率高。</p></details></div></details><details class="exam-q" data-exam-id="2026年5月-036"><summary><span class="exam-no">第 36 题</span><span class="exam-stem-peek">微内核操作系统中，设备驱动通常运行在</span></summary><div class="exam-q-body"><p class="exam-stem">微内核操作系统中，设备驱动通常运行在</p><ul class="exam-opts"><li><b>A</b> 用户态</li><li><b>B</b> 内核态</li><li><b>C</b> BIOS层</li><li><b>D</b> 缓冲区</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">微内核仅保留进程调度、内存管理等核心功能，驱动、文件系统均运行在用户态。</p></details></div></details><details class="exam-q" data-exam-id="2026年5月-004"><summary><span class="exam-no">第 4 题</span><span class="exam-stem-peek">DMA方式相比程序中断方式的优势是</span></summary><div class="exam-q-body"><p class="exam-stem">DMA方式相比程序中断方式的优势是</p><ul class="exam-opts"><li><b>A</b> CPU参与更多</li><li><b>B</b> 数据传输效率更高</li><li><b>C</b> 成本更高</li><li><b>D</b> 不支持高速设备</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">DMA由硬件直接完成数据搬运，极少占用CPU资源，传输效率远高于程序中断方式。</p></details></div></details></details><details class="exam-year" data-exam-year="2025年5月"><summary><span class="exam-year-name">2025年5月</span><span class="exam-year-n">6 题</span></summary><details class="exam-q" data-exam-id="2025年5月-044"><summary><span class="exam-no">第 44 题</span><span class="exam-stem-peek">以下不属于 RISC 特点的是 ()</span></summary><div class="exam-q-body"><p class="exam-stem">以下不属于 RISC 特点的是 ()</p><ul class="exam-opts"><li><b>A</b> 选择较高频率简单指令</li><li><b>B</b> 增加了寄存器，减少使用次数</li><li><b>C</b> 指令长度固定，指令格式种类少</li><li><b>D</b> 寻址方式种类尽量减少，指令功能尽可能强</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">D 后半句错了，指令功能强是 CISC 特点，RISC 强调简单单一，CISC 设计功能复杂指令。</p></details></div></details><details class="exam-q" data-exam-id="2025年5月-039"><summary><span class="exam-no">第 39 题</span><span class="exam-stem-peek">医院里面的影像文件一般采用下列（）进行存储</span></summary><div class="exam-q-body"><p class="exam-stem">医院里面的影像文件一般采用下列（）进行存储</p><ul class="exam-opts"><li><b>A</b> 分布式存储</li><li><b>B</b> 文件存储</li><li><b>C</b> 集中存储</li><li><b>D</b> 文件数据库</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">文件存储核心原因:
+标准化兼容性: 医疗影像遵循 DICOM（Digital Imaging and Communications in Medicine）标准，该标准原生支持文件系统存储（如目录结构、文件名规范）。文件存储（如 NAS、SAN）可直接管理 DICOM 文件的层级结构（患者→检查序列→单张影像），无需额外转换。
+性能与扩展性: 影像文件单个体积大（GB 级），且需高速读写（如调阅历史影像）。文件存储（如 NAS）通过横向扩展存储节点，可满足海量小文件（单张影像）和高吞吐需求，同时支持并发访问。
+行业实践:
+主流医学影像系统（PACS）底层普遍采用 文件存储 或 对象存储（对象存储可视为文件存储的扩展），而非数据库。
+A. 分布式存储 广义分布式存储包含文件存储（如 HDFS），但选项未特指；且医疗场景更倾向成熟的文件存储协议（NFS/SMB）。
+C. 集中存储 集中式存储（如传统 SAN）存在单点故障风险，难以应对影像数据的爆炸式增长。
+D. 文件数据库 文件数据库（如 MongoDB GridFS）适用于非结构化数据，但 DICOM 的元数据+文件分离架构更倾向文件存储+关系型数据库组合（影像文件存文件系统，元数据存 SQL）。</p></details></div></details><details class="exam-q" data-exam-id="2025年5月-027"><summary><span class="exam-no">第 27 题</span><span class="exam-stem-peek">下面（）不属于主存</span></summary><div class="exam-q-body"><p class="exam-stem">下面（）不属于主存</p><ul class="exam-opts"><li><b>A</b> ROM</li><li><b>B</b> cache</li><li><b>C</b> SRAM</li><li><b>D</b> DRAM</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">cache 是高速缓冲存储器，与主存无关，一般 SRAM 是构成 cache 的材料，DRAM 是构成主存的材料，但 SRAM 也可以用来制作主存。</p></details></div></details><details class="exam-q" data-exam-id="2025年5月-015"><summary><span class="exam-no">第 15 题</span><span class="exam-stem-peek">关于进程和线程说法不正确的是（）</span></summary><div class="exam-q-body"><p class="exam-stem">关于进程和线程说法不正确的是（）</p><ul class="exam-opts"><li><b>A</b> 一个进程可以创建一个或多个线程</li><li><b>B</b> 一个进程可以创建一个或多个进程</li><li><b>C</b> 一个线程可以创建一个或多个线程</li><li><b>D</b> 一个线程可以创建一个或多个进程</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">一个进程可以创建一个或多个线程，进程是拥有资源的最小单位，线程是可独立调度的最小单位，进程是包含线程的。</p></details></div></details><details class="exam-q" data-exam-id="2025年5月-007"><summary><span class="exam-no">第 7 题</span><span class="exam-stem-peek">（）是最适合使用SSD替代HDD的场景</span></summary><div class="exam-q-body"><p class="exam-stem">（）是最适合使用SSD替代HDD的场景</p><ul class="exam-opts"><li><b>A</b> 需要大量随机写入读取的时候</li><li><b>B</b> 网络带宽不足的时候</li><li><b>C</b> 存储冷数据的时候</li><li><b>D</b> 需要低成本进行数据存储的时候</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">SSD基于闪存无机械部件，随机读写速度快、延迟低，适合大量随机读写场景；HDD随机读写性能差，但成本低、适合存储冷数据，网络带宽与存储介质选型无关。</p></details></div></details><details class="exam-q" data-exam-id="2025年5月-004"><summary><span class="exam-no">第 4 题</span><span class="exam-stem-peek">（）由字符串组成，文件内的信息不再划分结构</span></summary><div class="exam-q-body"><p class="exam-stem">（）由字符串组成，文件内的信息不再划分结构</p><ul class="exam-opts"><li><b>A</b> 顺序文件</li><li><b>B</b> 有序文件</li><li><b>C</b> 流式文件</li><li><b>D</b> 记录式文件</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">文件逻辑结构分为记录式文件和流式文件，流式文件由无结构的字符流构成，内部信息不划分结构；记录式文件由多个有结构的记录组成。</p></details></div></details></details><details class="exam-year" data-exam-year="2024年5月"><summary><span class="exam-year-name">2024年5月</span><span class="exam-year-n">7 题</span></summary><details class="exam-q" data-exam-id="2024年5月-068"><summary><span class="exam-no">第 68 题</span><span class="exam-stem-peek">寄存器之间交换数据可通过以下（）方式</span></summary><div class="exam-q-body"><p class="exam-stem">寄存器之间交换数据可通过以下（）方式</p><ul class="exam-opts"><li><b>A</b> 使用数据交换指令</li><li><b>B</b> 使用控制指令</li><li><b>C</b> DMA</li><li><b>D</b> 中断</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">CPU架构设计了专门的数据交换指令，可直接完成通用寄存器之间的数据交互；控制指令用于程序流程跳转、权限管控，DMA负责外设与内存的高速批量传输，中断用于处理突发异步事件。</p></details></div></details><details class="exam-q" data-exam-id="2024年5月-051"><summary><span class="exam-no">第 51 题</span><span class="exam-stem-peek">在计算机硬件中，（）把内存中的数据传入 CPU 中供运行使用。</span></summary><div class="exam-q-body"><p class="exam-stem">在计算机硬件中，（）把内存中的数据传入 CPU 中供运行使用。</p><ul class="exam-opts"><li><b>A</b> 输入设备</li><li><b>B</b> 输出设备</li><li><b>C</b> 运算器</li><li><b>D</b> 控制器</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">控制器会根据指令时序，发起内存读操作，将内存数据读取到CPU内部寄存器，再调度给运算器执行计算；输入输出设备仅处理外设数据交互，运算器仅负责算术逻辑运算。</p></details></div></details><details class="exam-q" data-exam-id="2024年5月-044"><summary><span class="exam-no">第 44 题</span><span class="exam-stem-peek">以下（）不是产生死锁的必要条件</span></summary><div class="exam-q-body"><p class="exam-stem">以下（）不是产生死锁的必要条件</p><ul class="exam-opts"><li><b>A</b> 进程资源图为环路</li><li><b>B</b> 资源互斥</li><li><b>C</b> 不可强制剥夺资源</li><li><b>D</b> 资源共享</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">资源共享模式下多个进程可同时使用资源，打破了死锁必备的互斥条件，不会引发死锁；其余三项均是死锁产生的必要前提。</p></details></div></details><details class="exam-q" data-exam-id="2024年5月-036"><summary><span class="exam-no">第 36 题</span><span class="exam-stem-peek">以下总线技术中，（）支持热插拔、快速的数据传输。</span></summary><div class="exam-q-body"><p class="exam-stem">以下总线技术中，（）支持热插拔、快速的数据传输。</p><ul class="exam-opts"><li><b>A</b> RS232</li><li><b>B</b> IDE</li><li><b>C</b> ATA</li><li><b>D</b> SATA</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">SATA串行接口支持热插拔特性，迭代版本传输速率最高可达4800Mbps；RS232、IDE、传统并行ATA均不支持热插拔，传输速率更低。</p></details></div></details><details class="exam-q" data-exam-id="2024年5月-025"><summary><span class="exam-no">第 25 题</span><span class="exam-stem-peek">以下关于精简指令计算集 RISC 的叙述中，不正确的是（）。</span></summary><div class="exam-q-body"><p class="exam-stem">以下关于精简指令计算集 RISC 的叙述中，不正确的是（）。</p><ul class="exam-opts"><li><b>A</b> 数量少，使用频率接近</li><li><b>B</b> CPU 中设置大量寄存器</li><li><b>C</b> 大部分为单周期指令</li><li><b>D</b> 指令长度不固定，指令简单</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">RISC指令采用统一固定长度的格式，指令长度不固定属于CISC复杂指令集的特点；A、B、C均符合RISC技术规范。</p></details></div></details><details class="exam-q" data-exam-id="2024年5月-019"><summary><span class="exam-no">第 19 题</span><span class="exam-stem-peek">以下（）不属于按功能划分的总线。</span></summary><div class="exam-q-body"><p class="exam-stem">以下（）不属于按功能划分的总线。</p><ul class="exam-opts"><li><b>A</b> 服务总线</li><li><b>B</b> 地址总线</li><li><b>C</b> 指令总线</li><li><b>D</b> 数据总线</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">地址总线、数据总线、指令（控制）总线属于计算机硬件功能总线；服务总线是SOA软件架构组件，不属于硬件总线分类。</p></details></div></details><details class="exam-q" data-exam-id="2024年5月-006"><summary><span class="exam-no">第 6 题</span><span class="exam-stem-peek">在磁盘冗余阵列技术中，（）没有独立的校验盘，适合高速数据存储</span></summary><div class="exam-q-body"><p class="exam-stem">在磁盘冗余阵列技术中，（）没有独立的校验盘，适合高速数据存储</p><ul class="exam-opts"><li><b>A</b> RAID1</li><li><b>B</b> RAID3</li><li><b>C</b> RAID5</li><li><b>D</b> RAID10</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">RAID5的校验数据均匀分布在全部磁盘块中，无需设置独立专用校验盘，兼顾读写性能与容错能力，适配高速数据存储场景。</p></details></div></details></details><details class="exam-year" data-exam-year="2023年5月"><summary><span class="exam-year-name">2023年5月</span><span class="exam-year-n">5 题</span></summary><details class="exam-q" data-exam-id="2023年5月-064"><summary><span class="exam-no">第 64 题</span><span class="exam-stem-peek">邮件客户端使用( )协议同步服务器和客户端之间的邮件列表。</span></summary><div class="exam-q-body"><p class="exam-stem">邮件客户端使用( )协议同步服务器和客户端之间的邮件列表。</p><ul class="exam-opts"><li><b>A</b> POP3</li><li><b>B</b> SMTP</li><li><b>C</b> IMAP</li><li><b>D</b> SSL</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">IMAP协议下，客户端对邮件的查看、移动、删除等所有操作都会实时同步到邮件服务器，实现两端邮件列表双向同步；POP3下载邮件后服务端不会同步后续操作，无法实现双向同步。</p></details></div></details><details class="exam-q" data-exam-id="2023年5月-062"><summary><span class="exam-no">第 62 题</span><span class="exam-stem-peek">67-68.FTP服务可以开启匿名登录功能，其用户名是( )，若要上传文件，应使用( )命令。
+（本题为第 1 空）</span></summary><div class="exam-q-body"><p class="exam-stem">67-68.FTP服务可以开启匿名登录功能，其用户名是( )，若要上传文件，应使用( )命令。
+（本题为第 1 空）</p><ul class="exam-opts"><li><b>A</b> root</li><li><b>B</b> user</li><li><b>C</b> guest</li><li><b>D</b> anonymous</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">FTP协议标准规定匿名登录统一使用anonymous作为用户名；put命令可将本地文件上传至远程FTP服务器，get用于从服务器拉取文件到本地。</p></details></div></details><details class="exam-q" data-exam-id="2023年5月-050"><summary><span class="exam-no">第 50 题</span><span class="exam-stem-peek">49-51.进程P1、P2、P3、P4、P5和P6的前趋图如下所示：若用PV操作控制这6个进程的同步与互斥的程序如下，那…</span></summary><div class="exam-q-body"><p class="exam-stem">49-51.进程P1、P2、P3、P4、P5和P6的前趋图如下所示：若用PV操作控制这6个进程的同步与互斥的程序如下，那么程序中的空①和空②分别为( )；空③和空④处应分别为( )；空⑤和空⑥处应分别为( )。
+```mermaid
+graph LR
+P1 --&gt; P2
+P1 --&gt; P3
+P2 --&gt; P4
+P2 --&gt; P3
+P3 --&gt; P5
+P4 --&gt; P5
+P5 --&gt; P6
+flowchart TD
+Init[&quot;程序开始&lt;br/&gt;信号量 S1~S7 初始值=0&lt;br/&gt;CoBegin 并发启动所有进程&quot;]
+P1_Exec[&quot;P1 执行&quot;]
+P1_V[&quot;V(S1); V(S2);&quot;]
+P1_Exec --&gt; P1_V
+P2_1[&quot;①&quot;]
+P2_Exec[&quot;P2 执行&quot;]
+P2_2[&quot;②&quot;]
+P2_1 --&gt; P2_Exec --&gt; P2_2
+P3_1[&quot;③&quot;]
+P3_Exec[&quot;P3 执行&quot;]
+P3_2[&quot;④&quot;]
+P3_1 --&gt; P3_Exec --&gt; P3_2
+P4_P[&quot;P(S4);&quot;]
+P4_Exec[&quot;P4 执行&quot;]
+P4_V[&quot;V(S6);&quot;]
+P4_P --&gt; P4_Exec --&gt; P4_V
+P5_1[&quot;⑤&quot;]
+P5_Exec[&quot;P5 执行&quot;]
+P5_2[&quot;⑥&quot;]
+P5_1 --&gt; P5_Exec --&gt; P5_2
+P6_P[&quot;P(S7);&quot;]
+P6_Exec[&quot;P6 执行&quot;]
+P6_P --&gt; P6_Exec
+Init -.并发启动.-&gt; P1_Exec
+Init -.并发启动.-&gt; P2_1
+Init -.并发启动.-&gt; P3_1
+Init -.并发启动.-&gt; P4_P
+Init -.并发启动.-&gt; P5_1
+Init -.并发启动.-&gt; P6_P
+```
+（本题为第 2 空）</p><ul class="exam-opts"><li><b>A</b> V(S3)和V(S5)</li><li><b>B</b> P(S3)和V(S5)</li><li><b>C</b> V(S3)和P(S5)</li><li><b>D</b> P(S3)和P(S5)</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">①P2是P1的后继，开头执行P(S1)阻塞等待P1完成；②P2执行结束V(S3)唤醒P3、V(S4)唤醒P4；③P3开头P(S3)等待P2信号；④P3结束V(S5)通知P5；⑤P5需要等待P3、P4两个信号量，执行P(S5)P(S6)；⑥P5结束V(S7)唤醒P6。</p></details></div></details><details class="exam-q" data-exam-id="2023年5月-047"><summary><span class="exam-no">第 47 题</span><span class="exam-stem-peek">某系统采用请求页式存储管理方案，假设进程P有6个页面，系统给P分配了4个存储块，其页面变换表如下所示。表中的状态位等于1…</span></summary><div class="exam-q-body"><p class="exam-stem">某系统采用请求页式存储管理方案，假设进程P有6个页面，系统给P分配了4个存储块，其页面变换表如下所示。表中的状态位等于1/0分别表示页面在内存/不在内存。当P访问的页面2不在内存时，应该淘汰表中页号为( )的页面。
+页面变换表详情：
+| 页号 | 页帧号 | 状态位 | 访问位 | 修改位 |
+| ---- | ------ | ------ | ------ | ------ |
+| 0    | 5      | 1      | 1      | 1      |
+| 1    | -      | 0      | 0      | 0      |
+| 2    | -      | 0      | 0      | 0      |
+| 3    | 2      | 1      | 0      | 0      |
+| 4    | 8      | 1      | 1      | 1      |
+| 5    | 12     | 1      | 1      | 0      |
+请求分页置换优先淘汰内存中访问位为0、长期未被访问的页面。
+页面变换表详情：
+| 页号 | 页帧号 | 状态位 | 访问位 | 修改位 |
+| ---- | ------ | ------ | ------ | ------ |
+| 0    | 5      | 1      | 1      | 1      |
+| 1    | -      | 0      | 0      | 0      |
+| 2    | -      | 0      | 0      | 0      |
+| 3    | 2      | 1      | 0      | 0      |
+| 4    | 8      | 1      | 1      | 1      |
+| 5    | 12     | 1      | 1      | 0      |
+请求分页置换优先淘汰内存中访问位为0、长期未被访问的页面。</p><ul class="exam-opts"><li><b>A</b> 0</li><li><b>B</b> 3</li><li><b>C</b> 4</li><li><b>D</b> 5</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">页1、页2状态位为0不在内存，无需考虑；内存内的页0、4、5访问位均为1，只有页3访问位为0，是最久未被访问的页面，优先淘汰页3。</p></details></div></details><details class="exam-q" data-exam-id="2023年5月-015"><summary><span class="exam-no">第 15 题</span><span class="exam-stem-peek">与单核处理器相比，多核处理器在（ ）设计等方面面临着巨大的挑战，但也蕴含着巨大的潜能。CMP（单芯片多处理器）和 SMT…</span></summary><div class="exam-q-body"><p class="exam-stem">与单核处理器相比，多核处理器在（ ）设计等方面面临着巨大的挑战，但也蕴含着巨大的潜能。CMP（单芯片多处理器）和 SMT（同步多线程处理器）是目前较为流行的两种多核体系结构，CMP 相对 SMT 的最大优势还在于其（ ）设计的简洁性。
+（本题为第 2 空）</p><ul class="exam-opts"><li><b>A</b> 集成化</li><li><b>B</b> 模块化</li><li><b>C</b> 综合化</li><li><b>D</b> 构件化</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">第一空：多核需要攻克体系结构、并行软件适配、功耗控制、安全防护四大设计难点；第二空：CMP采用模块化复制物理核心的方案，架构设计比SMT更简洁直观，能直接通过增加核心提升性能。SMT依靠线程切换提升核心利用率，调度逻辑更复杂。</p></details></div></details></details><details class="exam-year" data-exam-year="2022年5月"><summary><span class="exam-year-name">2022年5月</span><span class="exam-year-n">8 题</span></summary><details class="exam-q" data-exam-id="2022年5月-059"><summary><span class="exam-no">第 59 题</span><span class="exam-tag">两空单选</span><span class="exam-tag">2 空</span><span class="exam-stem-peek">计算机系统性能评估中，（59）通常采用加法指令的运算速度来衡量计算机的速度。（60）首先计算出处理部件每个计算单元的有效…</span></summary><div class="exam-q-body"><p class="exam-stem">计算机系统性能评估中，<b class="exam-blank">（59）</b>通常采用加法指令的运算速度来衡量计算机的速度。<b class="exam-blank">（60）</b>首先计算出处理部件每个计算单元的有效计算率，再按不同字长加以调整，得出该计算单元的理论性能，所有组成该处理部件的计算单元的理论性能之和即为最终的计算机性能。
+（空1）
+（空2）</p><ul class="exam-opts"><li><b>A</b> 指令执行速度法</li><li><b>B</b> 等效指令速度法</li><li><b>C</b> 综合理论性能法</li><li><b>D</b> 基准程序法</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">C。解析：1. 指令执行速度法：计算机发展早期常用加法指令运算速度衡量整机速度，加法指令速度可以代表多数算术、逻辑指令的执行效率，单位为KIPS；
+2. 等效指令速度法（Gibson mix）：按不同指令在程序中的占比加权计算整体速度；
+3. 综合理论性能法（CTP）：先计算每个计算单元有效计算率，按字长调整得到单元理论性能，累加所有单元性能得到整机性能；
+4. 基准程序法：用业务高频核心程序作为统一测试标准评测性能。
+
+B. 人员安全
+C. 运行安全
+D. 实体安全
+（空2）</p></details></div></details><details class="exam-q" data-exam-id="2022年5月-050"><summary><span class="exam-no">第 50 题</span><span class="exam-tag">两空单选</span><span class="exam-tag">2 空</span><span class="exam-stem-peek">进程P1、P2、P3、P4、P5和P6的前趋图如下所示：若用PV操作控制进程P1、P2、P3、P4、P5和P6并发执行的…</span></summary><div class="exam-q-body"><p class="exam-stem">进程P1、P2、P3、P4、P5和P6的前趋图如下所示：若用PV操作控制进程P1、P2、P3、P4、P5和P6并发执行的过程，则需要设置7个信号量S1、S2、S3、S4、S5、S6和S7，且信号量S1~S7的初值都等于零。进程执行逻辑中，a和b处应分别填写<b class="exam-blank">（49）</b>，c和d处应分别填写<b class="exam-blank">（50）</b>，e和f处应分别填写<b class="exam-blank">（51）</b>。
+```mermaid
+flowchart LR
+    P1--&gt;P2
+    P2--&gt;P4
+    P2--&gt;P3
+    P3--&gt;P4
+    P3--&gt;P5
+    P4--&gt;P6
+    P5--&gt;P6
+```
+1. P2的唯一前驱是P1，因此a处需要P(S1)等待P1完成；P2有P3、P4两个后继，因此b处执行V(S2)V(S3)唤醒两个后继，第一空选A。
+2. P3有P4、P5两个后继，因此c处执行V(S4)V(S5)；P4的前驱是P2、P3两个，因此d处需要P(S3)P(S4)等待两个前驱完成，第二空选D。
+3. P5的后继是P6，因此e处执行V(S7)；P6已有来自P4的P(S6)，还需要等待P5的信号，因此f处执行P(S7)，第三空选C。
+（本题为第 2 空）</p><ul class="exam-opts"><li><b>A</b> V（S4）和P（S3）P（S4）</li><li><b>B</b> P（S4）和P（S3）P（S4）</li><li><b>C</b> P（S3）和V（S4）V（S5）</li><li><b>D</b> V（S4）V（S5）和P（S3）P（S4）</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">每一条前趋连线对应一个独立信号量，遵循「前驱结束V信号量，后继开始P信号量」的规则：</p></details></div></details><details class="exam-q" data-exam-id="2022年5月-048"><summary><span class="exam-no">第 48 题</span><span class="exam-tag">两空单选</span><span class="exam-tag">2 空</span><span class="exam-stem-peek">某文件管理系统在磁盘上建立了位示图（binmap）记录磁盘的使用情况。若磁盘上物理块的编号依次：0、1、2、……；系统中…</span></summary><div class="exam-q-body"><p class="exam-stem">某文件管理系统在磁盘上建立了位示图（binmap）记录磁盘的使用情况。若磁盘上物理块的编号依次：0、1、2、……；系统中的字长为32位，字的编号依次为：0、1、2；字中的一位对应文件存储器上的一个物理块，取值0表示该物理块空闲，取值1表示该物理块占用。假设操作系统将256号物理块分配给某文件，那么该物理块的使用情况在位示图中编号为<b class="exam-blank">（47）</b>的字中描述；系统应该将<b class="exam-blank">（48）</b>。
+```mermaid
+table 磁盘位示图结构
+    字号\位号 | 31 | 30 | ... | 3 | 2 | 1 | 0
+    0 | 0 | 1 | ... | 1 | 0 | 0 | 0 | 1
+    1 | 1 | 1 | ... | 1 | 0 | 1 | 1 | 0
+    2 | 0 | 1 | ... | 0 | 1 | 1 | 0 | 1
+    3 | 0 | 1 | ... | 1 | 0 | 1 | 0 | 1
+    ... | ... | ... | ... | ... | ... | ... | ... | ...
+    n | 1 | 1 | ... | 0 | 1 | 0 | 0 | 1
+```
+代入计算：字号=256÷32=8，位号=256%32=0；分配物理块需要将对应位标记为占用，因此把该字位号0的位置设为1。
+（本题为第 2 空）</p><ul class="exam-opts"><li><b>A</b> 该字的位号32的位置“1”</li><li><b>B</b> 该字的位号0的位置“1”</li><li><b>C</b> 该字的位号32的位置“0”</li><li><b>D</b> 该字的位号0的位置“0”</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">位示图计算公式：字号=物理块号//字长，位号=物理块号%字长；</p></details></div></details><details class="exam-q" data-exam-id="2022年5月-046"><summary><span class="exam-no">第 46 题</span><span class="exam-stem-peek">某系统中有5个并发进程竞争资源R，假设每个进程都需要3个R，那么最少需要有（46）个R，才能保证系统不会发生死锁。</span></summary><div class="exam-q-body"><p class="exam-stem">某系统中有5个并发进程竞争资源R，假设每个进程都需要3个R，那么最少需要有（46）个R，才能保证系统不会发生死锁。</p><ul class="exam-opts"><li><b>A</b> 10</li><li><b>B</b> 11</li><li><b>C</b> 12</li><li><b>D</b> 13</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">死锁最坏情况：每个进程都拿到2个资源，总共5×2=10个资源，此时再额外分配1个资源，就能让任意1个进程完成执行释放资源，彻底打破死锁，因此最少需要10+1=11个资源。</p></details></div></details><details class="exam-q" data-exam-id="2022年5月-038"><summary><span class="exam-no">第 38 题</span><span class="exam-tag">两空单选</span><span class="exam-tag">2 空</span><span class="exam-stem-peek">在软件逆向工程的相关概念中，（38）是指借助工具从已有程序中抽象出有关数据设计、总体结构设计和过程设计等方面的信息；（3…</span></summary><div class="exam-q-body"><p class="exam-stem">在软件逆向工程的相关概念中，<b class="exam-blank">（38）</b>是指借助工具从已有程序中抽象出有关数据设计、总体结构设计和过程设计等方面的信息；<b class="exam-blank">（39）</b>指不仅从现有系统中恢复设计信息，而且使用该信息去改变或重构现有系统，以改善其整体质量。
+<b class="exam-blank">（1）</b>重构：是指在同一抽象级别上转换系统描述形式；
+<b class="exam-blank">（2）</b>设计恢复：是指借助工具从已有程序中抽象出有关数据设计、总体结构设计和过程设计等方面的信息；
+<b class="exam-blank">（3）</b>再工程：是对现有系统的重新开发过程，包括逆向工程、新需求的考虑过程和正向工程三个步骤，能重构系统提升质量；
+<b class="exam-blank">（4）</b>正向工程：指不仅从现有系统中恢复设计信息，而且使用该信息去改变或重构现有系统，以改善其整体质量。
+（本题为第 1 空）</p><ul class="exam-opts"><li><b>A</b> 设计恢复</li><li><b>B</b> 正向工程</li><li><b>C</b> 设计重构</li><li><b>D</b> 重构</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">与逆向工程相关的概念定义如下：</p></details></div></details><details class="exam-q" data-exam-id="2022年5月-033"><summary><span class="exam-no">第 33 题</span><span class="exam-tag">两空单选</span><span class="exam-tag">2 空</span><span class="exam-stem-peek">结构化设计（Structured Design, SD）是一种面向数据流的方法，可进一步细分为（33）两个阶段，它根据（…</span></summary><div class="exam-q-body"><p class="exam-stem">结构化设计（Structured Design, SD）是一种面向数据流的方法，可进一步细分为<b class="exam-blank">（33）</b>两个阶段，它根据<b class="exam-blank">（34）</b>和系统结构准则，将DFD转换为系统结构图，用系统结构图来建立系统的物理模型，描述系统分层次的模块结构，以及模块之间的通信与控制关系。
+（本题为第 1 空）</p><ul class="exam-opts"><li><b>A</b> 概要设计和详细设计</li><li><b>B</b> 数据库设计和架构设计</li><li><b>C</b> 概要设计和架构设计</li><li><b>D</b> 模块设计和数据设计</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">SD可以进一步分为概要设计和详细设计两个阶段，它根据模块独立性原则和系统结构准则，将DFD转换为系统结构图（也称为模块结构图或控制结构图），用系统结构图来建立系统的物理模型，描述系统分层次的模块结构，以及模块之间的通信与控制关系。SD方法给出了一组帮助系统设计人员在模块层次上区分设计质量的原理与技术，它通常与SA方法衔接起来使用，以DFD为基础得到系统的模块结构。SD方法尤其适用于变换型结构和事务型结构的目标系统。</p></details></div></details><details class="exam-q" data-exam-id="2022年5月-004"><summary><span class="exam-no">第 4 题</span><span class="exam-stem-peek">敏捷软件开发方法是一种增量式开发方法，它将（4）视为软件过程的中心活动，将其他开发活动融入其中。</span></summary><div class="exam-q-body"><p class="exam-stem">敏捷软件开发方法是一种增量式开发方法，它将（4）视为软件过程的中心活动，将其他开发活动融入其中。</p><ul class="exam-opts"><li><b>A</b> 可行性分析</li><li><b>B</b> 需求分析和设计</li><li><b>C</b> 设计和实现</li><li><b>D</b> 实现和测试</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">敏捷方法是一种以人为核心、迭代、循序渐进的开发方法。在敏捷方法中，软件项目的构建被切分成多个子项目，各个子项目成果都经过测试，具备集成和可运行的特征。在敏捷方法中，从开发者的角度来看，主要的关注点有短平快的会议、小版本发布、较少的文档、合作为重、客户直接参与、自动化测试、适应性计划调整和结对编程；从管理者的角度来看，主要的关注点有测试驱动开发、持续集成和重构。综上，敏捷开发更关注成果，也就是实施和测试。</p></details></div></details><details class="exam-q" data-exam-id="2022年5月-001"><summary><span class="exam-no">第 1 题</span><span class="exam-stem-peek">（1）是从系统的应用领域而不是从系统用户的特定需要中得出的，它们可以是新的功能性需求，或者是对已有功能性需求的约束，或者…</span></summary><div class="exam-q-body"><p class="exam-stem">（1）是从系统的应用领域而不是从系统用户的特定需要中得出的，它们可以是新的功能性需求，或者是对已有功能性需求的约束，或者是陈述特定的计算必须遵守的要求。</p><ul class="exam-opts"><li><b>A</b> 功能性需求</li><li><b>B</b> 用户需求</li><li><b>C</b> 产品需求</li><li><b>D</b> 领域需求</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">纯定义。注意关键字系统的应用领域，而且后面可以是那么多不同的描述，很明显应该选高层次的领域需求。</p></details></div></details></details><details class="exam-year" data-exam-year="2021年5月"><summary><span class="exam-year-name">2021年5月</span><span class="exam-year-n">4 题</span></summary><details class="exam-q" data-exam-id="2021年5月-063"><summary><span class="exam-no">第 63 题</span><span class="exam-stem-peek">组相联映射是常见的Cache映射方法。如果容量为64块的Cache采用组相联方式映射，每块大小为128个字，每4块为一组…</span></summary><div class="exam-q-body"><p class="exam-stem">组相联映射是常见的Cache映射方法。如果容量为64块的Cache采用组相联方式映射，每块大小为128个字，每4块为一组。若主存容量为4096页，且以字编址，主存地址需要（ ）位。</p><ul class="exam-opts"><li><b>A</b> 256</li><li><b>B</b> 19</li><li><b>C</b> 128</li><li><b>D</b> 8</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">将地址四段位数累加：6(区号)+4(组号)+2(组内块号)+7(块内地址)=19位，因此主存地址总位数为19位。</p></details></div></details><details class="exam-q" data-exam-id="2021年5月-061"><summary><span class="exam-no">第 61 题</span><span class="exam-stem-peek">组相联映射是常见的Cache映射方法。如果容量为64块的Cache采用组相联方式映射，每块大小为128个字，每4块为一组…</span></summary><div class="exam-q-body"><p class="exam-stem">组相联映射是常见的Cache映射方法。如果容量为64块的Cache采用组相联方式映射，每块大小为128个字，每4块为一组，则Cache分为（ ）组。</p><ul class="exam-opts"><li><b>A</b> 8</li><li><b>B</b> 16</li><li><b>C</b> 32</li><li><b>D</b> 4</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">Cache总共有64块存储块，规定每4块划分为一组，因此分组总数=64÷4=16组。</p></details></div></details><details class="exam-q" data-exam-id="2021年5月-050"><summary><span class="exam-no">第 50 题</span><span class="exam-stem-peek">进程P1、P2、P3、P4、P5和P6的前趋图如下。若用PV操作控制这6个进程的同步与互斥的程序如下，那么程序中的空③和…</span></summary><div class="exam-q-body"><p class="exam-stem">进程P1、P2、P3、P4、P5和P6的前趋图如下。若用PV操作控制这6个进程的同步与互斥的程序如下，那么程序中的空③和空④处应分别为（ ）。
+```mermaid
+flowchart LR
+P1--&gt;|S1|P2
+P2--&gt;|S2|P3
+P2--&gt;|S3|P4
+P3--&gt;|S5|P5
+P4--&gt;|S6|P5
+P5--&gt;|S7|P6
+```</p><ul class="exam-opts"><li><b>A</b> V（S4）V（S5）和 P（S3）</li><li><b>B</b> P（S4）和 V（S4）V（S5）</li><li><b>C</b> P（S4）P（S5）和 V（S3）</li><li><b>D</b> V（S4）和 V（S5）P（S5）</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">P3执行完成后需要V(S5)通知P5；P4启动前需要P(S3)获取P2释放的信号量，执行完成后V(S4)通知P5，因此空③为V(S4)V(S5)、空④为P(S3)。</p></details></div></details><details class="exam-q" data-exam-id="2021年5月-048"><summary><span class="exam-no">第 48 题</span><span class="exam-stem-peek">某文件系统采用索引节点管理，其磁盘索引块和磁盘数据块大小均为4KB字节，且每个文件索引节点有8个地址项iaddr[0]~…</span></summary><div class="exam-q-body"><p class="exam-stem">某文件系统采用索引节点管理，其磁盘索引块和磁盘数据块大小均为4KB字节，且每个文件索引节点有8个地址项iaddr[0]~iaddr[7]，每个地址项大小为4字节，其中iaddr[0]~iaddr[4]采用直接地址索引，iaddr[5]和iaddr[6]采用一级间接地址索引，iaddr[7]采用二级间接地址索引。若用户要访问文件fileX中逻辑块号为5和2056的信息，则系统应分别采用（ ）物理块。</p><ul class="exam-opts"><li><b>A</b> 直接地址访问和直接地址访问</li><li><b>B</b> 直接地址访问和一级间接地址访问</li><li><b>C</b> 一级间接地址访问和一级间接地址访问</li><li><b>D</b> 一级间接地址访问和二级间接地址访问</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">逻辑块5落在一级间接索引覆盖区间，逻辑块2056超出一级间接最大编号2052，需要使用二级间接索引完成寻址。</p></details></div></details></details><details class="exam-year" data-exam-year="2020年11月"><summary><span class="exam-year-name">2020年11月</span><span class="exam-year-n">7 题</span></summary><details class="exam-q" data-exam-id="2020年11月-069"><summary><span class="exam-no">第 69 题</span><span class="exam-stem-peek">在 Linux 系统中，DNS 配置文件的（69）参数，用于确定 DNS 服务器地址。</span></summary><div class="exam-q-body"><p class="exam-stem">在 Linux 系统中，DNS 配置文件的（69）参数，用于确定 DNS 服务器地址。</p><ul class="exam-opts"><li><b>A</b> nameserver</li><li><b>B</b> domain</li><li><b>C</b> search</li><li><b>D</b> sortlist</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">resolv.conf里nameserver字段专门用来声明上游DNS服务器的IP地址，可配置多行实现多DNS冗余。</p></details></div></details><details class="exam-q" data-exam-id="2020年11月-063"><summary><span class="exam-no">第 63 题</span><span class="exam-stem-peek">磁盘冗余阵列机制中，（63）由磁盘对组成，每一个工作盘都有其对应的镜像盘，上面保存着与工作盘完全相同的数据拷贝，具有最高…</span></summary><div class="exam-q-body"><p class="exam-stem">磁盘冗余阵列机制中，（63）由磁盘对组成，每一个工作盘都有其对应的镜像盘，上面保存着与工作盘完全相同的数据拷贝，具有最高的安全性，但磁盘空间利用率只有50%；</p><ul class="exam-opts"><li><b>A</b> RAID 4级</li><li><b>B</b> RAID 1级</li><li><b>C</b> RAID 3级</li><li><b>D</b> RAID 2级</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">RAID1采用磁盘镜像架构，成对磁盘完全冗余备份，容错能力最强，但空间利用率固定为50%，适合高安全要求的业务场景。</p></details></div></details><details class="exam-q" data-exam-id="2020年11月-061"><summary><span class="exam-no">第 61 题</span><span class="exam-stem-peek">磁盘冗余阵列（Redundant Array of Inexpensive Disks, RAID）机制中共分（61）级…</span></summary><div class="exam-q-body"><p class="exam-stem">磁盘冗余阵列（Redundant Array of Inexpensive Disks, RAID）机制中共分（61）级别，RAID应用的主要技术有分块技术、交叉技术和重聚技术。</p><ul class="exam-opts"><li><b>A</b> 7个</li><li><b>B</b> 8个</li><li><b>C</b> 6个</li><li><b>D</b> 9个</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">行业公认的RAID主流标准共有8个规范级别，每个级别有专属的冗余策略、数据分布方案，适配不同业务的可靠性与性能需求。</p></details></div></details><details class="exam-q" data-exam-id="2020年11月-050"><summary><span class="exam-no">第 50 题</span><span class="exam-stem-peek">进程P1、P2、P3、P4和P5的前趋图如下。若用PV操作控制这5个进程的同步与互斥的程序如下，那么程序中的空③和空④处…</span></summary><div class="exam-q-body"><p class="exam-stem">进程P1、P2、P3、P4和P5的前趋图如下。若用PV操作控制这5个进程的同步与互斥的程序如下，那么程序中的空③和空④处应分别为（50）；
+```mermaid
+```mermaid
+flowchart LR
+    P1 --&gt; P2
+    P1 --&gt; P3
+    P2 --&gt; P4
+    P3 --&gt; P4
+    P3 --&gt; P5
+```
+```
+```mermaid
+```mermaid
+flowchart LR
+    P1 --&gt; P2
+    P1 --&gt; P3
+    P2 --&gt; P4
+    P3 --&gt; P4
+    P3 --&gt; P5
+```
+```</p><ul class="exam-opts"><li><b>A</b> V（S4）和 V（S5） P（S3）</li><li><b>B</b> P（S3）和 V（S5） V（S6）</li><li><b>C</b> V（S3）和 V（S4） V（S5）</li><li><b>D</b> P（S4）和 V（S4） P（S3）</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">P3已经执行P(S2)等待P1完成，空③需要执行P(S3)等待P2完成；P3执行结束后，空④需要执行V(S5)、V(S6)分别唤醒后继的P4、P5进程，对应选项B。</p></details></div></details><details class="exam-q" data-exam-id="2020年11月-048"><summary><span class="exam-no">第 48 题</span><span class="exam-stem-peek">某文件管理系统在磁盘上建立了位示图(bitmap)，记录磁盘的使用情况。若计算机系统的字长为32位（注：每位可以表示一个…</span></summary><div class="exam-q-body"><p class="exam-stem">某文件管理系统在磁盘上建立了位示图(bitmap)，记录磁盘的使用情况。若计算机系统的字长为32位（注：每位可以表示一个物理块“使用”还是“未用”的情况），若磁盘的容量为400GB，物理块的大小为4MB，那么位示图的大小需要（48）个字。</p><ul class="exam-opts"><li><b>A</b> 256</li><li><b>B</b> 1024</li><li><b>C</b> 3200</li><li><b>D</b> 4098</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">先算出磁盘一共划分出102400个物理块，位示图每个32位的字可以记录32个块的状态，最终需要的字数为102400÷32=3200。</p></details></div></details><details class="exam-q" data-exam-id="2020年11月-046"><summary><span class="exam-no">第 46 题</span><span class="exam-stem-peek">在进程资源有向图中，圆圈表示进程，方框表示资源，方框内的小圆数表示资源数。当有向边（请求边）由进程指向资源时，表示申请一…</span></summary><div class="exam-q-body"><p class="exam-stem">在进程资源有向图中，圆圈表示进程，方框表示资源，方框内的小圆数表示资源数。当有向边（请求边）由进程指向资源时，表示申请一个资源；当有向边（分配边）由资源指向进程时，表示获得一个资源。假设系统中有三个进程P1、P2和P3，两种资源R1、R2，且R1的资源数等于3，R2的资源数等于3。如果进程资源图如图（a）所示，那么图（a）中（46）；
+```mermaid
+```mermaid
+flowchart LR
+    subgraph R1[R1资源 总数量3]
+    end
+    subgraph R2[R2资源 总数量3]
+    end
+    P1((P1))
+    P2((P2))
+    P3((P3))
+    %% R2全部分配给3个进程
+    R2 --&gt; P1
+    R2 --&gt; P2
+    R2 --&gt; P3
+    %% 所有进程都继续请求R2资源
+    P1 --&gt; R2
+    P2 --&gt; R2
+    P3 --&gt; R2
+    %% 所有进程都请求R1资源
+    P1 --&gt; R1
+    P2 --&gt; R1
+    P3 --&gt; R1
+```
+```
+```mermaid
+```mermaid
+flowchart LR
+    subgraph R1[R1资源 总数量3]
+    end
+    subgraph R2[R2资源 总数量3]
+    end
+    P1((P1))
+    P2((P2))
+    P3((P3))
+    %% R2全部分配给3个进程
+    R2 --&gt; P1
+    R2 --&gt; P2
+    R2 --&gt; P3
+    %% 所有进程都继续请求R2资源
+    P1 --&gt; R2
+    P2 --&gt; R2
+    P3 --&gt; R2
+    %% 所有进程都请求R1资源
+    P1 --&gt; R1
+    P2 --&gt; R1
+    P3 --&gt; R1
+```
+```</p><ul class="exam-opts"><li><b>A</b> P1、P2、P3都是阻塞节点，该图不可以化简，是死锁的</li><li><b>B</b> P1、P2、P3都是非阻塞节点，该图可以化简，是非死锁的</li><li><b>C</b> P3是非阻塞节点，P1、P2是阻塞节点，该图可以化简，是非死锁的</li><li><b>D</b> P1、P2是非阻塞节点，P3是阻塞节点，该图不可以化简，是死锁的</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">R2资源已耗尽，P1、P2、P3的资源申请都无法被满足，全部处于阻塞状态；进程间形成闭环等待，资源图没有可先行执行释放资源的非阻塞节点，无法化简，系统发生死锁。</p></details></div></details><details class="exam-q" data-exam-id="2020年11月-015"><summary><span class="exam-no">第 15 题</span><span class="exam-stem-peek">IEEE-1394 总线采用菊花链的拓扑结构时，可最多支持 63 个节点。当 1394 总线支持 1023条桥接总线时，…</span></summary><div class="exam-q-body"><p class="exam-stem">IEEE-1394 总线采用菊花链的拓扑结构时，可最多支持 63 个节点。当 1394 总线支持 1023条桥接总线时，最多可以采用菊花链的拓扑结构互连(15)个节点。</p><ul class="exam-opts"><li><b>A</b> 1023</li><li><b>B</b> 1086</li><li><b>C</b> 64449</li><li><b>D</b> 645535</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">单段IEEE-1394菊花链最多支持63个节点，1023段桥接总线可支持的总节点数=1023×63=64449。</p></details></div></details></details><details class="exam-year" data-exam-year="2019年5月"><summary><span class="exam-year-name">2019年5月</span><span class="exam-year-n">3 题</span></summary><details class="exam-q" data-exam-id="2019年5月-018"><summary><span class="exam-no">第 18 题</span><span class="exam-stem-peek">多核CPU环境下进程的调度算法一般有全局队列调度和局部队列调度两种。（）属于全局队列调度的特征。</span></summary><div class="exam-q-body"><p class="exam-stem">多核CPU环境下进程的调度算法一般有全局队列调度和局部队列调度两种。（）属于全局队列调度的特征。</p><ul class="exam-opts"><li><b>A</b> 操作系统为每个CPU维护一个任务等待队列</li><li><b>B</b> 操作系统维护一个任务等待队列</li><li><b>C</b> 任务基本上无需在多个CPU核心间切换，有利于提高Cache命中率</li><li><b>D</b> 当系统中有一个CPU核心空闲时，操作系统便从该核心的任务等待队列中选取适当的任务执行</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">全局队列调度仅设置1个全局统一的任务等待队列，所有空闲CPU都从该队列领取任务；A、C、D均是为每个CPU单独设置队列的局部调度策略的特征。</p></details></div></details><details class="exam-q" data-exam-id="2019年5月-016"><summary><span class="exam-no">第 16 题</span><span class="exam-stem-peek">以下关于多核处理器的说法中，不正确的是（）。</span></summary><div class="exam-q-body"><p class="exam-stem">以下关于多核处理器的说法中，不正确的是（）。</p><ul class="exam-opts"><li><b>A</b> 采用多核处理器可以降低计算机系统的功耗和体积</li><li><b>B</b> SMP、BMP和MP是多核处理器系统通常采用的三种结构，采用哪种结构与应用场景相关，而无须考虑硬件的组成差异</li><li><b>C</b> 在多核处理器中，计算机可以同时执行多个进程，而操作系统中的多个线程也可以并行执行</li><li><b>D</b> 多核处理器是将两个或更多的独立处理器封装在一起，集成在一个电路中</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">SMP、BMP、MP三种多核架构的硬件底层设计存在显著差异，选型不仅要匹配业务场景，还必须适配硬件本身的架构限制；A、C、D的描述均符合多核处理器的定义与优势。</p></details></div></details><details class="exam-q" data-exam-id="2019年5月-014"><summary><span class="exam-no">第 14 题</span><span class="exam-stem-peek">雷达设计人员在设计数字信号处理单元时，其处理器普遍采用DSP芯片(比如：TI公司的TMS320C63xx)，通常DSP芯…</span></summary><div class="exam-q-body"><p class="exam-stem">雷达设计人员在设计数字信号处理单元时，其处理器普遍采用DSP芯片(比如：TI公司的TMS320C63xx)，通常DSP芯片采用哈佛(HarVard)体系结构，以下关于哈佛结构特征的描述，不正确的是（）。</p><ul class="exam-opts"><li><b>A</b> 程序和数据具有独立的存储空间，允许同时取指令和取操作数，并允许在程序空间或数据空间之间互传数据</li><li><b>B</b> 处理器内部采用多总线结构，保证了在一个机器周期内可以多次访问程序空间和数据空间</li><li><b>C</b> 哈佛体系结构强调的是多功能，适合多种不同的环境和任务，强调兼容性</li><li><b>D</b> 处理器内部采用多处理单元，可以在一个指令周期内同时进行运算</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">哈佛结构的程序、数据存储空间相互独立、配备专属总线，一个机器周期仅能分别访问一次程序空间、一次数据空间，无法多次访问同一类存储空间；其余选项均是哈佛结构与DSP芯片的典型特征。</p></details></div></details></details></details><details class="exam-subject" data-exam-subject="案例"><summary><span class="exam-subject-name">📋 案例分析</span><span class="exam-subject-n">2 题</span><span class="exam-subject-tip">情景简答 · 采分点三色标记</span></summary><div class="exam-bar"><span class="exam-bar-label">📋 案例分析</span><span class="exam-bar-stat">共 <b>2</b> 题 · 情景简答</span></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">10</span>考点：存储层次结构 / Cache / RAID / 网络存储（SAN/NAS/对象存储）/ 虚拟存储 / 多处理机结构<br>📅 时间：2025-07-08 上午 📍 地点：集团机房（设备到货验收）<br>👤 人物：甘工（乙方·系统分析师）、彭工（乙方·架构设计师）、邓经理（甲方运维）、硬件供应商（第三方）<br>⚡ 冲突：录音一年 4TB、话单要秒级查、AI 要 GPU，供应商只给一种配置<br>难度：★★★　总分：20 分　建议用时：25 分钟<br>背景：供应商工程师拍着机柜：&quot;这批都是高配通用服务器，跑你们系统够了。&quot; 邓经理（甲方运维）当场摇头：&quot;录音一年四个 T，三年十二个 T，你这本地盘够吗？话单三亿行，统计报表跑一次十几秒。&quot; 彭工补了一句：&quot;还有 AI 识别和大模型，那是另一类算力。&quot; 甘工翻着需求清单——结构化话单、非结构化录音、半结构化转写文本、热点会话数据，四类数据的读写特征完全不同，一套配置根本打不住。<br>补充资料：；③ASR转写文本（约 9 亿字/年，需全文检索）；④坐席会话与热点数据（需毫秒级读取）。 现有服务器为 20 台通用 x86 服务器；AI 语音识别与大模型推理需使用 GPU。运维反馈：①统计报表查询慢；②录音存储成本上升快；③GPU 服务器资源紧张但 CPU 服务器闲置。<br>问题 1：请说明计算机存储系统的层次结构及各层的特点与作用；并针对上述四类数据给出存储方案与理由（须涉及 Cache、主存、辅存与网络存储）。（10分）<br>问题 2：请比较 SMP（对称多处理机）与 MPP（海量并行处理）结构的特点与适用场景；针对&quot;GPU 紧张但 CPU 闲置&quot;给出解决方案；并说明指令系统中 CISC 与 RISC 的区别。（10分）</p><ul class="exam-questions"><li><b>问题 1</b> 请说明计算机<strong>存储系统的层次结构</strong>及各层的特点与作用；并针对上述四类数据给出存储方案与理由（须涉及 Cache、主存、辅存与网络存储）。（10分）</li><li><b>问题 2</b> 请比较 SMP（对称多处理机）与 MPP（海量并行处理）结构的特点与适用场景；针对&quot;GPU 紧张但 CPU 闲置&quot;给出解决方案；并说明指令系统中 CISC 与 RISC 的区别。（10分）<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点（10分）：<br>- 🔴 核心：🔴 核心（层次结构，由上到下容量增大、速度降低、成本降低）：<br>- 🟡 支撑：寄存器：CPU 内部；最快、容量最小（字节~KB）；存放当前指令与数据<br>- 🟡 支撑：高速缓存 Cache：SRAM；快（ns 级）、容量小（MB 级），对程序透明；缓解 CPU 与主存速度差距，基于程序局部性（时间局部性 + 空间局部性）<br>- 🟡 支撑：主存储器：DRAM；较快、容量中等（GB 级）、易失；存放正在运行的程序与数据<br>- 🟡 支撑：辅助存储器：磁盘/SSD；慢（ms 级）、容量大（TB 级）、非易失；长期保存程序与数据<br>- 🟡 支撑：网络/离线存储：SAN/NAS/对象存储；容量近乎无限、可共享；海量数据、共享访问、备份归档<br>- 🟡 支撑：🔴 核心（四类数据方案）：<br>- 🟡 支撑：1. 坐席会话与热点数据 → Redis 缓存（相当于&quot;应用层 Cache&quot;）：利用局部性，把热点客户、话术模板、坐席状态放内存，读取毫秒级，命中率可达 95% 以上；<br>- 🟡 支撑：2. 话单数据 → SSD + 关系数据库（或列式数仓），热数据（近 7 天）入内存/列存，按日期与地市分区；<br>- 🟡 支撑：3. 录音文件 → 对象存储（非结构化、量大、成本低），配生命周期策略（30 天转低频、1 年转归档），元数据入数据库以便检索下钻；<br>- 🟡 支撑：4. 转写文本 → 文档数据库 + 全文检索（ES），兼顾结构灵活与检索性能。<br>- 🟡 支撑：RAID（RAID0 提速、RAID1 镜像、RAID5/6 兼顾性能与容错、RAID10 高性能高可用）用于数据库盘；虚拟存储把多级存储统一为逻辑视图，屏蔽物理差异（本项目体现为&quot;热温冷分级 + 统一元数据&quot;）；网络存储中 SAN（块级、高性能、适合数据库）与 NAS（文件级、共享方便）按需选择，海量非结构化优先对象存储。；录音&quot;写一次读多次、长期保存&quot;的特征决定了它不应放在数据库或高性能 SAN，而应走对象存储 + 归档，这是本题最大的成本优化点。<br>- 🟢 加分：解析·多处理机与指令系统是综合知识章的高频点，答题要给出对比表与本项目对应。<br>问题 2｜参考答案要点（10分）：<br>- 🔴 核心：🔴 核心（SMP vs MPP）：<br>- 🟡 支撑：结构：多个同构处理器共享内存与总线；大量独立节点（各有 CPU/内存/磁盘），通过高速互连网络协作<br>- 🟡 支撑：存储：共享存储（统一地址空间）；分布存储（消息传递）<br>- 🟡 支撑：扩展：受总线/共享内存限制，扩展性有限（一般 ≤ 数十 CPU）；扩展性强（可扩展到数千节点）<br>- 🟡 支撑：编程：简单（共享内存、多线程）；复杂（消息传递 MPI、数据分区）<br>- 🟡 支撑：适用：通用服务器、数据库、事务处理；数据仓库、大数据分析、科学计算<br>- 🟡 支撑：🔴 核心（GPU 紧张 / CPU 闲置的解决）：<br>- 🟡 支撑：1. 资源池化与调度——用 K8s 统一管理 CPU 与 GPU，按队列配额调度；<br>- 🟡 支撑：2. 服务分层部署——ASR 与大模型推理（GPU 密集）与规则引擎、工单、报表（CPU 密集）分别部署，各自独立伸缩；<br>- 🟡 支撑：3. 模型侧优化——模型量化/蒸馏、批处理推理、结果缓存，降低单次推理的 GPU 占用；<br>- 🟡 支撑：4. 异步化——离线质检、历史转写走夜间批处理队列，不与实时链路争抢 GPU；<br>- 🟡 支撑：5. 弹性与错峰——按话务峰谷自动扩缩容，非高峰释放 GPU 给算法团队（乙方·数据运营）训练；；6. 降级预案——GPU 不可用时降级为关键词话术（CPU 即可运行），保证可用性。；🔴 核心（CISC vs RISC）：；CISC（复杂指令系统）：指令数量多、格式可变、寻址方式丰富，单条指令功能强（如一条指令完成内存到内存的运算），目标是用更少指令完成工作；代表 x86。优点：代码密度高、兼容性强；缺点：硬件复杂、指令执行周期差异大、难以流水化。；RISC（精简指令系统）：指令数量少、格式固定、只有 load/store 访问内存、寻址方式简单，单周期执行、便于流水线与编译优化；代表 ARM、RISC-V、MIPS。优点：硬件简单、功耗低、性能高；缺点：代码密度相对较低。；本项目坐席终端（IP 话机、移动 App）多采用 ARM/RISC 架构（功耗与成本优势），而中心服务器采用 x86/CISC；信创场景下还会涉及 ARM 架构服务器与 RISC-V 终端，这正是 CISC/RISC 的现实对应。</div></details></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">12</span>📅 时间：2026-01-14 凌晨 1:20 📍 地点：阿甘科技值班室（微信群同时在线）<br>👤 人物：甘工（乙方·系统分析师）、邓经理（甲方运维）、丁工（乙方·测试负责人）、彭工（乙方·架构设计师）<br>⚡ 冲突：距全面上线还有 8 小时，数据库服务器 CPU 冲高、内存告警，有人提议&quot;先加内存顶一下&quot;<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：邓经理在群里甩了张监控截图：&quot;数据库那台 CPU 92%，内存 88%，iowait 也不低。明天早上八点就要切流量，你们看着办。&quot; 有人建议：&quot;先加内存吧，反正云主机随时能扩。&quot; 彭工反对：&quot;现在加内存是掩盖问题——得先搞清楚是缓存命中率掉了、还是慢查询把 CPU 吃满了、还是磁盘 IO 瓶颈。乱加资源明天照样崩。&quot; 甘工登录机器，看到：Cache 访问时间 5ns、主存访问 60ns，当前统计的 Cache 命中率只有 82%（压测时是 96%）；进程列表里有 3 个统计任务在跑全表扫描；录音写入任务占用大量 IO。<br>补充资料：CPU 使用率 → 92% → 55% → 异常；内存使用率 → 88% → 60% → 异常；iowait → 21% → 5% → 异常；Cache 命中率 → 82% → 96% → 下降 14 个百分点；Cache 访问时间 → 5 ns → — → 硬件参数；主存访问时间 → 60 ns → — → 硬件参数 并行任务：3 个统计任务（全表扫描）+ 录音写入任务（大 IO）。<br>问题 1：（1）计算 Cache 命中率 96% 与 82% 两种情况下的平均访存时间（假设 Cache 命中时只需访问 Cache），并说明命中率下降 14 个百分点带来的性能影响；<br>问题 2：（2）说明进程的基本状态与进程调度的概念，分析本例中 CPU 冲高的可能原因；<br>问题 3：（3）说明 I/O 控制方式（程序查询、中断、DMA）的特点，指出录音写入应采用哪种并说明原因；<br>问题 4：（4）彭工反对&quot;先加内存顶一下&quot;，请说明正确的排查思路与治理措施。</p><ul class="exam-questions"><li><b>问题 1</b> （1）计算 Cache 命中率 96% 与 82% 两种情况下的<strong>平均访存时间</strong>（假设 Cache 命中时只需访问 Cache），并说明命中率下降 14 个百分点带来的性能影响；</li><li><b>问题 2</b> （2）说明<strong>进程</strong>的基本状态与<strong>进程调度</strong>的概念，分析本例中 CPU 冲高的可能原因；</li><li><b>问题 3</b> （3）说明 <strong>I/O 控制方式</strong>（程序查询、中断、DMA）的特点，指出录音写入应采用哪种并说明原因；</li><li><b>问题 4</b> （4）彭工反对&quot;先加内存顶一下&quot;，请说明正确的排查思路与治理措施。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）Cache 计算）：<br>- 🟢 加分：解析·Cache 计算 + 进程/I/O 概念 + 排查思路，是综合知识章与运维实践的结合。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🔴 核心（2）进程与调度）：进程是程序在某个数据集合上的一次执行过程，是资源分配与调度的基本单位；基本状态为就绪、运行、阻塞（新建、终止为辅助状态），状态间因调度、等待资源、时间片到而转换。进程调度是按某种策略（先来先服务、时间片轮转、优先级、多级反馈队列）从就绪队列选进程占用 CPU。<br>问题 3｜参考答案要点：<br>- 🔴 核心：🔴 核心（3）I/O 方式）：<br>问题 4｜参考答案要点：<br>- 🔴 核心：🟡 支撑（4）排查与治理）：</div></details></div></details></section>
     <div class="wrongbook"></div>
     <div class="keyhint">
   <span class="keyhint-title">键盘快捷键</span>
@@ -3249,6 +3600,77 @@ html{scroll-padding-top:80px}
     el.textContent = n
   }
 
+  // ══════════════════════════════════════════
+  // 12. 历年真题：批量展开 + 记忆展开状态
+  // ══════════════════════════════════════════
+  const Exam = {
+    KEY: 'examOpen',
+    init() {
+      const root = document.querySelector('.exam')
+      if (!root) return
+      const chapter = root.dataset.examChapter || 'x'
+
+      // 恢复上次展开状态：{ "H07": { "2025年5月": true, ... } }
+      const saved = store.get(this.KEY, {}) || {}
+      const mine = saved[chapter] || {}
+      root.querySelectorAll('.exam-year').forEach(y => {
+        const name = y.dataset.examYear
+        // 默认：展开最近 1 套（新年优先），其余收起
+        const open = (name in mine) ? mine[name] : false
+        if (open) y.open = true
+        y.addEventListener('toggle', () => {
+          mine[name] = y.open
+          saved[chapter] = mine
+          store.set(this.KEY, saved)
+        })
+      })
+      // 单题的"看过答案"状态也要记（避免重复点开）
+      const seen = store.get('examSeen', {}) || {}
+      root.querySelectorAll('.exam-q').forEach(qd => {
+        const qid = qd.dataset.examId
+        if (seen[qid]) {
+          const a = qd.querySelector('.exam-ans')
+          if (a) a.open = true
+        }
+        const ans = qd.querySelector('.exam-ans')
+        if (ans) ans.addEventListener('toggle', () => {
+          if (ans.open) { seen[qid] = 1; store.set('examSeen', seen) }
+        })
+      })
+
+      // 批量展开/收起按钮
+      root.querySelectorAll('.exam-op').forEach(btn => {
+        btn.addEventListener('click', e => {
+          e.preventDefault()
+          const openAll = btn.dataset.examAll === '1'
+          root.querySelectorAll('.exam-subject,.exam-year').forEach(d => { d.open = openAll })
+          root.querySelectorAll('.exam-ans').forEach(d => {
+            d.open = openAll
+            if (openAll && d.parentElement.dataset.examId) seen[d.parentElement.dataset.examId] = 1
+          })
+          if (openAll) store.set('examSeen', seen)
+          // 同步年份级记忆
+          root.querySelectorAll('.exam-year').forEach(y => { mine[y.dataset.examYear] = y.open })
+          saved[chapter] = mine
+          store.set(this.KEY, saved)
+        })
+      })
+
+      // 快捷键：E = 跳到真题区块（不与既有键冲突）
+      document.addEventListener('keydown', e => {
+        const t = e.target
+        if (t && t.nodeType === 1 && t.matches('input,textarea,select,[contenteditable]')) return
+        if (e.metaKey || e.ctrlKey || e.altKey) return
+        if (e.key.toLowerCase() === 'e') {
+          e.preventDefault()
+          root.scrollIntoView({ behavior: 'smooth', block: 'start' })
+          const y = root.querySelector('.exam-year')
+          if (y) y.open = true
+        }
+      })
+    }
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
     Theme.init()
     FontSize.init()
@@ -3264,6 +3686,7 @@ html{scroll-padding-top:80px}
     BackTop.init()
     CopyCode.init()
     ReadTime.init()
+    Exam.init()
     updateAnsweredStat()
     window.addEventListener('quiz:update', updateAnsweredStat)
     renderMermaid()

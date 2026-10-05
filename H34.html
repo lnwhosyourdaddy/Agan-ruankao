@@ -7,7 +7,7 @@
 <title>第 34 小时 · 系统运行与维护（二）· 系统转换与演进 · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
-<meta name="build-stamp" content="2026-10-05 08:06:29">
+<meta name="build-stamp" content="2026-10-05 11:44:51">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -1927,6 +1927,166 @@ table.zebra tbody tr:hover{background:var(--accent-soft-2)}
 /* ── 平滑滚动偏移（锚点跳转不卡顶栏下） ── */
 html{scroll-padding-top:80px}
 @media(max-width:760px){html{scroll-padding-top:70px}}
+
+/* ═══════════════════════════════════════════════════════════════
+   历年真题区块 · 三级折叠（原生 details，零 JS）
+   ═══════════════════════════════════════════════════════════════ */
+.exam{margin:2.2em 0 1.6em}
+
+/* ── 统计条：常驻不折叠，避免"用户不知道里面有真题"而白做 ── */
+.exam-bar{
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  padding:12px 16px;margin-bottom:10px;
+  background:linear-gradient(180deg,var(--bg-card) 0%,var(--bg-alt) 100%);
+  border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow-1);
+}
+.exam-bar-label{font-weight:700;font-size:14px;color:var(--accent)}
+.exam-bar-stat{font-size:12.5px;color:var(--fg-3);flex:1;min-width:140px}
+.exam-bar-stat b{color:var(--fg-2);font-variant-numeric:tabular-nums}
+.exam-bar-ops{display:flex;gap:6px}
+.exam-op{
+  padding:4px 11px;font:inherit;font-size:12px;cursor:pointer;
+  background:var(--bg-card);border:1px solid var(--line-2);
+  border-radius:999px;color:var(--fg-2);
+  transition:border-color .18s var(--ease),color .18s var(--ease),background .18s var(--ease);
+}
+.exam-op:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+
+/* ── 科目级折叠 ── */
+.exam-subject{
+  border:1px solid var(--line);border-radius:var(--radius);
+  background:var(--bg-card);overflow:hidden;
+}
+.exam-subject>summary{
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  padding:12px 16px;cursor:pointer;list-style:none;
+  font-weight:600;color:var(--fg-2);
+  transition:background .18s var(--ease),color .18s var(--ease);
+}
+.exam-subject>summary::-webkit-details-marker{display:none}
+.exam-subject>summary:hover{background:var(--accent-soft);color:var(--accent)}
+.exam-subject[open]>summary{border-bottom:1px solid var(--line);background:var(--bg-alt)}
+.exam-subject-name::before{content:'▸ ';display:inline-block;transition:transform .2s var(--ease)}
+.exam-subject[open] .exam-subject-name::before{transform:rotate(90deg)}
+.exam-subject-n{font-size:12px;color:var(--fg-3);font-variant-numeric:tabular-nums}
+.exam-subject-tip{margin-left:auto;font-size:11.5px;color:var(--fg-3);opacity:.8}
+
+/* ── 年份级折叠 ── */
+.exam-year{border-bottom:1px solid var(--line)}
+.exam-year:last-child{border-bottom:0}
+.exam-year>summary{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 16px 9px 30px;cursor:pointer;list-style:none;
+  font-size:13.5px;color:var(--fg-2);
+  transition:background .16s var(--ease),color .16s var(--ease);
+}
+.exam-year>summary::-webkit-details-marker{display:none}
+.exam-year>summary:hover{background:var(--accent-soft);color:var(--accent)}
+.exam-year[open]>summary{background:var(--bg-alt)}
+.exam-year-name::before{content:'▸ ';display:inline-block;transition:transform .2s var(--ease);color:var(--fg-3)}
+.exam-year[open] .exam-year-name::before{transform:rotate(90deg)}
+.exam-year-n{font-size:11.5px;color:var(--fg-3);font-variant-numeric:tabular-nums}
+
+/* ── 单题折叠 ── */
+.exam-q{border-top:1px solid var(--line)}
+.exam-q>summary{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:9px 16px 9px 46px;cursor:pointer;list-style:none;
+  font-size:13.5px;line-height:1.6;color:var(--fg-2);
+  transition:background .16s var(--ease);
+}
+.exam-q>summary::-webkit-details-marker{display:none}
+.exam-q>summary:hover{background:var(--accent-soft)}
+.exam-q[open]>summary{background:var(--bg-alt)}
+.exam-q>summary::before{
+  content:'＋';flex-shrink:0;width:1.1em;text-align:center;
+  color:var(--fg-3);font-size:12px;line-height:1.5;
+}
+.exam-q[open]>summary::before{content:'－';color:var(--accent)}
+.exam-no{
+  flex-shrink:0;font-size:11px;color:var(--fg-3);
+  font-variant-numeric:tabular-nums;padding-top:2px;min-width:44px;
+}
+.exam-tag{
+  flex-shrink:0;font-size:10.5px;padding:1px 6px;border-radius:4px;
+  background:var(--warn-bg);color:var(--warn-fg);border:1px solid var(--warn-line);
+}
+.exam-stem-peek{
+  flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  color:var(--fg-2);
+}
+.exam-q[open] .exam-stem-peek{color:var(--fg)}
+.exam-q-body{padding:4px 16px 16px 46px}
+.exam-stem{margin:.6em 0;font-size:14.5px;line-height:1.8;color:var(--fg)}
+.exam-blank{color:var(--danger);padding:0 1px}
+.exam-opts{list-style:none;margin:.5em 0 .9em;padding:0}
+/* ⚠️ 必须清掉全局 `ul>li::before` 的圆点（本站正文列表有项目符号），
+   否则真题选项前会多出一个小圆点，位置还和字母块错开 */
+.exam-opts>li::before{content:none !important}
+.exam-opts li{
+  position:relative;padding:4px 0 4px 26px;font-size:14px;line-height:1.7;
+  border-bottom:1px dashed var(--line);
+}
+.exam-opts li:last-child{border-bottom:0}
+.exam-opts b{
+  position:absolute;left:0;top:4px;
+  display:inline-flex;align-items:center;justify-content:center;
+  width:19px;height:19px;border-radius:5px;
+  background:var(--bg-alt);border:1px solid var(--line-2);
+  font-size:11px;font-weight:700;color:var(--fg-3);
+}
+
+/* ── 答案（默认再折叠一层）── */
+.exam-ans{margin-top:.6em}
+.exam-ans>summary{
+  display:inline-flex;align-items:center;gap:6px;cursor:pointer;list-style:none;
+  padding:4px 12px;font-size:12px;
+  background:var(--accent-soft);border:1px solid var(--line-2);
+  border-radius:999px;color:var(--accent);
+  transition:background .18s var(--ease),border-color .18s var(--ease);
+}
+.exam-ans>summary::-webkit-details-marker{display:none}
+.exam-ans>summary:hover{background:var(--accent-soft-2);border-color:var(--accent)}
+.exam-ans[open]>summary{margin-bottom:8px}
+.exam-ans-line{margin:.4em 0;font-size:14px;color:var(--fg)}
+.exam-ans-line b{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:26px;height:24px;padding:0 8px;margin-left:4px;
+  border-radius:6px;background:var(--tip-bg);color:var(--tip-fg);
+  border:1px solid var(--tip-line);font-weight:700;
+}
+.exam-exp{margin:.4em 0;font-size:13.5px;line-height:1.8;color:var(--fg-2)}
+
+/* ── 窄屏 ── */
+@media(max-width:760px){
+  .exam-bar{padding:10px 12px;gap:8px}
+  .exam-bar-label{font-size:13px}
+  .exam-bar-stat{font-size:11.5px;flex-basis:100%;order:3;min-width:0}
+  .exam-bar-ops{margin-left:auto}
+  .exam-subject-tip{display:none}
+  .exam-q>summary{padding-left:16px;flex-wrap:wrap}
+  .exam-q>summary::before{display:none}
+  .exam-no{min-width:0}
+  .exam-q-body{padding-left:16px}
+  .exam-year>summary{padding-left:20px}
+  .exam-stem-peek{white-space:normal;flex-basis:100%}
+  .exam-opts li{font-size:13.5px}
+}
+
+/* ── 打印：全部自动展开（服务"可打印带水印"卖点）── */
+@media print{
+  .exam-bar,.exam-op,.exam-ans>summary{display:none !important}
+  .exam-subject,.exam-year,.exam-q{border:0 !important;background:none !important}
+  .exam-subject>summary,.exam-year>summary{
+    padding:6pt 0;background:none !important;border-bottom:1pt solid #999;
+  }
+  .exam-subject-name::before,.exam-year-name::before,.exam-q>summary::before{content:'' !important}
+  .exam-q-body,.exam-ans[open] > div,.exam-ans > div{display:block !important}
+  .exam-q{break-inside:avoid;page-break-inside:avoid}
+  .exam-stem,.exam-opts li{font-size:9.5pt}
+  .exam-exp{font-size:8.5pt;color:#333}
+}
 </style>
 </head>
 <body>
@@ -2148,6 +2308,9 @@ html{scroll-padding-top:80px}
   </div>
 </div>
 </div>
+    <section class="exam" id="exam" data-exam-chapter="15" data-exam-hour="H34"><div class="exam-bar"><span class="exam-bar-label">📚 历年真题</span><span class="exam-bar-stat">本章共 <b>4</b> 题 · 本学时 <b>2</b> 题（其余见同章其他学时）</span><span class="exam-bar-ops"><button type="button" class="exam-op" data-exam-all="1">全部展开</button><button type="button" class="exam-op" data-exam-all="0">全部收起</button></span></div><details class="exam-subject" data-exam-subject="综合知识"><summary><span class="exam-subject-name">📝 综合知识</span><span class="exam-subject-n">2 题</span><span class="exam-subject-tip">按年份展开 · 单题可点开看答案</span></summary><details class="exam-year" data-exam-year="2026年5月"><summary><span class="exam-year-name">2026年5月</span><span class="exam-year-n">1 题</span></summary><details class="exam-q" data-exam-id="2026年5月-045"><summary><span class="exam-no">第 45 题</span><span class="exam-stem-peek">缓存技术更适用于</span></summary><div class="exam-q-body"><p class="exam-stem">缓存技术更适用于</p><ul class="exam-opts"><li><b>A</b> 高频更新库存</li><li><b>B</b> 高频变化订单</li><li><b>C</b> 商品分类信息</li><li><b>D</b> 实时支付流水</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">缓存适合读多写少、更新频率低的数据，商品分类信息符合该特征。</p></details></div></details></details><details class="exam-year" data-exam-year="2023年5月"><summary><span class="exam-year-name">2023年5月</span><span class="exam-year-n">1 题</span></summary><details class="exam-q" data-exam-id="2023年5月-058"><summary><span class="exam-no">第 58 题</span><span class="exam-tag">两空单选</span><span class="exam-tag">2 空</span><span class="exam-stem-peek">59-60.计算机系统的( )描述了计算机系统能正常工作的时间，其指标可以是能够持续工作的时间长度，也可以是在一段时间内…</span></summary><div class="exam-q-body"><p class="exam-stem">59-60.计算机系统的( )描述了计算机系统能正常工作的时间，其指标可以是能够持续工作的时间长度，也可以是在一段时间内，能够正常工作的时间所占的百分比，计算机系统的( )，通常用吞吐率、响应时间和资源利用率等三类指标进行衡量。
+（空1）
+（空2）</p><ul class="exam-opts"><li><b>A</b> 可靠性</li><li><b>B</b> 性能</li><li><b>C</b> 易用性</li><li><b>D</b> 可测试性</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">B。解析：第一空符合可靠性的定义，衡量系统稳定不间断运行的能力；第二空性能的三大经典衡量指标就是吞吐率、响应时间、资源利用率。</p></details></div></details></details></details><details class="exam-subject" data-exam-subject="案例"><summary><span class="exam-subject-name">📋 案例分析</span><span class="exam-subject-n">2 题</span><span class="exam-subject-tip">情景简答 · 采分点三色标记</span></summary><div class="exam-bar"><span class="exam-bar-label">📋 案例分析</span><span class="exam-bar-stat">共 <b>2</b> 题 · 情景简答</span></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">69</span>考点：遗留系统评价（四象限）与演化策略 / 新旧系统转换策略 / 数据迁移 / 系统评价<br>📅 时间：2026-03-25 下午 📍 地点：系统切换方案评审<br>👤 人物：甘工（乙方·系统分析师）、徐总监（甲方·数智化信息部总监）、邓经理（甲方·运维经理）、老陶（甲方·班组长(十年老坐席)）<br>⚡ 冲突：新平台上线了老系统还在跑，运维要维护两套，老陶舍不得换<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：邓经理先倒苦水：&quot;两套系统并行，坐席一天登两个账号。我这边备份、账号、权限全要做两遍。&quot; 老陶接话：&quot;新系统那个工作台不顺手，老系统里十年的工单记录，新系统还查不全。&quot; 徐总监问甘工：&quot;老系统到底什么时候下？数据怎么办？&quot; 甘工清楚：这不是&quot;删掉就好&quot;，而是要先给老系统定位，再定切换策略和数据迁移方案。<br>补充资料：值低，技术老旧，但外部接口稳定）；③2018 年质检系统（价值中等，技术尚可，与新平台功能重叠）。集团要求：切换过程数据不丢失、业务不停摆、可平滑回退。<br>问题 1：（1）用遗留系统评价矩阵（技术水平 × 业务价值）对三套系统定位并给出演化策略；<br>问题 2：（2）说明新旧系统转换的三种策略及本项目选择；<br>问题 3：（3）说明数据迁移应遵循的原则与步骤；<br>问题 4：（4）说明系统评价的指标与方法。</p><ul class="exam-questions"><li><b>问题 1</b> （1）用<strong>遗留系统评价矩阵</strong>（技术水平 × 业务价值）对三套系统定位并给出演化策略；</li><li><b>问题 2</b> （2）说明<strong>新旧系统转换</strong>的三种策略及本项目选择；</li><li><b>问题 3</b> （3）说明<strong>数据迁移</strong>应遵循的原则与步骤；</li><li><b>问题 4</b> （4）说明系统评价的指标与方法。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）四象限与策略）：<br>- 🟢 加分：解析·遗留系统与转换是第15章最稳定考点。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🔴 核心（2）三种转换策略与选择）：<br>问题 3｜参考答案要点：<br>- 🔴 核心：🔴 核心（3）数据迁移原则与步骤）：原则——①数据不丢失（先全量备份并验证可恢复）；②一致性与完整性（主外键、约束、编码映射）；③先清洗后迁移（去重、标准化、补缺省）；④分批 + 校验对账；⑤保留回滚方案与迁移日志；⑥避开业务高峰，迁移后做业务验证；⑦信创替换还需做数据类型/字符集/时区映射与兼容性回归。<br>问题 4｜参考答案要点：<br>- 🔴 核心：🔴 核心（4）系统评价）：指标——①技术性能（可用度 99.94%、响应 800ms、吞吐、MTBF/MTTR）；②经济效益（投资回收期 3.1 年、NPV/IRR、运维成本占比、成本效益比）；③业务效益（自助解决率、AHT 下降、满意度提升、放弃率下降）；④社会与管理（合规达标、数据资产化、员工体验、决策效率）；⑤质量（缺陷密度、需求覆盖率、可维护性）。</div></details></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">71</span>📅 时间：2026-06-11 上午 10:30 📍 地点：运营值班群 + 应急复盘<br>👤 人物：邓经理（甲方·运维经理）、甘工（乙方·系统分析师）、洪经理（甲方·客服部经理）、李工（乙方·项目经理）、客户经理（第三方·电信公司）<br>⚡ 冲突：外呼任务实时接通率跌破阈值，若不停会持续占用线路并发，还可能触发运营商限流；但停任务会完不成当日指标<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：邓经理在群里喊：&quot;外呼任务接通率掉到 18% 了！还在往外呼，线路并发全占满，呼入都受影响。&quot; 洪经理第一反应是&quot;别停，今天的任务还差三千通&quot;；李工担心被运营商限流，一旦限流连呼入都会受影响。 甘工调出清单里的验收要求——&quot;任务告警与自动调控&quot;：设定实时接通阈值，低于阈值后能自动调整任务线路 / 降低呼叫并发 / 暂停任务并通知。 问题是：这套自动调控之前只当&quot;配置项&quot;做了，从没真正触发过——今天第一次实战，它就&quot;卡&quot;在了&quot;要不要自动停&quot;的判定上。<br>补充资料：黄色 → 接通率 &lt;25% → 降并发 30% → 运营群；橙色 → &lt;20% → 切换备用线路 + 降并发 50% → 运营 + 值班；红色 → &lt;15%，或连续 3 窗口不达标 → 暂停任务并释放并发 → 运营 + 值班 + 客户经理 防抖：连续 2 个窗口达标才动作/恢复；样本量 &lt;100 通不判定。恢复：连续 5 分钟达标后逐步放量。开关：自动调控策略可单独开关；人工可一键暂停/覆盖并留痕。<br>问题 1：（1）说明系统运行管理中&quot;网络资源管理&quot;与&quot;软件资源管理&quot;的内容，并分析本例的资源冲突；<br>问题 2：（2）设计任务告警与自动调控机制（阈值、动作、判定、通知、回恢复）；<br>问题 3：（3）说明故障管理中&quot;先止损后定位&quot;的原则在本例的应用；<br>问题 4：（4）说明事后应如何从维护管理角度根治。</p><ul class="exam-questions"><li><b>问题 1</b> （1）说明<strong>系统运行管理</strong>中&quot;网络资源管理&quot;与&quot;软件资源管理&quot;的内容，并分析本例的资源冲突；</li><li><b>问题 2</b> （2）设计<strong>任务告警与自动调控</strong>机制（阈值、动作、判定、通知、回恢复）；</li><li><b>问题 3</b> （3）说明<strong>故障管理</strong>中&quot;先止损后定位&quot;的原则在本例的应用；</li><li><b>问题 4</b> （4）说明事后应如何从维护管理角度根治。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）运行管理内容）：网络资源管理——拓扑与地址、带宽与流量、设备与链路监控、安全策略、容量规划与扩容；软件资源管理——软件资产台账（版本、部署、授权）、许可证与合规、补丁与升级、配置与变更、发布与回收。<br>- 🟢 加分：解析·自动调控题要&quot;阈值分级 + 动作 + 防抖恢复 + 资源隔离根治&quot;。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🟡 支撑（2）自动调控机制）：<br>问题 3｜参考答案要点：<br>- 🔴 核心：🟡 支撑（3）先止损后定位）：①止损——立即按红色阈值暂停外呼任务、释放并发，保障呼入主链路（业务优先级：呼入 &gt; 外呼）；②定位——分段排查：本方平台（并发配置、任务参数）→ 线路/运营商（是否被限流、中继状态）→ 号码池（是否被大量标记/拦截）→ 目标号码质量（空号率是否偏高）；用数据定位（各线路接通率对比、状态码分布）；③恢复——切换健康线路/号码池后小流量试探，确认回升再逐步放量；④记录——完整时间线。<br>问题 4｜参考答案要点：<br>- 🔴 核心：🟢 加分（4）根治措施）：①资源隔离——外呼与呼入使用独立并发池，互不抢占，并给呼入设保底并发；②优先级调度——呼入优先抢占，外呼可降可停；③号码池治理——监控外显号码的接通率与标记情况，自动轮换与下线低效号码；④任务参数校验——导入前校验号码质量（空号/停机预检），降低无效呼叫；⑤维护管理——把&quot;自动调控&quot;纳入定期演练（注入低接通场景验证动作生效），更新 Runbook；并把阈值、开关纳入配置中心 + 变更控制，避免误改。</div></details></div></details><details class="exam-subject" data-exam-subject="论文"><summary><span class="exam-subject-name">📄 论文写作</span><span class="exam-subject-n">7 题</span><span class="exam-subject-tip">论述题 · 先写再看题</span></summary><div class="exam-bar"><span class="exam-bar-label">📄 论文写作</span><span class="exam-bar-stat">共 <b>7</b> 题 · 论述题</span></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与管理和开发的软件项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细描述DevSecOps的主要阶段，以及各阶段的核心工作。</li><li><b>问题 3</b> 结合项目实际，说明DevSecOps的实施过程与应用效果。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 运维与安全</span><span class="exam-lv">⭐⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与管理实施的软件运维项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 任选三个智能运维成熟度级别，分别说明对应级别下系统在效率、质量、成本方面的特征。</li><li><b>问题 3</b> 结合项目实际，说明智能运维的实施过程、遇到的问题、解决办法以及最终效果。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 运维与安全</span><span class="exam-lv">⭐⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与管理开发的信息系统项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 列举两种系统容错技术，并分别解释其原理。</li><li><b>问题 3</b> 结合项目实际，说明可靠性相关技术的实施过程与效果。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 可靠性与容灾</span><span class="exam-lv">⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与维护的信息系统项目（项目的背景、系统规模、维护类型、组织结构、维护周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细论述各类软件维护的核心内容、维护过程的管理流程（问题提交、分析、修复、验证、发布）、维护过程中的风险控制要点。</li><li><b>问题 3</b> 结合项目实践，论述你在维护工作中解决的典型问题、提升维护效率的方法，总结软件维护的实施经验。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 运维与安全</span><span class="exam-lv">⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与设计、开发的信息系统项目（项目的背景、容错等级要求、业务场景、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细论述软件容错设计的核心策略（硬件容错 / 软件容错）、容错技术（冗余设计、错误检测、故障恢复）、容错系统的测试方法。</li><li><b>问题 3</b> 结合项目实例，论述容错设计的落地过程、容错效果验证，分析现有容错方案的不足并提出优化措施。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 可靠性与容灾</span><span class="exam-lv">⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与实施的信创迁移适配项目（项目的背景、原有技术栈、国产化替代目标、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细论述信创迁移适配的整体方案、实施流程、兼容性改造、数据迁移、性能调优等关键技术要点。</li><li><b>问题 3</b> 结合项目实践，论述迁移适配过程中遇到的技术难点、风险问题及对应的解决措施，总结项目整体实施经验。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 信创迁移适配</span><span class="exam-lv">⭐⭐⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与管理和开发的软件项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细描述三种及以上智能化运维的技术与对应工具。</li><li><b>问题 3</b> 结合项目实际，详细论述如何使用智能化技术开展运维工作。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 运维与安全</span><span class="exam-lv">⭐⭐⭐</span></div></div></details></section>
     <div class="wrongbook"></div>
     <div class="keyhint">
   <span class="keyhint-title">键盘快捷键</span>
@@ -3022,6 +3185,77 @@ html{scroll-padding-top:80px}
     el.textContent = n
   }
 
+  // ══════════════════════════════════════════
+  // 12. 历年真题：批量展开 + 记忆展开状态
+  // ══════════════════════════════════════════
+  const Exam = {
+    KEY: 'examOpen',
+    init() {
+      const root = document.querySelector('.exam')
+      if (!root) return
+      const chapter = root.dataset.examChapter || 'x'
+
+      // 恢复上次展开状态：{ "H07": { "2025年5月": true, ... } }
+      const saved = store.get(this.KEY, {}) || {}
+      const mine = saved[chapter] || {}
+      root.querySelectorAll('.exam-year').forEach(y => {
+        const name = y.dataset.examYear
+        // 默认：展开最近 1 套（新年优先），其余收起
+        const open = (name in mine) ? mine[name] : false
+        if (open) y.open = true
+        y.addEventListener('toggle', () => {
+          mine[name] = y.open
+          saved[chapter] = mine
+          store.set(this.KEY, saved)
+        })
+      })
+      // 单题的"看过答案"状态也要记（避免重复点开）
+      const seen = store.get('examSeen', {}) || {}
+      root.querySelectorAll('.exam-q').forEach(qd => {
+        const qid = qd.dataset.examId
+        if (seen[qid]) {
+          const a = qd.querySelector('.exam-ans')
+          if (a) a.open = true
+        }
+        const ans = qd.querySelector('.exam-ans')
+        if (ans) ans.addEventListener('toggle', () => {
+          if (ans.open) { seen[qid] = 1; store.set('examSeen', seen) }
+        })
+      })
+
+      // 批量展开/收起按钮
+      root.querySelectorAll('.exam-op').forEach(btn => {
+        btn.addEventListener('click', e => {
+          e.preventDefault()
+          const openAll = btn.dataset.examAll === '1'
+          root.querySelectorAll('.exam-subject,.exam-year').forEach(d => { d.open = openAll })
+          root.querySelectorAll('.exam-ans').forEach(d => {
+            d.open = openAll
+            if (openAll && d.parentElement.dataset.examId) seen[d.parentElement.dataset.examId] = 1
+          })
+          if (openAll) store.set('examSeen', seen)
+          // 同步年份级记忆
+          root.querySelectorAll('.exam-year').forEach(y => { mine[y.dataset.examYear] = y.open })
+          saved[chapter] = mine
+          store.set(this.KEY, saved)
+        })
+      })
+
+      // 快捷键：E = 跳到真题区块（不与既有键冲突）
+      document.addEventListener('keydown', e => {
+        const t = e.target
+        if (t && t.nodeType === 1 && t.matches('input,textarea,select,[contenteditable]')) return
+        if (e.metaKey || e.ctrlKey || e.altKey) return
+        if (e.key.toLowerCase() === 'e') {
+          e.preventDefault()
+          root.scrollIntoView({ behavior: 'smooth', block: 'start' })
+          const y = root.querySelector('.exam-year')
+          if (y) y.open = true
+        }
+      })
+    }
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
     Theme.init()
     FontSize.init()
@@ -3037,6 +3271,7 @@ html{scroll-padding-top:80px}
     BackTop.init()
     CopyCode.init()
     ReadTime.init()
+    Exam.init()
     updateAnsweredStat()
     window.addEventListener('quiz:update', updateAnsweredStat)
     renderMermaid()

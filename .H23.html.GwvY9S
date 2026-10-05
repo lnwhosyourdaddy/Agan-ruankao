@@ -1,0 +1,3769 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>第 23 小时 · 软件需求工程（第 11 章 · 完整版） · 阿甘系分 48 小时冲刺</title>
+<meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
+<meta name="build-stamp" content="2026-10-05 09:05:06">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<style>/* ═══════════════════════════════════════════════════
+   阿甘系分 48 小时冲刺 · 设计系统
+   风格：暖墨绿调 / 教科书质感 / 现代极简
+   ═══════════════════════════════════════════════════ */
+
+/* ---------- 1. 设计令牌 ---------- */
+:root{
+  /* 暖墨绿调 —— 沉稳、书卷气，区别于技术文档的"文档蓝" */
+  --bg:#fbfaf6;
+  --bg-alt:#f2f0e9;
+  --bg-card:#fffdf9;
+  --bg-deep:#edeae1;
+
+  --fg:#1b211c;
+  --fg-2:#4d574e;
+  --fg-3:#7d877f;
+  --fg-inv:#fbfaf6;
+
+  --line:#e0ddd4;
+  --line-2:#cdc9bd;
+
+  --accent:#3d5a40;
+  --fs-base:16.5px;
+  --accent-2:#5a8a62;
+  --accent-3:#7ea888;
+  --accent-soft:rgba(61,90,64,.075);
+  --accent-soft-2:rgba(61,90,64,.14);
+  --accent-glow:rgba(90,138,98,.25);
+
+  --warn:#b8860b;
+  --warn-bg:#fdf7e6;
+  --warn-line:#e0b252;
+  --warn-fg:#6b4e06;
+
+  --tip:#2d6a4f;
+  --tip-bg:#e9f4ec;
+  --tip-line:#4a8a63;
+  --tip-fg:#1d4630;
+
+  --danger:#b33636;
+  --danger-bg:#fbeeee;
+  --danger-line:#dd7d7d;
+
+--gold:#a67c00;
+--gold-bg:#fbf6e3;
+/* 记忆口诀框（紫）——与墨绿主色同属低饱和冷调，不抢主色 */
+--mem:#6d4a8f;
+--mem-bg:#f4f1f8;
+--mem-line:#8b6bb0;
+--mem-fg:#4a3460;
+
+  --radius:10px;
+  --radius-lg:16px;
+  --radius-sm:7px;
+  /* 布局宽度：正文栏要够宽才不会在大屏上显得"空而窄"。
+     1440px 视口下 = 236(toc) + 56(gap) + 700(main) + 2×40(padding) ≈ 1072，居中留白更均衡。 */
+  --maxw:1180px;
+  --toc-w:236px;
+  --gap:56px;
+  --pad-x:40px;
+  --shadow-1:0 1px 2px rgba(28,34,29,.04), 0 2px 8px rgba(28,34,29,.03);
+  --shadow-2:0 4px 16px rgba(28,34,29,.07), 0 1px 3px rgba(28,34,29,.04);
+  --shadow-3:0 12px 32px rgba(28,34,29,.10);
+
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Noto Sans SC","Microsoft YaHei",sans-serif;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  --mono:ui-monospace,"SF Mono","JetBrains Mono","Fira Code",Menlo,Consolas,monospace;
+  --serif:"Songti SC","STSong","Source Han Serif SC","Noto Serif CJK SC","Source Han Serif CN","Times New Roman",SimSun,serif;
+  --measure:760px;
+
+  --ease:cubic-bezier(.4,0,.2,1);
+}
+
+html[data-theme="dark"]{
+  --bg:#141715;
+  --bg-alt:#1c201d;
+  --bg-card:#191d1a;
+  --bg-deep:#232824;
+
+  --fg:#dde5de;
+  --fg-2:#a0aaa2;
+  --fg-3:#6c766e;
+  --fg-inv:#141715;
+
+  --line:#2b302c;
+  --line-2:#3a413b;
+
+  --accent:#8bb195;
+  --accent-2:#a9c9b1;
+  --accent-3:#c3dcc8;
+  --accent-soft:rgba(139,177,149,.10);
+  --accent-soft-2:rgba(139,177,149,.18);
+  --accent-glow:rgba(139,177,149,.25);
+
+  --warn:#d9b04a;
+  --warn-bg:#252010;
+  --warn-line:#7d6428;
+  --warn-fg:#e8d08a;
+
+  --tip:#7fc79b;
+  --tip-bg:#16241c;
+  --tip-line:#3d7a55;
+  --tip-fg:#a8dcbd;
+
+  --danger:#e08585;
+  --danger-bg:#251818;
+  --danger-line:#8a4545;
+
+--gold:#d9bb6a;
+--gold-bg:#262210;
+--mem:#c9b0e0;
+--mem-bg:#221a2c;
+--mem-line:#7d5fa0;
+--mem-fg:#dccdf0;
+
+  --shadow-1:0 1px 2px rgba(0,0,0,.16);
+  --shadow-2:0 4px 16px rgba(0,0,0,.26);
+  --shadow-3:0 12px 32px rgba(0,0,0,.36);
+}
+
+/* ---------- 2. 基础重置 ---------- */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+html{
+  scroll-behavior:smooth;
+  -webkit-text-size-adjust:100%;
+  scroll-padding-top:80px;
+  font-size:var(--fs-base);     /* 字号可调（- / + 快捷键），默认 16.5px */
+}
+
+body{
+  font-family:var(--font);
+  background:var(--bg);
+  color:var(--fg);
+  font-size:16.5px;
+  line-height:1.88;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  font-variant-numeric:tabular-nums;
+}
+
+::selection{background:var(--accent-soft-2);color:var(--accent)}
+
+img{max-width:100%;height:auto}
+
+/* 焦点可见性（键盘导航） */
+:focus-visible{outline:2px solid var(--accent-2);outline-offset:2px;border-radius:4px}
+
+/* ---------- 3. 阅读进度条 ---------- */
+.read-progress{
+  position:fixed;top:0;left:0;right:0;height:2.5px;
+  background:var(--accent-2);
+  transform-origin:left;transform:scaleX(0);
+  width:100%;
+  z-index:1000;
+  transition:transform .1s linear;
+}
+
+/* ---------- 4. 顶部导航 ---------- */
+.topbar{
+  position:sticky;top:0;z-index:500;
+  height:54px;
+  display:flex;align-items:center;gap:24px;
+  padding:0 28px;
+  background:color-mix(in srgb, var(--bg) 85%, transparent);
+  backdrop-filter:saturate(180%) blur(14px);
+  -webkit-backdrop-filter:saturate(180%) blur(14px);
+  border-bottom:1px solid var(--line);
+}
+.topbar::after{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  box-shadow:0 1px 0 var(--line);
+}
+@media (prefers-reduced-motion:reduce){
+  .read-progress{transition:none}
+  *{animation-duration:.01ms!important;transition-duration:.01ms!important}
+}
+
+.brand{
+  display:flex;align-items:baseline;gap:8px;
+  font-weight:700;font-size:15.5px;letter-spacing:-.2px;
+  color:var(--accent);text-decoration:none;white-space:nowrap;
+  flex-shrink:0;
+}
+.brand-mark{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:22px;height:22px;border-radius:6px;
+  background:var(--accent);color:var(--fg-inv);
+  font-size:12px;font-weight:700;
+  align-self:center;
+}
+.brand-sub{color:var(--fg-3);font-weight:400;font-size:13px}
+
+/* ---------- 顶栏导航：胶囊触发器 + 分组下拉面板 ----------
+   14 个学时平铺会挤爆顶栏（尤其 1280px 以下），改成「当前页胶囊 + 分组面板」。
+   面板按模块分组（第一篇/第二篇/专项），底部给出待上线进度与上一章/下一章。 */
+.nav{position:relative;margin-left:auto;flex-shrink:0}
+.nav-trigger{
+  display:inline-flex;align-items:center;gap:8px;
+  max-width:min(46vw,340px);
+  padding:6px 12px 6px 8px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  background:var(--bg-card);
+  color:var(--fg-2);font:inherit;font-size:13.5px;
+  cursor:pointer;
+  transition:border-color .18s var(--ease), background .18s var(--ease), color .18s var(--ease);
+}
+.nav-trigger:hover{border-color:var(--accent);color:var(--accent)}
+.nav-trigger:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.nav-trigger-code{
+  flex-shrink:0;
+  padding:2px 8px;border-radius:999px;
+  background:var(--accent);color:var(--fg-inv);
+  font-size:11.5px;font-weight:700;letter-spacing:.02em;
+}
+.nav-trigger-label{
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.nav-caret{width:12px;height:12px;flex-shrink:0;transition:transform .2s var(--ease)}
+.nav.open .nav-caret{transform:rotate(180deg)}
+
+.nav-panel{
+  position:absolute;top:calc(100% + 10px);right:0;
+  width:min(88vw,392px);
+  max-height:min(74vh,620px);
+  display:flex;flex-direction:column;
+  background:var(--bg-card);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow-2);
+  overflow:hidden;
+  z-index:520;
+}
+.nav-panel[hidden]{display:none}
+.nav-panel-scroll{
+  overflow-y:auto;overscroll-behavior:contain;
+  padding:10px 8px 12px;
+  flex:1;
+  -webkit-overflow-scrolling:touch;
+}
+.nav-group + .nav-group{margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+.nav-group-solo{padding-bottom:2px}
+.nav-group-solo + .nav-group{margin-top:8px;padding-top:8px}
+.nav-group-title{
+  padding:0 10px 6px;
+  font-size:11.5px;font-weight:700;letter-spacing:.06em;
+  color:var(--fg-3);text-transform:none;
+}
+.nav-item{
+  display:flex;align-items:center;gap:9px;
+  padding:6px 10px;border-radius:var(--radius-sm);
+  font-size:13.5px;color:var(--fg-2);text-decoration:none;
+  transition:background .15s var(--ease), color .15s var(--ease);
+}
+.nav-item:hover{background:var(--accent-soft);color:var(--accent)}
+.nav-item:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.nav-item.active{background:var(--accent-soft-2);color:var(--accent);font-weight:600}
+.nav-item-code{
+  flex-shrink:0;min-width:38px;
+  font-size:11px;font-weight:700;color:var(--fg-3);
+  font-variant-numeric:tabular-nums;
+}
+.nav-item.active .nav-item-code{color:var(--accent)}
+.nav-item-label{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* 待上线：只做进度提示，不可点 */
+.nav-group-pending .nav-group-title{color:var(--fg-3)}
+.nav-pending-row{
+  display:flex;align-items:center;gap:9px;
+  padding:4px 10px;font-size:12.5px;color:var(--fg-3);
+}
+.nav-pending-row + .nav-pending-row{border-top:1px dashed var(--line)}
+.nav-pending-ch{flex-shrink:0;min-width:104px;font-weight:600}
+.nav-pending-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nav-pending-w{flex-shrink:0;font-size:11px;opacity:.8}
+
+.nav-foot{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:8px 12px;border-top:1px solid var(--line);
+  background:var(--bg);
+  font-size:11.5px;color:var(--fg-3);
+}
+.nav-foot-nav{display:inline-flex;gap:6px}
+.nav-step{
+  padding:4px 10px;border-radius:999px;
+  border:1px solid var(--line);
+  color:var(--fg-2);text-decoration:none;font-size:12px;
+  transition:border-color .15s var(--ease), color .15s var(--ease);
+}
+.nav-step:hover{border-color:var(--accent);color:var(--accent)}
+.nav-step.is-off{opacity:.4;pointer-events:none}
+
+@media(max-width:860px){
+  .nav-trigger{max-width:52vw;padding:5px 10px 5px 6px}
+  .nav-trigger-label{font-size:12.5px}
+  .nav-panel{width:min(92vw,360px)}
+  .nav-foot-tip{display:none}
+}
+@media(max-width:760px){
+  /* 手机上再收一档：只留「章号 + 短标题」，保证顶栏单行不换行 */
+  .topbar{gap:8px;padding:8px 12px}
+  .nav-trigger-code{padding:2px 6px;font-size:11px}
+  .nav-caret{display:none}
+  .nav-pending-ch{min-width:88px}
+
+  /* ⚠️ 窄屏必须把面板改成「贴顶栏左右边缘」，不能继续以 .nav 为锚点右对齐：
+     .nav 右边还有「专注 / ⋯」按钮，面板向左溢出会有一部分跑到屏幕外。
+     做法：.nav 退回 static（面板的包含块变回 position:sticky 的 .topbar），
+     再用 left/right 撑满。不能用 position:fixed —— .topbar 有 backdrop-filter，
+     会成为 fixed 的包含块，坐标会错位。 */
+  .nav{position:static}
+  .nav-panel{
+    left:8px;right:8px;width:auto;
+    top:calc(100% + 6px);
+    max-height:calc(100vh - 84px);
+  }
+}
+
+/* 主题切换按钮组 */
+.theme-switch{
+  display:flex;gap:2px;padding:3px;
+  background:var(--bg-alt);border-radius:var(--radius-sm);
+  border:1px solid var(--line);
+  flex-shrink:0;
+}
+.theme-btn{
+  border:none;background:transparent;cursor:pointer;
+  padding:4px 9px;border-radius:5px;
+  font-size:11.5px;font-family:inherit;color:var(--fg-3);
+  transition:all .18s var(--ease);
+}
+.theme-btn:hover{color:var(--fg-2)}
+.theme-btn.active{background:var(--bg-card);color:var(--accent);font-weight:600;box-shadow:var(--shadow-1)}
+
+/* ---------- 5. 页面布局 ---------- */
+.shell{
+  display:flex;gap:var(--gap);
+  max-width:var(--maxw);margin:0 auto;
+  padding:0 var(--pad-x);
+  align-items:flex-start;
+}
+.main{flex:1;min-width:0;padding:52px 0 100px}
+
+/* 侧边目录 */
+.toc{
+  position:sticky;top:78px;
+  width:var(--toc-w);flex-shrink:0;
+  padding:52px 0 40px;
+  font-size:13px;
+  max-height:calc(100vh - 100px);
+  overflow-y:auto;
+  scrollbar-width:thin;
+}
+.toc-title{
+  font-size:11px;font-weight:700;letter-spacing:.6px;
+  text-transform:uppercase;color:var(--fg-3);
+  margin-bottom:12px;padding-left:11px;
+  display:flex;align-items:center;gap:8px;
+}
+/* 目录标题右侧加一条渐隐细线，视觉上把目录框住 */
+.toc-title::after{
+  content:'';flex:1;height:1px;
+  background:linear-gradient(90deg,var(--line) 0%,transparent 100%);
+}
+.toc-item{
+  display:block;padding:5px 11px;margin:1px 0;
+  color:var(--fg-2);text-decoration:none;
+  border-left:2px solid transparent;
+  border-radius:0 var(--radius-sm) var(--radius-sm) 0;
+  transition:all .18s var(--ease);
+  line-height:1.5;
+}
+.toc-item:hover{color:var(--accent);background:var(--accent-soft)}
+.toc-item.active{
+  color:var(--accent);border-left-color:var(--accent);
+  background:linear-gradient(90deg,var(--accent-soft) 0%,transparent 100%);
+  font-weight:600;
+}
+
+/* ---------- 6. 封面（首页） ---------- */
+.cover{
+  padding:76px 0 60px;
+  text-align:center;
+  border-bottom:1px solid var(--line);
+  margin-bottom:56px;
+}
+.cover-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:6px 16px;margin-bottom:28px;
+  background:var(--accent-soft);border:1px solid var(--accent-soft-2);
+  border-radius:100px;
+  font-size:12.5px;color:var(--accent);font-weight:600;
+}
+.cover h1{
+  font-size:3.5em;font-weight:800;letter-spacing:-1.6px;
+  color:var(--accent);line-height:1.14;margin-bottom:16px;
+}
+/* ⚠️ 封面 h1 也继承 `.main h1::after` 那道 56px 短横线，但它是 display:block 的
+   固定宽块级元素 —— 文字居中不代表块级元素居中，会贴到左边。
+   修法：给封面这条短横线加 margin-left/right:auto 让它真正居中。 */
+.cover h1::after{
+  margin-left:auto;margin-right:auto;
+  width:72px;height:3px;
+}
+.cover .sub{
+  font-size:1.2em;color:var(--fg-2);
+  margin-bottom:32px;max-width:620px;
+  margin-left:auto;margin-right:auto;line-height:1.75;
+}
+.cover-stats{
+  display:flex;justify-content:center;gap:14px;flex-wrap:wrap;
+  margin-bottom:36px;
+}
+/* 数据卡：之前是"白框+黑字"，质感很弱。
+   改成微渐变底 + 顶部一道主色细线 + 更深的投影，卡片有了"浮起来"的层次。 */
+.stat{
+  position:relative;
+  background:linear-gradient(180deg,var(--bg-card) 0%,var(--bg-alt) 100%);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:14px 22px 13px;
+  min-width:104px;
+  box-shadow:var(--shadow-2);
+  overflow:hidden;
+}
+.stat::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--accent) 0%,var(--accent-3) 100%);
+}
+.stat-num{
+  display:block;font-size:2.05em;font-weight:700;
+  color:var(--accent);line-height:1.14;letter-spacing:-.6px;
+}
+.stat-num small{font-size:.5em;font-weight:600;color:var(--fg-3);margin-left:1px}
+.stat-label{display:block;font-size:11.5px;color:var(--fg-3);margin-top:4px;letter-spacing:.3px}
+
+/* CTA 按钮 */
+.cta-row{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+.cta{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:11px 24px;border-radius:var(--radius);
+  font-size:14px;font-weight:600;text-decoration:none;
+  border:1px solid var(--accent);background:var(--accent);color:var(--fg-inv);
+  transition:all .2s var(--ease);
+  box-shadow:var(--shadow-1);
+}
+.cta:hover{transform:translateY(-1px);box-shadow:var(--shadow-2);background:var(--accent-2)}
+.cta-ghost{background:transparent;color:var(--accent);border-color:var(--line-2)}
+.cta-ghost:hover{background:var(--accent-soft);border-color:var(--accent)}
+
+/* ---------- 7. 标题与正文 ---------- */
+h1{
+  font-size:2.3em;font-weight:750;letter-spacing:-.6px;
+  margin:1.5em 0 .55em;line-height:1.26;
+}
+h2{
+  font-size:1.72em;font-weight:700;letter-spacing:-.3px;
+  margin:2em 0 .5em;line-height:1.32;
+  padding-bottom:.4em;border-bottom:1.5px solid var(--line);
+}
+h3{font-size:1.3em;font-weight:650;margin:1.8em 0 .42em;line-height:1.42}
+h4{font-size:1.08em;font-weight:650;margin:1.5em 0 .35em}
+h1:first-child,h2:first-child,h3:first-child,h4:first-child{margin-top:0}
+
+p{margin:.95em 0}
+p:first-child{margin-top:0}
+
+strong{color:var(--accent);font-weight:650}
+em{font-style:italic}
+
+a{
+  color:var(--accent);
+  border-bottom:1px solid var(--accent-soft-2);
+  text-decoration:none;
+  transition:border-color .18s var(--ease), color .18s var(--ease);
+}
+a:hover{border-bottom-color:var(--accent-2)}
+
+/* ---------- 8. 列表 ---------- */
+ul,ol{margin:.85em 0 .85em 1.5em;padding:0}
+li{margin:.32em 0;line-height:1.8}
+li::marker{color:var(--fg-3)}
+ul{list-style:none}
+ul>li{position:relative}
+ul>li::before{
+  content:'';position:absolute;left:-1.1em;top:.78em;
+  width:5px;height:5px;border-radius:50%;
+  background:var(--accent-2);opacity:.75;
+}
+ol{list-style:decimal}
+ol>li::marker{color:var(--accent-2);font-weight:600;font-size:.92em}
+
+ul ul,ol ol,ul ol,ol ul{margin:.3em 0 .3em .2em}
+
+/* ---------- 9. 表格 ---------- */
+table{
+  width:100%;border-collapse:separate;border-spacing:0;
+  margin:1.5em 0;font-size:14.5px;
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  overflow:hidden;
+  box-shadow:var(--shadow-1);
+}
+th{
+  background:linear-gradient(180deg,var(--bg-alt) 0%,var(--bg-deep) 100%);
+  font-weight:700;font-size:12px;
+  text-align:left;letter-spacing:.5px;
+  padding:.78em 1em;
+  border-bottom:1.5px solid var(--line-2);
+  color:var(--accent);white-space:nowrap;
+}
+td{
+  padding:.78em 1em;
+  border-bottom:1px solid var(--line);
+  line-height:1.7;
+}
+tr:last-child td{border-bottom:none}
+tbody tr{transition:background .15s var(--ease)}
+tbody tr:hover{background:var(--accent-soft)}
+td strong{color:var(--accent)}
+
+/* 数字/居中列 */
+td[align="center"],th[align="center"]{text-align:center}
+
+/* ---------- 10. 提示框 ----------
+   优化要点：之前四种提示框各自带**整块饱和底色**，一页里绿/黄/紫连续堆叠，
+   看起来像表单而不是书。改成「统一米白底 + 左侧粗色条 + 标题着色」，
+   靠色条而不是靠大色块区分，页面立刻安静下来。 */
+.block{
+  position:relative;
+  margin:1.6em 0;
+  padding:1.05em 1.3em 1.1em 1.4em;
+  border-radius:var(--radius);
+  font-size:14.8px;line-height:1.78;
+  border:1px solid var(--line);
+  border-left:none;
+  background:var(--bg-card);
+  box-shadow:var(--shadow-1);
+}
+.block::before{
+  content:'';position:absolute;left:0;top:10px;bottom:10px;
+  width:4px;border-radius:0 4px 4px 0;
+  background:var(--accent-2);
+}
+.block-title{
+  font-weight:700;font-size:11.5px;
+  letter-spacing:.7px;
+  margin-bottom:7px;
+  display:flex;align-items:center;gap:6px;
+  color:var(--accent);
+}
+/* 每类只保留「标题色 + 色条色」，底色统一由 .block 提供 */
+.warning::before{background:var(--warn-line)}
+.warning .block-title{color:var(--warn-fg)}
+.tip::before{background:var(--tip-line)}
+.tip .block-title{color:var(--tip)}
+.info::before{background:var(--accent-2)}
+.info .block-title{color:var(--accent)}
+.danger::before{background:var(--danger-line)}
+.danger .block-title{color:var(--danger)}
+.gold::before{background:var(--gold)}
+.gold .block-title{color:var(--gold)}
+.mem::before{background:var(--mem-line)}
+.mem .block-title{color:var(--mem)}
+.block p{margin:.55em 0}
+.block p:last-child{margin-bottom:0}
+.block ul{margin:.5em 0}
+.block strong{color:inherit;font-weight:700}
+.block{color:var(--fg-2)}
+.warning{color:var(--warn-fg)}
+.tip{color:var(--tip-fg)}
+.mem{color:var(--mem-fg)}
+.gold{color:var(--fg)}
+
+/* ---------- 11. 引用（记忆点/口诀） ---------- */
+.quote{
+  margin:1.4em 0;
+  padding:1em 1.3em 1em 1.5em;
+  background:var(--bg-alt);
+  border-radius:var(--radius);
+  border:1px solid var(--line);
+  font-size:15px;line-height:1.82;
+  position:relative;
+}
+.quote:before{
+  content:'';position:absolute;left:0;top:.9em;bottom:.9em;
+  width:3px;border-radius:2px;background:var(--accent-2);
+}
+.quote p{margin:.35em 0}
+.quote strong{color:var(--accent)}
+
+/* ---------- 12. 表格内 mermaid / 代码 ---------- */
+.mermaid-wrap{
+  margin:1.7em 0;
+  padding:22px 18px;
+  background:var(--bg-card);
+  border:1px solid var(--line);
+  border-radius:var(--radius-lg);
+  text-align:center;
+  overflow-x:auto;
+  box-shadow:var(--shadow-1);
+}
+.mermaid-wrap svg{max-width:100%;height:auto;display:block;margin:0 auto}
+.mermaid-wrap.mermaid-err{
+  text-align:left;font-size:13px;color:var(--danger);
+  background:var(--danger-bg);border-color:var(--danger-line);
+}
+
+pre{
+  margin:1.3em 0;
+  padding:1em 1.2em;
+  background:var(--bg-deep);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  font-family:var(--mono);
+  font-size:13px;line-height:1.68;
+  overflow-x:auto;
+  color:var(--fg-2);
+}
+
+/* ---------- 13. Quiz 答题模块 ---------- */
+.quiz{
+  margin:2.6em 0;
+  background:var(--bg-card);
+  border:1.5px solid var(--line-2);
+  border-radius:var(--radius-lg);
+  overflow:hidden;
+  box-shadow:var(--shadow-2);
+}
+.quiz-head{
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+  padding:15px 22px;
+  background:var(--bg-alt);
+  border-bottom:1.5px solid var(--line);
+}
+.quiz-label{
+  font-weight:700;font-size:14px;color:var(--accent);
+  display:flex;align-items:center;gap:7px;
+}
+.quiz-progress{
+  font-size:12.5px;color:var(--fg-3);flex:1;min-width:120px;
+}
+.quiz-progress b{color:var(--accent);font-weight:700}
+.quiz-pbar{
+  height:4px;background:var(--line);border-radius:3px;
+  width:100%;margin-top:10px;overflow:hidden;
+}
+.quiz-pbar-fill{
+  height:100%;background:var(--accent-2);
+  transform-origin:left;width:0;
+  transition:width .35s var(--ease);
+}
+.quiz-btn{
+  font-size:12px;padding:5px 12px;
+  border:1px solid var(--line-2);background:var(--bg-card);
+  color:var(--fg-2);border-radius:var(--radius-sm);
+  cursor:pointer;font-family:inherit;
+  transition:all .18s var(--ease);
+  white-space:nowrap;
+}
+.quiz-btn:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+.quiz-btn:active{transform:scale(.97)}
+
+/* 题目卡 */
+.quiz-item{
+  padding:20px 24px;
+  border-bottom:1px solid var(--line);
+  transition:background .25s var(--ease);
+}
+.quiz-item:last-child{border-bottom:none}
+.quiz-q{
+  font-size:15px;font-weight:600;line-height:1.72;
+  margin-bottom:14px;
+}
+.quiz-q .qn{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:22px;height:22px;border-radius:6px;
+  background:var(--accent-soft);color:var(--accent);
+  font-size:12px;font-weight:700;margin-right:8px;
+  vertical-align:1px;
+}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{
+  display:flex;align-items:flex-start;gap:11px;
+  padding:11px 15px;
+  border:1.5px solid var(--line);
+  border-radius:var(--radius);
+  cursor:pointer;font-size:14.5px;line-height:1.68;
+  transition:all .2s var(--ease);
+  user-select:none;
+}
+.opt:hover{border-color:var(--accent-2);background:var(--accent-soft);transform:translateX(3px)}
+.opt .letter{
+  flex:0 0 21px;height:21px;
+  border-radius:5px;
+  background:var(--bg-alt);border:1px solid var(--line-2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;color:var(--fg-3);
+  margin-top:2px;
+}
+.opt .txt{flex:1;min-width:0}
+.opt.picked{border-color:var(--accent);background:var(--accent-soft-2)}
+.opt.right{border-color:var(--tip-line);background:var(--tip-bg);font-weight:600}
+.opt.right .letter{background:var(--tip-line);color:#fff;border-color:var(--tip-line)}
+.opt.wrong-pick .letter{background:var(--danger-line);color:#fff;border-color:var(--danger-line)}
+.mark{font-weight:700;margin-left:auto;font-size:15px;flex-shrink:0}
+.mark.ok{color:var(--tip-line)}
+.mark.no{color:var(--danger-line)}
+
+.quiz-item.correct{background:var(--tip-bg)}
+.quiz-item.wrong{background:var(--danger-bg)}
+
+/* 解析区 */
+.reveal{
+  margin-top:16px;padding-top:16px;
+  border-top:1px dashed var(--line-2);
+  animation:fadeUp .3s var(--ease);
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+.reveal-verdict{
+  font-weight:700;font-size:14.5px;margin-bottom:9px;
+  display:flex;align-items:center;gap:10px;
+}
+.reveal-verdict .answer{
+  font-weight:500;font-size:13px;color:var(--fg-2);
+  background:var(--bg-alt);padding:2px 10px;border-radius:5px;
+}
+.reveal-explain{
+  font-size:14px;color:var(--fg-2);line-height:1.82;
+}
+.reveal-ref{
+  font-size:12.5px;color:var(--fg-3);
+  margin-top:8px;font-style:italic;
+}
+
+/* ---------- 14. 错题本 ---------- */
+.wrongbook{
+  margin:2.6em 0;
+  background:var(--bg-card);
+  border:1.5px solid var(--line-2);
+  border-radius:var(--radius-lg);
+  overflow:hidden;
+  box-shadow:var(--shadow-1);
+}
+.wb-head{
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+  padding:15px 22px;
+  background:var(--bg-alt);
+  border-bottom:1.5px solid var(--line);
+  font-weight:700;font-size:14px;color:var(--accent);
+}
+.wb-total{font-size:12.5px;color:var(--fg-3);font-weight:400;margin-left:auto}
+.wb-empty{
+  padding:26px 22px;text-align:center;
+  font-size:13.5px;color:var(--fg-3);
+}
+.wb-row{
+  display:flex;align-items:center;gap:14px;
+  padding:12px 22px;
+  border-bottom:1px solid var(--line);
+  transition:background .15s var(--ease);
+}
+.wb-row:hover{background:var(--accent-soft)}
+.wb-row a{font-size:14px;color:var(--accent);font-weight:600}
+.wb-row a:hover{background:none;border-bottom-color:var(--accent)}
+.wb-count{
+  font-size:12px;color:var(--fg-3);
+  background:var(--bg-alt);padding:3px 10px;border-radius:5px;
+  margin-left:auto;
+}
+.wb-clear{
+  width:100%;padding:11px;
+  border:none;background:transparent;
+  color:var(--fg-3);font-size:12.5px;cursor:pointer;
+  font-family:inherit;
+  transition:all .18s var(--ease);
+}
+.wb-clear:hover{background:var(--danger-bg);color:var(--danger)}
+
+/* ---------- 15. 页脚 ---------- */
+.footer{
+  margin-top:70px;
+  padding:36px 28px 44px;
+  text-align:center;
+  border-top:1px solid var(--line);
+  font-size:12.5px;color:var(--fg-3);
+}
+.footer p{margin:.4em 0}
+.footer strong{color:var(--fg-2);font-weight:600}
+.footer .sep{margin:.9em 0;font-size:11.5px}
+
+/* ---------- 16. 快捷键面板 ---------- */
+.keyhint{
+  margin:2.4em 0;
+  padding:16px 20px;
+  background:var(--bg-alt);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  font-size:13px;color:var(--fg-2);
+  display:flex;flex-wrap:wrap;gap:8px 22px;align-items:center;
+}
+.keyhint-title{font-weight:700;color:var(--accent);font-size:12.5px}
+.kbd{
+  display:inline-flex;align-items:center;justify-content:center;
+  key-order:0;
+  min-width:22px;height:22px;padding:0 6px;
+  background:var(--bg-card);border:1px solid var(--line-2);
+  border-bottom-width:2px;
+  border-radius:5px;
+  font-family:var(--mono);font-size:11px;
+  font-weight:600;color:var(--fg-2);
+}
+.keyhint span.item{display:flex;align-items:center;gap:6px}
+
+/* ---------- 17. 响应式 ---------- */
+@media(max-width:1240px){
+  /* 目录还在，但正文让出宽度给两侧留白 */
+  .shell{max-width:1000px;gap:40px;--pad-x:28px}
+  .toc{width:200px}
+}
+@media(max-width:1100px){
+  .shell{max-width:820px;gap:0;--pad-x:24px}
+  .toc{display:none}
+}
+@media(max-width:760px){
+  body{font-size:16px;line-height:1.82}
+  .topbar{height:auto;min-height:52px;padding:10px 16px;flex-wrap:wrap;gap:10px}
+  .brand-sub{display:none}
+  /* 窄屏：品牌只留图标，标题在触发器里显示，顶栏保持单行 */
+  .brand span:not(.brand-mark){display:none}
+  .nav{margin-left:auto;gap:2px}
+  .main{padding:32px 0 80px}
+  .cover{padding:48px 0 40px;margin-bottom:40px}
+  .cover h1{font-size:2.4em;letter-spacing:-.8px}
+  .cover .sub{font-size:1.05em;margin-bottom:24px}
+  .cover-stats{gap:10px;margin-bottom:28px}
+  .stat{min-width:76px;padding:10px 14px}
+  .stat-num{font-size:1.5em}
+  h1{font-size:1.85em;margin:1.4em 0 .5em}
+  h2{font-size:1.5em;margin:1.8em 0 .45em}
+  h3{font-size:1.18em}
+  table{font-size:13.5px}
+  th{padding:.6em .8em;white-space:normal}
+  td{padding:.68em .8em}
+  .quiz-item{padding:16px 18px}
+  .quiz-q{font-size:14.5px}
+  .opt{padding:10px 13px;font-size:14px}
+  .mermaid-wrap{padding:16px 12px}
+  .footer{margin-top:50px;padding:28px 16px 36px}
+}
+@media(max-width:480px){
+  .theme-switch{display:inline-flex}  /* 极窄屏仍需主题切换（深浅色刚需），依赖⋯浮层收纳 */
+}
+
+/* ---------- 18. 打印样式 ---------- */
+@media print{
+  .read-progress,
+  .topbar,
+  .toc,
+  .theme-switch,
+  .quiz-btn,
+  .cta-row,
+  .wrongbook,
+  .keyhint,
+  .pager,
+  .focus-btn,
+  .search-panel,
+  .search-box,
+  .search-results,
+  .mermaid-wrap .lang{
+    display:none !important;
+  }
+
+  body{
+    font-size:11pt;
+    line-height:1.62;
+    background:#fff;
+    color:#000;
+  }
+  .shell{max-width:100%;padding:0;gap:0}
+  .main{padding:0}
+
+  h1{font-size:19pt;margin:1.2em 0 .4em}
+  h2{font-size:15pt;margin:1.5em 0 .4em}
+  h3{font-size:12.5pt}
+  h4{font-size:11pt}
+  h1,h2,h3,h4{break-after:avoid;page-break-after:avoid}
+
+  .cover{padding:0 0 18px;margin-bottom:18px;text-align:left}
+  .cover h1{font-size:24pt}
+  .cover-stats,.cover-badge,.cta-row{display:none !important}
+
+  a[href^="http"]:after{
+    content:" (" attr(href) ")";
+    font-size:8pt;color:#666;word-break:break-all;
+  }
+
+  table{
+    font-size:9.5pt;margin:1em 0;
+    box-shadow:none;border:1px solid #ccc;
+  }
+  th{background:#f0f0f0 !important;color:#000 !important}
+  th,td{padding:.5em .7em}
+  thead{display:table-header-group}
+  tr{break-inside:avoid;page-break-inside:avoid}
+
+  .quiz-item{
+    break-inside:avoid;
+    page-break-inside:avoid;
+    background:#fff !important;
+  }
+  .quiz{border:1px solid #ccc;box-shadow:none}
+  .quiz-head{background:#f6f6f6 !important}
+
+  .block,.quote,.mermaid-wrap{
+    break-inside:avoid;
+    page-break-inside:avoid;
+  }
+  .mermaid-wrap svg{max-height:220mm;height:auto}
+
+  strong{color:#000 !important}
+  .footer{page-break-before:always;margin-top:0;padding-top:20px}
+}
+
+/* ---------- 19. 上下页导航 ---------- */
+.pager{
+  display:flex;gap:14px;
+  margin:44px 0 0;
+}
+.pg{
+  flex:1;min-width:0;
+  display:flex;flex-direction:column;gap:3px;
+  padding:15px 18px;
+  background:var(--bg-card);
+  border:1.5px solid var(--line);
+  border-radius:var(--radius);
+  text-decoration:none;
+  transition:all .2s var(--ease);
+}
+.pg:hover{
+  border-color:var(--accent-2);
+  background:var(--accent-soft);
+  transform:translateY(-2px);
+  box-shadow:var(--shadow-2);
+}
+.pg-label{
+  font-size:11.5px;letter-spacing:.5px;
+  color:var(--fg-3);font-weight:600;
+  text-transform:uppercase;
+}
+.pg-title{
+  font-size:14.5px;font-weight:650;color:var(--accent);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.pg-next{text-align:right}
+.pg-next .pg-label::after{content:""}
+@media(max-width:640px){
+  .pager{flex-direction:column;gap:10px}
+  .pg-next{text-align:left}
+}
+
+/* ---------- 20. mermaid 降级提示 ---------- */
+.mmd-note{
+  font-size:12px;font-weight:600;letter-spacing:.4px;
+  color:var(--danger);margin-bottom:8px;
+  display:flex;align-items:center;gap:6px;
+}
+.mmd-note::before{
+  content:'';width:7px;height:7px;border-radius:50%;
+  background:var(--danger);flex:0 0 auto;
+}
+.mermaid-wrap.mermaid-err pre{
+  margin:0;text-align:left;
+  font-size:12px;max-height:340px;overflow:auto;
+}
+
+/* ---------- 21. 移动端表格横向滚动 ---------- */
+@media(max-width:760px){
+  .vp-doc table,
+  main table{
+    display:block;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    max-width:100%;
+  }
+  main table tbody{min-width:520px}
+  /* 让表头保持可读 */
+  main th{white-space:nowrap}
+}
+
+/* mermaid 源码占位（未渲染前隐藏；源码在 data-src 属性里） */
+.vp-doc .mermaid-src,
+main .mermaid-src{ display:none !important }
+
+/* ---------- 22. 多级目录（4 级） ---------- */
+.toc{ font-size:12.5px }
+.toc-tree{ margin-top:2px }
+.toc-item{
+  display:block;
+  padding:3.5px 10px 3.5px calc(11px + var(--depth,0) * 13px);
+  margin:0;
+  border-left:2px solid transparent;
+  border-radius:0 5px 5px 0;
+  line-height:1.45;
+  color:var(--fg-3);
+  position:relative;
+  transition:color .15s var(--ease), background .15s var(--ease), border-color .15s var(--ease);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+/* 层级视觉：h2 加粗深色，h3/h4/h5 逐级变浅变小 */
+.toc-l1{ font-weight:650;font-size:13px;color:var(--fg-2);margin-top:8px }
+.toc-l1:first-child{ margin-top:0 }
+.toc-l2{ font-weight:500 }
+.toc-l3{ padding-left:calc(11px + var(--depth,0)*13px); font-size:12px }
+.toc-l4{ font-size:11.5px;opacity:.9 }
+/* 子级左侧引导线 */
+.toc-item[style*="--depth:1"]::before,
+.toc-item[style*="--depth:2"]::before,
+.toc-item[style*="--depth:3"]::before{
+  content:'';position:absolute;left:calc(4px + (var(--depth) - 1) * 13px);
+  top:0;bottom:0;width:1px;background:var(--line);
+}
+.toc-item:hover{ color:var(--accent);background:var(--accent-soft) }
+.toc-item.active{
+  color:var(--accent);font-weight:600;
+  background:var(--accent-soft);
+  border-left-color:var(--accent);
+}
+.toc-item.active.toc-l2,
+.toc-item.active.toc-l3,
+.toc-item.active.toc-l4{ background:var(--accent-soft-2) }
+
+/* 目录项过多时滚动 */
+.toc{ max-height:calc(100vh - 110px);overflow-y:auto;overscroll-behavior:contain }
+.toc::-webkit-scrollbar{width:4px }
+.toc::-webkit-scrollbar-thumb{background:var(--line-2);border-radius:4px }
+
+/* 折叠按钮（只在有子节点时显示） */
+.toc-toggle{
+  position:absolute;left:0;top:0;width:16px;height:100%;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:var(--fg-3);
+}
+.toc-toggle::before{
+  content:'';width:0;height:0;
+  border-left:4px solid currentColor;
+  border-top:3.5px solid transparent;
+  border-bottom:3.5px solid transparent;
+  transition:transform .18s var(--ease);
+}
+.toc-group.collapsed > .toc-toggle::before{ transform:rotate(-90deg) }
+.toc-group.collapsed > .toc-sub{ display:none }
+
+@media(max-width:1100px){ .toc{ display:none } }
+
+/* ---------- 23. 专注模式 ---------- */
+/* 注意：不要用 visibility:hidden 兜底 —— 那会把退出按钮一起隐藏，真人点不到。
+   正确做法见文件末尾「专注模式退出按钮修复」段（opacity + pointer-events）。 */
+html.focus-mode .shell{
+  max-width:720px;
+  margin:0 auto;
+  padding:40px 24px 80px;
+}
+/* 顶栏里的专注按钮常态样式 */
+.focus-btn{
+  background:var(--bg-card);border:1px solid var(--line);
+  border-radius:999px;padding:5px 12px;
+  font-size:12px;font-weight:600;color:var(--fg-3);
+  cursor:pointer;transition:all .18s var(--ease);
+  display:inline-flex;align-items:center;gap:5px;
+}
+.focus-btn::before{ content:'◐'; font-size:11px;opacity:.7 }
+.focus-btn:hover{ color:var(--accent);border-color:var(--accent);background:var(--accent-soft) }
+.focus-btn.active{ color:#fff;background:var(--accent);border-color:var(--accent) }
+.focus-btn.active::before{ opacity:1 }
+
+/* ---------- 24. 全文搜索面板 ---------- */
+.search-panel{
+  position:fixed;inset:0;z-index:80;
+  display:none;
+  background:rgba(0,0,0,.28);
+  backdrop-filter:blur(3px);
+}
+.search-panel.open{ display:block }
+.search-box{
+  position:absolute;top:12%;left:50%;transform:translateX(-50%);
+  width:min(640px,90vw);
+  background:var(--bg-card);
+  border:1.5px solid var(--line);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow-3,0 20px 60px rgba(0,0,0,.25));
+  padding:14px 18px;
+  display:flex;align-items:center;gap:12px;
+}
+.search-input{
+  flex:1;border:none;background:transparent;outline:none;
+  font-size:16px;font-family:var(--font);color:var(--fg);
+}
+.search-input::placeholder{ color:var(--fg-3) }
+.search-count{
+  font-size:11.5px;color:var(--fg-3);white-space:nowrap;
+  font-variant-numeric:tabular-nums;
+}
+.search-results{
+  position:absolute;top:calc(12% + 76px);left:50%;transform:translateX(-50%);
+  width:min(640px,90vw);
+  max-height:52vh;overflow:auto;
+  background:var(--bg-card);
+  border:1.5px solid var(--line);border-top:none;
+  border-radius:0 0 var(--radius) var(--radius);
+  box-shadow:var(--shadow-3,0 20px 60px rgba(0,0,0,.25));
+  list-style:none;margin:0;padding:6px;
+}
+.search-results:empty{ display:none }
+.search-hit{
+  display:flex;gap:10px;align-items:baseline;
+  padding:9px 12px;border-radius:6px;cursor:pointer;
+  font-size:13px;line-height:1.5;
+}
+.search-hit:hover{ background:var(--bg-soft) }
+.search-hit.cur{ background:var(--accent-soft) }
+.hit-kind{
+  flex:0 0 auto;
+  font-size:10.5px;font-weight:700;letter-spacing:.4px;
+  padding:2px 7px;border-radius:4px;
+  background:var(--accent-soft);color:var(--accent);
+}
+.hit-kind:has(+ .hit-text:has(mark)){ }
+.hit-text{ color:var(--fg-2);flex:1;min-width:0 }
+mark.search-mark{
+  background:rgba(255,196,0,.4);
+  color:inherit;border-radius:3px;padding:0 2px;
+  box-shadow:0 0 0 2px rgba(255,196,0,.25);
+}
+html[data-theme="dark"] mark.search-mark{
+  background:rgba(255,196,0,.28)
+}
+.flash-hit{
+  animation:flashHit 1.1s var(--ease);
+}
+@keyframes flashHit{
+  0%{ background:rgba(255,196,0,.35) }
+  100%{ background:transparent }
+}
+
+/* ---------- 25. 快捷键提示更新（含 / 与 F） ---------- */
+/* 字号调节无 UI，仅键盘 - / + */
+
+/* ═══════════════════════════════════════════════════════════════
+   ��五版 · 出版物排版（A 方案）
+   改动目标：换掉"技术文档站"气质，走教材/杂志的阅读质感
+   关键约束：全部用系统字体，零外部请求 → 部署后与本地完全一致
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── 1. 正文排版：衬线标题 + 更合适的行宽与行距 ── */
+/* 合并到顶部 :root（避免重复定义导致后者覆盖前者） */
+
+.main{ max-width:var(--measure) }
+.main p{
+  font-family:var(--sans);
+  font-size:1.02em;
+  line-height:1.95;
+  letter-spacing:.01em;
+  color:var(--fg);
+  margin:1.15em 0;
+  text-align:justify;          /* 两端对齐，中文排版更整齐 */
+  text-justify:inter-ideograph;
+}
+
+/* ⚠️ 全局断行保护（H35 踩坑后补）：
+   正文里常出现"无空格长串"（如 HTTP 状态码 `200/301/302/400/...`、
+   长 URL、驼峰标识符），浏览器默认**不会在斜杠/点号处断行**，
+   这类串在 375px 窄屏会把文档撑宽并产生横向滚动（实测溢出 27px）。
+   `overflow-wrap:anywhere` 只在"单词本身放不下"时才断，
+   不影响中英文正常排版 —— 比 `word-break:break-all` 安全得多
+   （后者会在任意字符处断，中文正文会被切得很难看）。 */
+.main{
+  overflow-wrap:anywhere;
+}
+.main p, .main li, .main td, .main th, .main strong, .main em, .main code{
+  overflow-wrap:anywhere;
+}
+.main a{ overflow-wrap:anywhere }
+
+/* ── 2. 标题：衬线体 + 短横线，替代通栏分割线 ── */
+/* ---------- 章首进度条（22 章 × 每章几十节时的定位锚）----------
+   ⚠️ sticky top 必须 = 顶栏实际高度。顶栏是 `position:sticky; height:54px`，
+   这里写小了会被顶栏盖住（截图里只剩进度条贴着顶栏下沿、"9 / 20" 灰在下面）。
+   宽度也留出顶栏投影的落点，避免滚动时内容从下方"顶穿"。 */
+.chapbar{
+  position:sticky;top:53px;z-index:110;
+  margin:0 0 34px;
+  padding:11px 0 10px;
+  background:linear-gradient(180deg,var(--bg) 74%,transparent);
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+}
+.chapbar-top{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.chapbar-badge{
+  flex-shrink:0;
+  padding:2px 9px;border-radius:999px;
+  background:var(--accent);color:var(--fg-inv);
+  font-size:11.5px;font-weight:700;letter-spacing:.02em;
+}
+.chapbar-title{
+  font-size:13px;color:var(--fg-2);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.chapbar-spacer{flex:1}
+.chapbar-sec{
+  flex-shrink:0;
+  font-size:12px;color:var(--fg-3);
+  font-variant-numeric:tabular-nums;
+}
+.chapbar-track{
+  height:3px;border-radius:2px;
+  background:var(--bg-deep);overflow:hidden;
+}
+.chapbar-fill{
+  height:100%;width:0;border-radius:2px;
+  background:linear-gradient(90deg,var(--accent) 0%,var(--accent-3) 100%);
+  transition:width .18s var(--ease);
+}
+@media(max-width:760px){
+  /* 窄屏顶栏实际高度是 57px（flex-wrap 后实测），这里跟着改 */
+  .chapbar{top:56px;margin-bottom:26px;padding:10px 0 8px}
+  .chapbar-title{display:none}
+}
+/* 专注模式：进度条是"定位锚"，保留但变淡 */
+html.focus-mode .chapbar{opacity:.35;pointer-events:none}
+
+.main h1,.main h2,.main h3,.main h4{
+  font-family:var(--serif);
+  font-weight:600;
+  letter-spacing:.01em;
+  color:var(--fg);
+}
+.main h1{
+  font-size:2.15em;line-height:1.3;
+  margin:.5em 0 .7em;           /* 页面顶部无大间距 */
+  padding-bottom:0;             /* 去掉通栏 border */
+  position:relative;
+}
+/* 章首横幅：h1 上方加一条"章号 + 主色渐变"的装饰带，
+   让每页开头有一个明确的"进入新章"仪式感（原来 h1 直接浮在正文里）。
+   ⚠️ 必须排除 .cover —— 封面 h1 自己已有顶部留白与居中布局，
+   加上横幅会与下方分隔线叠成双线（首页曾出现两条横线紧挨）。 */
+.main h1:not(.cover h1)::before{
+  content:'';display:block;
+  width:100%;height:4px;
+  background:linear-gradient(90deg,var(--accent) 0%,var(--accent-3) 42%,transparent 88%);
+  border-radius:2px;
+  margin-bottom:.62em;
+}
+.cover h1::before{content:none}
+.main h1::after{
+  content:'';display:block;
+  width:56px;height:3px;
+  background:var(--accent);
+  margin-top:.5em;              /* 短横线，比通栏线优雅 */
+  border-radius:2px;
+}
+.main h2{
+  font-size:1.62em;line-height:1.38;
+  margin:2.2em 0 .62em;
+  padding:0 0 .45em 0;
+  border:0;
+  position:relative;
+}
+/* h2 左侧加一道竖锚：强化"大章节"的层级感，替代原来那条渐变横线 */
+.main h2::before{
+  content:'';position:absolute;
+  left:-18px;top:.34em;bottom:.5em;
+  width:3px;border-radius:2px;
+  background:linear-gradient(180deg,var(--accent) 0%,var(--accent-3) 100%);
+  opacity:.75;
+}
+.main h2::after{
+  content:'';position:absolute;
+  left:0;bottom:0;width:100%;height:1px;
+  background:linear-gradient(90deg,var(--line) 0%,var(--line) 26%,transparent 100%);
+}
+.main h3{
+  font-size:1.26em;line-height:1.5;
+  margin:1.9em 0 .5em;
+}
+.main h3::before{               /* h3 前缀小方块，建立视觉锚点 */
+  content:'';display:inline-block;
+  width:.46em;height:.46em;
+  background:var(--accent-3);
+  border-radius:2px;
+  margin-right:.5em;
+  vertical-align:.06em;
+}
+.main h4{
+  font-size:1.06em;
+  margin:1.6em 0 .4em;
+  color:var(--fg-2);
+}
+
+/* 首段导语：h1 之后的第一段用稍大、稍淡的引言体，形成"开篇"感。
+   用 :first-of-type 而不是 .lead —— 内容是 markdown 转出来的，
+   h1 后面紧跟的通常是 blockquote 或提示框，不一定有 <p>。 */
+.main h1 + p,
+.main h1 + blockquote + p{
+  font-size:1.06em;
+  color:var(--fg-2);
+  line-height:1.82;
+}
+/* 正文里的第一条列表：去掉与标题之间多余的视觉间隔 */
+.main h2 + ul,.main h3 + ul,.main h2 + ol,.main h3 + ol{margin-top:.3em}
+
+/* ── 3. 引用块：加深底 + 左侧色条（原来几乎不可见）── */
+.main .quote{
+  position:relative;
+  margin:1.7em 0;
+  padding:1.1em 1.4em 1.1em 1.5em;
+  background:linear-gradient(135deg,var(--accent-soft) 0%,transparent 60%);
+  border-left:3px solid var(--accent-2);
+  border-radius:0 var(--radius) var(--radius) 0;
+  font-family:var(--sans);
+  font-size:.98em;
+  line-height:1.9;
+}
+.main .quote::before{ content:none }     /* 覆盖旧的 ::before */
+.main .quote p{ margin:.4em 0; text-align:left }
+.main .quote strong{ color:var(--accent);font-weight:700 }
+
+/* ── 4. 列表：改为方形标记 + 更松的间距 ── */
+.main ul>li::before{
+  content:'';position:absolute;
+  left:-1.15em;top:.82em;
+  width:5px;height:5px;
+  background:var(--accent-3);
+  border-radius:1px;              /* 方点，比圆点更书卷 */
+  transform:rotate(45deg);        /* 菱形 */
+  opacity:.85;
+}
+.main li{ margin:.42em 0 }
+.main ol>li::marker{ color:var(--accent-2);font-weight:700;font-size:.9em }
+
+/* ── 5. 表格：去掉阴影，改用衬线表头 + 更轻的分隔 ── */
+.main table{
+  box-shadow:none;
+  border:0;
+  border-top:2px solid var(--accent-2);
+  border-bottom:1px solid var(--line-2);
+  border-radius:0;
+  margin:1.8em 0;
+  font-family:var(--sans);
+}
+.main thead{ border-bottom:1px solid var(--line) }
+.main th{
+  background:transparent;
+  font-family:var(--serif);
+  font-weight:600;
+  font-size:13px;
+  color:var(--accent);
+  letter-spacing:.04em;
+  padding:.85em 1em;
+  border-bottom:1px solid var(--line);
+  text-transform:none;            /* 中文不需要uppercase */
+}
+.main td{
+  padding:.85em 1em;
+  border-bottom:1px solid var(--line);
+  font-size:.96em;
+}
+.main tbody tr:last-child td{ border-bottom:none }
+.main tbody tr:hover{ background:var(--accent-soft) }
+.main td strong{ color:var(--accent);font-weight:700 }
+
+/* ── 6. mermaid 容器：去掉边框阴影，改成"插图"质感 ── */
+.main .mermaid-wrap{
+  margin:2em 0;
+  padding:1.6em 1em;
+  background:var(--bg-alt);
+  border:0;
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+  border-radius:0;
+  box-shadow:none;
+  text-align:center;
+  overflow-x:auto;
+}
+
+/* ── 7. 提示框：左侧色条加粗 + 标题衬线体 ── */
+.main .block{
+  margin:1.7em 0;
+  padding:1.05em 1.35em;
+  border-radius:var(--radius);
+  border:1px solid var(--line);
+  /* ⚠️ 这里原来有 `border-left:3.5px solid` + `border-radius:0 R R 0`（左侧色条版式）。
+     设计 v6 改成「左侧 4px 色条 = ::before 伪元素 + 四周圆角」后必须去掉这条：
+     它是 2 个类（.main .block），比第 10 节的 .block（1 个类）优先级高，
+     会把 ::before 色条往左挤 —— 表现为"色条贴在边框外侧"。
+     顺带把 sans 补回变量名（下面 font-family:var(--sans) 引用了一个不存在的变量）。 */
+  font-family:var(--font);
+  font-size:.97em;
+  line-height:1.85;
+  background:var(--bg-card);
+  box-shadow:var(--shadow-1);
+}
+.main .block-title{
+  font-family:var(--serif);
+  font-weight:600;
+  font-size:12.5px;
+  letter-spacing:.08em;
+  text-transform:none;
+  margin-bottom:.55em;
+  display:flex;align-items:center;gap:.5em;
+}
+.main .block-title::before{ content:'';width:4px;height:4px;border-radius:50%;background:currentColor;flex:0 0 auto }
+/* ⚠️ 这组覆盖已废弃：提示框改为「统一米白底 + 左侧色条」后，
+   各类型只保留标题色与色条色（见第 10 节），不要再在这里给整块上底色。
+   留着它们会让绿/黄/紫大色块重新回来，页面又变回表单样。 */
+.main .block p{ margin:.5em 0 }
+
+/* ── 8. Quiz 卡片（B 方案局部借用）：题块更立体 ── */
+.main .quiz{
+  margin:2.4em 0;
+  border:0;
+  border-top:2px solid var(--accent-2);
+  border-radius:0;
+  background:transparent;
+  box-shadow:none;
+  overflow:visible;
+}
+.main .quiz-head{
+  background:var(--bg-alt);
+  border:0;
+  border-bottom:1px solid var(--line);
+  border-radius:var(--radius) var(--radius) 0 0;
+  padding:1em 1.3em;
+}
+.main .quiz-label{
+  font-family:var(--serif);
+  font-size:1.02em;
+  font-weight:600;
+  letter-spacing:.04em;
+}
+.main .quiz-item{
+  background:var(--bg-card);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  margin-bottom:.9em;
+  padding:1.35em 1.5em;
+}
+.main .quiz-item.correct{
+  background:var(--tip-bg);
+  border-color:var(--tip-line);
+  border-left-width:3.5px;
+}
+.main .quiz-item.wrong{
+  background:var(--danger-bg);
+  border-color:var(--danger-line);
+  border-left-width:3.5px;
+}
+.main .quiz-q{
+  font-family:var(--serif);
+  font-size:1.04em;
+  font-weight:600;
+  line-height:1.72;
+  color:var(--fg);
+}
+.main .quiz-q .qn{
+  background:var(--accent);color:var(--fg-inv);
+  border-radius:3px;
+  font-family:var(--sans);
+  font-size:11.5px;
+}
+.main .opt{
+  font-family:var(--sans);
+  border-radius:var(--radius-sm);
+  border-color:var(--line);
+  background:var(--bg);
+}
+.main .opt:hover{ background:var(--accent-soft);border-color:var(--accent-2) }
+.main .opt.right{ background:var(--tip-bg);border-color:var(--tip-line) }
+.main .reveal-explain{ font-family:var(--sans);line-height:1.88 }
+.main .reveal-ref{ font-style:normal;opacity:.75 }
+
+/* ── 9. 上下页导航 / 错题本：与新风格对齐 ── */
+.main .pg{
+  background:var(--bg-card);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+}
+.main .pg-title{ font-family:var(--serif) }
+.main .wrongbook{
+  border:0;
+  border-top:2px solid var(--danger-line);
+  border-radius:0;
+  background:transparent;
+  box-shadow:none;
+}
+.main .wrongbook .wb-head{
+  background:var(--danger-bg);
+  border-bottom:1px solid var(--line);
+  font-family:var(--serif);
+  border-radius:var(--radius) var(--radius) 0 0;
+}
+.main .wb-row{ border-bottom:1px solid var(--line) }
+.main .wb-row a{ font-family:var(--serif);font-weight:600 }
+
+/* ── 10. 页脚：更像版权页 ── */
+.main .footer{
+  margin-top:3.5em;
+  padding-top:2em;
+  border-top:1px solid var(--line);
+  font-size:12.5px;
+}
+.main .footer strong{ font-family:var(--serif);font-size:14px }
+
+/* ═══════════════════════════════════════════════════════════════
+   顶栏溢出菜单 + 目录层级强化
+   ═══════════════════════════════════════════════════════════════ */
+
+/* 顶栏：控件收进⋯ 浮层 */
+.overflow-btn{
+  background:var(--bg-card);
+  border:1px solid var(--line);
+  border-radius:999px;
+  width:30px;height:30px;
+  font-size:16px;line-height:1;
+  color:var(--fg-3);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .18s var(--ease);
+  flex-shrink:0;
+}
+.overflow-btn:hover{ color:var(--accent);border-color:var(--accent-2) }
+.overflow-btn.active{ color:#fff;background:var(--accent);border-color:var(--accent) }
+
+.overflow-panel{
+  position:absolute;top:calc(100% + 8px);right:28px;
+  background:var(--bg-card);
+  border:1.5px solid var(--line);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow-2);
+  padding:10px;
+  display:none;
+  z-index:120;
+}
+.overflow-panel.open{ display:block }
+.overflow-panel .theme-switch{
+  background:var(--bg-alt);
+  border:1px solid var(--line);
+  padding:3px;
+  border-radius:var(--radius-sm);
+  display:flex;gap:2px;
+}
+.overflow-panel .theme-btn{
+  border:none;background:transparent;cursor:pointer;
+  padding:5px 11px;border-radius:5px;
+  font-size:12px;font-family:var(--serif);font-weight:600;
+  color:var(--fg-3);transition:all .18s var(--ease);
+}
+.overflow-panel .theme-btn:hover{ color:var(--fg-2) }
+.overflow-panel .theme-btn.active{
+  background:var(--bg-card);color:var(--accent);
+  box-shadow:var(--shadow-1);
+}
+
+/* 专注模式：顶栏只留一个圆钮 */
+.focus-btn-top{ padding:5px 13px }
+html.focus-mode .focus-btn-top{ display:inline-flex !important }
+html.focus-mode .overflow-btn,
+html.focus-mode .nav{ display:none }
+
+/* 目录：加大缩进 + 层级色差，让4 级看得出来 */
+.toc{ width:236px; font-size:12.5px }
+.toc-item{
+  padding:4px 10px 4px calc(12px + var(--depth,0) * 17px);
+  line-height:1.5;
+}
+.toc-l1{
+  font-family:var(--serif);
+  font-size:13.5px;font-weight:600;
+  color:var(--fg);
+  margin-top:12px;
+  padding-top:6px;
+  border-top:1px solid var(--line);
+}
+.toc-l1:first-child{ margin-top:0;padding-top:0;border-top:none }
+.toc-l2{ color:var(--fg-2);font-weight:500;margin-top:4px }
+.toc-l3{ color:var(--fg-3);font-size:12px }
+.toc-l4{ color:var(--fg-3);font-size:11.5px;opacity:.85 }
+.toc-item:hover{ background:var(--accent-soft);color:var(--accent) }
+.toc-item.active{
+  color:var(--accent);
+  font-weight:700;
+  background:var(--accent-soft-2);
+  border-left-color:var(--accent);
+}
+.toc-title{
+  font-family:var(--serif);
+  font-size:11.5px;letter-spacing:.1em;
+  color:var(--fg-3);
+  padding-bottom:.6em;
+  border-bottom:1px solid var(--line);
+  margin-bottom:.7em;
+}
+
+/* ── 11. 修h1 换行 + mermaid 节点间距 ── */
+.main h1{
+  font-size:1.95em;                 /* 略降，避免长标题折行 */
+  text-wrap:balance;                /* 浏览器自动平衡两行宽度 */
+  line-height:1.28;
+}
+.main h1 br{ display:none }         /* 源 md 里的换行不强制断 */
+.main h1 br::after{ content:' ' }
+
+/* 图表节点：加宽间距，<br/> 换行才不堆叠 */
+.main .mermaid-wrap svg{
+  max-width:100%;
+  height:auto;
+}
+.main .mermaid-wrap .nodeLabel,
+.main .mermaid-wrap .labelText,
+.main .mermaid-wrap text{
+  font-family:var(--sans)!important;
+  font-size:13px!important;
+  line-height:1.5!important;
+}
+.main .mermaid-wrap .node rect,
+.main .mermaid-wrap .node polygon,
+.main .mermaid-wrap .node circle{
+  rx:5px; ry:5px;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   专注模式退出按钮修复
+   Bug：顶栏整体 visibility:hidden → 退出按钮一起隐藏 → 真人点不到
+   修法：顶栏不用 visibility，改用 opacity + pointer-events；
+        退出按钮单独保持可见可点（focus 态常显，hover 展开全栏）
+   ═══════════════════════════════════════════════════════════════ */
+
+/* 隐藏的元素不能兜底 visibility:hidden —— 那样连按钮一起没了 */
+html.focus-mode .toc,
+html.focus-mode .footer,
+html.focus-mode .pager,
+html.focus-mode .keyhint{ display:none !important }
+
+html.focus-mode .topbar{
+  display:block;
+  opacity:0;
+  pointer-events:none;            /* 默认不吃鼠标 */
+  position:fixed;
+  top:8px;left:50%;
+  transform:translateX(-50%);
+  background:var(--bg-card);
+  box-shadow:var(--shadow-2);
+  border:1px solid var(--line);
+  border-radius:999px;
+  padding:5px 9px;
+  z-index:60;
+  transition:opacity .22s var(--ease);
+  min-height:34px;
+}
+html.focus-mode .topbar .nav,
+html.focus-mode .topbar .brand,
+html.focus-mode .topbar .theme-switch,
+html.focus-mode .topbar .overflow-btn{ display:none }
+
+/* 关键：退出按钮永远可见可点，不随顶栏淡出 */
+html.focus-mode .focus-btn-top{
+  display:inline-flex !important;
+  align-items:center;gap:6px;
+  opacity:1 !important;
+  pointer-events:auto !important;
+  background:var(--accent);
+  color:var(--fg-inv);
+  border-color:var(--accent);
+  cursor:pointer;
+  white-space:nowrap;
+}
+html.focus-mode .focus-btn-top::after{
+  content:'退出';
+  font-size:11.5px;
+  opacity:.85;
+}
+html.focus-mode .focus-btn-top:hover{
+  background:var(--accent-2);
+  border-color:var(--accent-2);
+}
+/* 顶栏其余部分 hover 展开（键鼠用户），但不影响退出按钮 */
+html.focus-mode .topbar:hover{ opacity:1 }
+/* ⚠️ 导航已从「平铺链接」改成「胶囊 + 面板」，默认 display 是 block，
+   这里不能用 flex（会把胶囊挤成一行）。 */
+html.focus-mode .topbar:hover .nav{ display:block }
+
+@media(max-width:640px){
+  html.focus-mode .topbar{ top:6px; padding:4px 7px }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   专注模式退出浮标（右下角常驻）
+   设计动机：退出入口原本藏在屏幕正上方中间的顶栏里，用户找不到/点不到，
+   误以为"退不出去"。这里做一个完全脱离 .topbar 的常驻浮标，
+   只受 html.focus-mode 控制，不受任何 visibility/display 隐藏规则波及。
+   ═══════════════════════════════════════════════════════════════ */
+
+.focus-exit-fab{ display:none }
+
+html.focus-mode .focus-exit-fab{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  position:fixed;
+  right:24px;
+  bottom:26px;
+  z-index:90;                 /* 高于 topbar(60) 与搜索面板，确保永远在最上层 */
+  padding:11px 18px;
+  border-radius:999px;
+  background:var(--accent);
+  color:var(--fg-inv);
+  border:1px solid var(--accent);
+  box-shadow:var(--shadow-2);
+  font-family:inherit;
+  font-size:13px;
+  font-weight:600;
+  line-height:1;
+  cursor:pointer;
+  opacity:.94;
+  transition:opacity .18s var(--ease), transform .18s var(--ease);
+}
+html.focus-mode .focus-exit-fab:hover{
+  opacity:1;
+  transform:translateY(-2px);
+}
+html.focus-mode .focus-exit-fab:active{ transform:translateY(0) }
+html.focus-mode .focus-exit-fab:focus-visible{
+  outline:2px solid var(--accent);
+  outline-offset:3px;
+}
+html.focus-mode .focus-exit-dot{
+  width:7px;height:7px;border-radius:50%;
+  background:var(--fg-inv);
+  opacity:.75;
+  flex:none;
+}
+@media(max-width:640px){
+  html.focus-mode .focus-exit-fab{
+    right:14px; bottom:16px;
+    padding:10px 15px; font-size:12.5px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   整合自外部笔记模板（蓝白风 → 转译为本项目墨绿设计系统）
+   借用其「结构」，颜色全部走本项目语义变量：
+     · .block.mem      记忆口诀框（紫）
+     · .fig/.figcaption 图容器 + 图题（含 mermaid 图 .fig-mermaid）
+     · .tag            行内小标签
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ---------- 记忆口诀框（紫）---------- */
+/* 紫色只用在标题与色条上，正文保持统一米白底 */
+.mem{color:var(--mem-fg)}
+.mem .block-title{color:var(--mem)}
+.main .block.mem .block-title{color:var(--mem)}
+/* 口诀正文加重，方便朗读记忆 */
+.mem strong{color:var(--mem-fg);font-weight:700}
+
+/* ---------- 图容器 + 图题 ---------- */
+.fig{
+  margin:1.8em 0;
+  padding:16px 18px 12px;
+  background:var(--bg-card);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  text-align:center;
+}
+.fig svg{max-width:100%;height:auto}
+.fig figcaption{
+  margin-top:10px;
+  font-size:12.8px;
+  line-height:1.6;
+  color:var(--fg-2);
+  letter-spacing:.02em;
+}
+/* mermaid 图单独放开内边距，图本身已有留白 */
+.fig-mermaid{padding:18px 10px 12px;overflow-x:auto}
+
+/* ── 7. mermaid 图表：防止宽图溢出 + 节点文字截断 ── */
+.main .mermaid-wrap{
+  overflow-x:auto;
+  padding:1.6em 1em;
+}
+.main .mermaid-wrap svg{
+  max-width:100%;
+  height:auto;
+  min-width:0;
+}
+/* 图表比容器宽时，允许横向滚动而不是截缩 */
+.fig-mermaid{min-width:0}
+/* Slidev 手绘 SVG：颜色为深底黑板调（文字 #f2efe4），
+   放进浅色正文会隐形 → 套深色卡片还原原始配色。
+   ⚠️ 选择器必须带 .main（下文有 `.main .fig{background:var(--bg-card)}`，
+      同为 2 类时后者胜出 → 深色底会被浅色覆盖，字又隐形）。
+      所以这里用 `.main .fig.fig-slidev`（3 类）压住它。 */
+.fig-slidev{padding:14px 10px 10px}
+.main .fig.fig-slidev,
+.fig.fig-slidev{
+  background:#142b20;
+  border-color:#24402f;
+}
+.fig-slidev svg{width:100%;height:auto;max-height:420px}
+.main .fig{background:var(--bg-card)}
+.main .fig figcaption{color:var(--fg-2)}
+
+/* ---------- 行内小标签 ---------- */
+.tag{
+  display:inline-block;
+  padding:1px 9px;
+  margin-right:5px;
+  border-radius:999px;
+  font-size:11.5px;
+  font-weight:600;
+  line-height:1.7;
+  background:var(--accent-soft);
+  color:var(--accent);
+  border:1px solid var(--accent-soft-2);
+  white-space:nowrap;
+}
+.tag.warn{background:var(--warn-bg);color:var(--warn-fg);border-color:var(--warn-line)}
+.tag.exam{background:var(--gold-bg);color:var(--gold);border-color:var(--gold)}
+.tag.mem{background:var(--mem-bg);color:var(--mem-line);border-color:var(--mem-line)}
+.main .tag{font-family:var(--sans)}
+
+/* ═══════════════════════════════════════════════════════════════
+   增强 v1：返回顶部 / 外链指示器 / 代码复制 / 阅读时长
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── 返回顶部按钮 ── */
+.back-top{
+  position:fixed;right:24px;bottom:80px;z-index:85;
+  width:42px;height:42px;
+  border-radius:50%;
+  background:var(--bg-card);
+  border:1.5px solid var(--line);
+  box-shadow:var(--shadow-2);
+  color:var(--fg-3);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;line-height:1;
+  opacity:0;transform:translateY(12px);
+  pointer-events:none;
+  transition:opacity .25s var(--ease),transform .25s var(--ease),color .18s var(--ease),border-color .18s var(--ease);
+}
+.back-top.show{opacity:1;transform:none;pointer-events:auto}
+.back-top:hover{color:var(--accent);border-color:var(--accent);transform:translateY(-2px)}
+.back-top:active{transform:translateY(0)}
+@media(max-width:760px){
+  .back-top{right:14px;bottom:70px;width:38px;height:38px;font-size:16px}
+}
+
+/* ── 外链指示器 ── */
+a[href^="http"]:not(.cta):not(.pg)::after{
+  content:'↗';
+  display:inline-block;
+  margin-left:2px;
+  font-size:.82em;
+  opacity:.6;
+  vertical-align:.05em;
+  transition:opacity .15s var(--ease);
+}
+a[href^="http"]:not(.cta):not(.pg):hover::after{opacity:1}
+
+/* ── 代码块复制按钮 ── */
+.code-wrap{position:relative;margin:1.3em 0}
+.copy-btn{
+  position:absolute;top:8px;right:8px;
+  padding:5px 11px;
+  font-size:11.5px;font-family:var(--sans);
+  background:var(--bg-card);
+  border:1px solid var(--line);
+  border-radius:5px;
+  color:var(--fg-3);cursor:pointer;
+  opacity:0;
+  transition:all .18s var(--ease);
+  z-index:2;
+}
+.code-wrap:hover .copy-btn,
+.copy-btn:focus{opacity:1}
+.copy-btn:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+.copy-btn.copied{border-color:var(--tip-line);color:var(--tip);background:var(--tip-bg)}
+.code-wrap pre{margin:0;border-radius:var(--radius)}
+
+/* ── 阅读时长（章节页标题下方） ── */
+.read-time{
+  display:flex;align-items:center;gap:7px;
+  font-size:12px;color:var(--fg-3);
+  margin-top:-8px;margin-bottom:18px;
+  padding-bottom:14px;
+  border-bottom:1px solid var(--line);
+}
+.read-time::before{content:'🕐';font-size:13px;filter:saturate(.7)}
+
+/* ── Quiz 答错时给错误选项加红色标记 ── */
+.opt.wrong-pick{border-color:var(--danger-line);background:var(--danger-bg)}
+.opt.wrong-pick .letter{background:var(--danger-line);color:#fff;border-color:var(--danger-line)}
+
+/* ── 表格斑马纹（可选，通过 class 控制） ── */
+table.zebra tbody tr:nth-child(even){background:var(--accent-soft)}
+table.zebra tbody tr:hover{background:var(--accent-soft-2)}
+
+/* ── 统计卡 hover 微动 ── */
+.stat{transition:transform .2s var(--ease),box-shadow .2s var(--ease)}
+.stat:hover{transform:translateY(-3px);box-shadow:var(--shadow-3)}
+
+/* ── 封面 CTA 按钮点击反馈 ── */
+.cta:active{transform:translateY(0) scale(.97)}
+
+/* ── 平滑滚动偏移（锚点跳转不卡顶栏下） ── */
+html{scroll-padding-top:80px}
+@media(max-width:760px){html{scroll-padding-top:70px}}
+
+/* ═══════════════════════════════════════════════════════════════
+   历年真题区块 · 三级折叠（原生 details，零 JS）
+   ═══════════════════════════════════════════════════════════════ */
+.exam{margin:2.2em 0 1.6em}
+
+/* ── 统计条：常驻不折叠，避免"用户不知道里面有真题"而白做 ── */
+.exam-bar{
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  padding:12px 16px;margin-bottom:10px;
+  background:linear-gradient(180deg,var(--bg-card) 0%,var(--bg-alt) 100%);
+  border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow-1);
+}
+.exam-bar-label{font-weight:700;font-size:14px;color:var(--accent)}
+.exam-bar-stat{font-size:12.5px;color:var(--fg-3);flex:1;min-width:140px}
+.exam-bar-stat b{color:var(--fg-2);font-variant-numeric:tabular-nums}
+.exam-bar-ops{display:flex;gap:6px}
+.exam-op{
+  padding:4px 11px;font:inherit;font-size:12px;cursor:pointer;
+  background:var(--bg-card);border:1px solid var(--line-2);
+  border-radius:999px;color:var(--fg-2);
+  transition:border-color .18s var(--ease),color .18s var(--ease),background .18s var(--ease);
+}
+.exam-op:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+
+/* ── 科目级折叠 ── */
+.exam-subject{
+  border:1px solid var(--line);border-radius:var(--radius);
+  background:var(--bg-card);overflow:hidden;
+}
+.exam-subject>summary{
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  padding:12px 16px;cursor:pointer;list-style:none;
+  font-weight:600;color:var(--fg-2);
+  transition:background .18s var(--ease),color .18s var(--ease);
+}
+.exam-subject>summary::-webkit-details-marker{display:none}
+.exam-subject>summary:hover{background:var(--accent-soft);color:var(--accent)}
+.exam-subject[open]>summary{border-bottom:1px solid var(--line);background:var(--bg-alt)}
+.exam-subject-name::before{content:'▸ ';display:inline-block;transition:transform .2s var(--ease)}
+.exam-subject[open] .exam-subject-name::before{transform:rotate(90deg)}
+.exam-subject-n{font-size:12px;color:var(--fg-3);font-variant-numeric:tabular-nums}
+.exam-subject-tip{margin-left:auto;font-size:11.5px;color:var(--fg-3);opacity:.8}
+
+/* ── 年份级折叠 ── */
+.exam-year{border-bottom:1px solid var(--line)}
+.exam-year:last-child{border-bottom:0}
+.exam-year>summary{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 16px 9px 30px;cursor:pointer;list-style:none;
+  font-size:13.5px;color:var(--fg-2);
+  transition:background .16s var(--ease),color .16s var(--ease);
+}
+.exam-year>summary::-webkit-details-marker{display:none}
+.exam-year>summary:hover{background:var(--accent-soft);color:var(--accent)}
+.exam-year[open]>summary{background:var(--bg-alt)}
+.exam-year-name::before{content:'▸ ';display:inline-block;transition:transform .2s var(--ease);color:var(--fg-3)}
+.exam-year[open] .exam-year-name::before{transform:rotate(90deg)}
+.exam-year-n{font-size:11.5px;color:var(--fg-3);font-variant-numeric:tabular-nums}
+
+/* ── 单题折叠 ── */
+.exam-q{border-top:1px solid var(--line)}
+.exam-q>summary{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:9px 16px 9px 46px;cursor:pointer;list-style:none;
+  font-size:13.5px;line-height:1.6;color:var(--fg-2);
+  transition:background .16s var(--ease);
+}
+.exam-q>summary::-webkit-details-marker{display:none}
+.exam-q>summary:hover{background:var(--accent-soft)}
+.exam-q[open]>summary{background:var(--bg-alt)}
+.exam-q>summary::before{
+  content:'＋';flex-shrink:0;width:1.1em;text-align:center;
+  color:var(--fg-3);font-size:12px;line-height:1.5;
+}
+.exam-q[open]>summary::before{content:'－';color:var(--accent)}
+.exam-no{
+  flex-shrink:0;font-size:11px;color:var(--fg-3);
+  font-variant-numeric:tabular-nums;padding-top:2px;min-width:44px;
+}
+.exam-tag{
+  flex-shrink:0;font-size:10.5px;padding:1px 6px;border-radius:4px;
+  background:var(--warn-bg);color:var(--warn-fg);border:1px solid var(--warn-line);
+}
+.exam-stem-peek{
+  flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  color:var(--fg-2);
+}
+.exam-q[open] .exam-stem-peek{color:var(--fg)}
+.exam-q-body{padding:4px 16px 16px 46px}
+.exam-stem{margin:.6em 0;font-size:14.5px;line-height:1.8;color:var(--fg)}
+.exam-blank{color:var(--danger);padding:0 1px}
+.exam-opts{list-style:none;margin:.5em 0 .9em;padding:0}
+/* ⚠️ 必须清掉全局 `ul>li::before` 的圆点（本站正文列表有项目符号），
+   否则真题选项前会多出一个小圆点，位置还和字母块错开 */
+.exam-opts>li::before{content:none !important}
+.exam-opts li{
+  position:relative;padding:4px 0 4px 26px;font-size:14px;line-height:1.7;
+  border-bottom:1px dashed var(--line);
+}
+.exam-opts li:last-child{border-bottom:0}
+.exam-opts b{
+  position:absolute;left:0;top:4px;
+  display:inline-flex;align-items:center;justify-content:center;
+  width:19px;height:19px;border-radius:5px;
+  background:var(--bg-alt);border:1px solid var(--line-2);
+  font-size:11px;font-weight:700;color:var(--fg-3);
+}
+
+/* ── 答案（默认再折叠一层）── */
+.exam-ans{margin-top:.6em}
+.exam-ans>summary{
+  display:inline-flex;align-items:center;gap:6px;cursor:pointer;list-style:none;
+  padding:4px 12px;font-size:12px;
+  background:var(--accent-soft);border:1px solid var(--line-2);
+  border-radius:999px;color:var(--accent);
+  transition:background .18s var(--ease),border-color .18s var(--ease);
+}
+.exam-ans>summary::-webkit-details-marker{display:none}
+.exam-ans>summary:hover{background:var(--accent-soft-2);border-color:var(--accent)}
+.exam-ans[open]>summary{margin-bottom:8px}
+.exam-ans-line{margin:.4em 0;font-size:14px;color:var(--fg)}
+.exam-ans-line b{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:26px;height:24px;padding:0 8px;margin-left:4px;
+  border-radius:6px;background:var(--tip-bg);color:var(--tip-fg);
+  border:1px solid var(--tip-line);font-weight:700;
+}
+.exam-exp{margin:.4em 0;font-size:13.5px;line-height:1.8;color:var(--fg-2)}
+
+/* ── 窄屏 ── */
+@media(max-width:760px){
+  .exam-bar{padding:10px 12px;gap:8px}
+  .exam-bar-label{font-size:13px}
+  .exam-bar-stat{font-size:11.5px;flex-basis:100%;order:3;min-width:0}
+  .exam-bar-ops{margin-left:auto}
+  .exam-subject-tip{display:none}
+  .exam-q>summary{padding-left:16px;flex-wrap:wrap}
+  .exam-q>summary::before{display:none}
+  .exam-no{min-width:0}
+  .exam-q-body{padding-left:16px}
+  .exam-year>summary{padding-left:20px}
+  .exam-stem-peek{white-space:normal;flex-basis:100%}
+  .exam-opts li{font-size:13.5px}
+}
+
+/* ── 打印：全部自动展开（服务"可打印带水印"卖点）── */
+@media print{
+  .exam-bar,.exam-op,.exam-ans>summary{display:none !important}
+  .exam-subject,.exam-year,.exam-q{border:0 !important;background:none !important}
+  .exam-subject>summary,.exam-year>summary{
+    padding:6pt 0;background:none !important;border-bottom:1pt solid #999;
+  }
+  .exam-subject-name::before,.exam-year-name::before,.exam-q>summary::before{content:'' !important}
+  .exam-q-body,.exam-ans[open] > div,.exam-ans > div{display:block !important}
+  .exam-q{break-inside:avoid;page-break-inside:avoid}
+  .exam-stem,.exam-opts li{font-size:9.5pt}
+  .exam-exp{font-size:8.5pt;color:#333}
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="index.html"><span class="brand-mark">48</span><span>阿甘系分</span><span class="brand-sub">冲刺手册</span></a>
+  <nav class="nav"><div class="nav" id="chapnav"><button class="nav-trigger" type="button" id="navTrigger" aria-haspopup="true" aria-expanded="false" aria-controls="navPanel" title="章节导航（Enter / ↓ 打开，Esc 关闭）"><span class="nav-trigger-code">H23</span><span class="nav-trigger-label">软件需求工程</span><svg class="nav-caret" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5 L6 8 L9.5 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="nav-panel" id="navPanel" hidden><div class="nav-panel-scroll"><div class="nav-group nav-group-solo"><a class="nav-item" href="index.html"><span class="nav-item-code">首页</span><span class="nav-item-label">首页 · 手册总览</span></a></div><div class="nav-group"><div class="nav-group-title">第一篇 · 基础知识</div><a class="nav-item" href="H01.html"><span class="nav-item-code">H01</span><span class="nav-item-label">绪论与备考总纲</span></a><a class="nav-item" href="H02.html"><span class="nav-item-code">H02</span><span class="nav-item-label">数学与工程基础（一）· 概率统计与图论应用</span></a><a class="nav-item" href="H03.html"><span class="nav-item-code">H03</span><span class="nav-item-label">数学与工程基础（二）· 预测决策与工程伦理</span></a><a class="nav-item" href="H04.html"><span class="nav-item-code">H04</span><span class="nav-item-label">计算机系统（一）· 硬件与体系结构</span></a><a class="nav-item" href="H05.html"><span class="nav-item-code">H05</span><span class="nav-item-label">计算机系统（二）· 操作系统</span></a><a class="nav-item" href="H06.html"><span class="nav-item-code">H06</span><span class="nav-item-label">计算机网络（一）· 数据通信与协议体系</span></a><a class="nav-item" href="H07.html"><span class="nav-item-code">H07</span><span class="nav-item-label">计算机网络（二）· TCP/IP 与网络工程</span></a><a class="nav-item" href="H08.html"><span class="nav-item-code">H08</span><span class="nav-item-label">分布式系统、构件与云计算</span></a><a class="nav-item" href="H09.html"><span class="nav-item-code">H09</span><span class="nav-item-label">数据库系统（一）· 三级模式与关系基础</span></a><a class="nav-item" href="H10.html"><span class="nav-item-code">H10</span><span class="nav-item-label">数据库系统（二）· 范式与事务并发控制</span></a><a class="nav-item" href="H11.html"><span class="nav-item-code">H11</span><span class="nav-item-label">数据库系统（三）· 设计、仓库与 NoSQL</span></a><a class="nav-item" href="H12.html"><span class="nav-item-code">H12</span><span class="nav-item-label">企业信息化（一）· 信息化规划</span></a><a class="nav-item" href="H13.html"><span class="nav-item-code">H13</span><span class="nav-item-label">企业信息化（二）· 信息系统与商务</span></a><a class="nav-item" href="H14.html"><span class="nav-item-code">H14</span><span class="nav-item-label">软件工程（一）· 生命周期与开发模型</span></a><a class="nav-item" href="H15.html"><span class="nav-item-code">H15</span><span class="nav-item-label">软件工程（二）· 过程管理与软件重用</span></a><a class="nav-item" href="H16.html"><span class="nav-item-code">H16</span><span class="nav-item-label">软件工程（三）· UML 与形式化方法</span></a><a class="nav-item" href="H17.html"><span class="nav-item-code">H17</span><span class="nav-item-label">项目管理（一）· 范围进度成本与挣值分析</span></a><a class="nav-item" href="H18.html"><span class="nav-item-code">H18</span><span class="nav-item-label">项目管理（二）· 配置质量风险与文档</span></a><a class="nav-item" href="H19.html"><span class="nav-item-code">H19</span><span class="nav-item-label">信息安全（一）· 安全体系与加密认证</span></a><a class="nav-item" href="H20.html"><span class="nav-item-code">H20</span><span class="nav-item-label">信息安全（二）· 网络安全与可靠性</span></a></div><div class="nav-group"><div class="nav-group-title">第二篇 · 关键技术</div><a class="nav-item" href="H21.html"><span class="nav-item-code">H21</span><span class="nav-item-label">系统规划与分析（一）· 需求分析与 DFD 建模</span></a><a class="nav-item" href="H22.html"><span class="nav-item-code">H22</span><span class="nav-item-label">系统规划与分析（二）· 成本效益与可行性论证</span></a><a class="nav-item active" href="H23.html" aria-current="page"><span class="nav-item-code">H23</span><span class="nav-item-label">软件需求工程</span></a><a class="nav-item" href="H26.html"><span class="nav-item-code">H26</span><span class="nav-item-label">软件架构设计（一）· 架构定义与 4+1 视图</span></a><a class="nav-item" href="H27.html"><span class="nav-item-code">H27</span><span class="nav-item-label">软件架构设计（二）· 架构风格与 SOA</span></a><a class="nav-item" href="H28.html"><span class="nav-item-code">H28</span><span class="nav-item-label">软件架构设计（三）· 质量属性与 ATAM 评估</span></a><a class="nav-item" href="H29.html"><span class="nav-item-code">H29</span><span class="nav-item-label">系统设计（一）· 结构化设计与面向对象设计</span></a><a class="nav-item" href="H30.html"><span class="nav-item-code">H30</span><span class="nav-item-label">系统设计（二）· 设计模式与人机交互</span></a><a class="nav-item" href="H31.html"><span class="nav-item-code">H31</span><span class="nav-item-label">软件实现与测试（一）· 测试原则与黑盒白盒方法</span></a><a class="nav-item" href="H32.html"><span class="nav-item-code">H32</span><span class="nav-item-label">软件实现与测试（二）· 测试阶段与部署发布</span></a><a class="nav-item" href="H33.html"><span class="nav-item-code">H33</span><span class="nav-item-label">系统运行与维护（一）· 运维指标与软件维护</span></a><a class="nav-item" href="H34.html"><span class="nav-item-code">H34</span><span class="nav-item-label">系统运行与维护（二）· 系统转换与演进</span></a></div><div class="nav-group"><div class="nav-group-title">第三篇 · 案例实践</div><a class="nav-item" href="H35.html"><span class="nav-item-code">H35</span><span class="nav-item-label">Web 应用系统分析与设计 · 架构、缓存与测试</span></a><a class="nav-item" href="H36.html"><span class="nav-item-code">H36</span><span class="nav-item-label">嵌入式系统分析与设计 · 实时调度与低功耗</span></a><a class="nav-item" href="H37.html"><span class="nav-item-code">H37</span><span class="nav-item-label">移动应用系统分析与设计 · 架构演进与开发方式选型</span></a><a class="nav-item" href="H38.html"><span class="nav-item-code">H38</span><span class="nav-item-label">大数据处理系统分析与设计 · Lambda/Kappa 架构</span></a><a class="nav-item" href="H39.html"><span class="nav-item-code">H39</span><span class="nav-item-label">微服务系统分析与设计 · 组件、事务与反模式</span></a><a class="nav-item" href="H40.html"><span class="nav-item-code">H40</span><span class="nav-item-label">信息物理系统 CPS · 闭环架构与边缘计算</span></a><a class="nav-item" href="H41.html"><span class="nav-item-code">H41</span><span class="nav-item-label">系统分析师论文写作要点 · 结构、字数与评分</span></a></div><div class="nav-group"><div class="nav-group-title">专项模块 · 案例专项</div><a class="nav-item" href="H42.html"><span class="nav-item-code">H42</span><span class="nav-item-label">案例分析专项（一）· 四步答题法与设问模板</span></a><a class="nav-item" href="H43.html"><span class="nav-item-code">H43</span><span class="nav-item-label">案例分析专项（二）· 考点地图与真题精讲</span></a><a class="nav-item" href="H44.html"><span class="nav-item-code">H44</span><span class="nav-item-label">案例分析专项（三）· 六大方向专项与场景实战</span></a></div><div class="nav-group"><div class="nav-group-title">专项模块</div><a class="nav-item" href="H45.html"><span class="nav-item-code">H45</span><span class="nav-item-label">论文写作专项</span></a><a class="nav-item" href="H46.html"><span class="nav-item-code">H46</span><span class="nav-item-label">论文写作专项（二）· 万能素材卡与考点落点</span></a><a class="nav-item" href="H47.html"><span class="nav-item-code">H47</span><span class="nav-item-label">全真模拟（一）· 上午场综合知识与案例</span></a><a class="nav-item" href="H48.html"><span class="nav-item-code">H48</span><span class="nav-item-label">全真模拟（二）· 下午场论文与复盘方法论</span></a></div><div class="nav-group nav-group-pending"><div class="nav-group-title">待上线 · 按真题权重排序</div><div class="nav-pending-row"><span class="nav-pending-ch">✅ 48 学时已全部上线</span><span class="nav-pending-name">第一篇 9 章 + 第二篇 6 章 + 第三篇 7 章</span><span class="nav-pending-w">22 章</span></div><div class="nav-pending-row"><span class="nav-pending-ch">✅ 专项模块</span><span class="nav-pending-name">案例分析 H42–H44 · 论文 H45–H46 · 全真模拟 H47–H48</span><span class="nav-pending-w">7 学时</span></div></div></div><div class="nav-foot"><span class="nav-foot-tip">↑↓ 选择 · Enter 打开 · Esc 关闭</span><span class="nav-foot-nav"><a class="nav-step" href="H22.html">← 上一章</a><a class="nav-step" href="H26.html">下一章 →</a></span></div></div></div></nav>
+  <div class="theme-switch" role="group" aria-label="主题">
+    <button class="theme-btn" data-theme="light" type="button">浅</button>
+    <button class="theme-btn" data-theme="dark" type="button">深</button>
+    <button class="theme-btn active" data-theme="auto" type="button">跟随</button>
+  </div>
+</header>
+<main class="shell">
+  <aside class="toc"></aside>
+      <article class="main">
+    <div class="chapbar" id="chapbar"
+     data-sec-total="34" data-page-index="23" data-page-total="46">
+  <div class="chapbar-top">
+    <span class="chapbar-badge">H23</span>
+    <span class="chapbar-title">软件需求工程</span>
+    <span class="chapbar-spacer"></span>
+    <span class="chapbar-sec" id="chapbarSec">1 / 34</span>
+  </div>
+  <div class="chapbar-track"><div class="chapbar-fill" id="chapbarFill"></div></div>
+</div>
+    
+    <h1 id="第-23-小时-软件需求工程-第-11-章-完整版">第 23 小时 · 软件需求工程（第 11 章 · 完整版）</h1>
+<h2 id="章节考点分析">章节考点分析</h2>
+<p>第 11 章是<strong>综合知识、案例分析、论文写作三科的共同地基</strong>——案例第 1 题常年考需求与建模，<br>论文"需求获取/需求管理"类题目也是高频。本学时覆盖<strong>需求层次、需求工程框架、需求获取六法</strong>。</p>
+<div class="fig fig-mermaid"><div class="mermaid-src" data-src="flowchart LR
+    A[&quot;第11章&lt;br/&gt;软件需求工程&quot;] --&gt; B[&quot;11.1 需求与需求工程&quot;]
+    A --&gt; C[&quot;11.2 &lt;b&gt;需求获取&lt;/b&gt;&quot;]
+    A --&gt; D[&quot;11.3 需求分析&quot;]
+    A --&gt; E[&quot;11.4 结构化分析 SA&quot;]
+    A --&gt; F[&quot;11.5 面向对象分析 OOA&quot;]
+    A --&gt; G[&quot;11.6 需求定义&quot;]
+    A --&gt; H[&quot;11.7 需求验证&quot;]
+    A --&gt; I[&quot;11.8 需求管理&quot;]
+    C --&gt; C1[&quot;访谈 / 问卷 / 采样&quot;]
+    C --&gt; C2[&quot;情节串联板&quot;]
+    C --&gt; C3[&quot;&lt;b&gt;JRP 联合需求计划&lt;/b&gt;&quot;]
+    C --&gt; C4[&quot;需求记录技术&quot;]
+    B --&gt; B1[&quot;业务需求 → 用户需求 → 系统需求&quot;]
+    B --&gt; B2[&quot;需求工程 5 个阶段&quot;]"></div></div>
+<div class="block gold"><div class="block-title">考情定位</div><p>本章是综合知识、案例分析、论文三科的共同基础。</p></div>
+<div class="fig fig-mermaid"><div class="mermaid-src" data-src="mindmap
+  root((第11章))
+    11.1 概述
+      三层次
+      QFD三类需求
+      FURPS+
+      需求工程五阶段
+    11.2 获取
+      访谈
+      问卷
+      采样
+      情节串联板
+      JAD/JRP
+      记录技术
+    11.3 分析
+      SA
+      OOA
+      PDOA
+    11.4 SA
+      DFD
+      STD
+      数据字典
+    11.5 OOA
+      用例模型
+      分析模型
+    11.6 定义
+      严格定义
+      原型方法
+      SRS
+    11.7 验证
+      评审
+      需求测试
+    11.8 管理
+      变更
+      CCB
+      跟踪"></div><figcaption>图0-2 本章知识脑图</figcaption></div>
+<h3 id="导读小贴士">【导读小贴士】</h3>
+<p>这章内容多，但<strong>结构极其规整</strong>：先分层次（业务/用户/系统），再走流程（获取→分析→规格→验证→管理），<br>每步有各自的工具与方法。抓住"<strong>层次 + 流程 + 工具</strong>"三条线，就不会记混。<br><strong>案例题考你画图与找错，论文题考你用哪类方法、为什么选它</strong>——两科考的是同一套知识的不同侧面。</p>
+<hr>
+<h2 id="基础知识点">【基础知识点】</h2>
+<h3 id="s1-需求的三个层次-业务-用户-系统">1. 需求的三个层次（业务 → 用户 → 系统）</h3>
+<div class="fig fig-mermaid"><div class="mermaid-src" data-src="flowchart TD
+    L1[&quot;&lt;b&gt;业务需求&lt;/b&gt;&lt;br/&gt;高层次目标要求&lt;br/&gt;来源：投资人、客户、管理层、市场/产品策划&quot;]
+    L2[&quot;&lt;b&gt;用户需求&lt;/b&gt;&lt;br/&gt;用户的具体目标 / 要求系统完成的任务&lt;br/&gt;来源：访谈、问卷、场景（scenarios）&quot;]
+    L3[&quot;&lt;b&gt;系统需求&lt;/b&gt;&lt;br/&gt;从系统角度说明&lt;br/&gt;功能需求 + 非功能需求 + 设计约束&quot;]
+    L1 --&gt; L2 --&gt; L3
+    L3 --&gt; F1[&quot;功能需求（行为需求）&lt;br/&gt;必须实现的软件功能&quot;]
+    L3 --&gt; F2[&quot;非功能需求&lt;br/&gt;质量属性（可维护性、效率等）+ 其他&quot;]
+    L3 --&gt; F3[&quot;设计约束&lt;br/&gt;平台、标准、法规等限制&quot;]"></div></div>
+<div class="quote"><p><strong>记忆点</strong>：三个层次<strong>从目标到具体、从整体到局部、从概念到细节</strong>。<br><strong>业务需求</strong>确定项目视图和范围（视图和范围文档）；<strong>用户需求</strong>建立在场景整理之上；<br><strong>系统需求</strong>是需求规格说明书的直接对象。</p></div>
+<h3 id="s2-需求工程的五个阶段">2. 需求工程的五个阶段</h3>
+<table><thead><tr><th>阶段</th><th>内容</th><th>关键产出</th></tr></thead><tbody><tr><td>① <strong>需求获取</strong></td><td>与用户交流、观察现有系统、分析任务，开发/捕获/修订需求</td><td>原始需求</td></tr><tr><td>② <strong>需求分析</strong></td><td>为系统建立概念模型，抽象描述并捕获现实世界语义</td><td>需求模型</td></tr><tr><td>③ <strong>形成需求规格</strong>（文档化）</td><td>按标准生成需求模型的文档描述</td><td>需求规格说明书</td></tr><tr><td>④ <strong>需求确认与验证</strong></td><td>确认需求的完整性、正确性、一致性、可测试性、可行性</td><td>评审记录</td></tr><tr><td>⑤ <strong>需求管理</strong></td><td>需求追踪管理、变更控制、版本控制</td><td><strong>需求基线（Baseline）</strong></td></tr></tbody></table>
+<div class="block warning"><div class="block-title">关键区分</div><ul><li><strong>需求开发</strong> = 阶段 ①②③④（获取、分析、规格、验证）</li><li><strong>需求管理</strong> = 阶段 ⑤</li><li><strong>需求基线</strong>：最终文档<strong>评审批准后</strong>才定义出需求基线</li><li><strong>需求约定</strong>是需求开发与需求管理之间的<strong>桥梁</strong></li></ul></div>
+<h3 id="s3-需求获取的六种方法-重点-JRP">3. 需求获取的六种方法（重点：JRP）</h3>
+<div class="fig fig-mermaid"><div class="mermaid-src" data-src="flowchart LR
+    R[&quot;需求获取&lt;br/&gt;方法&quot;] --&gt; R1[&quot;用户访谈&lt;br/&gt;结构化 + 非结构化&quot;]
+    R --&gt; R2[&quot;问卷调查&quot;]
+    R --&gt; R3[&quot;采样&lt;br/&gt;（抽样了解）&quot;]
+    R --&gt; R4[&quot;情节串联板&lt;br/&gt;最生动、消除盲区&quot;]
+    R --&gt; R5[&quot;&lt;b&gt;JRP 联合需求计划&lt;/b&gt;&quot;]
+    R --&gt; R6[&quot;需求记录技术&lt;br/&gt;统一口径的记录工具&quot;]
+    R4 --&gt; R4a[&quot;👍 优点：用户友好、交互性强、&lt;br/&gt;对界面提供早期评审&quot;]
+    R4 --&gt; R4b[&quot;👎 缺点：费时、速度慢&quot;]
+    R5 --&gt; R5a[&quot;6~18 人 · 1~5 小时&lt;br/&gt;成本较高但十分有效&quot;]"></div></div>
+<h4 id="s3-1-JAD-与-JRP-的关系-高频易错">3.1 JAD 与 JRP 的关系（<strong>高频易错</strong>）</h4>
+<table><thead><tr><th>项</th><th>JAD（联合应用开发）</th><th>JRP（联合需求计划）</th></tr></thead><tbody><tr><td>英文</td><td>Joint <strong>Application Development</strong></td><td>Joint <strong>Requirement Planning</strong></td></tr><tr><td>定位</td><td>以小组形式<strong>定义并建立系统</strong>的专题讨论组</td><td><strong>JAD 的一部分</strong>，是需求获取方法</td></tr><tr><td>参与者</td><td>主管部门经理、会议主持人、用户、协调人员、IT 人员、秘书</td><td>关键用户代表 + 系统分析师 + 开发团队代表</td></tr><tr><td>规模</td><td>专题讨论组</td><td><strong>6～18 人，1～5 小时</strong></td></tr><tr><td>核心意图</td><td><strong>定义需求 + 讨论可选技术方案</strong></td><td><strong>只收集需求，不对需求分析和验证</strong></td></tr><tr><td>成本</td><td>比传统收集需求<strong>时间更短</strong></td><td><strong>成本较高，但十分有效</strong></td></tr></tbody></table>
+<div class="block tip"><div class="block-title">记忆口诀</div><p><strong>JRP 是 JAD 的一部分；JAD 讨论技术方案，JRP 只管收集不管验证。</strong></p></div>
+<h4 id="s3-2-JAD-四步骤">3.2 JAD 四步骤</h4>
+<ol><li><strong>确定 JAD 项目</strong>（确定系统范围和规范）</li><li><strong>JAD 专题预备会</strong>（主持人介绍项目与讨论内容）</li><li><strong>准备 JAD 专题讨论材料</strong></li><li><strong>进行专题讨论会</strong>（达成需求一致意见，并对可选技术方案讨论出几套方案）</li></ol>
+<h4 id="s3-3-JRP-会议四步骤">3.3 JRP 会议四步骤</h4>
+<ol><li><strong>互相认识 + 逐项专题讨论</strong>（在轻松气氛下）</li><li><strong>开放性交流</strong>——对现有系统/类似系统的不足说想法，<strong>这一过程不对想法发表任何评论</strong></li><li><strong>设想新方案</strong>——把想法、问题、不足记录下来，<strong>形成要点清单</strong></li><li><strong>整理要点清单 → 明确优先级 → 评审</strong></li></ol>
+<div class="quote"><p><strong>JRP 会后</strong>：与会者完成<strong>评价性调查问卷</strong>；最后产出<strong>总结性报告</strong>，内容为<br><strong>已达成一致的需求</strong> 和 <strong>未解决的问题</strong>。</p></div>
+<h4 id="s3-4-JRP-实施的八条主要原则">3.4 JRP 实施的八条主要原则</h4>
+<ol><li>实施前应制定<strong>详细议程</strong>，并严格遵照议程</li><li>按既定时间安排进行</li><li>尽量完整地记录会议期间的内容</li><li>讨论期间<strong>尽量避免使用专业术语</strong></li><li>充分运用<strong>解决冲突</strong>的技能</li><li>会议期间设置<strong>充分的间歇时间</strong></li><li><strong>鼓励团队取得一致意见</strong></li><li>保证所有人员遵守事先约定的规则</li></ol>
+<div class="quote"><p><strong>JRP 最适合的场景</strong>：最有歧义的问题、<strong>需求最不清晰的领域</strong>——群策群力效果好。<br><strong>最大难点</strong>：会议的组织和相关人员的能力（要言之有物、气氛开放）。</p></div>
+<h3 id="s4-需求记录技术">4. 需求记录技术</h3>
+<ul><li><strong>为什么需要</strong>：获取人员与分析人员可能不是同一团队；一个项目可能有多个系统分析师参与获取</li><li><strong>目的</strong>：需要<strong>统一需求记录工具</strong>，让所有人的获取结果是<strong>同一口径</strong></li><li><strong>需求记录要求</strong>：能避免二义性、能被系统分析师和用户同时理解、便于追踪与查找</li></ul>
+<hr>
+<h2 id="补充知识点">补充知识点</h2>
+<h3 id="用户访谈的两种形式">用户访谈的两种形式</h3>
+<table><thead><tr><th>形式</th><th>做法</th><th>特点</th></tr></thead><tbody><tr><td><strong>结构化</strong></td><td>事先准备好一系列问题，有针对性地进行</td><td>可控、可比</td></tr><tr><td><strong>非结构化</strong></td><td>只列一个粗略想法，根据访谈情况发挥</td><td>灵活</td></tr><tr><td><strong>最佳实践</strong></td><td><strong>结合这两种方法</strong></td><td>最有效——不可能把什么都计划清楚，应保持良好灵活性</td></tr></tbody></table>
+<hr>
+<h2 id="教材精讲-11-1-11-2-补充">【教材精讲】11.1~11.2 补充</h2>
+<div class="quote"><p>需求层次、需求工程五阶段、需求获取六法见上面「基础知识点」；这里补齐这三节里<strong>尚未展开</strong>的小节，编号与教材一一对应。11.3 之后为完整新增章节。</p></div>
+<h3 id="s11-1-2-质量功能部署-QFD">11.1.2 质量功能部署(QFD)</h3>
+<p>QFD 是把用户要求转化为软件需求的技术,目的是最大限度提升用户满意度。</p>
+<div class="fig">
+<svg viewBox="0 0 640 230">
+<text x="320" y="20" text-anchor="middle" font-size="14" font-weight="bold">QFD(卡诺模型思想):满意度 vs 实现程度</text>
+<line x1="60" y1="190" x2="600" y2="190" stroke="#333"/><line x1="60" y1="35" x2="60" y2="190" stroke="#333"/>
+<line x1="60" y1="112" x2="600" y2="112" stroke="#aaa" stroke-dasharray="4"/>
+<path d="M70 175 L590 50" stroke="#2563eb" stroke-width="3" fill="none"/>
+<path d="M70 185 Q300 170 590 120" stroke="#ef4444" stroke-width="3" fill="none"/>
+<path d="M70 120 Q300 100 590 40" stroke="#10b981" stroke-width="3" fill="none" stroke-dasharray="6 3"/>
+<text x="480" y="48" fill="#2563eb" font-size="12">常规需求:越多越满意</text>
+<text x="360" y="168" fill="#ef4444" font-size="12">期望需求:没做→不满意</text>
+<text x="100" y="98" fill="#10b981" font-size="12">意外(兴奋)需求:做了更高兴,不做无妨</text>
+<text x="330" y="208" text-anchor="middle" font-size="12">需求实现程度 →</text>
+</svg>
+</div>
+<table><thead><tr><th>类型</th><th>特点</th><th>影响</th></tr></thead><tbody><tr><td>常规需求</td><td>用户认为系统应做到的功能/性能</td><td>实现越多越满意</td></tr><tr><td>期望需求</td><td>想当然应具备,但常不能准确描述</td><td>未实现则用户不满意</td></tr><tr><td>意外需求(兴奋需求)</td><td>超出用户要求范围,开发人员乐意赋予</td><td>实现更高兴,不实现不影响购买决策;是否实现由开发人员掌控(成本/周期)</td></tr></tbody></table>
+<h3 id="s11-1-3-软件需求的内涵与分类">11.1.3 软件需求的内涵与分类</h3>
+<h4 id="s1-经典瀑布模型中的需求">1. 经典瀑布模型中的需求</h4>
+<p>需求分析是第一阶段,输出<strong>用户原始需求说明书</strong>和<strong>软件需求规格说明</strong>。需先定义原始需求并与用户达成一致,再分析并给出初步解决方案,两份文档之间存在转换过程。</p>
+<h4 id="s2-统一过程-UP-的-FURPS-模型">2. 统一过程 UP 的 FURPS+ 模型</h4>
+<table><thead><tr><th>字母</th><th>含义</th><th>内容</th></tr></thead><tbody><tr><td>F</td><td>功能性 Functional</td><td>特性、功能、安全性</td></tr><tr><td>U</td><td>可用性 Usability</td><td>人性化因素、帮助、文档</td></tr><tr><td>R</td><td>可靠性 Reliability</td><td>故障频率、可恢复性、可预测性</td></tr><tr><td>P</td><td>性能 Performance</td><td>响应时间、吞吐量、准确性、有效性、资源利用率</td></tr><tr><td>S</td><td>可支持 Supportability</td><td>适应性、可维护性、国际化、可配置性</td></tr><tr><td>+ 实现</td><td>Implementation</td><td>资源限制、语言和工具、硬件</td></tr><tr><td>+ 接口</td><td>Interface</td><td>强加于外部系统接口的约束</td></tr><tr><td>+ 操作</td><td>Operation</td><td>对其操作设置的系统管理</td></tr><tr><td>+ 包装</td><td>Packaging</td><td>如物理包装盒</td></tr><tr><td>+ 授权</td><td>Legal</td><td>许可证或其他方式</td></tr></tbody></table>
+<h4 id="s3-IEEE-对好需求的界定">3. IEEE 对好需求的界定</h4>
+<table><thead><tr><th>对象</th><th>特性</th></tr></thead><tbody><tr><td>好需求</td><td>正确、无歧义、可检验、可跟踪</td></tr><tr><td>好需求集合</td><td>完整、一致、可修改</td></tr><tr><td>高品质特性</td><td>正确性、完整性、一致性、明确性、可验证性、按重要程度及稳定度排序、可修改性、可追溯性、可理解性</td></tr></tbody></table>
+<h3 id="s11-2-6-需求记录技术">11.2.6 需求记录技术</h3>
+<p>目的:统一工具,让多人获取的结果同一口径。常用:任务卡片、场景说明、用户故事、Volere 白卡。</p>
+<h4 id="s1-任务卡片-示例-开通课程">1. 任务卡片(示例:开通课程)</h4>
+<div class="fig">
+<svg viewBox="0 0 640 250">
+<rect x="10" y="10" width="300" height="230" fill="#eff6ff" stroke="#2563eb" rx="6"/>
+<text x="160" y="32" text-anchor="middle" font-weight="bold">任务卡片:开通课程</text>
+<text x="22" y="58">任务:开通课程</text><text x="22" y="80">目的:开通权限,标记为“学员”</text>
+<text x="22" y="102">触发:/</text><text x="22" y="124">前提:用户交费到账</text>
+<text x="22" y="146">频率:平均每天880人次</text><text x="22" y="168">关键情况:单位集体报名</text>
+<text x="22" y="192">子任务:查资料→标记学员→加学习币</text><text x="22" y="216">变体:1a已是学员 1b多交费 2a老学员</text>
+<rect x="330" y="10" width="300" height="230" fill="#fffbeb" stroke="#f59e0b" rx="6"/>
+<text x="480" y="32" text-anchor="middle" font-weight="bold">增强版 = 基本版 +</text>
+<text x="345" y="62">问题点描述(核心问题)</text><text x="345" y="84">例:同时选多门课;多加学习币</text>
+<text x="345" y="116">解决方案提示(对应方案示例)</text><text x="345" y="138">例:权限控制;显示各门课学习币</text>
+<text x="345" y="172">作用:验证系统功能能否解决用户提出的问题</text>
+</svg>
+</div>
+<table><thead><tr><th>项目</th><th>说明</th><th>备注</th></tr></thead><tbody><tr><td>任务</td><td>业务活动命名,用用户业务术语</td><td></td></tr><tr><td>目的</td><td>活动的工作意义</td><td>意图而非动作</td></tr><tr><td>触发</td><td>进行该活动</td><td>系统要判断的前置条件</td></tr><tr><td>前提</td><td>触发时机和场景</td><td>业务前提</td></tr><tr><td>频率</td><td>发生频率</td><td>非功能需求</td></tr><tr><td>关键情况</td><td>特殊业务场景</td><td>系统需专门处理</td></tr><tr><td>子任务</td><td>具体步骤</td><td>≈用例基本事件流</td></tr><tr><td>任务变体</td><td>变体与异常处理</td><td>≈用例扩展事件流</td></tr></tbody></table>
+<h4 id="s2-场景说明">2. 场景说明</h4>
+<p>难以抽象子任务和变体时,整理用户对工作场景和过程的详细描述,抽象出子任务;后续用于测试用例和用户培训手册。</p>
+<h4 id="s3-用户故事">3. 用户故事</h4>
+<p>三方面:书面描述(计划备忘)、交谈(细化)、测试用例(验证)。故事是讨论的引子,不是详细规范;编写前建立用户角色模型;由用户团队按重要性安排开发、编写故事。</p>
+<table><thead><tr><th>属性</th><th>含义</th></tr></thead><tbody><tr><td>独立性</td><td>避免依赖,以免产生优先级和规划问题</td></tr><tr><td>可协商性</td><td>不是必须实现的合同或需求</td></tr><tr><td>对用户有价值</td><td>最好由用户编写</td></tr><tr><td>可预测性</td><td>能大致估计规模和工作量</td></tr><tr><td>短小精悍</td><td>规模取决于团队规模、能力和技术</td></tr><tr><td>可测试性</td><td>必须可测试</td></tr></tbody></table>
+<div class="block mem"><div class="block-title">口诀(INVEST)</div><p>独立、协商、价值、预测、短小、测试。</p></div>
+<h4 id="s4-Volere-白卡">4. Volere 白卡</h4>
+<p>字段:需求编号、需求类型、事件/用例编号、描述、理由、来源、验收标准、顾客满意度、顾客不满意度、依赖关系、冲突、支持材料、历史。用户故事与 Volere 白卡定位最小需求项,量大,多用于敏捷方法。选工具时考虑开发方法、用户情况、分析师技能。</p>
+<h2 id="s11-3-需求分析">11.3 需求分析</h2>
+<p>获取的需求杂乱、重复、矛盾,不能直接做设计基础。好需求具备:无二义性、完整性、一致性、可测试性、确定性、可跟踪性、正确性、必要性。</p>
+<h3 id="s11-3-1-需求分析的任务">11.3.1 需求分析的任务</h3>
+<p>把用户“要求”整理确认,形成完整、清晰、规范的文档,确定软件要实现的功能和完成的工作;并确定非功能需求(性能、可靠性、响应时间、可扩展性)、设计约束、运行时与其他软件的关系。</p>
+<h3 id="s11-3-2-需求分析的方法">11.3.2 需求分析的方法</h3>
+<p>主要有 SA、OOA、PDOA,另有形式化方法如维也纳设计方法(VDM)。</p>
+<h4 id="s1-PDOA-方法">1. PDOA 方法</h4>
+<div class="fig fig-mermaid"><div class="mermaid-src" data-src="flowchart LR
+  A[&quot;收集基本信息 开发问题框架 确定问题域类型&quot;] --&gt; B[&quot;问题框架指导下 收集详细信息 描述问题域特性&quot;] --&gt; C[&quot;收集并文档化 新系统需求&quot;]
+  A -.产出.-&gt; D[&quot;文档1:问题域描述+需求列表(分析时产生)&quot;]
+  C -.产出.-&gt; E[&quot;文档2:解系统待求行为(需求定义阶段完成)&quot;]"></div><figcaption>图3-1 PDOA 过程</figcaption></div>
+<p>PDOA 强调描述、较少强调建模;问题框架将问题域分为相互关联的子域,类似上下文范围关系图,但前者针对<strong>问题域</strong>,后者针对<strong>解系统</strong>。</p>
+<h4 id="s2-SA-OOA-PDOA-对比">2. SA、OOA、PDOA 对比</h4>
+<table><thead><tr><th>方法</th><th>思维方式</th><th>基本假设</th><th>特点</th></tr></thead><tbody><tr><td>SA</td><td>功能分层分解,自顶向下;因果律、归纳法、逻辑法</td><td>问题域可定义、有限,有限步骤可分解;分析师理解全部且能正确分解</td><td>仍有大量成功系统,未过时</td></tr><tr><td>OOA</td><td>抽象、信息隐藏、功能独立、模块化;观测外在表象→逻辑对象→接口通信</td><td>不假定理解全部,只承诺持续“观测并理解”</td><td>当前主流,工具和语言支持多</td></tr><tr><td>PDOA</td><td>聚焦问题域和需求</td><td>规格说明作为另外任务</td><td>成果:问题域描述+需求列表;丰富 SA/OOA,但掌握有限</td></tr></tbody></table>
+<h2 id="s11-4-结构化分析方法">11.4 结构化分析方法</h2>
+<p>基本思想:<strong>自顶向下,逐层分解</strong>。分析模型以<strong>数据字典</strong>为核心,围绕数据模型(E-R 图)、功能模型(DFD)、行为模型/状态模型(STD)。三个模型联系密切,建立无严格时序,迭代进行。</p>
+<div class="fig fig-mermaid"><div class="mermaid-src" data-src="flowchart TB
+  DD((数据字典 核心))
+  DM[&quot;数据模型 E-R图&quot;]
+  FM[&quot;功能模型 DFD&quot;]
+  BM[&quot;行为模型 STD&quot;]
+  DD --- DM
+  DD --- FM
+  DD --- BM
+  DM &lt;--&gt; FM
+  FM &lt;--&gt; BM
+  BM &lt;--&gt; DM"></div><figcaption>图4-1 SA 分析模型</figcaption></div>
+<h3 id="s11-4-1-数据流图-DFD">11.4.1 数据流图(DFD)</h3>
+<p>表达系统内数据流动并通过数据流描述功能;采用结构化方法时,DFD 通常是 SRS 的组成部分。</p>
+<h4 id="s1-主要作用">1. 主要作用</h4>
+<ul><li>理解和表达用户需求的工具(简明易懂,可与用户交流)。</li><li>概括系统内部逻辑,是需求分析结果的表达,也是系统设计的起点。</li><li>作为存档材料,是修改充实开发计划的依据。</li></ul>
+<h4 id="s2-四种基本符号">2. 四种基本符号</h4>
+<div class="fig">
+<svg viewBox="0 0 700 150">
+<defs><marker id="ar" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0 0L10 4L0 8z" fill="#333"/></marker></defs>
+<line x1="20" y1="60" x2="140" y2="60" stroke="#333" stroke-width="2" marker-end="url(#ar)"/>
+<text x="80" y="50" text-anchor="middle">数据名</text><text x="80" y="110" text-anchor="middle">数据流(带名箭头)</text>
+<circle cx="260" cy="60" r="38" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/><text x="260" y="65" text-anchor="middle">加工</text>
+<text x="260" y="125" text-anchor="middle">加工(圆圈,动宾短语)</text>
+<line x1="390" y1="40" x2="500" y2="40" stroke="#333" stroke-width="2"/><line x1="390" y1="80" x2="500" y2="80" stroke="#333" stroke-width="2"/>
+<text x="445" y="65" text-anchor="middle">D1 数据存储</text><text x="445" y="125" text-anchor="middle">数据存储(直线段)</text>
+<rect x="570" y="35" width="100" height="50" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/><text x="620" y="65" text-anchor="middle">外部实体</text>
+<text x="620" y="125" text-anchor="middle">外部实体(方框)</text>
+</svg>
+</div>
+<p>外部实体是系统之外的信息生产者或消费者(数据源和终点),不能由计算机处理。</p>
+<h4 id="s3-DFD-的层次">3. DFD 的层次</h4>
+<div class="fig fig-mermaid"><div class="mermaid-src" data-src="flowchart LR
+  subgraph 顶层图
+    T1[培训部] --&gt;|课程安排数据| S((&quot;0 在线教育 平台系统&quot;))
+    T2[学员] --&gt;|注册请求| S
+    S --&gt;|课程安排| T2
+    S --&gt;|类别列表| T3[辅导老师]
+  end"></div><figcaption>图4-2 顶层图:整个系统为一个加工,画出所有外部实体和进出数据流</figcaption></div>
+<div class="fig fig-mermaid"><div class="mermaid-src" data-src="flowchart LR
+  P[培训部] --&gt;|课程安排数据| A((1 安排课程))
+  A --&gt; C[(课程)]
+  A --&gt; B((2 学员注册))
+  X[学员] --&gt;|注册请求| B
+  B --&gt;|课程安排| X
+  B --&gt; S1[(学员)]
+  B --&gt; S2[(学员注册)]
+  C --&gt; G((3 产生类别列表))
+  S1 --&gt; G
+  S2 --&gt; G
+  G --&gt;|类别列表| T[辅导老师]"></div><figcaption>图4-3 0层图:对顶层图中编号0的加工分解,新加工编号1、2、3…;再分解为1层图,编号1.1、1.2…</figcaption></div>
+<h4 id="s4-画图步骤">4. 画图步骤</h4>
+<ol><li>画系统输入输出(确定范围;可先多画再删减补漏)。</li><li>画内部:用一系列处理连接输入输出。</li><li>为数据流命名(避免空洞名字)。</li><li>为加工命名(动宾短语)。</li></ol>
+<h4 id="s5-检查修改原则-案例找错重点">5. 检查修改原则(案例找错重点)</h4>
+<table><thead><tr><th>#</th><th>规则</th><th>典型错误</th></tr></thead><tbody><tr><td>1</td><td>只限四种符号,每个元素必须有名字</td><td>元素无名</td></tr><tr><td>2</td><td>每个加工至少一进一出,数据守恒;输出流不应与输入流同名</td><td>“黑洞”(只进不出)、“奇迹”(只出不进)、输出数据无来源</td></tr><tr><td>3</td><td>按层给加工编号</td><td>编号不分层</td></tr><tr><td>4</td><td>父图子图平衡:输入/输出流数量和名字一致;父图一个流对应子图多个流且数据项总和相同,仍平衡</td><td>子图丢失或新增数据流</td></tr><tr><td>5</td><td>数据存储必须既有读又有写;但某张子图中可只读或只写</td><td>存储只读/只写(整套图中)</td></tr><tr><td>6</td><td>可加物质流,不可夹带控制流</td><td>画了控制流</td></tr></tbody></table>
+<div class="block warning"><div class="block-title">易错</div><p>外部实体之间直接连数据流、数据存储之间直接连数据流,都不符合 DFD 规范(这是通用画法规则,教材未专门展开)。</p></div>
+<h3 id="s11-4-2-状态转换图-STD">11.4.2 状态转换图(STD)</h3>
+<p>业务系统多为数据驱动,适合 DFD;实时控制系统多为事件驱动,适合行为模型。STD 通过状态和事件表示行为,还指出事件发生时执行的动作。</p>
+<ul><li><strong>状态</strong>:可观察到的系统行为模式,圆形或椭圆框,内标状态名;规定系统对事件的响应方式。</li><li><strong>事件</strong>:特定时刻发生的事,是引起转换的控制信息(时钟到时、鼠标单击)。</li><li><strong>转换</strong>:箭头线,线上标事件名,方括号内为转换条件,条件为真才转换。</li><li>循环运行过程不关心如何启动;单程生命期需标初态(实心圆)和终态(同心圆,内圆实心)。</li></ul>
+<div class="fig">
+<svg viewBox="0 0 700 90">
+<defs><marker id="a2" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0 0L10 4L0 8z" fill="#333"/></marker></defs>
+<circle cx="40" cy="45" r="9" fill="#000"/><text x="40" y="78" text-anchor="middle">初态</text>
+<line x1="50" y1="45" x2="130" y2="45" stroke="#333" marker-end="url(#a2)"/>
+<ellipse cx="180" cy="45" rx="48" ry="26" fill="#dbeafe" stroke="#2563eb"/><text x="180" y="49" text-anchor="middle">状态</text>
+<line x1="228" y1="45" x2="360" y2="45" stroke="#333" marker-end="url(#a2)"/><text x="294" y="38" text-anchor="middle">事件[条件]/动作</text>
+<ellipse cx="410" cy="45" rx="48" ry="26" fill="#dbeafe" stroke="#2563eb"/><text x="410" y="49" text-anchor="middle">状态</text>
+<line x1="458" y1="45" x2="580" y2="45" stroke="#333" marker-end="url(#a2)"/>
+<circle cx="610" cy="45" r="16" fill="none" stroke="#000" stroke-width="2"/><circle cx="610" cy="45" r="9" fill="#000"/><text x="610" y="78" text-anchor="middle">终态</text>
+</svg>
+</div>
+<div class="fig fig-mermaid"><div class="mermaid-src" data-src="stateDiagram-v2
+  [*] --&gt; 注册
+  注册 --&gt; 注册 : 没有交费
+  注册 --&gt; 学习 : 开通课程[已交费]
+  学习 --&gt; 测试 : 已学完指定教材
+  测试 --&gt; 学习 : 测试不合格
+  测试 --&gt; [*] : 合格"></div><figcaption>图4-4 在线课程学习的 STD 示例</figcaption></div>
+<h3 id="s11-4-3-数据字典">11.4.3 数据字典</h3>
+<p>DFD 无法反映数据的详细内容;数据字典定义 DFD 中所有命名元素,与 DFD 配合,从图形和文字两方面完整描述逻辑模型。</p>
+<h4 id="s1-六类条目">1. 六类条目</h4>
+<div class="fig fig-mermaid"><div class="mermaid-src" data-src="flowchart LR
+  DD[数据字典条目] --&gt; E1[数据元素 最小单位]
+  DD --&gt; E2[数据结构 组合关系]
+  DD --&gt; E3[数据流]
+  DD --&gt; E4[数据存储]
+  DD --&gt; E5[加工逻辑]
+  DD --&gt; E6[外部实体]
+  E2 --&gt; O[&quot;任选项 [ ]&quot;]
+  E2 --&gt; M[&quot;必选项 { }(多选一)&quot;]
+  E2 --&gt; R[&quot;重复项 *&quot;]"></div></div>
+<table><thead><tr><th>条目</th><th>描述要点</th></tr></thead><tbody><tr><td>数据元素</td><td>名称、编号、别名、类型、长度、取值范围及含义、简要说明、相关数据结构</td></tr><tr><td>数据结构</td><td>递归概念;描述元素间组合关系;特殊成分:任选项 [ ]、必选项 { }、重复项(如“课程细节*”)</td></tr><tr><td>数据流</td><td>名称、编号、简要说明、来源、去处、组成、流通量(含高峰期)</td></tr><tr><td>数据存储</td><td>结构、有关数据流、查询要求;只列数据结构不列内部构成;多层出现时列最底层图的数据流</td></tr><tr><td>加工逻辑</td><td>编号、名称、简要功能、输入输出数据流;详细逻辑用判定树、判定表、结构化语言</td></tr><tr><td>外部实体</td><td>名称、编号、简要说明、产生的与接收的数据流、数量(估计业务量)</td></tr></tbody></table>
+<h4 id="s2-作用">2. 作用</h4>
+<p>数据字典是“关于系统数据的数据库”,是全过程统一标准,保证数据完整性和一致性。</p>
+<ul><li>按要求列表,保证设计不遗漏。</li><li>相互参照,便于修改。</li><li>由描述内容检索名称。</li><li>一致性、完整性检验(无来源去向的数据流、无输入输出的存储、加工与输入元素是否匹配等)。</li></ul>
+<h4 id="s3-管理">3. 管理</h4>
+<p>必须由专人(数据管理员)管理;任何人(分析师、设计师、程序员)修改须经数据管理员,管理员及时通知最新版本。</p>
+<h2 id="s11-5-面向对象分析方法">11.5 面向对象分析方法</h2>
+<p>OOA 运用 OO 方法分析理解问题域,找出描述问题域和系统功能所需的类和对象,定义属性、职责和联系,产生符合需求的 OOA 模型。OOA 独立于具体实现:<strong>OOA 解决“做什么”,OOD 解决“怎么做”</strong>。</p>
+<h3 id="s11-5-1-用例模型">11.5.1 用例模型</h3>
+<p>用例方法是一种需求合成技术,关注系统提供的服务。</p>
+<div class="fig fig-mermaid"><div class="mermaid-src" data-src="flowchart LR
+  S1[&quot;①识别参与者 (必需)&quot;] --&gt; S2[&quot;②合并需求获得用例 (必需)&quot;] --&gt; S3[&quot;③细化用例描述 (必需)&quot;] --&gt; S4[&quot;④调整用例模型 (非必需)&quot;]"></div><figcaption>图5-1 用例建模四阶段</figcaption></div>
+<h4 id="s1-用例图元素">1. 用例图元素</h4>
+<div class="fig">
+<svg viewBox="0 0 640 170">
+<circle cx="70" cy="45" r="14" fill="none" stroke="#333" stroke-width="2"/>
+<line x1="70" y1="59" x2="70" y2="100" stroke="#333" stroke-width="2"/><line x1="40" y1="72" x2="100" y2="72" stroke="#333" stroke-width="2"/>
+<line x1="70" y1="100" x2="45" y2="130" stroke="#333" stroke-width="2"/><line x1="70" y1="100" x2="95" y2="130" stroke="#333" stroke-width="2"/>
+<text x="70" y="152" text-anchor="middle">参与者</text>
+<line x1="120" y1="85" x2="300" y2="85" stroke="#333" stroke-width="2"/><text x="210" y="75" text-anchor="middle">通信关联</text>
+<ellipse cx="380" cy="85" rx="80" ry="38" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/><text x="380" y="90" text-anchor="middle">用例(动词+名词)</text>
+<text x="560" y="60" text-anchor="middle" font-size="12">箭尾=主动发起者</text><text x="560" y="80" text-anchor="middle" font-size="12">箭头=被动接受者</text><text x="560" y="105" text-anchor="middle" font-size="12" fill="#ef4444">信息流默认双向,</text><text x="560" y="123" text-anchor="middle" font-size="12" fill="#ef4444">与箭头方向无关</text>
+</svg>
+</div>
+<ul><li><strong>参与者</strong>:系统外部与系统交互的任何事物。</li><li><strong>用例</strong>:系统执行的一系列动作,为特定参与者生成可见价值结果。</li><li><strong>通信关联</strong>:参与者与用例、用例与用例之间的关系。</li></ul>
+<h4 id="s2-识别参与者">2. 识别参与者</h4>
+<p>可由人、<strong>其他系统</strong>(如 OA 系统)、<strong>硬件设备</strong>(如 IC 卡读写器)、<strong>时钟</strong>(如定时交卷)担任。</p>
+<h4 id="s3-合并需求获得用例">3. 合并需求获得用例</h4>
+<div class="fig fig-mermaid"><div class="mermaid-src" data-src="flowchart LR
+  A1[客服人员] --&gt; U1([解答咨询])
+  A1 --&gt; U2([开通课程])
+  A1 --&gt; U3([学员联络])
+  A2[学员] --&gt; U4([注册课程])
+  A2 --&gt; U5([学习课程])
+  A2 --&gt; U6([课程测试])"></div><figcaption>图5-2 在线教育平台用例图示例</figcaption></div>
+<ul><li>命名:<strong>动词(短语)+名词(短语)</strong>,并编号(便于需求跟踪)。</li><li>不能把用例包含的步骤(验证学员信息、检查权限、保存记录等)当成独立用例,它们只是事件流。</li><li>区分<strong>业务用例</strong>(含人工活动,如“编写教材”)与<strong>系统用例</strong>;信息系统只识别系统用例。</li></ul>
+<h4 id="s4-细化用例描述">4. 细化用例描述</h4>
+<p>用例建模主要工作是写<strong>用例规约</strong>而非画图;至少含用例名、参与者、目标、前置条件、事件流、后置条件;可含非功能需求和优先级。</p>
+<table><thead><tr><th>组成</th><th>编写要点</th></tr></thead><tbody><tr><td>用例名称</td><td>与用例图相符,带编号</td></tr><tr><td>简要说明</td><td>描述传递给参与者的价值,用自然语言</td></tr><tr><td>事件流</td><td>简单语法、主语明确;写明“谁控制球”;俯视角度;写意图和职责,不写界面和技术细节。主事件流=典型成功路径,无条件分支;备选事件流=失败、分支、扩展路径。可分阶段迭代,高优先级先细化;复杂时引用顺序图、状态图、通信图</td></tr><tr><td>非功能需求</td><td>可度量、可验证</td></tr><tr><td>前置/后置条件</td><td>前置不满足则无法启动;后置为执行后状态;可后续细化</td></tr><tr><td>扩展点</td><td>写出包含/扩展用例名及使用情形</td></tr><tr><td>优先级</td><td>满意度/不满意度,如 1~5</td></tr></tbody></table>
+<h4 id="案例-开通课程-UC02-用例描述">案例:开通课程(UC02)用例描述</h4>
+<div class="fig fig-mermaid"><div class="mermaid-src" data-src="flowchart TD
+  M1[1 客服发出开通课程请求] --&gt; M2[2 系统要求选课程类型] --&gt; M3[3 显示界面,自动按权限规则生成权限] --&gt; M4[4 输入用户名/费用/时间/课程名] --&gt; M5{5 费用与规定一致?}
+  M5 -- 一致 --&gt; M6[6 存储建档,开通权限]
+  M5 -- 少于规定 --&gt; A1[&quot;显示规定费用 修改→回第5步 / 取消→结束&quot;]
+  M5 -- 多于规定 --&gt; A2[&quot;显示超额 转学习币或退还→回第5步&quot;]
+  M4 -. 人数超限 .-&gt; A3[提示客服,结束用例]"></div><figcaption>图5-3 主事件流与备选事件流。前置:客服登录;后置:修改学员权限和课程选修人数;优先级最高(满意度5/不满意度5)</figcaption></div>
+<h4 id="s5-调整用例模型-三种关系">5. 调整用例模型:三种关系</h4>
+<div class="fig fig-mermaid"><div class="mermaid-src" data-src="flowchart LR
+  subgraph 包含
+    B1([开通课程]) -. &quot;«include»&quot; .-&gt; B2([验证学员信息])
+    B3([注册课程]) -. &quot;«include»&quot; .-&gt; B2
+  end
+  subgraph 扩展
+    C2([处理超额费用]) -. &quot;«extend»&quot; .-&gt; C1([开通课程])
+  end
+  subgraph 泛化
+    D2([软考测试]) --&gt; D1([课程测试])
+    D3([考研测试]) --&gt; D1
+  end"></div><figcaption>图5-4 包含(抽公共行为)、扩展(分支场景)、泛化(子用例继承父用例)</figcaption></div>
+<table><thead><tr><th>关系</th><th>何时用</th><th>要点</th></tr></thead><tbody><tr><td>包含</td><td>两个及以上用例有公共行为</td><td>公共部分=抽象用例;原始=基本/基础用例</td></tr><tr><td>扩展</td><td>一个用例混合多种场景、有分支</td><td>拆成基本用例+扩展用例</td></tr><tr><td>泛化</td><td>多个用例有类似结构和行为</td><td>子用例继承父用例的结构、行为、关系</td></tr></tbody></table>
+<p>这三种关系都会增加用例个数、提高复杂度,要谨慎使用;一般在模型完成后再调整。</p>
+<h3 id="s11-5-2-分析模型">11.5.2 分析模型</h3>
+<p>描述系统基本逻辑结构:静态模型(类/对象如何组成系统)、动态模型(如何通信实现行为)。建立过程:定义概念类 → 确定类关系 → 添加职责 → 建立交互图,前三步合称 <strong>CRC 建模</strong>(Class-Responsibility-Collaborator)。</p>
+<h4 id="s1-定义概念类-名词短语法">1. 定义概念类:名词短语法</h4>
+<div class="fig fig-mermaid"><div class="mermaid-src" data-src="flowchart LR
+  N1[读懂需求/用例描述] --&gt; N2[筛选名词→候选类清单] --&gt; N3[&quot;分三类 显而易见/明显无意义/不确定&quot;] --&gt; N4[舍弃无意义类] --&gt; N5[小组讨论不确定类 合并或调整]"></div></div>
+<table><thead><tr><th>类别</th><th>示例(开通课程)</th></tr></thead><tbody><tr><td>显而易见的类</td><td>课程、学习币、学员</td></tr><tr><td>明显无意义的类</td><td>请求、界面、信息</td></tr><tr><td>不确定类别的类</td><td>学员账户、课程类型、权限、用户名、费用、课程名称</td></tr></tbody></table>
+<p>结论:学员账户/用户名/权限→“学员”属性;课程类型/课程名称→“课程”属性;“费用”独立为“费用清单”类。最终4个类:课程、学习币、学员、费用清单。也可按人员、组织、物品、设备、事件、规格说明、业务规则或政策等名词类别发现候选类。</p>
+<h4 id="s2-确定类之间的关系">2. 确定类之间的关系</h4>
+<div class="fig">
+<svg viewBox="0 0 720 330">
+<defs>
+<marker id="open" markerWidth="12" markerHeight="10" refX="11" refY="5" orient="auto"><path d="M0 0L11 5L0 10" fill="none" stroke="#333"/></marker>
+<marker id="tri" markerWidth="14" markerHeight="12" refX="13" refY="6" orient="auto"><path d="M0 0L13 6L0 12z" fill="#fff" stroke="#333"/></marker>
+<marker id="dia" markerWidth="16" markerHeight="12" refX="15" refY="6" orient="auto"><path d="M0 6L8 0L16 6L8 12z" fill="#fff" stroke="#333"/></marker>
+<marker id="dia2" markerWidth="16" markerHeight="12" refX="15" refY="6" orient="auto"><path d="M0 6L8 0L16 6L8 12z" fill="#333" stroke="#333"/></marker>
+</defs>
+<g stroke="#333" fill="#eff6ff"><rect x="20" y="15" width="70" height="30"/><rect x="230" y="15" width="70" height="30"/>
+<rect x="20" y="75" width="70" height="30"/><rect x="230" y="75" width="70" height="30"/>
+<rect x="20" y="135" width="70" height="30"/><rect x="230" y="135" width="70" height="30"/>
+<rect x="20" y="195" width="70" height="30"/><rect x="230" y="195" width="70" height="30"/>
+<rect x="20" y="255" width="70" height="30"/><rect x="230" y="255" width="70" height="30"/>
+<rect x="380" y="255" width="70" height="30"/></g>
+<g text-anchor="middle"><text x="55" y="35">类A</text><text x="265" y="35">类B</text><text x="55" y="95">类A</text><text x="265" y="95">类B</text><text x="55" y="155">子类</text><text x="265" y="155">父类</text><text x="55" y="215">部分</text><text x="265" y="215">整体</text><text x="55" y="275">部分</text><text x="265" y="275">整体</text><text x="415" y="275">接口</text></g>
+<line x1="90" y1="30" x2="230" y2="30" stroke="#333"/><text x="160" y="24" text-anchor="middle">1 —— 0..*</text>
+<line x1="90" y1="90" x2="230" y2="90" stroke="#333" stroke-dasharray="5" marker-end="url(#open)"/>
+<line x1="90" y1="150" x2="230" y2="150" stroke="#333" marker-end="url(#tri)"/>
+<line x1="90" y1="210" x2="230" y2="210" stroke="#333" marker-start="url(#dia)"/>
+<line x1="90" y1="270" x2="230" y2="270" stroke="#333" marker-start="url(#dia2)"/>
+<line x1="90" y1="285" x2="90" y2="285" stroke="#333"/>
+<text x="330" y="34">关联:实例间结构关系(名称/角色/多重性/导向性)</text>
+<text x="330" y="94">依赖:虚线箭头,B变→A可能变(发消息/成员/参数)</text>
+<text x="330" y="154">泛化:空心三角,指向父类,继承的反关系</text>
+<text x="330" y="214">聚合:空心菱形在整体端;部分可属多个整体,生命周期可不同</text>
+<text x="330" y="244">例:汽车—车轮</text>
+<text x="330" y="274" fill="#333" dy="-12">组合:实心菱形;部分只属一个整体,同生共死(公司—部门)</text>
+<line x1="320" y1="300" x2="320" y2="300"/>
+<line x1="230" y1="320" x2="380" y2="320" stroke="#333" stroke-dasharray="5"/>
+<text x="460" y="324">实现:虚线+空心三角,类实现接口(此处示意)</text>
+</svg>
+</div>
+<table><thead><tr><th>关系</th><th>说明</th><th>例子</th></tr></thead><tbody><tr><td>关联</td><td>对象实例间关系;关联名称(动词)、角色、多重性(*=0..*)、导向性(箭头,无箭头为双向或未定义)</td><td>用户—测试—试卷</td></tr><tr><td>依赖</td><td>B 的变化可能引起 A 变化</td><td>发送消息、数据成员、操作参数</td></tr><tr><td>泛化</td><td>父类与子类</td><td>软考试卷、考研试卷是试卷的子类</td></tr><tr><td>聚合</td><td>整体—部分,部分可属多个整体,生命周期可不同</td><td>汽车—车轮</td></tr><tr><td>组合</td><td>部分只属一个整体,生命周期相同</td><td>公司—部门</td></tr><tr><td>实现</td><td>说明与实现联系;多个类可实现同一接口</td><td>接口—类</td></tr></tbody></table>
+<div class="fig fig-mermaid"><div class="mermaid-src" data-src="classDiagram
+  试卷列表 &quot;1&quot; o-- &quot;0..*&quot; 试卷
+  测试记录列表 &quot;1&quot; o-- &quot;0..*&quot; 测试记录
+  试卷 &quot;1&quot; -- &quot;0..1&quot; 测试记录
+  试卷 &lt;|-- 软考试卷
+  试卷 &lt;|-- 考研试卷
+  试卷 &lt;|-- 等考试卷"></div><figcaption>图5-5 领域模型示例(聚合、关联、泛化)</figcaption></div>
+<div class="block mem"><div class="block-title">聚合 vs 组合</div><p>聚合“能分开”(车坏轮还能用),组合“同生共死”(公司倒闭部门消失)。</p></div>
+<h4 id="s3-为类添加职责">3. 为类添加职责</h4>
+<ul><li>职责=类维护的知识(属性)+能执行的行为(方法)。</li><li>属性要简单:只定义与系统责任和目标相关的;用简单数据类型;不用可导出的冗余属性;不为类关联定义属性;说明名称、解释、数据类型。</li><li>责任可由用例描述中的<strong>动词</strong>确定再筛选;通用性描述(如“交费”“组卷”)。</li><li>封装性:信息及相关行为在同一类;适当时可共享责任。</li><li>只找主要、明显、与业务规则相关的部分,避免引入数据库、分布式对象等实现技术。</li></ul>
+<h4 id="s4-建立交互图">4. 建立交互图</h4>
+<p>UML 2.0:顺序图、交互概览图、通信图、定时图。最常用<strong>顺序图</strong>,元素为对象、参与者、生命线、激活框、消息、消息路线,<strong>消息是灵魂</strong>;对象状态复杂时用状态图。</p>
+<div class="fig fig-mermaid"><div class="mermaid-src" data-src="sequenceDiagram
+  actor 客服人员
+  participant 系统
+  participant 学员
+  participant 课程
+  客服人员-&gt;&gt;系统: 开通课程请求
+  系统--&gt;&gt;客服人员: 选择课程类型
+  客服人员-&gt;&gt;系统: 输入学员信息
+  系统-&gt;&gt;课程: 检查规定费用/人数
+  课程--&gt;&gt;系统: 校验结果
+  系统-&gt;&gt;学员: 修改权限
+  系统--&gt;&gt;客服人员: 开通成功"></div><figcaption>图5-6 “开通课程”顺序图示意</figcaption></div>
+<h4 id="s5-分析模型的详细程度">5. 分析模型的详细程度</h4>
+<p>文献说法不一;分析模型随开发演变,初期围绕领域知识,后期逐步加入设计元素。模型是辅助工具,能帮助团队开发的就是好模型。</p>
+<h2 id="s11-6-需求定义">11.6 需求定义</h2>
+<h3 id="s11-6-1-需求定义的方法">11.6.1 需求定义的方法</h3>
+<table><thead><tr><th>对比项</th><th>严格定义方法(预先定义)</th><th>原型方法</th></tr></thead><tbody><tr><td>核心理念</td><td>需求能事先全部定义</td><td>迭代循环,从满足基本需求的原型开始逐步完善</td></tr><tr><td>假设/依据</td><td>①所有需求可预先定义 ②开发与用户能准确交流 ③图文可充分体现最终系统</td><td>①并非所有需求可事先说明 ②原型缓解沟通困难 ③需要“活”的系统模型 ④有合适开发环境 ⑤反复是必要的</td></tr><tr><td>问题</td><td>假设常不成立;文档静态、被动</td><td>可能反复;需明确后转严格方法</td></tr><tr><td>关系</td><td>原型不排斥严格定义:原型演示明确需求后,应采用严格方法完成最终系统;需求一旦确定就遵循严格方法</td><td></td></tr></tbody></table>
+<div class="fig fig-mermaid"><div class="mermaid-src" data-src="flowchart LR
+  P1[基本需求] --&gt; P2[构建原型] --&gt; P3[用户试用评价] --&gt; P4{满意?}
+  P4 -- 否 --&gt; P5[修改完善] --&gt; P2
+  P4 -- 是 --&gt; P6[确定需求定义] --&gt; P7[严格方法开发最终系统]"></div><figcaption>图6-1 原型方法流程</figcaption></div>
+<h3 id="s11-6-2-软件需求规格说明书-SRS">11.6.2 软件需求规格说明书(SRS)</h3>
+<p>需求开发活动的产物,使干系人与开发团队对系统初始规定有共同理解,是最重要的文档之一,任何规模和性质项目都不应缺少。</p>
+<table><thead><tr><th>编写方法</th><th>说明</th></tr></thead><tbody><tr><td>结构化+自然语言文本</td><td>最现实,大多数项目采用,含功能与非功能需求</td></tr><tr><td>图形化模型</td><td>描述转换过程、系统状态及变化、数据关系、逻辑流、对象类及关系;作为文本补充</td></tr><tr><td>形式化规格说明</td><td>数学精确的形式化逻辑语言;严密精确,但只有少数专业人员熟悉,未普及</td></tr></tbody></table>
+<p>质量要求:正确性、完整性、一致性、必要性、可行性、确定性、可修改性、可追踪性;为便于非技术人员阅读,尽量用自然语言和简单图表。</p>
+<h4 id="GB-T-8567-2006-规定的-SRS-结构">GB/T 8567—2006 规定的 SRS 结构</h4>
+<div class="fig fig-mermaid"><div class="mermaid-src" data-src="flowchart TB
+  SRS[SRS] --&gt; a1[1 范围]
+  SRS --&gt; a2[2 引用文件]
+  SRS --&gt; a3[&quot;3 需求(主体)&quot;]
+  SRS --&gt; a4[4 合格性规定]
+  SRS --&gt; a5[5 需求可追踪性]
+  SRS --&gt; a6[6 尚未解决的问题]
+  SRS --&gt; a7[7 注解]
+  SRS --&gt; a8[8 附录]
+  a3 --&gt; b1[&quot;状态和方式·需求概述·需求规格·能力需求 外部/内部接口·适应性·保密和私密性 环境·计算机资源·质量因素·设计和实现约束 数据·操作·故障处理·算法·人员/培训/后勤/包装 优先次序和关键程度&quot;]
+  a4 --&gt; b2[&quot;方法:演示·测试·分析·审查·特殊方法&quot;]
+  a5 --&gt; b3[&quot;双向可追踪:SRS需求↔系统(子系统)需求&quot;]"></div></div>
+<h2 id="s11-7-需求验证">11.7 需求验证</h2>
+<p>后期才发现需求错误代价高昂,所以在分析阶段验证 SRS(也称需求确认),确定:</p>
+<ol><li>SRS 正确描述预期行为和特征。</li><li>软件需求正确来自系统需求、业务规格等。</li><li>需求完整且高质量。</li><li>表示处处一致。</li><li>为设计、实现、测试提供足够基础。</li></ol>
+<h3 id="s11-7-1-需求评审">11.7.1 需求评审</h3>
+<p>需求评审是需求开发阶段结束前的技术评审,对象 SRS,可发现二义性、不确定需求并促成共识。通过后进入设计阶段,跨里程碑修改成本大。</p>
+<h4 id="s1-技术评审类型-IEEE">1. 技术评审类型(IEEE)</h4>
+<table><thead><tr><th>类型</th><th>特点</th></tr></thead><tbody><tr><td>评审</td><td>正式会议,向用户或干系人介绍工作产品,征求意见和批准</td></tr><tr><td>检查</td><td>由<strong>非制作者本人</strong>的个人或小组详细检查,验证错误、是否违反标准</td></tr><tr><td>走查</td><td>由<strong>开发人员领导</strong>团队成员检查其产品,其他成员提技术、风格、错误、标准等意见</td></tr></tbody></table>
+<table><thead><tr><th></th><th>正式评审</th><th>非正式评审</th></tr></thead><tbody><tr><td>形式</td><td>评审会,多专家,明确角色职责</td><td>邮件、文件汇签、网络聊天</td></tr><tr><td>特点</td><td>遵循预定步骤,记录在案(材料、完整性判定、问题总结)</td><td>反馈分散随机,但不系统、不彻底、不一致</td></tr></tbody></table>
+<h4 id="s2-如何做好需求评审-九条经验">2. 如何做好需求评审(九条经验)</h4>
+<div class="fig fig-mermaid"><div class="mermaid-src" data-src="mindmap
+  root((需求评审))
+    人
+      精心挑选评审人员
+      培训评审人员
+    方式
+      分层次评审
+      分阶段评审
+      正式+非正式结合
+    工具与流程
+      评审检查单:形式+内容
+      标准评审流程
+    前后
+      充分准备评审
+      评审后跟踪"></div></div>
+<ol><li>分层次评审:不同层次需求描述形式和评审人员不同。</li><li>正式与非正式结合:非正式往往效率更高。</li><li>分阶段评审:拆大评审为小评审,降低返工风险。</li><li>精心挑选人员:各类型人员都要参与(建设单位管理/操作人员、IT/采购主管,承建单位市场/分析师/架构师/工程师/测试/QA/实施/项目经理,第三方领域专家),且要真正了解系统。</li><li>评审人员培训:领域专家不一定懂评审方法。</li><li>检查单:形式检查(QA 查格式)、内容检查(评审人员查目标、遗漏、错误,是重点)。</li><li>标准流程:进入条件、提交资料、职责分配、步骤、通过条件。</li><li>评审后跟踪:评估问题→书面变更申请→进入变更管理→变更后复审。</li><li>充分准备:提前下发 SRS,执行进入条件,事先沟通,准备检查单。</li></ol>
+<h3 id="s11-7-2-需求测试">11.7.2 需求测试</h3>
+<p>测试应从需求定义开始,早制订测试计划和用例,防止错误“放大”,降低测试和维护费用;需求遗漏错误隐蔽,仅读 SRS 难以想象系统行为。</p>
+<h4 id="s1-概念测试用例">1. 概念测试用例</h4>
+<ul><li>需求阶段无可执行系统,只做“概念”测试,不真正执行。</li><li>来源:功能需求(SA)或用例(OO);可发现 SRS 错误、二义性、遗漏,可用于模型分析,是用户验收测试基础,系统测试时再细化。</li><li>覆盖:主事件流、备选事件流(OO)或功能描述(SA),以及获取分析期间的约束;<strong>独立于实现</strong>。</li><li>另一种方式:<strong>对话图</strong>(Dialog Map),更直观,但不适合描述约束和复杂流程。</li></ul>
+<div class="block tip"><div class="block-title">示例(开通课程)校验规则</div><p>用户名必须存在;所交费用为整数;交费时间在当前时间之前;选修课程必须已存在。费用多/少、人数超限均有对应测试分支;最后修改学员权限,课程人数加1。</p></div>
+<h4 id="s2-需求测试过程">2. 需求测试过程</h4>
+<div class="fig fig-mermaid"><div class="mermaid-src" data-src="flowchart LR
+  T1[依概念测试用例概念上执行 发现遗漏/错误/不必要需求] --&gt; T2[快速修改需求文档 完成一轮] --&gt; T3{概念测试覆盖全部用例和功能条目?}
+  T3 -- 否 --&gt; T1
+  T3 -- 是 --&gt; T4[测试人员与分析师讨论 修订SRS内容和版本]"></div></div>
+<p>需求测试人员应脱离开发部门、加入测试部门(不能既当运动员又当裁判员);也可用 RAD 工具建界面原型由用户确认,需求测试由测试人员和用户共同完成。</p>
+<h2 id="s11-8-需求管理">11.8 需求管理</h2>
+<p>包括追踪管理、变更控制、版本控制;评审批准的最终文档定义<strong>需求基线</strong>。</p>
+<h3 id="s11-8-1-需求变更">11.8.1 需求变更</h3>
+<p>变更是常态。原因:获取不完整有遗漏、理解偏差、业务变化等。合理变更不可避免,无控制的变更导致项目混乱。应确保:仔细评估建议变更;挑选合适人选判定;及时通知相关人员;按程序采纳并控制过程和状态。</p>
+<h4 id="s1-变更控制过程">1. 变更控制过程</h4>
+<div class="fig fig-mermaid"><div class="mermaid-src" data-src="flowchart LR
+  C1[提出变更提议] --&gt; C2[&quot;问题分析和变更描述 检查有效性&quot;] --&gt; C3[&quot;变更分析和成本计算 影响分析评估 成本含需求文档/设计/实现修改&quot;] --&gt; C4{CCB决策}
+  C4 -- 拒绝 --&gt; C7[更新状态并通知]
+  C4 -- 批准 --&gt; C5[&quot;变更实现 计划驱动:回溯到需求分析重做 敏捷:纳入下一次迭代&quot;] --&gt; C6[复审并更新状态]"></div><figcaption>图8-1 变更控制流程</figcaption></div>
+<div class="block tip"><div class="block-title">要点</div><p>变更控制不是设置障碍,而是“渠道和过滤器”,确保采纳最合适的变更并将负面影响降到最低。</p></div>
+<h4 id="常见变更策略">常见变更策略</h4>
+<ol><li>所有需求变更必须遵循变更控制过程。</li><li>未获批准的变更不应做设计和实现。</li><li>由项目变更控制委员会决定实现哪些变更。</li><li>项目风险承担者应能了解变更内容。</li><li>绝不能从配置库删除或修改变更请求的原始文档。</li><li>每个集成的需求变更必须能跟踪到经核准的变更请求(水平可追踪性)。</li></ol>
+<p>工具:需求变更跟踪工具(收集、存储、管理变更);问题跟踪工具可按状态分类报告变更请求数目。</p>
+<h4 id="s2-变更控制委员会-CCB">2. 变更控制委员会(CCB)</h4>
+<ul><li>项目所有者权益代表,<strong>负责裁定接受哪些变更</strong>;由多方成员组成,通常含用户和实施方决策人员。</li><li>是<strong>决策机构,不是作业机构</strong>;通过评审决定是否变更,<strong>不提出变更方案</strong>。</li><li>可能代表:产品或计划管理、项目管理、开发、测试或质量保证、市场部或客户代表、用户文档、技术支持、帮助桌面或用户支持热线、配置管理部门。</li><li>应有总则:目的、授权范围、成员构成、决策过程和操作步骤、会议频度和事由;管理范围说明可做哪些决策、哪类上报更高一级委员会。</li></ul>
+<table><thead><tr><th>过程步骤</th><th>内容</th></tr></thead><tbody><tr><td>制定决策</td><td>明确有效决定的出席人数、决策方法(投票/一致通过等)、主席是否可否决集体决定;权衡利弊——利:节省资金或额外收入、客户满意度、竞争优势、缩短上市时间;弊:开发费用增加、交付推迟、质量下降、功能减少、用户不满意</td></tr><tr><td>交流情况</td><td>决策后指派人员及时更新请求状态</td></tr><tr><td>重新协商约定</td><td>变更总有代价,拒绝的变更也耗费资源(提交、评估、决策);接受重要变更要与管理部门和客户重新协商:推迟交货、增加人手、推迟低优先级需求、质量折中</td></tr></tbody></table>
+<h3 id="s11-8-2-需求跟踪">11.8.2 需求跟踪</h3>
+<p>编制每个需求与系统元素(其他需求、体系结构、设计部件、源代码模块、测试、帮助文件和文档)联系的文档,形成水平可追踪性,便于变更影响分析。目的:建立与维护“需求-设计-编程-测试”之间的一致性,确保成果符合用户需求。</p>
+<div class="fig fig-mermaid"><div class="mermaid-src" data-src="flowchart LR
+  R[需求规格 SRS] --&gt; D[设计] --&gt; C[代码] --&gt; T[测试]
+  R -- 正向跟踪 --&gt; D
+  D -- 正向跟踪 --&gt; C
+  C -- 正向跟踪 --&gt; T
+  T -. 逆向跟踪 .-&gt; C
+  C -. 逆向跟踪 .-&gt; D
+  D -. 逆向跟踪 .-&gt; R"></div><figcaption>图8-2 正向跟踪+逆向跟踪=双向跟踪</figcaption></div>
+<table><thead><tr><th>方式</th><th>检查内容</th></tr></thead><tbody><tr><td>正向跟踪</td><td>SRS 中每个需求是否都能在后继成果中找到对应点(防遗漏实现)</td></tr><tr><td>逆向跟踪</td><td>设计文档、代码、测试用例是否都能在 SRS 中找到出处(防“镀金”)</td></tr></tbody></table>
+<h4 id="需求跟踪矩阵示例">需求跟踪矩阵示例</h4>
+<table><thead><tr><th>需求编号</th><th>用例</th><th>设计模块</th><th>代码</th><th>测试用例</th><th>状态</th></tr></thead><tbody><tr><td>REQ-001</td><td>UC02 开通课程</td><td>课程权限模块</td><td>CourseOpen.java</td><td>TC-02-01~09</td><td>已实现</td></tr></tbody></table>
+<ul><li>两种方式都要建立维护<strong>需求跟踪矩阵</strong>;每个需求须统一标识。</li><li>跟踪是手工、劳动强度大的任务,需组织支持;跟踪信息一旦过时可能无法重建;实际项目常用配置管理工具实现。</li></ul>
+<h2 id="高频易错速记表">高频易错速记表</h2>
+<table><thead><tr><th>考点</th><th>结论</th></tr></thead><tbody><tr><td>JRP 与 JAD</td><td>JRP 是 JAD 的一部分;JRP 只收集,6~18 人、1~5 小时</td></tr><tr><td>需求基线</td><td>评审批准后的最终文档定义;需求约定是开发与管理之间的桥梁</td></tr><tr><td>QFD</td><td>常规、期望、意外(兴奋)三类;期望需求未实现用户不满意</td></tr><tr><td>用例命名</td><td>动词+名词,并编号</td></tr><tr><td>用例建模阶段</td><td>共4阶段,前三个必需,“调整用例模型”非必需</td></tr><tr><td>用例信息流</td><td>双向,与箭头无关;箭头只表示谁主动发起</td></tr><tr><td>DFD</td><td>四元素;数据守恒;父子图平衡;存储有读有写;不含控制流</td></tr><tr><td>数据字典</td><td>以数据字典为 SA 模型核心;六类条目;专人管理</td></tr><tr><td>聚合/组合</td><td>聚合部分可独立,组合同生共死</td></tr><tr><td>CCB</td><td>决策机构,不提变更方案</td></tr><tr><td>需求测试人员</td><td>应独立于开发部门</td></tr><tr><td>需求跟踪</td><td>正向+逆向=双向;用跟踪矩阵</td></tr></tbody></table>
+<hr>
+<h2 id="章节练习题">章节练习题</h2>
+<hr>
+    <div class="quiz quiz-js" data-key="H23-软件需求工程.md">
+  <div class="quiz-head">
+    <span class="quiz-label">章节练习题</span>
+    <span class="quiz-progress">已答 0 / 8</span>
+    <button class="quiz-btn quiz-export" type="button">导出记录</button>
+    <button class="quiz-btn quiz-reset" type="button">重做</button>
+    <div class="quiz-pbar"><div class="quiz-pbar-fill"></div></div>
+  </div>
+  <div class="quiz-item" data-answer="A" data-explain="JRP 主要意图是收集需求、不做分析验证（正确）。JRP 会议为 6～18 人、1～5 小时（B 数字记反）；JRP 是 JAD 的一部分，不是反过来（C 倒置）；&quot;研究出几套可选方案&quot;是 JAD 专题讨论会的目的（D 属于 JAD）。" data-ref="第11章 · 11.2.5 联合需求计划">
+  <div class="quiz-q"><span class="qn">1</span>关于 JRP（联合需求计划）的描述，正确的是：</div>
+  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">JRP 的主要意图是收集需求，而不是对需求进行分析和验证</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">JRP 通常的参与人数为 2～5 人，会议时间为 6～18 小时</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">JRP 是 JAD 的上位概念，JAD 是 JRP 的一部分</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">JRP 讨论的目的是从可选技术方案中研究出几套方案</span></div></div>
+  <div class="reveal" style="display:none">
+    <div class="reveal-verdict"></div>
+    <div class="reveal-explain">JRP 主要意图是收集需求、不做分析验证（正确）。JRP 会议为 6～18 人、1～5 小时（B 数字记反）；JRP 是 JAD 的一部分，不是反过来（C 倒置）；"研究出几套可选方案"是 JAD 专题讨论会的目的（D 属于 JAD）。</div>
+    <div class="reveal-ref">第11章 · 11.2.5 联合需求计划</div>
+  </div>
+</div><div class="quiz-item" data-answer="A" data-explain="题干出现&quot;由主管部门经理、会议主持人、用户、协调人员、IT 人员、秘书组成专题讨论组&quot;&quot;定义需求和可选技术方案&quot;，正是 JAD 的定义。JRP 参与者是&quot;关键用户代表+系统分析师+开发团队代表&quot;，且只收集不验证。" data-ref="第11章 · 11.2.5 联合需求计划">
+  <div class="quiz-q"><span class="qn">2</span>某公司使用 JAD 方法，由主管部门经理、会议主持人、用户、协调人员、IT 人员、秘书组成专题讨论组，定义并详细说明系统的需求和可选的技术方案。该场景描述的是：</div>
+  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">联合应用开发（JAD）</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">联合需求计划（JRP）</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">用户访谈（结构化）</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">情节串联板</span></div></div>
+  <div class="reveal" style="display:none">
+    <div class="reveal-verdict"></div>
+    <div class="reveal-explain">题干出现"由主管部门经理、会议主持人、用户、协调人员、IT 人员、秘书组成专题讨论组""定义需求和可选技术方案"，正是 JAD 的定义。JRP 参与者是"关键用户代表+系统分析师+开发团队代表"，且只收集不验证。</div>
+    <div class="reveal-ref">第11章 · 11.2.5 联合需求计划</div>
+  </div>
+</div><div class="quiz-item" data-answer="A" data-explain="业务需求反映企业或客户对系统的高层次目标要求，通过业务需求可以确定项目视图和范围；项目视图和范围文档把业务需求集中在一个简单紧凑的文档中，为后续开发奠定基础。用户需求用场景（scenarios）描述；功能/非功能需求属于系统需求层。" data-ref="第11章 · 11.1.1 需求的层次">
+  <div class="quiz-q"><span class="qn">3</span>在需求的三个层次中，用于确定项目视图和范围的是：</div>
+  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">业务需求</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">用户需求</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">功能需求</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">非功能需求</span></div></div>
+  <div class="reveal" style="display:none">
+    <div class="reveal-verdict"></div>
+    <div class="reveal-explain">业务需求反映企业或客户对系统的高层次目标要求，通过业务需求可以确定项目视图和范围；项目视图和范围文档把业务需求集中在一个简单紧凑的文档中，为后续开发奠定基础。用户需求用场景（scenarios）描述；功能/非功能需求属于系统需求层。</div>
+    <div class="reveal-ref">第11章 · 11.1.1 需求的层次</div>
+  </div>
+</div><div class="quiz-item" data-answer="D" data-explain="错误在 D：人们逐渐认识到需求分析活动不再仅限于软件开发的最初阶段，而是贯穿于系统开发的整个生命周期。A、B、C 均为教材原文表述。" data-ref="第11章 · 11.1.4 需求工程">
+  <div class="quiz-q"><span class="qn">4</span>下列关于需求工程活动的说法，错误的是：</div>
+  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">需求开发包括需求获取、需求分析、形成需求规格、需求确认与验证</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">需求基线在需求开发的最终文档评审批准后才定义</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">需求约定是需求开发与需求管理之间的桥梁</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">需求分析与定义仅发生在软件开发的最初阶段，不贯穿整个生命周期</span></div></div>
+  <div class="reveal" style="display:none">
+    <div class="reveal-verdict"></div>
+    <div class="reveal-explain">错误在 D：人们逐渐认识到需求分析活动不再仅限于软件开发的最初阶段，而是贯穿于系统开发的整个生命周期。A、B、C 均为教材原文表述。</div>
+    <div class="reveal-ref">第11章 · 11.1.4 需求工程</div>
+  </div>
+</div><div class="quiz-item" data-answer="A" data-explain="情节串联板让用户直观了解&quot;系统如何做&quot;，帮助消除盲区、达成共识，是最生动的技术；优点是用户友好、交互性强、对界面提供早期评审；缺点是花费时间很多，使需求获取速度大大降低。它恰恰会涉及解决方案的探讨（B、D 错），也不属于变更控制（C 错）。" data-ref="第11章 · 11.2.4 情节串联板">
+  <div class="quiz-q"><span class="qn">5</span>以下关于情节串联板技术的说法，正确的是：</div>
+  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">它是最生动的需求获取技术，优点是用户友好、交互性强，缺点是花费时间多、降低获取速度</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">它只能由系统分析师单方面演示，用户不参与</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">它主要用于需求变更控制阶段</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">它是一种完全不涉及解决方案探讨的技术</span></div></div>
+  <div class="reveal" style="display:none">
+    <div class="reveal-verdict"></div>
+    <div class="reveal-explain">情节串联板让用户直观了解"系统如何做"，帮助消除盲区、达成共识，是最生动的技术；优点是用户友好、交互性强、对界面提供早期评审；缺点是花费时间很多，使需求获取速度大大降低。它恰恰会涉及解决方案的探讨（B、D 错），也不属于变更控制（C 错）。</div>
+    <div class="reveal-ref">第11章 · 11.2.4 情节串联板</div>
+  </div>
+</div><div class="quiz-item" data-answer="A" data-explain="用例命名应采用&quot;动词（短语）+名词（短语）&quot;的形式，如&quot;开通课程&quot;&quot;课程测试&quot;。最好还能对用例进行编号，这是实现需求跟踪管理的重要技巧，可将用户需求落实到特定用例中去。" data-ref="第11章 · 11.5.1 用例模型">
+  <div class="quiz-q"><span class="qn">6</span>在确定用例的过程中，用例的命名应当采用的形式是：</div>
+  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">动词（短语）+ 名词（短语），如"开通课程"</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">名词（短语）+ 动词（短语），如"课程开通"</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">仅用名词短语，如"课程"</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">仅用动词短语，如"开通"</span></div></div>
+  <div class="reveal" style="display:none">
+    <div class="reveal-verdict"></div>
+    <div class="reveal-explain">用例命名应采用"动词（短语）+名词（短语）"的形式，如"开通课程""课程测试"。最好还能对用例进行编号，这是实现需求跟踪管理的重要技巧，可将用户需求落实到特定用例中去。</div>
+    <div class="reveal-ref">第11章 · 11.5.1 用例模型</div>
+  </div>
+</div><div class="quiz-item" data-answer="A" data-explain="OOA 方法中构建用例模型的 4 阶段为：识别参与者 → 合并需求获得用例 → 细化用例描述 → 调整用例模型，其中&lt;strong&gt;前三个阶段是必需的&lt;/strong&gt;，第四个&quot;调整用例模型&quot;不是必需的。" data-ref="第11章 · 11.5.1 用例模型">
+  <div class="quiz-q"><span class="qn">7</span>用例模型的构建一般需要经历 4 个阶段，其中必需的阶段是：</div>
+  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">识别参与者、合并需求获得用例、细化用例描述</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">识别参与者、细化用例描述、调整用例模型</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">合并需求获得用例、细化用例描述、调整用例模型</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">四个阶段都是必需的</span></div></div>
+  <div class="reveal" style="display:none">
+    <div class="reveal-verdict"></div>
+    <div class="reveal-explain">OOA 方法中构建用例模型的 4 阶段为：识别参与者 → 合并需求获得用例 → 细化用例描述 → 调整用例模型，其中<strong>前三个阶段是必需的</strong>，第四个"调整用例模型"不是必需的。</div>
+    <div class="reveal-ref">第11章 · 11.5.1 用例模型</div>
+  </div>
+</div><div class="quiz-item" data-answer="A" data-explain="箭头表示在该关系中哪一方是对话的主动发起者，箭头所指方为对话的被动接受者，箭尾所指方为主动发起者。注意：信息流&lt;strong&gt;不是由通信关联表示&lt;/strong&gt;的，它是默认存在的、&lt;strong&gt;双向的&lt;/strong&gt;，与箭头方向无关。" data-ref="第11章 · 11.5.1 用例模型">
+  <div class="quiz-q"><span class="qn">8</span>在用例图中，箭头方向表示的是：</div>
+  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">对话中哪一方是主动发起者，箭头所指方为被动接受者</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">数据流的传递方向</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">信息流的流向，且信息流仅沿箭头方向单向传递</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">用例的执行顺序</span></div></div>
+  <div class="reveal" style="display:none">
+    <div class="reveal-verdict"></div>
+    <div class="reveal-explain">箭头表示在该关系中哪一方是对话的主动发起者，箭头所指方为对话的被动接受者，箭尾所指方为主动发起者。注意：信息流<strong>不是由通信关联表示</strong>的，它是默认存在的、<strong>双向的</strong>，与箭头方向无关。</div>
+    <div class="reveal-ref">第11章 · 11.5.1 用例模型</div>
+  </div>
+</div>
+</div>
+    <section class="exam" id="exam" data-exam-chapter="11" data-exam-hour="H23"><div class="exam-bar"><span class="exam-bar-label">📚 历年真题</span><span class="exam-bar-stat">共 <b>26</b> 题 · 来自 5 套真题</span><span class="exam-bar-ops"><button type="button" class="exam-op" data-exam-all="1">全部展开</button><button type="button" class="exam-op" data-exam-all="0">全部收起</button></span></div><details class="exam-subject" data-exam-subject="综合知识"><summary><span class="exam-subject-name">📝 综合知识</span><span class="exam-subject-n">26 题</span><span class="exam-subject-tip">按年份展开 · 单题可点开看答案</span></summary><details class="exam-year" data-exam-year="2026年5月"><summary><span class="exam-year-name">2026年5月</span><span class="exam-year-n">3 题</span></summary><details class="exam-q" data-exam-id="2026年5月-27"><summary><span class="exam-no">第 27 题</span><span class="exam-stem-peek">下列关于软件需求的描述中,错误的是</span></summary><div class="exam-q-body"><p class="exam-stem">下列关于软件需求的描述中,错误的是</p><ul class="exam-opts"><li><b>A</b> 可验证</li><li><b>B</b> 可追踪</li><li><b>C</b> 获取后一般不再变化</li><li><b>D</b> 完整一致</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">软件需求具备动态性,项目全周期内会持续发生变更。</p></details></div></details><details class="exam-q" data-exam-id="2026年5月-56"><summary><span class="exam-no">第 56 题</span><span class="exam-stem-peek">描述系统“做什么”的核心文档是</span></summary><div class="exam-q-body"><p class="exam-stem">描述系统“做什么”的核心文档是</p><ul class="exam-opts"><li><b>A</b> 设计说明书</li><li><b>B</b> 需求规格说明书</li><li><b>C</b> 数据库文档</li><li><b>D</b> 测试报告</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">软件需求规格说明书(SRS)是需求阶段核心文档,定义系统功能与非功能需求。</p></details></div></details><details class="exam-q" data-exam-id="2026年5月-59"><summary><span class="exam-no">第 59 题</span><span class="exam-stem-peek">JRP会议形成要点后,下一步是</span></summary><div class="exam-q-body"><p class="exam-stem">JRP会议形成要点后,下一步是</p><ul class="exam-opts"><li><b>A</b> 编写代码</li><li><b>B</b> 形成清单并评审</li><li><b>C</b> 建数据库</li><li><b>D</b> 直接上线</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">JRP联合需求会议输出需求要点后,需整理清单并组织评审确认。</p></details></div></details></details><details class="exam-year" data-exam-year="2025年5月"><summary><span class="exam-year-name">2025年5月</span><span class="exam-year-n">7 题</span></summary><details class="exam-q" data-exam-id="2025年5月-09"><summary><span class="exam-no">第 9 题</span><span class="exam-stem-peek">在线购物系统中,用户登录后才能查看购物车,“用户登录”与“查看购物车”两个用例关系是()</span></summary><div class="exam-q-body"><p class="exam-stem">在线购物系统中,用户登录后才能查看购物车,“用户登录”与“查看购物车”两个用例关系是()</p><ul class="exam-opts"><li><b>A</b> 扩展</li><li><b>B</b> 泛化</li><li><b>C</b> 组合</li><li><b>D</b> 包含</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">要查看购物车,必须要先登录,所以是包含。</p></details></div></details><details class="exam-q" data-exam-id="2025年5月-36"><summary><span class="exam-no">第 36 题</span><span class="exam-stem-peek">在软件工程或项目管理中,需求跟踪矩阵(RTM)的核心作用是什么 ()</span></summary><div class="exam-q-body"><p class="exam-stem">在软件工程或项目管理中,需求跟踪矩阵(RTM)的核心作用是什么 ()</p><ul class="exam-opts"><li><b>A</b> 用于详细记录项目进度和里程碑完成情况。</li><li><b>B</b> 作为项目团队内部沟通的主要即时通讯工具。</li><li><b>C</b> 仅用于记录需求变更请求的详细信息和审批状态。</li><li><b>D</b> 建立需求与设计、开发、测试等下游工作产品之间的双向链接,以确保需求被完整覆盖并实现,并支持变更影响分析。</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">顾名思义,需求跟踪矩阵就是用来跟踪需求实现情况的,包括正向和反向跟踪。</p></details></div></details><details class="exam-q" data-exam-id="2025年5月-47"><summary><span class="exam-no">第 47 题</span><span class="exam-stem-peek">酒店管理系统设计中,客房类、客人信息类、预定记录类、账单单属于()(实体类/控制类/边界类)</span></summary><div class="exam-q-body"><p class="exam-stem">酒店管理系统设计中,客房类、客人信息类、预定记录类、账单单属于()(实体类/控制类/边界类)</p><ul class="exam-opts"><li><b>A</b> 预定服务类</li><li><b>B</b> 入住登记界面类</li><li><b>C</b> 客房类 / 客人信息类/ 预定记录类/ 账单单类</li><li><b>D</b> 支付处理类</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">实体类一般是名词,表示跟系统进行交互的人或物或其他系统;控制类一般是动词,表示某个功能或处理流程;边界类一般是系统和外界交互的接口,人机界面等。</p></details></div></details><details class="exam-q" data-exam-id="2025年5月-48"><summary><span class="exam-no">第 48 题</span><span class="exam-stem-peek">酒店管理系统设计中,预定服务类、支付处理类属于()(实体类/控制类/边界类)</span></summary><div class="exam-q-body"><p class="exam-stem">酒店管理系统设计中,预定服务类、支付处理类属于()(实体类/控制类/边界类)</p><ul class="exam-opts"><li><b>A</b> 预定服务类/ 支付处理类</li><li><b>B</b> 客房类</li><li><b>C</b> 入住登记界面类</li><li><b>D</b> 客人信息类</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">实体类一般是名词,表示跟系统进行交互的人或物或其他系统;控制类一般是动词,表示某个功能或处理流程;边界类一般是系统和外界交互的接口,人机界面等。</p></details></div></details><details class="exam-q" data-exam-id="2025年5月-49"><summary><span class="exam-no">第 49 题</span><span class="exam-stem-peek">酒店管理系统设计中,入住登记界面类属于()(实体类/控制类/边界类)</span></summary><div class="exam-q-body"><p class="exam-stem">酒店管理系统设计中,入住登记界面类属于()(实体类/控制类/边界类)</p><ul class="exam-opts"><li><b>A</b> 预定服务类</li><li><b>B</b> 支付处理类</li><li><b>C</b> 入住登记界面类</li><li><b>D</b> 预定记录类</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">实体类一般是名词,表示跟系统进行交互的人或物或其他系统;控制类一般是动词,表示某个功能或处理流程;边界类一般是系统和外界交互的接口,人机界面等。</p></details></div></details><details class="exam-q" data-exam-id="2025年5月-65"><summary><span class="exam-no">第 65 题</span><span class="exam-stem-peek">UML 图中,用于描述系统动态行为的是 ()</span></summary><div class="exam-q-body"><p class="exam-stem">UML 图中,用于描述系统动态行为的是 ()</p><ul class="exam-opts"><li><b>A</b> 组件图(Component Diagram)</li><li><b>B</b> 部署图(Deployment Diagram)</li><li><b>C</b> 序列图(Sequence Diagram)</li><li><b>D</b> 类图(Class Diagram)</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">UML分为静态结构图和动态行为图,序列图按时间顺序描述对象之间的消息交互,属于典型动态行为图;组件图、部署图、类图均用于刻画系统静态结构。</p></details></div></details><details class="exam-q" data-exam-id="2025年5月-66"><summary><span class="exam-no">第 66 题</span><span class="exam-stem-peek">UML 图中,用于描述系统与外部系统或外部用户的交互的是 ()</span></summary><div class="exam-q-body"><p class="exam-stem">UML 图中,用于描述系统与外部系统或外部用户的交互的是 ()</p><ul class="exam-opts"><li><b>A</b> 用例图</li><li><b>B</b> 活动图</li><li><b>C</b> 交互图</li><li><b>D</b> 部署图</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">用例图通过参与者(外部用户/外部系统)和用例,明确系统和外部参与方的交互边界;活动图描述系统内部业务流程,交互图描述对象内部消息交互,部署图描述软硬件节点部署架构。</p></details></div></details></details><details class="exam-year" data-exam-year="2023年5月"><summary><span class="exam-year-name">2023年5月</span><span class="exam-year-n">1 题</span></summary><details class="exam-q" data-exam-id="2023年5月-03"><summary><span class="exam-no">第 3 题</span><span class="exam-stem-peek">进行数据流图的正确性检查时,以下说法不正确的是( )。</span></summary><div class="exam-q-body"><p class="exam-stem">进行数据流图的正确性检查时,以下说法不正确的是( )。</p><ul class="exam-opts"><li><b>A</b> 任何一个处理至少有一个输入数据流</li><li><b>B</b> 任何一个处理至少有一个输出数据流</li><li><b>C</b> 任何一个数据流的两端都必须存在相应的处理</li><li><b>D</b> 任何一个数据存储都必定有流入的数据流和流出的数据流</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">数据流仅一端需要连接加工处理,不需要两端都绑定处理;处理必须有输入、输出数据流,数据存储可只有写入流入或只有读取流出,因此C描述明显错误。</p></details></div></details></details><details class="exam-year" data-exam-year="2021年5月"><summary><span class="exam-year-name">2021年5月</span><span class="exam-year-n">10 题</span></summary><details class="exam-q" data-exam-id="2021年5月-01"><summary><span class="exam-no">第 1 题</span><span class="exam-stem-peek">结构化分析方法以数据字典为核心,有三个维度的模型,分别是()。</span></summary><div class="exam-q-body"><p class="exam-stem">结构化分析方法以数据字典为核心,有三个维度的模型,分别是()。</p><ul class="exam-opts"><li><b>A</b> 数据模型、功能模型、架构模型</li><li><b>B</b> 功能模型、状态模型、行为模型</li><li><b>C</b> 数据模型、功能模型、行为模型</li><li><b>D</b> 数据模型、状态模型、架构模型</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">系统分析模型以数据字典为核心,包含三类模型:行为模型(也叫状态模型,用STD表示)、数据模型(用E-R图表示)、功能模型(用DFD数据流图表示)。</p></details></div></details><details class="exam-q" data-exam-id="2021年5月-02"><summary><span class="exam-no">第 2 题</span><span class="exam-stem-peek">如果一个用例包含了两种或两种以上的不同场景,则可以通过( )表示。</span></summary><div class="exam-q-body"><p class="exam-stem">如果一个用例包含了两种或两种以上的不同场景,则可以通过( )表示。</p><ul class="exam-opts"><li><b>A</b> 扩展关系</li><li><b>B</b> 包含关系</li><li><b>C</b> 泛化关系</li><li><b>D</b> 组合关系</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">用例扩展关系用于处理一个用例存在多种分支场景的情况,可将不同分支拆分出独立扩展用例;包含关系用于提取多个用例的公共行为;泛化表示用例间的继承关系;组合属于类之间的关系,不属于用例关系。</p></details></div></details><details class="exam-q" data-exam-id="2021年5月-03"><summary><span class="exam-no">第 3 题</span><span class="exam-stem-peek">数据字典中有6类条目,不同类型的条目有不同的属性描述。其中,( )是数据的最小组成单位。</span></summary><div class="exam-q-body"><p class="exam-stem">数据字典中有6类条目,不同类型的条目有不同的属性描述。其中,( )是数据的最小组成单位。</p><ul class="exam-opts"><li><b>A</b> 数据类型</li><li><b>B</b> 数据流</li><li><b>C</b> 数据模型</li><li><b>D</b> 数据元素</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">数据字典包含6类条目,其中数据元素也叫数据项,是不可再拆分的数据最小组成单位。</p></details></div></details><details class="exam-q" data-exam-id="2021年5月-04"><summary><span class="exam-no">第 4 题</span><span class="exam-stem-peek">数据字典中有6类条目,不同类型的条目有不同的属性描述。其中,( )用来描述数据之间的组合关系。</span></summary><div class="exam-q-body"><p class="exam-stem">数据字典中有6类条目,不同类型的条目有不同的属性描述。其中,( )用来描述数据之间的组合关系。</p><ul class="exam-opts"><li><b>A</b> 数据项</li><li><b>B</b> 数据结构</li><li><b>C</b> 数据表</li><li><b>D</b> 数据存储</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">数据结构条目的核心作用,就是定义多个数据元素之间的层级、组合逻辑关系。</p></details></div></details><details class="exam-q" data-exam-id="2021年5月-05"><summary><span class="exam-no">第 5 题</span><span class="exam-stem-peek">数据字典中有6类条目,不同类型的条目有不同的属性描述。其中,( )是数据流的来源或去向。</span></summary><div class="exam-q-body"><p class="exam-stem">数据字典中有6类条目,不同类型的条目有不同的属性描述。其中,( )是数据流的来源或去向。</p><ul class="exam-opts"><li><b>A</b> 数据库</li><li><b>B</b> 数据存储</li><li><b>C</b> 外部实体</li><li><b>D</b> 输入输出</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">外部实体是系统外部和系统产生数据交互的对象,是数据流的起点(来源)或终点(去向)。</p></details></div></details><details class="exam-q" data-exam-id="2021年5月-71"><summary><span class="exam-no">第 71 题</span><span class="exam-stem-peek">系统分析阶段包含四项主要活动。( )involves fact-finding to describe the curr…</span></summary><div class="exam-q-body"><p class="exam-stem">系统分析阶段包含四项主要活动。( )involves fact-finding to describe the current system and identification of the requirements for the new system, such as outputs, inputs, processes, performance, and security.</p><ul class="exam-opts"><li><b>A</b> System logical modeling</li><li><b>B</b> Use case modeling</li><li><b>C</b> Requirement modeling</li><li><b>D</b> Application modeling</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">需求建模(Requirement modeling)的核心工作就是实地调研梳理现有系统现状,同时提取新系统在输出、输入、性能、安全等方面的全部需求,和题干描述完全匹配。</p></details></div></details><details class="exam-q" data-exam-id="2021年5月-72"><summary><span class="exam-no">第 72 题</span><span class="exam-stem-peek">系统分析阶段包含四项主要活动。( )refer to the logical rules that are applie…</span></summary><div class="exam-q-body"><p class="exam-stem">系统分析阶段包含四项主要活动。( )refer to the logical rules that are applied to transform the data into meaningful information.</p><ul class="exam-opts"><li><b>A</b> Outputs</li><li><b>B</b> Inputs</li><li><b>C</b> Processes</li><li><b>D</b> Models</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">过程(Processes)的业务定义就是将原始输入数据经过一系列逻辑处理,转化为具备业务价值的有效信息的规则集合,符合题干描述。</p></details></div></details><details class="exam-q" data-exam-id="2021年5月-73"><summary><span class="exam-no">第 73 题</span><span class="exam-stem-peek">系统分析阶段包含四项主要活动。( )continues the modeling process by learning…</span></summary><div class="exam-q-body"><p class="exam-stem">系统分析阶段包含四项主要活动。( )continues the modeling process by learning how to represent graphically system data and processes using traditional structured analysis techniques.</p><ul class="exam-opts"><li><b>A</b> Business modeling</li><li><b>B</b> Database modeling</li><li><b>C</b> Structure modeling</li><li><b>D</b> Data and process modeling</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">数据和过程建模(Data and process modeling)依托传统结构化分析方法,通过数据流图等图形化手段可视化呈现系统的数据流转、业务处理全流程,匹配题干特征。</p></details></div></details><details class="exam-q" data-exam-id="2021年5月-74"><summary><span class="exam-no">第 74 题</span><span class="exam-stem-peek">系统分析阶段包含四项主要活动。( )combines data and the processes that act o…</span></summary><div class="exam-q-body"><p class="exam-stem">系统分析阶段包含四项主要活动。( )combines data and the processes that act on the data into objects. These objects represent actual people, things, transactions, and events that affect the system.</p><ul class="exam-opts"><li><b>A</b> Object modeling</li><li><b>B</b> Domain analysis</li><li><b>C</b> Component modeling</li><li><b>D</b> Behavior modeling</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">对象建模(Object modeling)是面向对象分析的核心环节,将实体的数据属性和操作数据的方法封装为对象,用对象映射现实业务里的人员、事物、交易等实体,和题干描述一致。</p></details></div></details><details class="exam-q" data-exam-id="2021年5月-75"><summary><span class="exam-no">第 75 题</span><span class="exam-stem-peek">系统分析阶段包含四项主要活动。In( ), we will consider various development o…</span></summary><div class="exam-q-body"><p class="exam-stem">系统分析阶段包含四项主要活动。In( ), we will consider various development options and prepare for the transition to the systems design phase of the SDLC.</p><ul class="exam-opts"><li><b>A</b> feasibility analysis</li><li><b>B</b> development strategies</li><li><b>C</b> architecture design</li><li><b>D</b> technique outline</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">开发策略(development strategies)环节会评估多种技术实现、项目推进方案,确定后续落地路线,为系统分析阶段平稳过渡到系统设计阶段做全方面准备,符合题干要求。</p></details></div></details></details><details class="exam-year" data-exam-year="2020年11月"><summary><span class="exam-year-name">2020年11月</span><span class="exam-year-n">5 题</span></summary><details class="exam-q" data-exam-id="2020年11月-71"><summary><span class="exam-no">第 71 题</span><span class="exam-stem-peek">Unified Modeling Language (UML) is a widely used method of v…</span></summary><div class="exam-q-body"><p class="exam-stem">Unified Modeling Language (UML) is a widely used method of visualizing and documenting an information system. The UML can be used to develop (71) , in which an object represents a person, place, event, or transaction that is significant to the information system.</p><ul class="exam-opts"><li><b>A</b> database models</li><li><b>B</b> object models</li><li><b>C</b> event models</li><li><b>D</b> static system models</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">UML是面向对象建模的标准语言,用来构建对象模型,模型中的对象对应业务场景里有意义的人、地点、事件、交易等实体。</p></details></div></details><details class="exam-q" data-exam-id="2020年11月-72"><summary><span class="exam-no">第 72 题</span><span class="exam-stem-peek">Systems analysts define an object&#x27;s attributes during the (7…</span></summary><div class="exam-q-body"><p class="exam-stem">Systems analysts define an object&#x27;s attributes during the (72) .</p><ul class="exam-opts"><li><b>A</b> systems maintenance process</li><li><b>B</b> systems implementation process</li><li><b>C</b> systems design process</li><li><b>D</b> systems testing process</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">系统设计阶段承接需求分析成果,完成对象属性、方法、类结构的详细规范定义,是对象特征落地设计的环节。</p></details></div></details><details class="exam-q" data-exam-id="2020年11月-73"><summary><span class="exam-no">第 73 题</span><span class="exam-stem-peek">An object also has (73) , which are tasks or functions that …</span></summary><div class="exam-q-body"><p class="exam-stem">An object also has (73) , which are tasks or functions that the object performs when it receives a message, or command, to do so.</p><ul class="exam-opts"><li><b>A</b> methods</li><li><b>B</b> interactions</li><li><b>C</b> interfaces</li><li><b>D</b> behaviors</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">面向对象概念中,method(方法)就是对象收到消息后触发执行的任务与功能,是对象内部行为的具体实现。</p></details></div></details><details class="exam-q" data-exam-id="2020年11月-74"><summary><span class="exam-no">第 74 题</span><span class="exam-stem-peek">A(n) (74) is a group of similar objects.</span></summary><div class="exam-q-body"><p class="exam-stem">A(n) (74) is a group of similar objects.</p><ul class="exam-opts"><li><b>A</b> actor</li><li><b>B</b> instance</li><li><b>C</b> component</li><li><b>D</b> class</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">类是对一组特征、行为相似的对象的抽象定义,作为创建对象的蓝图模板。</p></details></div></details><details class="exam-q" data-exam-id="2020年11月-75"><summary><span class="exam-no">第 75 题</span><span class="exam-stem-peek">Objects can have a specific attribute called a(n) (75) , whi…</span></summary><div class="exam-q-body"><p class="exam-stem">Objects can have a specific attribute called a(n) (75) , which of an object is an adjective that describes the object&#x27;s current status.</p><ul class="exam-opts"><li><b>A</b> state</li><li><b>B</b> constant</li><li><b>C</b> instance</li><li><b>D</b> member</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">对象的state(状态)由属性当前取值决定,专门用于描述对象当下所处的情况与特征。</p></details></div></details></details></details></section>
+    <div class="wrongbook"></div>
+    <div class="keyhint">
+  <span class="keyhint-title">键盘快捷键</span>
+  <span class="item"><kbd class="kbd">/</kbd> 搜索本页</span>
+  <span class="item"><kbd class="kbd">T</kbd> 深/浅色</span>
+  <span class="item"><kbd class="kbd">F</kbd> 专注模式</span>
+  <span class="item"><kbd class="kbd">-</kbd>/<kbd class="kbd">+</kbd> 字号</span>
+  <span class="item"><kbd class="kbd">P</kbd> 答下一题</span>
+  <span class="item"><kbd class="kbd">G</kbd> 上一已答</span>
+  <span class="item"><kbd class="kbd">J</kbd>/<kbd class="kbd">K</kbd> 快滚</span>
+  <span class="item"><kbd class="kbd">0</kbd> 回顶部</span>
+</div>
+    <nav class="pager"><a class="pg pg-prev" href="H22.html"><span class="pg-label">上一学时</span><span class="pg-title">系统规划与分析（二）· 成本效益与可行性论证</span></a><a class="pg pg-next" href="H26.html"><span class="pg-label">下一学时</span><span class="pg-title">软件架构设计（一）· 架构定义与 4+1 视图</span></a></nav>
+    <footer class="footer">
+  <p><strong>阿甘系分 · 48 小时冲刺手册</strong></p>
+  <p class="sep">非官方出版物 · 与软考办无隶属关系 · 内容均为独立原创编写</p>
+  <p>仅供学习参考 · 版权归作者所有 · 禁止以任何形式用于商业培训或二次销售</p>
+</footer>
+  </article>
+</main>
+<button class="focus-exit-fab" type="button" title="退出专注模式（F）">
+  <span class="focus-exit-dot" aria-hidden="true"></span>退出专注
+</button>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"
+        onerror="window.__mermaidFailed=true"></script>
+<script>/**
+ * 阿甘系分 48 小时冲刺 · 独立 HTML 站点
+ * 设计系统 + 交互逻辑（内联进每个 HTML，零依赖）
+ */
+(function () {
+  'use strict'
+
+  // ══════════════════════════════════════════
+  // 1. 存储层
+  // ══════════════════════════════════════════
+  const NS = 'xifen48'
+  // ⚠️ 多用户隔离：GitHub Pages 部署下所有用户共享同一个源（origin），
+  // localStorage 是按源隔离的 → A 用户的答题记录会覆盖 B 用户的。
+  // 方案：为每个浏览器档案生成一个随机 UUID，用它做 key 命名空间。
+  // 不同 Chrome 档案/不同浏览器 → 不同 UUID → 数据互相隔离。
+  // ⚠️ 清浏览器缓存 = 丢失 UUID = 答题记录清零（属正常，和重置功能语义一致）
+  function getUserId() {
+    let id = localStorage.getItem(NS + ':uid')
+    if (!id) {
+      id = 'u_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 10)
+      localStorage.setItem(NS + ':uid', id)
+    }
+    return id
+  }
+  const UID = getUserId()
+  const store = {
+    get(k, d) { try { const v = localStorage.getItem(NS + ':' + UID + ':' + k); return v ? JSON.parse(v) : d } catch { return d } },
+    set(k, v) { try { localStorage.setItem(NS + ':' + UID + ':' + k, JSON.stringify(v)) } catch {} },
+    del(k) { try { localStorage.removeItem(NS + ':' + UID + ':' + k) } catch {} }
+  }
+
+  // ══════════════════════════════════════════
+  // 2. 主题：跟随系统 + 手动覆盖
+  // ══════════════════════════════════════════
+  const Theme = {
+    KEY: 'theme',
+    get() { return store.get('theme', 'auto') },
+    set(v) {
+      store.set('theme', v)
+      Theme.apply()
+      document.querySelectorAll('.theme-btn').forEach(b => b.classList.toggle('active', b.dataset.theme === v))
+    },
+    apply() {
+      const m = store.get('theme', 'auto')
+      const dark = m === 'auto'
+        ? window.matchMedia('(prefers-color-scheme: dark)').matches
+        : m === 'dark'
+      document.documentElement.style.colorScheme = dark ? 'dark' : 'light'
+      document.documentElement.dataset.theme = dark ? 'dark' : 'light'
+    },
+    init() {
+      Theme.apply()
+      const m = store.get('theme', 'auto')
+      document.querySelectorAll('.theme-btn').forEach(b => b.classList.toggle('active', b.dataset.theme === m))
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+        if (store.get('theme', 'auto') === 'auto') Theme.apply()
+      })
+      // 点击切换：跟随 → 浅 → 深 → 跟随
+      document.querySelectorAll('.theme-btn').forEach(btn => {
+        btn.addEventListener('click', () => Theme.set(btn.dataset.theme))
+      })
+    }
+  }
+
+  // ══════════════════════════════════════════
+  // 3. 阅读进度条
+  // ══════════════════════════════════════════
+  const Progress = {
+    init() {
+      const bar = document.createElement('div')
+      bar.className = 'read-progress'
+      document.body.appendChild(bar)
+
+      const toc = document.querySelector('.toc')
+      if (!toc) return
+      // 细化到 4 级：h2（学时/大题）→ h3（小节）→ h4（知识条目）→ h5（细项，若有人写更深）
+      const heads = [...document.querySelectorAll('.main h2, .main h3, .main h4, .main h5')]
+      if (!heads.length) return
+
+      // 必须【先】给每个标题补 id，【再】生成目录链接，
+      // 否则 href="#undefined"，点击全部无效（此前踩过）
+      heads.forEach((h, i) => {
+        if (!h.id) {
+          let slug = (h.textContent || '').replace(/\s+/g, '-')
+            .replace(/[^\w一-鿿-]/g, '').slice(0, 40)
+          if (slug && slug[0].match(/[0-9]/)) slug = 's' + slug   // 数字开头 → CSS 选择器非法
+          h.id = slug || ('h' + (i + 1))
+        }
+        let dup = 0
+        for (const other of document.querySelectorAll('[id]')) {
+          if (other !== h && other.id === h.id) { dup++; break }
+        }
+        if (dup) h.id = h.id + '-' + i          // 去重，锚点必须唯一
+      })
+
+      // 构建层级：按标题顺序压栈，把 h3/h4/h5 挂到上级下面
+      const lvMap = { h2: 0, h3: 1, h4: 2, h5: 3 }
+      const nodes = heads.map(h => ({
+        el: h,
+        lv: lvMap[h.tagName.toLowerCase()],
+        text: h.textContent.replace(/<[^>]*>/g, '').trim(),
+        id: h.id,
+        children: []
+      }))
+      // 先剥掉 h3/h4/h5 开头（没有 h2 父级）的孤儿节点，否则 roots 会漏
+      const roots = []
+      const stack = []
+      nodes.forEach(n => {
+        // 找比自己 lv 小的栈顶作为父
+        while (stack.length && stack[stack.length - 1].lv >= n.lv) stack.pop()
+        if (stack.length) stack[stack.length - 1].children.push(n)
+        else roots.push(n)              // 无父级 → 顶级（本身就是 h2）
+        stack.push(n)
+      })
+
+      const renderTree = (list, depth) =>
+        list.map(n => {
+          const hasSub = n.children.length
+          return `<div class="toc-group${hasSub ? '' : ' leaf'}">
+            <a href="#${n.id}" class="toc-item toc-l${n.lv + 1}" style="--depth:${depth}">${n.text}</a>
+            ${hasSub ? '<div class="toc-sub">' + renderTree(n.children, depth + 1) + '</div>' : ''}
+          </div>`
+        }).join('')
+
+      toc.innerHTML =
+        '<div class="toc-title">本页目录</div>' +
+        '<div class="toc-tree">' + renderTree(roots, 0) + '</div>'
+
+      // 折叠交互：点击有子节点的 a 右侧空白 → 展开/收缩
+      toc.querySelectorAll('.toc-group > .toc-item').forEach(a => {
+        if (!a.parentElement.querySelector('.toc-sub')) return
+        a.style.cursor = 'pointer'
+        a.addEventListener('click', e => {
+          if (e.target !== a) return
+          a.parentElement.classList.toggle('collapsed')
+        })
+      })
+
+      // 高亮：取最近经过的标题，并点亮它到根的整条祖先链
+      const links = [...toc.querySelectorAll('.toc-item')]
+      const linkById = {}
+      links.forEach(a => { linkById[a.getAttribute('href').slice(1)] = a })
+      // 递归找祖先：从根往下走到 node，返回路径
+      const pathOf = (node, chain = []) => {
+        for (const n of roots) {
+          const hit = walk(n, node, [...chain, n])
+          if (hit) return hit
+        }
+        return [node]
+      }
+      function walk(n, target, chain) {
+        if (n === target) return chain
+        for (const c of n.children) {
+          const r = walk(c, target, [...chain, c])
+          if (r) return r
+        }
+        return null
+      }
+      const update = () => {
+        const y = window.scrollY + 130
+        let cur = null
+        heads.forEach(h => { if (h.offsetTop <= y + 1) cur = h })
+        links.forEach(a => a.classList.remove('active'))
+        if (cur) {
+          const node = nodes.find(n => n.el === cur)
+          if (node) {
+            pathOf(node).forEach(n => {
+              const a = linkById[n.id]
+              if (a) a.classList.add('active')
+            })
+          }
+        }
+        const max = document.body.scrollHeight - window.innerHeight
+        bar.style.width = (max > 0 ? Math.min(100, (window.scrollY / max) * 100) : 0) + '%'
+      }
+      window.addEventListener('scroll', update, { passive: true })
+      update()
+    }
+  }
+
+  // ══════════════════════════════════════════
+  // 4. Quiz：答题 + 判分 + 错题本 + 进度
+  // 注意：store.get/set 内部已自动加 "xifen48:" 前缀，
+  //所以这里传的 key 不要再带 NS，否则会出现 "xifen48:xifen48:xxx"
+  // ══════════════════════════════════════════
+  const Quiz = {
+    wrongKey(page) { return 'wrong:' + page },
+    answersKey(page) { return 'ans:' + page },
+
+    init(root) {
+      const page = root.dataset.key
+      const answers = store.get(this.answersKey(page), {})
+      let wrong = store.get(this.wrongKey(page), [])
+
+      const total = root.querySelectorAll('.quiz-item').length
+      const updateBar = () => {
+        const done = root.querySelectorAll('.quiz-item.done').length
+        const right = root.querySelectorAll('.quiz-item.correct').length
+        const pct = total ? Math.round((right / total) * 100) : 0
+        root.querySelector('.quiz-progress').innerHTML =
+          `已答 <b>${done}</b>/${total}` +
+          (done ? ` · 正确 <b>${right}</b> · 正确率 <b>${pct}%</b>` : '')
+        const bar = root.querySelector('.quiz-pbar-fill')
+        if (bar) bar.style.width = pct + '%'
+      }
+
+      root.querySelectorAll('.quiz-item').forEach((item, i) => {
+        const correct = item.dataset.answer
+        const explain = item.dataset.explain || ''
+        const ref = item.dataset.ref || ''
+        item.querySelectorAll('.opt').forEach(opt => {
+          opt.addEventListener('click', () => {
+            if (item.classList.contains('done')) return
+            const letter = opt.dataset.letter
+            item.classList.add('done')
+            opt.classList.add('picked')
+            const ok = letter === correct
+            item.classList.add(ok ? 'correct' : 'wrong')
+            item.querySelector('.reveal').style.display = 'block'
+            item.querySelector('.reveal-verdict').innerHTML = ok
+              ? '✅ 回答正确<span class="answer">正确答案 ' + correct + '</span>'
+              : '❌ 回答错误<span class="answer">正确答案 ' + correct + '</span>'
+            if (!ok) {
+              item.querySelector('.opt[data-letter="' + correct + '"]').classList.add('right')
+              opt.classList.add('wrong-pick')
+            }
+
+            // 错题本
+            const cur = store.get(this.answersKey(page), {})
+            cur[i] = letter
+            store.set(this.answersKey(page), cur)
+            const w = store.get(this.wrongKey(page), [])
+            if (!ok && !w.includes(i)) { w.push(i); store.set(this.wrongKey(page), w) }
+            else if (ok) store.set(this.wrongKey(page), w.filter(x => x !== i))
+
+            updateBar()
+            window.dispatchEvent(new CustomEvent('quiz:update', { detail: { page } }))
+          })
+        })
+
+        // 恢复
+        const picked = answers[i]
+        if (picked) {
+          item.classList.add('done')
+          item.querySelector('.opt[data-letter="' + picked + '"]').classList.add('picked')
+          const ok = picked === correct
+          item.classList.add(ok ? 'correct' : 'wrong')
+          item.querySelector('.reveal').style.display = 'block'
+          item.querySelector('.reveal-verdict').innerHTML = ok
+            ? '✅ 回答正确<span class="answer">正确答案 ' + correct + '</span>'
+            : '❌ 回答错误<span class="answer">正确答案 ' + correct + '</span>'
+          if (!ok) item.querySelector('.opt[data-letter="' + correct + '"]').classList.add('right')
+        }
+      })
+
+      root.querySelector('.quiz-reset').addEventListener('click', () => {
+        store.del(this.answersKey(page))
+        store.del(this.wrongKey(page))
+        root.querySelectorAll('.quiz-item').forEach(it => {
+          it.classList.remove('done', 'correct', 'wrong')
+          it.querySelectorAll('.opt').forEach(o => o.classList.remove('picked', 'right'))
+          it.querySelector('.reveal').style.display = 'none'
+        })
+        updateBar()
+        window.dispatchEvent(new CustomEvent('quiz:update'))
+      })
+
+      // 导出本学时答题记录
+      root.querySelector('.quiz-export')?.addEventListener('click', () => {
+        const cur = store.get(this.answersKey(page), {})
+        const total = root.querySelectorAll('.quiz-item').length
+        const right = root.querySelectorAll('.quiz-item.correct').length
+        const rows = []
+        for (let i = 0; i < total; i++) {
+          rows.push(`${i + 1}. ${cur[i] || '未答'}${cur[i] && cur[i] === root.querySelectorAll('.quiz-item')[i].dataset.answer ? ' ✓' : cur[i] ? ' ✗' : ''}`)
+        }
+        const blob = new Blob([
+          `阿甘系分 48 小时冲刺 · 答题记录\n${page}\n` +
+          `正确 ${right}/${total}（${Math.round((right / total) * 100)}%）\n生成时间：${new Date().toLocaleString('zh-CN')}\n\n` +
+          rows.join('\n')
+        ], { type: 'text/plain;charset=utf-8' })
+        const a = document.createElement('a')
+        a.href = URL.createObjectURL(blob)
+        a.download = page.replace(/\.md$/, '') + '-答题记录.txt'
+        a.click()
+        URL.revokeObjectURL(a.href)
+      })
+
+      updateBar()
+      return { total, page }
+    }
+  }
+
+  // ══════════════════════════════════════════
+  // 5. 全站错题本（跨页汇总）
+  // ══════════════════════════════════════════
+  const WrongBook = {
+    collect() {
+      const idx = []
+      const prefix = NS + ':' + UID + ':wrong:'
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i)
+        if (k && k.startsWith(prefix)) {
+          const page = k.slice(prefix.length)
+          const arr = store.get('wrong:' + page, [])
+          if (arr.length) idx.push({ page, count: arr.length, items: arr })
+        }
+      }
+      return idx.sort((a, b) => b.count - a.count)
+    },
+    render() {
+      const panel = document.querySelector('.wrongbook')
+      if (!panel) return
+      const idx = this.collect()
+      if (!idx.length) {
+        panel.innerHTML = '<div class="wb-empty">暂无错题记录 — 做完练习后这里会自动汇总</div>'
+        return
+      }
+      panel.innerHTML =
+        '<div class="wb-head"><span>📕 错题本</span><span class="wb-total">' +
+        idx.reduce((n, x) => n + x.count, 0) + ' 道错题 · ' + idx.length + ' 个学时</span></div>' +
+        idx.map(x =>
+          `<div class="wb-row"><a href="${x.page.replace(/\.md$/, '.html')}">${x.page.replace(/\.md$/, '')}</a>` +
+          `<span class="wb-count">${x.count} 道</span></div>`
+        ).join('') +
+        '<button class="wb-clear" data-act="wb-clear">清空错题本</button>'
+
+      panel.querySelector('[data-act="wb-clear"]')?.addEventListener('click', () => {
+        if (!confirm('确定要清空当前浏览器的错题本吗？此操作不可恢复。')) return
+        idx.forEach(x => store.del('wrong:' + x.page))
+        this.render()
+      })
+    },
+    init() { this.render(); window.addEventListener('quiz:update', () => this.render()) }
+  }
+
+  // ══════════════════════════════════════════
+  // 6. 快捷键
+  // ══════════════════════════════════════════
+  /* ---------- 章首进度条：随滚动更新「读到第几节 / 全书第几学时」 ---------- */
+  const ChapBar = {
+    init() {
+      const bar = document.getElementById('chapbar')
+      if (!bar) return
+      this.bar = bar
+      this.fill = document.getElementById('chapbarFill')
+      this.sec = document.getElementById('chapbarSec')
+      this.secs = [...document.querySelectorAll('.main h2[id], .main h3[id]')]
+      this.total = Number(bar.dataset.secTotal) || this.secs.length
+      if (!this.secs.length) return
+      this.cur = -1
+      this.onScroll = this.update.bind(this)
+      window.addEventListener('scroll', this.onScroll, { passive: true })
+      this.update()
+    },
+    update() {
+      // 以"视口上沿往下 120px"为判定线，取该位置之后最近的标题
+      const line = 140
+      let idx = 0
+      for (let i = 0; i < this.secs.length; i++) {
+        const t = this.secs[i].getBoundingClientRect().top
+        if (t - line <= 0) idx = i
+        else break
+      }
+      if (idx !== this.cur) {
+        this.cur = idx
+        if (this.sec) this.sec.textContent = (idx + 1) + ' / ' + this.total
+      }
+      // 整页滚动进度（含末尾）
+      const doc = document.documentElement
+      const max = doc.scrollHeight - doc.clientHeight
+      const p = max > 0 ? Math.min(1, Math.max(0, doc.scrollTop / max)) : 0
+      if (this.fill) this.fill.style.width = (p * 100).toFixed(2) + '%'
+    }
+  }
+
+  /* ---------- 章节导航：胶囊触发器 + 分组下拉面板 ---------- */
+  const ChapNav = {
+    root: null, trigger: null, panel: null, items: [], cursor: -1,
+
+    init() {
+      this.root = document.getElementById('chapnav')
+      if (!this.root) return
+      this.trigger = document.getElementById('navTrigger')
+      this.panel = document.getElementById('navPanel')
+      if (!this.trigger || !this.panel) return
+      this.items = [...this.panel.querySelectorAll('.nav-item')]
+
+      this.trigger.addEventListener('click', e => {
+        e.stopPropagation()
+        // ⚠️ 键盘在触发器上按 Enter/Space 时，浏览器会在 keydown 之后**再合成一次 click**。
+        //    若 keydown 里已经打开面板，这次 click 就会立刻把它关掉（表现为"按 Enter 闪一下又没了"）。
+        //    用一次性标记吞掉紧随其后的那次 click。
+        if (this._swallowClick) { this._swallowClick = false; return }
+        this.toggle()
+      })
+      // 面板内点击：跳转交给 <a> 默认行为，但要点空白处不关闭、点链接才关
+      this.panel.addEventListener('click', e => {
+        if (e.target.closest('.nav-item')) this.close()
+      })
+      // 点外部关闭
+      document.addEventListener('click', e => {
+        if (!this.root.contains(e.target)) this.close()
+      })
+      document.addEventListener('keydown', e => this.onKey(e), true)
+      // 视口变窄时自动关掉，避免面板悬在半个屏幕外
+      window.addEventListener('resize', () => { if (this.isOpen()) this.close() })
+    },
+
+    isOpen() { return !this.panel.hasAttribute('hidden') },
+
+    open() {
+      this.panel.removeAttribute('hidden')
+      this.root.classList.add('open')
+      this.trigger.setAttribute('aria-expanded', 'true')
+      // 打开后把当前页滚进视野，并让「当前项」成为键盘游标
+      const act = this.items.findIndex(a => a.classList.contains('active'))
+      this.cursor = act >= 0 ? act : 0
+      const cur = this.items[this.cursor]
+      if (cur) {
+        const box = this.panel.querySelector('.nav-panel-scroll')
+        if (box && cur.offsetTop < box.scrollTop) box.scrollTop = Math.max(0, cur.offsetTop - 12)
+        else if (box && cur.offsetTop + cur.offsetHeight > box.scrollTop + box.clientHeight)
+          box.scrollTop = cur.offsetTop + cur.offsetHeight - box.clientHeight + 12
+      }
+    },
+
+    close() {
+      if (!this.isOpen()) return
+      this.panel.setAttribute('hidden', '')
+      this.root.classList.remove('open')
+      this.trigger.setAttribute('aria-expanded', 'false')
+    },
+
+    toggle() { this.isOpen() ? this.close() : this.open() },
+
+    focusCursor() {
+      const a = this.items[this.cursor]
+      if (a) { a.focus(); return }
+      this.trigger.focus()
+    },
+
+    onKey(e) {
+      if (!this.isOpen()) {
+        // 未打开时：Enter / ↓ / Alt+↓ 直接开面板
+        if (this.root.contains(e.target) && (e.key === 'Enter' || e.key === 'ArrowDown' || e.key === ' ')) {
+          e.preventDefault()
+          this._swallowClick = true          // 吞掉紧随其后的合成 click
+          this.open()
+          this.focusCursor()
+          // 安全阀：若浏览器这次没派发 click，标记要能过期，否则下一次真鼠标点击会被吞
+          setTimeout(() => { this._swallowClick = false }, 120)
+        }
+        return
+      }
+      if (e.key === 'Escape') { e.preventDefault(); this.close(); this.trigger.focus(); return }
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        e.preventDefault()
+        const d = e.key === 'ArrowDown' ? 1 : -1
+        this.cursor = (this.cursor + d + this.items.length) % this.items.length
+        this.focusCursor()
+        return
+      }
+      if (e.key === 'Home') { e.preventDefault(); this.cursor = 0; this.focusCursor(); return }
+      if (e.key === 'End') {
+        e.preventDefault(); this.cursor = this.items.length - 1; this.focusCursor(); return
+      }
+      // Tab 走出面板就自动收起
+      if (e.key === 'Tab') this.close()
+    }
+  }
+
+  const Keys = {
+    init() {
+      document.addEventListener('keydown', e => {
+        // e.target 可能是 document（无 matches 方法），必须先判断
+        const t = e.target
+        if (t && t.nodeType === 1 && t.matches('input,textarea,select,[contenteditable]')) return
+        if (e.metaKey || e.ctrlKey || e.altKey) return
+
+        const k = e.key.toLowerCase()
+        if (k === 't') {
+          // auto 状态下先按当前实际渲染的主题取反，落成明确值
+          const cur = document.documentElement.dataset.theme
+          Theme.set(cur === 'dark' ? 'light' : 'dark')
+          e.preventDefault()
+        } else if (k === 'p') {
+          // P：跳到下一未答题并选中第一选项
+          const next = [...document.querySelectorAll('.quiz-item')]
+            .find(it => !it.classList.contains('done'))
+          if (next) {
+            next.querySelector('.opt')?.click()
+            next.scrollIntoView({ behavior: 'smooth', block: 'center' })
+          }
+          e.preventDefault()
+        } else if (k === '0') {
+          // 0：回顶部
+          window.scrollTo({ top: 0, behavior: 'smooth' })
+          e.preventDefault()
+        } else if (k === 'g') {
+          // g：上一未答题（与 P 反方向）
+          const items = [...document.querySelectorAll('.quiz-item.done')]
+          if (items.length) {
+            items[items.length - 1].scrollIntoView({ behavior: 'smooth', block: 'center' })
+          }
+          e.preventDefault()
+        } else if (k === 'j' || k === 'k') {
+          // j/k：快速滚动 1/3 页
+          const d = k === 'j' ? 1 : -1
+          window.scrollBy({ top: window.innerHeight * d * 0.6, behavior: 'smooth' })
+          e.preventDefault()
+        }
+      })
+    }
+  }
+
+  // ══════════════════════════════════════════
+  // 7. 全文搜索（当前页，Cmd/Ctrl+K 呼出）
+  // ══════════════════════════════════════════
+  const Search = {
+    init() {
+      // 索引：本页所有块级内容（标题/段落/表格行/提示框/题目）
+      const idx = []
+      const push = (text, anchor, kind) => {
+        const t = (text || '').replace(/\s+/g, ' ').trim()
+        if (t.length >= 2) idx.push({ t: t.toLowerCase(), raw: t, anchor, kind })
+      }
+      document.querySelectorAll('.main h2[id], .main h3[id], .main h4[id]').forEach(h => {
+        push(h.textContent, h.id, '标题')
+      })
+      document.querySelectorAll('.main p, .main li').forEach(el => {
+        // 找到最近的上级标题作为锚点
+        let a = null, n = el
+        while (n && n !== document.body) {
+          if (n.previousElementSibling && n.previousElementSibling.id) { a = n.previousElementSibling.id; break }
+          n = n.previousElementSibling
+        }
+        push(el.textContent, a || '', '正文')
+      })
+      document.querySelectorAll('.main tbody tr').forEach(tr => {
+        push(tr.textContent, '', '表格')
+      })
+      document.querySelectorAll('.main .block, .main .quote').forEach(b => {
+        push(b.textContent, '', '提示')
+      })
+      document.querySelectorAll('.quiz-q').forEach(q => push(q.textContent, '', '题目'))
+
+      if (!idx.length) return
+
+      // UI
+      const panel = document.createElement('div')
+      panel.className = 'search-panel'
+      panel.innerHTML = `
+        <div class="search-box">
+          <input class="search-input" type="search" placeholder="搜索本页内容…  (Esc 关闭)" autocomplete="off">
+          <span class="search-count"></span>
+        </div>
+        <ul class="search-results"></ul>`
+      document.body.appendChild(panel)
+      const input = panel.querySelector('.search-input')
+      const list = panel.querySelector('.search-results')
+      const count = panel.querySelector('.search-count')
+
+      let hits = [], cur = -1
+      const open = () => { panel.classList.add('open'); input.focus(); input.select() }
+      const close = () => { panel.classList.remove('open'); input.value = ''; list.innerHTML = ''; hits = []; cur = -1 }
+
+      function run(q) {
+        q = q.trim().toLowerCase()
+        if (!q) { list.innerHTML = ''; count.textContent = ''; hits = []; return }
+        hits = idx.filter(x => x.t.includes(q)).slice(0, 40)
+        count.textContent = hits.length ? `${hits.length} 条` : '无结果'
+        cur = hits.length ? 0 : -1
+        list.innerHTML = hits.map((h, i) => {
+          const p = h.raw.indexOf(q)
+          const snip = p < 0 ? h.raw.slice(0, 90)
+            : (p > 30 ? '…' : '') + h.raw.slice(Math.max(0, p - 30), p + 70) + (p + 70 < h.raw.length ? '…' : '')
+          return `<li class="search-hit${i === cur ? ' cur' : ''}" data-i="${i}">
+            <span class="hit-kind">${h.kind}</span><span class="hit-text">${escapeHtml(snip)}</span></li>`
+        }).join('')
+      }
+
+      function goto(i) {
+        const h = hits[i]
+        if (!h) return
+        if (h.anchor) {
+          const t = document.getElementById(h.anchor)
+          if (t) { t.scrollIntoView({ behavior: 'smooth', block: 'start' }); flash(t) }
+        }
+        // 高亮正文里的命中词
+        document.querySelectorAll('.search-mark').forEach(m => {
+          m.outerHTML = m.textContent
+        })
+        const walker = document.createTreeWalker(document.querySelector('.main'), NodeFilter.SHOW_TEXT)
+        const targets = []
+        let n
+        while ((n = walker.nextNode())) if (n.nodeValue.toLowerCase().includes(input.value.trim().toLowerCase())) targets.push(n)
+        targets.slice(0, 40).forEach(node => {
+          const frag = document.createDocumentFragment()
+          const parts = node.nodeValue.split(new RegExp('(' + escapeRe(input.value.trim()) + ')', 'ig'))
+          parts.forEach(p => {
+            if (p.toLowerCase() === input.value.trim().toLowerCase()) {
+              const m = document.createElement('mark')
+              m.className = 'search-mark'; m.textContent = p; frag.appendChild(m)
+            } else frag.appendChild(document.createTextNode(p))
+          })
+          node.parentNode.replaceChild(frag, node)
+        })
+        if (targets.length) {
+          const first = document.querySelector('.search-mark')
+          if (first) { first.scrollIntoView({ behavior: 'smooth', block: 'center' }); flash(first) }
+        }
+      }
+
+      function flash(el) {
+        el.classList.add('flash-hit')
+        setTimeout(() => el.classList.remove('flash-hit'), 1200)
+      }
+
+      input.addEventListener('input', () => run(input.value))
+      input.addEventListener('keydown', e => {
+        if (e.key === 'Escape') { close(); e.stopPropagation() }
+        else if (e.key === 'ArrowDown') { cur = Math.min(cur + 1, hits.length - 1); renderCur(); e.preventDefault() }
+        else if (e.key === 'ArrowUp') { cur = Math.max(cur - 1, 0); renderCur(); e.preventDefault() }
+        else if (e.key === 'Enter') { goto(cur); e.preventDefault() }
+      })
+      const renderCur = () => {
+        list.querySelectorAll('.search-hit').forEach((el, i) => el.classList.toggle('cur', i === cur))
+      }
+      list.addEventListener('click', e => {
+        const li = e.target.closest('.search-hit')
+        if (li) goto(Number(li.dataset.i))
+      })
+      panel.addEventListener('click', e => { if (e.target === panel) close() })
+
+      // 快捷键：/ 或 Cmd/Ctrl+K
+      document.addEventListener('keydown', e => {
+        if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); panel.classList.contains('open') ? close() : open() }
+        else if (e.key === '/' && !panel.classList.contains('open')) {
+          const t = e.target
+          if (!(t && t.nodeType === 1 && t.matches('input,textarea'))) { e.preventDefault(); open() }
+        }
+      })
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && panel.classList.contains('open')) close()
+      })
+    }
+  }
+
+  function escapeHtml(s) { return String(s).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c])) }
+  function escapeRe(s) { return String(s).replace(/[.*+?^${}()|[\]\\]/g, '\\$&') }
+
+  // ══════════════════════════════════════════
+  // 8. 专注模式：隐藏导航/目录/页脚，只留正文
+  // ══════════════════════════════════════════
+  const Focus = {
+    KEY: 'focus',
+    init() {
+      // 顶栏按钮由 Overflow 模块创建（它负责插入到正确位置），这里只绑行为
+      Focus.sync()
+      document.addEventListener('keydown', e => {
+        const t = e.target
+        if (t && t.nodeType === 1 && t.matches('input,textarea')) return
+        if (e.metaKey || e.ctrlKey || e.altKey) return
+        if (e.key.toLowerCase() === 'f') { Focus.toggle(); e.preventDefault() }
+      })
+      if (store.get(this.KEY, false)) document.documentElement.classList.add('focus-mode')
+      // 右下角退出浮标：独立于顶栏，保证专注模式下永远有一个能点的退出入口
+      const fab = document.querySelector('.focus-exit-fab')
+      if (fab) fab.addEventListener('click', () => Focus.toggle())
+      this.sync()
+    },
+    toggle() {
+      const on = !document.documentElement.classList.contains('focus-mode')
+      if (on) document.documentElement.classList.add('focus-mode')
+      else document.documentElement.classList.remove('focus-mode')
+      store.set(this.KEY, on)
+      this.sync()
+    },
+    sync() {
+      const on = document.documentElement.classList.contains('focus-mode')
+      document.querySelectorAll('.focus-btn').forEach(b => b.classList.toggle('active', on))
+    }
+  }
+
+  // ══════════════════════════════════════════
+  // 9. 字号调节（- / + 或 [ ]）
+  // ══════════════════════════════════════════
+  const FontSize = {
+    KEY: 'fontsize',
+    MIN: 13, MAX: 22, STEP: 1,
+    init() {
+      this.apply(store.get(this.KEY, 16.5))
+      document.addEventListener('keydown', e => {
+        const t = e.target
+        if (t && t.nodeType === 1 && t.matches('input,textarea')) return
+        if (e.metaKey || e.ctrlKey || e.altKey) return
+        const cur = store.get(this.KEY, 16.5)
+        if (e.key === '-' || e.key === '_') { FontSize.set(cur - FontSize.STEP); e.preventDefault() }
+        if (e.key === '=' || e.key === '+') { FontSize.set(cur + FontSize.STEP); e.preventDefault() }
+      })
+    },
+    set(v) { FontSize.apply(Math.min(FontSize.MAX, Math.max(FontSize.MIN, v))) },
+    apply(v) {
+      v = Math.round(v * 10) / 10
+      store.set(FontSize.KEY, v)
+      document.documentElement.style.setProperty('--fs-base', v + 'px')
+    }
+  }
+
+  // ══════════════════════════════════════════
+  // 10. 顶栏溢出菜单（窄屏时把次要控件收进⋯）
+  // ══════════════════════════════════════════
+  const Overflow = {
+    init() {
+      const bar = document.querySelector('.topbar')
+      const sw = document.querySelector('.theme-switch')
+      if (!bar || !sw) return
+
+      const btn = document.createElement('button')
+      btn.className = 'overflow-btn'
+      btn.type = 'button'
+      btn.title = '更多'
+      btn.setAttribute('aria-label', '更多操作')
+      btn.textContent = '⋯'
+
+      const panel = document.createElement('div')
+      panel.className = 'overflow-panel'
+
+      btn.addEventListener('click', e => {
+        e.stopPropagation()
+        const open = panel.classList.toggle('open')
+        btn.classList.toggle('active', open)
+      })
+      document.addEventListener('click', () => {
+        panel.classList.remove('open')
+        btn.classList.remove('active')
+      })
+      panel.addEventListener('click', e => e.stopPropagation())
+
+      // 把主题切换搬进去
+      sw.remove()
+      panel.appendChild(sw)
+      // 专注按钮也放进去（保留顶栏一个 focus-btn 副本给快捷键用）
+      bar.appendChild(btn)
+      bar.appendChild(panel)
+
+      // 专注模式需要顶栏留一个可见按钮
+      const fb = document.createElement('button')
+      fb.className = 'focus-btn focus-btn-top'
+      fb.type = 'button'
+      fb.title = '专注模式（F）'
+      fb.textContent = '专注'
+      fb.addEventListener('click', () => Focus.toggle())
+      bar.insertBefore(fb, btn)
+      Focus.topButton = fb
+    }
+  }
+
+  // ══════════════════════════════════════════
+  // 11. 返回顶部 + 代码复制 + 阅读时长
+  // ══════════════════════════════════════════
+  const BackTop = {
+    init() {
+      const btn = document.createElement('button')
+      btn.className = 'back-top'
+      btn.type = 'button'
+      btn.title = '返回顶部'
+      btn.setAttribute('aria-label', '返回顶部')
+      btn.textContent = '↑'
+      document.body.appendChild(btn)
+      btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }))
+      let last = 0
+      window.addEventListener('scroll', () => {
+        const y = window.scrollY
+        if (y > 500 && y !== last) btn.classList.add('show')
+        else if (y <= 500) btn.classList.remove('show')
+        last = y
+      }, { passive: true })
+    }
+  }
+
+  const CopyCode = {
+    init() {
+      document.querySelectorAll('pre').forEach(pre => {
+        // 跳过 mermaid fallback pre
+        if (pre.closest('.mermaid-err')) return
+        const wrap = document.createElement('div')
+        wrap.className = 'code-wrap'
+        pre.parentNode.insertBefore(wrap, pre)
+        wrap.appendChild(pre)
+        const btn = document.createElement('button')
+        btn.className = 'copy-btn'
+        btn.type = 'button'
+        btn.textContent = '复制'
+        btn.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(pre.textContent)
+            btn.textContent = '已复制 ✓'
+            btn.classList.add('copied')
+            setTimeout(() => { btn.textContent = '复制'; btn.classList.remove('copied') }, 1500)
+          } catch {
+            // 降级：老浏览器用 execCommand
+            const ta = document.createElement('textarea')
+            ta.value = pre.textContent
+            document.body.appendChild(ta)
+            ta.select()
+            try { document.execCommand('copy') } catch {}
+            document.body.removeChild(ta)
+            btn.textContent = '已复制 ✓'
+            setTimeout(() => { btn.textContent = '复制' }, 1500)
+          }
+        })
+        wrap.appendChild(btn)
+      })
+    }
+  }
+
+  const ReadTime = {
+    init() {
+      const h1 = document.querySelector('.main h1')
+      if (!h1) return
+      const main = document.querySelector('.main')
+      if (!main) return
+      const text = main.textContent || ''
+      // 中文阅读速度约 400 字/分钟
+      const minutes = Math.max(1, Math.round(text.length / 400))
+      const el = document.createElement('div')
+      el.className = 'read-time'
+      el.textContent = '预计阅读 ' + minutes + ' 分钟 · ' + text.length + ' 字'
+      h1.insertAdjacentElement('afterend', el)
+    }
+  }
+
+  function updateAnsweredStat() {
+    const el = document.getElementById('stat-answered')
+    if (!el) return
+    let n = 0
+    const prefix = NS + ':' + UID + ':ans:'
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i)
+      if (k && k.startsWith(prefix)) {
+        const a = store.get('ans:' + k.slice(prefix.length), {})
+        n += Object.keys(a).filter(x => a[x]).length
+      }
+    }
+    el.textContent = n
+  }
+
+  // ══════════════════════════════════════════
+  // 12. 历年真题：批量展开 + 记忆展开状态
+  // ══════════════════════════════════════════
+  const Exam = {
+    KEY: 'examOpen',
+    init() {
+      const root = document.querySelector('.exam')
+      if (!root) return
+      const chapter = root.dataset.examChapter || 'x'
+
+      // 恢复上次展开状态：{ "H07": { "2025年5月": true, ... } }
+      const saved = store.get(this.KEY, {}) || {}
+      const mine = saved[chapter] || {}
+      root.querySelectorAll('.exam-year').forEach(y => {
+        const name = y.dataset.examYear
+        // 默认：展开最近 1 套（新年优先），其余收起
+        const open = (name in mine) ? mine[name] : false
+        if (open) y.open = true
+        y.addEventListener('toggle', () => {
+          mine[name] = y.open
+          saved[chapter] = mine
+          store.set(this.KEY, saved)
+        })
+      })
+      // 单题的"看过答案"状态也要记（避免重复点开）
+      const seen = store.get('examSeen', {}) || {}
+      root.querySelectorAll('.exam-q').forEach(qd => {
+        const qid = qd.dataset.examId
+        if (seen[qid]) {
+          const a = qd.querySelector('.exam-ans')
+          if (a) a.open = true
+        }
+        const ans = qd.querySelector('.exam-ans')
+        if (ans) ans.addEventListener('toggle', () => {
+          if (ans.open) { seen[qid] = 1; store.set('examSeen', seen) }
+        })
+      })
+
+      // 批量展开/收起按钮
+      root.querySelectorAll('.exam-op').forEach(btn => {
+        btn.addEventListener('click', e => {
+          e.preventDefault()
+          const openAll = btn.dataset.examAll === '1'
+          root.querySelectorAll('.exam-subject,.exam-year').forEach(d => { d.open = openAll })
+          root.querySelectorAll('.exam-ans').forEach(d => {
+            d.open = openAll
+            if (openAll && d.parentElement.dataset.examId) seen[d.parentElement.dataset.examId] = 1
+          })
+          if (openAll) store.set('examSeen', seen)
+          // 同步年份级记忆
+          root.querySelectorAll('.exam-year').forEach(y => { mine[y.dataset.examYear] = y.open })
+          saved[chapter] = mine
+          store.set(this.KEY, saved)
+        })
+      })
+
+      // 快捷键：E = 跳到真题区块（不与既有键冲突）
+      document.addEventListener('keydown', e => {
+        const t = e.target
+        if (t && t.nodeType === 1 && t.matches('input,textarea,select,[contenteditable]')) return
+        if (e.metaKey || e.ctrlKey || e.altKey) return
+        if (e.key.toLowerCase() === 'e') {
+          e.preventDefault()
+          root.scrollIntoView({ behavior: 'smooth', block: 'start' })
+          const y = root.querySelector('.exam-year')
+          if (y) y.open = true
+        }
+      })
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    Theme.init()
+    FontSize.init()
+    Progress.init()
+    ChapBar.init()
+    document.querySelectorAll('.quiz-js').forEach(r => Quiz.init(r))
+    WrongBook.init()
+    Search.init()
+    ChapNav.init()
+    Focus.init()
+    Overflow.init()
+    Keys.init()
+    BackTop.init()
+    CopyCode.init()
+    ReadTime.init()
+    Exam.init()
+    updateAnsweredStat()
+    window.addEventListener('quiz:update', updateAnsweredStat)
+    renderMermaid()
+  })
+
+  // ══════════════════════════════════════════
+  // 8. mermaid 渲染（自定义墨绿主题，与正文同色系）
+  // ══════════════════════════════════════════
+  // 站点配色（与 design.css 的令牌保持一致）
+  const MERMAID_LIGHT = {
+    bg: '#f2f0e9', fg: '#1b211c', line: '#cdc9bd',
+    accent: '#3d5a40', accent2: '#5a8a62', accent3: '#7ea888',
+    tip: '#2d6a4f', warn: '#b8860b', danger: '#b33636'
+  }
+  const MERMAID_DARK = {
+    bg: '#1c201d', fg: '#dde5de', line: '#3a413b',
+    accent: '#8bb195', accent2: '#a9c9b1', accent3: '#c3dcc8',
+    tip: '#7fc79b', warn: '#d9b04a', danger: '#e08585'
+  }
+
+  function mermaidTheme(dark) {
+    const c = dark ? MERMAID_DARK : MERMAID_LIGHT
+    return {
+      startOnLoad: false, securityLevel: 'strict',
+      fontFamily: 'inherit',
+      theme: 'base',
+      themeVariables: {
+        background: c.bg,
+        primaryColor: c.accent + '18',
+        primaryTextColor: c.fg,
+        primaryBorderColor: c.accent2,
+        secondaryColor: c.accent2 + '20',
+        tertiaryColor: c.bg,
+        lineColor: c.line,
+        textColor: c.fg,
+        mainBkg: c.accent + '18',
+        nodeBorder: c.accent2,
+        clusterBkg: c.accent2 + '14',
+        clusterBorder: c.line,
+        titleColor: c.accent,
+        edgeLabelBackground: c.bg,
+        // 分类色：全部落在墨绿/暖褐区间，不再是默认紫
+        tertiaryColor: c.bg,
+        quaternaryColor: c.accent3 + '22',
+        noteBkgColor: c.warn + '18',
+        noteTextColor: c.fg,
+        noteBorderColor: c.warn,
+        actorBkg: c.accent2 + '28',
+        actorBorder: c.accent,
+        actorTextColor: c.fg,
+        signalColor: c.fg,
+        signalTextColor: c.fg,
+        labelBoxBkgColor: c.bg,
+        labelTextColor: c.fg,
+        loopTextColor: c.fg,
+        activationBkgColor: c.accent3 + '30',
+        pie1: c.accent, pie2: c.accent2, pie3: c.accent3,
+        pie4: c.tip, pie5: c.warn, pie6: c.danger
+      },
+      flowchart: { htmlLabels: true, curve: 'basis', useMaxWidth: true, padding: 14 },
+      sequence: { useMaxWidth: true, actorFontSize: 13, noteFontSize: 12 }
+    }
+  }
+
+  function renderMermaid() {
+    // 覆盖两类节点：未渲染的 .mermaid-src，和已渲染但主题不符的 .mermaid-wrap
+    const nodes = [...document.querySelectorAll('.mermaid-src, .mermaid-wrap[data-src]')]
+    if (!nodes.length) return
+
+    const dark = document.documentElement.dataset.theme === 'dark'
+    const theme = dark ? 'dark' : 'light'
+
+    // ① 图表库未加载（离线 / CDN 挂）→ 优雅降级：把源码摊开显示，别让图凭空消失
+    if (!window.mermaid) {
+      nodes.forEach(node => {
+        const src = node.dataset.src ||
+          (node.classList.contains('mermaid-src') ? node.textContent.trim() : '')
+        if (!src || node.classList.contains('mermaid-fallback')) return
+        node.outerHTML =
+          '<div class="mermaid-wrap mermaid-err" data-src="' + escAttr(src) + '">' +
+          '<div class="mmd-note">图表库未加载（离线）· 以下为图表源码</div>' +
+          '<pre>' + escHtml(src) + '</pre></div>'
+      })
+      return
+    }
+
+    mermaid.initialize(mermaidTheme(dark))
+
+    nodes.forEach((node, i) => {
+      const src = node.dataset.src ||
+        (node.classList.contains('mermaid-src') ? node.textContent.trim() : '')
+      if (!src) return
+      // 已按当前主题渲染过 → 跳过
+      if (node.classList.contains('mermaid-wrap') && node.dataset.theme === theme) return
+
+      const id = 'mmd' + Date.now().toString(36) + i + Math.random().toString(36).slice(2, 6)
+      const mount = (svg) => {
+        const holder = document.createElement('div')
+        holder.className = 'mermaid-wrap'
+        holder.dataset.src = src
+        holder.dataset.theme = theme
+        holder.innerHTML = svg
+        node.replaceWith(holder)
+      }
+      const fail = (err) => {
+        const holder = document.createElement('div')
+        holder.className = 'mermaid-wrap mermaid-err'
+        holder.dataset.src = src
+        holder.dataset.theme = theme
+        holder.innerHTML = '<div class="mmd-note">图表渲染失败 · 源码如下</div><pre>' +
+          escHtml(src) + '</pre>'
+        node.replaceWith(holder)
+        console.warn('[mermaid]', err)
+      }
+      try {
+        const res = mermaid.render(id, src)
+        if (res && typeof res.then === 'function') res.then(r => mount(r.svg)).catch(fail)
+        else mount(res.svg || res)
+      } catch (e) { fail(e) }
+    })
+  }
+
+  function escHtml(s) {
+    return String(s).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]))
+  }
+  function escAttr(s) {
+    return String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]))
+  }
+
+  // 主题切换后重渲染图表
+  const origApply = Theme.apply
+  Theme.apply = function () { origApply(); setTimeout(renderMermaid, 50) }
+})()</script>
+</body>
+</html>

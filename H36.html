@@ -7,7 +7,7 @@
 <title>第 36 小时 · 嵌入式系统分析与设计 · 实时调度与低功耗 · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
-<meta name="build-stamp" content="2026-10-05 08:06:29">
+<meta name="build-stamp" content="2026-10-05 11:44:51">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -1927,6 +1927,166 @@ table.zebra tbody tr:hover{background:var(--accent-soft-2)}
 /* ── 平滑滚动偏移（锚点跳转不卡顶栏下） ── */
 html{scroll-padding-top:80px}
 @media(max-width:760px){html{scroll-padding-top:70px}}
+
+/* ═══════════════════════════════════════════════════════════════
+   历年真题区块 · 三级折叠（原生 details，零 JS）
+   ═══════════════════════════════════════════════════════════════ */
+.exam{margin:2.2em 0 1.6em}
+
+/* ── 统计条：常驻不折叠，避免"用户不知道里面有真题"而白做 ── */
+.exam-bar{
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  padding:12px 16px;margin-bottom:10px;
+  background:linear-gradient(180deg,var(--bg-card) 0%,var(--bg-alt) 100%);
+  border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow-1);
+}
+.exam-bar-label{font-weight:700;font-size:14px;color:var(--accent)}
+.exam-bar-stat{font-size:12.5px;color:var(--fg-3);flex:1;min-width:140px}
+.exam-bar-stat b{color:var(--fg-2);font-variant-numeric:tabular-nums}
+.exam-bar-ops{display:flex;gap:6px}
+.exam-op{
+  padding:4px 11px;font:inherit;font-size:12px;cursor:pointer;
+  background:var(--bg-card);border:1px solid var(--line-2);
+  border-radius:999px;color:var(--fg-2);
+  transition:border-color .18s var(--ease),color .18s var(--ease),background .18s var(--ease);
+}
+.exam-op:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+
+/* ── 科目级折叠 ── */
+.exam-subject{
+  border:1px solid var(--line);border-radius:var(--radius);
+  background:var(--bg-card);overflow:hidden;
+}
+.exam-subject>summary{
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  padding:12px 16px;cursor:pointer;list-style:none;
+  font-weight:600;color:var(--fg-2);
+  transition:background .18s var(--ease),color .18s var(--ease);
+}
+.exam-subject>summary::-webkit-details-marker{display:none}
+.exam-subject>summary:hover{background:var(--accent-soft);color:var(--accent)}
+.exam-subject[open]>summary{border-bottom:1px solid var(--line);background:var(--bg-alt)}
+.exam-subject-name::before{content:'▸ ';display:inline-block;transition:transform .2s var(--ease)}
+.exam-subject[open] .exam-subject-name::before{transform:rotate(90deg)}
+.exam-subject-n{font-size:12px;color:var(--fg-3);font-variant-numeric:tabular-nums}
+.exam-subject-tip{margin-left:auto;font-size:11.5px;color:var(--fg-3);opacity:.8}
+
+/* ── 年份级折叠 ── */
+.exam-year{border-bottom:1px solid var(--line)}
+.exam-year:last-child{border-bottom:0}
+.exam-year>summary{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 16px 9px 30px;cursor:pointer;list-style:none;
+  font-size:13.5px;color:var(--fg-2);
+  transition:background .16s var(--ease),color .16s var(--ease);
+}
+.exam-year>summary::-webkit-details-marker{display:none}
+.exam-year>summary:hover{background:var(--accent-soft);color:var(--accent)}
+.exam-year[open]>summary{background:var(--bg-alt)}
+.exam-year-name::before{content:'▸ ';display:inline-block;transition:transform .2s var(--ease);color:var(--fg-3)}
+.exam-year[open] .exam-year-name::before{transform:rotate(90deg)}
+.exam-year-n{font-size:11.5px;color:var(--fg-3);font-variant-numeric:tabular-nums}
+
+/* ── 单题折叠 ── */
+.exam-q{border-top:1px solid var(--line)}
+.exam-q>summary{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:9px 16px 9px 46px;cursor:pointer;list-style:none;
+  font-size:13.5px;line-height:1.6;color:var(--fg-2);
+  transition:background .16s var(--ease);
+}
+.exam-q>summary::-webkit-details-marker{display:none}
+.exam-q>summary:hover{background:var(--accent-soft)}
+.exam-q[open]>summary{background:var(--bg-alt)}
+.exam-q>summary::before{
+  content:'＋';flex-shrink:0;width:1.1em;text-align:center;
+  color:var(--fg-3);font-size:12px;line-height:1.5;
+}
+.exam-q[open]>summary::before{content:'－';color:var(--accent)}
+.exam-no{
+  flex-shrink:0;font-size:11px;color:var(--fg-3);
+  font-variant-numeric:tabular-nums;padding-top:2px;min-width:44px;
+}
+.exam-tag{
+  flex-shrink:0;font-size:10.5px;padding:1px 6px;border-radius:4px;
+  background:var(--warn-bg);color:var(--warn-fg);border:1px solid var(--warn-line);
+}
+.exam-stem-peek{
+  flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  color:var(--fg-2);
+}
+.exam-q[open] .exam-stem-peek{color:var(--fg)}
+.exam-q-body{padding:4px 16px 16px 46px}
+.exam-stem{margin:.6em 0;font-size:14.5px;line-height:1.8;color:var(--fg)}
+.exam-blank{color:var(--danger);padding:0 1px}
+.exam-opts{list-style:none;margin:.5em 0 .9em;padding:0}
+/* ⚠️ 必须清掉全局 `ul>li::before` 的圆点（本站正文列表有项目符号），
+   否则真题选项前会多出一个小圆点，位置还和字母块错开 */
+.exam-opts>li::before{content:none !important}
+.exam-opts li{
+  position:relative;padding:4px 0 4px 26px;font-size:14px;line-height:1.7;
+  border-bottom:1px dashed var(--line);
+}
+.exam-opts li:last-child{border-bottom:0}
+.exam-opts b{
+  position:absolute;left:0;top:4px;
+  display:inline-flex;align-items:center;justify-content:center;
+  width:19px;height:19px;border-radius:5px;
+  background:var(--bg-alt);border:1px solid var(--line-2);
+  font-size:11px;font-weight:700;color:var(--fg-3);
+}
+
+/* ── 答案（默认再折叠一层）── */
+.exam-ans{margin-top:.6em}
+.exam-ans>summary{
+  display:inline-flex;align-items:center;gap:6px;cursor:pointer;list-style:none;
+  padding:4px 12px;font-size:12px;
+  background:var(--accent-soft);border:1px solid var(--line-2);
+  border-radius:999px;color:var(--accent);
+  transition:background .18s var(--ease),border-color .18s var(--ease);
+}
+.exam-ans>summary::-webkit-details-marker{display:none}
+.exam-ans>summary:hover{background:var(--accent-soft-2);border-color:var(--accent)}
+.exam-ans[open]>summary{margin-bottom:8px}
+.exam-ans-line{margin:.4em 0;font-size:14px;color:var(--fg)}
+.exam-ans-line b{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:26px;height:24px;padding:0 8px;margin-left:4px;
+  border-radius:6px;background:var(--tip-bg);color:var(--tip-fg);
+  border:1px solid var(--tip-line);font-weight:700;
+}
+.exam-exp{margin:.4em 0;font-size:13.5px;line-height:1.8;color:var(--fg-2)}
+
+/* ── 窄屏 ── */
+@media(max-width:760px){
+  .exam-bar{padding:10px 12px;gap:8px}
+  .exam-bar-label{font-size:13px}
+  .exam-bar-stat{font-size:11.5px;flex-basis:100%;order:3;min-width:0}
+  .exam-bar-ops{margin-left:auto}
+  .exam-subject-tip{display:none}
+  .exam-q>summary{padding-left:16px;flex-wrap:wrap}
+  .exam-q>summary::before{display:none}
+  .exam-no{min-width:0}
+  .exam-q-body{padding-left:16px}
+  .exam-year>summary{padding-left:20px}
+  .exam-stem-peek{white-space:normal;flex-basis:100%}
+  .exam-opts li{font-size:13.5px}
+}
+
+/* ── 打印：全部自动展开（服务"可打印带水印"卖点）── */
+@media print{
+  .exam-bar,.exam-op,.exam-ans>summary{display:none !important}
+  .exam-subject,.exam-year,.exam-q{border:0 !important;background:none !important}
+  .exam-subject>summary,.exam-year>summary{
+    padding:6pt 0;background:none !important;border-bottom:1pt solid #999;
+  }
+  .exam-subject-name::before,.exam-year-name::before,.exam-q>summary::before{content:'' !important}
+  .exam-q-body,.exam-ans[open] > div,.exam-ans > div{display:block !important}
+  .exam-q{break-inside:avoid;page-break-inside:avoid}
+  .exam-stem,.exam-opts li{font-size:9.5pt}
+  .exam-exp{font-size:8.5pt;color:#333}
+}
 </style>
 </head>
 <body>
@@ -2248,6 +2408,9 @@ html{scroll-padding-top:80px}
   </div>
 </div>
 </div>
+    <section class="exam" id="exam" data-exam-chapter="17" data-exam-hour="H36"><div class="exam-bar"><span class="exam-bar-label">📚 历年真题</span><span class="exam-bar-stat">共 <b>11</b> 题 · 来自 3 套真题</span><span class="exam-bar-ops"><button type="button" class="exam-op" data-exam-all="1">全部展开</button><button type="button" class="exam-op" data-exam-all="0">全部收起</button></span></div><details class="exam-subject" data-exam-subject="综合知识"><summary><span class="exam-subject-name">📝 综合知识</span><span class="exam-subject-n">11 题</span><span class="exam-subject-tip">按年份展开 · 单题可点开看答案</span></summary><details class="exam-year" data-exam-year="2023年5月"><summary><span class="exam-year-name">2023年5月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2023年5月-048"><summary><span class="exam-no">第 48 题</span><span class="exam-stem-peek">在嵌入式操作系统中，通常采用硬件抽象层（Hardware Abstraction Level,HAL)和板级支撑包(Bo…</span></summary><div class="exam-q-body"><p class="exam-stem">在嵌入式操作系统中，通常采用硬件抽象层（Hardware Abstraction Level,HAL)和板级支撑包(Board Support Package, BSP)的底层设计技术，目的是为了提高操作系统的（ ）。</p><ul class="exam-opts"><li><b>A</b> 可定制</li><li><b>B</b> 实时性</li><li><b>C</b> 可靠性</li><li><b>D</b> 可移植性</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">硬件抽象层HAL和板级支持包BSP封装了硬件操作细节，更换硬件平台时仅需修改底层BSP适配代码，大幅提升操作系统跨硬件的可移植性。</p></details></div></details><details class="exam-q" data-exam-id="2023年5月-016"><summary><span class="exam-no">第 16 题</span><span class="exam-stem-peek">嵌入式系统是一种以应用为中心，以计算机技术为基础，可以适应不同应用对功能、可靠性、成本、体积、功耗严格要求的专用计算机系…</span></summary><div class="exam-q-body"><p class="exam-stem">嵌入式系统是一种以应用为中心，以计算机技术为基础，可以适应不同应用对功能、可靠性、成本、体积、功耗严格要求的专用计算机系统。集可配置可裁剪的软、硬件于一体的专用计算机系统。嵌入式系统通常是通过外部接口采集相关输入信息或人机接口输入的命令，在嵌入式计算机中（ ），控制受控对象。</p><ul class="exam-opts"><li><b>A</b> 对输入数据进行加工、计算，并将计算结果通过外部接口输出</li><li><b>B</b> 对输入数据进行加工、计算然后将结果进行比对</li><li><b>C</b> 对输入数据镜像卡尔曼滤波，并将卡尔曼滤波结果通过拟合后输出</li><li><b>D</b> 对人机输入的命令镜像处理并输出至屏幕</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">嵌入式系统遵循通用计算机处理流程：采集输入数据→加工运算处理→通过外部接口输出控制指令管控受控对象，其余选项都是特定场景的局部操作，不是通用流程。</p></details></div></details></details><details class="exam-year" data-exam-year="2022年5月"><summary><span class="exam-year-name">2022年5月</span><span class="exam-year-n">5 题</span></summary><details class="exam-q" data-exam-id="2022年5月-018"><summary><span class="exam-no">第 18 题</span><span class="exam-stem-peek">嵌入式实时系统存在许多调度解法。如果调度程序根据任务的紧急程度确定该任务的优先级，任务紧急程度高，被赋予的优先级就高，可…</span></summary><div class="exam-q-body"><p class="exam-stem">嵌入式实时系统存在许多调度解法。如果调度程序根据任务的紧急程度确定该任务的优先级，任务紧急程度高，被赋予的优先级就高，可被优先执行。这种调度算法称之为（18）。</p><ul class="exam-opts"><li><b>A</b> 最早截止时间优先（Earliest Deadline First, EDF）算法</li><li><b>B</b> 最低松弛度优先（Least Laxity First, LLF算法</li><li><b>C</b> 单调速率调度（Rate Monotonic Scheduling, RMS）算法</li><li><b>D</b> 抢占式优先级调度（Preemptive Priority Scheduling, PPS）算法</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">优先级越高越快执行，那就是优先级调度，这里题干倒没有体现抢占式，不过跟优先级相关的只有D。</p></details></div></details><details class="exam-q" data-exam-id="2022年5月-017"><summary><span class="exam-no">第 17 题</span><span class="exam-stem-peek">由于处理器芯片在不同领域应用时，需要考虑对环境的适应性。通常，我们把芯片分为民用级、工业级和军用级。（17）分别是民用级…</span></summary><div class="exam-q-body"><p class="exam-stem">由于处理器芯片在不同领域应用时，需要考虑对环境的适应性。通常，我们把芯片分为民用级、工业级和军用级。（17）分别是民用级、工业级和军用级芯片的标准工作温度范围。</p><ul class="exam-opts"><li><b>A</b> -10℃~+70℃ 、-40℃~+80℃ 、-50℃~+150℃</li><li><b>B</b> 0℃~+70℃、-30℃~+85℃、-60℃~+150℃</li><li><b>C</b> 0℃~+70℃、-40℃~+85℃、-55℃~+150℃</li><li><b>D</b> -0℃~+60℃、-40℃~+90℃、-55℃~+150℃</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">奇葩的题目，考了有啥哈意义。</p></details></div></details><details class="exam-q" data-exam-id="2022年5月-016"><summary><span class="exam-no">第 16 题</span><span class="exam-stem-peek">嵌入式软件开发方法与传统软件开发方法存在较大差异，（16）的说法对嵌入式软件开发而言是错误的。</span></summary><div class="exam-q-body"><p class="exam-stem">嵌入式软件开发方法与传统软件开发方法存在较大差异，（16）的说法对嵌入式软件开发而言是错误的。</p><ul class="exam-opts"><li><b>A</b> 嵌入式软件开发的结果通常需要固化在目标系统的储存器或处理器内部储存器资源中</li><li><b>B</b> 嵌入式软件的开发一般需要专门的开发工具，目标系统和测试设备</li><li><b>C</b> 嵌入式软件对安全性和可靠性的要求较高</li><li><b>D</b> 嵌入式软件开发不用考虑代码的规模</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">常识。任何软件开发都要考虑代码规模，嵌入式尤其要考虑，因为嵌入式设备资源少，更要注重代码质量。</p></details></div></details><details class="exam-q" data-exam-id="2022年5月-015"><summary><span class="exam-no">第 15 题</span><span class="exam-tag">两空单选</span><span class="exam-tag">2 空</span><span class="exam-stem-peek">嵌入式系统已被广泛应用到各行各业。嵌入式系统是一个内置于设备中，对设备的各种传感器进行管理与控制的系统。通常，根据系统对…</span></summary><div class="exam-q-body"><p class="exam-stem">嵌入式系统已被广泛应用到各行各业。嵌入式系统是一个内置于设备中，对设备的各种传感器进行管理与控制的系统。通常，根据系统对时间的敏感程度可将嵌入式系统划分为<b class="exam-blank">（14）</b>两种，而实时系统又可分为强实时（Hard Real-Time）系统和弱实时（WeakReal-Time）系统；如果从安全性要求看，嵌入式系统还可分为<b class="exam-blank">（15）</b>。
+（本题为第 2 空）</p><ul class="exam-opts"><li><b>A</b> 高可靠系统和高安全系统</li><li><b>B</b> 实时系统和非实时系统</li><li><b>C</b> 安全攸关系统和非安全攸关系统</li><li><b>D</b> 网络系统和分布式系统</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">顾名思义，对时间敏感程度就是实时的区别，题干后面也有提示；安全就是安全相关。</p></details></div></details><details class="exam-q" data-exam-id="2022年5月-014"><summary><span class="exam-no">第 14 题</span><span class="exam-tag">两空单选</span><span class="exam-tag">2 空</span><span class="exam-stem-peek">嵌入式系统已被广泛应用到各行各业。嵌入式系统是一个内置于设备中，对设备的各种传感器进行管理与控制的系统。通常，根据系统对…</span></summary><div class="exam-q-body"><p class="exam-stem">嵌入式系统已被广泛应用到各行各业。嵌入式系统是一个内置于设备中，对设备的各种传感器进行管理与控制的系统。通常，根据系统对时间的敏感程度可将嵌入式系统划分为<b class="exam-blank">（14）</b>两种，而实时系统又可分为强实时（Hard Real-Time）系统和弱实时（WeakReal-Time）系统；如果从安全性要求看，嵌入式系统还可分为<b class="exam-blank">（15）</b>。
+（本题为第 1 空）</p><ul class="exam-opts"><li><b>A</b> 嵌入式系统和嵌入式实时系统</li><li><b>B</b> 控制系统和业务系统</li><li><b>C</b> 安全攸关系统和非安全攸关系统</li><li><b>D</b> CPS系统和非CPS系统</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">顾名思义，对时间敏感程度就是实时的区别，题干后面也有提示；安全就是安全相关。</p></details></div></details></details><details class="exam-year" data-exam-year="2021年5月"><summary><span class="exam-year-name">2021年5月</span><span class="exam-year-n">4 题</span></summary><details class="exam-q" data-exam-id="2021年5月-047"><summary><span class="exam-no">第 47 题</span><span class="exam-stem-peek">嵌入式系统初始化过程通常包括三个环节：片级初始化、板级初始化和系统级初始化。以下关于系统级初始化主要任务的描述，准确的是…</span></summary><div class="exam-q-body"><p class="exam-stem">嵌入式系统初始化过程通常包括三个环节：片级初始化、板级初始化和系统级初始化。以下关于系统级初始化主要任务的描述，准确的是（ ）。</p><ul class="exam-opts"><li><b>A</b> 完成嵌入式微处理器的初始化</li><li><b>B</b> 以软件初始化为主，主要进行操作系统的初始化</li><li><b>C</b> 完成嵌入式微处理器以外的其他硬件设备的初始化</li><li><b>D</b> 设置嵌入式微处理器的核心寄存器和控制寄存器工作状态</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">A、D属于片级初始化任务，C属于板级初始化任务；系统级初始化以软件操作为核心，完成操作系统加载、设备驱动初始化、系统内存与文件系统搭建等工作。</p></details></div></details><details class="exam-q" data-exam-id="2021年5月-016"><summary><span class="exam-no">第 16 题</span><span class="exam-stem-peek">在多核与多处理技术融合的系统中，对调试问题提出许多新挑战。其主要原因是由于系统的复杂度在不断增加，需要通过优化硬件和软件…</span></summary><div class="exam-q-body"><p class="exam-stem">在多核与多处理技术融合的系统中，对调试问题提出许多新挑战。其主要原因是由于系统的复杂度在不断增加，需要通过优化硬件和软件来充分发挥系统的性能潜力。以下对调试难点问题的描述，不正确的是（ ）。</p><ul class="exam-opts"><li><b>A</b> 在多核、多电路板和多操作系统环境中对操作系统和应用代码进行调试</li><li><b>B</b> 调试单一芯片中的同构和异构调试方法，进而实现整个系统的协同调试</li><li><b>C</b> 有效利用JTAG与基于代理调试方法，确保不同调试工具之间的顺畅协同</li><li><b>D</b> 在多核环境中调试应用程序不需考虑同步机制</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">多核多线程场景下，共享资源访问必须依靠同步机制保障数据一致性，调试环节必须重点关注同步逻辑，否则会出现运行结果二义性，D选项说法错误。</p></details></div></details><details class="exam-q" data-exam-id="2021年5月-015"><summary><span class="exam-no">第 15 题</span><span class="exam-stem-peek">在一个具有72MHz的Cortex-M3/M4系统下，使用中断模式来接收串口数据，其波特率为115200。假设该系统的串…</span></summary><div class="exam-q-body"><p class="exam-stem">在一个具有72MHz的Cortex-M3/M4系统下，使用中断模式来接收串口数据，其波特率为115200。假设该系统的串行接口没有硬件FIFO，波特率是115200，数据格式采用“1起始位+1终止位+无校验位+8数据位”，则其最大允许屏蔽中断的时间约是（ ）。</p><ul class="exam-opts"><li><b>A</b> 11.5 μs</li><li><b>B</b> 87 μs</li><li><b>C</b> 23.4 μs</li><li><b>D</b> 17 μs</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">单帧数据共10bit，每秒产生中断次数=115200/10=11520次，中断间隔=1/11520≈87μs，也就是中断屏蔽时长不能超过87μs，否则会出现数据丢失。</p></details></div></details><details class="exam-q" data-exam-id="2021年5月-014"><summary><span class="exam-no">第 14 题</span><span class="exam-stem-peek">在嵌入式系统中，板上通信接口是指用于将各种集成电路与其他外围设备交互连接的电路或总线。常用的板上通信接口包括I2C、SP…</span></summary><div class="exam-q-body"><p class="exam-stem">在嵌入式系统中，板上通信接口是指用于将各种集成电路与其他外围设备交互连接的电路或总线。常用的板上通信接口包括I2C、SPI、UART等。其中，I2C总线通常被用于多主机场景。以下关于I2C总线不正确的说法是（ ）。</p><ul class="exam-opts"><li><b>A</b> I2C总线是一种同步、双向、半双工的两线式串行接口总线</li><li><b>B</b> I2C总线由两条总线组成：串行时钟总线SCL和串行数据总线SDA</li><li><b>C</b> I2C总线是一种同步、双向、全双工的4线式串行接口总线</li><li><b>D</b> I2C最初的设计目标是为微处理器/微控制器系统与电视机外围芯片之间的连接提供简单的方法</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">I2C只有SCL、SDA两根信号线，属于半双工两线总线；SPI才是4线全双工同步总线，C选项将SPI的特性错误套用在了I2C总线上。</p></details></div></details></details></details><details class="exam-subject" data-exam-subject="案例"><summary><span class="exam-subject-name">📋 案例分析</span><span class="exam-subject-n">5 题</span><span class="exam-subject-tip">情景简答 · 采分点三色标记</span></summary><div class="exam-bar"><span class="exam-bar-label">📋 案例分析</span><span class="exam-bar-stat">共 <b>5</b> 题 · 情景简答</span></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">77</span>考点：嵌入式系统特征 / RTOS / RMS 与 EDF 可调度性 / 优先级反转与解决<br>📅 时间：2026-01-08 上午 📍 地点：试点职场（话机问题排查）<br>👤 人物：甘工（乙方·系统分析师）、邓经理（甲方·运维经理）、老陶（甲方·班组长(十年老坐席)）、硬件供应商（第三方）<br>⚡ 冲突：话机音频爆音、UI 卡顿，供应商说是网络问题，换了机器还是一样<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：老陶抱着话机来找甘工：&quot;通话里有爆音，按个键还要等半秒。&quot; 供应商远程看了一眼：&quot;应该是你们网络抖动。&quot; 邓经理换了网口、换了话机，问题照旧。 甘工把任务表调出来：音频采集 10 毫秒一个周期、SIP 信令、端侧推理、心跳、键盘显示——五个任务挤在一个 MCU 上。他知道，这大概率是调度和优先级的问题，而不是网络。<br>补充资料：ms） | C（ms） | T2 → SIP 信令处理 → 50 → 5；T3 → 端侧唤醒词/VAD 推理 → 100 → 25；T4 → 心跳与状态上报 → 1 000 → 3；T5 → 键盘扫描与显示刷新 → 200 → 8 运行中曾出现：低优先级的 UI 任务写&quot;配置/通话记录&quot;缓冲区时持有互斥锁，导致最高优先级的音频任务被阻塞，出现爆音。<br>问题 1：（1）说明嵌入式系统的组成、特点，以及 RTOS 与通用操作系统的区别；<br>问题 2：（2）用 RMS 判断任务集可调度性（利用率 + 充分条件 + 响应时间分析）；用 EDF 判断并比较两者；<br>问题 3：（3）说明优先级反转的概念，构造本例场景，并给出解决办法。</p><ul class="exam-questions"><li><b>问题 1</b> （1）说明<strong>嵌入式系统</strong>的组成、特点，以及 <strong>RTOS 与通用操作系统</strong>的区别；</li><li><b>问题 2</b> （2）用 <strong>RMS</strong> 判断任务集可调度性（利用率 + 充分条件 + 响应时间分析）；用 <strong>EDF</strong> 判断并比较两者；</li><li><b>问题 3</b> （3）说明优先级反转的概念，构造本例场景，并给出解决办法。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）组成与特点）：由嵌入式硬件（处理器/MCU、存储器、外设与接口）、嵌入式软件（操作系统/固件 + 应用软件）组成。特点：专用性强、资源受限（CPU/内存/功耗）、实时性要求高、可靠性要求高、软硬件协同、开发调试方式特殊（交叉编译、宿主机/目标机）、固化在 ROM/Flash 中。<br>- 🟢 加分：解析·可调度性必须写出公式与迭代；反转题必须&quot;场景 + 两种协议 + 工程规避&quot;。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🔴 核心（2）RMS 计算）：<br>问题 3｜参考答案要点：<br>- 🔴 核心：🔴 核心（3）优先级反转）：</div></details></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">78</span>考点：嵌入式数据库 / 软硬件协同设计 / 低功耗 / V&amp;V 与嵌入式测试<br>📅 时间：2026-01-22 上午 📍 地点：话机固件设计评审<br>👤 人物：甘工（乙方·系统分析师）、彭工（乙方·架构设计师）、固件工程师（第三方·话机供应商）、邓经理（甲方·运维经理）<br>⚡ 冲突：话机断网要撑 8 小时，Flash 擦写寿命有限，还要过 V&amp;V<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：邓经理提了个硬需求：&quot;地下室没信号，话机得撑八小时——两百条通话记录、五百条通讯录、两千条日志都要存本地。&quot; 供应商工程师皱眉：&quot;Flash 擦写次数有限，写太频繁会坏。&quot; 彭工补了一句：&quot;还有功耗，话机是 PoE 供电，也不能太费。&quot; 甘工知道，这三件事——本地存储、低功耗、验证确认——是嵌入式设计躲不开的三道坎。<br>补充资料：0 条未上传事件日志。硬件：MCU + DSP + 轻量 NPU，RAM 512KB、Flash 8MB（擦写寿命 10 万次）。<br>问题 1：（1）说明嵌入式数据库的特点与关键技术，给出本话机本地数据方案（含磨损与掉电安全）；<br>问题 2：（2）说明软硬件协同设计的流程、划分依据与挑战；<br>问题 3：（3）给出低功耗设计策略；<br>问题 4：（4）说明 V&amp;V 与嵌入式软件测试的特点与覆盖准则。</p><ul class="exam-questions"><li><b>问题 1</b> （1）说明<strong>嵌入式数据库</strong>的特点与关键技术，给出本话机本地数据方案（含磨损与掉电安全）；</li><li><b>问题 2</b> （2）说明<strong>软硬件协同设计</strong>的流程、划分依据与挑战；</li><li><b>问题 3</b> （3）给出<strong>低功耗设计</strong>策略；</li><li><b>问题 4</b> （4）说明 V&amp;V 与嵌入式软件测试的特点与覆盖准则。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）嵌入式数据库）：特点——体积小可裁剪、资源占用低、实时性（操作时间可预测）、高可靠与掉电安全、可移植、支持定制存储介质、并发访问受限。关键技术——轻量存储引擎与索引、事务与原子提交、掉电保护（写前日志/影子页/校验和）、磨损均衡、坏块管理、内存上限控制、同步与复制。<br>- 🟢 加分：解析·嵌入式题要&quot;特点 + 方案 + 策略 + V&amp;V&quot;，掉电与磨损是高频细节。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🔴 核心（2）协同设计）：流程——需求与规格定义 → 系统建模与描述 → 软硬件划分 → 协同仿真与验证 → 协同实现与集成 → 协同调试与系统测试 → 迭代优化。划分依据——性能与时延要求、计算密集度与并行性、灵活性与可升级性、功耗、成本与面积、开发周期与风险、复用与生态（本例：音频 AEC/降噪属计算密集且需确定性时延，放 DSP；协议栈与 UI 放 MCU）。挑战——划分决策影响深远、接口与时序难定义、协同仿真环境复杂、调试手段受限、团队知识割裂、验证覆盖不足。<br>问题 3｜参考答案要点：<br>- 🔴 核心：🔴 核心（3）低功耗策略）：①硬件——低功耗器件、PoE 优化、关闭未用外设时钟、DVFS；②软件——休眠/唤醒机制（无通话进入低功耗，由摘机/来电/唤醒词唤醒）；③任务层——中断驱动替代轮询、合并定时任务（心跳 1s 而非 100ms）、降低采样与刷新频率；④算法层——端侧推理按需触发（VAD 先判是否有人声，再启动唤醒词模型），避免 NPU 常开；⑤通信层——批量上报、压缩报文、缩短射频开启时间。<br>问题 4｜参考答案要点：<br>- 🔴 核心：🔴 核心（4）V&amp;V 与测试）：验证（Verification）——&quot;是否正确地建造&quot;，检查各阶段成果是否满足上一阶段规格（代码符合设计、固件符合需求）；确认（Validation）——&quot;是否建造了正确的产品&quot;，在真实环境检验是否满足用户真实需要。</div></details></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">79</span>📅 时间：2026-02-05 📍 地点：试点职场（现场排查）<br>👤 人物：甘工（乙方·系统分析师）、硬件供应商（第三方）工程师、邓经理（甲方·运维经理）、老陶（甲方·班组长(十年老坐席)）<br>⚡ 冲突：IP 话机开机两三天后操作变卡、偶发重启，供应商称&quot;是网络问题&quot;，现场换机后依旧复现<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：老陶抱怨：&quot;这新话机刚开机挺快，用个两三天就卡，按个键要等半秒，有时候还自己重启。&quot; 供应商工程师远程看了日志：&quot;我们固件没问题，应该是你们网络抖动。&quot; 邓经理换了新机、换了网口，甚至单独拉了条网线——三天后照样卡。 甘工把话机接上串口抓日志，发现：Flash 写入次数异常偏高、内存碎片严重、某个任务每 100ms 写一次日志；而且一个低优先级任务持有互斥锁时，音频任务被阻塞了几十毫秒（偶发爆音）。 供应商看完沉默了：&quot;……这是我们固件的问题。&quot;<br>补充资料：日志写入频率 → 每 100 ms 一次 → 写放大，Flash 磨损加速；内存 → 长运行后碎片化 → 分配变慢、偶发重启；互斥锁临界区 → UI 任务持锁更新配置 → 优先级反转 → 音频阻塞几十 ms（爆音）；CPU 余量 → &lt;10% → 不足，UI 响应慢；拷机测试 → 未做 → 未发现长期退化 Flash 寿命：擦写 10 万次；按现状估算 约 6 个月即接近上限（需批量写 + 循环覆盖）。<br>问题 1：（1）结合现象分析可能的原因（至少 4 条）；<br>问题 2：（2）说明嵌入式系统在资源受限下的设计要点（内存、存储、实时性）；<br>问题 3：（3）说明低功耗与稳定性的设计措施；<br>问题 4：（4）说明嵌入式系统的验证与确认方法（含本例应如何复现与定位）。</p><ul class="exam-questions"><li><b>问题 1</b> （1）结合现象分析可能的原因（至少 4 条）；</li><li><b>问题 2</b> （2）说明<strong>嵌入式系统</strong>在资源受限下的设计要点（内存、存储、实时性）；</li><li><b>问题 3</b> （3）说明<strong>低功耗与稳定性</strong>的设计措施；</li><li><b>问题 4</b> （4）说明嵌入式系统的验证与确认方法（含本例应如何复现与定位）。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）原因分析）：①Flash 频繁写入——每 100ms 写日志，远超必要频率，导致写放大与磨损，写操作阻塞引起卡顿；②内存泄漏/碎片——长期运行后可用内存减少、分配变慢甚至失败引发重启；③优先级反转——低优先级任务持锁阻塞高优先级音频任务（爆音）；④任务设计不合理——高频任务占用 CPU，UI 响应变慢；⑤看门狗或异常处理不当——偶发重启可能与栈溢出、断言或看门狗复位有关；⑥网络只是表象——供应商的&quot;网络抖动&quot;说法被换机换网口证伪。<br>- 🟢 加分：解析·嵌入式故障题要&quot;原因分析 + 资源设计 + 稳定措施 + V&amp;V 定位方法&quot;。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🟡 支撑（2）资源受限设计要点）：①内存——静态分配优先、避免频繁动态分配、内存池/固定块分配防碎片、严格控制栈深度、设置内存上限与监控；②存储——批量/合并写入、Append-only + 循环覆盖、磨损均衡、掉电安全（CRC + 序号 + 双备份）；③实时性——任务按周期/优先级划分（RMS）、缩短临界区、无锁缓冲传递音频数据、控制中断处理时长、测量 WCET 并留余量。<br>问题 3｜参考答案要点：<br>- 🔴 核心：🟡 支撑（3）低功耗与稳定性）：低功耗——休眠/唤醒机制、中断驱动替代轮询、合并定时任务、端侧推理按需触发（VAD 先行）、关闭未用外设时钟、DVFS；稳定性——看门狗、心跳与自愈（异常重启恢复）、异常与错误码体系、安全 OTA（签名 + 断点续传 + 回滚）、日志分级与限流（避免日志本身拖垮系统）、长时间拷机测试。<br>问题 4｜参考答案要点：<br>- 🔴 核心：🔴 核心（4）V&amp;V 方法）：验证（是否正确地建造）——单元测试、宿主机仿真、硬件在环 HIL、代码审查、静态分析（MISRA C）、覆盖率（关键模块 MC/DC）、时序验证（中断延迟、任务抖动、WCET 实测）、拷机与压力测试（72 小时以上）、环境试验（高低温/EMC）。</div></details></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">80</span>📅 时间：2026-01-28 上午 📍 地点：话机固件调优现场<br>👤 人物：甘工（乙方·系统分析师）、固件工程师（第三方·话机供应商）、邓经理（甲方·运维经理）、老陶（甲方·班组长(十年老坐席)）<br>⚡ 冲突：开启端侧唤醒词后音频偶发爆音，工程师想把推理频率调低，但又怕漏唤醒<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：供应商工程师很为难：&quot;唤醒词模型跑在 NPU 上，本来不占 CPU。但每帧都要送数据，音频任务还是被拖慢了。&quot; 邓经理测出来：开启唤醒后，音频任务的最坏执行时间明显变长，偶尔超过 10ms 的周期预算，于是出现爆音。 工程师提议：&quot;要不把推理频率降一半？&quot; 老陶立刻反对：&quot;那我喊它有时候不理我了。&quot; 甘工把任务表和 WCET 数据摊开——这不是&quot;调频率&quot;能解决的，而是实时性预算怎么分配的问题。<br>补充资料：音频采集/播放 → 10 ms → 2 ms → 2.8 ms → 10 ms → 最高（硬实时）；VAD → 20 ms → 1 ms → 1 ms → 20 ms → 高；唤醒词推理 → 100 ms → — → ≤2 ms/帧 → 100 ms → 中（软实时）；SIP 信令 → 50 ms → 5 ms → 5 ms → 50 ms → 高；心跳上报 → 1 000 ms → 3 ms → 3 ms → 1 000 ms → 低 利用率：约 0.62（RMS 充分条件 0.7435，可调度）；改进：VAD 先行 + 按需推理 + DMA 搬运 + 无锁双缓冲。<br>问题 1：（1）结合本例说明嵌入式实时性的关键概念（周期、WCET、可调度性、抖动）；<br>问题 2：（2）分析爆音的可能原因，并给出改进方案；<br>问题 3：（3）说明软硬件协同设计中&quot;划分&quot;的依据与本例的划分建议；<br>问题 4：（4）说明如何验证改进效果。</p><ul class="exam-questions"><li><b>问题 1</b> （1）结合本例说明<strong>嵌入式实时性</strong>的关键概念（周期、WCET、可调度性、抖动）；</li><li><b>问题 2</b> （2）分析爆音的可能原因，并给出<strong>改进方案</strong>；</li><li><b>问题 3</b> （3）说明<strong>软硬件协同设计</strong>中&quot;划分&quot;的依据与本例的划分建议；</li><li><b>问题 4</b> （4）说明如何验证改进效果。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）实时性概念）：①周期（T）——任务两次释放之间的间隔（本例音频 10ms）；②截止时间（D）——任务必须完成的时刻；③执行时间 C 与最坏执行时间 WCET——任务执行所需时间的最坏估计，是可调度性分析的输入；④可调度性——所有任务能否在其截止时间内完成（RMS 用利用率判据 + 响应时间分析，EDF 用 U ≤ 1）；⑤抖动（Jitter）——任务实际执行时刻相对期望时刻的偏差，音频对抖动极敏感；⑥优先级与抢占——高优先级抢占低优先级；⑦余量（Slack）——CPU 空闲比例，需保留安全余量。<br>- 🟢 加分：解析·嵌入式实时性题要&quot;概念 + 原因分析 + 协同划分 + 验证&quot;，WCET 与优先级反转是高频点。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🟡 支撑（2）爆音原因与改进）：<br>问题 3｜参考答案要点：<br>- 🔴 核心：🟡 支撑（3）划分依据与建议）：依据——性能与确定性时延、计算密集度与并行性、灵活性与可升级性、功耗、成本与面积、开发周期与风险、复用与生态。<br>问题 4｜参考答案要点：<br>- 🔴 核心：🟢 加分（4）验证方法）：①时序验证——实测中断延迟、任务抖动与各任务 WCET（用 Trace/逻辑分析仪），确认 10ms 预算未被突破；②可调度性复算——用实测 WCET 重跑 RMS 利用率与响应时间分析；③拷机测试——连续运行 72 小时以上，统计爆音次数（目标 0）；④场景测试——安静/嘈杂/方言/连续唤醒；⑤回归与灰度——固件先小批量升级验证，再全量推送。</div></details></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">81</span>📅 时间：2026-03-05 上午 📍 地点：试点职场（固件升级事故）<br>👤 人物：甘工（乙方·系统分析师）、邓经理（甲方·运维经理）、固件工程师（第三方·话机供应商）、老陶（甲方·班组长(十年老坐席)）<br>⚡ 冲突：批量 OTA 升级后有十几台话机起不来，坐席没法接电话<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：供应商推送了一版新固件，第二天早班，十几台话机启动卡在 logo，坐席没法上班。 邓经理急得团团转：&quot;这一片坐席全停工了。&quot; 工程师远程查：&quot;升级包在写入过程中设备断了网，固件写了一半。&quot; 老陶补了一句：&quot;我这台是升级到一半我把它重启了……&quot; 甘工意识到：OTA 不只是&quot;把包发下去&quot;，断点、校验、回滚、灰度一样都不能少。<br>补充资料：分区 → 单分区 → A/B 双分区 + 金丝雀启动；校验 → 写入后才校验 → 签名 + 哈希校验（通过才启动）；传输 → 一次性下载 → 分片 + 断点续传；断电 → 无保护 → 状态记录 + 上电回滚；灰度 → 一次性全量 → 1% → 10% → 100%，超阈值自动停止；观测 → 无 → 升级结果上报 + 失败原因码；应急 → 返厂 → 本地串口烧录 + 备用话机 事故影响：十几台话机变砖，早班坐席无法接话，需现场处置。<br>问题 1：（1）说明嵌入式系统的开发流程与开发平台特点；<br>问题 2：（2）分析本次&quot;变砖&quot;的原因，设计安全的 OTA 升级方案；<br>问题 3：（3）说明软件维护的分类及本例属于哪一类；<br>问题 4：（4）说明维护管理与发布策略（灰度、回滚、演练）。</p><ul class="exam-questions"><li><b>问题 1</b> （1）说明嵌入式系统的<strong>开发流程</strong>与<strong>开发平台</strong>特点；</li><li><b>问题 2</b> （2）分析本次&quot;变砖&quot;的原因，设计<strong>安全的 OTA 升级方案</strong>；</li><li><b>问题 3</b> （3）说明<strong>软件维护</strong>的分类及本例属于哪一类；</li><li><b>问题 4</b> （4）说明维护管理与发布策略（灰度、回滚、演练）。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）开发流程与平台）：流程——需求与规格 → 系统设计与软硬件划分 → 建模与仿真 → 编码与交叉编译 → 下载/烧写到目标机 → 调试与测试（宿主机仿真、硬件在环 HIL）→ 现场试点 → 批量部署与维护。平台特点——宿主机（开发机）+ 目标机分离、交叉编译、依赖仿真器/调试器（JTAG/SWD）、资源受限（内存/存储/算力）、实时性与可靠性要求高、调试手段受限（断点可能影响实时性，需日志与 Trace）、需考虑量产烧录与 OTA 升级。<br>- 🟢 加分：解析·OTA 题要&quot;流程平台 + 原因分析 + 安全方案 + 维护分类 + 发布策略&quot;。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🟡 支撑（2）原因与 OTA 方案）：<br>问题 3｜参考答案要点：<br>- 🔴 核心：🟡 支撑（3）维护分类）：软件维护分改正性（修缺陷）、适应性（适配环境/法规/硬件变化）、完善性（增强功能与性能）、预防性（为将来可维护性而重构）。本例——推送新固件若是为修复缺陷属改正性；若为新增能力属完善性；若因系统/硬件环境变化（如信创适配）属适应性。而&quot;变砖&quot;本身是维护过程失控导致的事故。<br>问题 4｜参考答案要点：<br>- 🔴 核心：🟢 加分（4）维护管理与发布策略）：①维护流程——维护申请 → 影响分析与分类 → 审批与排期 → 实施（开发/打包）→ 测试与验证（含升级演练）→ 发布（灰度） → 验证与观察 → 记录与关闭。②发布策略——灰度分批 + 自动停止 + 一键回滚 + 版本台账；保留回滚包与回滚时限；③演练——升级前在实验室/小批量做断电、断网、半包、错误版本等异常演练；④监控——升级成功率、失败原因分布、设备在线率、故障率；⑤应急——准备本地救砖方案（如串口/本地烧录）与备用设备，避免坐席停工。</div></details></div></details></section>
     <div class="wrongbook"></div>
     <div class="keyhint">
   <span class="keyhint-title">键盘快捷键</span>
@@ -3122,6 +3285,77 @@ html{scroll-padding-top:80px}
     el.textContent = n
   }
 
+  // ══════════════════════════════════════════
+  // 12. 历年真题：批量展开 + 记忆展开状态
+  // ══════════════════════════════════════════
+  const Exam = {
+    KEY: 'examOpen',
+    init() {
+      const root = document.querySelector('.exam')
+      if (!root) return
+      const chapter = root.dataset.examChapter || 'x'
+
+      // 恢复上次展开状态：{ "H07": { "2025年5月": true, ... } }
+      const saved = store.get(this.KEY, {}) || {}
+      const mine = saved[chapter] || {}
+      root.querySelectorAll('.exam-year').forEach(y => {
+        const name = y.dataset.examYear
+        // 默认：展开最近 1 套（新年优先），其余收起
+        const open = (name in mine) ? mine[name] : false
+        if (open) y.open = true
+        y.addEventListener('toggle', () => {
+          mine[name] = y.open
+          saved[chapter] = mine
+          store.set(this.KEY, saved)
+        })
+      })
+      // 单题的"看过答案"状态也要记（避免重复点开）
+      const seen = store.get('examSeen', {}) || {}
+      root.querySelectorAll('.exam-q').forEach(qd => {
+        const qid = qd.dataset.examId
+        if (seen[qid]) {
+          const a = qd.querySelector('.exam-ans')
+          if (a) a.open = true
+        }
+        const ans = qd.querySelector('.exam-ans')
+        if (ans) ans.addEventListener('toggle', () => {
+          if (ans.open) { seen[qid] = 1; store.set('examSeen', seen) }
+        })
+      })
+
+      // 批量展开/收起按钮
+      root.querySelectorAll('.exam-op').forEach(btn => {
+        btn.addEventListener('click', e => {
+          e.preventDefault()
+          const openAll = btn.dataset.examAll === '1'
+          root.querySelectorAll('.exam-subject,.exam-year').forEach(d => { d.open = openAll })
+          root.querySelectorAll('.exam-ans').forEach(d => {
+            d.open = openAll
+            if (openAll && d.parentElement.dataset.examId) seen[d.parentElement.dataset.examId] = 1
+          })
+          if (openAll) store.set('examSeen', seen)
+          // 同步年份级记忆
+          root.querySelectorAll('.exam-year').forEach(y => { mine[y.dataset.examYear] = y.open })
+          saved[chapter] = mine
+          store.set(this.KEY, saved)
+        })
+      })
+
+      // 快捷键：E = 跳到真题区块（不与既有键冲突）
+      document.addEventListener('keydown', e => {
+        const t = e.target
+        if (t && t.nodeType === 1 && t.matches('input,textarea,select,[contenteditable]')) return
+        if (e.metaKey || e.ctrlKey || e.altKey) return
+        if (e.key.toLowerCase() === 'e') {
+          e.preventDefault()
+          root.scrollIntoView({ behavior: 'smooth', block: 'start' })
+          const y = root.querySelector('.exam-year')
+          if (y) y.open = true
+        }
+      })
+    }
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
     Theme.init()
     FontSize.init()
@@ -3137,6 +3371,7 @@ html{scroll-padding-top:80px}
     BackTop.init()
     CopyCode.init()
     ReadTime.init()
+    Exam.init()
     updateAnsweredStat()
     window.addEventListener('quiz:update', updateAnsweredStat)
     renderMermaid()

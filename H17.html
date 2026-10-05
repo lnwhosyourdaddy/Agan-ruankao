@@ -7,7 +7,7 @@
 <title>第 17 小时 · 项目管理（一）· 范围进度成本与挣值分析 · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
-<meta name="build-stamp" content="2026-10-05 08:06:29">
+<meta name="build-stamp" content="2026-10-05 11:44:51">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -1927,6 +1927,166 @@ table.zebra tbody tr:hover{background:var(--accent-soft-2)}
 /* ── 平滑滚动偏移（锚点跳转不卡顶栏下） ── */
 html{scroll-padding-top:80px}
 @media(max-width:760px){html{scroll-padding-top:70px}}
+
+/* ═══════════════════════════════════════════════════════════════
+   历年真题区块 · 三级折叠（原生 details，零 JS）
+   ═══════════════════════════════════════════════════════════════ */
+.exam{margin:2.2em 0 1.6em}
+
+/* ── 统计条：常驻不折叠，避免"用户不知道里面有真题"而白做 ── */
+.exam-bar{
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  padding:12px 16px;margin-bottom:10px;
+  background:linear-gradient(180deg,var(--bg-card) 0%,var(--bg-alt) 100%);
+  border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow-1);
+}
+.exam-bar-label{font-weight:700;font-size:14px;color:var(--accent)}
+.exam-bar-stat{font-size:12.5px;color:var(--fg-3);flex:1;min-width:140px}
+.exam-bar-stat b{color:var(--fg-2);font-variant-numeric:tabular-nums}
+.exam-bar-ops{display:flex;gap:6px}
+.exam-op{
+  padding:4px 11px;font:inherit;font-size:12px;cursor:pointer;
+  background:var(--bg-card);border:1px solid var(--line-2);
+  border-radius:999px;color:var(--fg-2);
+  transition:border-color .18s var(--ease),color .18s var(--ease),background .18s var(--ease);
+}
+.exam-op:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+
+/* ── 科目级折叠 ── */
+.exam-subject{
+  border:1px solid var(--line);border-radius:var(--radius);
+  background:var(--bg-card);overflow:hidden;
+}
+.exam-subject>summary{
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  padding:12px 16px;cursor:pointer;list-style:none;
+  font-weight:600;color:var(--fg-2);
+  transition:background .18s var(--ease),color .18s var(--ease);
+}
+.exam-subject>summary::-webkit-details-marker{display:none}
+.exam-subject>summary:hover{background:var(--accent-soft);color:var(--accent)}
+.exam-subject[open]>summary{border-bottom:1px solid var(--line);background:var(--bg-alt)}
+.exam-subject-name::before{content:'▸ ';display:inline-block;transition:transform .2s var(--ease)}
+.exam-subject[open] .exam-subject-name::before{transform:rotate(90deg)}
+.exam-subject-n{font-size:12px;color:var(--fg-3);font-variant-numeric:tabular-nums}
+.exam-subject-tip{margin-left:auto;font-size:11.5px;color:var(--fg-3);opacity:.8}
+
+/* ── 年份级折叠 ── */
+.exam-year{border-bottom:1px solid var(--line)}
+.exam-year:last-child{border-bottom:0}
+.exam-year>summary{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 16px 9px 30px;cursor:pointer;list-style:none;
+  font-size:13.5px;color:var(--fg-2);
+  transition:background .16s var(--ease),color .16s var(--ease);
+}
+.exam-year>summary::-webkit-details-marker{display:none}
+.exam-year>summary:hover{background:var(--accent-soft);color:var(--accent)}
+.exam-year[open]>summary{background:var(--bg-alt)}
+.exam-year-name::before{content:'▸ ';display:inline-block;transition:transform .2s var(--ease);color:var(--fg-3)}
+.exam-year[open] .exam-year-name::before{transform:rotate(90deg)}
+.exam-year-n{font-size:11.5px;color:var(--fg-3);font-variant-numeric:tabular-nums}
+
+/* ── 单题折叠 ── */
+.exam-q{border-top:1px solid var(--line)}
+.exam-q>summary{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:9px 16px 9px 46px;cursor:pointer;list-style:none;
+  font-size:13.5px;line-height:1.6;color:var(--fg-2);
+  transition:background .16s var(--ease);
+}
+.exam-q>summary::-webkit-details-marker{display:none}
+.exam-q>summary:hover{background:var(--accent-soft)}
+.exam-q[open]>summary{background:var(--bg-alt)}
+.exam-q>summary::before{
+  content:'＋';flex-shrink:0;width:1.1em;text-align:center;
+  color:var(--fg-3);font-size:12px;line-height:1.5;
+}
+.exam-q[open]>summary::before{content:'－';color:var(--accent)}
+.exam-no{
+  flex-shrink:0;font-size:11px;color:var(--fg-3);
+  font-variant-numeric:tabular-nums;padding-top:2px;min-width:44px;
+}
+.exam-tag{
+  flex-shrink:0;font-size:10.5px;padding:1px 6px;border-radius:4px;
+  background:var(--warn-bg);color:var(--warn-fg);border:1px solid var(--warn-line);
+}
+.exam-stem-peek{
+  flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  color:var(--fg-2);
+}
+.exam-q[open] .exam-stem-peek{color:var(--fg)}
+.exam-q-body{padding:4px 16px 16px 46px}
+.exam-stem{margin:.6em 0;font-size:14.5px;line-height:1.8;color:var(--fg)}
+.exam-blank{color:var(--danger);padding:0 1px}
+.exam-opts{list-style:none;margin:.5em 0 .9em;padding:0}
+/* ⚠️ 必须清掉全局 `ul>li::before` 的圆点（本站正文列表有项目符号），
+   否则真题选项前会多出一个小圆点，位置还和字母块错开 */
+.exam-opts>li::before{content:none !important}
+.exam-opts li{
+  position:relative;padding:4px 0 4px 26px;font-size:14px;line-height:1.7;
+  border-bottom:1px dashed var(--line);
+}
+.exam-opts li:last-child{border-bottom:0}
+.exam-opts b{
+  position:absolute;left:0;top:4px;
+  display:inline-flex;align-items:center;justify-content:center;
+  width:19px;height:19px;border-radius:5px;
+  background:var(--bg-alt);border:1px solid var(--line-2);
+  font-size:11px;font-weight:700;color:var(--fg-3);
+}
+
+/* ── 答案（默认再折叠一层）── */
+.exam-ans{margin-top:.6em}
+.exam-ans>summary{
+  display:inline-flex;align-items:center;gap:6px;cursor:pointer;list-style:none;
+  padding:4px 12px;font-size:12px;
+  background:var(--accent-soft);border:1px solid var(--line-2);
+  border-radius:999px;color:var(--accent);
+  transition:background .18s var(--ease),border-color .18s var(--ease);
+}
+.exam-ans>summary::-webkit-details-marker{display:none}
+.exam-ans>summary:hover{background:var(--accent-soft-2);border-color:var(--accent)}
+.exam-ans[open]>summary{margin-bottom:8px}
+.exam-ans-line{margin:.4em 0;font-size:14px;color:var(--fg)}
+.exam-ans-line b{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:26px;height:24px;padding:0 8px;margin-left:4px;
+  border-radius:6px;background:var(--tip-bg);color:var(--tip-fg);
+  border:1px solid var(--tip-line);font-weight:700;
+}
+.exam-exp{margin:.4em 0;font-size:13.5px;line-height:1.8;color:var(--fg-2)}
+
+/* ── 窄屏 ── */
+@media(max-width:760px){
+  .exam-bar{padding:10px 12px;gap:8px}
+  .exam-bar-label{font-size:13px}
+  .exam-bar-stat{font-size:11.5px;flex-basis:100%;order:3;min-width:0}
+  .exam-bar-ops{margin-left:auto}
+  .exam-subject-tip{display:none}
+  .exam-q>summary{padding-left:16px;flex-wrap:wrap}
+  .exam-q>summary::before{display:none}
+  .exam-no{min-width:0}
+  .exam-q-body{padding-left:16px}
+  .exam-year>summary{padding-left:20px}
+  .exam-stem-peek{white-space:normal;flex-basis:100%}
+  .exam-opts li{font-size:13.5px}
+}
+
+/* ── 打印：全部自动展开（服务"可打印带水印"卖点）── */
+@media print{
+  .exam-bar,.exam-op,.exam-ans>summary{display:none !important}
+  .exam-subject,.exam-year,.exam-q{border:0 !important;background:none !important}
+  .exam-subject>summary,.exam-year>summary{
+    padding:6pt 0;background:none !important;border-bottom:1pt solid #999;
+  }
+  .exam-subject-name::before,.exam-year-name::before,.exam-q>summary::before{content:'' !important}
+  .exam-q-body,.exam-ans[open] > div,.exam-ans > div{display:block !important}
+  .exam-q{break-inside:avoid;page-break-inside:avoid}
+  .exam-stem,.exam-opts li{font-size:9.5pt}
+  .exam-exp{font-size:8.5pt;color:#333}
+}
 </style>
 </head>
 <body>
@@ -2237,6 +2397,349 @@ html{scroll-padding-top:80px}
   </div>
 </div>
 </div>
+    <section class="exam" id="exam" data-exam-chapter="8" data-exam-hour="H17"><div class="exam-bar"><span class="exam-bar-label">📚 历年真题</span><span class="exam-bar-stat">本章共 <b>34</b> 题 · 本学时 <b>17</b> 题（其余见同章其他学时）</span><span class="exam-bar-ops"><button type="button" class="exam-op" data-exam-all="1">全部展开</button><button type="button" class="exam-op" data-exam-all="0">全部收起</button></span></div><details class="exam-subject" data-exam-subject="综合知识"><summary><span class="exam-subject-name">📝 综合知识</span><span class="exam-subject-n">17 题</span><span class="exam-subject-tip">按年份展开 · 单题可点开看答案</span></summary><details class="exam-year" data-exam-year="2026年5月"><summary><span class="exam-year-name">2026年5月</span><span class="exam-year-n">3 题</span></summary><details class="exam-q" data-exam-id="2026年5月-065"><summary><span class="exam-no">第 65 题</span><span class="exam-stem-peek">资源管理过程不包括</span></summary><div class="exam-q-body"><p class="exam-stem">资源管理过程不包括</p><ul class="exam-opts"><li><b>A</b> 获取资源</li><li><b>B</b> 管理团队</li><li><b>C</b> 控制资源</li><li><b>D</b> 系统部署上线</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">系统部署上线属于项目实施阶段，不属于资源管理范畴。</p></details></div></details><details class="exam-q" data-exam-id="2026年5月-035"><summary><span class="exam-no">第 35 题</span><span class="exam-stem-peek">用于确定项目最短工期的方法是</span></summary><div class="exam-q-body"><p class="exam-stem">用于确定项目最短工期的方法是</p><ul class="exam-opts"><li><b>A</b> PERT</li><li><b>B</b> WBS</li><li><b>C</b> CPM</li><li><b>D</b> SWOT</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">CPM关键路径法用于识别关键活动、计算项目最短工期。</p></details></div></details><details class="exam-q" data-exam-id="2026年5月-008"><summary><span class="exam-no">第 8 题</span><span class="exam-stem-peek">在组织结构中，项目经理权力最大的是</span></summary><div class="exam-q-body"><p class="exam-stem">在组织结构中，项目经理权力最大的是</p><ul class="exam-opts"><li><b>A</b> 职能型</li><li><b>B</b> 平衡矩阵</li><li><b>C</b> 弱矩阵</li><li><b>D</b> 项目型</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">组织权力排序：项目型 &gt; 强矩阵 &gt; 平衡矩阵 &gt; 弱矩阵 &gt; 职能型，项目型中项目经理全权管理团队。</p></details></div></details></details><details class="exam-year" data-exam-year="2025年5月"><summary><span class="exam-year-name">2025年5月</span><span class="exam-year-n">1 题</span></summary><details class="exam-q" data-exam-id="2025年5月-040"><summary><span class="exam-no">第 40 题</span><span class="exam-stem-peek">某项目需求变更较多，为了控制质量，项目经理最该怎么做 ()</span></summary><div class="exam-q-body"><p class="exam-stem">某项目需求变更较多，为了控制质量，项目经理最该怎么做 ()</p><ul class="exam-opts"><li><b>A</b> 建立变更控制委员会</li><li><b>B</b> 不做这些变更</li><li><b>C</b> 选择敏捷开发方法</li><li><b>D</b> 选择支持业务扩展性的架构</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">单纯就提高质量方式来说，测试、质量评审等都可以，但这里要注意前提是变更多导致的质量问题，因此要针对性的回答，本质还是从控制变更的角度出发，建议选建立 CCB，决策必要的变更。</p></details></div></details></details><details class="exam-year" data-exam-year="2024年5月"><summary><span class="exam-year-name">2024年5月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2024年5月-022"><summary><span class="exam-no">第 22 题</span><span class="exam-stem-peek">设三个煤场A、B、C分别能供应煤12、14、10万吨，三个工厂X、Y、Z分别需要煤11、12、13万吨，从各煤场到各工厂…</span></summary><div class="exam-q-body"><p class="exam-stem">设三个煤场A、B、C分别能供应煤12、14、10万吨，三个工厂X、Y、Z分别需要煤11、12、13万吨，从各煤场到各工厂运煤的单价（百元/吨）见表格，最优运输方案总运输成本为（）百万元。
+```mermaid
+flowchart TD
+subgraph 供需运价表
+A[煤场A:供应12万吨，X运价9/Y运价1/Z运价8]
+B[煤场B:供应14万吨，X运价2/Y运价4/Z运价3]
+C[煤场C:供应10万吨，X运价9/Y运价8/Z运价7]
+X[工厂X:需求11万吨]
+Y[工厂Y:需求12万吨]
+Z[工厂Z:需求13万吨]
+end
+```
+```mermaid
+flowchart TD
+subgraph 供需运价表
+A[煤场A:供应12万吨，X运价9/Y运价1/Z运价8]
+B[煤场B:供应14万吨，X运价2/Y运价4/Z运价3]
+C[煤场C:供应10万吨，X运价9/Y运价8/Z运价7]
+X[工厂X:需求11万吨]
+Y[工厂Y:需求12万吨]
+Z[工厂Z:需求13万吨]
+end
+```</p><ul class="exam-opts"><li><b>A</b> 83</li><li><b>B</b> 91</li><li><b>C</b> 113</li><li><b>D</b> 153</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">采用运输问题表上作业法求解最优资源调配方案，优先分配低运价运力，最终核算得到总运输成本为83百万元。</p></details></div></details><details class="exam-q" data-exam-id="2024年5月-012"><summary><span class="exam-no">第 12 题</span><span class="exam-stem-peek">某地天然气输送管线网络图如下，每段管线旁边数字表示输气能力（单位：万立方米/小时）。根据该图，从源S到目的地T的最大输气…</span></summary><div class="exam-q-body"><p class="exam-stem">某地天然气输送管线网络图如下，每段管线旁边数字表示输气能力（单位：万立方米/小时）。根据该图，从源S到目的地T的最大输气能力为（）万立方米/小时。
+```mermaid
+flowchart LR
+S((S)) --&gt;|4| A((A))
+S --&gt;|3| B((B))
+S --&gt;|2| C((C))
+S --&gt;|1| D((D))
+A --&gt;|1| T((T))
+B --&gt;|3| A
+B --&gt;|2| T
+B --&gt;|3| C
+C --&gt;|3| D
+C --&gt;|3| T
+D --&gt;|4| T
+```
+```mermaid
+flowchart LR
+S((S)) --&gt;|4| A((A))
+S --&gt;|3| B((B))
+S --&gt;|2| C((C))
+S --&gt;|1| D((D))
+A --&gt;|1| T((T))
+B --&gt;|3| A
+B --&gt;|2| T
+B --&gt;|3| C
+C --&gt;|3| D
+C --&gt;|3| T
+D --&gt;|4| T
+```</p><ul class="exam-opts"><li><b>A</b> 4</li><li><b>B</b> 8</li><li><b>C</b> 9</li><li><b>D</b> 10</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">逐轮寻找可增广流量的路径抽取运力，所有路径无剩余可拓展流量后，累计得到最大输气能力为9万立方米/小时。</p></details></div></details></details><details class="exam-year" data-exam-year="2023年5月"><summary><span class="exam-year-name">2023年5月</span><span class="exam-year-n">3 题</span></summary><details class="exam-q" data-exam-id="2023年5月-056"><summary><span class="exam-no">第 56 题</span><span class="exam-stem-peek">企业从部门中选择四个部门下月做甲、乙、丙、丁四项工作，每个部门做一项工作。已知每个部门做每项工作所需的成本(单位:万元)…</span></summary><div class="exam-q-body"><p class="exam-stem">企业从部门中选择四个部门下月做甲、乙、丙、丁四项工作，每个部门做一项工作。已知每个部门做每项工作所需的成本(单位:万元)如下表，在总成本最低的方案中，（ ）。
+部门-工作成本矩阵：
+| 工作\部门 | A  | B  | C  | D  | E  |
+| -------- | -- | -- | -- | -- | -- |
+| 甲       | 4  | 5  | 4  | 2  | 8  |
+| 乙       | 7  | 11 | 9  | 12 | 12 |
+| 丙       | 5  | 6  | 7  | 11 | 9  |
+| 丁       | 12 | 11 | 9  | 10 | 7  |
+使用匈牙利指派法求解最小总成本分配方案。</p><ul class="exam-opts"><li><b>A</b> 选择部门A、B、C、D做工作，安排部门A做工作甲</li><li><b>B</b> 选择部门A、B、D、E做工作，安排部门A做工作乙</li><li><b>C</b> 选择部门A、B、C、E做工作，安排部门A做工作丙</li><li><b>D</b> 选择部门B、C、D、E做工作，安排部门B做工作甲</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">匈牙利法最优分配：D做甲(2万)、A做乙(7万)、B做丙(6万)、E做丁(7万)，总成本22万，对应选用A、B、D、E四个部门，A承接乙工作。</p></details></div></details><details class="exam-q" data-exam-id="2023年5月-054"><summary><span class="exam-no">第 54 题</span><span class="exam-stem-peek">54-55.某项目共有A-G七道工序，各道工序所需的时间(天数)以及工序之间的运行关系如下表。该项目计划的最短工期为( …</span></summary><div class="exam-q-body"><p class="exam-stem">54-55.某项目共有A-G七道工序，各道工序所需的时间(天数)以及工序之间的运行关系如下表。该项目计划的最短工期为( )天。假设每道工序只需要一人做，都可以做所有各道工序，但不能同时做多道工序，那么该项目至少需要( )人。
+```mermaid
+graph LR
+A[A:7天] --&gt; B[B:5天]
+A --&gt; C[C:7天]
+A --&gt; D[D:7天]
+B --&gt; G[G:10天]
+C --&gt; E[E:5天]
+C --&gt; G
+D --&gt; E
+D --&gt; F[F:4天]
+```
+工序前置与工期表：
+| 工序 | 紧前工序 | 所需天数 |
+| ---- | -------- | -------- |
+| A    | 无       | 7        |
+| B    | A        | 5        |
+| C    | A        | 7        |
+| D    | A        | 7        |
+| E    | C,D      | 5        |
+| F    | D        | 4        |
+| G    | B,C      | 10       |
+关键路径为A→C→G，总工期7+7+10=24天；经资源平滑优化，最少配置2名人员即可完成全流程。
+```mermaid
+graph LR
+A[A:7天] --&gt; B[B:5天]
+A --&gt; C[C:7天]
+A --&gt; D[D:7天]
+B --&gt; G[G:10天]
+C --&gt; E[E:5天]
+C --&gt; G
+D --&gt; E
+D --&gt; F[F:4天]
+```
+工序前置与工期表：
+| 工序 | 紧前工序 | 所需天数 |
+| ---- | -------- | -------- |
+| A    | 无       | 7        |
+| B    | A        | 5        |
+| C    | A        | 7        |
+| D    | A        | 7        |
+| E    | C,D      | 5        |
+| F    | D        | 4        |
+| G    | B,C      | 10       |
+关键路径为A→C→G，总工期7+7+10=24天；经资源平滑优化，最少配置2名人员即可完成全流程。
+（本题为第 1 空）</p><ul class="exam-opts"><li><b>A</b> 11</li><li><b>B</b> 19</li><li><b>C</b> 22</li><li><b>D</b> 24</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">第一问遍历所有路径时长，最长关键路径A-C-G总工期24天；第二问通过资源平滑调整并行工序执行时序，最低仅需2人就可错开完成所有工序。</p></details></div></details><details class="exam-q" data-exam-id="2023年5月-052"><summary><span class="exam-no">第 52 题</span><span class="exam-stem-peek">运用数学模型来描述实际事物的主要优点不包括( )。</span></summary><div class="exam-q-body"><p class="exam-stem">运用数学模型来描述实际事物的主要优点不包括( )。</p><ul class="exam-opts"><li><b>A</b> 可以对决策进行事前分析，尽量避免决策失误造成损失</li><li><b>B</b> 可以对决策进行事后评价，便于总结经验改进管理工作</li><li><b>C</b> 有利于对事物做更好的描述和理解，便于人们互相交流</li><li><b>D</b> 便于研究事物之间的共性，使模型更具简洁性和适应性</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">数学模型的核心优势是事前对决策方案做仿真分析、提前规避风险，事后复盘评价不是它的主要设计用途。</p></details></div></details></details><details class="exam-year" data-exam-year="2022年5月"><summary><span class="exam-year-name">2022年5月</span><span class="exam-year-n">3 题</span></summary><details class="exam-q" data-exam-id="2022年5月-057"><summary><span class="exam-no">第 57 题</span><span class="exam-stem-peek">某地天然气输送管线网络图如下，每段管线旁边数字表示输气能力（单位：万立方米/小时）。根据该图，从源S到目的地T的最大输气…</span></summary><div class="exam-q-body"><p class="exam-stem">某地天然气输送管线网络图如下，每段管线旁边数字表示输气能力（单位：万立方米/小时）。根据该图，从源S到目的地T的最大输气能力为（57）万立方米/小时。
+```mermaid
+flowchart LR
+    S --4--&gt; A
+    S --3--&gt; B
+    S --2--&gt; C
+    S --1--&gt; D
+    A --1--&gt; T
+    A --3--&gt; B
+    B --2--&gt; T
+    C --3--&gt; T
+    C --3--&gt; D
+    D --4--&gt; T
+```
+```mermaid
+flowchart LR
+    S --4--&gt; A
+    S --3--&gt; B
+    S --2--&gt; C
+    S --1--&gt; D
+    A --1--&gt; T
+    A --3--&gt; B
+    B --2--&gt; T
+    C --3--&gt; T
+    C --3--&gt; D
+    D --4--&gt; T
+```</p><ul class="exam-opts"><li><b>A</b> 4</li><li><b>B</b> 8</li><li><b>C</b> 9</li><li><b>D</b> 10</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">依次选取可增广的最大流量路径累加：
+1. S-B-C-T，流量3；
+2. S-A-B-T，流量2；
+3. S-C-D-T，流量2；
+4. S-A-T，流量1；
+5. S-D-T，流量1；
+总流量3+2+2+1+1=9万立方米/小时，即最大输气能力为9。</p></details></div></details><details class="exam-q" data-exam-id="2022年5月-055"><summary><span class="exam-no">第 55 题</span><span class="exam-tag">两空单选</span><span class="exam-tag">2 空</span><span class="exam-stem-peek">某乡有7个小村庄A~G，村与村之间有小路可加宽修建公路的路线如下图所示（路边的数字表示路长的公里数）。为实现村村通公路，…</span></summary><div class="exam-q-body"><p class="exam-stem">某乡有7个小村庄A~G，村与村之间有小路可加宽修建公路的路线如下图所示（路边的数字表示路长的公里数）。为实现村村通公路，修建公路总长至少<b class="exam-blank">（55）</b>公里，若在<b class="exam-blank">（56）</b>村新建一所中学，则可以使人们从离它最远的村到该校所走的优化路线最短。
+```mermaid
+flowchart LR
+    A --5--&gt; B
+    A --2--&gt; C
+    A --2--&gt; D
+    C --2.5--&gt; D
+    C --1.8--&gt; E
+    B --5--&gt; C
+    B --4--&gt; G
+    D --1.5--&gt; E
+    D --3--&gt; F
+    E --1.5--&gt; G
+    F --6--&gt; G
+```
+```mermaid
+flowchart LR
+    A --5--&gt; B
+    A --2--&gt; C
+    A --2--&gt; D
+    C --2.5--&gt; D
+    C --1.8--&gt; E
+    B --5--&gt; C
+    B --4--&gt; G
+    D --1.5--&gt; E
+    D --3--&gt; F
+    E --1.5--&gt; G
+    F --6--&gt; G
+```
+2. 图中心选址验证：
+（本题为第 1 空）</p><ul class="exam-opts"><li><b>A</b> 13.8</li><li><b>B</b> 14.3</li><li><b>C</b> 14.8</li><li><b>D</b> 15.3</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">1. 最小生成树（普里姆算法求解）：从F出发依次选取最短边F-D(3)、D-E(1.5)、E-G(1.5)、E-C(1.8)、C-A(2)、G-B(4)，总长度3+1.5+1.5+1.8+2+4=13.8公里，第一空选A。</p></details></div></details><details class="exam-q" data-exam-id="2022年5月-053"><summary><span class="exam-no">第 53 题</span><span class="exam-tag">两空单选</span><span class="exam-tag">2 空</span><span class="exam-stem-peek">某项目有8个作业A~H，每个作业的紧前作业、所需天数和所需人数见下表。由于整个项目团队总共只有10人，各个作业都必须连续…</span></summary><div class="exam-q-body"><p class="exam-stem">某项目有8个作业A~H，每个作业的紧前作业、所需天数和所需人数见下表。由于整个项目团队总共只有10人，各个作业都必须连续进行，中途不能停止，因此需要适当安排施工方案，使该项目能尽快在<b class="exam-blank">（53）</b>内完工。在该方案中，作业A应安排在<b class="exam-blank">（54）</b>内进行。
+```mermaid
+flowchart LR
+    Start--&gt;A[&quot;A(工期5天,需6人)&quot;]
+    Start--&gt;B[&quot;B(工期2天,需2人)&quot;]
+    Start--&gt;C[&quot;C(工期2天,需6人)&quot;]
+    Start--&gt;D[&quot;D(工期2天,需4人)&quot;]
+    B--&gt;E[&quot;E(工期3天,需6人)&quot;]
+    C--&gt;F[&quot;F(工期2天,需7人)&quot;]
+    D &amp; F --&gt; G[&quot;G(工期3天,需2人)&quot;]
+    E &amp; G --&gt; H[&quot;H(工期4天,需1人)&quot;]
+    A &amp; B &amp; C &amp; D &amp; E &amp; F &amp; G &amp; H --&gt; End
+```
+作业基础信息表：
+| 作业 | 紧前作业 | 所需天数 | 所需人数 |
+| ---- | -------- | -------- | -------- |
+| A    | -        | 5        | 6        |
+| B    | -        | 2        | 2        |
+| C    | -        | 2        | 6        |
+| D    | -        | 2        | 4        |
+| E    | B        | 3        | 6        |
+| F    | C        | 2        | 7        |
+| G    | D,F      | 3        | 2        |
+| H    | E,G      | 4        | 1        |
+项目总可用人力上限为10人，需要结合前置逻辑做资源平滑优化，压缩总工期。
+```mermaid
+flowchart LR
+    Start--&gt;A[&quot;A(工期5天,需6人)&quot;]
+    Start--&gt;B[&quot;B(工期2天,需2人)&quot;]
+    Start--&gt;C[&quot;C(工期2天,需6人)&quot;]
+    Start--&gt;D[&quot;D(工期2天,需4人)&quot;]
+    B--&gt;E[&quot;E(工期3天,需6人)&quot;]
+    C--&gt;F[&quot;F(工期2天,需7人)&quot;]
+    D &amp; F --&gt; G[&quot;G(工期3天,需2人)&quot;]
+    E &amp; G --&gt; H[&quot;H(工期4天,需1人)&quot;]
+    A &amp; B &amp; C &amp; D &amp; E &amp; F &amp; G &amp; H --&gt; End
+```
+作业基础信息表：
+| 作业 | 紧前作业 | 所需天数 | 所需人数 |
+| ---- | -------- | -------- | -------- |
+| A    | -        | 5        | 6        |
+| B    | -        | 2        | 2        |
+| C    | -        | 2        | 6        |
+| D    | -        | 2        | 4        |
+| E    | B        | 3        | 6        |
+| F    | C        | 2        | 7        |
+| G    | D,F      | 3        | 2        |
+| H    | E,G      | 4        | 1        |
+项目总可用人力上限为10人，需要结合前置逻辑做资源平滑优化，压缩总工期。
+2. 优化排布方案：
+第1-2天：C(6人)+D(4人)，刚好用满10人；
+第3-4天：F(7人)+B(2人)，合计9人；
+第5-7天：E(6人)+G(2人)，合计8人；
+第8-11天：A(6人)+H(1人)，合计7人；
+因此A安排在第8~12天区间内执行。
+（本题为第 1 空）</p><ul class="exam-opts"><li><b>A</b> 10天</li><li><b>B</b> 11天</li><li><b>C</b> 12天</li><li><b>D</b> 13天</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">1. 无资源限制时原始关键路径为C-F-G-H，最短工期11天；但C(6人)、F(7人)、A(6人)、E(6人)、D(4人)、B(2人)部分并行组合会超出10人人力上限，需要调整并行安排，最终可实现的最短工期为12天。</p></details></div></details></details><details class="exam-year" data-exam-year="2021年5月"><summary><span class="exam-year-name">2021年5月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2021年5月-057"><summary><span class="exam-no">第 57 题</span><span class="exam-stem-peek">某工厂分配四个工人甲、乙、丙、丁同时去操作四台机床A、B、C、D，每人分配其中的一台。已知每个工人操作每台机床每小时的效…</span></summary><div class="exam-q-body"><p class="exam-stem">某工厂分配四个工人甲、乙、丙、丁同时去操作四台机床A、B、C、D，每人分配其中的一台。已知每个工人操作每台机床每小时的效益值如下表所示，则总效益最高的最优分配方案共有（ ）个。
+工人-机床每小时效益矩阵：
+| 工人\机床 | A | B | C | D |
+| ---- | ---- | ---- | ---- | ---- |
+| 甲 | 5 | 3 | 5 | 4 |
+| 乙 | 3 | 4 | 5 | 6 |
+| 丙 | 4 | 3 | 2 | 3 |
+| 丁 | 4 | 2 | 3 | 5 |
+要求每行每列仅能分配一个岗位，使用匈牙利指派法求解最大效益的方案数量。</p><ul class="exam-opts"><li><b>A</b> 1</li><li><b>B</b> 2</li><li><b>C</b> 3</li><li><b>D</b> 4</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">将最大效益问题转化为最小指派问题，对矩阵做行列约简后得到3组互不重复、行列无冲突的最优分配方案，每组方案总效益均为18，因此最优方案共3个。</p></details></div></details><details class="exam-q" data-exam-id="2021年5月-053"><summary><span class="exam-no">第 53 题</span><span class="exam-stem-peek">某项目包括8个作业A~H，每天需要间接费用5万元，完成各作业所需的时间与直接费用、赶进度时每天需要增加的费用以及作业之间…</span></summary><div class="exam-q-body"><p class="exam-stem">某项目包括8个作业A~H，每天需要间接费用5万元，完成各作业所需的时间与直接费用、赶进度时每天需要增加的费用以及作业之间的衔接关系见下表。根据这些数据，以最低成本完成该项目需要（ ）天。
+```mermaid
+flowchart LR
+A[作业A 4天] --&gt; D[作业D 3天]
+A --&gt; E[作业E 5天]
+A --&gt; F[作业F 9天]
+B[作业B 8天] --&gt; C[作业C 6天]
+B --&gt; G[作业G 4天]
+D --&gt; G
+G --&gt; H[作业H 3天]
+E --&gt; H
+F --&gt; H
+```
+作业完整参数表：
+| 作业 | A | B | C | D | E | F | G | H |
+| ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
+| 所需时间（天） | 4 | 8 | 6 | 3 | 5 | 9 | 4 | 3 |
+| 紧前作业 | - | - | B | A | A | A | B,D | E,G |
+| 正常进度直接费用（万元） | 20 | 30 | 15 | 5 | 15 | 40 | 10 | 15 |
+| 赶工每日增加费用（万元/天） | 5 | 6 | 3 | 2 | 4 | 7 | 3 | 6 |
+项目每日固定间接费用5万元，需要通过关键路径赶工优化总成本。
+```mermaid
+flowchart LR
+A[作业A 4天] --&gt; D[作业D 3天]
+A --&gt; E[作业E 5天]
+A --&gt; F[作业F 9天]
+B[作业B 8天] --&gt; C[作业C 6天]
+B --&gt; G[作业G 4天]
+D --&gt; G
+G --&gt; H[作业H 3天]
+E --&gt; H
+F --&gt; H
+```
+作业完整参数表：
+| 作业 | A | B | C | D | E | F | G | H |
+| ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
+| 所需时间（天） | 4 | 8 | 6 | 3 | 5 | 9 | 4 | 3 |
+| 紧前作业 | - | - | B | A | A | A | B,D | E,G |
+| 正常进度直接费用（万元） | 20 | 30 | 15 | 5 | 15 | 40 | 10 | 15 |
+| 赶工每日增加费用（万元/天） | 5 | 6 | 3 | 2 | 4 | 7 | 3 | 6 |
+项目每日固定间接费用5万元，需要通过关键路径赶工优化总成本。</p><ul class="exam-opts"><li><b>A</b> 13</li><li><b>B</b> 14</li><li><b>C</b> 15</li><li><b>D</b> 16</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">初始关键路径为B-G-H，原始工期8+4+3=15天，总直接费用150万元，项目总成本150+15×5=225万元；关键路径上G的赶工单日增量成本最低（3万元/天），将G压缩1天至3天，工期变为14天，赶工增加3万直接费，间接费节省5万，总成本降至223万；继续压缩需要同时压缩多条并行关键路径，单日增量成本超过5万无法进一步降低总成本，因此最低成本最优工期为14天。</p></details></div></details></details><details class="exam-year" data-exam-year="2020年11月"><summary><span class="exam-year-name">2020年11月</span><span class="exam-year-n">3 题</span></summary><details class="exam-q" data-exam-id="2020年11月-057"><summary><span class="exam-no">第 57 题</span><span class="exam-stem-peek">甲、乙、丙、丁四个任务分配在A、B、C、D四台机器上执行，每台机器执行一个任务，所需的成本（单位：百元）如下表所示。适当…</span></summary><div class="exam-q-body"><p class="exam-stem">甲、乙、丙、丁四个任务分配在A、B、C、D四台机器上执行，每台机器执行一个任务，所需的成本（单位：百元）如下表所示。适当分配使总成本最低的最优方案中，任务乙应由机器（57）执行。
+任务-机器成本矩阵（单位：百元）：
+| 任务\机器 | A | B | C | D |
+| ---- | ---- | ---- | ---- | ---- |
+| 甲 | 1 | 4 | 6 | 3 |
+| 乙 | 9 | 7 | 10 | 9 |
+| 丙 | 4 | 5 | 11 | 7 |
+| 丁 | 8 | 7 | 8 | 5 |
+匈牙利化简步骤：每行减去行最小值→每列减去列最小值→寻找独立零元素，最终最优指派：甲-A、乙-C、丙-B、丁-D。</p><ul class="exam-opts"><li><b>A</b> A</li><li><b>B</b> B</li><li><b>C</b> C</li><li><b>D</b> D</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">通过匈牙利指派法对成本矩阵做行、列规约，筛选出不重复行、列的独立零元素，得到全局成本最低的分配方案，任务乙分配给C机器执行，整体总成本21百元。</p></details></div></details><details class="exam-q" data-exam-id="2020年11月-055"><summary><span class="exam-no">第 55 题</span><span class="exam-stem-peek">某乡8个小村（编号为1~8）之间的距离如下表（单位：km）。1号村离水库最近，为5km，从水库开始铺设水管将各村连接起来…</span></summary><div class="exam-q-body"><p class="exam-stem">某乡8个小村（编号为1~8）之间的距离如下表（单位：km）。1号村离水库最近，为5km，从水库开始铺设水管将各村连接起来，水管分叉必须设在各村处，最少需要铺设（55）长的水管。
+```mermaid
+```mermaid
+flowchart LR
+    ShuiKu((水库)) --5km--&gt; C1[1号村]
+    C1 --1km--&gt; C4[4号村]
+    C4 --1km--&gt; C8[8号村]
+    C8 --0.5km--&gt; C7[7号村]
+    C7 --0.8km--&gt; C6[6号村]
+    C8 --1km--&gt; C3[3号村]
+    C3 --1km--&gt; C2[2号村]
+    C2 --1km--&gt; C5[5号村]
+```
+```
+```mermaid
+```mermaid
+flowchart LR
+    ShuiKu((水库)) --5km--&gt; C1[1号村]
+    C1 --1km--&gt; C4[4号村]
+    C4 --1km--&gt; C8[8号村]
+    C8 --0.5km--&gt; C7[7号村]
+    C7 --0.8km--&gt; C6[6号村]
+    C8 --1km--&gt; C3[3号村]
+    C3 --1km--&gt; C2[2号村]
+    C2 --1km--&gt; C5[5号村]
+```
+```</p><ul class="exam-opts"><li><b>A</b> 6.3km</li><li><b>B</b> 11.3km</li><li><b>C</b> 11.8km</li><li><b>D</b> 16.8km</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">本题属于最小生成树应用场景，以水库-1号村为起点，每次选择距离最近的未连通村庄拓展线路，最终累加所有最优链路总长度为11.3km，是水管铺设的最小总长度。</p></details></div></details><details class="exam-q" data-exam-id="2020年11月-053"><summary><span class="exam-no">第 53 题</span><span class="exam-stem-peek">某项目有8个作业A~H，每个作业的紧前作业、所需天数和所需人数见下表。由于整个项目团队总共只有9人，各个作业都必须连续进…</span></summary><div class="exam-q-body"><p class="exam-stem">某项目有8个作业A~H，每个作业的紧前作业、所需天数和所需人数见下表。由于整个项目团队总共只有9人，各个作业都必须连续进行，中途不能停止，因此需要适当安排施工方案，使该项目能尽快在（53）内完工。
+```mermaid
+```mermaid
+flowchart LR
+    Start --&gt;|3天|A
+    Start --&gt;|1天|B
+    Start --&gt;|2天|C
+    Start --&gt;|2天|D
+    C --&gt;|2天|E
+    B &amp; E --&gt;|3天|F
+    D --&gt;|2天|G
+    F &amp; G --&gt;|3天|H
+```
+```
+作业基础参数表：
+|作业|A|B|C|D|E|F|G|H|
+|----|-|-|-|-|-|-|-|-|
+|紧前作业|-|-|-|-|C|B,E|D|F,G|
+|所需天数|3|1|2|2|2|3|2|3|
+|所需人数|7|8|5|4|1|1|7|6|
+不考虑人力约束关键路径C-E-F-H工期10天，受每日最多9人的人力约束优化后，最短工期为11天。
+```mermaid
+```mermaid
+flowchart LR
+    Start --&gt;|3天|A
+    Start --&gt;|1天|B
+    Start --&gt;|2天|C
+    Start --&gt;|2天|D
+    C --&gt;|2天|E
+    B &amp; E --&gt;|3天|F
+    D --&gt;|2天|G
+    F &amp; G --&gt;|3天|H
+```
+```
+作业基础参数表：
+|作业|A|B|C|D|E|F|G|H|
+|----|-|-|-|-|-|-|-|-|
+|紧前作业|-|-|-|-|C|B,E|D|F,G|
+|所需天数|3|1|2|2|2|3|2|3|
+|所需人数|7|8|5|4|1|1|7|6|
+不考虑人力约束关键路径C-E-F-H工期10天，受每日最多9人的人力约束优化后，最短工期为11天。</p><ul class="exam-opts"><li><b>A</b> 10 天</li><li><b>B</b> 11 天</li><li><b>C</b> 12 天</li><li><b>D</b> 13 天</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">原始关键路径工期10天，但部分并行作业同时开展会超出9人人力上限，通过调整非关键作业的开工时间、错开高峰人力需求，满足每日人数≤9的约束下，项目最短可11天完工。</p></details></div></details></details></details><details class="exam-subject" data-exam-subject="案例"><summary><span class="exam-subject-name">📋 案例分析</span><span class="exam-subject-n">3 题</span><span class="exam-subject-tip">情景简答 · 采分点三色标记</span></summary><div class="exam-bar"><span class="exam-bar-label">📋 案例分析</span><span class="exam-bar-stat">共 <b>3</b> 题 · 情景简答</span></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">33</span>考点：范围计划 / WBS 分解 / 范围确认与控制 / 范围蔓延治理<br>📅 时间：2025-09-16 下午 📍 地点：项目组周会<br>👤 人物：李工（乙方·项目经理）、甘工（乙方·系统分析师）、洪经理（甲方·客服部经理）、彭工（乙方·架构设计师）<br>⚡ 冲突：甲方不断口头加需求，进度滞后、质量下降，却没人走变更流程<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：李工把进度表拍在桌上：&quot;第五个月了，微信渠道、方言识别、报表字段从十五加到三十——全是口头加的。现在进度滞后，团队天天加班。&quot; 洪经理在电话那头：&quot;这些都是小需求，顺手就做了嘛。&quot; 彭工摇头：&quot;顺手做的代价是没评估、没设计、没回归，上线出问题谁担？&quot; 甘工翻着需求台账——清单上原本只有四大模块。他知道，问题不是&quot;加了什么&quot;，而是加的时候没人管。<br>补充资料：个月。项目进行到第 5 个月时，甲方陆续提出：增加&quot;微信渠道接入&quot;、增加&quot;方言识别&quot;、把&quot;报表字段从 15 项增加到 30 项&quot;。项目经理李工均口头答应，未走变更流程。结果第 8 个月时进度滞后、团队加班严重、质量下降。<br>问题 1：（1）说明范围管理的主要过程；<br>问题 2：（2）请为本项目编制WBS（分解到第三层即可）；<br>问题 3：（3）分析本案例出现的问题与治理措施。</p><ul class="exam-questions"><li><b>问题 1</b> （1）说明<strong>范围管理</strong>的主要过程；</li><li><b>问题 2</b> （2）请为本项目编制<strong>WBS</strong>（分解到第三层即可）；</li><li><b>问题 3</b> （3）分析本案例出现的问题与治理措施。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）范围管理过程）：①规划范围管理（制定范围管理计划与需求管理计划）；②收集需求；③定义范围（产出范围说明书：产品范围、可交付成果、验收标准、除外责任）；④创建 WBS（把可交付成果分解为工作包）；⑤确认范围（正式验收已完成的可交付成果）；⑥控制范围（监督范围状态、管理范围基准变更）。<br>- 🟢 加分：解析·WBS 题要&quot;结构 + 分解原则&quot;，蔓延题要&quot;流程 + 等价交换 + 优先级&quot;。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🔴 核心（2）WBS 示例）：<br>问题 3｜参考答案要点：<br>- 🔴 核心：🔴 核心（3）问题与治理）：</div></details></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">35</span>考点：软件质量模型 / 质量保证与质量控制 / 配置管理 / 人力资源与团队建设 / 风险管理<br>📅 时间：2025-12-10 上午 📍 地点：项目组 + 甲方联席会<br>👤 人物：甘工（乙方·系统分析师）、丁工（乙方·测试负责人）、李工（乙方·项目经理）、徐总监（甲方·数智化信息部总监）<br>⚡ 冲突：缺陷反复出现、配置被覆盖、关键人员离职后模块没人能改<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：丁工先报数：&quot;同一个缺陷修了三次；配置文件被人覆盖过一次；最关键的是——负责状态同步那块的同事上周离职了，现在没人敢改那块代码。&quot; 李工急着赶进度：&quot;能不能先放着，上线以后再说？&quot; 徐总监不放心：&quot;上线以后再说，就是永远不说。&quot; 甘工意识到，这三件事分别对应质量、配置管理、人力资源——而且都不是靠&quot;小心一点&quot;能解决的。<br>补充资料：模块无人能改；④第三方 ASR 服务即将下线旧版接口（尚未启动适配）。<br>问题 1：（1）说明软件质量模型（ISO/IEC 25010 或 McCall 等）的主要质量特性，并给出本项目的质量指标；<br>问题 2：（2）说明质量保证（QA）与质量控制（QC）的区别与主要活动；<br>问题 3：（3）说明配置管理的主要活动，解决配置覆盖与知识断层；<br>问题 4：（4）说明风险管理过程，并给出&quot;第三方接口下线&quot;的应对。</p><ul class="exam-questions"><li><b>问题 1</b> （1）说明软件<strong>质量模型</strong>（ISO/IEC 25010 或 McCall 等）的主要质量特性，并给出本项目的质量指标；</li><li><b>问题 2</b> （2）说明<strong>质量保证（QA）与质量控制（QC）</strong>的区别与主要活动；</li><li><b>问题 3</b> （3）说明<strong>配置管理</strong>的主要活动，解决配置覆盖与知识断层；</li><li><b>问题 4</b> （4）说明风险管理过程，并给出&quot;第三方接口下线&quot;的应对。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）质量特性与指标）：<br>- 🟢 加分：解析·质量与配置题要&quot;特性 + 指标 + QA/QC 区别 + 六项活动&quot;，风险题要&quot;过程 + 四类策略&quot;。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🔴 核心（2）QA vs QC）：<br>问题 3｜参考答案要点：<br>- 🔴 核心：🔴 核心（3）配置管理）：活动包括配置项识别、版本控制、变更控制、配置状态报告、配置审计、发布与构建管理。<br>问题 4｜参考答案要点：<br>- 🔴 核心：🔴 核心（4）风险管理）：过程为风险规划 → 风险识别 → 风险分析（定性/定量）→ 风险应对 → 风险监控，输出风险登记册（描述、概率、影响、等级、责任人、策略、触发条件）。应对策略：规避、转移、减轻、接受。</div></details></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">37</span>📅 时间：2025-12-16 📍 地点：试点区域坐席职场 + 项目组<br>👤 人物：老陶（甲方·班组长/十年老坐席）、小黄（新坐席）、洪经理（甲方·客服部经理）、甘工（乙方·系统分析师）、李工（乙方·项目经理）<br>⚡ 冲突：试点上线后人手紧张，新人误操作频发，老员工带教负担重，团队士气下滑<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：试点上线第一周，小黄把三张工单派错了技能组，客户等了一整天没人上门。老陶被洪经理训了一顿，转头就冲小黄发火，小黄当场红了眼眶。 李工抱怨：&quot;项目本来就紧，还要派人去做培训，进度怎么保？&quot; 洪经理也找到甘工：&quot;新系统这么难上手，是不是设计有问题？&quot; 甘工复盘后发现：小黄只培训了半小时就上岗；系统里&quot;派单&quot;和&quot;改派&quot;两个按钮长得几乎一样；关键操作没有二次确认；而老陶带教没有任何激励，还被算作&quot;工时损失&quot;。<br>补充资料：新人培训时长 → 0.5 小时 → 未考核即上岗；小黄首周误操作 → 3 次派错技能组 → 客户等待 1 天；工单误派率 → 4.2%（新人）/ 0.6%（老坐席） → 差异显著；老陶带教计工 → 未计入 → 影响带教积极性；驻场支持 → 无 → 问题反馈无出口；工作台按钮相似度 → &quot;派单&quot;与&quot;改派&quot;视觉几乎一致 → 易误点 改进要点：分层培训 + 师徒制激励 + 界面防错（二次确认、视觉区分、撤销）。<br>问题 1：（1）说明人力资源管理的主要过程（编制计划、组建团队、团队建设、管理团队）；<br>问题 2：（2）指出本案例在团队与培训方面的问题并给出改进措施；<br>问题 3：（3）从人机交互设计角度说明系统应如何避免误操作；<br>问题 4：（4）说明项目中的沟通管理要点。</p><ul class="exam-questions"><li><b>问题 1</b> （1）说明<strong>人力资源管理</strong>的主要过程（编制计划、组建团队、团队建设、管理团队）；</li><li><b>问题 2</b> （2）指出本案例在团队与培训方面的问题并给出改进措施；</li><li><b>问题 3</b> （3）从<strong>人机交互设计</strong>角度说明系统应如何避免误操作；</li><li><b>问题 4</b> （4）说明项目中的沟通管理要点。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）人力资源管理过程）：①编制人力资源计划（角色与职责 RAM/RACI、人员配备管理计划、培训需求、团队建设计划）；②组建项目团队（获取人员、明确分工）；③建设项目团队（培训、团建、技能提升、共同目标与信任、绩效考核与激励）；④管理项目团队（跟踪绩效、反馈、冲突管理、问题解决、人员变更）。<br>- 🟢 加分：解析·人力与沟通题要&quot;过程 + 问题诊断 + 改进 + 界面防错&quot;。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🟡 支撑（2）问题与改进）：<br>问题 3｜参考答案要点：<br>- 🔴 核心：🔴 核心（3）人机交互改进）：①关键操作二次确认（派单/改派/删除）；②视觉区分——把&quot;派单&quot;与&quot;改派&quot;按钮在颜色、位置、图标上明显区分，并加操作后果提示（&quot;将派往 XX 技能组&quot;）；③默认值与智能推荐（按故障类型自动推荐技能组，减少人工选择）；④撤销与回滚（误派后可一键撤回）；⑤及时反馈（操作成功/失败明确提示，错误说清原因与改法）；⑥防错设计（必填校验、选择范围收敛）；⑦适老化与新手模式（简化视图 + 引导）。<br>问题 4｜参考答案要点：<br>- 🔴 核心：🔴 核心（4）沟通管理要点）：①明确干系人与沟通需求（甲方领导要结果、客服要好用、运维要可维护）；②制定沟通计划（谁、何时、以何方式、沟通什么）；③分层沟通（操作层每日站会、管理层周报、决策层里程碑汇报）；④信息一致与可追溯（重要结论书面化，避免口头承诺）；⑤冲突与期望管理（本例需同时回应洪经理的&quot;设计问题&quot;质疑与李工的&quot;进度&quot;担忧）；⑥反馈闭环（坐席问题进台账并反馈处理结果）。</div></details></div></details><details class="exam-subject" data-exam-subject="论文"><summary><span class="exam-subject-name">📄 论文写作</span><span class="exam-subject-n">9 题</span><span class="exam-subject-tip">论述题 · 先写再看题</span></summary><div class="exam-bar"><span class="exam-bar-label">📄 论文写作</span><span class="exam-bar-stat">共 <b>9</b> 题 · 论述题</span></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与管理和开发的软件项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 论述信息系统项目风险管理的完整流程。</li><li><b>问题 3</b> 结合项目实际，说明风险管理的实施过程与落地效果。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 项目管理</span><span class="exam-lv">⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与管理、开发的信息系统项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细论述软件项目风险识别的方法、风险评估的维度（概率、影响度）、风险应对策略（规避、转移、减轻、接受）及风险监控要点。</li><li><b>问题 3</b> 结合项目实践，论述你在项目中识别的核心风险、对应的应对措施，分析风险管理工作的不足并提出改进方案。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 项目管理</span><span class="exam-lv">⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与管理和开发的软件项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细论述质量保证、质量控制的具体活动，以及二者之间的关系。</li><li><b>问题 3</b> 分析项目的质量成本，并对整体质量管理工作做出评价。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 项目管理</span><span class="exam-lv">⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与管理的信息系统项目（项目的背景、预算规模、成本管控目标、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细论述成本估算的方法（如代码行估算、功能点估算、COCOMO 模型）、成本预算的分配原则、成本控制的措施（如挣值分析）。</li><li><b>问题 3</b> 结合项目实践，论述你在项目中如何解决成本超支问题，分析成本管理的不足并提出改进方向。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 项目管理</span><span class="exam-lv">⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与管理的信息系统项目（项目的背景、范围边界、业务复杂度、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细论述范围定义的方法、WBS 分解的原则与步骤、范围验证的流程、范围变更控制的措施。</li><li><b>问题 3</b> 结合项目实践，论述你在项目中如何控制范围蔓延，分析范围管理的不足并提出改进方向。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 项目管理</span><span class="exam-lv">⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与管理的信息系统项目（项目的背景、干系人数量、沟通复杂度、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细论述沟通规划的方法、沟通渠道的选择（正式 / 非正式、同步 / 异步）、绩效报告的内容与形式、干系人沟通策略。</li><li><b>问题 3</b> 结合项目实践，论述你在沟通管理中解决的信息不对称问题，分析沟通管理的不足并提出改进措施。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 项目管理</span><span class="exam-lv">⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与管理的信息系统项目（项目的背景、干系人类型、利益诉求、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细论述干系人识别的方法、干系人分析的维度（权力 / 利益矩阵）、干系人沟通与参与管理的策略。</li><li><b>问题 3</b> 结合项目实践，论述你在干系人管理中解决的冲突问题，分析干系人管理的不足并提出改进方向。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 项目管理</span><span class="exam-lv">⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与设计、开发的 HRM 系统项目（项目的背景、企业规模、HR 业务复杂度、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细论述 HRM 系统的架构设计、核心功能模块（人事档案、薪酬计算、绩效流程、考勤管理）、数据安全与权限设计要点。</li><li><b>问题 3</b> 结合项目实践，论述系统实现过程中的薪酬规则定制难点、报表分析优化方法，总结系统对企业 HR 管理的支撑效果。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 项目管理</span><span class="exam-lv">⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与管理的大中型信息系统项目（项目的背景、项目特点、实施难点、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细论述项目不确定性的来源、分类，以及不确定性管理的核心流程、通用方法与实施策略。</li><li><b>问题 3</b> 结合项目实践，论述你如何应对需求、技术、资源、外部环境等各类不确定性问题，总结管理经验与后续改进方向。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 项目不确定性管理</span><span class="exam-lv">⭐⭐⭐</span></div></div></details></section>
     <div class="wrongbook"></div>
     <div class="keyhint">
   <span class="keyhint-title">键盘快捷键</span>
@@ -3111,6 +3614,77 @@ html{scroll-padding-top:80px}
     el.textContent = n
   }
 
+  // ══════════════════════════════════════════
+  // 12. 历年真题：批量展开 + 记忆展开状态
+  // ══════════════════════════════════════════
+  const Exam = {
+    KEY: 'examOpen',
+    init() {
+      const root = document.querySelector('.exam')
+      if (!root) return
+      const chapter = root.dataset.examChapter || 'x'
+
+      // 恢复上次展开状态：{ "H07": { "2025年5月": true, ... } }
+      const saved = store.get(this.KEY, {}) || {}
+      const mine = saved[chapter] || {}
+      root.querySelectorAll('.exam-year').forEach(y => {
+        const name = y.dataset.examYear
+        // 默认：展开最近 1 套（新年优先），其余收起
+        const open = (name in mine) ? mine[name] : false
+        if (open) y.open = true
+        y.addEventListener('toggle', () => {
+          mine[name] = y.open
+          saved[chapter] = mine
+          store.set(this.KEY, saved)
+        })
+      })
+      // 单题的"看过答案"状态也要记（避免重复点开）
+      const seen = store.get('examSeen', {}) || {}
+      root.querySelectorAll('.exam-q').forEach(qd => {
+        const qid = qd.dataset.examId
+        if (seen[qid]) {
+          const a = qd.querySelector('.exam-ans')
+          if (a) a.open = true
+        }
+        const ans = qd.querySelector('.exam-ans')
+        if (ans) ans.addEventListener('toggle', () => {
+          if (ans.open) { seen[qid] = 1; store.set('examSeen', seen) }
+        })
+      })
+
+      // 批量展开/收起按钮
+      root.querySelectorAll('.exam-op').forEach(btn => {
+        btn.addEventListener('click', e => {
+          e.preventDefault()
+          const openAll = btn.dataset.examAll === '1'
+          root.querySelectorAll('.exam-subject,.exam-year').forEach(d => { d.open = openAll })
+          root.querySelectorAll('.exam-ans').forEach(d => {
+            d.open = openAll
+            if (openAll && d.parentElement.dataset.examId) seen[d.parentElement.dataset.examId] = 1
+          })
+          if (openAll) store.set('examSeen', seen)
+          // 同步年份级记忆
+          root.querySelectorAll('.exam-year').forEach(y => { mine[y.dataset.examYear] = y.open })
+          saved[chapter] = mine
+          store.set(this.KEY, saved)
+        })
+      })
+
+      // 快捷键：E = 跳到真题区块（不与既有键冲突）
+      document.addEventListener('keydown', e => {
+        const t = e.target
+        if (t && t.nodeType === 1 && t.matches('input,textarea,select,[contenteditable]')) return
+        if (e.metaKey || e.ctrlKey || e.altKey) return
+        if (e.key.toLowerCase() === 'e') {
+          e.preventDefault()
+          root.scrollIntoView({ behavior: 'smooth', block: 'start' })
+          const y = root.querySelector('.exam-year')
+          if (y) y.open = true
+        }
+      })
+    }
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
     Theme.init()
     FontSize.init()
@@ -3126,6 +3700,7 @@ html{scroll-padding-top:80px}
     BackTop.init()
     CopyCode.init()
     ReadTime.init()
+    Exam.init()
     updateAnsweredStat()
     window.addEventListener('quiz:update', updateAnsweredStat)
     renderMermaid()

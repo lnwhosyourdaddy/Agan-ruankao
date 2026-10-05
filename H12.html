@@ -7,7 +7,7 @@
 <title>第 12 小时 · 企业信息化（一）· 信息化规划 · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
-<meta name="build-stamp" content="2026-10-05 08:06:29">
+<meta name="build-stamp" content="2026-10-05 11:44:51">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -1927,6 +1927,166 @@ table.zebra tbody tr:hover{background:var(--accent-soft-2)}
 /* ── 平滑滚动偏移（锚点跳转不卡顶栏下） ── */
 html{scroll-padding-top:80px}
 @media(max-width:760px){html{scroll-padding-top:70px}}
+
+/* ═══════════════════════════════════════════════════════════════
+   历年真题区块 · 三级折叠（原生 details，零 JS）
+   ═══════════════════════════════════════════════════════════════ */
+.exam{margin:2.2em 0 1.6em}
+
+/* ── 统计条：常驻不折叠，避免"用户不知道里面有真题"而白做 ── */
+.exam-bar{
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  padding:12px 16px;margin-bottom:10px;
+  background:linear-gradient(180deg,var(--bg-card) 0%,var(--bg-alt) 100%);
+  border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow-1);
+}
+.exam-bar-label{font-weight:700;font-size:14px;color:var(--accent)}
+.exam-bar-stat{font-size:12.5px;color:var(--fg-3);flex:1;min-width:140px}
+.exam-bar-stat b{color:var(--fg-2);font-variant-numeric:tabular-nums}
+.exam-bar-ops{display:flex;gap:6px}
+.exam-op{
+  padding:4px 11px;font:inherit;font-size:12px;cursor:pointer;
+  background:var(--bg-card);border:1px solid var(--line-2);
+  border-radius:999px;color:var(--fg-2);
+  transition:border-color .18s var(--ease),color .18s var(--ease),background .18s var(--ease);
+}
+.exam-op:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+
+/* ── 科目级折叠 ── */
+.exam-subject{
+  border:1px solid var(--line);border-radius:var(--radius);
+  background:var(--bg-card);overflow:hidden;
+}
+.exam-subject>summary{
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  padding:12px 16px;cursor:pointer;list-style:none;
+  font-weight:600;color:var(--fg-2);
+  transition:background .18s var(--ease),color .18s var(--ease);
+}
+.exam-subject>summary::-webkit-details-marker{display:none}
+.exam-subject>summary:hover{background:var(--accent-soft);color:var(--accent)}
+.exam-subject[open]>summary{border-bottom:1px solid var(--line);background:var(--bg-alt)}
+.exam-subject-name::before{content:'▸ ';display:inline-block;transition:transform .2s var(--ease)}
+.exam-subject[open] .exam-subject-name::before{transform:rotate(90deg)}
+.exam-subject-n{font-size:12px;color:var(--fg-3);font-variant-numeric:tabular-nums}
+.exam-subject-tip{margin-left:auto;font-size:11.5px;color:var(--fg-3);opacity:.8}
+
+/* ── 年份级折叠 ── */
+.exam-year{border-bottom:1px solid var(--line)}
+.exam-year:last-child{border-bottom:0}
+.exam-year>summary{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 16px 9px 30px;cursor:pointer;list-style:none;
+  font-size:13.5px;color:var(--fg-2);
+  transition:background .16s var(--ease),color .16s var(--ease);
+}
+.exam-year>summary::-webkit-details-marker{display:none}
+.exam-year>summary:hover{background:var(--accent-soft);color:var(--accent)}
+.exam-year[open]>summary{background:var(--bg-alt)}
+.exam-year-name::before{content:'▸ ';display:inline-block;transition:transform .2s var(--ease);color:var(--fg-3)}
+.exam-year[open] .exam-year-name::before{transform:rotate(90deg)}
+.exam-year-n{font-size:11.5px;color:var(--fg-3);font-variant-numeric:tabular-nums}
+
+/* ── 单题折叠 ── */
+.exam-q{border-top:1px solid var(--line)}
+.exam-q>summary{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:9px 16px 9px 46px;cursor:pointer;list-style:none;
+  font-size:13.5px;line-height:1.6;color:var(--fg-2);
+  transition:background .16s var(--ease);
+}
+.exam-q>summary::-webkit-details-marker{display:none}
+.exam-q>summary:hover{background:var(--accent-soft)}
+.exam-q[open]>summary{background:var(--bg-alt)}
+.exam-q>summary::before{
+  content:'＋';flex-shrink:0;width:1.1em;text-align:center;
+  color:var(--fg-3);font-size:12px;line-height:1.5;
+}
+.exam-q[open]>summary::before{content:'－';color:var(--accent)}
+.exam-no{
+  flex-shrink:0;font-size:11px;color:var(--fg-3);
+  font-variant-numeric:tabular-nums;padding-top:2px;min-width:44px;
+}
+.exam-tag{
+  flex-shrink:0;font-size:10.5px;padding:1px 6px;border-radius:4px;
+  background:var(--warn-bg);color:var(--warn-fg);border:1px solid var(--warn-line);
+}
+.exam-stem-peek{
+  flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  color:var(--fg-2);
+}
+.exam-q[open] .exam-stem-peek{color:var(--fg)}
+.exam-q-body{padding:4px 16px 16px 46px}
+.exam-stem{margin:.6em 0;font-size:14.5px;line-height:1.8;color:var(--fg)}
+.exam-blank{color:var(--danger);padding:0 1px}
+.exam-opts{list-style:none;margin:.5em 0 .9em;padding:0}
+/* ⚠️ 必须清掉全局 `ul>li::before` 的圆点（本站正文列表有项目符号），
+   否则真题选项前会多出一个小圆点，位置还和字母块错开 */
+.exam-opts>li::before{content:none !important}
+.exam-opts li{
+  position:relative;padding:4px 0 4px 26px;font-size:14px;line-height:1.7;
+  border-bottom:1px dashed var(--line);
+}
+.exam-opts li:last-child{border-bottom:0}
+.exam-opts b{
+  position:absolute;left:0;top:4px;
+  display:inline-flex;align-items:center;justify-content:center;
+  width:19px;height:19px;border-radius:5px;
+  background:var(--bg-alt);border:1px solid var(--line-2);
+  font-size:11px;font-weight:700;color:var(--fg-3);
+}
+
+/* ── 答案（默认再折叠一层）── */
+.exam-ans{margin-top:.6em}
+.exam-ans>summary{
+  display:inline-flex;align-items:center;gap:6px;cursor:pointer;list-style:none;
+  padding:4px 12px;font-size:12px;
+  background:var(--accent-soft);border:1px solid var(--line-2);
+  border-radius:999px;color:var(--accent);
+  transition:background .18s var(--ease),border-color .18s var(--ease);
+}
+.exam-ans>summary::-webkit-details-marker{display:none}
+.exam-ans>summary:hover{background:var(--accent-soft-2);border-color:var(--accent)}
+.exam-ans[open]>summary{margin-bottom:8px}
+.exam-ans-line{margin:.4em 0;font-size:14px;color:var(--fg)}
+.exam-ans-line b{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:26px;height:24px;padding:0 8px;margin-left:4px;
+  border-radius:6px;background:var(--tip-bg);color:var(--tip-fg);
+  border:1px solid var(--tip-line);font-weight:700;
+}
+.exam-exp{margin:.4em 0;font-size:13.5px;line-height:1.8;color:var(--fg-2)}
+
+/* ── 窄屏 ── */
+@media(max-width:760px){
+  .exam-bar{padding:10px 12px;gap:8px}
+  .exam-bar-label{font-size:13px}
+  .exam-bar-stat{font-size:11.5px;flex-basis:100%;order:3;min-width:0}
+  .exam-bar-ops{margin-left:auto}
+  .exam-subject-tip{display:none}
+  .exam-q>summary{padding-left:16px;flex-wrap:wrap}
+  .exam-q>summary::before{display:none}
+  .exam-no{min-width:0}
+  .exam-q-body{padding-left:16px}
+  .exam-year>summary{padding-left:20px}
+  .exam-stem-peek{white-space:normal;flex-basis:100%}
+  .exam-opts li{font-size:13.5px}
+}
+
+/* ── 打印：全部自动展开（服务"可打印带水印"卖点）── */
+@media print{
+  .exam-bar,.exam-op,.exam-ans>summary{display:none !important}
+  .exam-subject,.exam-year,.exam-q{border:0 !important;background:none !important}
+  .exam-subject>summary,.exam-year>summary{
+    padding:6pt 0;background:none !important;border-bottom:1pt solid #999;
+  }
+  .exam-subject-name::before,.exam-year-name::before,.exam-q>summary::before{content:'' !important}
+  .exam-q-body,.exam-ans[open] > div,.exam-ans > div{display:block !important}
+  .exam-q{break-inside:avoid;page-break-inside:avoid}
+  .exam-stem,.exam-opts li{font-size:9.5pt}
+  .exam-exp{font-size:8.5pt;color:#333}
+}
 </style>
 </head>
 <body>
@@ -2415,6 +2575,42 @@ html{scroll-padding-top:80px}
   </div>
 </div>
 </div>
+    <section class="exam" id="exam" data-exam-chapter="6" data-exam-hour="H12"><div class="exam-bar"><span class="exam-bar-label">📚 历年真题</span><span class="exam-bar-stat">本章共 <b>67</b> 题 · 本学时 <b>34</b> 题（其余见同章其他学时）</span><span class="exam-bar-ops"><button type="button" class="exam-op" data-exam-all="1">全部展开</button><button type="button" class="exam-op" data-exam-all="0">全部收起</button></span></div><details class="exam-subject" data-exam-subject="综合知识"><summary><span class="exam-subject-name">📝 综合知识</span><span class="exam-subject-n">34 题</span><span class="exam-subject-tip">按年份展开 · 单题可点开看答案</span></summary><details class="exam-year" data-exam-year="2026年5月"><summary><span class="exam-year-name">2026年5月</span><span class="exam-year-n">4 题</span></summary><details class="exam-q" data-exam-id="2026年5月-053"><summary><span class="exam-no">第 53 题</span><span class="exam-stem-peek">业务流程的三要素包括对象、活动以及</span></summary><div class="exam-q-body"><p class="exam-stem">业务流程的三要素包括对象、活动以及</p><ul class="exam-opts"><li><b>A</b> 接口</li><li><b>B</b> 实体</li><li><b>C</b> 数据库</li><li><b>D</b> 类图</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">业务流程标准三要素：对象、活动、实体。</p></details></div></details><details class="exam-q" data-exam-id="2026年5月-048"><summary><span class="exam-no">第 48 题</span><span class="exam-stem-peek">“采购→生产→销售”属于</span></summary><div class="exam-q-body"><p class="exam-stem">“采购→生产→销售”属于</p><ul class="exam-opts"><li><b>A</b> ERP</li><li><b>B</b> CRM</li><li><b>C</b> SCM</li><li><b>D</b> DSS</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">SCM供应链管理覆盖采购、生产、仓储、销售全业务链路。</p></details></div></details><details class="exam-q" data-exam-id="2026年5月-033"><summary><span class="exam-no">第 33 题</span><span class="exam-stem-peek">战略集合转化法主要用于</span></summary><div class="exam-q-body"><p class="exam-stem">战略集合转化法主要用于</p><ul class="exam-opts"><li><b>A</b> 数据库设计</li><li><b>B</b> 信息系统战略规划</li><li><b>C</b> 软件测试</li><li><b>D</b> 面向对象设计</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">SST（战略集合转化法）、BSP、CSF均为信息系统战略规划主流方法。</p></details></div></details><details class="exam-q" data-exam-id="2026年5月-011"><summary><span class="exam-no">第 11 题</span><span class="exam-stem-peek">下列属于显性知识的是</span></summary><div class="exam-q-body"><p class="exam-stem">下列属于显性知识的是</p><ul class="exam-opts"><li><b>A</b> 专家经验</li><li><b>B</b> 技术直觉</li><li><b>C</b> 文档规范</li><li><b>D</b> 个人技能</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">显性知识可文档化、标准化、可传递；经验、直觉、个人技能属于难以书面化的隐性知识。</p></details></div></details></details><details class="exam-year" data-exam-year="2025年5月"><summary><span class="exam-year-name">2025年5月</span><span class="exam-year-n">5 题</span></summary><details class="exam-q" data-exam-id="2025年5月-068"><summary><span class="exam-no">第 68 题</span><span class="exam-stem-peek">客户关系管理（CRM）系统的主要功能不包括 ()</span></summary><div class="exam-q-body"><p class="exam-stem">客户关系管理（CRM）系统的主要功能不包括 ()</p><ul class="exam-opts"><li><b>A</b> 处理供应商原材料采购</li><li><b>B</b> 从传统的电话营销转向网站营销和APP营销</li><li><b>C</b> 不同部门共享客户资料库</li><li><b>D</b> 记录客户信息并分析购买行为</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">CRM聚焦客户销售、营销、售后全生命周期管理，供应商原材料采购属于供应链管理SCM的业务范畴；B属于营销管理、C属于客户资源管理、D属于客户数据分析，均是CRM核心功能。</p></details></div></details><details class="exam-q" data-exam-id="2025年5月-024"><summary><span class="exam-no">第 24 题</span><span class="exam-stem-peek">信息资源管理的基础标准中，（24）包含了企业管理的表单、报表、屏幕数据格式等</span></summary><div class="exam-q-body"><p class="exam-stem">信息资源管理的基础标准中，（24）包含了企业管理的表单、报表、屏幕数据格式等</p><ul class="exam-opts"><li><b>A</b> 数据元素标准</li><li><b>B</b> 用户视图标准</li><li><b>C</b> 信息分类编码标准</li><li><b>D</b> 逻辑数据库标准</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">IRM 的基础标准：
+（1）数据元素标准。数据元素是最小不可再分的信息单位，是一类数据的总称，它是数据对象的抽象。数据元素标准又可分为命名标准、标识标准和一致性标准。
+（2）信息分类编码标准。信息分类就是根据信息内容的属性或特征，将信息按一定的原则和方法进行区分和归类，并建立起一定的分类系统和排列顺序，以便管理和使用信息。是信息资源标准中最基础的标准。
+（3）用户视图标准。用户视图是一些数据元素的集合，它反映了最终用户对数据实体的看法。用户视图是数据在系统外部而不是内部的表象，是系统的输入或输出的媒介或手段，包含企业管理的表单、报表、屏幕数据格式等。
+（4）概念数据库标准。概念数据库是最终用户对数据存储的看法，是对用户信息需求的综合概括。概念数据库标准包括数据库名称、标识、主关键字和数据内容列表。
+（5）逻辑数据库标准。逻辑数据库是系统分析与设计的基础，是对概念数据库的进一步分解和细化，一个逻辑主题数据库由一组规范化的基本表构成。</p></details></div></details><details class="exam-q" data-exam-id="2025年5月-022"><summary><span class="exam-no">第 22 题</span><span class="exam-stem-peek">信息资源分类中（22）是根据信息资源服务的目标建立不同的信息资源分类方式</span></summary><div class="exam-q-body"><p class="exam-stem">信息资源分类中（22）是根据信息资源服务的目标建立不同的信息资源分类方式</p><ul class="exam-opts"><li><b>A</b> 管理维度分类</li><li><b>B</b> 信息存储技术分类</li><li><b>C</b> 信息存储技术分类</li><li><b>D</b> 应用主题维度分类</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">信息资源分类的主要功能是用于 IRM，而 IRM 的起点和基础是建立信息资源目录。对信息资源的分类一般从以下三个维度展开：
+(1)从管理维度分类。从信息资源建立的最初目的来看，一般信息资源都是在业务信息化基础上形成的各种信息。管理维度的分类一般有两种情况：一是专门的业务部门所采用的分类体系；二是综合部门从信息资源登记和管理的角度提出的分类。
+(2)从信息来源维度分类。这种分类体系比较简单，一般按照信息资源提供部门来设置信息资源的一级、二级乃至三级类目。最大优势在于两个方面：一是从分类信息的赋值角度极大地简化了工作量。二是使用者不需要学习或者了解特定分类体系的内容，使信息资源的查找过程更加简单和直接
+(3)从应用主题维度分类。这种分类体系最复杂。同一个信息资源根据其服务和应用的目标不同，会有不同的分类方式。尤其对于政府部门产生的信息资源，从政府部门之间跨部门应用角度提出的分类体系与服务于企业和公众的信息资源分类体系必然有很大的不同，这是由不同的信息资源使用者的应用需求决定的，有多少不同的应用需求就有多少相应的信息资源分类方式。</p></details></div></details><details class="exam-q" data-exam-id="2025年5月-020"><summary><span class="exam-no">第 20 题</span><span class="exam-stem-peek">信息资源分类中（20）包含了专门业务部门所采用的分类体系</span></summary><div class="exam-q-body"><p class="exam-stem">信息资源分类中（20）包含了专门业务部门所采用的分类体系</p><ul class="exam-opts"><li><b>A</b> 信息存储技术分类</li><li><b>B</b> 管理维度分类</li><li><b>C</b> 信息来源维度分类</li><li><b>D</b> 应用主题维度分类</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">信息资源分类的主要功能是用于 IRM，而 IRM 的起点和基础是建立信息资源目录。对信息资源的分类一般从以下三个维度展开：
+(1)从管理维度分类。从信息资源建立的最初目的来看，一般信息资源都是在业务信息化基础上形成的各种信息。管理维度的分类一般有两种情况：一是专门的业务部门所采用的分类体系；二是综合部门从信息资源登记和管理的角度提出的分类。
+(2)从信息来源维度分类。这种分类体系比较简单，一般按照信息资源提供部门来设置信息资源的一级、二级乃至三级类目。最大优势在于两个方面：一是从分类信息的赋值角度极大地简化了工作量。二是使用者不需要学习或者了解特定分类体系的内容，使信息资源的查找过程更加简单和直接
+(3)从应用主题维度分类。这种分类体系最复杂。同一个信息资源根据其服务和应用的目标不同，会有不同的分类方式。尤其对于政府部门产生的信息资源，从政府部门之间跨部门应用角度提出的分类体系与服务于企业和公众的信息资源分类体系必然有很大的不同，这是由不同的信息资源使用者的应用需求决定的，有多少不同的应用需求就有多少相应的信息资源分类方式。</p></details></div></details><details class="exam-q" data-exam-id="2025年5月-008"><summary><span class="exam-no">第 8 题</span><span class="exam-stem-peek">电子商务技术可以划分为（）等技术。</span></summary><div class="exam-q-body"><p class="exam-stem">电子商务技术可以划分为（）等技术。</p><ul class="exam-opts"><li><b>A</b> 网络数据通信、电子数据交换、安全、电子支付和数据库</li><li><b>B</b> 交易协议支付方式、安全机制、签名与鉴别、记录的核查与保留</li><li><b>C</b> 完全电子商务和非完全电子商务</li><li><b>D</b> 企业对消费者、企业对企业、消费者对消费者</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">电子商务技术划分为五大类：网络数据通信技术、电子数据交换技术、安全技术、电子支付技术和数据库技术；其他选项分别为安全机制、业务分类方式、商业模式分类，不属于技术分类。</p></details></div></details></details><details class="exam-year" data-exam-year="2024年5月"><summary><span class="exam-year-name">2024年5月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2024年5月-069"><summary><span class="exam-no">第 69 题</span><span class="exam-stem-peek">面向服务的开发方法有三个主要的抽象级别，按抽象级别从低到高分别是（）</span></summary><div class="exam-q-body"><p class="exam-stem">面向服务的开发方法有三个主要的抽象级别，按抽象级别从低到高分别是（）</p><ul class="exam-opts"><li><b>A</b> 服务、操作、业务流程</li><li><b>B</b> 操作、业务流程、服务</li><li><b>C</b> 操作、服务、业务流程</li><li><b>D</b> 服务、业务流程、操作</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">面向服务架构抽象层级从低到高排序：最底层是最小粒度的可执行操作，多个强关联操作封装为独立服务，多个服务按照业务规则编排形成顶层的业务流程。</p></details></div></details><details class="exam-q" data-exam-id="2024年5月-032"><summary><span class="exam-no">第 32 题</span><span class="exam-stem-peek">产品的生命周期一般包括 5 个阶段，分别是（）</span></summary><div class="exam-q-body"><p class="exam-stem">产品的生命周期一般包括 5 个阶段，分别是（）</p><ul class="exam-opts"><li><b>A</b> 培育期、发展期、成熟期、衰退期、结束期</li><li><b>B</b> 培育期、成长期、成熟期、衰退期、结束期</li><li><b>C</b> 初始期、成长期、成熟期、衰退期、结束期</li><li><b>D</b> 初始期、发展期、成长期、成熟期、结束期</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">通用产品生命周期规范划分是培育期、成长期、成熟期、衰退期、结束期五个阶段。</p></details></div></details></details><details class="exam-year" data-exam-year="2023年5月"><summary><span class="exam-year-name">2023年5月</span><span class="exam-year-n">4 题</span></summary><details class="exam-q" data-exam-id="2023年5月-026"><summary><span class="exam-no">第 26 题</span><span class="exam-stem-peek">数字化转型成熟度模型由成熟度等级和评价域构成，其中，成熟度等级包括（ ）。</span></summary><div class="exam-q-body"><p class="exam-stem">数字化转型成熟度模型由成熟度等级和评价域构成，其中，成熟度等级包括（ ）。</p><ul class="exam-opts"><li><b>A</b> 初始级、规范级、场景级、领域级、平台级</li><li><b>B</b> 初始级、规范级、场景级、领域级、生态级</li><li><b>C</b> 规范级、场景级、领域级、平台级、生态级</li><li><b>D</b> 初始级、规范级、领域级、平台级、生态级</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">本题为超纲考点，数字化转型成熟度模型从基础规范起步，依次经过单场景落地、全领域推广、全域平台化、产业生态化五个等级演进。</p></details></div></details><details class="exam-q" data-exam-id="2023年5月-022"><summary><span class="exam-no">第 22 题</span><span class="exam-stem-peek">21-22.数据治理模型包括三个框架，显示了数据治理内部的逻辑关系，其中，范围展示了具体应该关注什么，（ ）是数据治理的…</span></summary><div class="exam-q-body"><p class="exam-stem">21-22.数据治理模型包括三个框架，显示了数据治理内部的逻辑关系，其中，范围展示了具体应该关注什么，（ ）是数据治理的推动因素，（ ）体现了如何实现治理的方法。
+（本题为第 2 空）</p><ul class="exam-opts"><li><b>A</b> 用户使用</li><li><b>B</b> 执行及评估</li><li><b>C</b> 使用策略</li><li><b>D</b> 管理方式</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">本题属于超纲考点，数据治理模型三大框架分工：范围明确治理关注范畴，促成因素是推动治理落地的驱动力，执行及评估规范治理实施与考核的具体方法。</p></details></div></details><details class="exam-q" data-exam-id="2023年5月-019"><summary><span class="exam-no">第 19 题</span><span class="exam-stem-peek">区块链是按照时间顺序，将数据区块以顺序相连的方式组合成的链式数据结构，是以密码学方式保证的不可篡改和不可伪造的分布式账本…</span></summary><div class="exam-q-body"><p class="exam-stem">区块链是按照时间顺序，将数据区块以顺序相连的方式组合成的链式数据结构，是以密码学方式保证的不可篡改和不可伪造的分布式账本。以下选项中（ ）不是区块链具有的特征。</p><ul class="exam-opts"><li><b>A</b> 去中心化</li><li><b>B</b> 开放性</li><li><b>C</b> 依赖性</li><li><b>D</b> 匿名性</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">区块链是分布式账本，核心特征为去中心化、开放性、匿名性，去中心化设计让它不依赖单一节点，依赖性不属于区块链特征。</p></details></div></details><details class="exam-q" data-exam-id="2023年5月-002"><summary><span class="exam-no">第 2 题</span><span class="exam-stem-peek">诺兰阶段模型总结了管理信息系统发展的经验和规律，将信息系统的发展路线划分为六个阶段，包括：（ ）。</span></summary><div class="exam-q-body"><p class="exam-stem">诺兰阶段模型总结了管理信息系统发展的经验和规律，将信息系统的发展路线划分为六个阶段，包括：（ ）。</p><ul class="exam-opts"><li><b>A</b> 初始阶段、扩展阶段、控制阶段、统一阶段、数据管理阶段、成熟阶段</li><li><b>B</b> 初始阶段、控制阶段、统一阶段、数据管理阶段、测试阶段、成熟阶段</li><li><b>C</b> 初始阶段、控制阶段、统一阶段、项目管理阶段、测试阶段、成熟阶段</li><li><b>D</b> 初始阶段、同一阶段、数据管理阶段、测试阶段、成熟阶段、完善阶段</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">诺兰模型将信息系统进化分为6个标准阶段：1.初始阶段：计算机刚进入企业，仅用于财务办公；2.传播（扩展）阶段：扩大计算机应用，盲目增加软件投入；3.控制阶段：统筹协调系统，解决信息孤岛，是从管理转向数据管理的关键；4.集成（统一）阶段：统一规划搭建数据库，实现资源集成共享；5.数据管理阶段：信息成为核心资源，全平台实现数据整合共享；6.成熟阶段：系统适配企业全层级需求，深度融合IT与管理。其余选项的测试、项目管理等不属于诺兰划分的阶段。</p></details></div></details></details><details class="exam-year" data-exam-year="2022年5月"><summary><span class="exam-year-name">2022年5月</span><span class="exam-year-n">3 题</span></summary><details class="exam-q" data-exam-id="2022年5月-037"><summary><span class="exam-no">第 37 题</span><span class="exam-tag">两空单选</span><span class="exam-tag">2 空</span><span class="exam-stem-peek">在企业信息化中，（36）的主要方法有业务与IT整合和企业IT架构构建。下面关于上述两种方法的说法中，不正确的是（37）。…</span></summary><div class="exam-q-body"><p class="exam-stem">在企业信息化中，<b class="exam-blank">（36）</b>的主要方法有业务与IT整合和企业IT架构构建。下面关于上述两种方法的说法中，不正确的是<b class="exam-blank">（37）</b>。
+<b class="exam-blank">（1）</b>业务与IT整合（BITA）：是一种以业务为导向的、全面的IT管理咨询实施方法论。从制订企业战略、建立（或改进）企业组织结构和业务流程，到进行IT管理和制订过渡计划，使IT能够更好地为企业战略和目标服务。BITA适用于信息系统不能满足当前管理中的业务需要，业务和IT之间总是有不一致的地方的场景。
+<b class="exam-blank">（2）</b>企业IT架构（EITA）：分析企业战略，帮助企业制订IT战略，并对其投资决策进行指导。在技术、信息系统、信息、IT组织和IT流程方面，帮助企业建立IT的原则规范、模式和标准。EITA适用于现有信息系统和IT基础架构不一致、不兼容和缺乏统一整体管理的企业。
+两种方法存在不少重合的应用领域，因此A选项说法错误。
+（本题为第 2 空）</p><ul class="exam-opts"><li><b>A</b> 业务与IT整合和企业IT架构两种方法不存在任何领域的重叠</li><li><b>B</b> 业务与IT整合是一种以业务为导向的、全面的IT管理咨询实施方法论</li><li><b>C</b> 企业架构帮助企业制订IT战略，并对其投资决策进行指导</li><li><b>D</b> 企业IT架构适用于现有信息系统和IT基础架构不一致、不兼容和缺乏统一的整体管理的企业</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">企业战略与信息化战略集成的主要方法有BITA（Business-IT Alignment，业务与IT整合）和EITA（Enterprise IT Architecture，企业IT架构）：</p></details></div></details><details class="exam-q" data-exam-id="2022年5月-035"><summary><span class="exam-no">第 35 题</span><span class="exam-stem-peek">信息化规划与企业战略规划总是互相影响、互相促进的。当财务部门提出财务电算化的需求，生产部门提出库房管理的需求时，IT 部…</span></summary><div class="exam-q-body"><p class="exam-stem">信息化规划与企业战略规划总是互相影响、互相促进的。当财务部门提出财务电算化的需求，生产部门提出库房管理的需求时，IT 部门根据不同部门的需求分别独立实施，以此形成一个完全基于企业组织与业务流程的信息系统结构，其中各个信息系统分别对应于特定部门或特定业务流程。这表明（35）。</p><ul class="exam-opts"><li><b>A</b> 企业处在信息化的初级阶段</li><li><b>B</b> 企业处在信息化的中级阶段</li><li><b>C</b> 企业处在信息化的高级阶段</li><li><b>D</b> 企业处在信息化的完成阶段</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">该企业信息化还停留于围绕部门需求以数据处理为核心、各部门独立建设信息系统的模式，这属于信息化发展的初级阶段特征。</p></details></div></details><details class="exam-q" data-exam-id="2022年5月-024"><summary><span class="exam-no">第 24 题</span><span class="exam-tag">两空单选</span><span class="exam-tag">2 空</span><span class="exam-stem-peek">智能制造系统架构从生命周期、系统层级和智能特征3个维度对智能制造所涉及的活动、装备、特征等内容进行描述，主要用于明确智能…</span></summary><div class="exam-q-body"><p class="exam-stem">智能制造系统架构从生命周期、系统层级和智能特征3个维度对智能制造所涉及的活动、装备、特征等内容进行描述，主要用于明确智能制造的<b class="exam-blank">（24）</b>，指导国家智能制造标准体系建设。其中，系统层级是对与企业生产活动相关的组织结构的层级划分，包括<b class="exam-blank">（25）</b>。
+1. 生命周期：生命周期涵盖从产品原型研发到产品回收再制造的各个阶段，包括设计、生产、物流、销售、服务等一系列相互联系的价值创造活动。生命周期的各项活动可进行迭代优化，具有可持续性发展等特点，不同行业的生命周期构成和时间顺序不尽相同。
+<b class="exam-blank">（1）</b>设计是根据企业的所有约束条件以及所选择的技术来对需求进行实现和优化的过程；
+<b class="exam-blank">（2）</b>生产是指将物料进行加工、运送、装配、检验等活动创造产品的过程；
+<b class="exam-blank">（3）</b>物流是指物品从供应地向接收地的实体流动过程；
+<b class="exam-blank">（4）</b>销售是指产品或商品等从企业转移到客户手中的经营活动；
+<b class="exam-blank">（5）</b>服务是指产品提供者与客户接触过程中所产生的一系列活动的过程及其结果。
+2. 系统层级：系统层级是指与企业生产活动相关的组织结构的层级划分，包括设备层、单元层、车间层、企业层和协同层。
+<b class="exam-blank">（1）</b>设备层是指企业利用传感器、仪器仪表、机器、装置等，实现实际物理流程并感知和操控物理流程的层级；
+<b class="exam-blank">（2）</b>单元层是指用于企业内处理信息、实现监测和控制物理流程的层级；
+<b class="exam-blank">（3）</b>车间层是实现面向工厂或车间的生产管理的层级；
+<b class="exam-blank">（4）</b>企业层是实现面向企业经营管理的层级；
+<b class="exam-blank">（5）</b>协同层是企业实现其内部和外部信息互联和共享，实现跨企业间业务协同的层级。
+3. 智能特征：智能特征是指制造活动具有的自感知、自决策、自执行、自学习、自适应之类功能的表征，包括资源要素、互联互通、融合共享、系统集成和新兴业态等5层智能化要求。
+<b class="exam-blank">（1）</b>资源要素是指企业从事生产时所需要使用的资源或工具及其数字化模型所在的层级；
+<b class="exam-blank">（2）</b>互联互通是指通过有线或无线网络、通信协议与接口，实现资源要素之间的数据传递与参数语义交换的层级；
+<b class="exam-blank">（3）</b>融合共享是指在互联互通的基础上，利用云计算、大数据等新一代信息通信技术，实现信息协同共享的层级；
+<b class="exam-blank">（4）</b>系统集成是指企业实现智能制造过程中的装备、生产单元、生产线、数字化车间、智能工厂之间，以及智能制造系统之间的数据交换和功能互连的层级；
+<b class="exam-blank">（5）</b>新兴业态是基于物理空间不同层级资源要素和数字空间集成与融合的数据、模型及系统，建立的涵盖了认知、诊断、预测及决策等功能，且支持迭代优化的层级。
+（本题为第 1 空）</p><ul class="exam-opts"><li><b>A</b> 标准化需求、业务和对象</li><li><b>B</b> 标准化需求、对象和范围</li><li><b>C</b> 标准化需求、业务和流程</li><li><b>D</b> 标准化需求、流程和范围</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">智能制造系统架构从生命周期、系统层级和智能特征等3个维度对智能制造所涉及的要素、装备、活动等内容进行描述，主要用于明确智能制造的标准化对象和范围。</p></details></div></details></details><details class="exam-year" data-exam-year="2021年5月"><summary><span class="exam-year-name">2021年5月</span><span class="exam-year-n">7 题</span></summary><details class="exam-q" data-exam-id="2021年5月-037"><summary><span class="exam-no">第 37 题</span><span class="exam-stem-peek">电子商务是指买卖双方利用现代开放的Internet网络，按照一定的标准所进行的各类商业活动。电子商务可具有不同的模式，其…</span></summary><div class="exam-q-body"><p class="exam-stem">电子商务是指买卖双方利用现代开放的Internet网络，按照一定的标准所进行的各类商业活动。电子商务可具有不同的模式，其中个人工作者给消费者提供服务属于（ ）。</p><ul class="exam-opts"><li><b>A</b> B2B</li><li><b>B</b> C2C</li><li><b>C</b> B2C</li><li><b>D</b> C2B</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">C2C即消费者对消费者模式，交易双方均为个体个人，个人工作者属于个体消费者，面向普通消费者提供服务符合C2C模式定义；B2B是企业对企业、B2C是企业对消费者、C2B是消费者对企业。</p></details></div></details><details class="exam-q" data-exam-id="2021年5月-035"><summary><span class="exam-no">第 35 题</span><span class="exam-stem-peek">信息资源管理（IRM）包括强调对数据控制的（ ），和关心企业管理人员如何获取和处理信息的信息处理管理。</span></summary><div class="exam-q-body"><p class="exam-stem">信息资源管理（IRM）包括强调对数据控制的（ ），和关心企业管理人员如何获取和处理信息的信息处理管理。</p><ul class="exam-opts"><li><b>A</b> 数据来源管理</li><li><b>B</b> 信息架构管理</li><li><b>C</b> 信息来源管理</li><li><b>D</b> 数据资源管理</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">IRM分为两大分支：数据资源管理（侧重数据全生命周期管控、维护与安全）、信息处理管理（侧重人员信息获取、加工的流程规范）。</p></details></div></details><details class="exam-q" data-exam-id="2021年5月-033"><summary><span class="exam-no">第 33 题</span><span class="exam-stem-peek">ERP将（ ）和企业内部的采购、生产、销售以及客户紧密联系起来，可对供应链上的所有环节进行有效管理。</span></summary><div class="exam-q-body"><p class="exam-stem">ERP将（ ）和企业内部的采购、生产、销售以及客户紧密联系起来，可对供应链上的所有环节进行有效管理。</p><ul class="exam-opts"><li><b>A</b> 供应商</li><li><b>B</b> 开发商</li><li><b>C</b> 销售渠道</li><li><b>D</b> 建设商</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">ERP打通上游供应商、企业内部产供销环节、下游终端客户的全供应链链路，实现端到端的供应链管控。</p></details></div></details><details class="exam-q" data-exam-id="2021年5月-026"><summary><span class="exam-no">第 26 题</span><span class="exam-stem-peek">业务流程重组（BPR）遵循的原则不包括（ ）。</span></summary><div class="exam-q-body"><p class="exam-stem">业务流程重组（BPR）遵循的原则不包括（ ）。</p><ul class="exam-opts"><li><b>A</b> 以流程为中心的原则</li><li><b>B</b> 利润最大化的原则</li><li><b>C</b> 以客户为导向的原则</li><li><b>D</b> 以人为本的原则</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">BPR以长期业务效率、客户价值、可持续发展为目标，不将短期利润最大化作为核心遵循原则；其公认三大核心原则为：以流程为中心、以客户为导向、以人为本（团队式管理）。</p></details></div></details><details class="exam-q" data-exam-id="2021年5月-024"><summary><span class="exam-no">第 24 题</span><span class="exam-stem-peek">信息系统战略规划方法中的战略一致性模型由（ ）领域构成。</span></summary><div class="exam-q-body"><p class="exam-stem">信息系统战略规划方法中的战略一致性模型由（ ）领域构成。</p><ul class="exam-opts"><li><b>A</b> 企业经营管理、组织与业务流程、信息系统战略</li><li><b>B</b> 企业经营战略、信息系统战略、组织与业务流程、IT基础架构</li><li><b>C</b> 企业战略、业务流程、信息系统、IT基础架构</li><li><b>D</b> 企业规划战略、组织与业务流程、信息系统战略</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">战略一致性模型（SAM）包含四大核心领域：企业经营战略、组织与业务流程、信息系统战略、IT基础架构，用于实现企业业务战略与信息化建设的双向对齐。</p></details></div></details><details class="exam-q" data-exam-id="2021年5月-021"><summary><span class="exam-no">第 21 题</span><span class="exam-stem-peek">决策支持系统（DSS）是辅助决策者通过数据、模型和知识，以人机交互方式进行半结构化或非结构化决策的计算机应用系统。其中，…</span></summary><div class="exam-q-body"><p class="exam-stem">决策支持系统（DSS）是辅助决策者通过数据、模型和知识，以人机交互方式进行半结构化或非结构化决策的计算机应用系统。其中，（ ）可以建立适当的算法产生决策方案，使决策方案得到较优解。</p><ul class="exam-opts"><li><b>A</b> 结构化和半结构化决策</li><li><b>B</b> 半结构化决策</li><li><b>C</b> 非结构化决策</li><li><b>D</b> 半结构化和非结构化决策</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">半结构化决策存在可遵循的规律但无法完全确定全局最优解，能够建立对应算法生成较优决策方案；非结构化决策无固定决策规律，无法通过算法得到较优解；结构化决策可直接求得最优解。</p></details></div></details><details class="exam-q" data-exam-id="2021年5月-019"><summary><span class="exam-no">第 19 题</span><span class="exam-stem-peek">企业信息化规划涉及多个领域的融合，它是企业战略、管理规划、业务流程重组等内容的综合规划活动。其中，（ ）规划是评价环境和…</span></summary><div class="exam-q-body"><p class="exam-stem">企业信息化规划涉及多个领域的融合，它是企业战略、管理规划、业务流程重组等内容的综合规划活动。其中，（ ）规划是评价环境和企业现状，进而选择和确定企业的总体和长远目标，制定和抉择实现目标的行动方案。</p><ul class="exam-opts"><li><b>A</b> 企业战略</li><li><b>B</b> 企业目标</li><li><b>C</b> 业务目标</li><li><b>D</b> 企业管理</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">企业战略规划的定义就是分析企业内外部环境、梳理现状，确立企业长期总体发展目标，制定落地行动方案的顶层规划工作。</p></details></div></details></details><details class="exam-year" data-exam-year="2020年11月"><summary><span class="exam-year-name">2020年11月</span><span class="exam-year-n">5 题</span></summary><details class="exam-q" data-exam-id="2020年11月-036"><summary><span class="exam-no">第 36 题</span><span class="exam-stem-peek">企业战略与信息化战略集成的主要方法有业务与IT整合和(36)。</span></summary><div class="exam-q-body"><p class="exam-stem">企业战略与信息化战略集成的主要方法有业务与IT整合和(36)。</p><ul class="exam-opts"><li><b>A</b> 企业IT架构</li><li><b>B</b> BITA</li><li><b>C</b> 信息架构</li><li><b>D</b> 业务信息整合</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">企业战略和信息化战略融合有两类主流方案：业务与IT整合、企业IT架构，其中企业IT架构包含数据、应用、技术三层架构，用于统筹信息化顶层设计。</p></details></div></details><details class="exam-q" data-exam-id="2020年11月-030"><summary><span class="exam-no">第 30 题</span><span class="exam-stem-peek">企业应用集成(Enterprise Application Integration, EAI)技术可以消除(30)。当前…</span></summary><div class="exam-q-body"><p class="exam-stem">企业应用集成(Enterprise Application Integration, EAI)技术可以消除(30)。当前，从最普遍的意义上来说，EAI可以包括表示集成、数据集成、控制集成和业务流程集成等多个层次和方面。</p><ul class="exam-opts"><li><b>A</b> 业务流程编排错误</li><li><b>B</b> 安全隐患</li><li><b>C</b> 信息孤岛</li><li><b>D</b> 网络故障</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">EAI的核心目标是打通企业内异构系统的数据、业务壁垒，解决系统间信息不互通、流程脱节的问题，消除信息孤岛。</p></details></div></details><details class="exam-q" data-exam-id="2020年11月-023"><summary><span class="exam-no">第 23 题</span><span class="exam-tag">两空单选</span><span class="exam-tag">2 空</span><span class="exam-stem-peek">客户关系管理系统的核心是客户(22)管理, 其目的是与客户建立长期和有效的业务关系，最大限度地增加利润。(23)和客户服…</span></summary><div class="exam-q-body"><p class="exam-stem">客户关系管理系统的核心是客户<b class="exam-blank">（22）</b>管理, 其目的是与客户建立长期和有效的业务关系，最大限度地增加利润。<b class="exam-blank">（23）</b>和客户服务是 CRM 的支柱性功能，是客户与企业产生联系的主要方面。</p><ul class="exam-opts"><li><b>A</b> 客户关怀</li><li><b>B</b> 客户开拓</li><li><b>C</b> 市场营销</li><li><b>D</b> 市场调研</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">CRM两大支柱性功能为市场营销、客户服务，二者是企业触达客户、建立业务往来的核心渠道。</p></details></div></details><details class="exam-q" data-exam-id="2020年11月-021"><summary><span class="exam-no">第 21 题</span><span class="exam-tag">两空单选</span><span class="exam-tag">2 空</span><span class="exam-stem-peek">(19)是一套为企业运营提供辅助决策和日常管理信息的大规模集成化软件，同时也是辅助企业管理向零缺陷趋近的一整套现代化管理…</span></summary><div class="exam-q-body"><p class="exam-stem"><b class="exam-blank">（19）</b>是一套为企业运营提供辅助决策和日常管理信息的大规模集成化软件，同时也是辅助企业管理向零缺陷趋近的一整套现代化管理思想和办公手段。它将供应商和企业内部的采购、<b class="exam-blank">（20）</b>、销售以及客户紧密联系起来，可对<b class="exam-blank">（21）</b>上的所有环节进行有效管理，实现对企业的动态控制和资源的集成和优化，提升基础管理水平，追求资源的合理高效利用。</p><ul class="exam-opts"><li><b>A</b> 供应链</li><li><b>B</b> 资金链</li><li><b>C</b> 信息流</li><li><b>D</b> 业务流</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">ERP的管理边界覆盖整条供应链的上游供应商、企业内部生产流通、下游客户全链路，实现供应链全环节的资源优化管控。</p></details></div></details><details class="exam-q" data-exam-id="2020年11月-019"><summary><span class="exam-no">第 19 题</span><span class="exam-tag">两空单选</span><span class="exam-tag">2 空</span><span class="exam-stem-peek">(19)是一套为企业运营提供辅助决策和日常管理信息的大规模集成化软件，同时也是辅助企业管理向零缺陷趋近的一整套现代化管理…</span></summary><div class="exam-q-body"><p class="exam-stem"><b class="exam-blank">（19）</b>是一套为企业运营提供辅助决策和日常管理信息的大规模集成化软件，同时也是辅助企业管理向零缺陷趋近的一整套现代化管理思想和办公手段。它将供应商和企业内部的采购、<b class="exam-blank">（20）</b>、销售以及客户紧密联系起来，可对<b class="exam-blank">（21）</b>上的所有环节进行有效管理，实现对企业的动态控制和资源的集成和优化，提升基础管理水平，追求资源的合理高效利用。</p><ul class="exam-opts"><li><b>A</b> 供应链管理系统</li><li><b>B</b> 财务管理系统</li><li><b>C</b> 信息资源规划系统</li><li><b>D</b> 企业资源规划系统</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">企业资源规划系统（ERP）是覆盖企业上下游供应链、内部全业务流程的集成化管理平台，兼具信息化软件工具与现代化管理理念双重属性。</p></details></div></details></details><details class="exam-year" data-exam-year="2019年5月"><summary><span class="exam-year-name">2019年5月</span><span class="exam-year-n">4 题</span></summary><details class="exam-q" data-exam-id="2019年5月-025"><summary><span class="exam-no">第 25 题</span><span class="exam-stem-peek">业务流程重组(Business Process Reengineering，BPR)是针对企业业务流程的基本问题进行回顾…</span></summary><div class="exam-q-body"><p class="exam-stem">业务流程重组(Business Process Reengineering，BPR)是针对企业业务流程的基本问题进行回顾，其核心思路是对业务流程的（）改造</p><ul class="exam-opts"><li><b>A</b> 增量式</li><li><b>B</b> 根本性</li><li><b>C</b> 迭代式</li><li><b>D</b> 保守式</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">BPR的核心特征是对业务流程进行彻底的、根本性的重新设计改造，而非小范围增量优化。</p></details></div></details><details class="exam-q" data-exam-id="2019年5月-023"><summary><span class="exam-no">第 23 题</span><span class="exam-stem-peek">IRP 的过程大致可以分为 7 个步骤，其中（）步骤的主要工作是主题数据库定义、基本表定义和扩展表定义；</span></summary><div class="exam-q-body"><p class="exam-stem">IRP 的过程大致可以分为 7 个步骤，其中（）步骤的主要工作是主题数据库定义、基本表定义和扩展表定义；</p><ul class="exam-opts"><li><b>A</b> 信息接口建模</li><li><b>B</b> 数据结构建模</li><li><b>C</b> 系统数据建模</li><li><b>D</b> 信息处理建模</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">系统数据建模环节聚焦数据层设计，负责主题数据库、基础数据表、扩展数据表的定义工作。</p></details></div></details><details class="exam-q" data-exam-id="2019年5月-021"><summary><span class="exam-no">第 21 题</span><span class="exam-stem-peek">信息资源规划(Information Resource Planning, IRP)是信息化建设的基础工程，IRP强调将…</span></summary><div class="exam-q-body"><p class="exam-stem">信息资源规划(Information Resource Planning, IRP)是信息化建设的基础工程，IRP强调将需求分析与（）结合起来。</p><ul class="exam-opts"><li><b>A</b> 系统建模</li><li><b>B</b> 系统架构</li><li><b>C</b> 业务分析</li><li><b>D</b> 流程建模</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">IRP的核心规范是将需求分析和系统建模紧密结合，需求分析是系统建模的前置准备，系统建模负责把用户需求定型、规范化表达。</p></details></div></details><details class="exam-q" data-exam-id="2019年5月-019"><summary><span class="exam-no">第 19 题</span><span class="exam-stem-peek">信息资源是企业的重要资源，需要进行合理的管理，其中（）管理强调对数据的控制(维护和安全)。</span></summary><div class="exam-q-body"><p class="exam-stem">信息资源是企业的重要资源，需要进行合理的管理，其中（）管理强调对数据的控制(维护和安全)。</p><ul class="exam-opts"><li><b>A</b> 生产资源</li><li><b>B</b> 流程资源</li><li><b>C</b> 客户资源</li><li><b>D</b> 数据资源</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">数据资源管理的核心目标就是对企业全量数据进行管控，保障数据的日常维护、存储安全与合规使用，匹配题干描述的要求。</p></details></div></details></details></details><details class="exam-subject" data-exam-subject="案例"><summary><span class="exam-subject-name">📋 案例分析</span><span class="exam-subject-n">3 题</span><span class="exam-subject-tip">情景简答 · 采分点三色标记</span></summary><div class="exam-bar"><span class="exam-bar-label">📋 案例分析</span><span class="exam-bar-stat">共 <b>3</b> 题 · 情景简答</span></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">23</span>考点：信息资源管理 / IRP / 主题数据库 / 信息资源网 / 信息化规划方法<br>📅 时间：2025-06-10 上午 📍 地点：集团信息化规划启动会<br>👤 人物：甘工（乙方·系统分析师）、徐总监（甲方·数智化信息部总监）、洪经理（甲方·客服部经理）、计费厂商（第三方·业务系统）、郑专员（甲方·合规专员）<br>⚡ 冲突：六套系统各有各的「客户」，谁都不肯改自己的编码<br>难度：★★★　总分：10 分　建议用时：25 分钟<br>背景：徐总监开场就放话：&quot;同一户人在四套系统里四个编码三个手机号，AI 根本认不出客户。这次必须统一。&quot; 洪经理先急：&quot;我们这套编码用了十年，坐席都背熟了，改了怎么查历史？&quot; 计费厂商更直接：&quot;改主键要动三十多张表，这钱谁出？&quot; 郑专员补了一句：&quot;统一归统一，个人信息共享得有边界，不能建个大库谁都能查。&quot; 甘工在笔记本上写下两个词：IRP 和 主题数据库——他知道，技术上建主数据不难，难的是&quot;谁定标准、谁来维护、谁担责任&quot;。<br>补充资料：- &quot;客户&quot;在 4 套系统中各有编码，同一客户的手机号在计费系统是明文、在客服系统是脱敏； - 管网 GIS 与工单系统不互通，泄漏报警后无法自动定位受影响用户； - 各系统报表口径不一，&quot;接通率&quot;在客服与运营两个部门算出不同结果。 集团启动信息资源规划（IRP），甘工负责该项工作。<br>问题 1：请说明信息资源管理（IRM）的主要内容与意义；说明信息资源规划（IRP）的概念、主要工作与成果；并给出本集团的主题数据库划分。（10分）<br>问题 2：（1）说明信息化规划的主要内容，以及它与企业战略规划的关系；<br>问题 3：（2）比较常用的信息系统战略规划方法（BSP、CSF、SST 等）；<br>问题 4：（3）针对本集团 6 套系统的集成，给出集成方式与实施路线。</p><ul class="exam-questions"><li><b>问题 1</b> 请说明<strong>信息资源管理（IRM）</strong>的主要内容与意义；说明<strong>信息资源规划（IRP）</strong>的概念、主要工作与成果；并给出本集团的<strong>主题数据库</strong>划分。（10分）</li><li><b>问题 2</b> （1）说明<strong>信息化规划</strong>的主要内容，以及它与<strong>企业战略规划</strong>的关系；</li><li><b>问题 3</b> （2）比较常用的<strong>信息系统战略规划方法</strong>（BSP、CSF、SST 等）；</li><li><b>问题 4</b> （3）针对本集团 6 套系统的集成，给出集成方式与实施路线。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点（10分）：<br>- 🔴 核心：内容包括信息资源的规划、组织、控制与利用——①制定信息资源管理的规范与标准（数据标准、编码标准、接口标准）；②开展信息资源规划；③建设信息资源网；④信息资源的采集、加工、存储、共享与利用；⑤信息安全与生命周期管理。意义：把信息作为与人力、物力、财力并列的战略资源加以管理，消除信息孤岛、提升共享与决策能力、支撑业务战略。<br>- 🔴 核心：IRP 是对企业生产经营所需要的信息，从采集、处理、传输到利用的全面规划，核心是&quot;基于业务主题、面向数据稳定&quot;来设计数据结构，而不是按部门应用各自建库。<br>- 🟡 支撑：业务分析与业务模型建立（职能域、业务过程、业务活动）<br>- 🟡 支撑：数据分析与数据模型建立（用户视图分析、数据元素、主题数据库）<br>- 🟡 支撑：建立主题数据库与全域数据模型<br>- 🟡 支撑：建立信息分类编码体系<br>- 🟡 支撑：制定数据标准与管理规范<br>- 🟡 支撑：规划信息资源网与应用系统集成。<br>- 🟡 支撑：主要成果：业务模型、数据模型（主题数据库）、信息分类编码体系、数据标准、系统建设顺序。<br>- 🟡 支撑：客户主题、设备与管网资产主题、工单与服务主题、计费与账务主题、位置与地理主题、组织与人员主题（坐席、师傅、服务商）、产品与营销主题。<br>- 🟢 加分：IRP 的经典结论——&quot;主题数据库是稳定的，而应用是多变的&quot;；以主题库为中心建系统，才能避免&quot;每上一个系统就多一个孤岛&quot;。<br>- 🟢 加分：解析·规划与集成题要&quot;内容 + 方法比较 + 路线图&quot;。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）规划内容与关系）：信息化规划内容包括：①现状评估（系统、数据、基础设施、组织）；②战略目标与信息化蓝图；③应用架构规划（系统划分与关系）；④数据架构规划（主题库、数据标准、治理）；⑤技术架构规划（网络、云、安全）；⑥IT 治理与组织规划；⑦实施路线与投资计划（分期、优先级）；⑧风险与保障。<br>问题 3｜参考答案要点：<br>- 🔴 核心：🔴 核心（2）规划方法比较）：<br>问题 4｜参考答案要点：<br>- 🔴 核心：🔴 核心（3）集成方式与路线）：</div></details></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">25</span>考点：ERP 与实施 / 信息系统开发方法 / BPR<br>📅 时间：2025-07-18 上午 📍 地点：集团 ERP 项目启动会<br>👤 人物：甘工（乙方·系统分析师）、徐总监（甲方·数智化信息部总监）、财务负责人（甲方·财务部）、徐总（甲方·分管副总）<br>⚡ 冲突：同行 ERP 失败在前：照搬软件流程，业务抵触，最后只用了财务模块<br>难度：★★★　总分：10 分　建议用时：25 分钟<br>背景：徐总开场就泼冷水：&quot;隔壁同行上了 ERP，照搬软件标准流程，业务不买账，最后只用起来一个财务模块。我们不能重蹈覆辙。&quot; 财务负责人（甲方·财务部）担心：&quot;我们现有流程跑了十几年，改起来动静太大。&quot; 徐总监看向甘工：&quot;系统怎么上？流程改不改？什么时候改？&quot; 甘工想起同行失败的那个项目——问题从来不在软件，而在流程没重组、数据没治理、变革没管理。<br>补充资料：同类企业 ERP 项目失败：直接照搬软件标准流程，导致业务人员抵触，最终只用了财务模块。<br>问题 1：请说明 ERP 的核心思想与主要功能模块；分析该项目失败的原因；给出本项目的实施策略与关键成功因素。（10分）</p><ul class="exam-questions"><li><b>问题 1</b> 请说明 ERP 的核心思想与主要功能模块；分析该项目失败的原因；给出本项目的实施策略与关键成功因素。（10分）<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点（10分）：<br>- 🔴 核心：ERP 以&quot;供应链&quot;思想为核心，把企业物流、资金流、信息流三流合一，对企业内外资源（人、财、物、产、供、销）进行一体化计划与管理；核心思想是统一数据库 + 统一流程 + 跨部门协同。<br>- 🟡 支撑：主要模块：财务管理（总账/应收应付/成本）、供应链管理（采购/库存/销售）、生产管理、人力资源管理、资产管理、项目管理，以及 CRM/SCM/BI 的扩展集成。<br>- 🔴 核心：①重软件轻管理——照搬标准流程而非优化业务流程，未做业务流程重组（BPR）；②未做信息资源规划，主数据（物料、供应商、组织）未统一；③变革管理缺失——未做培训、沟通与考核调整，业务人员抵触；④需求与期望失控——范围蔓延，无基线；⑤数据准备不足——期初数据质量差；⑥高层支持不够——跨部门协同缺少权威推动；⑦实施方法不当——一次性大爆炸上线，未试点未分步。<br>- 🟡 支撑：🟡 支撑（实施策略）：<br>- 🟡 支撑：1. 规划先行：做 IRP 与主数据治理（物料、供应商、组织、客户编码统一）；<br>- 🟡 支撑：2. 流程先行：先做BPR（如&quot;备件申领—库存—结算&quot;流程再造），再配置系统，必要时才做二次开发（尽量用配置而非改代码）；<br>- 🟡 支撑：3. 分步实施：先财务 + 库存（基础），再采购与人力，最后与客服平台对接；先试点后推广；<br>- 🟡 支撑：4. 变革管理：高层挂帅、成立联合项目组、全员培训、把新流程纳入考核；<br>- 🟡 支撑：5. 数据准备：期初数据清洗与导入演练；<br>- 🟡 支撑：6. 集成设计：与客服平台通过接口/中间件集成（备件库存查询、结算凭证回写），明确接口契约与幂等；<br>- 🟡 支撑：7. 验收与持续优化：设定可量化指标（库存周转率、月结天数、单据处理时长）。<br>- 🔴 核心：高层支持与承诺、明确的目标与范围、业务流程重组、数据质量、变革管理与培训、合格的实施团队与方法、分步上线与试点、持续评价改进。；ERP 领域的经典教训——&quot;上 ERP 是找死，不上 ERP 是等死&quot;的反面解法就是&quot;先重组流程、统一数据，再上系统&quot;，这与 BPR 的原则完全一致。<br>- 🟢 加分：解析·ERP 题要&quot;思想 + 模块 + 失败原因 + 策略 + 成功因素&quot;，重点在管理而非技术。</div></details></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">27</span>📅 时间：2026-07-08 📍 地点：集团经营分析会<br>👤 人物：徐总（甲方·分管副总）、徐总监（甲方·数智化信息部总监）、甘工（乙方·系统分析师）、洪经理（甲方·客服部经理）<br>⚡ 冲突：徐总要看&quot;经营驾驶舱&quot;，有人说是 BI，有人说是报表，还有人提议买一套 DSS<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：徐总在会上说：&quot;我要一个驾驶舱，打开就能看到话务、工单、满意度、成本，最好还能告诉我&#x27;下个月该配多少人&#x27;。&quot; 徐总监：&quot;这就是 BI 嘛，上套 BI 工具。&quot; 洪经理：&quot;我们有几十张报表了，再上一个系统，坐席看哪个？&quot; 有人插话：&quot;要不要买套决策支持系统？听说能智能推荐。&quot; 甘工清楚：这几件事分别对应 BI、企业门户、DSS、知识管理，混为一谈会导致买错系统、用不起来。<br>问题 1：（1）辨析 BI（商业智能）、DSS（决策支持系统）、企业门户、知识管理（KM） 的概念与区别；<br>问题 2：（2）说明 电子商务的类型、特征与优势，判断集团网上商城的类型；<br>问题 3：（3）为徐总的&quot;驾驶舱&quot;给出建设方案（含与现有报表的关系）；<br>问题 4：（4）说明信息系统开发方法的选择。</p><ul class="exam-questions"><li><b>问题 1</b> （1）辨析 <strong>BI（商业智能）、DSS（决策支持系统）、企业门户、知识管理（KM）</strong> 的概念与区别；</li><li><b>问题 2</b> （2）说明 <strong>电子商务</strong>的类型、特征与优势，判断集团网上商城的类型；</li><li><b>问题 3</b> （3）为徐总的&quot;驾驶舱&quot;给出建设方案（含与现有报表的关系）；</li><li><b>问题 4</b> （4）说明信息系统开发方法的选择。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）概念辨析）：<br>- 🟢 加分：解析·概念辨析 + 建设方案 + 方法选择，重点是&quot;先指标后工具&quot;。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🔴 核心（2）电子商务）：类型——按主体分 B2B、B2C、C2C、O2O、B2G、C2B；特征——普遍性、便利性、整体性（集成）、安全性、协调性、可扩展性；优势——降低交易成本、突破时空限制、提升效率、个性化服务、催生新商业模式。集团网上商城为 B2C（向居民销售燃气具/服务），&quot;线上预约 + 上门服务&quot;构成 O2O。<br>问题 3｜参考答案要点：<br>- 🔴 核心：🟡 支撑（3）驾驶舱建设方案）：<br>问题 4｜参考答案要点：<br>- 🔴 核心：🔴 核心（4）开发方法选择）：结构化方法（面向数据流，适合稳定的数据处理型模块）、面向对象方法（适合复杂业务与复用）、原型法（适合需求不明的看板交互）、敏捷方法（适合快速迭代的分析场景）。本项目：整体采用面向对象 + 增量迭代，驾驶舱的交互与视图用原型法快速确认，指标平台按主题分增量交付。</div></details></div></details><details class="exam-subject" data-exam-subject="论文"><summary><span class="exam-subject-name">📄 论文写作</span><span class="exam-subject-n">5 题</span><span class="exam-subject-tip">论述题 · 先写再看题</span></summary><div class="exam-bar"><span class="exam-bar-label">📄 论文写作</span><span class="exam-bar-stat">共 <b>5</b> 题 · 论述题</span></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与设计、开发的企业信息门户项目（项目的背景、建设目标、用户群体、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细论述企业信息门户的架构设计（数据层、应用层、展示层）、功能模块设计（单点登录、内容管理、应用集成、个性化定制）、技术选型要点。</li><li><b>问题 3</b> 结合项目实践，论述门户实现过程中的集成难点、性能优化方法，总结项目实施效果与经验教训。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 行业应用系统</span><span class="exam-lv">⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与设计、开发的 CRM 系统项目（项目的背景、企业行业属性、建设目标、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细论述 CRM 系统的架构设计、核心功能模块（客户 360° 视图、销售漏斗、工单管理）、数据整合与分析设计要点。</li><li><b>问题 3</b> 结合项目实践，论述系统实现过程中的客户数据清洗难点、个性化定制方法，总结系统对企业业务的支撑效果。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 行业应用系统</span><span class="exam-lv">⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与设计、开发的电子商务系统项目（项目的背景、业务模式、用户规模、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细论述电商系统的架构设计（微服务 / 分布式架构）、核心功能模块（商品管理、订单系统、支付集成、用户中心）、高并发与高可用设计要点。</li><li><b>问题 3</b> 结合项目实践，论述系统实现过程中的支付对接难点、峰值流量应对方法，总结项目实施的经验教训。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 行业应用系统</span><span class="exam-lv">⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与设计、开发的 OA 系统项目（项目的背景、企业规模、流程复杂度、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细论述 OA 系统的架构设计、核心功能模块（工作流引擎、电子印章、知识管理、移动办公）、流程定制与集成设计要点。</li><li><b>问题 3</b> 结合项目实践，论述系统实现过程中的流程适配难点、用户体验优化方法，总结系统对企业办公效率的提升效果。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 行业应用系统</span><span class="exam-lv">⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与设计、开发的 FM 系统项目（项目的背景、企业行业属性、财务制度要求、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细论述 FM 系统的架构设计、核心功能模块（总账 / 应收应付 / 成本核算 / 财务报表）、财务数据安全与审计设计要点。</li><li><b>问题 3</b> 结合项目实践，论述系统实现过程中的财务规则适配难点、数据对接（如 ERP 集成）问题及解决方法，总结系统实施效果。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 行业应用系统</span><span class="exam-lv">⭐</span></div></div></details></section>
     <div class="wrongbook"></div>
     <div class="keyhint">
   <span class="keyhint-title">键盘快捷键</span>
@@ -3289,6 +3485,77 @@ html{scroll-padding-top:80px}
     el.textContent = n
   }
 
+  // ══════════════════════════════════════════
+  // 12. 历年真题：批量展开 + 记忆展开状态
+  // ══════════════════════════════════════════
+  const Exam = {
+    KEY: 'examOpen',
+    init() {
+      const root = document.querySelector('.exam')
+      if (!root) return
+      const chapter = root.dataset.examChapter || 'x'
+
+      // 恢复上次展开状态：{ "H07": { "2025年5月": true, ... } }
+      const saved = store.get(this.KEY, {}) || {}
+      const mine = saved[chapter] || {}
+      root.querySelectorAll('.exam-year').forEach(y => {
+        const name = y.dataset.examYear
+        // 默认：展开最近 1 套（新年优先），其余收起
+        const open = (name in mine) ? mine[name] : false
+        if (open) y.open = true
+        y.addEventListener('toggle', () => {
+          mine[name] = y.open
+          saved[chapter] = mine
+          store.set(this.KEY, saved)
+        })
+      })
+      // 单题的"看过答案"状态也要记（避免重复点开）
+      const seen = store.get('examSeen', {}) || {}
+      root.querySelectorAll('.exam-q').forEach(qd => {
+        const qid = qd.dataset.examId
+        if (seen[qid]) {
+          const a = qd.querySelector('.exam-ans')
+          if (a) a.open = true
+        }
+        const ans = qd.querySelector('.exam-ans')
+        if (ans) ans.addEventListener('toggle', () => {
+          if (ans.open) { seen[qid] = 1; store.set('examSeen', seen) }
+        })
+      })
+
+      // 批量展开/收起按钮
+      root.querySelectorAll('.exam-op').forEach(btn => {
+        btn.addEventListener('click', e => {
+          e.preventDefault()
+          const openAll = btn.dataset.examAll === '1'
+          root.querySelectorAll('.exam-subject,.exam-year').forEach(d => { d.open = openAll })
+          root.querySelectorAll('.exam-ans').forEach(d => {
+            d.open = openAll
+            if (openAll && d.parentElement.dataset.examId) seen[d.parentElement.dataset.examId] = 1
+          })
+          if (openAll) store.set('examSeen', seen)
+          // 同步年份级记忆
+          root.querySelectorAll('.exam-year').forEach(y => { mine[y.dataset.examYear] = y.open })
+          saved[chapter] = mine
+          store.set(this.KEY, saved)
+        })
+      })
+
+      // 快捷键：E = 跳到真题区块（不与既有键冲突）
+      document.addEventListener('keydown', e => {
+        const t = e.target
+        if (t && t.nodeType === 1 && t.matches('input,textarea,select,[contenteditable]')) return
+        if (e.metaKey || e.ctrlKey || e.altKey) return
+        if (e.key.toLowerCase() === 'e') {
+          e.preventDefault()
+          root.scrollIntoView({ behavior: 'smooth', block: 'start' })
+          const y = root.querySelector('.exam-year')
+          if (y) y.open = true
+        }
+      })
+    }
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
     Theme.init()
     FontSize.init()
@@ -3304,6 +3571,7 @@ html{scroll-padding-top:80px}
     BackTop.init()
     CopyCode.init()
     ReadTime.init()
+    Exam.init()
     updateAnsweredStat()
     window.addEventListener('quiz:update', updateAnsweredStat)
     renderMermaid()

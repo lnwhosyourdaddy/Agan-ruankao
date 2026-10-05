@@ -1,0 +1,3674 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>第 12 小时 · 企业信息化（一）· 信息化规划 · 阿甘系分 48 小时冲刺</title>
+<meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
+<meta name="build-stamp" content="2026-10-05 09:05:06">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<style>/* ═══════════════════════════════════════════════════
+   阿甘系分 48 小时冲刺 · 设计系统
+   风格：暖墨绿调 / 教科书质感 / 现代极简
+   ═══════════════════════════════════════════════════ */
+
+/* ---------- 1. 设计令牌 ---------- */
+:root{
+  /* 暖墨绿调 —— 沉稳、书卷气，区别于技术文档的"文档蓝" */
+  --bg:#fbfaf6;
+  --bg-alt:#f2f0e9;
+  --bg-card:#fffdf9;
+  --bg-deep:#edeae1;
+
+  --fg:#1b211c;
+  --fg-2:#4d574e;
+  --fg-3:#7d877f;
+  --fg-inv:#fbfaf6;
+
+  --line:#e0ddd4;
+  --line-2:#cdc9bd;
+
+  --accent:#3d5a40;
+  --fs-base:16.5px;
+  --accent-2:#5a8a62;
+  --accent-3:#7ea888;
+  --accent-soft:rgba(61,90,64,.075);
+  --accent-soft-2:rgba(61,90,64,.14);
+  --accent-glow:rgba(90,138,98,.25);
+
+  --warn:#b8860b;
+  --warn-bg:#fdf7e6;
+  --warn-line:#e0b252;
+  --warn-fg:#6b4e06;
+
+  --tip:#2d6a4f;
+  --tip-bg:#e9f4ec;
+  --tip-line:#4a8a63;
+  --tip-fg:#1d4630;
+
+  --danger:#b33636;
+  --danger-bg:#fbeeee;
+  --danger-line:#dd7d7d;
+
+--gold:#a67c00;
+--gold-bg:#fbf6e3;
+/* 记忆口诀框（紫）——与墨绿主色同属低饱和冷调，不抢主色 */
+--mem:#6d4a8f;
+--mem-bg:#f4f1f8;
+--mem-line:#8b6bb0;
+--mem-fg:#4a3460;
+
+  --radius:10px;
+  --radius-lg:16px;
+  --radius-sm:7px;
+  /* 布局宽度：正文栏要够宽才不会在大屏上显得"空而窄"。
+     1440px 视口下 = 236(toc) + 56(gap) + 700(main) + 2×40(padding) ≈ 1072，居中留白更均衡。 */
+  --maxw:1180px;
+  --toc-w:236px;
+  --gap:56px;
+  --pad-x:40px;
+  --shadow-1:0 1px 2px rgba(28,34,29,.04), 0 2px 8px rgba(28,34,29,.03);
+  --shadow-2:0 4px 16px rgba(28,34,29,.07), 0 1px 3px rgba(28,34,29,.04);
+  --shadow-3:0 12px 32px rgba(28,34,29,.10);
+
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Noto Sans SC","Microsoft YaHei",sans-serif;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  --mono:ui-monospace,"SF Mono","JetBrains Mono","Fira Code",Menlo,Consolas,monospace;
+  --serif:"Songti SC","STSong","Source Han Serif SC","Noto Serif CJK SC","Source Han Serif CN","Times New Roman",SimSun,serif;
+  --measure:760px;
+
+  --ease:cubic-bezier(.4,0,.2,1);
+}
+
+html[data-theme="dark"]{
+  --bg:#141715;
+  --bg-alt:#1c201d;
+  --bg-card:#191d1a;
+  --bg-deep:#232824;
+
+  --fg:#dde5de;
+  --fg-2:#a0aaa2;
+  --fg-3:#6c766e;
+  --fg-inv:#141715;
+
+  --line:#2b302c;
+  --line-2:#3a413b;
+
+  --accent:#8bb195;
+  --accent-2:#a9c9b1;
+  --accent-3:#c3dcc8;
+  --accent-soft:rgba(139,177,149,.10);
+  --accent-soft-2:rgba(139,177,149,.18);
+  --accent-glow:rgba(139,177,149,.25);
+
+  --warn:#d9b04a;
+  --warn-bg:#252010;
+  --warn-line:#7d6428;
+  --warn-fg:#e8d08a;
+
+  --tip:#7fc79b;
+  --tip-bg:#16241c;
+  --tip-line:#3d7a55;
+  --tip-fg:#a8dcbd;
+
+  --danger:#e08585;
+  --danger-bg:#251818;
+  --danger-line:#8a4545;
+
+--gold:#d9bb6a;
+--gold-bg:#262210;
+--mem:#c9b0e0;
+--mem-bg:#221a2c;
+--mem-line:#7d5fa0;
+--mem-fg:#dccdf0;
+
+  --shadow-1:0 1px 2px rgba(0,0,0,.16);
+  --shadow-2:0 4px 16px rgba(0,0,0,.26);
+  --shadow-3:0 12px 32px rgba(0,0,0,.36);
+}
+
+/* ---------- 2. 基础重置 ---------- */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+html{
+  scroll-behavior:smooth;
+  -webkit-text-size-adjust:100%;
+  scroll-padding-top:80px;
+  font-size:var(--fs-base);     /* 字号可调（- / + 快捷键），默认 16.5px */
+}
+
+body{
+  font-family:var(--font);
+  background:var(--bg);
+  color:var(--fg);
+  font-size:16.5px;
+  line-height:1.88;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  font-variant-numeric:tabular-nums;
+}
+
+::selection{background:var(--accent-soft-2);color:var(--accent)}
+
+img{max-width:100%;height:auto}
+
+/* 焦点可见性（键盘导航） */
+:focus-visible{outline:2px solid var(--accent-2);outline-offset:2px;border-radius:4px}
+
+/* ---------- 3. 阅读进度条 ---------- */
+.read-progress{
+  position:fixed;top:0;left:0;right:0;height:2.5px;
+  background:var(--accent-2);
+  transform-origin:left;transform:scaleX(0);
+  width:100%;
+  z-index:1000;
+  transition:transform .1s linear;
+}
+
+/* ---------- 4. 顶部导航 ---------- */
+.topbar{
+  position:sticky;top:0;z-index:500;
+  height:54px;
+  display:flex;align-items:center;gap:24px;
+  padding:0 28px;
+  background:color-mix(in srgb, var(--bg) 85%, transparent);
+  backdrop-filter:saturate(180%) blur(14px);
+  -webkit-backdrop-filter:saturate(180%) blur(14px);
+  border-bottom:1px solid var(--line);
+}
+.topbar::after{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  box-shadow:0 1px 0 var(--line);
+}
+@media (prefers-reduced-motion:reduce){
+  .read-progress{transition:none}
+  *{animation-duration:.01ms!important;transition-duration:.01ms!important}
+}
+
+.brand{
+  display:flex;align-items:baseline;gap:8px;
+  font-weight:700;font-size:15.5px;letter-spacing:-.2px;
+  color:var(--accent);text-decoration:none;white-space:nowrap;
+  flex-shrink:0;
+}
+.brand-mark{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:22px;height:22px;border-radius:6px;
+  background:var(--accent);color:var(--fg-inv);
+  font-size:12px;font-weight:700;
+  align-self:center;
+}
+.brand-sub{color:var(--fg-3);font-weight:400;font-size:13px}
+
+/* ---------- 顶栏导航：胶囊触发器 + 分组下拉面板 ----------
+   14 个学时平铺会挤爆顶栏（尤其 1280px 以下），改成「当前页胶囊 + 分组面板」。
+   面板按模块分组（第一篇/第二篇/专项），底部给出待上线进度与上一章/下一章。 */
+.nav{position:relative;margin-left:auto;flex-shrink:0}
+.nav-trigger{
+  display:inline-flex;align-items:center;gap:8px;
+  max-width:min(46vw,340px);
+  padding:6px 12px 6px 8px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  background:var(--bg-card);
+  color:var(--fg-2);font:inherit;font-size:13.5px;
+  cursor:pointer;
+  transition:border-color .18s var(--ease), background .18s var(--ease), color .18s var(--ease);
+}
+.nav-trigger:hover{border-color:var(--accent);color:var(--accent)}
+.nav-trigger:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.nav-trigger-code{
+  flex-shrink:0;
+  padding:2px 8px;border-radius:999px;
+  background:var(--accent);color:var(--fg-inv);
+  font-size:11.5px;font-weight:700;letter-spacing:.02em;
+}
+.nav-trigger-label{
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.nav-caret{width:12px;height:12px;flex-shrink:0;transition:transform .2s var(--ease)}
+.nav.open .nav-caret{transform:rotate(180deg)}
+
+.nav-panel{
+  position:absolute;top:calc(100% + 10px);right:0;
+  width:min(88vw,392px);
+  max-height:min(74vh,620px);
+  display:flex;flex-direction:column;
+  background:var(--bg-card);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow-2);
+  overflow:hidden;
+  z-index:520;
+}
+.nav-panel[hidden]{display:none}
+.nav-panel-scroll{
+  overflow-y:auto;overscroll-behavior:contain;
+  padding:10px 8px 12px;
+  flex:1;
+  -webkit-overflow-scrolling:touch;
+}
+.nav-group + .nav-group{margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+.nav-group-solo{padding-bottom:2px}
+.nav-group-solo + .nav-group{margin-top:8px;padding-top:8px}
+.nav-group-title{
+  padding:0 10px 6px;
+  font-size:11.5px;font-weight:700;letter-spacing:.06em;
+  color:var(--fg-3);text-transform:none;
+}
+.nav-item{
+  display:flex;align-items:center;gap:9px;
+  padding:6px 10px;border-radius:var(--radius-sm);
+  font-size:13.5px;color:var(--fg-2);text-decoration:none;
+  transition:background .15s var(--ease), color .15s var(--ease);
+}
+.nav-item:hover{background:var(--accent-soft);color:var(--accent)}
+.nav-item:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.nav-item.active{background:var(--accent-soft-2);color:var(--accent);font-weight:600}
+.nav-item-code{
+  flex-shrink:0;min-width:38px;
+  font-size:11px;font-weight:700;color:var(--fg-3);
+  font-variant-numeric:tabular-nums;
+}
+.nav-item.active .nav-item-code{color:var(--accent)}
+.nav-item-label{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* 待上线：只做进度提示，不可点 */
+.nav-group-pending .nav-group-title{color:var(--fg-3)}
+.nav-pending-row{
+  display:flex;align-items:center;gap:9px;
+  padding:4px 10px;font-size:12.5px;color:var(--fg-3);
+}
+.nav-pending-row + .nav-pending-row{border-top:1px dashed var(--line)}
+.nav-pending-ch{flex-shrink:0;min-width:104px;font-weight:600}
+.nav-pending-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nav-pending-w{flex-shrink:0;font-size:11px;opacity:.8}
+
+.nav-foot{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:8px 12px;border-top:1px solid var(--line);
+  background:var(--bg);
+  font-size:11.5px;color:var(--fg-3);
+}
+.nav-foot-nav{display:inline-flex;gap:6px}
+.nav-step{
+  padding:4px 10px;border-radius:999px;
+  border:1px solid var(--line);
+  color:var(--fg-2);text-decoration:none;font-size:12px;
+  transition:border-color .15s var(--ease), color .15s var(--ease);
+}
+.nav-step:hover{border-color:var(--accent);color:var(--accent)}
+.nav-step.is-off{opacity:.4;pointer-events:none}
+
+@media(max-width:860px){
+  .nav-trigger{max-width:52vw;padding:5px 10px 5px 6px}
+  .nav-trigger-label{font-size:12.5px}
+  .nav-panel{width:min(92vw,360px)}
+  .nav-foot-tip{display:none}
+}
+@media(max-width:760px){
+  /* 手机上再收一档：只留「章号 + 短标题」，保证顶栏单行不换行 */
+  .topbar{gap:8px;padding:8px 12px}
+  .nav-trigger-code{padding:2px 6px;font-size:11px}
+  .nav-caret{display:none}
+  .nav-pending-ch{min-width:88px}
+
+  /* ⚠️ 窄屏必须把面板改成「贴顶栏左右边缘」，不能继续以 .nav 为锚点右对齐：
+     .nav 右边还有「专注 / ⋯」按钮，面板向左溢出会有一部分跑到屏幕外。
+     做法：.nav 退回 static（面板的包含块变回 position:sticky 的 .topbar），
+     再用 left/right 撑满。不能用 position:fixed —— .topbar 有 backdrop-filter，
+     会成为 fixed 的包含块，坐标会错位。 */
+  .nav{position:static}
+  .nav-panel{
+    left:8px;right:8px;width:auto;
+    top:calc(100% + 6px);
+    max-height:calc(100vh - 84px);
+  }
+}
+
+/* 主题切换按钮组 */
+.theme-switch{
+  display:flex;gap:2px;padding:3px;
+  background:var(--bg-alt);border-radius:var(--radius-sm);
+  border:1px solid var(--line);
+  flex-shrink:0;
+}
+.theme-btn{
+  border:none;background:transparent;cursor:pointer;
+  padding:4px 9px;border-radius:5px;
+  font-size:11.5px;font-family:inherit;color:var(--fg-3);
+  transition:all .18s var(--ease);
+}
+.theme-btn:hover{color:var(--fg-2)}
+.theme-btn.active{background:var(--bg-card);color:var(--accent);font-weight:600;box-shadow:var(--shadow-1)}
+
+/* ---------- 5. 页面布局 ---------- */
+.shell{
+  display:flex;gap:var(--gap);
+  max-width:var(--maxw);margin:0 auto;
+  padding:0 var(--pad-x);
+  align-items:flex-start;
+}
+.main{flex:1;min-width:0;padding:52px 0 100px}
+
+/* 侧边目录 */
+.toc{
+  position:sticky;top:78px;
+  width:var(--toc-w);flex-shrink:0;
+  padding:52px 0 40px;
+  font-size:13px;
+  max-height:calc(100vh - 100px);
+  overflow-y:auto;
+  scrollbar-width:thin;
+}
+.toc-title{
+  font-size:11px;font-weight:700;letter-spacing:.6px;
+  text-transform:uppercase;color:var(--fg-3);
+  margin-bottom:12px;padding-left:11px;
+  display:flex;align-items:center;gap:8px;
+}
+/* 目录标题右侧加一条渐隐细线，视觉上把目录框住 */
+.toc-title::after{
+  content:'';flex:1;height:1px;
+  background:linear-gradient(90deg,var(--line) 0%,transparent 100%);
+}
+.toc-item{
+  display:block;padding:5px 11px;margin:1px 0;
+  color:var(--fg-2);text-decoration:none;
+  border-left:2px solid transparent;
+  border-radius:0 var(--radius-sm) var(--radius-sm) 0;
+  transition:all .18s var(--ease);
+  line-height:1.5;
+}
+.toc-item:hover{color:var(--accent);background:var(--accent-soft)}
+.toc-item.active{
+  color:var(--accent);border-left-color:var(--accent);
+  background:linear-gradient(90deg,var(--accent-soft) 0%,transparent 100%);
+  font-weight:600;
+}
+
+/* ---------- 6. 封面（首页） ---------- */
+.cover{
+  padding:76px 0 60px;
+  text-align:center;
+  border-bottom:1px solid var(--line);
+  margin-bottom:56px;
+}
+.cover-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:6px 16px;margin-bottom:28px;
+  background:var(--accent-soft);border:1px solid var(--accent-soft-2);
+  border-radius:100px;
+  font-size:12.5px;color:var(--accent);font-weight:600;
+}
+.cover h1{
+  font-size:3.5em;font-weight:800;letter-spacing:-1.6px;
+  color:var(--accent);line-height:1.14;margin-bottom:16px;
+}
+/* ⚠️ 封面 h1 也继承 `.main h1::after` 那道 56px 短横线，但它是 display:block 的
+   固定宽块级元素 —— 文字居中不代表块级元素居中，会贴到左边。
+   修法：给封面这条短横线加 margin-left/right:auto 让它真正居中。 */
+.cover h1::after{
+  margin-left:auto;margin-right:auto;
+  width:72px;height:3px;
+}
+.cover .sub{
+  font-size:1.2em;color:var(--fg-2);
+  margin-bottom:32px;max-width:620px;
+  margin-left:auto;margin-right:auto;line-height:1.75;
+}
+.cover-stats{
+  display:flex;justify-content:center;gap:14px;flex-wrap:wrap;
+  margin-bottom:36px;
+}
+/* 数据卡：之前是"白框+黑字"，质感很弱。
+   改成微渐变底 + 顶部一道主色细线 + 更深的投影，卡片有了"浮起来"的层次。 */
+.stat{
+  position:relative;
+  background:linear-gradient(180deg,var(--bg-card) 0%,var(--bg-alt) 100%);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:14px 22px 13px;
+  min-width:104px;
+  box-shadow:var(--shadow-2);
+  overflow:hidden;
+}
+.stat::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--accent) 0%,var(--accent-3) 100%);
+}
+.stat-num{
+  display:block;font-size:2.05em;font-weight:700;
+  color:var(--accent);line-height:1.14;letter-spacing:-.6px;
+}
+.stat-num small{font-size:.5em;font-weight:600;color:var(--fg-3);margin-left:1px}
+.stat-label{display:block;font-size:11.5px;color:var(--fg-3);margin-top:4px;letter-spacing:.3px}
+
+/* CTA 按钮 */
+.cta-row{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+.cta{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:11px 24px;border-radius:var(--radius);
+  font-size:14px;font-weight:600;text-decoration:none;
+  border:1px solid var(--accent);background:var(--accent);color:var(--fg-inv);
+  transition:all .2s var(--ease);
+  box-shadow:var(--shadow-1);
+}
+.cta:hover{transform:translateY(-1px);box-shadow:var(--shadow-2);background:var(--accent-2)}
+.cta-ghost{background:transparent;color:var(--accent);border-color:var(--line-2)}
+.cta-ghost:hover{background:var(--accent-soft);border-color:var(--accent)}
+
+/* ---------- 7. 标题与正文 ---------- */
+h1{
+  font-size:2.3em;font-weight:750;letter-spacing:-.6px;
+  margin:1.5em 0 .55em;line-height:1.26;
+}
+h2{
+  font-size:1.72em;font-weight:700;letter-spacing:-.3px;
+  margin:2em 0 .5em;line-height:1.32;
+  padding-bottom:.4em;border-bottom:1.5px solid var(--line);
+}
+h3{font-size:1.3em;font-weight:650;margin:1.8em 0 .42em;line-height:1.42}
+h4{font-size:1.08em;font-weight:650;margin:1.5em 0 .35em}
+h1:first-child,h2:first-child,h3:first-child,h4:first-child{margin-top:0}
+
+p{margin:.95em 0}
+p:first-child{margin-top:0}
+
+strong{color:var(--accent);font-weight:650}
+em{font-style:italic}
+
+a{
+  color:var(--accent);
+  border-bottom:1px solid var(--accent-soft-2);
+  text-decoration:none;
+  transition:border-color .18s var(--ease), color .18s var(--ease);
+}
+a:hover{border-bottom-color:var(--accent-2)}
+
+/* ---------- 8. 列表 ---------- */
+ul,ol{margin:.85em 0 .85em 1.5em;padding:0}
+li{margin:.32em 0;line-height:1.8}
+li::marker{color:var(--fg-3)}
+ul{list-style:none}
+ul>li{position:relative}
+ul>li::before{
+  content:'';position:absolute;left:-1.1em;top:.78em;
+  width:5px;height:5px;border-radius:50%;
+  background:var(--accent-2);opacity:.75;
+}
+ol{list-style:decimal}
+ol>li::marker{color:var(--accent-2);font-weight:600;font-size:.92em}
+
+ul ul,ol ol,ul ol,ol ul{margin:.3em 0 .3em .2em}
+
+/* ---------- 9. 表格 ---------- */
+table{
+  width:100%;border-collapse:separate;border-spacing:0;
+  margin:1.5em 0;font-size:14.5px;
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  overflow:hidden;
+  box-shadow:var(--shadow-1);
+}
+th{
+  background:linear-gradient(180deg,var(--bg-alt) 0%,var(--bg-deep) 100%);
+  font-weight:700;font-size:12px;
+  text-align:left;letter-spacing:.5px;
+  padding:.78em 1em;
+  border-bottom:1.5px solid var(--line-2);
+  color:var(--accent);white-space:nowrap;
+}
+td{
+  padding:.78em 1em;
+  border-bottom:1px solid var(--line);
+  line-height:1.7;
+}
+tr:last-child td{border-bottom:none}
+tbody tr{transition:background .15s var(--ease)}
+tbody tr:hover{background:var(--accent-soft)}
+td strong{color:var(--accent)}
+
+/* 数字/居中列 */
+td[align="center"],th[align="center"]{text-align:center}
+
+/* ---------- 10. 提示框 ----------
+   优化要点：之前四种提示框各自带**整块饱和底色**，一页里绿/黄/紫连续堆叠，
+   看起来像表单而不是书。改成「统一米白底 + 左侧粗色条 + 标题着色」，
+   靠色条而不是靠大色块区分，页面立刻安静下来。 */
+.block{
+  position:relative;
+  margin:1.6em 0;
+  padding:1.05em 1.3em 1.1em 1.4em;
+  border-radius:var(--radius);
+  font-size:14.8px;line-height:1.78;
+  border:1px solid var(--line);
+  border-left:none;
+  background:var(--bg-card);
+  box-shadow:var(--shadow-1);
+}
+.block::before{
+  content:'';position:absolute;left:0;top:10px;bottom:10px;
+  width:4px;border-radius:0 4px 4px 0;
+  background:var(--accent-2);
+}
+.block-title{
+  font-weight:700;font-size:11.5px;
+  letter-spacing:.7px;
+  margin-bottom:7px;
+  display:flex;align-items:center;gap:6px;
+  color:var(--accent);
+}
+/* 每类只保留「标题色 + 色条色」，底色统一由 .block 提供 */
+.warning::before{background:var(--warn-line)}
+.warning .block-title{color:var(--warn-fg)}
+.tip::before{background:var(--tip-line)}
+.tip .block-title{color:var(--tip)}
+.info::before{background:var(--accent-2)}
+.info .block-title{color:var(--accent)}
+.danger::before{background:var(--danger-line)}
+.danger .block-title{color:var(--danger)}
+.gold::before{background:var(--gold)}
+.gold .block-title{color:var(--gold)}
+.mem::before{background:var(--mem-line)}
+.mem .block-title{color:var(--mem)}
+.block p{margin:.55em 0}
+.block p:last-child{margin-bottom:0}
+.block ul{margin:.5em 0}
+.block strong{color:inherit;font-weight:700}
+.block{color:var(--fg-2)}
+.warning{color:var(--warn-fg)}
+.tip{color:var(--tip-fg)}
+.mem{color:var(--mem-fg)}
+.gold{color:var(--fg)}
+
+/* ---------- 11. 引用（记忆点/口诀） ---------- */
+.quote{
+  margin:1.4em 0;
+  padding:1em 1.3em 1em 1.5em;
+  background:var(--bg-alt);
+  border-radius:var(--radius);
+  border:1px solid var(--line);
+  font-size:15px;line-height:1.82;
+  position:relative;
+}
+.quote:before{
+  content:'';position:absolute;left:0;top:.9em;bottom:.9em;
+  width:3px;border-radius:2px;background:var(--accent-2);
+}
+.quote p{margin:.35em 0}
+.quote strong{color:var(--accent)}
+
+/* ---------- 12. 表格内 mermaid / 代码 ---------- */
+.mermaid-wrap{
+  margin:1.7em 0;
+  padding:22px 18px;
+  background:var(--bg-card);
+  border:1px solid var(--line);
+  border-radius:var(--radius-lg);
+  text-align:center;
+  overflow-x:auto;
+  box-shadow:var(--shadow-1);
+}
+.mermaid-wrap svg{max-width:100%;height:auto;display:block;margin:0 auto}
+.mermaid-wrap.mermaid-err{
+  text-align:left;font-size:13px;color:var(--danger);
+  background:var(--danger-bg);border-color:var(--danger-line);
+}
+
+pre{
+  margin:1.3em 0;
+  padding:1em 1.2em;
+  background:var(--bg-deep);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  font-family:var(--mono);
+  font-size:13px;line-height:1.68;
+  overflow-x:auto;
+  color:var(--fg-2);
+}
+
+/* ---------- 13. Quiz 答题模块 ---------- */
+.quiz{
+  margin:2.6em 0;
+  background:var(--bg-card);
+  border:1.5px solid var(--line-2);
+  border-radius:var(--radius-lg);
+  overflow:hidden;
+  box-shadow:var(--shadow-2);
+}
+.quiz-head{
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+  padding:15px 22px;
+  background:var(--bg-alt);
+  border-bottom:1.5px solid var(--line);
+}
+.quiz-label{
+  font-weight:700;font-size:14px;color:var(--accent);
+  display:flex;align-items:center;gap:7px;
+}
+.quiz-progress{
+  font-size:12.5px;color:var(--fg-3);flex:1;min-width:120px;
+}
+.quiz-progress b{color:var(--accent);font-weight:700}
+.quiz-pbar{
+  height:4px;background:var(--line);border-radius:3px;
+  width:100%;margin-top:10px;overflow:hidden;
+}
+.quiz-pbar-fill{
+  height:100%;background:var(--accent-2);
+  transform-origin:left;width:0;
+  transition:width .35s var(--ease);
+}
+.quiz-btn{
+  font-size:12px;padding:5px 12px;
+  border:1px solid var(--line-2);background:var(--bg-card);
+  color:var(--fg-2);border-radius:var(--radius-sm);
+  cursor:pointer;font-family:inherit;
+  transition:all .18s var(--ease);
+  white-space:nowrap;
+}
+.quiz-btn:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+.quiz-btn:active{transform:scale(.97)}
+
+/* 题目卡 */
+.quiz-item{
+  padding:20px 24px;
+  border-bottom:1px solid var(--line);
+  transition:background .25s var(--ease);
+}
+.quiz-item:last-child{border-bottom:none}
+.quiz-q{
+  font-size:15px;font-weight:600;line-height:1.72;
+  margin-bottom:14px;
+}
+.quiz-q .qn{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:22px;height:22px;border-radius:6px;
+  background:var(--accent-soft);color:var(--accent);
+  font-size:12px;font-weight:700;margin-right:8px;
+  vertical-align:1px;
+}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{
+  display:flex;align-items:flex-start;gap:11px;
+  padding:11px 15px;
+  border:1.5px solid var(--line);
+  border-radius:var(--radius);
+  cursor:pointer;font-size:14.5px;line-height:1.68;
+  transition:all .2s var(--ease);
+  user-select:none;
+}
+.opt:hover{border-color:var(--accent-2);background:var(--accent-soft);transform:translateX(3px)}
+.opt .letter{
+  flex:0 0 21px;height:21px;
+  border-radius:5px;
+  background:var(--bg-alt);border:1px solid var(--line-2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;color:var(--fg-3);
+  margin-top:2px;
+}
+.opt .txt{flex:1;min-width:0}
+.opt.picked{border-color:var(--accent);background:var(--accent-soft-2)}
+.opt.right{border-color:var(--tip-line);background:var(--tip-bg);font-weight:600}
+.opt.right .letter{background:var(--tip-line);color:#fff;border-color:var(--tip-line)}
+.opt.wrong-pick .letter{background:var(--danger-line);color:#fff;border-color:var(--danger-line)}
+.mark{font-weight:700;margin-left:auto;font-size:15px;flex-shrink:0}
+.mark.ok{color:var(--tip-line)}
+.mark.no{color:var(--danger-line)}
+
+.quiz-item.correct{background:var(--tip-bg)}
+.quiz-item.wrong{background:var(--danger-bg)}
+
+/* 解析区 */
+.reveal{
+  margin-top:16px;padding-top:16px;
+  border-top:1px dashed var(--line-2);
+  animation:fadeUp .3s var(--ease);
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+.reveal-verdict{
+  font-weight:700;font-size:14.5px;margin-bottom:9px;
+  display:flex;align-items:center;gap:10px;
+}
+.reveal-verdict .answer{
+  font-weight:500;font-size:13px;color:var(--fg-2);
+  background:var(--bg-alt);padding:2px 10px;border-radius:5px;
+}
+.reveal-explain{
+  font-size:14px;color:var(--fg-2);line-height:1.82;
+}
+.reveal-ref{
+  font-size:12.5px;color:var(--fg-3);
+  margin-top:8px;font-style:italic;
+}
+
+/* ---------- 14. 错题本 ---------- */
+.wrongbook{
+  margin:2.6em 0;
+  background:var(--bg-card);
+  border:1.5px solid var(--line-2);
+  border-radius:var(--radius-lg);
+  overflow:hidden;
+  box-shadow:var(--shadow-1);
+}
+.wb-head{
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+  padding:15px 22px;
+  background:var(--bg-alt);
+  border-bottom:1.5px solid var(--line);
+  font-weight:700;font-size:14px;color:var(--accent);
+}
+.wb-total{font-size:12.5px;color:var(--fg-3);font-weight:400;margin-left:auto}
+.wb-empty{
+  padding:26px 22px;text-align:center;
+  font-size:13.5px;color:var(--fg-3);
+}
+.wb-row{
+  display:flex;align-items:center;gap:14px;
+  padding:12px 22px;
+  border-bottom:1px solid var(--line);
+  transition:background .15s var(--ease);
+}
+.wb-row:hover{background:var(--accent-soft)}
+.wb-row a{font-size:14px;color:var(--accent);font-weight:600}
+.wb-row a:hover{background:none;border-bottom-color:var(--accent)}
+.wb-count{
+  font-size:12px;color:var(--fg-3);
+  background:var(--bg-alt);padding:3px 10px;border-radius:5px;
+  margin-left:auto;
+}
+.wb-clear{
+  width:100%;padding:11px;
+  border:none;background:transparent;
+  color:var(--fg-3);font-size:12.5px;cursor:pointer;
+  font-family:inherit;
+  transition:all .18s var(--ease);
+}
+.wb-clear:hover{background:var(--danger-bg);color:var(--danger)}
+
+/* ---------- 15. 页脚 ---------- */
+.footer{
+  margin-top:70px;
+  padding:36px 28px 44px;
+  text-align:center;
+  border-top:1px solid var(--line);
+  font-size:12.5px;color:var(--fg-3);
+}
+.footer p{margin:.4em 0}
+.footer strong{color:var(--fg-2);font-weight:600}
+.footer .sep{margin:.9em 0;font-size:11.5px}
+
+/* ---------- 16. 快捷键面板 ---------- */
+.keyhint{
+  margin:2.4em 0;
+  padding:16px 20px;
+  background:var(--bg-alt);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  font-size:13px;color:var(--fg-2);
+  display:flex;flex-wrap:wrap;gap:8px 22px;align-items:center;
+}
+.keyhint-title{font-weight:700;color:var(--accent);font-size:12.5px}
+.kbd{
+  display:inline-flex;align-items:center;justify-content:center;
+  key-order:0;
+  min-width:22px;height:22px;padding:0 6px;
+  background:var(--bg-card);border:1px solid var(--line-2);
+  border-bottom-width:2px;
+  border-radius:5px;
+  font-family:var(--mono);font-size:11px;
+  font-weight:600;color:var(--fg-2);
+}
+.keyhint span.item{display:flex;align-items:center;gap:6px}
+
+/* ---------- 17. 响应式 ---------- */
+@media(max-width:1240px){
+  /* 目录还在，但正文让出宽度给两侧留白 */
+  .shell{max-width:1000px;gap:40px;--pad-x:28px}
+  .toc{width:200px}
+}
+@media(max-width:1100px){
+  .shell{max-width:820px;gap:0;--pad-x:24px}
+  .toc{display:none}
+}
+@media(max-width:760px){
+  body{font-size:16px;line-height:1.82}
+  .topbar{height:auto;min-height:52px;padding:10px 16px;flex-wrap:wrap;gap:10px}
+  .brand-sub{display:none}
+  /* 窄屏：品牌只留图标，标题在触发器里显示，顶栏保持单行 */
+  .brand span:not(.brand-mark){display:none}
+  .nav{margin-left:auto;gap:2px}
+  .main{padding:32px 0 80px}
+  .cover{padding:48px 0 40px;margin-bottom:40px}
+  .cover h1{font-size:2.4em;letter-spacing:-.8px}
+  .cover .sub{font-size:1.05em;margin-bottom:24px}
+  .cover-stats{gap:10px;margin-bottom:28px}
+  .stat{min-width:76px;padding:10px 14px}
+  .stat-num{font-size:1.5em}
+  h1{font-size:1.85em;margin:1.4em 0 .5em}
+  h2{font-size:1.5em;margin:1.8em 0 .45em}
+  h3{font-size:1.18em}
+  table{font-size:13.5px}
+  th{padding:.6em .8em;white-space:normal}
+  td{padding:.68em .8em}
+  .quiz-item{padding:16px 18px}
+  .quiz-q{font-size:14.5px}
+  .opt{padding:10px 13px;font-size:14px}
+  .mermaid-wrap{padding:16px 12px}
+  .footer{margin-top:50px;padding:28px 16px 36px}
+}
+@media(max-width:480px){
+  .theme-switch{display:inline-flex}  /* 极窄屏仍需主题切换（深浅色刚需），依赖⋯浮层收纳 */
+}
+
+/* ---------- 18. 打印样式 ---------- */
+@media print{
+  .read-progress,
+  .topbar,
+  .toc,
+  .theme-switch,
+  .quiz-btn,
+  .cta-row,
+  .wrongbook,
+  .keyhint,
+  .pager,
+  .focus-btn,
+  .search-panel,
+  .search-box,
+  .search-results,
+  .mermaid-wrap .lang{
+    display:none !important;
+  }
+
+  body{
+    font-size:11pt;
+    line-height:1.62;
+    background:#fff;
+    color:#000;
+  }
+  .shell{max-width:100%;padding:0;gap:0}
+  .main{padding:0}
+
+  h1{font-size:19pt;margin:1.2em 0 .4em}
+  h2{font-size:15pt;margin:1.5em 0 .4em}
+  h3{font-size:12.5pt}
+  h4{font-size:11pt}
+  h1,h2,h3,h4{break-after:avoid;page-break-after:avoid}
+
+  .cover{padding:0 0 18px;margin-bottom:18px;text-align:left}
+  .cover h1{font-size:24pt}
+  .cover-stats,.cover-badge,.cta-row{display:none !important}
+
+  a[href^="http"]:after{
+    content:" (" attr(href) ")";
+    font-size:8pt;color:#666;word-break:break-all;
+  }
+
+  table{
+    font-size:9.5pt;margin:1em 0;
+    box-shadow:none;border:1px solid #ccc;
+  }
+  th{background:#f0f0f0 !important;color:#000 !important}
+  th,td{padding:.5em .7em}
+  thead{display:table-header-group}
+  tr{break-inside:avoid;page-break-inside:avoid}
+
+  .quiz-item{
+    break-inside:avoid;
+    page-break-inside:avoid;
+    background:#fff !important;
+  }
+  .quiz{border:1px solid #ccc;box-shadow:none}
+  .quiz-head{background:#f6f6f6 !important}
+
+  .block,.quote,.mermaid-wrap{
+    break-inside:avoid;
+    page-break-inside:avoid;
+  }
+  .mermaid-wrap svg{max-height:220mm;height:auto}
+
+  strong{color:#000 !important}
+  .footer{page-break-before:always;margin-top:0;padding-top:20px}
+}
+
+/* ---------- 19. 上下页导航 ---------- */
+.pager{
+  display:flex;gap:14px;
+  margin:44px 0 0;
+}
+.pg{
+  flex:1;min-width:0;
+  display:flex;flex-direction:column;gap:3px;
+  padding:15px 18px;
+  background:var(--bg-card);
+  border:1.5px solid var(--line);
+  border-radius:var(--radius);
+  text-decoration:none;
+  transition:all .2s var(--ease);
+}
+.pg:hover{
+  border-color:var(--accent-2);
+  background:var(--accent-soft);
+  transform:translateY(-2px);
+  box-shadow:var(--shadow-2);
+}
+.pg-label{
+  font-size:11.5px;letter-spacing:.5px;
+  color:var(--fg-3);font-weight:600;
+  text-transform:uppercase;
+}
+.pg-title{
+  font-size:14.5px;font-weight:650;color:var(--accent);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.pg-next{text-align:right}
+.pg-next .pg-label::after{content:""}
+@media(max-width:640px){
+  .pager{flex-direction:column;gap:10px}
+  .pg-next{text-align:left}
+}
+
+/* ---------- 20. mermaid 降级提示 ---------- */
+.mmd-note{
+  font-size:12px;font-weight:600;letter-spacing:.4px;
+  color:var(--danger);margin-bottom:8px;
+  display:flex;align-items:center;gap:6px;
+}
+.mmd-note::before{
+  content:'';width:7px;height:7px;border-radius:50%;
+  background:var(--danger);flex:0 0 auto;
+}
+.mermaid-wrap.mermaid-err pre{
+  margin:0;text-align:left;
+  font-size:12px;max-height:340px;overflow:auto;
+}
+
+/* ---------- 21. 移动端表格横向滚动 ---------- */
+@media(max-width:760px){
+  .vp-doc table,
+  main table{
+    display:block;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    max-width:100%;
+  }
+  main table tbody{min-width:520px}
+  /* 让表头保持可读 */
+  main th{white-space:nowrap}
+}
+
+/* mermaid 源码占位（未渲染前隐藏；源码在 data-src 属性里） */
+.vp-doc .mermaid-src,
+main .mermaid-src{ display:none !important }
+
+/* ---------- 22. 多级目录（4 级） ---------- */
+.toc{ font-size:12.5px }
+.toc-tree{ margin-top:2px }
+.toc-item{
+  display:block;
+  padding:3.5px 10px 3.5px calc(11px + var(--depth,0) * 13px);
+  margin:0;
+  border-left:2px solid transparent;
+  border-radius:0 5px 5px 0;
+  line-height:1.45;
+  color:var(--fg-3);
+  position:relative;
+  transition:color .15s var(--ease), background .15s var(--ease), border-color .15s var(--ease);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+/* 层级视觉：h2 加粗深色，h3/h4/h5 逐级变浅变小 */
+.toc-l1{ font-weight:650;font-size:13px;color:var(--fg-2);margin-top:8px }
+.toc-l1:first-child{ margin-top:0 }
+.toc-l2{ font-weight:500 }
+.toc-l3{ padding-left:calc(11px + var(--depth,0)*13px); font-size:12px }
+.toc-l4{ font-size:11.5px;opacity:.9 }
+/* 子级左侧引导线 */
+.toc-item[style*="--depth:1"]::before,
+.toc-item[style*="--depth:2"]::before,
+.toc-item[style*="--depth:3"]::before{
+  content:'';position:absolute;left:calc(4px + (var(--depth) - 1) * 13px);
+  top:0;bottom:0;width:1px;background:var(--line);
+}
+.toc-item:hover{ color:var(--accent);background:var(--accent-soft) }
+.toc-item.active{
+  color:var(--accent);font-weight:600;
+  background:var(--accent-soft);
+  border-left-color:var(--accent);
+}
+.toc-item.active.toc-l2,
+.toc-item.active.toc-l3,
+.toc-item.active.toc-l4{ background:var(--accent-soft-2) }
+
+/* 目录项过多时滚动 */
+.toc{ max-height:calc(100vh - 110px);overflow-y:auto;overscroll-behavior:contain }
+.toc::-webkit-scrollbar{width:4px }
+.toc::-webkit-scrollbar-thumb{background:var(--line-2);border-radius:4px }
+
+/* 折叠按钮（只在有子节点时显示） */
+.toc-toggle{
+  position:absolute;left:0;top:0;width:16px;height:100%;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:var(--fg-3);
+}
+.toc-toggle::before{
+  content:'';width:0;height:0;
+  border-left:4px solid currentColor;
+  border-top:3.5px solid transparent;
+  border-bottom:3.5px solid transparent;
+  transition:transform .18s var(--ease);
+}
+.toc-group.collapsed > .toc-toggle::before{ transform:rotate(-90deg) }
+.toc-group.collapsed > .toc-sub{ display:none }
+
+@media(max-width:1100px){ .toc{ display:none } }
+
+/* ---------- 23. 专注模式 ---------- */
+/* 注意：不要用 visibility:hidden 兜底 —— 那会把退出按钮一起隐藏，真人点不到。
+   正确做法见文件末尾「专注模式退出按钮修复」段（opacity + pointer-events）。 */
+html.focus-mode .shell{
+  max-width:720px;
+  margin:0 auto;
+  padding:40px 24px 80px;
+}
+/* 顶栏里的专注按钮常态样式 */
+.focus-btn{
+  background:var(--bg-card);border:1px solid var(--line);
+  border-radius:999px;padding:5px 12px;
+  font-size:12px;font-weight:600;color:var(--fg-3);
+  cursor:pointer;transition:all .18s var(--ease);
+  display:inline-flex;align-items:center;gap:5px;
+}
+.focus-btn::before{ content:'◐'; font-size:11px;opacity:.7 }
+.focus-btn:hover{ color:var(--accent);border-color:var(--accent);background:var(--accent-soft) }
+.focus-btn.active{ color:#fff;background:var(--accent);border-color:var(--accent) }
+.focus-btn.active::before{ opacity:1 }
+
+/* ---------- 24. 全文搜索面板 ---------- */
+.search-panel{
+  position:fixed;inset:0;z-index:80;
+  display:none;
+  background:rgba(0,0,0,.28);
+  backdrop-filter:blur(3px);
+}
+.search-panel.open{ display:block }
+.search-box{
+  position:absolute;top:12%;left:50%;transform:translateX(-50%);
+  width:min(640px,90vw);
+  background:var(--bg-card);
+  border:1.5px solid var(--line);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow-3,0 20px 60px rgba(0,0,0,.25));
+  padding:14px 18px;
+  display:flex;align-items:center;gap:12px;
+}
+.search-input{
+  flex:1;border:none;background:transparent;outline:none;
+  font-size:16px;font-family:var(--font);color:var(--fg);
+}
+.search-input::placeholder{ color:var(--fg-3) }
+.search-count{
+  font-size:11.5px;color:var(--fg-3);white-space:nowrap;
+  font-variant-numeric:tabular-nums;
+}
+.search-results{
+  position:absolute;top:calc(12% + 76px);left:50%;transform:translateX(-50%);
+  width:min(640px,90vw);
+  max-height:52vh;overflow:auto;
+  background:var(--bg-card);
+  border:1.5px solid var(--line);border-top:none;
+  border-radius:0 0 var(--radius) var(--radius);
+  box-shadow:var(--shadow-3,0 20px 60px rgba(0,0,0,.25));
+  list-style:none;margin:0;padding:6px;
+}
+.search-results:empty{ display:none }
+.search-hit{
+  display:flex;gap:10px;align-items:baseline;
+  padding:9px 12px;border-radius:6px;cursor:pointer;
+  font-size:13px;line-height:1.5;
+}
+.search-hit:hover{ background:var(--bg-soft) }
+.search-hit.cur{ background:var(--accent-soft) }
+.hit-kind{
+  flex:0 0 auto;
+  font-size:10.5px;font-weight:700;letter-spacing:.4px;
+  padding:2px 7px;border-radius:4px;
+  background:var(--accent-soft);color:var(--accent);
+}
+.hit-kind:has(+ .hit-text:has(mark)){ }
+.hit-text{ color:var(--fg-2);flex:1;min-width:0 }
+mark.search-mark{
+  background:rgba(255,196,0,.4);
+  color:inherit;border-radius:3px;padding:0 2px;
+  box-shadow:0 0 0 2px rgba(255,196,0,.25);
+}
+html[data-theme="dark"] mark.search-mark{
+  background:rgba(255,196,0,.28)
+}
+.flash-hit{
+  animation:flashHit 1.1s var(--ease);
+}
+@keyframes flashHit{
+  0%{ background:rgba(255,196,0,.35) }
+  100%{ background:transparent }
+}
+
+/* ---------- 25. 快捷键提示更新（含 / 与 F） ---------- */
+/* 字号调节无 UI，仅键盘 - / + */
+
+/* ═══════════════════════════════════════════════════════════════
+   ��五版 · 出版物排版（A 方案）
+   改动目标：换掉"技术文档站"气质，走教材/杂志的阅读质感
+   关键约束：全部用系统字体，零外部请求 → 部署后与本地完全一致
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── 1. 正文排版：衬线标题 + 更合适的行宽与行距 ── */
+/* 合并到顶部 :root（避免重复定义导致后者覆盖前者） */
+
+.main{ max-width:var(--measure) }
+.main p{
+  font-family:var(--sans);
+  font-size:1.02em;
+  line-height:1.95;
+  letter-spacing:.01em;
+  color:var(--fg);
+  margin:1.15em 0;
+  text-align:justify;          /* 两端对齐，中文排版更整齐 */
+  text-justify:inter-ideograph;
+}
+
+/* ⚠️ 全局断行保护（H35 踩坑后补）：
+   正文里常出现"无空格长串"（如 HTTP 状态码 `200/301/302/400/...`、
+   长 URL、驼峰标识符），浏览器默认**不会在斜杠/点号处断行**，
+   这类串在 375px 窄屏会把文档撑宽并产生横向滚动（实测溢出 27px）。
+   `overflow-wrap:anywhere` 只在"单词本身放不下"时才断，
+   不影响中英文正常排版 —— 比 `word-break:break-all` 安全得多
+   （后者会在任意字符处断，中文正文会被切得很难看）。 */
+.main{
+  overflow-wrap:anywhere;
+}
+.main p, .main li, .main td, .main th, .main strong, .main em, .main code{
+  overflow-wrap:anywhere;
+}
+.main a{ overflow-wrap:anywhere }
+
+/* ── 2. 标题：衬线体 + 短横线，替代通栏分割线 ── */
+/* ---------- 章首进度条（22 章 × 每章几十节时的定位锚）----------
+   ⚠️ sticky top 必须 = 顶栏实际高度。顶栏是 `position:sticky; height:54px`，
+   这里写小了会被顶栏盖住（截图里只剩进度条贴着顶栏下沿、"9 / 20" 灰在下面）。
+   宽度也留出顶栏投影的落点，避免滚动时内容从下方"顶穿"。 */
+.chapbar{
+  position:sticky;top:53px;z-index:110;
+  margin:0 0 34px;
+  padding:11px 0 10px;
+  background:linear-gradient(180deg,var(--bg) 74%,transparent);
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+}
+.chapbar-top{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.chapbar-badge{
+  flex-shrink:0;
+  padding:2px 9px;border-radius:999px;
+  background:var(--accent);color:var(--fg-inv);
+  font-size:11.5px;font-weight:700;letter-spacing:.02em;
+}
+.chapbar-title{
+  font-size:13px;color:var(--fg-2);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.chapbar-spacer{flex:1}
+.chapbar-sec{
+  flex-shrink:0;
+  font-size:12px;color:var(--fg-3);
+  font-variant-numeric:tabular-nums;
+}
+.chapbar-track{
+  height:3px;border-radius:2px;
+  background:var(--bg-deep);overflow:hidden;
+}
+.chapbar-fill{
+  height:100%;width:0;border-radius:2px;
+  background:linear-gradient(90deg,var(--accent) 0%,var(--accent-3) 100%);
+  transition:width .18s var(--ease);
+}
+@media(max-width:760px){
+  /* 窄屏顶栏实际高度是 57px（flex-wrap 后实测），这里跟着改 */
+  .chapbar{top:56px;margin-bottom:26px;padding:10px 0 8px}
+  .chapbar-title{display:none}
+}
+/* 专注模式：进度条是"定位锚"，保留但变淡 */
+html.focus-mode .chapbar{opacity:.35;pointer-events:none}
+
+.main h1,.main h2,.main h3,.main h4{
+  font-family:var(--serif);
+  font-weight:600;
+  letter-spacing:.01em;
+  color:var(--fg);
+}
+.main h1{
+  font-size:2.15em;line-height:1.3;
+  margin:.5em 0 .7em;           /* 页面顶部无大间距 */
+  padding-bottom:0;             /* 去掉通栏 border */
+  position:relative;
+}
+/* 章首横幅：h1 上方加一条"章号 + 主色渐变"的装饰带，
+   让每页开头有一个明确的"进入新章"仪式感（原来 h1 直接浮在正文里）。
+   ⚠️ 必须排除 .cover —— 封面 h1 自己已有顶部留白与居中布局，
+   加上横幅会与下方分隔线叠成双线（首页曾出现两条横线紧挨）。 */
+.main h1:not(.cover h1)::before{
+  content:'';display:block;
+  width:100%;height:4px;
+  background:linear-gradient(90deg,var(--accent) 0%,var(--accent-3) 42%,transparent 88%);
+  border-radius:2px;
+  margin-bottom:.62em;
+}
+.cover h1::before{content:none}
+.main h1::after{
+  content:'';display:block;
+  width:56px;height:3px;
+  background:var(--accent);
+  margin-top:.5em;              /* 短横线，比通栏线优雅 */
+  border-radius:2px;
+}
+.main h2{
+  font-size:1.62em;line-height:1.38;
+  margin:2.2em 0 .62em;
+  padding:0 0 .45em 0;
+  border:0;
+  position:relative;
+}
+/* h2 左侧加一道竖锚：强化"大章节"的层级感，替代原来那条渐变横线 */
+.main h2::before{
+  content:'';position:absolute;
+  left:-18px;top:.34em;bottom:.5em;
+  width:3px;border-radius:2px;
+  background:linear-gradient(180deg,var(--accent) 0%,var(--accent-3) 100%);
+  opacity:.75;
+}
+.main h2::after{
+  content:'';position:absolute;
+  left:0;bottom:0;width:100%;height:1px;
+  background:linear-gradient(90deg,var(--line) 0%,var(--line) 26%,transparent 100%);
+}
+.main h3{
+  font-size:1.26em;line-height:1.5;
+  margin:1.9em 0 .5em;
+}
+.main h3::before{               /* h3 前缀小方块，建立视觉锚点 */
+  content:'';display:inline-block;
+  width:.46em;height:.46em;
+  background:var(--accent-3);
+  border-radius:2px;
+  margin-right:.5em;
+  vertical-align:.06em;
+}
+.main h4{
+  font-size:1.06em;
+  margin:1.6em 0 .4em;
+  color:var(--fg-2);
+}
+
+/* 首段导语：h1 之后的第一段用稍大、稍淡的引言体，形成"开篇"感。
+   用 :first-of-type 而不是 .lead —— 内容是 markdown 转出来的，
+   h1 后面紧跟的通常是 blockquote 或提示框，不一定有 <p>。 */
+.main h1 + p,
+.main h1 + blockquote + p{
+  font-size:1.06em;
+  color:var(--fg-2);
+  line-height:1.82;
+}
+/* 正文里的第一条列表：去掉与标题之间多余的视觉间隔 */
+.main h2 + ul,.main h3 + ul,.main h2 + ol,.main h3 + ol{margin-top:.3em}
+
+/* ── 3. 引用块：加深底 + 左侧色条（原来几乎不可见）── */
+.main .quote{
+  position:relative;
+  margin:1.7em 0;
+  padding:1.1em 1.4em 1.1em 1.5em;
+  background:linear-gradient(135deg,var(--accent-soft) 0%,transparent 60%);
+  border-left:3px solid var(--accent-2);
+  border-radius:0 var(--radius) var(--radius) 0;
+  font-family:var(--sans);
+  font-size:.98em;
+  line-height:1.9;
+}
+.main .quote::before{ content:none }     /* 覆盖旧的 ::before */
+.main .quote p{ margin:.4em 0; text-align:left }
+.main .quote strong{ color:var(--accent);font-weight:700 }
+
+/* ── 4. 列表：改为方形标记 + 更松的间距 ── */
+.main ul>li::before{
+  content:'';position:absolute;
+  left:-1.15em;top:.82em;
+  width:5px;height:5px;
+  background:var(--accent-3);
+  border-radius:1px;              /* 方点，比圆点更书卷 */
+  transform:rotate(45deg);        /* 菱形 */
+  opacity:.85;
+}
+.main li{ margin:.42em 0 }
+.main ol>li::marker{ color:var(--accent-2);font-weight:700;font-size:.9em }
+
+/* ── 5. 表格：去掉阴影，改用衬线表头 + 更轻的分隔 ── */
+.main table{
+  box-shadow:none;
+  border:0;
+  border-top:2px solid var(--accent-2);
+  border-bottom:1px solid var(--line-2);
+  border-radius:0;
+  margin:1.8em 0;
+  font-family:var(--sans);
+}
+.main thead{ border-bottom:1px solid var(--line) }
+.main th{
+  background:transparent;
+  font-family:var(--serif);
+  font-weight:600;
+  font-size:13px;
+  color:var(--accent);
+  letter-spacing:.04em;
+  padding:.85em 1em;
+  border-bottom:1px solid var(--line);
+  text-transform:none;            /* 中文不需要uppercase */
+}
+.main td{
+  padding:.85em 1em;
+  border-bottom:1px solid var(--line);
+  font-size:.96em;
+}
+.main tbody tr:last-child td{ border-bottom:none }
+.main tbody tr:hover{ background:var(--accent-soft) }
+.main td strong{ color:var(--accent);font-weight:700 }
+
+/* ── 6. mermaid 容器：去掉边框阴影，改成"插图"质感 ── */
+.main .mermaid-wrap{
+  margin:2em 0;
+  padding:1.6em 1em;
+  background:var(--bg-alt);
+  border:0;
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+  border-radius:0;
+  box-shadow:none;
+  text-align:center;
+  overflow-x:auto;
+}
+
+/* ── 7. 提示框：左侧色条加粗 + 标题衬线体 ── */
+.main .block{
+  margin:1.7em 0;
+  padding:1.05em 1.35em;
+  border-radius:var(--radius);
+  border:1px solid var(--line);
+  /* ⚠️ 这里原来有 `border-left:3.5px solid` + `border-radius:0 R R 0`（左侧色条版式）。
+     设计 v6 改成「左侧 4px 色条 = ::before 伪元素 + 四周圆角」后必须去掉这条：
+     它是 2 个类（.main .block），比第 10 节的 .block（1 个类）优先级高，
+     会把 ::before 色条往左挤 —— 表现为"色条贴在边框外侧"。
+     顺带把 sans 补回变量名（下面 font-family:var(--sans) 引用了一个不存在的变量）。 */
+  font-family:var(--font);
+  font-size:.97em;
+  line-height:1.85;
+  background:var(--bg-card);
+  box-shadow:var(--shadow-1);
+}
+.main .block-title{
+  font-family:var(--serif);
+  font-weight:600;
+  font-size:12.5px;
+  letter-spacing:.08em;
+  text-transform:none;
+  margin-bottom:.55em;
+  display:flex;align-items:center;gap:.5em;
+}
+.main .block-title::before{ content:'';width:4px;height:4px;border-radius:50%;background:currentColor;flex:0 0 auto }
+/* ⚠️ 这组覆盖已废弃：提示框改为「统一米白底 + 左侧色条」后，
+   各类型只保留标题色与色条色（见第 10 节），不要再在这里给整块上底色。
+   留着它们会让绿/黄/紫大色块重新回来，页面又变回表单样。 */
+.main .block p{ margin:.5em 0 }
+
+/* ── 8. Quiz 卡片（B 方案局部借用）：题块更立体 ── */
+.main .quiz{
+  margin:2.4em 0;
+  border:0;
+  border-top:2px solid var(--accent-2);
+  border-radius:0;
+  background:transparent;
+  box-shadow:none;
+  overflow:visible;
+}
+.main .quiz-head{
+  background:var(--bg-alt);
+  border:0;
+  border-bottom:1px solid var(--line);
+  border-radius:var(--radius) var(--radius) 0 0;
+  padding:1em 1.3em;
+}
+.main .quiz-label{
+  font-family:var(--serif);
+  font-size:1.02em;
+  font-weight:600;
+  letter-spacing:.04em;
+}
+.main .quiz-item{
+  background:var(--bg-card);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  margin-bottom:.9em;
+  padding:1.35em 1.5em;
+}
+.main .quiz-item.correct{
+  background:var(--tip-bg);
+  border-color:var(--tip-line);
+  border-left-width:3.5px;
+}
+.main .quiz-item.wrong{
+  background:var(--danger-bg);
+  border-color:var(--danger-line);
+  border-left-width:3.5px;
+}
+.main .quiz-q{
+  font-family:var(--serif);
+  font-size:1.04em;
+  font-weight:600;
+  line-height:1.72;
+  color:var(--fg);
+}
+.main .quiz-q .qn{
+  background:var(--accent);color:var(--fg-inv);
+  border-radius:3px;
+  font-family:var(--sans);
+  font-size:11.5px;
+}
+.main .opt{
+  font-family:var(--sans);
+  border-radius:var(--radius-sm);
+  border-color:var(--line);
+  background:var(--bg);
+}
+.main .opt:hover{ background:var(--accent-soft);border-color:var(--accent-2) }
+.main .opt.right{ background:var(--tip-bg);border-color:var(--tip-line) }
+.main .reveal-explain{ font-family:var(--sans);line-height:1.88 }
+.main .reveal-ref{ font-style:normal;opacity:.75 }
+
+/* ── 9. 上下页导航 / 错题本：与新风格对齐 ── */
+.main .pg{
+  background:var(--bg-card);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+}
+.main .pg-title{ font-family:var(--serif) }
+.main .wrongbook{
+  border:0;
+  border-top:2px solid var(--danger-line);
+  border-radius:0;
+  background:transparent;
+  box-shadow:none;
+}
+.main .wrongbook .wb-head{
+  background:var(--danger-bg);
+  border-bottom:1px solid var(--line);
+  font-family:var(--serif);
+  border-radius:var(--radius) var(--radius) 0 0;
+}
+.main .wb-row{ border-bottom:1px solid var(--line) }
+.main .wb-row a{ font-family:var(--serif);font-weight:600 }
+
+/* ── 10. 页脚：更像版权页 ── */
+.main .footer{
+  margin-top:3.5em;
+  padding-top:2em;
+  border-top:1px solid var(--line);
+  font-size:12.5px;
+}
+.main .footer strong{ font-family:var(--serif);font-size:14px }
+
+/* ═══════════════════════════════════════════════════════════════
+   顶栏溢出菜单 + 目录层级强化
+   ═══════════════════════════════════════════════════════════════ */
+
+/* 顶栏：控件收进⋯ 浮层 */
+.overflow-btn{
+  background:var(--bg-card);
+  border:1px solid var(--line);
+  border-radius:999px;
+  width:30px;height:30px;
+  font-size:16px;line-height:1;
+  color:var(--fg-3);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .18s var(--ease);
+  flex-shrink:0;
+}
+.overflow-btn:hover{ color:var(--accent);border-color:var(--accent-2) }
+.overflow-btn.active{ color:#fff;background:var(--accent);border-color:var(--accent) }
+
+.overflow-panel{
+  position:absolute;top:calc(100% + 8px);right:28px;
+  background:var(--bg-card);
+  border:1.5px solid var(--line);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow-2);
+  padding:10px;
+  display:none;
+  z-index:120;
+}
+.overflow-panel.open{ display:block }
+.overflow-panel .theme-switch{
+  background:var(--bg-alt);
+  border:1px solid var(--line);
+  padding:3px;
+  border-radius:var(--radius-sm);
+  display:flex;gap:2px;
+}
+.overflow-panel .theme-btn{
+  border:none;background:transparent;cursor:pointer;
+  padding:5px 11px;border-radius:5px;
+  font-size:12px;font-family:var(--serif);font-weight:600;
+  color:var(--fg-3);transition:all .18s var(--ease);
+}
+.overflow-panel .theme-btn:hover{ color:var(--fg-2) }
+.overflow-panel .theme-btn.active{
+  background:var(--bg-card);color:var(--accent);
+  box-shadow:var(--shadow-1);
+}
+
+/* 专注模式：顶栏只留一个圆钮 */
+.focus-btn-top{ padding:5px 13px }
+html.focus-mode .focus-btn-top{ display:inline-flex !important }
+html.focus-mode .overflow-btn,
+html.focus-mode .nav{ display:none }
+
+/* 目录：加大缩进 + 层级色差，让4 级看得出来 */
+.toc{ width:236px; font-size:12.5px }
+.toc-item{
+  padding:4px 10px 4px calc(12px + var(--depth,0) * 17px);
+  line-height:1.5;
+}
+.toc-l1{
+  font-family:var(--serif);
+  font-size:13.5px;font-weight:600;
+  color:var(--fg);
+  margin-top:12px;
+  padding-top:6px;
+  border-top:1px solid var(--line);
+}
+.toc-l1:first-child{ margin-top:0;padding-top:0;border-top:none }
+.toc-l2{ color:var(--fg-2);font-weight:500;margin-top:4px }
+.toc-l3{ color:var(--fg-3);font-size:12px }
+.toc-l4{ color:var(--fg-3);font-size:11.5px;opacity:.85 }
+.toc-item:hover{ background:var(--accent-soft);color:var(--accent) }
+.toc-item.active{
+  color:var(--accent);
+  font-weight:700;
+  background:var(--accent-soft-2);
+  border-left-color:var(--accent);
+}
+.toc-title{
+  font-family:var(--serif);
+  font-size:11.5px;letter-spacing:.1em;
+  color:var(--fg-3);
+  padding-bottom:.6em;
+  border-bottom:1px solid var(--line);
+  margin-bottom:.7em;
+}
+
+/* ── 11. 修h1 换行 + mermaid 节点间距 ── */
+.main h1{
+  font-size:1.95em;                 /* 略降，避免长标题折行 */
+  text-wrap:balance;                /* 浏览器自动平衡两行宽度 */
+  line-height:1.28;
+}
+.main h1 br{ display:none }         /* 源 md 里的换行不强制断 */
+.main h1 br::after{ content:' ' }
+
+/* 图表节点：加宽间距，<br/> 换行才不堆叠 */
+.main .mermaid-wrap svg{
+  max-width:100%;
+  height:auto;
+}
+.main .mermaid-wrap .nodeLabel,
+.main .mermaid-wrap .labelText,
+.main .mermaid-wrap text{
+  font-family:var(--sans)!important;
+  font-size:13px!important;
+  line-height:1.5!important;
+}
+.main .mermaid-wrap .node rect,
+.main .mermaid-wrap .node polygon,
+.main .mermaid-wrap .node circle{
+  rx:5px; ry:5px;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   专注模式退出按钮修复
+   Bug：顶栏整体 visibility:hidden → 退出按钮一起隐藏 → 真人点不到
+   修法：顶栏不用 visibility，改用 opacity + pointer-events；
+        退出按钮单独保持可见可点（focus 态常显，hover 展开全栏）
+   ═══════════════════════════════════════════════════════════════ */
+
+/* 隐藏的元素不能兜底 visibility:hidden —— 那样连按钮一起没了 */
+html.focus-mode .toc,
+html.focus-mode .footer,
+html.focus-mode .pager,
+html.focus-mode .keyhint{ display:none !important }
+
+html.focus-mode .topbar{
+  display:block;
+  opacity:0;
+  pointer-events:none;            /* 默认不吃鼠标 */
+  position:fixed;
+  top:8px;left:50%;
+  transform:translateX(-50%);
+  background:var(--bg-card);
+  box-shadow:var(--shadow-2);
+  border:1px solid var(--line);
+  border-radius:999px;
+  padding:5px 9px;
+  z-index:60;
+  transition:opacity .22s var(--ease);
+  min-height:34px;
+}
+html.focus-mode .topbar .nav,
+html.focus-mode .topbar .brand,
+html.focus-mode .topbar .theme-switch,
+html.focus-mode .topbar .overflow-btn{ display:none }
+
+/* 关键：退出按钮永远可见可点，不随顶栏淡出 */
+html.focus-mode .focus-btn-top{
+  display:inline-flex !important;
+  align-items:center;gap:6px;
+  opacity:1 !important;
+  pointer-events:auto !important;
+  background:var(--accent);
+  color:var(--fg-inv);
+  border-color:var(--accent);
+  cursor:pointer;
+  white-space:nowrap;
+}
+html.focus-mode .focus-btn-top::after{
+  content:'退出';
+  font-size:11.5px;
+  opacity:.85;
+}
+html.focus-mode .focus-btn-top:hover{
+  background:var(--accent-2);
+  border-color:var(--accent-2);
+}
+/* 顶栏其余部分 hover 展开（键鼠用户），但不影响退出按钮 */
+html.focus-mode .topbar:hover{ opacity:1 }
+/* ⚠️ 导航已从「平铺链接」改成「胶囊 + 面板」，默认 display 是 block，
+   这里不能用 flex（会把胶囊挤成一行）。 */
+html.focus-mode .topbar:hover .nav{ display:block }
+
+@media(max-width:640px){
+  html.focus-mode .topbar{ top:6px; padding:4px 7px }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   专注模式退出浮标（右下角常驻）
+   设计动机：退出入口原本藏在屏幕正上方中间的顶栏里，用户找不到/点不到，
+   误以为"退不出去"。这里做一个完全脱离 .topbar 的常驻浮标，
+   只受 html.focus-mode 控制，不受任何 visibility/display 隐藏规则波及。
+   ═══════════════════════════════════════════════════════════════ */
+
+.focus-exit-fab{ display:none }
+
+html.focus-mode .focus-exit-fab{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  position:fixed;
+  right:24px;
+  bottom:26px;
+  z-index:90;                 /* 高于 topbar(60) 与搜索面板，确保永远在最上层 */
+  padding:11px 18px;
+  border-radius:999px;
+  background:var(--accent);
+  color:var(--fg-inv);
+  border:1px solid var(--accent);
+  box-shadow:var(--shadow-2);
+  font-family:inherit;
+  font-size:13px;
+  font-weight:600;
+  line-height:1;
+  cursor:pointer;
+  opacity:.94;
+  transition:opacity .18s var(--ease), transform .18s var(--ease);
+}
+html.focus-mode .focus-exit-fab:hover{
+  opacity:1;
+  transform:translateY(-2px);
+}
+html.focus-mode .focus-exit-fab:active{ transform:translateY(0) }
+html.focus-mode .focus-exit-fab:focus-visible{
+  outline:2px solid var(--accent);
+  outline-offset:3px;
+}
+html.focus-mode .focus-exit-dot{
+  width:7px;height:7px;border-radius:50%;
+  background:var(--fg-inv);
+  opacity:.75;
+  flex:none;
+}
+@media(max-width:640px){
+  html.focus-mode .focus-exit-fab{
+    right:14px; bottom:16px;
+    padding:10px 15px; font-size:12.5px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   整合自外部笔记模板（蓝白风 → 转译为本项目墨绿设计系统）
+   借用其「结构」，颜色全部走本项目语义变量：
+     · .block.mem      记忆口诀框（紫）
+     · .fig/.figcaption 图容器 + 图题（含 mermaid 图 .fig-mermaid）
+     · .tag            行内小标签
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ---------- 记忆口诀框（紫）---------- */
+/* 紫色只用在标题与色条上，正文保持统一米白底 */
+.mem{color:var(--mem-fg)}
+.mem .block-title{color:var(--mem)}
+.main .block.mem .block-title{color:var(--mem)}
+/* 口诀正文加重，方便朗读记忆 */
+.mem strong{color:var(--mem-fg);font-weight:700}
+
+/* ---------- 图容器 + 图题 ---------- */
+.fig{
+  margin:1.8em 0;
+  padding:16px 18px 12px;
+  background:var(--bg-card);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  text-align:center;
+}
+.fig svg{max-width:100%;height:auto}
+.fig figcaption{
+  margin-top:10px;
+  font-size:12.8px;
+  line-height:1.6;
+  color:var(--fg-2);
+  letter-spacing:.02em;
+}
+/* mermaid 图单独放开内边距，图本身已有留白 */
+.fig-mermaid{padding:18px 10px 12px;overflow-x:auto}
+
+/* ── 7. mermaid 图表：防止宽图溢出 + 节点文字截断 ── */
+.main .mermaid-wrap{
+  overflow-x:auto;
+  padding:1.6em 1em;
+}
+.main .mermaid-wrap svg{
+  max-width:100%;
+  height:auto;
+  min-width:0;
+}
+/* 图表比容器宽时，允许横向滚动而不是截缩 */
+.fig-mermaid{min-width:0}
+/* Slidev 手绘 SVG：颜色为深底黑板调（文字 #f2efe4），
+   放进浅色正文会隐形 → 套深色卡片还原原始配色。
+   ⚠️ 选择器必须带 .main（下文有 `.main .fig{background:var(--bg-card)}`，
+      同为 2 类时后者胜出 → 深色底会被浅色覆盖，字又隐形）。
+      所以这里用 `.main .fig.fig-slidev`（3 类）压住它。 */
+.fig-slidev{padding:14px 10px 10px}
+.main .fig.fig-slidev,
+.fig.fig-slidev{
+  background:#142b20;
+  border-color:#24402f;
+}
+.fig-slidev svg{width:100%;height:auto;max-height:420px}
+.main .fig{background:var(--bg-card)}
+.main .fig figcaption{color:var(--fg-2)}
+
+/* ---------- 行内小标签 ---------- */
+.tag{
+  display:inline-block;
+  padding:1px 9px;
+  margin-right:5px;
+  border-radius:999px;
+  font-size:11.5px;
+  font-weight:600;
+  line-height:1.7;
+  background:var(--accent-soft);
+  color:var(--accent);
+  border:1px solid var(--accent-soft-2);
+  white-space:nowrap;
+}
+.tag.warn{background:var(--warn-bg);color:var(--warn-fg);border-color:var(--warn-line)}
+.tag.exam{background:var(--gold-bg);color:var(--gold);border-color:var(--gold)}
+.tag.mem{background:var(--mem-bg);color:var(--mem-line);border-color:var(--mem-line)}
+.main .tag{font-family:var(--sans)}
+
+/* ═══════════════════════════════════════════════════════════════
+   增强 v1：返回顶部 / 外链指示器 / 代码复制 / 阅读时长
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── 返回顶部按钮 ── */
+.back-top{
+  position:fixed;right:24px;bottom:80px;z-index:85;
+  width:42px;height:42px;
+  border-radius:50%;
+  background:var(--bg-card);
+  border:1.5px solid var(--line);
+  box-shadow:var(--shadow-2);
+  color:var(--fg-3);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;line-height:1;
+  opacity:0;transform:translateY(12px);
+  pointer-events:none;
+  transition:opacity .25s var(--ease),transform .25s var(--ease),color .18s var(--ease),border-color .18s var(--ease);
+}
+.back-top.show{opacity:1;transform:none;pointer-events:auto}
+.back-top:hover{color:var(--accent);border-color:var(--accent);transform:translateY(-2px)}
+.back-top:active{transform:translateY(0)}
+@media(max-width:760px){
+  .back-top{right:14px;bottom:70px;width:38px;height:38px;font-size:16px}
+}
+
+/* ── 外链指示器 ── */
+a[href^="http"]:not(.cta):not(.pg)::after{
+  content:'↗';
+  display:inline-block;
+  margin-left:2px;
+  font-size:.82em;
+  opacity:.6;
+  vertical-align:.05em;
+  transition:opacity .15s var(--ease);
+}
+a[href^="http"]:not(.cta):not(.pg):hover::after{opacity:1}
+
+/* ── 代码块复制按钮 ── */
+.code-wrap{position:relative;margin:1.3em 0}
+.copy-btn{
+  position:absolute;top:8px;right:8px;
+  padding:5px 11px;
+  font-size:11.5px;font-family:var(--sans);
+  background:var(--bg-card);
+  border:1px solid var(--line);
+  border-radius:5px;
+  color:var(--fg-3);cursor:pointer;
+  opacity:0;
+  transition:all .18s var(--ease);
+  z-index:2;
+}
+.code-wrap:hover .copy-btn,
+.copy-btn:focus{opacity:1}
+.copy-btn:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+.copy-btn.copied{border-color:var(--tip-line);color:var(--tip);background:var(--tip-bg)}
+.code-wrap pre{margin:0;border-radius:var(--radius)}
+
+/* ── 阅读时长（章节页标题下方） ── */
+.read-time{
+  display:flex;align-items:center;gap:7px;
+  font-size:12px;color:var(--fg-3);
+  margin-top:-8px;margin-bottom:18px;
+  padding-bottom:14px;
+  border-bottom:1px solid var(--line);
+}
+.read-time::before{content:'🕐';font-size:13px;filter:saturate(.7)}
+
+/* ── Quiz 答错时给错误选项加红色标记 ── */
+.opt.wrong-pick{border-color:var(--danger-line);background:var(--danger-bg)}
+.opt.wrong-pick .letter{background:var(--danger-line);color:#fff;border-color:var(--danger-line)}
+
+/* ── 表格斑马纹（可选，通过 class 控制） ── */
+table.zebra tbody tr:nth-child(even){background:var(--accent-soft)}
+table.zebra tbody tr:hover{background:var(--accent-soft-2)}
+
+/* ── 统计卡 hover 微动 ── */
+.stat{transition:transform .2s var(--ease),box-shadow .2s var(--ease)}
+.stat:hover{transform:translateY(-3px);box-shadow:var(--shadow-3)}
+
+/* ── 封面 CTA 按钮点击反馈 ── */
+.cta:active{transform:translateY(0) scale(.97)}
+
+/* ── 平滑滚动偏移（锚点跳转不卡顶栏下） ── */
+html{scroll-padding-top:80px}
+@media(max-width:760px){html{scroll-padding-top:70px}}
+
+/* ═══════════════════════════════════════════════════════════════
+   历年真题区块 · 三级折叠（原生 details，零 JS）
+   ═══════════════════════════════════════════════════════════════ */
+.exam{margin:2.2em 0 1.6em}
+
+/* ── 统计条：常驻不折叠，避免"用户不知道里面有真题"而白做 ── */
+.exam-bar{
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  padding:12px 16px;margin-bottom:10px;
+  background:linear-gradient(180deg,var(--bg-card) 0%,var(--bg-alt) 100%);
+  border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow-1);
+}
+.exam-bar-label{font-weight:700;font-size:14px;color:var(--accent)}
+.exam-bar-stat{font-size:12.5px;color:var(--fg-3);flex:1;min-width:140px}
+.exam-bar-stat b{color:var(--fg-2);font-variant-numeric:tabular-nums}
+.exam-bar-ops{display:flex;gap:6px}
+.exam-op{
+  padding:4px 11px;font:inherit;font-size:12px;cursor:pointer;
+  background:var(--bg-card);border:1px solid var(--line-2);
+  border-radius:999px;color:var(--fg-2);
+  transition:border-color .18s var(--ease),color .18s var(--ease),background .18s var(--ease);
+}
+.exam-op:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+
+/* ── 科目级折叠 ── */
+.exam-subject{
+  border:1px solid var(--line);border-radius:var(--radius);
+  background:var(--bg-card);overflow:hidden;
+}
+.exam-subject>summary{
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  padding:12px 16px;cursor:pointer;list-style:none;
+  font-weight:600;color:var(--fg-2);
+  transition:background .18s var(--ease),color .18s var(--ease);
+}
+.exam-subject>summary::-webkit-details-marker{display:none}
+.exam-subject>summary:hover{background:var(--accent-soft);color:var(--accent)}
+.exam-subject[open]>summary{border-bottom:1px solid var(--line);background:var(--bg-alt)}
+.exam-subject-name::before{content:'▸ ';display:inline-block;transition:transform .2s var(--ease)}
+.exam-subject[open] .exam-subject-name::before{transform:rotate(90deg)}
+.exam-subject-n{font-size:12px;color:var(--fg-3);font-variant-numeric:tabular-nums}
+.exam-subject-tip{margin-left:auto;font-size:11.5px;color:var(--fg-3);opacity:.8}
+
+/* ── 年份级折叠 ── */
+.exam-year{border-bottom:1px solid var(--line)}
+.exam-year:last-child{border-bottom:0}
+.exam-year>summary{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 16px 9px 30px;cursor:pointer;list-style:none;
+  font-size:13.5px;color:var(--fg-2);
+  transition:background .16s var(--ease),color .16s var(--ease);
+}
+.exam-year>summary::-webkit-details-marker{display:none}
+.exam-year>summary:hover{background:var(--accent-soft);color:var(--accent)}
+.exam-year[open]>summary{background:var(--bg-alt)}
+.exam-year-name::before{content:'▸ ';display:inline-block;transition:transform .2s var(--ease);color:var(--fg-3)}
+.exam-year[open] .exam-year-name::before{transform:rotate(90deg)}
+.exam-year-n{font-size:11.5px;color:var(--fg-3);font-variant-numeric:tabular-nums}
+
+/* ── 单题折叠 ── */
+.exam-q{border-top:1px solid var(--line)}
+.exam-q>summary{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:9px 16px 9px 46px;cursor:pointer;list-style:none;
+  font-size:13.5px;line-height:1.6;color:var(--fg-2);
+  transition:background .16s var(--ease);
+}
+.exam-q>summary::-webkit-details-marker{display:none}
+.exam-q>summary:hover{background:var(--accent-soft)}
+.exam-q[open]>summary{background:var(--bg-alt)}
+.exam-q>summary::before{
+  content:'＋';flex-shrink:0;width:1.1em;text-align:center;
+  color:var(--fg-3);font-size:12px;line-height:1.5;
+}
+.exam-q[open]>summary::before{content:'－';color:var(--accent)}
+.exam-no{
+  flex-shrink:0;font-size:11px;color:var(--fg-3);
+  font-variant-numeric:tabular-nums;padding-top:2px;min-width:44px;
+}
+.exam-tag{
+  flex-shrink:0;font-size:10.5px;padding:1px 6px;border-radius:4px;
+  background:var(--warn-bg);color:var(--warn-fg);border:1px solid var(--warn-line);
+}
+.exam-stem-peek{
+  flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  color:var(--fg-2);
+}
+.exam-q[open] .exam-stem-peek{color:var(--fg)}
+.exam-q-body{padding:4px 16px 16px 46px}
+.exam-stem{margin:.6em 0;font-size:14.5px;line-height:1.8;color:var(--fg)}
+.exam-blank{color:var(--danger);padding:0 1px}
+.exam-opts{list-style:none;margin:.5em 0 .9em;padding:0}
+/* ⚠️ 必须清掉全局 `ul>li::before` 的圆点（本站正文列表有项目符号），
+   否则真题选项前会多出一个小圆点，位置还和字母块错开 */
+.exam-opts>li::before{content:none !important}
+.exam-opts li{
+  position:relative;padding:4px 0 4px 26px;font-size:14px;line-height:1.7;
+  border-bottom:1px dashed var(--line);
+}
+.exam-opts li:last-child{border-bottom:0}
+.exam-opts b{
+  position:absolute;left:0;top:4px;
+  display:inline-flex;align-items:center;justify-content:center;
+  width:19px;height:19px;border-radius:5px;
+  background:var(--bg-alt);border:1px solid var(--line-2);
+  font-size:11px;font-weight:700;color:var(--fg-3);
+}
+
+/* ── 答案（默认再折叠一层）── */
+.exam-ans{margin-top:.6em}
+.exam-ans>summary{
+  display:inline-flex;align-items:center;gap:6px;cursor:pointer;list-style:none;
+  padding:4px 12px;font-size:12px;
+  background:var(--accent-soft);border:1px solid var(--line-2);
+  border-radius:999px;color:var(--accent);
+  transition:background .18s var(--ease),border-color .18s var(--ease);
+}
+.exam-ans>summary::-webkit-details-marker{display:none}
+.exam-ans>summary:hover{background:var(--accent-soft-2);border-color:var(--accent)}
+.exam-ans[open]>summary{margin-bottom:8px}
+.exam-ans-line{margin:.4em 0;font-size:14px;color:var(--fg)}
+.exam-ans-line b{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:26px;height:24px;padding:0 8px;margin-left:4px;
+  border-radius:6px;background:var(--tip-bg);color:var(--tip-fg);
+  border:1px solid var(--tip-line);font-weight:700;
+}
+.exam-exp{margin:.4em 0;font-size:13.5px;line-height:1.8;color:var(--fg-2)}
+
+/* ── 窄屏 ── */
+@media(max-width:760px){
+  .exam-bar{padding:10px 12px;gap:8px}
+  .exam-bar-label{font-size:13px}
+  .exam-bar-stat{font-size:11.5px;flex-basis:100%;order:3;min-width:0}
+  .exam-bar-ops{margin-left:auto}
+  .exam-subject-tip{display:none}
+  .exam-q>summary{padding-left:16px;flex-wrap:wrap}
+  .exam-q>summary::before{display:none}
+  .exam-no{min-width:0}
+  .exam-q-body{padding-left:16px}
+  .exam-year>summary{padding-left:20px}
+  .exam-stem-peek{white-space:normal;flex-basis:100%}
+  .exam-opts li{font-size:13.5px}
+}
+
+/* ── 打印：全部自动展开（服务"可打印带水印"卖点）── */
+@media print{
+  .exam-bar,.exam-op,.exam-ans>summary{display:none !important}
+  .exam-subject,.exam-year,.exam-q{border:0 !important;background:none !important}
+  .exam-subject>summary,.exam-year>summary{
+    padding:6pt 0;background:none !important;border-bottom:1pt solid #999;
+  }
+  .exam-subject-name::before,.exam-year-name::before,.exam-q>summary::before{content:'' !important}
+  .exam-q-body,.exam-ans[open] > div,.exam-ans > div{display:block !important}
+  .exam-q{break-inside:avoid;page-break-inside:avoid}
+  .exam-stem,.exam-opts li{font-size:9.5pt}
+  .exam-exp{font-size:8.5pt;color:#333}
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="index.html"><span class="brand-mark">48</span><span>阿甘系分</span><span class="brand-sub">冲刺手册</span></a>
+  <nav class="nav"><div class="nav" id="chapnav"><button class="nav-trigger" type="button" id="navTrigger" aria-haspopup="true" aria-expanded="false" aria-controls="navPanel" title="章节导航（Enter / ↓ 打开，Esc 关闭）"><span class="nav-trigger-code">H12</span><span class="nav-trigger-label">企业信息化（一）</span><svg class="nav-caret" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5 L6 8 L9.5 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="nav-panel" id="navPanel" hidden><div class="nav-panel-scroll"><div class="nav-group nav-group-solo"><a class="nav-item" href="index.html"><span class="nav-item-code">首页</span><span class="nav-item-label">首页 · 手册总览</span></a></div><div class="nav-group"><div class="nav-group-title">第一篇 · 基础知识</div><a class="nav-item" href="H01.html"><span class="nav-item-code">H01</span><span class="nav-item-label">绪论与备考总纲</span></a><a class="nav-item" href="H02.html"><span class="nav-item-code">H02</span><span class="nav-item-label">数学与工程基础（一）· 概率统计与图论应用</span></a><a class="nav-item" href="H03.html"><span class="nav-item-code">H03</span><span class="nav-item-label">数学与工程基础（二）· 预测决策与工程伦理</span></a><a class="nav-item" href="H04.html"><span class="nav-item-code">H04</span><span class="nav-item-label">计算机系统（一）· 硬件与体系结构</span></a><a class="nav-item" href="H05.html"><span class="nav-item-code">H05</span><span class="nav-item-label">计算机系统（二）· 操作系统</span></a><a class="nav-item" href="H06.html"><span class="nav-item-code">H06</span><span class="nav-item-label">计算机网络（一）· 数据通信与协议体系</span></a><a class="nav-item" href="H07.html"><span class="nav-item-code">H07</span><span class="nav-item-label">计算机网络（二）· TCP/IP 与网络工程</span></a><a class="nav-item" href="H08.html"><span class="nav-item-code">H08</span><span class="nav-item-label">分布式系统、构件与云计算</span></a><a class="nav-item" href="H09.html"><span class="nav-item-code">H09</span><span class="nav-item-label">数据库系统（一）· 三级模式与关系基础</span></a><a class="nav-item" href="H10.html"><span class="nav-item-code">H10</span><span class="nav-item-label">数据库系统（二）· 范式与事务并发控制</span></a><a class="nav-item" href="H11.html"><span class="nav-item-code">H11</span><span class="nav-item-label">数据库系统（三）· 设计、仓库与 NoSQL</span></a><a class="nav-item active" href="H12.html" aria-current="page"><span class="nav-item-code">H12</span><span class="nav-item-label">企业信息化（一）· 信息化规划</span></a><a class="nav-item" href="H13.html"><span class="nav-item-code">H13</span><span class="nav-item-label">企业信息化（二）· 信息系统与商务</span></a><a class="nav-item" href="H14.html"><span class="nav-item-code">H14</span><span class="nav-item-label">软件工程（一）· 生命周期与开发模型</span></a><a class="nav-item" href="H15.html"><span class="nav-item-code">H15</span><span class="nav-item-label">软件工程（二）· 过程管理与软件重用</span></a><a class="nav-item" href="H16.html"><span class="nav-item-code">H16</span><span class="nav-item-label">软件工程（三）· UML 与形式化方法</span></a><a class="nav-item" href="H17.html"><span class="nav-item-code">H17</span><span class="nav-item-label">项目管理（一）· 范围进度成本与挣值分析</span></a><a class="nav-item" href="H18.html"><span class="nav-item-code">H18</span><span class="nav-item-label">项目管理（二）· 配置质量风险与文档</span></a><a class="nav-item" href="H19.html"><span class="nav-item-code">H19</span><span class="nav-item-label">信息安全（一）· 安全体系与加密认证</span></a><a class="nav-item" href="H20.html"><span class="nav-item-code">H20</span><span class="nav-item-label">信息安全（二）· 网络安全与可靠性</span></a></div><div class="nav-group"><div class="nav-group-title">第二篇 · 关键技术</div><a class="nav-item" href="H21.html"><span class="nav-item-code">H21</span><span class="nav-item-label">系统规划与分析（一）· 需求分析与 DFD 建模</span></a><a class="nav-item" href="H22.html"><span class="nav-item-code">H22</span><span class="nav-item-label">系统规划与分析（二）· 成本效益与可行性论证</span></a><a class="nav-item" href="H23.html"><span class="nav-item-code">H23</span><span class="nav-item-label">软件需求工程</span></a><a class="nav-item" href="H26.html"><span class="nav-item-code">H26</span><span class="nav-item-label">软件架构设计（一）· 架构定义与 4+1 视图</span></a><a class="nav-item" href="H27.html"><span class="nav-item-code">H27</span><span class="nav-item-label">软件架构设计（二）· 架构风格与 SOA</span></a><a class="nav-item" href="H28.html"><span class="nav-item-code">H28</span><span class="nav-item-label">软件架构设计（三）· 质量属性与 ATAM 评估</span></a><a class="nav-item" href="H29.html"><span class="nav-item-code">H29</span><span class="nav-item-label">系统设计（一）· 结构化设计与面向对象设计</span></a><a class="nav-item" href="H30.html"><span class="nav-item-code">H30</span><span class="nav-item-label">系统设计（二）· 设计模式与人机交互</span></a><a class="nav-item" href="H31.html"><span class="nav-item-code">H31</span><span class="nav-item-label">软件实现与测试（一）· 测试原则与黑盒白盒方法</span></a><a class="nav-item" href="H32.html"><span class="nav-item-code">H32</span><span class="nav-item-label">软件实现与测试（二）· 测试阶段与部署发布</span></a><a class="nav-item" href="H33.html"><span class="nav-item-code">H33</span><span class="nav-item-label">系统运行与维护（一）· 运维指标与软件维护</span></a><a class="nav-item" href="H34.html"><span class="nav-item-code">H34</span><span class="nav-item-label">系统运行与维护（二）· 系统转换与演进</span></a></div><div class="nav-group"><div class="nav-group-title">第三篇 · 案例实践</div><a class="nav-item" href="H35.html"><span class="nav-item-code">H35</span><span class="nav-item-label">Web 应用系统分析与设计 · 架构、缓存与测试</span></a><a class="nav-item" href="H36.html"><span class="nav-item-code">H36</span><span class="nav-item-label">嵌入式系统分析与设计 · 实时调度与低功耗</span></a><a class="nav-item" href="H37.html"><span class="nav-item-code">H37</span><span class="nav-item-label">移动应用系统分析与设计 · 架构演进与开发方式选型</span></a><a class="nav-item" href="H38.html"><span class="nav-item-code">H38</span><span class="nav-item-label">大数据处理系统分析与设计 · Lambda/Kappa 架构</span></a><a class="nav-item" href="H39.html"><span class="nav-item-code">H39</span><span class="nav-item-label">微服务系统分析与设计 · 组件、事务与反模式</span></a><a class="nav-item" href="H40.html"><span class="nav-item-code">H40</span><span class="nav-item-label">信息物理系统 CPS · 闭环架构与边缘计算</span></a><a class="nav-item" href="H41.html"><span class="nav-item-code">H41</span><span class="nav-item-label">系统分析师论文写作要点 · 结构、字数与评分</span></a></div><div class="nav-group"><div class="nav-group-title">专项模块 · 案例专项</div><a class="nav-item" href="H42.html"><span class="nav-item-code">H42</span><span class="nav-item-label">案例分析专项（一）· 四步答题法与设问模板</span></a><a class="nav-item" href="H43.html"><span class="nav-item-code">H43</span><span class="nav-item-label">案例分析专项（二）· 考点地图与真题精讲</span></a><a class="nav-item" href="H44.html"><span class="nav-item-code">H44</span><span class="nav-item-label">案例分析专项（三）· 六大方向专项与场景实战</span></a></div><div class="nav-group"><div class="nav-group-title">专项模块</div><a class="nav-item" href="H45.html"><span class="nav-item-code">H45</span><span class="nav-item-label">论文写作专项</span></a><a class="nav-item" href="H46.html"><span class="nav-item-code">H46</span><span class="nav-item-label">论文写作专项（二）· 万能素材卡与考点落点</span></a><a class="nav-item" href="H47.html"><span class="nav-item-code">H47</span><span class="nav-item-label">全真模拟（一）· 上午场综合知识与案例</span></a><a class="nav-item" href="H48.html"><span class="nav-item-code">H48</span><span class="nav-item-label">全真模拟（二）· 下午场论文与复盘方法论</span></a></div><div class="nav-group nav-group-pending"><div class="nav-group-title">待上线 · 按真题权重排序</div><div class="nav-pending-row"><span class="nav-pending-ch">✅ 48 学时已全部上线</span><span class="nav-pending-name">第一篇 9 章 + 第二篇 6 章 + 第三篇 7 章</span><span class="nav-pending-w">22 章</span></div><div class="nav-pending-row"><span class="nav-pending-ch">✅ 专项模块</span><span class="nav-pending-name">案例分析 H42–H44 · 论文 H45–H46 · 全真模拟 H47–H48</span><span class="nav-pending-w">7 学时</span></div></div></div><div class="nav-foot"><span class="nav-foot-tip">↑↓ 选择 · Enter 打开 · Esc 关闭</span><span class="nav-foot-nav"><a class="nav-step" href="H11.html">← 上一章</a><a class="nav-step" href="H13.html">下一章 →</a></span></div></div></div></nav>
+  <div class="theme-switch" role="group" aria-label="主题">
+    <button class="theme-btn" data-theme="light" type="button">浅</button>
+    <button class="theme-btn" data-theme="dark" type="button">深</button>
+    <button class="theme-btn active" data-theme="auto" type="button">跟随</button>
+  </div>
+</header>
+<main class="shell">
+  <aside class="toc"></aside>
+      <article class="main">
+    <div class="chapbar" id="chapbar"
+     data-sec-total="28" data-page-index="12" data-page-total="46">
+  <div class="chapbar-top">
+    <span class="chapbar-badge">H12</span>
+    <span class="chapbar-title">企业信息化（一）· 信息化规划</span>
+    <span class="chapbar-spacer"></span>
+    <span class="chapbar-sec" id="chapbarSec">1 / 28</span>
+  </div>
+  <div class="chapbar-track"><div class="chapbar-fill" id="chapbarFill"></div></div>
+</div>
+    
+    <h1 id="第-12-小时-企业信息化-一-信息化规划">第 12 小时 · 企业信息化（一）· 信息化规划</h1>
+<div class="quote"><p>第 6 章是<strong>综合知识真题占比最高的章</strong>（10.1%，56/557），也是案例与论文的联动章。<br>本学时覆盖 <strong>6.1 概述、6.2 信息资源管理、6.3 信息化规划</strong> —— 全章最难记的「方法辨识」集中在这里。</p></div>
+<div class="block gold"><div class="block-title">考情定位</div><p><strong>本章被严重低估</strong>：教材知识点卡标注"低频 4%"，但真实真题占比是 <strong>10.1%</strong>。<br>三件事必考：① 缩写 ↔ 全称；② 分类与顺序（BSP 三矩阵、电商/政务模式、EAI 四层次）；③ 对比辨析（谁比谁大、谁驱动谁）。</p></div>
+<h2 id="全章知识骨架">全章知识骨架</h2>
+<div class="fig fig-mermaid"><div class="mermaid-src" data-src="mindmap
+  root((06 企业信息化))
+    6.1 概述
+      定义与本质
+      五项信息化方法
+    6.2 信息资源管理
+      IRM 三主题
+      分类三维度
+      基础标准五项
+      德雷尔十原则
+      IRP 七步骤
+      信息资源网
+    6.3 信息化规划 ★
+      规划内容与依赖
+      信息化战略vs企业战略
+      BITA 与 EITA
+      八大规划方法
+      BSP 与 U/C 矩阵
+      SDP 主题数据库
+      战略栅格 SG
+    6.4 企业信息系统 ★★
+      CRM SCM
+      PDM PLM KM
+      BI 商业智能
+      企业门户 EP
+      DSS 决策支持
+      开发方法四类
+    6.5 电子商务
+      六种交易类型
+      五大特征
+      电商技术
+    6.6 电子政务
+      业务模型三领域
+      G2G G2B G2C G2E
+    6.7 业务流程重组
+      BPR 四核心
+      BPR 实施
+      基于 BPR 的信息系统规划
+    6.8 企业应用集成
+      信息孤岛
+      传统 EAI 四层次
+      事件驱动 EDA
+      ESB 五层"></div><figcaption>图6-0 第6章知识骨架</figcaption></div>
+<h2 id="s6-1-企业信息化概述">6.1 企业信息化概述</h2>
+<h3 id="s6-1-企业信息化是什么">6.1 企业信息化是什么</h3>
+<p>📖教材定义（原话）</p>
+<p>企业信息化是指企业<strong>以业务流程的优化和重构为基础</strong>，在一定的深度和广度上利用计算机技术、网络技术和数据库技术，控制和管理企业生产经营活动中的各种信息，实现企业内、外部信息的共享和有效利用，以提高企业的经济效益和市场竞争力。</p>
+<p>技术视角信息化的核心和本质是企业运用信息技术，进行<strong>隐含知识的挖掘和编码化</strong>，进行<strong>业务流程的管理</strong></p>
+<p>涉及范围管理理念创新 · 管理流程优化 · 管理团队重组 · 管理手段革新</p>
+<p>项目性质是<strong>系统工程</strong>，不是单元技术改造；涉及整个"生态系统"</p>
+<p>发展形态不断发展和完善，是<strong>螺旋式上升</strong>的过程</p>
+<p>🔧企业信息化五种方法</p>
+<p>① 业务流程重组方法</p>
+<p>对组织结构与工作方法做"彻底的、根本性的"重新设计</p>
+<p>② 核心业务应用方法</p>
+<p>围绕核心业务应用信息技术 —— 很多企业成功的秘诀</p>
+<p>③ 信息系统建设方法</p>
+<p>最具普遍意义的方法（大多数企业的重点和关键）</p>
+<p>④ 主题数据库方法</p>
+<p>面向企业业务主题、核心业务的数据库</p>
+<p>⑤ 资源管理方法</p>
+<p>企业资源规划和管理方法</p>
+<h3 id="s6-1-易错点-两种-方法-别混">6.1 易错点：两种"方法"别混</h3>
+<p>🏢企业信息化方法</p>
+<p><strong>整个企业实现信息化</strong>的方法</p>
+<p>· 层次<strong>高</strong>、涉及面<strong>广</strong></p>
+<p>· 面向"企业怎么完成信息化"</p>
+<p>· 例：BPR 法、核心业务应用法、主题数据库法</p>
+<p>是"企业级"的一盘棋</p>
+<p>VS</p>
+<p>🧩信息系统建设方法</p>
+<p><strong>一个具体信息化项目</strong>的开发方法</p>
+<p>· 层次<strong>低</strong>、只涉及<strong>一个项目</strong></p>
+<p>· 面向"系统怎么做出来"</p>
+<p>· 例：结构化方法、OO 方法、原型化方法</p>
+<p>是"项目级"的一役</p>
+<p>⚠️ <strong>判断题标准</strong>：题干出现"<strong>整个企业</strong>""<strong>企业级</strong>""<strong>层次更高、涉及面更广</strong>" → 选<strong>企业信息化方法</strong>；<br>题干出现"<strong>某个项目</strong>""<strong>生命周期</strong>""<strong>开发工具与文档</strong>" → 选<strong>信息系统建设方法</strong>。</p>
+<p>口诀：<strong>企业信息化方法管"做什么"，信息系统建设方法管"怎么做"</strong>——前者是顶层，后者是执行层。</p>
+<h2 id="s6-2-信息资源管理-IRM">6.2 信息资源管理 IRM</h2>
+<h3 id="s6-2-信息资源管理-三大战略资源">6.2 信息资源管理 · 三大战略资源</h3>
+<p>🌐信息 · 材料 · 能源</p>
+<p>信息和材料、能源共同构成了国民经济和社会发展的<strong>三大战略资源</strong>，它们在一定的条件下可以互相转换。</p>
+<p>材料 / 能源有限 · 不可再生 · 不可共享</p>
+<p>利用后果产生污染、破坏自然界</p>
+<p>信息资源无限 · 可再生 · 可共享</p>
+<p>利用后果很少产生新污染，还减少材料能源消耗</p>
+<p>💡 这一段是<strong>定性对比题</strong>的母本：一问"三种资源的区别"，答案就是"是否有限、是否可再生、是否可共享"。</p>
+<p>📚IRM 的内容</p>
+<p>做好信息资源管理（<strong>IRM</strong>）的目的是：通过企业内外信息流的畅通和信息资源的有效利用，来提高企业的<strong>效益和竞争力</strong>。</p>
+<p>IRM 是<strong>企业管理的必要环节</strong>，应该纳入企业管理的<strong>预算</strong>。</p>
+<p>两部分<strong>数据资源管理</strong>（强调对数据的控制：维护与安全）＋ <strong>信息处理管理</strong>（关心管理人员如何获取和处理信息：流程与方法）</p>
+<p>基础IRM 的基础是<strong>数据管理</strong></p>
+<p>三主题① 资源管理的方向和控制　② 建立企业信息资源<strong>指导委员会</strong>　③ 建立信息资源的<strong>组织机构</strong>（由一位副总领导）</p>
+<p>⚠️ <strong>数据管理 ≠ 数据库管理</strong>：数据库管理只负责物理库的设计、实现、安全性与维护；数据管理还要确定<strong>数据规划、数据应用、数据标准、数据内容、数据范围</strong>。</p>
+<h3 id="s6-2-信息资源的分类-三个维度">6.2 信息资源的分类 · 三个维度</h3>
+<p>🏛️管理维度</p>
+<p>从<strong>业务管理</strong>角度分类，用于指导信息采集的专业分工。</p>
+<p><strong>两种情况：</strong></p>
+<p>· 专门的<strong>业务部门</strong>采用的分类体系</p>
+<p>例：地震信息资源分为测震、前兆、强震动、应急</p>
+<p>· <strong>综合部门</strong>从登记和管理角度提出的分类</p>
+<p>例：政务信息资源的分类方式</p>
+<p>🔌信息来源维度</p>
+<p>按<strong>信息资源提供部门</strong>设置一级、二级、三级类目。</p>
+<p><strong>这种分类体系最简单</strong>，两大优势：</p>
+<p>· <strong>赋值简化</strong>——同一部门设一个初始值，其后所有分类信息都可复用；基本不需培训、不必重复录入</p>
+<p>· <strong>查找简单</strong>——使用者不需要学习特定分类体系</p>
+<p>🎯应用主题维度</p>
+<p>按<strong>服务和应用的目标</strong>分类，<strong>这种分类体系最复杂</strong>。</p>
+<p>同一个信息资源，目标不同 → 分类不同：</p>
+<p>· 全国行政区划信息，从基础测绘部门看 → <strong>基础性信息资源</strong></p>
+<p>· 从宏观经济管理看 → <strong>辅助性信息资源</strong></p>
+<p>有多少不同的应用需求，就有多少种分类方式</p>
+<p>💡 <strong>分类三原则</strong>：应当遵循<strong>简洁、独立、可操作</strong>的原则。IRM 的起点和基础是<strong>建立信息资源目录</strong>——只有科学地建立了目录，信息资源才能被快速、及时地存储、处理、检索和利用。</p>
+<p>⚠️ 不同分类体系之间需要<strong>相互转化和映射</strong>：已按某种体系分类后，再按其他体系赋值时，一般希望<strong>通过分类转换自动进行</strong>，而不是重新分类赋值。</p>
+<p>class: dense</p>
+<h3 id="s6-2-IRM-五大基础标准">6.2 IRM 五大基础标准 ⭐</h3>
+<table><thead><tr><th>标准</th><th>是什么</th><th>关键点 / 例子</th></tr></thead><tbody><tr><td><strong>① 数据元素标准</strong></td><td>数据元素是最小的不可再分的信息单位，是一类数据的总称，是数据对象的抽象</td><td>又分<strong>命名标准</strong>、<strong>标识标准</strong>、<strong>一致性标准</strong>；不标准会导致"职工姓名 / 员工姓名 / 职员姓名"满天飞</td></tr><tr><td><strong>② 信息分类编码标准</strong></td><td>根据信息内容的属性或特征，按一定原则和方法区分归类，建立分类系统和排列顺序</td><td><strong>信息资源标准中最基础的标准</strong>；典型方法 ABC 法（见下）</td></tr><tr><td><strong>③ 用户视图标准</strong></td><td>用户视图是一些数据元素的集合，反映最终用户对数据实体的看法</td><td>是数据在系统<strong>外部</strong>而非内部的表象；含表单、报表、屏幕数据格式；规范并简化用户视图是内外信息共享交换的基础</td></tr><tr><td><strong>④ 概念数据库标准</strong></td><td>最终用户对数据存储的看法，是对用户信息需求的综合概括</td><td>含数据库名称、标识、主关键字、数据内容列表；是<strong>主题数据库的概要信息</strong>；经 <strong>SDP</strong> 工作后完成</td></tr><tr><td><strong>⑤ 逻辑数据库标准</strong></td><td>系统分析与设计的基础，是对概念数据库的进一步分解和细化</td><td>一个逻辑主题数据库由一组<strong>规范化的基本表</strong>构成；核心工作是<strong>数据结构规范化</strong></td></tr></tbody></table>
+<p>🔤信息分类编码的 ABC 法</p>
+<p>A 类系统中<strong>不单独设立编码表</strong>，是基本表的一个视图　例：身份证号、设备编码</p>
+<p>B 类系统中<strong>单独设立编码表（基本表）</strong>　例：职称编码、设备配件编码</p>
+<p>C 类码表<strong>短小但使用频率很大</strong>，把它们统一设在一个编码库管理　例：性别、文化程度</p>
+<p>口诀：<strong>A 是视图（不建表）· B 是基本表（单独建）· C 是公共码（统一放）</strong></p>
+<p>class: dense</p>
+<h3 id="s6-2-威廉-德雷尔-IRM-标准十原则">6.2 威廉·德雷尔 · IRM 标准十原则</h3>
+<p>①<strong>不能把例外当成正规。</strong>任何原则都有例外，但数据管理人员决不允许把例外当成正规。</p>
+<p>②<strong>管理部门必须支持并乐于帮助执行标准。</strong>违背标准时，管理部门必须帮助纠正。</p>
+<p>③<strong>标准必须是从实际出发的、有生命力的、切实可行的。</strong>以共同看法为基础，内容越简明越好执行。</p>
+<p>④<strong>标准不是绝对的，必须有某种灵活的余地。</strong>不能严格到严重束缚数据设计人员的灵活性。</p>
+<p>⑤<strong>标准不应该迁就落后。</strong>标准要控制和管理当前和未来的活动，而不是恢复和重演过去。</p>
+<p>⑥<strong>标准必须是容易执行的。</strong>能自动检查标准符合情况的方法越多，标准本身就越有效。</p>
+<p>⑦<strong>标准必须加以宣传推广，而不是靠强迫命令。</strong>要向各级业务人员讲明为什么需要这些标准。</p>
+<p>⑧<strong>关于标准的细节本身并不重要，重要的是制定了某些标准。</strong>要善于综合考虑和商讨细节。</p>
+<p>⑨<strong>标准应该逐渐地制定出来。</strong>不要企图一次搞完；执行标准是渐进的、有节奏的，是渐进过程而不是突变过程。</p>
+<p>⑩<strong>数据管理最重要的标准是一致性标准</strong>——数据命名、数据属性、数据设计、数据使用的一致性。</p>
+<p>十原则口诀：<strong>例外不当真 · 领导要支持 · 实在又简明 · 留有余地 · 不迁就落后 · 容易执行 · 靠宣传不靠命令 · 重在有标准 · 逐步推行 · 一致性为王</strong></p>
+<h3 id="s6-2-信息资源规划-IRP-七步两条主线">6.2 信息资源规划 IRP · 七步两条主线 ⭐</h3>
+<div class="fig fig-mermaid"><div class="mermaid-src" data-src="flowchart TB
+  B1[&quot;① 定义职能域&quot;] --&gt; B2[&quot;② 各职能域 · 业务分析&lt;br/&gt;职能域—业务过程—业务活动&lt;br/&gt;（三层业务模型）&quot;]
+  B1 --&gt; D1[&quot;③ 各职能域 · 数据分析&lt;br/&gt;用户视图采集→分组分析→数据元素分析&quot;]
+  B2 --&gt; D2[&quot;④ 建立整个企业的 IRM 基础标准&lt;br/&gt;业务模型 ⇄ 数据模型 在此汇合定型&quot;]
+  D1 --&gt; D2
+  D2 --&gt; B3[&quot;⑤ 建立信息系统功能模型&lt;br/&gt;子系统 → 功能模块 → 程序单元&quot;]
+  D2 --&gt; D3[&quot;⑥ 建立信息系统数据模型&lt;br/&gt;主题数据库 → 基本表 → 扩展表&quot;]
+  B3 --&gt; E[&quot;⑦ 建立关联矩阵（CU 矩阵）&lt;br/&gt;功能 × 数据 的对应关系&quot;]
+  D3 --&gt; E"></div><figcaption>图6-1 信息资源规划（IRP）七步：业务主线与数据主线「两条腿走路」</figcaption></div>
+<p>🧠两条主线怎么区分</p>
+<p>业务主线（功能需求分析）</p>
+<ul><li>成果 = <strong>业务模型</strong>（也叫系统功能模型 / 企业模型）</li><li>三层结构：<strong>职能域 → 业务过程 → 业务活动</strong></li><li>业务活动是<strong>最小的、不可再分解</strong>的功能单元</li></ul>
+<p>数据主线（数据需求分析）</p>
+<p>工作量<strong>最大、最复杂</strong>，强调<strong>全局观点</strong><br>从<strong>用户视图</strong>采集开始 → 分类 → 登记数据项 → 用 DFD 分析数据流 → 建<strong>基本表和主题数据库</strong></p>
+<p>口诀：<strong>左业务右数据，中间定标准；功能模型管"做什么"，数据模型管"存什么"，最后 CU 矩阵把两者对上</strong></p>
+<h3 id="s6-2-信息资源网建设">6.2 信息资源网建设</h3>
+<p>🕸️三个阶段的演进</p>
+<ul><li>点对点的通信</li><li>↓</li><li>信息通信网</li><li>利用国家公用电信平台：公用电话网 / 分组交换网 / 数字数据网</li><li>↓</li><li>信息资源网（高级阶段）</li><li>各相关部门建立的数据库、信息中心和应用系统</li></ul>
+<p>💡 <strong>功能区别</strong>：信息通信网只解决"<strong>传输</strong>"；信息资源网覆盖从<strong>采集、加工到最终利用</strong>的众多环节。</p>
+<p>🗄️数据分布策略：分散 vs 集中</p>
+<p><strong>分散存储</strong> —— 存在使用它的地方</p>
+<p>· 用户认为库是"<strong>自己的</strong>"，更负责任</p>
+<p>· 数据固有属性：某地使用、他地很少用</p>
+<p>· 当地部门负责自己数据的准确性、保密性、安全性</p>
+<p>· 集中存储会导致<strong>更新频率太高</strong></p>
+<p>· 终端检索处理量大，全压到中心会危及中心性能</p>
+<p>VS</p>
+<p><strong>集中存储</strong> —— 数据固有属性使然</p>
+<p>· 被<strong>集中式应用项目</strong>使用</p>
+<p>· 各部门都要频繁更新同一数据 → 集中管理避免<strong>多副本实时同步</strong></p>
+<p>· 数据要作为一个<strong>整体</strong>被检索，分散访问浪费时间</p>
+<p>· 需<strong>高度安全性</strong>：集中存储 + 后备副本更安全</p>
+<p><strong>分布式数据库</strong>：用计算机网络将物理上分散的多个数据库单元连接起来，组成一个<strong>逻辑上统一</strong>的数据库。每个被连接的数据库单元称为<strong>站点或结点</strong>；由统一的<strong>分布式数据库管理系统</strong>来管理。</p>
+<h2 id="s6-3-信息化规划">6.3 信息化规划</h2>
+<h3 id="s6-3-为什么必须做信息化规划">6.3 为什么必须做信息化规划</h3>
+<p>缺乏总体规划 → <strong>信息系统林立 · 数据资源分散 · 数据收集成本高而质量低 · 各种系统相互孤立互不连通</strong> → 形成<strong>信息孤岛</strong>。<br>而要把这些信息孤岛集成起来，难度超乎寻常，甚至<strong>造成返工、从头重建</strong>。</p>
+<p>🧭信息化规划的地位</p>
+<p>纲领与向导是企业信息化建设的<strong>纲领和向导</strong></p>
+<p>前提与依据是信息系统<strong>设计和实施的前提和依据</strong></p>
+<p>规划基础以企业的发展目标和战略、各部门的目标与功能为基础，结合行业实践与信息技术发展趋势</p>
+<p>🧩规划是"三合一"活动</p>
+<p>企业信息化规划不仅涉及信息系统规划，同时与企业规划、业务流程建模等紧密相关，是融合<strong>企业战略、管理规划、业务流程重组</strong>等内容的<strong>"业务＋管理＋技术"</strong>的规划活动。</p>
+<p>口诀：<strong>规划是"业务＋管理＋技术"三合一</strong>，不是单纯的 IT 技术规划。</p>
+<h3 id="s6-3-五层规划-谁支撑谁">6.3 五层规划 · 谁支撑谁</h3>
+<div class="fig fig-mermaid"><div class="mermaid-src" data-src="flowchart TB
+  A[&quot;企业战略规划&lt;br/&gt;用机会威胁评价环境&lt;br/&gt;用优劣势评价现状&lt;br/&gt;← 企业如何达到目标？&quot;] --&gt; B[&quot;信息系统战略规划&lt;br/&gt;对信息系统远景、组成架构、逻辑关系做规划&lt;br/&gt;← 信息系统如何支撑这些目标？&quot;]
+  B --&gt; C[&quot;信息技术战略规划（IT 战略）&lt;br/&gt;对硬件、软件、支撑环境做具体规划&lt;br/&gt;← 需要哪些信息技术来支撑？&quot;]
+  C --&gt; D[&quot;信息资源规划（IRP）&lt;br/&gt;数据需求分析 · 信息资源标准 · 资源整合&lt;br/&gt;← 为具体建设项目做数据准备&quot;]
+  D --&gt; E[&quot;信息化建设具体项目的实施&lt;br/&gt;落到一个个可交付的项目上&lt;br/&gt;← 落地执行&quot;]
+  E -.-&gt;|&quot;自下而上反馈修正&quot;| A
+  GO[&quot;所有规划都围绕&lt;br/&gt;企业关键目标而展开&quot;]
+  A -.-&gt; GO"></div><figcaption>图6-2 信息系统战略规划五层：自上而下分解、自下而上反馈</figcaption></div>
+<p>💡 <strong>IT 战略规划四步骤</strong>：业务分析（理解业务部门现在与未来）→ 检查当前 IT 架构和信息系统 → 识别机会（定义通过信息系统改进业务的机会）→ 选择方案。</p>
+<p>⚠️ <strong>四层规划最容易混</strong>：企业战略管"做什么业务"，信息系统战略管"系统架构"，IT 战略管"硬件软件环境"，IRP 管"数据"。<strong>越往下越具体、越偏技术</strong>。</p>
+<h3 id="s6-3-信息化战略-vs-企业战略-三阶段">6.3 信息化战略 vs 企业战略 · 三阶段</h3>
+<p>📈按信息化阶段分三种关系</p>
+<p>初级阶段 · 业务部门直接提需求</p>
+<p>业务部门<strong>根据现有流程或管理需要直接提需求</strong>，IT 部门按需求实施。形成的信息系统结构<strong>完全基于现有组织与业务流程</strong>，各系统分别对应特定部门或特定流程。<br>例：财务部门提财务电算化、生产部门提库房管理，各自独立实施</p>
+<p>中级阶段 · 先按战略改流程，再提需求</p>
+<p>企业已制定<strong>整体战略规划</strong>，业务部门根据企业战略，<strong>先对现有业务流程和组织结构做改进</strong>，然后各自提出信息化需求，IT 部门分别独立实施。<br>形成的信息系统结构与<strong>优化后</strong>的组织结构和业务流程相适应</p>
+<p>高级阶段 · 通盘考虑 + 统一规划分步实施</p>
+<p>企业根据整体战略规划，<strong>通盘考虑各业务部门的信息化需求</strong>，制定<strong>整体的信息化战略</strong>，统一规划、分步实施。<br>信息系统结构由企业信息化战略<strong>统一指导</strong></p>
+<p>⚖️双向关系</p>
+<p><strong>企业战略 → 信息化战略</strong>（指导）</p>
+<p>离开企业战略去规划信息系统，犹如<strong>建设海市蜃楼</strong>。</p>
+<p><strong>信息化战略 → 企业战略</strong>（支撑，甚至决定）</p>
+<p>在信息时代，信息、信息技术和信息系统不再<strong>仅仅起着支撑</strong>企业战略的作用，而是<strong>在某种程度上决定</strong>企业战略。</p>
+<p>⚠️ <strong>核心问题</strong>：保证企业信息化战略与企业战略的<strong>一致性</strong>，把企业战略目标转换为信息系统战略目标。</p>
+<p>二者分别独立运行、缺乏协调统一，是造成 <strong>"IT 黑洞"</strong>的主要原因之一。</p>
+<h3 id="s6-3-BITA-vs-EITA">6.3 BITA vs EITA ⭐</h3>
+<p>🔵BITA · 业务与 IT 整合</p>
+<p><strong>Business-IT Alignment</strong></p>
+<p><strong>以业务为导向</strong>的、全面的 IT 管理咨询实施方法论</p>
+<p>驱动方向：<strong>业务 → IT</strong>（业务驱动）</p>
+<p>路径：制定企业战略 → 建立（或改进）组织结构和业务流程 → 进行 IT 管理和制订<strong>过渡计划</strong>（Transition Plan）</p>
+<p>适用：信息系统<strong>不能满足当前管理中的业务需要</strong>，业务和 IT 之间<strong>总是有不一致</strong>的地方的企业</p>
+<p>VS</p>
+<p>🟣EITA · 企业 IT 架构</p>
+<p><strong>Enterprise IT Architecture</strong></p>
+<p><strong>分析企业战略</strong>，帮助企业<strong>制定 IT 战略</strong>，并对其<strong>投资决策</strong>进行指导</p>
+<p>驱动方向：<strong>IT → 业务战略</strong>（IT 驱动）</p>
+<p>内容：在技术、信息系统、信息、IT 组织、IT 流程方面建立<strong>原则规范、模式和标准</strong></p>
+<p>适用：现有信息系统和 IT 基础架构<strong>不一致、不兼容、缺乏统一整体管理</strong>的企业</p>
+<p>💡 <strong>相同点</strong>：BITA 和 EITA 有相同之处，甚至在某些领域有重叠，都是为了<strong>业务与 IT 战略对齐</strong>。</p>
+<p>口诀：<strong>BITA 里 B 在前 → 业务驱动 IT；EITA 里 IT 在后 → IT 驱动战略</strong>。实践中选择一种，也可以结合使用。</p>
+<p>class: dense</p>
+<h3 id="s6-3-信息系统战略规划-八方法全景">6.3 信息系统战略规划 · 八方法全景</h3>
+<p>第一阶段<strong>以数据处理为核心，围绕职能部门需求</strong>：企业系统规划法 <strong>BSP</strong> ｜ 关键成功因素法 <strong>CSF</strong> ｜ 战略集合转化法 <strong>SST</strong></p>
+<p>第二阶段<strong>以企业内部管理信息系统为核心，围绕企业整体需求</strong>：战略数据规划法 <strong>SDP</strong> ｜ 信息工程法 <strong>IE</strong> ｜ 战略栅格法 <strong>SG</strong></p>
+<p>第三阶段<strong>综合考虑企业内外环境，以集成为核心，围绕企业战略需求</strong>：价值链分析法 <strong>VCA</strong> ｜ 战略一致性模型 <strong>SAM</strong></p>
+<table><thead><tr><th>缩写</th><th>全称</th><th>提出者 / 出身</th><th>核心思想一句话</th></tr></thead><tbody><tr><td><strong>BSP</strong></td><td>企业系统规划法</td><td>IBM，20 世纪 70 年代</td><td><strong>自上而下识别，自下而上设计</strong>；识别<strong>企业过程</strong>是核心；PO / RD / CU 三矩阵</td></tr><tr><td><strong>CSF</strong></td><td>关键成功因素法</td><td>John Rockart，70 年代末</td><td>找出对企业成功起<strong>关键作用</strong>的少数因素，<strong>突出重点</strong></td></tr><tr><td><strong>SST</strong></td><td>战略集合转化法</td><td>William King，1978</td><td>把企业战略集合（使命/目标/战略/属性）<strong>转化为</strong>信息系统战略集合</td></tr><tr><td><strong>SDP</strong></td><td>战略数据规划法</td><td>詹姆斯·马丁（James Martin）</td><td>以<strong>主题数据库</strong>为核心；数据类关系<strong>相对稳定</strong>，业务流程<strong>经常变化</strong></td></tr><tr><td><strong>IE</strong></td><td>信息工程法</td><td>马丁，基于 BSP + SDP</td><td>把信息系统开发<strong>工程化</strong>；三要素 = 信息 · 过程 · 技术</td></tr><tr><td><strong>SG</strong></td><td>战略栅格法</td><td>McFarlan 等，80 年代初</td><td>2×2 栅格做<strong>诊断</strong>：战略型 / 转变型 / 工厂型 / 支持型</td></tr><tr><td><strong>VCA</strong></td><td>价值链分析法</td><td>Michael E. Porter，1989</td><td>辨识<strong>增值环节</strong>与<strong>减值环节</strong>，优先建设关键环节的信息系统</td></tr><tr><td><strong>SAM</strong></td><td>战略一致性模型</td><td>John Handerson，1994</td><td>检查<strong>企业战略与信息基础架构的一致性</strong>；四大领域内外两大部分</td></tr></tbody></table>
+<h3 id="s6-3-BSP-方法-五原则-四基本步骤">6.3 BSP 方法 · 五原则 + 四基本步骤</h3>
+<p>📜BSP 五原则</p>
+<p>①信息系统必须支持企业的<strong>战略目标</strong>（BSP 可看作一个转化过程）</p>
+<p>②信息系统的战略应当表达出企业<strong>各个管理层次</strong>的需求（战略计划层 / 管理控制层 / 操作控制层）</p>
+<p>③信息系统应该向<strong>整个企业提供一致的信息</strong>（把数据作为企业资源统一规划、管理和控制）</p>
+<p>④信息系统应该<strong>适应企业组织结构和管理体制的改变</strong>（独立于组织结构）</p>
+<p>⑤由总体信息系统结构中的<strong>子系统开始实现</strong>：自上而下规划，自下而上分步实现</p>
+<p>BSP 方法所得规划随时间变化，只是某时间内对企业信息资源的最佳认识。其<strong>真正价值在于创造一种环境和提出初步的行动计划</strong>，使企业能对将来的系统和优先次序的改变做出积极响应，不至于造成设计的重大失误。</p>
+<p>🔁四大基本步骤 + 前期准备</p>
+<p>从 BSP 的 13 个活动步骤中可总结出 <strong>4 个基本步骤</strong>：</p>
+<p><strong>① 定义管理目标　② 定义管理功能　③ 定义数据分类　④ 定义信息结构</strong></p>
+<p>🧰前期准备工作（四条）</p>
+<p>①确定规划范围，成立<strong>系统规划组 SPG</strong>；最重要的任务是选 <strong>SPG 组长</strong>，要有企业领导<strong>用全部时间参加</strong>；SPG 设秘书、若干调查小组、协调组、顾问</p>
+<p>②<strong>收集数据</strong>：企业一般情况、现有系统情况；形成业务文档、技术文档、系统文档并评审</p>
+<p>③<strong>制订计划</strong>：画出系统规划工作的 <strong>PERT 图</strong>和<strong>甘特图</strong>，准备调查表与调查提纲</p>
+<p>④<strong>开好介绍会</strong>：全体 SPG 成员和相关部门负责人都应出席，由<strong>最高层领导主持</strong>。信息化是"<strong>一把手</strong>"工程</p>
+<h3 id="s6-3-BSP-核心动作-定义企业过程">6.3 BSP 核心动作 · 定义企业过程</h3>
+<p><strong>企业过程</strong>是企业资源管理所需要的、<strong>逻辑相关的一组决策和活动</strong>。定义企业过程可以作为识别信息系统的基础——按企业过程开发的信息系统，在企业组织结构发生变化时<strong>可以不必改变</strong>，即让信息系统尽量<strong>独立于组织结构</strong>。</p>
+<p>🗂️从三类资源入手识别过程</p>
+<p>① 战略计划与管理控制</p>
+<p>把准备阶段收集的计划、关键成功因素及其度量标准组合成该类。<br><strong>战略计划</strong>＝长远计划或发展规划；<strong>管理控制</strong>＝操作计划、管理计划、资源计划</p>
+<p>② 产品 / 服务过程</p>
+<p>按产品/服务<strong>生命周期的四个阶段</strong>识别过程：<br><strong>产生 → 获得 → 服务 → 归宿</strong><br>例：服务阶段有库存控制、质量控制、包装存储</p>
+<p>③ 支持性资源过程</p>
+<ul><li>支持性资源＝"企业为实现其目标时的<strong>消耗和使用物</strong>"。</li><li>四类：<strong>材料 · 资金 · 设备 · 人员</strong>，同样按生命周期四阶段识别</li></ul>
+<p>📐过程归并的两个关键数字</p>
+<p>过程组正常情况下一般有 <strong>4 ～ 12 个</strong>过程组</p>
+<p>过程最大数便于规划的过程的最大数量是 <strong>60 个</strong></p>
+<p>资源数实体法列企业资源时，一般列出 <strong>7 ～ 15 类</strong>资源</p>
+<p>口诀：<strong>4～12 个过程组，最多 60 个过程，7～15 类资源</strong>。这三个数字是填空题的常客。</p>
+<p>class: dense</p>
+<h3 id="s6-3-BSP-三兄弟矩阵-PO-RD-CU">6.3 BSP 三兄弟矩阵 · PO / RD / CU ⭐</h3>
+<table><thead><tr><th>矩阵</th><th>横轴 × 纵轴</th><th>用来干什么</th><th>关键符号 / 考点</th></tr></thead><tbody><tr><td><strong>PO 矩阵</strong></td><td><strong>企业过程</strong> × <strong>组织</strong></td><td>把企业组织结构与企业过程联系起来，说明每个过程<strong>与组织的联系和其决策人</strong></td><td><strong>✓</strong> 负责和决策 <strong>⊥</strong> 过程主要涉及 <strong>+</strong> 过程有涉及 空白＝不涉及用途：明确调查对象、决定过程负责人提出的问题、作为管理系统手册的索引</td></tr><tr><td><strong>RD 矩阵</strong></td><td><strong>企业资源</strong> × <strong>数据类型</strong></td><td><strong>实体法</strong>识别数据类：先列出企业资源（一般 7～15 类），再看每类资源对应哪些数据</td><td>行 = <strong>存档类 / 事务类 / 计划类 / 统计类</strong>（信息生命周期：需求→分配→经营管理→获取）列 = 产品、顾客、设备、材料、厂商、资金、人事…</td></tr><tr><td><strong>CU 矩阵</strong></td><td><strong>企业过程</strong> × <strong>数据类</strong></td><td>表达企业过程与数据类之间的联系；调整后可<strong>划分子系统</strong></td><td><strong>C（Create）</strong>＝过程生成该数据类 <strong>U（User）</strong>＝过程使用该数据类调整后的 CU 矩阵可形成一个个子系统</td></tr></tbody></table>
+<p><strong>两种定义数据类的方法</strong></p>
+<p>· <strong>实体法</strong>：先列企业资源 → 列 RD 矩阵</p>
+<p>· <strong>功能法（过程法）</strong>：利用已识别的企业过程，分析每个过程的<strong>输入数据类和输出数据类</strong>，与 RD 矩阵比较并调整，最后归纳出数据类；可用 <strong>IPO 图</strong>（输入-处理-输出）表示</p>
+<p>⚠️ <strong>PO 和 CU 别搞混</strong>：<strong>PO</strong> 的横轴是"<strong>组织</strong>"（Organisation），讲的是<strong>谁决策</strong>；<strong>CU</strong> 的横轴是"<strong>数据类</strong>"，讲的是<strong>谁产生、谁使用数据</strong>。</p>
+<p>看到"✓ ⊥ +"三个符号 → PO；看到"C / U"字母 → CU。</p>
+<h3 id="s6-3-U-C-矩阵三条正确性检验">6.3 U/C 矩阵三条正确性检验 ⭐⭐</h3>
+<p>✅三条检验（必背）</p>
+<p>① 完备性</p>
+<ul><li>每个<strong>数据类</strong>必须有至少一个 <strong>C</strong>，并且至少有一个 <strong>U</strong></li><li>即：每个数据都得有人产生，也得有人用</li></ul>
+<p>② 一致性</p>
+<ul><li>每个<strong>数据类只能有一个 C</strong></li><li>即：一个数据只能有一个"源头"，不能多头产生</li></ul>
+<p>③ 无冗余性</p>
+<ul><li>不允许出现<strong>空行、空列</strong></li><li>空行＝这个企业过程没产生也没用任何数据；空列＝这个数据没人管</li></ul>
+<p>🎯用途与延伸</p>
+<p><strong>用途</strong>：按 C 所在的行列<strong>聚集成块</strong>，用来<strong>划分子系统</strong>。</p>
+<p><strong>流程位置</strong>：定义企业过程 → 定义数据类 → 形成 CU 矩阵 → 分析现有系统 → 确定管理部门要求 → 提出判断和结论 → 定义信息总体结构 → 确定优先顺序。</p>
+<p>口诀：<strong>「有 C 有 U 是完备，一列一 C 是一致，不留空行空列无冗余」</strong></p>
+<p>⚠️ <strong>出题套路</strong>：给你一张 CU 矩阵的局部，问"违反了哪条原则"。</p>
+<p>· 某列全是 U 没有 C → 违反完备性</p>
+<p>· 某列有两个 C → 违反一致性</p>
+<p>· 出现全空的行或列 → 违反无冗余性</p>
+<h3 id="s6-3-CSF-关键成功因素法">6.3 CSF · 关键成功因素法</h3>
+<p>🔑CSF 的四种类型</p>
+<p>内部 CSF针对企业内部活动　例：改善产品质量、提高工效</p>
+<p>外部 CSF与企业对外活动有关　例：满足客户企业的标准、获得对方信贷</p>
+<p>监控型 CSF对现有业务流程等进行监控　例：监测零件缺陷百分比</p>
+<p>建设型 CSF适应企业未来变化的有关活动　例：改善产品组合</p>
+<p>🏔️CSF 的四层（依次相互影响）</p>
+<ul><li>行业 CSF竞争中取胜的关键环节</li><li>可用层次分析法识别</li></ul>
+<p>企业 CSF整个企业层面</p>
+<p>部门 CSF部门层面</p>
+<p>管理人员 CSF个人层面</p>
+<p>🚶CSF 三步骤</p>
+<ul><li>① 确定企业目标</li><li>了解情况 → 访谈高层 → 分析定目标</li><li>→</li><li>② 识别 CSF</li><li>识别 → 整合排序</li><li>→</li><li>③ 确定信息需求</li><li>定性能指标 → 定关键信息需求</li></ul>
+<p>⚠️CSF 的四个缺点（教材原话）</p>
+<p>①数据的汇总和数据分析过程比较<strong>随意</strong>，缺乏专门的、严格的方法把众多个人的 CSF 汇总成整个企业的 CSF</p>
+<p>②个人和企业的 CSF 往往并不一致，界限容易被混淆，容易使企业 CSF 具有<strong>个人倾向性</strong></p>
+<p>③环境和管理经常迅速变化，CSF 方法开发的系统可能<strong>无法适应变化了的环境</strong></p>
+<p>④应用于<strong>较低层管理</strong>时，不容易找到相应目标的 CSF 及其关键指标，<strong>效率较低</strong></p>
+<p>💡 <strong>CSF 的适用面</strong>：要求高层管理人员就评价标准达成共识，<strong>对高层管理和开发决策支持系统尤其适用</strong>；抓主要矛盾，使目标识别突出重点。</p>
+<h3 id="s6-3-SST-战略集合转化法-CSB-组合">6.3 SST · 战略集合转化法 + CSB 组合</h3>
+<p>🔄SST 三步骤</p>
+<p>第一步 · 识别和阐明企业的战略集合</p>
+<p>若无书面战略规划，则构造之：<br>① 描述企业各类人员结构（卖主、经理、雇员、供应商、顾客、贷款人、政府代理人、地区社团、竞争者）</p>
+<ul><li>② 识别每类人员的目标</li><li>③ 识别其使命和战略　④ 验证企业战略集合</li></ul>
+<p>第二步 · 转化为信息系统战略集合</p>
+<p>对组织战略集合的<strong>每个元素</strong>确定对应的信息系统战略元素，然后提炼出整个信息系统的结构</p>
+<p>第三步 · 反复完善、评审、送审</p>
+<ul><li>选出最佳方案送主管领导审核。</li><li>⚠️ 由于不同组织战略集合差别很大，<strong>转化过程还不能形成形式化的算法</strong></li></ul>
+<p>⚖️BSP / CSF / SST 三者对比</p>
+<table><thead><tr><th>方法</th><th>强项</th><th>短板</th></tr></thead><tbody><tr><td><strong>CSF</strong></td><td>能<strong>抓住主要矛盾</strong>，使目标识别<strong>突出重点</strong>；所定目标与传统方法衔接得比较好</td><td>一般最有利的<strong>只是在确定管理目标上</strong></td></tr><tr><td><strong>SST</strong></td><td>反映<strong>各种人的要求</strong>，给出按这种要求的分层，再转化为信息系统目标的结构化方法；保证目标<strong>比较全面、疏漏较少</strong></td><td>在<strong>突出重点方面不如 CSF</strong></td></tr><tr><td><strong>BSP</strong></td><td>虽也强调目标，但<strong>没有明显的目标引出过程</strong>；目标转换通过对 PO / RD / CU 矩阵的分析得到，<strong>识别企业过程是 BSP 的核心</strong></td><td>——</td></tr></tbody></table>
+<p><strong>CSB 方法</strong>（三法合一）：先用 <strong>CSF</strong> 确定企业目标 → 再用 <strong>SST</strong> 补充完善企业目标并转化为信息系统目标 → 接着用 <strong>BSP</strong> 校核两个目标并确定信息系统结构。</p>
+<p>补充了单个方法的不足，但也使整个方法过于复杂，削弱了单个方法的灵活性。</p>
+<p>class: dense</p>
+<h3 id="s6-3-SDP-战略数据规划-主题数据库">6.3 SDP 战略数据规划 · 主题数据库 ⭐</h3>
+<p>詹姆斯·马丁（James Martin）的观点：企业要搞信息化，首要任务应该是在企业战略目标的指导下做好<strong>企业战略数据规划（SDP）</strong>。马丁发现了一个基本规律——<br>数据类和数据之间内在的联系是相对稳定的，而对数据处理的业务流程和步骤是经常变化的。</p>
+<p>🗃️主题数据库的四个基本特征</p>
+<p>① 面向业务主题</p>
+<p>面向业务主题的数据组织存储，<strong>不是</strong>按单证和报表的原样建立；与企业管理要解决的主要问题相关联，<strong>而不是</strong>与通常的信息系统应用项目相关联<br>典型主题库：产品、客户、零部件、供应商、订货、员工、文件资料、工程规范</p>
+<p>② 信息共享</p>
+<p>是对各个应用系统"<strong>自建自用</strong>"数据库的否定，强调建立"<strong>共建共用</strong>"的共享数据库，不同应用系统统一调用</p>
+<p>③ 一次一处输入系统</p>
+<p>强调数据的<strong>就地采集、就地处理、使用和存储</strong>，以及必要的传输、汇总和集中存储。同一数据必须一次、一处进入系统，保证准确性、及时性和完整性，但可以<strong>多次、多处使用</strong></p>
+<p>④ 由基本表组成</p>
+<p>由多个达到<strong>基本表规范（满足 3NF）</strong>要求的数据实体构成</p>
+<p>🧱四类数据环境</p>
+<p>①<strong>文件环境</strong>　不使用数据库管理系统</p>
+<p>②<strong>应用数据库环境</strong>　使用数据库管理系统</p>
+<p>③<strong>主题数据库环境</strong>　数据库的建立基本<strong>独立于具体应用</strong></p>
+<p>④<strong>信息检索系统环境</strong>　为自动信息检索、决策支持和办公自动化而设计，<strong>数据动态变化</strong></p>
+<p>💡 信息检索系统环境通常与主题数据库环境<strong>共存</strong>，把信息检索系统从生产性数据系统中分离出来，主要是考虑<strong>效率</strong>问题。</p>
+<p>⚠️ 主题数据库环境如果<strong>管理不善</strong>，会退化成文件环境或应用数据库环境。</p>
+<p>✅ 一个高效率的企业应该基本上具有 <strong>3 类或 4 类</strong>数据环境作为基础。</p>
+<p>class: dense</p>
+<h3 id="s6-3-SDP-执行过程-分布数据六形式">6.3 SDP 执行过程 + 分布数据六形式</h3>
+<p>🔬SDP 执行五过程</p>
+<p>① 企业的实体分析自顶向下确定企业实体。<strong>实体是数据的载体</strong>；实体可按联系路径的<strong>使用频率</strong>聚集成<strong>超级组</strong>，一个超级组内的实体在<strong>同一个主题数据库</strong>中实现。高频联系的实体聚在一起，不同超级组之间联系频率低</p>
+<p>② 实体活动分析一个基本活动对应一个计算机处理过程或人工处理过程；细分原则是——把活动细分到"可以用一句话说明一个活动的目的"为止</p>
+<p>③ 企业的重组实体分析不仅把组织结构转换成数据结构，还为高层提供手段，决定企业或部门应该怎样改变；实体活动分析会导致过程的重新考虑，常会提出<strong>部门或企业的重组</strong>问题</p>
+<p>④ 亲和度分析E(E1,E2) 从未被同一活动使用 = <strong>0</strong>；总是同时被每个活动使用 = <strong>1</strong>；部分共用则在 <strong>(0,1)</strong> 区间。<strong>亲和度高 → 放同一个主题数据库；反之则不能</strong></p>
+<p>⑤ 分布数据规划分<strong>定性分析</strong>（讨论分布式处理系统中各应用程序的运行位置）与<strong>定量分析</strong>（安排数据和加工处理位置，使任意两点间的流通量和相互作用尽量小）</p>
+<p>🌍分布式数据的六种基本形式</p>
+<p>复制数据相同数据在不同地方存几个副本，<strong>避免系统间的数据传输</strong></p>
+<p>子集数据外围计算机存的是大型机的<strong>数据子集</strong>；是复制数据的一种形式，但<strong>通常没有完整的模式</strong></p>
+<p>重组数据用倒排表、次索引或多个关键字，把数据从库中选出并<strong>重新组织</strong></p>
+<p>划分数据同一模型用于多台计算机，各自存<strong>不同记录</strong>，但构造形式和使用程序相同</p>
+<p>独立模式数据不同计算机含<strong>不同模式</strong>的数据、使用不同程序，由不同组织安装和使用</p>
+<p>不相容数据不同机构建立的信息系统，数据<strong>没有统一设计和规划</strong></p>
+<p>口诀：<strong>复制 · 子集 · 重组 · 划分 · 独立模式 · 不相容</strong>——从"最像"到"最不像"，六种依次松散。</p>
+<p><strong>企业模型</strong>（SDP 第一阶段）：职能范围 → 业务活动过程 → 业务活动。大型企业约有 <strong>30 个职能</strong>、<strong>150～300 个可执行过程</strong>，每个过程含 <strong>5～30 个活动</strong>。企业模型应具有<strong>完整性、适用性和持久性</strong>。大多数企业通常有 <strong>3～6 个</strong>关键成功因素。</p>
+<p>class: dense</p>
+<h3 id="s6-3-IE-SG-VCA-SAM-四方法速览">6.3 IE / SG / VCA / SAM 四方法速览</h3>
+<p>🏗️IE · 信息工程法（马丁）</p>
+<p>基础是 <strong>BSP 方法 + SDP 方法</strong>。最大的不同：<strong>不仅是一种方法，还是一门工程学科</strong>，把信息系统开发过程<strong>工程化</strong>。</p>
+<p>由四部分组成：<strong>系统的方法论 · 完备的工具集 · 信息工程环境 · 成熟的经验总结</strong></p>
+<p>三要素：<strong>信息 · 过程 · 技术</strong></p>
+<p><strong>四实施阶段</strong>：信息战略规划 → 业务领域分析 → 系统设计 → 系统构建</p>
+<p>（可细分为 7 步骤：信息战略规划、业务领域分析、业务系统设计、技术系统设计、系统构建、系统转换、系统运行）</p>
+<p>信息战略规划报告 = 摘要（≤5 页）+ 规划（40～70 页）+ 附录</p>
+<p>🎛️SG · 战略栅格法（McFarlan）</p>
+<p>2×2 栅格，依据"<strong>现有信息系统</strong>"和"<strong>规划中的信息系统</strong>"的战略影响，得出四种条件：</p>
+<p><strong>战略型</strong>：现有高 · 未来高 → 投入可观资源 + <strong>广泛高层参与</strong></p>
+<p><strong>转变型</strong>：现有低 · 未来高 → 支持型向战略型过渡，战略重点在服务</p>
+<p><strong>工厂型</strong>：现有高 · 未来低 → 没有它企业无法运转，但不提供未来竞争优势；需细致计划，但<strong>高层不必参与</strong></p>
+<p><strong>支持型</strong>：现有低 · 未来低 → 只起辅助作用；<strong>只需很少资源</strong></p>
+<p>是一种了解企业中信息系统作用的<strong>诊断工具</strong></p>
+<p>⛓️VCA · 价值链分析法（波特）</p>
+<p>视企业为一系列的<strong>输入、处理与输出的活动序列集合</strong>，每个活动都可能产生<strong>增值</strong>行为。信息技术和关键业务流程的优化是实现企业战略的关键。</p>
+<p><strong>① 确定增值环节</strong>：确定各环节在价值附加中所起作用的比例，比例大的就是关键环节。例：设价值链总分为 100 分，参与调查的人把 100 分分配到各环节，综合后得分高的就是关键环节（典型结果：制造或服务、采购最重，产品研发次之）</p>
+<p><strong>② 确定减值环节</strong>：价值减少最多的关键环节，通常也是最需要信息系统支持的环节。</p>
+<p>口诀：<strong>既要关注增值环节，也要关注减值环节</strong></p>
+<p>🧭SAM · 战略一致性模型（Handerson）</p>
+<p>帮助检查<strong>企业战略与信息基础架构之间的一致性</strong>。分<strong>内、外</strong>两大部分，由<strong>四大领域</strong>构成：</p>
+<p>· <strong>企业经营战略</strong>：产品与市场的定位选择（企业目标 · 核心能力 · 管理制度）</p>
+<p>· <strong>组织与业务流程</strong>：企业基础设施 · 业务流程 · 组织技能</p>
+<p>· <strong>信息系统战略</strong>：IT 市场中的定位（系统目标 · 系统能力 · 管理制度）</p>
+<p>· <strong>IT 基础架构</strong>：IT 基础设施 · IT 流程 · IT 技能</p>
+<p>使信息系统的战略地位<strong>从传统的内部定位提升到从内外环境获取竞争优势的关键位置</strong></p>
+<h3 id="s6-3-规划方法怎么选-三分类">6.3 规划方法怎么选 · 三分类</h3>
+<p>🧮把 SAM 当基准，其余 7 种分成三类</p>
+<p>① 保证「业务流程 ↔ 信息系统架构」一致</p>
+<p>BSP**　企业系统规划法</p>
+<p>SDP**　战略数据规划法</p>
+<p>都以"过程 / 数据"为抓手，把流程和系统架构对上</p>
+<p>② 保证「企业战略 ↔ 信息系统战略」一致</p>
+<p>SST**　战略集合转化法</p>
+<p>SG**　战略栅格法</p>
+<p>CSF**　关键成功因素法</p>
+<p>VCA**　价值链分析法</p>
+<p>③ 保证「战略 · 流程 · 架构」三者一致</p>
+<p>IE**　信息工程法（代表）</p>
+<p>覆盖最全，所以也只有它单独成一类</p>
+<p>这些方法的共同短板（教材原话）**</p>
+<p>· 都<strong>缺少模型的支持</strong>，只是对概念的描述和一般性步骤的叙述，<strong>可操作性都比较差</strong></p>
+<p>· 无法与已有的信息系统开发方法进行连接，导致<strong>信息系统和企业战略目标脱节</strong>的现象更加严重</p>
+<p>口诀：<strong>BSP·SDP 管"流程对架构"；SST·SG·CSF·VCA 管"战略对战略"；IE 一个人管三样</strong></p>
+<hr>
+<h2 id="章节练习题">章节练习题</h2>
+<hr>
+    <div class="quiz quiz-js" data-key="H12-企业信息化（一）.md">
+  <div class="quiz-head">
+    <span class="quiz-label">章节练习题</span>
+    <span class="quiz-progress">已答 0 / 6</span>
+    <button class="quiz-btn quiz-export" type="button">导出记录</button>
+    <button class="quiz-btn quiz-reset" type="button">重做</button>
+    <div class="quiz-pbar"><div class="quiz-pbar-fill"></div></div>
+  </div>
+  <div class="quiz-item" data-answer="C" data-explain="BSP（企业系统规划法）的核心是定义企业过程，用 U/C 矩阵做正确性检验，强调自上而下识别目标、自下而上设计。CSF 抓关键成功因素，SST 把战略目标集合转化为信息系统目标，SDP 侧重主题数据库与数据稳定性。" data-ref="第6章 · 6.3 信息化规划">
+  <div class="quiz-q"><span class="qn">1</span>信息化规划方法中，强调「自上而下识别系统目标、自下而上设计系统」，并以企业过程为核心、用 U/C 矩阵检验的是：</div>
+  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">关键成功因素法 CSF</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">战略目标集转化法 SST</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">企业系统规划法 BSP</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">战略数据规划法 SDP</span></div></div>
+  <div class="reveal" style="display:none">
+    <div class="reveal-verdict"></div>
+    <div class="reveal-explain">BSP（企业系统规划法）的核心是定义企业过程，用 U/C 矩阵做正确性检验，强调自上而下识别目标、自下而上设计。CSF 抓关键成功因素，SST 把战略目标集合转化为信息系统目标，SDP 侧重主题数据库与数据稳定性。</div>
+    <div class="reveal-ref">第6章 · 6.3 信息化规划</div>
+  </div>
+</div><div class="quiz-item" data-answer="D" data-explain="U/C 矩阵三条正确性检验是：完备性（每列必须有 U 和 C）、一致性（每列有且仅有一个 C）、无冗余性（不能空行空列）。安全性不属于矩阵检验项。" data-ref="第6章 · 6.3 U/C 矩阵">
+  <div class="quiz-q"><span class="qn">2</span>U/C 矩阵的正确性检验不包括下列哪一项？</div>
+  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">完备性检验</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">一致性检验</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">无冗余性检验</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">安全性检验</span></div></div>
+  <div class="reveal" style="display:none">
+    <div class="reveal-verdict"></div>
+    <div class="reveal-explain">U/C 矩阵三条正确性检验是：完备性（每列必须有 U 和 C）、一致性（每列有且仅有一个 C）、无冗余性（不能空行空列）。安全性不属于矩阵检验项。</div>
+    <div class="reveal-ref">第6章 · 6.3 U/C 矩阵</div>
+  </div>
+</div><div class="quiz-item" data-answer="B" data-explain="威廉·德雷尔（William Durell）提出信息资源管理的「十原则」，核心思想是数据位于处理之上、数据稳定性、主题数据库。BSP 三矩阵是 IBM 的方法，不是德雷尔的。" data-ref="第6章 · 6.2 信息资源管理">
+  <div class="quiz-q"><span class="qn">3</span>信息资源管理（IRM）中，威廉·德雷尔提出的著名原则是：</div>
+  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">数据位于处理之上</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">IRM 十原则</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">主题数据库规划</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">三矩阵分析法</span></div></div>
+  <div class="reveal" style="display:none">
+    <div class="reveal-verdict"></div>
+    <div class="reveal-explain">威廉·德雷尔（William Durell）提出信息资源管理的「十原则」，核心思想是数据位于处理之上、数据稳定性、主题数据库。BSP 三矩阵是 IBM 的方法，不是德雷尔的。</div>
+    <div class="reveal-ref">第6章 · 6.2 信息资源管理</div>
+  </div>
+</div><div class="quiz-item" data-answer="C" data-explain="三个阶段为：战略匹配（信息化支撑企业战略）→ 战略融合（二者交织）→ 战略驱动（信息化引领企业战略）。顺序不能颠倒，这是高频辨析点。" data-ref="第6章 · 6.3 信息化战略 vs 企业战略">
+  <div class="quiz-q"><span class="qn">4</span>关于信息化战略与企业战略的关系，三个阶段依次是：</div>
+  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">业务主导 → 技术驱动 → 战略融合</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">战略 fusion → 战略匹配 → 战略驱动</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">战略匹配 → 战略融合 → 战略驱动</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">技术驱动 → 战略匹配 → 业务主导</span></div></div>
+  <div class="reveal" style="display:none">
+    <div class="reveal-verdict"></div>
+    <div class="reveal-explain">三个阶段为：战略匹配（信息化支撑企业战略）→ 战略融合（二者交织）→ 战略驱动（信息化引领企业战略）。顺序不能颠倒，这是高频辨析点。</div>
+    <div class="reveal-ref">第6章 · 6.3 信息化战略 vs 企业战略</div>
+  </div>
+</div><div class="quiz-item" data-answer="B" data-explain="BITA（Business-IT Alignment）关注业务与 IT 的对齐；EITA（Enterprise-IT Alignment）把范围扩到企业层面，含外部伙伴与生态，范围更大。" data-ref="第6章 · 6.3 BITA vs EITA">
+  <div class="quiz-q"><span class="qn">5</span>BITA 与 EITA 的区别，正确的是：</div>
+  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">BITA 偏业务与 IT 融合，EITA 偏 IT 与业务对齐后的扩展</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">BITA 是业务—IT 对齐，EITA 是企业—IT 对齐（范围更大，含外部）</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">两者完全等价，只是叫法不同</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">EITA 是 BITA 的早期版本</span></div></div>
+  <div class="reveal" style="display:none">
+    <div class="reveal-verdict"></div>
+    <div class="reveal-explain">BITA（Business-IT Alignment）关注业务与 IT 的对齐；EITA（Enterprise-IT Alignment）把范围扩到企业层面，含外部伙伴与生态，范围更大。</div>
+    <div class="reveal-ref">第6章 · 6.3 BITA vs EITA</div>
+  </div>
+</div><div class="quiz-item" data-answer="B" data-explain="IRP 有两条主线：业务分析（梳理职能域、业务过程、业务活动）与数据分析（用户视图、数据元素、主题数据库），最终建立信息资源网。" data-ref="第6章 · 6.2 信息资源规划 IRP">
+  <div class="quiz-q"><span class="qn">6</span>信息资源规划（IRP）的核心主线是：</div>
+  <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">需求分析与系统建模两条主线</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">业务分析与数据分析两条主线</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">战略规划与技术规划两条主线</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">数据建模与功能建模两条主线</span></div></div>
+  <div class="reveal" style="display:none">
+    <div class="reveal-verdict"></div>
+    <div class="reveal-explain">IRP 有两条主线：业务分析（梳理职能域、业务过程、业务活动）与数据分析（用户视图、数据元素、主题数据库），最终建立信息资源网。</div>
+    <div class="reveal-ref">第6章 · 6.2 信息资源规划 IRP</div>
+  </div>
+</div>
+</div>
+    <section class="exam" id="exam" data-exam-chapter="6" data-exam-hour="H12"><div class="exam-bar"><span class="exam-bar-label">📚 历年真题</span><span class="exam-bar-stat">本章共 <b>67</b> 题 · 本学时 <b>34</b> 题（其余见同章其他学时）</span><span class="exam-bar-ops"><button type="button" class="exam-op" data-exam-all="1">全部展开</button><button type="button" class="exam-op" data-exam-all="0">全部收起</button></span></div><details class="exam-subject" data-exam-subject="综合知识"><summary><span class="exam-subject-name">📝 综合知识</span><span class="exam-subject-n">34 题</span><span class="exam-subject-tip">按年份展开 · 单题可点开看答案</span></summary><details class="exam-year" data-exam-year="2026年5月"><summary><span class="exam-year-name">2026年5月</span><span class="exam-year-n">4 题</span></summary><details class="exam-q" data-exam-id="2026年5月-11"><summary><span class="exam-no">第 11 题</span><span class="exam-stem-peek">下列属于显性知识的是</span></summary><div class="exam-q-body"><p class="exam-stem">下列属于显性知识的是</p><ul class="exam-opts"><li><b>A</b> 专家经验</li><li><b>B</b> 技术直觉</li><li><b>C</b> 文档规范</li><li><b>D</b> 个人技能</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">显性知识可文档化、标准化、可传递;经验、直觉、个人技能属于难以书面化的隐性知识。</p></details></div></details><details class="exam-q" data-exam-id="2026年5月-33"><summary><span class="exam-no">第 33 题</span><span class="exam-stem-peek">战略集合转化法主要用于</span></summary><div class="exam-q-body"><p class="exam-stem">战略集合转化法主要用于</p><ul class="exam-opts"><li><b>A</b> 数据库设计</li><li><b>B</b> 信息系统战略规划</li><li><b>C</b> 软件测试</li><li><b>D</b> 面向对象设计</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">SST(战略集合转化法)、BSP、CSF均为信息系统战略规划主流方法。</p></details></div></details><details class="exam-q" data-exam-id="2026年5月-48"><summary><span class="exam-no">第 48 题</span><span class="exam-stem-peek">“采购→生产→销售”属于</span></summary><div class="exam-q-body"><p class="exam-stem">“采购→生产→销售”属于</p><ul class="exam-opts"><li><b>A</b> ERP</li><li><b>B</b> CRM</li><li><b>C</b> SCM</li><li><b>D</b> DSS</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">SCM供应链管理覆盖采购、生产、仓储、销售全业务链路。</p></details></div></details><details class="exam-q" data-exam-id="2026年5月-53"><summary><span class="exam-no">第 53 题</span><span class="exam-stem-peek">业务流程的三要素包括对象、活动以及</span></summary><div class="exam-q-body"><p class="exam-stem">业务流程的三要素包括对象、活动以及</p><ul class="exam-opts"><li><b>A</b> 接口</li><li><b>B</b> 实体</li><li><b>C</b> 数据库</li><li><b>D</b> 类图</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">业务流程标准三要素:对象、活动、实体。</p></details></div></details></details><details class="exam-year" data-exam-year="2025年5月"><summary><span class="exam-year-name">2025年5月</span><span class="exam-year-n">5 题</span></summary><details class="exam-q" data-exam-id="2025年5月-12"><summary><span class="exam-no">第 12 题</span><span class="exam-stem-peek">常见的企业信息化方法包括()</span></summary><div class="exam-q-body"><p class="exam-stem">常见的企业信息化方法包括()</p><ul class="exam-opts"><li><b>A</b> 业务流程重组、核心业务应用、建设信息系统、主题数据库</li><li><b>B</b> 企业战略规划、核心业务应用、建设信息系统、主题数据库</li><li><b>C</b> 企业战略规划、业务流程重组、核心业务应用、资源管理</li><li><b>D</b> 企业战略规划、业务流程重组、主题数据库、资源管理</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">企业信息化方法: (1)业务流程重组方法。利用信息技术,对企业的组织结构和工作方法进行“彻底的、根本性的”重新设计。 (2)核心业务应用方法。围绕核心业务应用信息技术是很多企业信息化成功的秘诀。 (3)信息系统建设方法。对大多数企业来说,企业信息化的重点和关键是建设好信息系统。因此,信息系统建设成了最具普遍意义的企业信息化方法。 (4)主题数据库方法。主题数据库就是面向企业业务主题的数据库,也就是面向企业的核心业务的数据库。 (5)资源管理方法。管理好企业的资源是企业管理的永恒主题。信息技术的应用为企业资源管理提供了强大的支持。</p></details></div></details><details class="exam-q" data-exam-id="2025年5月-21"><summary><span class="exam-no">第 21 题</span><span class="exam-stem-peek">信息资源分类中(21)是指通过设置一级、二级和三级类目以提高分类信息利用和查找效率</span></summary><div class="exam-q-body"><p class="exam-stem">信息资源分类中(21)是指通过设置一级、二级和三级类目以提高分类信息利用和查找效率</p><ul class="exam-opts"><li><b>A</b> 信息来源维度分类</li><li><b>B</b> 信息存储技术分类</li><li><b>C</b> 应用主题维度分类</li><li><b>D</b> 管理维度分类</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">信息资源分类的主要功能是用于 IRM,而 IRM 的起点和基础是建立信息资源目录。对信息资源的分类一般从以下三个维度展开: (1)从管理维度分类。从信息资源建立的最初目的来看,一般信息资源都是在业务信息化基础上形成的各种信息。管理维度的分类一般有两种情况:一是专门的业务部门所采用的分类体系;二是综合部门从信息资源登记和管理的角度提出的分类。 (2)从信息来源维度分类。这种分类体系比较简单,一般按照信息资源提供部门来设置信息资源的一级、二级乃至三级类目。最大优势在于两个方面:一是从分类信息的赋值角度极大地简化了工作量。二是使用者不需要学习或者了解特定分类体系的内容,使信息资源的查找过程更加简单和直接 (3)从应用主题维度分类。这种分类体系最复杂。同一个信息资源根据其服务和应用的目标不同,会有不同的分类方式。尤其对于政府部门产生的信息资源,从政府部门之间跨部门应用角度提出的分类体系与服务于企业和公众的信息资源分类体系必然有很大的不同,这是由不同的信息资源使用者的应用需求决定的,有多少不同的应用需求就有多少相应的信息资源分类方式。</p></details></div></details><details class="exam-q" data-exam-id="2025年5月-23"><summary><span class="exam-no">第 23 题</span><span class="exam-stem-peek">信息资源管理的基础标准中,(23)包含了命名标准、标识标准和一致性标准</span></summary><div class="exam-q-body"><p class="exam-stem">信息资源管理的基础标准中,(23)包含了命名标准、标识标准和一致性标准</p><ul class="exam-opts"><li><b>A</b> 逻辑数据库标准</li><li><b>B</b> 数据元素标准</li><li><b>C</b> 概念数据库标准</li><li><b>D</b> 信息分类编码标准</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">IRM 的基础标准: (1)数据元素标准。数据元素是最小不可再分的信息单位,是一类数据的总称,它是数据对象的抽象。数据元素标准又可分为命名标准、标识标准和一致性标准。 (2)信息分类编码标准。信息分类就是根据信息内容的属性或特征,将信息按一定的原则和方法进行区分和归类,并建立起一定的分类系统和排列顺序,以便管理和使用信息。是信息资源标准中最基础的标准。 (3)用户视图标准。用户视图是一些数据元素的集合,它反映了最终用户对数据实体的看法。用户视图是数据在系统外部而不是内部的表象,是系统的输入或输出的媒介或手段。 (4)概念数据库标准。概念数据库是最终用户对数据存储的看法,是对用户信息需求的综合概括。概念数据库标准包括数据库名称、标识、主关键字和数据内容列表。 (5)逻辑数据库标准。逻辑数据库是系统分析与设计的基础,是对概念数据库的进一步分解和细化,一个逻辑主题数据库由一组规范化的基本表构成。</p></details></div></details><details class="exam-q" data-exam-id="2025年5月-56"><summary><span class="exam-no">第 56 题</span><span class="exam-stem-peek">电子政务的应用场景不包括 ()</span></summary><div class="exam-q-body"><p class="exam-stem">电子政务的应用场景不包括 ()</p><ul class="exam-opts"><li><b>A</b> 政府对政府</li><li><b>B</b> 政府对企业</li><li><b>C</b> 政府对公务员</li><li><b>D</b> 公务员对群众</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">电子政务标准分类为G2G(政府对政府)、G2E(政府对公务员)、G2B(政府对企业)、G2C(政府对公众),场景必须以政府作为参与主体,不存在公务员直接对群众的分类场景。</p></details></div></details><details class="exam-q" data-exam-id="2025年5月-70"><summary><span class="exam-no">第 70 题</span><span class="exam-stem-peek">企业资源计划(ERP)的主要功能不包括 ()</span></summary><div class="exam-q-body"><p class="exam-stem">企业资源计划(ERP)的主要功能不包括 ()</p><ul class="exam-opts"><li><b>A</b> 生产控制</li><li><b>B</b> 物流管理</li><li><b>C</b> 财务管理</li><li><b>D</b> 客户关系管理</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">ERP原生核心模块包含财会管理、物流管理、生产控制管理、人力资源管理;客户关系管理CRM是独立配套业务系统,不属于ERP原生功能范畴。</p></details></div></details></details><details class="exam-year" data-exam-year="2024年5月"><summary><span class="exam-year-name">2024年5月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2024年5月-32"><summary><span class="exam-no">第 32 题</span><span class="exam-stem-peek">产品的生命周期一般包括 5 个阶段,分别是()</span></summary><div class="exam-q-body"><p class="exam-stem">产品的生命周期一般包括 5 个阶段,分别是()</p><ul class="exam-opts"><li><b>A</b> 培育期、发展期、成熟期、衰退期、结束期</li><li><b>B</b> 培育期、成长期、成熟期、衰退期、结束期</li><li><b>C</b> 初始期、成长期、成熟期、衰退期、结束期</li><li><b>D</b> 初始期、发展期、成长期、成熟期、结束期</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">通用产品生命周期规范划分是培育期、成长期、成熟期、衰退期、结束期五个阶段。</p></details></div></details><details class="exam-q" data-exam-id="2024年5月-69"><summary><span class="exam-no">第 69 题</span><span class="exam-stem-peek">面向服务的开发方法有三个主要的抽象级别,按抽象级别从低到高分别是()</span></summary><div class="exam-q-body"><p class="exam-stem">面向服务的开发方法有三个主要的抽象级别,按抽象级别从低到高分别是()</p><ul class="exam-opts"><li><b>A</b> 服务、操作、业务流程</li><li><b>B</b> 操作、业务流程、服务</li><li><b>C</b> 操作、服务、业务流程</li><li><b>D</b> 服务、业务流程、操作</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">面向服务架构抽象层级从低到高排序:最底层是最小粒度的可执行操作,多个强关联操作封装为独立服务,多个服务按照业务规则编排形成顶层的业务流程。</p></details></div></details></details><details class="exam-year" data-exam-year="2023年5月"><summary><span class="exam-year-name">2023年5月</span><span class="exam-year-n">4 题</span></summary><details class="exam-q" data-exam-id="2023年5月-01"><summary><span class="exam-no">第 1 题</span><span class="exam-stem-peek">信息系统的构成包括( )。</span></summary><div class="exam-q-body"><p class="exam-stem">信息系统的构成包括( )。</p><ul class="exam-opts"><li><b>A</b> 计算机硬件、计算机软件、网络和通信设备、系统分析人员、系统设计人员、系统开发人员</li><li><b>B</b> 计算机硬件、计算机软件、系统分析人员、系统设计人员、系统开发人员</li><li><b>C</b> 计算机硬件、计算机软件、系统设计人员、系统开发人员、信息用户</li><li><b>D</b> 计算机硬件、计算机软件、网络和通信设备、信息资源、信息用户和规章制度</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">信息系统的构成包含维持系统全生命周期运行的全部要素,覆盖硬件、软件、网络通信设施、核心信息资源、使用维护的信息用户以及规范运行的规章制度,对比选项可直接选出D。</p></details></div></details><details class="exam-q" data-exam-id="2023年5月-04"><summary><span class="exam-no">第 4 题</span><span class="exam-stem-peek">业务流程重组强调以业务流程为改造对象、以( )为目标、对现有的业务流程进行再造,利用先进的制造技术、信息技术以及现代的管…</span></summary><div class="exam-q-body"><p class="exam-stem">业务流程重组强调以业务流程为改造对象、以( )为目标、对现有的业务流程进行再造,利用先进的制造技术、信息技术以及现代的管理手段、最大限度地实现技术上的功能集成和管理上的职能重建,以打破传统的职能型组织结构,建立全新的过程型组织结构,从而实现企业经营在成本、质量、服务和速度等方面的突破性的改善。</p><ul class="exam-opts"><li><b>A</b> 客户的需求和满意度</li><li><b>B</b> 系统的质量</li><li><b>C</b> 企业的高收益</li><li><b>D</b> 企业的经营成本</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">业务流程重组(BPR)的核心目标是满足客户需求、提升客户满意度,围绕客户体验重构业务流程,实现成本、质量、服务、速度多维度优化。</p></details></div></details><details class="exam-q" data-exam-id="2023年5月-21"><summary><span class="exam-no">第 21 题</span><span class="exam-stem-peek">21-22.数据治理模型包括三个框架,显示了数据治理内部的逻辑关系,其中,范围展示了具体应该关注什么,( )是数据治理的…</span></summary><div class="exam-q-body"><p class="exam-stem">21-22.数据治理模型包括三个框架,显示了数据治理内部的逻辑关系,其中,范围展示了具体应该关注什么,( )是数据治理的推动因素,( )体现了如何实现治理的方法。 (本题为第 1 空)</p><ul class="exam-opts"><li><b>A</b> 使用类型</li><li><b>B</b> 安全因素</li><li><b>C</b> 用户访问</li><li><b>D</b> 促成因素</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">本题属于超纲考点,数据治理模型三大框架分工:范围明确治理关注范畴,促成因素是推动治理落地的驱动力,执行及评估规范治理实施与考核的具体方法。</p></details></div></details><details class="exam-q" data-exam-id="2023年5月-23"><summary><span class="exam-no">第 23 题</span><span class="exam-stem-peek">基于统一的( ),数字化转型和云化转型能够把数字化转型工作重心放在业务应用上,从而使得数字化转型的目标重新回归到业务应用…</span></summary><div class="exam-q-body"><p class="exam-stem">基于统一的( ),数字化转型和云化转型能够把数字化转型工作重心放在业务应用上,从而使得数字化转型的目标重新回归到业务应用本身,通过云原生来提升业务应用的迭代速度,促进业务创新。</p><ul class="exam-opts"><li><b>A</b> 基础平台、软件架构、开发流程</li><li><b>B</b> 基础平合、软件架构、管理模式</li><li><b>C</b> 基础平台、服务架构、管理模式</li><li><b>D</b> 软件架构、服务架构、管理模式</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">本题为架构第二版教材新增的超纲知识点,统一的基础平台、软件架构、开发流程是云原生数字化转型的底层支撑,可让转型聚焦业务应用本身。</p></details></div></details></details><details class="exam-year" data-exam-year="2022年5月"><summary><span class="exam-year-name">2022年5月</span><span class="exam-year-n">3 题</span></summary><details class="exam-q" data-exam-id="2022年5月-19"><summary><span class="exam-no">第 19 题</span><span class="exam-stem-peek">企业信息化工程是将(19)相结合,改善企业的经营、管理、产品开发和生产等各个环节,提高生产效率、产品质量和企业的创新能力…</span></summary><div class="exam-q-body"><p class="exam-stem">企业信息化工程是将(19)相结合,改善企业的经营、管理、产品开发和生产等各个环节,提高生产效率、产品质量和企业的创新能力,从而实现产品设计制造和企业管理的信息化、生产过程的智能化、制造装备的数控化以及咨询服务的网络化,全面提高我国企业的竞争力。</p><ul class="exam-opts"><li><b>A</b> 信息技术、自动化技术、现代管理技术、制造技术</li><li><b>B</b> 信息技术、自动化技术、现代管理技术、建模技术</li><li><b>C</b> 信息技术、测试技术、现代管理技术、制造技术</li><li><b>D</b> 需求分析技术、建模技术、测试技术、现代管理技术</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">企业信息化工程(Enterprise Information Engineer,简称EIE)是指将信息技术,自动化技术,现代管理技术与制造技术相结合,改善制造企业的经营、管理、产品开发和生产等各个环节,提高生产效率、产品质量和企业创新能力,降低消耗,带动产品设计方法和设计工具的创新、企业管理模式的创新、制造技术的创新以及企业间协作关系的创新,从而实现产品设计制造和企业管理的信息化、生产过程智能化、制造装备的数控化以及咨询服务的网络化,全面提高我国企业的竞争力。</p></details></div></details><details class="exam-q" data-exam-id="2022年5月-25"><summary><span class="exam-no">第 25 题</span><span class="exam-stem-peek">智能制造系统架构从生命周期、系统层级和智能特征3个维度对智能制造所涉及的活动、装备、特征等内容进行描述,主要用于明确智能…</span></summary><div class="exam-q-body"><p class="exam-stem">智能制造系统架构从生命周期、系统层级和智能特征3个维度对智能制造所涉及的活动、装备、特征等内容进行描述,主要用于明确智能制造的(24),指导国家智能制造标准体系建设。其中,系统层级是对与企业生产活动相关的组织结构的层级划分,包括(25)。 1. 生命周期:生命周期涵盖从产品原型研发到产品回收再制造的各个阶段,包括设计、生产、物流、销售、服务等一系列相互联系的价值创造活动。生命周期的各项活动可进行迭代优化,具有可持续性发展等特点,不同行业的生命周期构成和时间顺序不尽相同。 (1)设计是根据企业的所有约束条件以及所选择的技术来对需求进行实现和优化的过程; (2)生产是指将物料进行加工、运送、装配、检验等活动创造产品的过程; (3)物流是指物品从供应地向接收地的实体流动过程; (4)销售是指产品或商品等从企业转移到客户手中的经营活动; (5)服务是指产品提供者与客户接触过程中所产生的一系列活动的过程及其结果。 2. 系统层级:系统层级是指与企业生产活动相关的组织结构的层级划分,包括设备层、单元层、车间层、企业层和协同层。 (1)设备层是指企业利用传感器、仪器仪表、机器、装置等,实现实际物理流程并感知和操控物理流程的层级; (2)单元层是指用于企业内处理信息、实现监测和控制物理流程的层级; (3)车间层是实现面向工厂或车间的生产管理的层级; (4)企业层是实现面向企业经营管理的层级; (5)协同层是企业实现其内部和外部信息互联和共享,实现跨企业间业务协同的层级。 3. 智能特征:智能特征是指制造活动具有的自感知、自决策、自执行、自学习、自适应之类功能的表征,包括资源要素、互联互通、融合共享、系统集成和新兴业态等5层智能化要求。 (1)资源要素是指企业从事生产时所需要使用的资源或工具及其数字化模型所在的层级; (2)互联互通是指通过有线或无线网络、通信协议与接口,实现资源要素之间的数据传递与参数语义交换的层级; (3)融合共享是指在互联互通的基础上,利用云计算、大数据等新一代信息通信技术,实现信息协同共享的层级; (4)系统集成是指企业实现智能制造过程中的装备、生产单元、生产线、数字化车间、智能工厂之间,以及智能制造系统之间的数据交换和功能互连的层级; (5)新兴业态是基于物理空间不同层级资源要素和数字空间集成与融合的数据、模型及系统,建立的涵盖了认知、诊断、预测及决策等功能,且支持迭代优化的层级。 (本题为第 2 空)</p><ul class="exam-opts"><li><b>A</b> 设备层、单元层、车间层、企业层和应用层</li><li><b>B</b> 设备层、单元层、传输层、企业层和应用层</li><li><b>C</b> 设备层、单元层、传输层、企业层和协同层</li><li><b>D</b> 设备层、单元层、车间层、企业层和协同层</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">智能制造系统架构从生命周期、系统层级和智能特征等3个维度对智能制造所涉及的要素、装备、活动等内容进行描述,主要用于明确智能制造的标准化对象和范围。</p></details></div></details><details class="exam-q" data-exam-id="2022年5月-36"><summary><span class="exam-no">第 36 题</span><span class="exam-stem-peek">在企业信息化中,(36)的主要方法有业务与IT整合和企业IT架构构建。下面关于上述两种方法的说法中,不正确的是(37)。…</span></summary><div class="exam-q-body"><p class="exam-stem">在企业信息化中,(36)的主要方法有业务与IT整合和企业IT架构构建。下面关于上述两种方法的说法中,不正确的是(37)。 (1)业务与IT整合(BITA):是一种以业务为导向的、全面的IT管理咨询实施方法论。从制订企业战略、建立(或改进)企业组织结构和业务流程,到进行IT管理和制订过渡计划,使IT能够更好地为企业战略和目标服务。BITA适用于信息系统不能满足当前管理中的业务需要,业务和IT之间总是有不一致的地方的场景。 (2)企业IT架构(EITA):分析企业战略,帮助企业制订IT战略,并对其投资决策进行指导。在技术、信息系统、信息、IT组织和IT流程方面,帮助企业建立IT的原则规范、模式和标准。EITA适用于现有信息系统和IT基础架构不一致、不兼容和缺乏统一整体管理的企业。 两种方法存在不少重合的应用领域,因此A选项说法错误。 (本题为第 1 空)</p><ul class="exam-opts"><li><b>A</b> 信息架构继承</li><li><b>B</b> 企业战略与信息化战略集成</li><li><b>C</b> 信息化规划与业务整合</li><li><b>D</b> 信息化规划与企业战略规划</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">企业战略与信息化战略集成的主要方法有BITA(Business-IT Alignment,业务与IT整合)和EITA(Enterprise IT Architecture,企业IT架构):</p></details></div></details></details><details class="exam-year" data-exam-year="2021年5月"><summary><span class="exam-year-name">2021年5月</span><span class="exam-year-n">7 题</span></summary><details class="exam-q" data-exam-id="2021年5月-19"><summary><span class="exam-no">第 19 题</span><span class="exam-stem-peek">企业信息化规划涉及多个领域的融合,它是企业战略、管理规划、业务流程重组等内容的综合规划活动。其中,( )规划是评价环境和…</span></summary><div class="exam-q-body"><p class="exam-stem">企业信息化规划涉及多个领域的融合,它是企业战略、管理规划、业务流程重组等内容的综合规划活动。其中,( )规划是评价环境和企业现状,进而选择和确定企业的总体和长远目标,制定和抉择实现目标的行动方案。</p><ul class="exam-opts"><li><b>A</b> 企业战略</li><li><b>B</b> 企业目标</li><li><b>C</b> 业务目标</li><li><b>D</b> 企业管理</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">企业战略规划的定义就是分析企业内外部环境、梳理现状,确立企业长期总体发展目标,制定落地行动方案的顶层规划工作。</p></details></div></details><details class="exam-q" data-exam-id="2021年5月-21"><summary><span class="exam-no">第 21 题</span><span class="exam-stem-peek">决策支持系统(DSS)是辅助决策者通过数据、模型和知识,以人机交互方式进行半结构化或非结构化决策的计算机应用系统。其中,…</span></summary><div class="exam-q-body"><p class="exam-stem">决策支持系统(DSS)是辅助决策者通过数据、模型和知识,以人机交互方式进行半结构化或非结构化决策的计算机应用系统。其中,( )可以建立适当的算法产生决策方案,使决策方案得到较优解。</p><ul class="exam-opts"><li><b>A</b> 结构化和半结构化决策</li><li><b>B</b> 半结构化决策</li><li><b>C</b> 非结构化决策</li><li><b>D</b> 半结构化和非结构化决策</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">半结构化决策存在可遵循的规律但无法完全确定全局最优解,能够建立对应算法生成较优决策方案;非结构化决策无固定决策规律,无法通过算法得到较优解;结构化决策可直接求得最优解。</p></details></div></details><details class="exam-q" data-exam-id="2021年5月-24"><summary><span class="exam-no">第 24 题</span><span class="exam-stem-peek">信息系统战略规划方法中的战略一致性模型由( )领域构成。</span></summary><div class="exam-q-body"><p class="exam-stem">信息系统战略规划方法中的战略一致性模型由( )领域构成。</p><ul class="exam-opts"><li><b>A</b> 企业经营管理、组织与业务流程、信息系统战略</li><li><b>B</b> 企业经营战略、信息系统战略、组织与业务流程、IT基础架构</li><li><b>C</b> 企业战略、业务流程、信息系统、IT基础架构</li><li><b>D</b> 企业规划战略、组织与业务流程、信息系统战略</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">战略一致性模型(SAM)包含四大核心领域:企业经营战略、组织与业务流程、信息系统战略、IT基础架构,用于实现企业业务战略与信息化建设的双向对齐。</p></details></div></details><details class="exam-q" data-exam-id="2021年5月-26"><summary><span class="exam-no">第 26 题</span><span class="exam-stem-peek">业务流程重组(BPR)遵循的原则不包括( )。</span></summary><div class="exam-q-body"><p class="exam-stem">业务流程重组(BPR)遵循的原则不包括( )。</p><ul class="exam-opts"><li><b>A</b> 以流程为中心的原则</li><li><b>B</b> 利润最大化的原则</li><li><b>C</b> 以客户为导向的原则</li><li><b>D</b> 以人为本的原则</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">BPR以长期业务效率、客户价值、可持续发展为目标,不将短期利润最大化作为核心遵循原则;其公认三大核心原则为:以流程为中心、以客户为导向、以人为本(团队式管理)。</p></details></div></details><details class="exam-q" data-exam-id="2021年5月-33"><summary><span class="exam-no">第 33 题</span><span class="exam-stem-peek">ERP将( )和企业内部的采购、生产、销售以及客户紧密联系起来,可对供应链上的所有环节进行有效管理。</span></summary><div class="exam-q-body"><p class="exam-stem">ERP将( )和企业内部的采购、生产、销售以及客户紧密联系起来,可对供应链上的所有环节进行有效管理。</p><ul class="exam-opts"><li><b>A</b> 供应商</li><li><b>B</b> 开发商</li><li><b>C</b> 销售渠道</li><li><b>D</b> 建设商</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">ERP打通上游供应商、企业内部产供销环节、下游终端客户的全供应链链路,实现端到端的供应链管控。</p></details></div></details><details class="exam-q" data-exam-id="2021年5月-35"><summary><span class="exam-no">第 35 题</span><span class="exam-stem-peek">信息资源管理(IRM)包括强调对数据控制的( ),和关心企业管理人员如何获取和处理信息的信息处理管理。</span></summary><div class="exam-q-body"><p class="exam-stem">信息资源管理(IRM)包括强调对数据控制的( ),和关心企业管理人员如何获取和处理信息的信息处理管理。</p><ul class="exam-opts"><li><b>A</b> 数据来源管理</li><li><b>B</b> 信息架构管理</li><li><b>C</b> 信息来源管理</li><li><b>D</b> 数据资源管理</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">IRM分为两大分支:数据资源管理(侧重数据全生命周期管控、维护与安全)、信息处理管理(侧重人员信息获取、加工的流程规范)。</p></details></div></details><details class="exam-q" data-exam-id="2021年5月-37"><summary><span class="exam-no">第 37 题</span><span class="exam-stem-peek">电子商务是指买卖双方利用现代开放的Internet网络,按照一定的标准所进行的各类商业活动。电子商务可具有不同的模式,其…</span></summary><div class="exam-q-body"><p class="exam-stem">电子商务是指买卖双方利用现代开放的Internet网络,按照一定的标准所进行的各类商业活动。电子商务可具有不同的模式,其中个人工作者给消费者提供服务属于( )。</p><ul class="exam-opts"><li><b>A</b> B2B</li><li><b>B</b> C2C</li><li><b>C</b> B2C</li><li><b>D</b> C2B</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">C2C即消费者对消费者模式,交易双方均为个体个人,个人工作者属于个体消费者,面向普通消费者提供服务符合C2C模式定义;B2B是企业对企业、B2C是企业对消费者、C2B是消费者对企业。</p></details></div></details></details><details class="exam-year" data-exam-year="2020年11月"><summary><span class="exam-year-name">2020年11月</span><span class="exam-year-n">5 题</span></summary><details class="exam-q" data-exam-id="2020年11月-20"><summary><span class="exam-no">第 20 题</span><span class="exam-stem-peek">(19)是一套为企业运营提供辅助决策和日常管理信息的大规模集成化软件,同时也是辅助企业管理向零缺陷趋近的一整套现代化管理…</span></summary><div class="exam-q-body"><p class="exam-stem">(19)是一套为企业运营提供辅助决策和日常管理信息的大规模集成化软件,同时也是辅助企业管理向零缺陷趋近的一整套现代化管理思想和办公手段。它将供应商和企业内部的采购、(20)、销售以及客户紧密联系起来,可对(21)上的所有环节进行有效管理,实现对企业的动态控制和资源的集成和优化,提升基础管理水平,追求资源的合理高效利用。</p><ul class="exam-opts"><li><b>A</b> 人力</li><li><b>B</b> 生产</li><li><b>C</b> 培训</li><li><b>D</b> 交付</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">ERP打通上下游供应链,覆盖企业内部采购、生产、销售三大核心业务环节,实现端到端的业务管控。</p></details></div></details><details class="exam-q" data-exam-id="2020年11月-22"><summary><span class="exam-no">第 22 题</span><span class="exam-stem-peek">客户关系管理系统的核心是客户(22)管理, 其目的是与客户建立长期和有效的业务关系,最大限度地增加利润。(23)和客户服…</span></summary><div class="exam-q-body"><p class="exam-stem">客户关系管理系统的核心是客户(22)管理, 其目的是与客户建立长期和有效的业务关系,最大限度地增加利润。(23)和客户服务是 CRM 的支柱性功能,是客户与企业产生联系的主要方面。</p><ul class="exam-opts"><li><b>A</b> 信息</li><li><b>B</b> 价值</li><li><b>C</b> 需求</li><li><b>D</b> 变更</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">CRM客户关系管理的核心是客户全生命周期价值管理,通过精细化运营提升客户留存与复购,实现企业长期利润最大化。</p></details></div></details><details class="exam-q" data-exam-id="2020年11月-24"><summary><span class="exam-no">第 24 题</span><span class="exam-stem-peek">商业智能(BI)主要关注如何从业务数据中提取有用的信息,然后根据这些信息采取相应的行动,其核心是构建(24)。</span></summary><div class="exam-q-body"><p class="exam-stem">商业智能(BI)主要关注如何从业务数据中提取有用的信息,然后根据这些信息采取相应的行动,其核心是构建(24)。</p><ul class="exam-opts"><li><b>A</b> ER模型</li><li><b>B</b> 消息中心</li><li><b>C</b> 数据仓库</li><li><b>D</b> 业务模型</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">商业智能BI的核心是构建数据仓库,用来整合分散的多源业务数据,为后续多阶段数据分析、业务决策提供统一的数据基础。</p></details></div></details><details class="exam-q" data-exam-id="2020年11月-31"><summary><span class="exam-no">第 31 题</span><span class="exam-stem-peek">企业应用集成多个层次中,(31)是把用户界面作为公共的集成点,把原有零散的系统界面集中在一个新的界面中的集成类型。</span></summary><div class="exam-q-body"><p class="exam-stem">企业应用集成多个层次中,(31)是把用户界面作为公共的集成点,把原有零散的系统界面集中在一个新的界面中的集成类型。</p><ul class="exam-opts"><li><b>A</b> 表示集成</li><li><b>B</b> 数据集成</li><li><b>C</b> 控制集成</li><li><b>D</b> 业务流程集成</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">表示集成也叫界面集成,是最浅层的EAI集成方式,通过统一的前端界面整合多个零散系统的入口,后端系统无需改动。</p></details></div></details><details class="exam-q" data-exam-id="2020年11月-37"><summary><span class="exam-no">第 37 题</span><span class="exam-stem-peek">企业战略与信息化战略集成方法中,(37)适用于现有信息系统和IT基础架构不一致、不兼容和缺乏统一的整体管理的企业。</span></summary><div class="exam-q-body"><p class="exam-stem">企业战略与信息化战略集成方法中,(37)适用于现有信息系统和IT基础架构不一致、不兼容和缺乏统一的整体管理的企业。</p><ul class="exam-opts"><li><b>A</b> 信息架构</li><li><b>B</b> 企业IT架构</li><li><b>C</b> 业务与IT整合</li><li><b>D</b> 结构化方法</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">企业IT架构可以搭建统一的信息化顶层蓝图,解决企业原有IT系统异构、架构割裂、缺乏统一管控体系的问题,适配这类企业的整合需求。</p></details></div></details></details><details class="exam-year" data-exam-year="2019年5月"><summary><span class="exam-year-name">2019年5月</span><span class="exam-year-n">4 题</span></summary><details class="exam-q" data-exam-id="2019年5月-20"><summary><span class="exam-no">第 20 题</span><span class="exam-stem-peek">()管理则关心企业管理人员如何获取和处理信息(流程和方法)且强调企业中信息资源的重要性。</span></summary><div class="exam-q-body"><p class="exam-stem">()管理则关心企业管理人员如何获取和处理信息(流程和方法)且强调企业中信息资源的重要性。</p><ul class="exam-opts"><li><b>A</b> 信息处理</li><li><b>B</b> 流程重组</li><li><b>C</b> 组织机构</li><li><b>D</b> 业务方法</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">信息处理管理聚焦于设计信息获取、流转、加工的流程规范与落地方法,面向企业管理人员的业务使用需求,突出信息资源的业务价值。</p></details></div></details><details class="exam-q" data-exam-id="2019年5月-22"><summary><span class="exam-no">第 22 题</span><span class="exam-stem-peek">IRP 的过程大致可以分为 7 个步骤,其中()步骤的主要工作是用户视图收集、分组、分析和数据元素分析;</span></summary><div class="exam-q-body"><p class="exam-stem">IRP 的过程大致可以分为 7 个步骤,其中()步骤的主要工作是用户视图收集、分组、分析和数据元素分析;</p><ul class="exam-opts"><li><b>A</b> 业务流程分析</li><li><b>B</b> 数据需求分析</li><li><b>C</b> 业务需求分析</li><li><b>D</b> 关联模型分析</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">数据需求分析阶段的核心工作就是完成用户视图的收集、分组、分析以及数据元素的梳理分析,匹配题干描述。</p></details></div></details><details class="exam-q" data-exam-id="2019年5月-24"><summary><span class="exam-no">第 24 题</span><span class="exam-stem-peek">IRP 的过程大致可以分为 7 个步骤,其中()步骤的主要工作是子系统定义、功能模块定义和程序单元定义。 ```merm…</span></summary><div class="exam-q-body"><p class="exam-stem">IRP 的过程大致可以分为 7 个步骤,其中()步骤的主要工作是子系统定义、功能模块定义和程序单元定义。 ```mermaid flowchart TD A[&quot;征求业务和信息部门初步意见&quot;] --&gt; B[&quot;业务需求分析&lt;br/&gt;职能域分析&lt;br/&gt;业务域定义&lt;br/&gt;业务流程梳理&quot;] A --&gt; C[&quot;数据需求分析&lt;br/&gt;用户视图收集&lt;br/&gt;用户视图分组、分析&lt;br/&gt;数据元素分析&quot;] B --&gt; D[&quot;IRM基础标准&quot;] C --&gt; D D --&gt; E[&quot;系统功能建模&lt;br/&gt;子系统定义&lt;br/&gt;功能模块定义&lt;br/&gt;程序单元定义&quot;] D --&gt; F[&quot;系统数据建模&lt;br/&gt;主题数据库定义&lt;br/&gt;基本表定义&lt;br/&gt;扩展表定义&quot;] E &lt;--&gt; G[&quot;业务模型&lt;br/&gt;数据模型&quot;] F &lt;--&gt; G E --&gt; H[&quot;关联模型(CU矩阵)&quot;] F --&gt; H ``` ```mermaid flowchart TD A[&quot;征求业务和信息部门初步意见&quot;] --&gt; B[&quot;业务需求分析&lt;br/&gt;职能域分析&lt;br/&gt;业务域定义&lt;br/&gt;业务流程梳理&quot;] A --&gt; C[&quot;数据需求分析&lt;br/&gt;用户视图收集&lt;br/&gt;用户视图分组、分析&lt;br/&gt;数据元素分析&quot;] B --&gt; D[&quot;IRM基础标准&quot;] C --&gt; D D --&gt; E[&quot;系统功能建模&lt;br/&gt;子系统定义&lt;br/&gt;功能模块定义&lt;br/&gt;程序单元定义&quot;] D --&gt; F[&quot;系统数据建模&lt;br/&gt;主题数据库定义&lt;br/&gt;基本表定义&lt;br/&gt;扩展表定义&quot;] E &lt;--&gt; G[&quot;业务模型&lt;br/&gt;数据模型&quot;] F &lt;--&gt; G E --&gt; H[&quot;关联模型(CU矩阵)&quot;] F --&gt; H ```</p><ul class="exam-opts"><li><b>A</b> 系统功能建模</li><li><b>B</b> 业务流程分解</li><li><b>C</b> 系统架构建模</li><li><b>D</b> 系统业务重组</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">系统功能建模环节完成子系统拆分、功能模块划分、程序单元的定义设计,对应题干的工作内容。</p></details></div></details><details class="exam-q" data-exam-id="2019年5月-26"><summary><span class="exam-no">第 26 题</span><span class="exam-stem-peek">业务流程重组(Business Process Reengineering,BPR)是针对企业业务流程的基本问题进行回顾…</span></summary><div class="exam-q-body"><p class="exam-stem">业务流程重组(Business Process Reengineering,BPR)是针对企业业务流程的基本问题进行回顾,BPR过程通常以()为中心。</p><ul class="exam-opts"><li><b>A</b> 流程</li><li><b>B</b> 需求</li><li><b>C</b> 组织</li><li><b>D</b> 资源</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">BPR全程以业务流程为核心开展优化重构,围绕流程的全链路重新设计相关的组织、资源与规范。</p></details></div></details></details></details></section>
+    <div class="wrongbook"></div>
+    <div class="keyhint">
+  <span class="keyhint-title">键盘快捷键</span>
+  <span class="item"><kbd class="kbd">/</kbd> 搜索本页</span>
+  <span class="item"><kbd class="kbd">T</kbd> 深/浅色</span>
+  <span class="item"><kbd class="kbd">F</kbd> 专注模式</span>
+  <span class="item"><kbd class="kbd">-</kbd>/<kbd class="kbd">+</kbd> 字号</span>
+  <span class="item"><kbd class="kbd">P</kbd> 答下一题</span>
+  <span class="item"><kbd class="kbd">G</kbd> 上一已答</span>
+  <span class="item"><kbd class="kbd">J</kbd>/<kbd class="kbd">K</kbd> 快滚</span>
+  <span class="item"><kbd class="kbd">0</kbd> 回顶部</span>
+</div>
+    <nav class="pager"><a class="pg pg-prev" href="H11.html"><span class="pg-label">上一学时</span><span class="pg-title">数据库系统（三）· 设计、仓库与 NoSQL</span></a><a class="pg pg-next" href="H13.html"><span class="pg-label">下一学时</span><span class="pg-title">企业信息化（二）· 信息系统与商务</span></a></nav>
+    <footer class="footer">
+  <p><strong>阿甘系分 · 48 小时冲刺手册</strong></p>
+  <p class="sep">非官方出版物 · 与软考办无隶属关系 · 内容均为独立原创编写</p>
+  <p>仅供学习参考 · 版权归作者所有 · 禁止以任何形式用于商业培训或二次销售</p>
+</footer>
+  </article>
+</main>
+<button class="focus-exit-fab" type="button" title="退出专注模式（F）">
+  <span class="focus-exit-dot" aria-hidden="true"></span>退出专注
+</button>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"
+        onerror="window.__mermaidFailed=true"></script>
+<script>/**
+ * 阿甘系分 48 小时冲刺 · 独立 HTML 站点
+ * 设计系统 + 交互逻辑（内联进每个 HTML，零依赖）
+ */
+(function () {
+  'use strict'
+
+  // ══════════════════════════════════════════
+  // 1. 存储层
+  // ══════════════════════════════════════════
+  const NS = 'xifen48'
+  // ⚠️ 多用户隔离：GitHub Pages 部署下所有用户共享同一个源（origin），
+  // localStorage 是按源隔离的 → A 用户的答题记录会覆盖 B 用户的。
+  // 方案：为每个浏览器档案生成一个随机 UUID，用它做 key 命名空间。
+  // 不同 Chrome 档案/不同浏览器 → 不同 UUID → 数据互相隔离。
+  // ⚠️ 清浏览器缓存 = 丢失 UUID = 答题记录清零（属正常，和重置功能语义一致）
+  function getUserId() {
+    let id = localStorage.getItem(NS + ':uid')
+    if (!id) {
+      id = 'u_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 10)
+      localStorage.setItem(NS + ':uid', id)
+    }
+    return id
+  }
+  const UID = getUserId()
+  const store = {
+    get(k, d) { try { const v = localStorage.getItem(NS + ':' + UID + ':' + k); return v ? JSON.parse(v) : d } catch { return d } },
+    set(k, v) { try { localStorage.setItem(NS + ':' + UID + ':' + k, JSON.stringify(v)) } catch {} },
+    del(k) { try { localStorage.removeItem(NS + ':' + UID + ':' + k) } catch {} }
+  }
+
+  // ══════════════════════════════════════════
+  // 2. 主题：跟随系统 + 手动覆盖
+  // ══════════════════════════════════════════
+  const Theme = {
+    KEY: 'theme',
+    get() { return store.get('theme', 'auto') },
+    set(v) {
+      store.set('theme', v)
+      Theme.apply()
+      document.querySelectorAll('.theme-btn').forEach(b => b.classList.toggle('active', b.dataset.theme === v))
+    },
+    apply() {
+      const m = store.get('theme', 'auto')
+      const dark = m === 'auto'
+        ? window.matchMedia('(prefers-color-scheme: dark)').matches
+        : m === 'dark'
+      document.documentElement.style.colorScheme = dark ? 'dark' : 'light'
+      document.documentElement.dataset.theme = dark ? 'dark' : 'light'
+    },
+    init() {
+      Theme.apply()
+      const m = store.get('theme', 'auto')
+      document.querySelectorAll('.theme-btn').forEach(b => b.classList.toggle('active', b.dataset.theme === m))
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+        if (store.get('theme', 'auto') === 'auto') Theme.apply()
+      })
+      // 点击切换：跟随 → 浅 → 深 → 跟随
+      document.querySelectorAll('.theme-btn').forEach(btn => {
+        btn.addEventListener('click', () => Theme.set(btn.dataset.theme))
+      })
+    }
+  }
+
+  // ══════════════════════════════════════════
+  // 3. 阅读进度条
+  // ══════════════════════════════════════════
+  const Progress = {
+    init() {
+      const bar = document.createElement('div')
+      bar.className = 'read-progress'
+      document.body.appendChild(bar)
+
+      const toc = document.querySelector('.toc')
+      if (!toc) return
+      // 细化到 4 级：h2（学时/大题）→ h3（小节）→ h4（知识条目）→ h5（细项，若有人写更深）
+      const heads = [...document.querySelectorAll('.main h2, .main h3, .main h4, .main h5')]
+      if (!heads.length) return
+
+      // 必须【先】给每个标题补 id，【再】生成目录链接，
+      // 否则 href="#undefined"，点击全部无效（此前踩过）
+      heads.forEach((h, i) => {
+        if (!h.id) {
+          let slug = (h.textContent || '').replace(/\s+/g, '-')
+            .replace(/[^\w一-鿿-]/g, '').slice(0, 40)
+          if (slug && slug[0].match(/[0-9]/)) slug = 's' + slug   // 数字开头 → CSS 选择器非法
+          h.id = slug || ('h' + (i + 1))
+        }
+        let dup = 0
+        for (const other of document.querySelectorAll('[id]')) {
+          if (other !== h && other.id === h.id) { dup++; break }
+        }
+        if (dup) h.id = h.id + '-' + i          // 去重，锚点必须唯一
+      })
+
+      // 构建层级：按标题顺序压栈，把 h3/h4/h5 挂到上级下面
+      const lvMap = { h2: 0, h3: 1, h4: 2, h5: 3 }
+      const nodes = heads.map(h => ({
+        el: h,
+        lv: lvMap[h.tagName.toLowerCase()],
+        text: h.textContent.replace(/<[^>]*>/g, '').trim(),
+        id: h.id,
+        children: []
+      }))
+      // 先剥掉 h3/h4/h5 开头（没有 h2 父级）的孤儿节点，否则 roots 会漏
+      const roots = []
+      const stack = []
+      nodes.forEach(n => {
+        // 找比自己 lv 小的栈顶作为父
+        while (stack.length && stack[stack.length - 1].lv >= n.lv) stack.pop()
+        if (stack.length) stack[stack.length - 1].children.push(n)
+        else roots.push(n)              // 无父级 → 顶级（本身就是 h2）
+        stack.push(n)
+      })
+
+      const renderTree = (list, depth) =>
+        list.map(n => {
+          const hasSub = n.children.length
+          return `<div class="toc-group${hasSub ? '' : ' leaf'}">
+            <a href="#${n.id}" class="toc-item toc-l${n.lv + 1}" style="--depth:${depth}">${n.text}</a>
+            ${hasSub ? '<div class="toc-sub">' + renderTree(n.children, depth + 1) + '</div>' : ''}
+          </div>`
+        }).join('')
+
+      toc.innerHTML =
+        '<div class="toc-title">本页目录</div>' +
+        '<div class="toc-tree">' + renderTree(roots, 0) + '</div>'
+
+      // 折叠交互：点击有子节点的 a 右侧空白 → 展开/收缩
+      toc.querySelectorAll('.toc-group > .toc-item').forEach(a => {
+        if (!a.parentElement.querySelector('.toc-sub')) return
+        a.style.cursor = 'pointer'
+        a.addEventListener('click', e => {
+          if (e.target !== a) return
+          a.parentElement.classList.toggle('collapsed')
+        })
+      })
+
+      // 高亮：取最近经过的标题，并点亮它到根的整条祖先链
+      const links = [...toc.querySelectorAll('.toc-item')]
+      const linkById = {}
+      links.forEach(a => { linkById[a.getAttribute('href').slice(1)] = a })
+      // 递归找祖先：从根往下走到 node，返回路径
+      const pathOf = (node, chain = []) => {
+        for (const n of roots) {
+          const hit = walk(n, node, [...chain, n])
+          if (hit) return hit
+        }
+        return [node]
+      }
+      function walk(n, target, chain) {
+        if (n === target) return chain
+        for (const c of n.children) {
+          const r = walk(c, target, [...chain, c])
+          if (r) return r
+        }
+        return null
+      }
+      const update = () => {
+        const y = window.scrollY + 130
+        let cur = null
+        heads.forEach(h => { if (h.offsetTop <= y + 1) cur = h })
+        links.forEach(a => a.classList.remove('active'))
+        if (cur) {
+          const node = nodes.find(n => n.el === cur)
+          if (node) {
+            pathOf(node).forEach(n => {
+              const a = linkById[n.id]
+              if (a) a.classList.add('active')
+            })
+          }
+        }
+        const max = document.body.scrollHeight - window.innerHeight
+        bar.style.width = (max > 0 ? Math.min(100, (window.scrollY / max) * 100) : 0) + '%'
+      }
+      window.addEventListener('scroll', update, { passive: true })
+      update()
+    }
+  }
+
+  // ══════════════════════════════════════════
+  // 4. Quiz：答题 + 判分 + 错题本 + 进度
+  // 注意：store.get/set 内部已自动加 "xifen48:" 前缀，
+  //所以这里传的 key 不要再带 NS，否则会出现 "xifen48:xifen48:xxx"
+  // ══════════════════════════════════════════
+  const Quiz = {
+    wrongKey(page) { return 'wrong:' + page },
+    answersKey(page) { return 'ans:' + page },
+
+    init(root) {
+      const page = root.dataset.key
+      const answers = store.get(this.answersKey(page), {})
+      let wrong = store.get(this.wrongKey(page), [])
+
+      const total = root.querySelectorAll('.quiz-item').length
+      const updateBar = () => {
+        const done = root.querySelectorAll('.quiz-item.done').length
+        const right = root.querySelectorAll('.quiz-item.correct').length
+        const pct = total ? Math.round((right / total) * 100) : 0
+        root.querySelector('.quiz-progress').innerHTML =
+          `已答 <b>${done}</b>/${total}` +
+          (done ? ` · 正确 <b>${right}</b> · 正确率 <b>${pct}%</b>` : '')
+        const bar = root.querySelector('.quiz-pbar-fill')
+        if (bar) bar.style.width = pct + '%'
+      }
+
+      root.querySelectorAll('.quiz-item').forEach((item, i) => {
+        const correct = item.dataset.answer
+        const explain = item.dataset.explain || ''
+        const ref = item.dataset.ref || ''
+        item.querySelectorAll('.opt').forEach(opt => {
+          opt.addEventListener('click', () => {
+            if (item.classList.contains('done')) return
+            const letter = opt.dataset.letter
+            item.classList.add('done')
+            opt.classList.add('picked')
+            const ok = letter === correct
+            item.classList.add(ok ? 'correct' : 'wrong')
+            item.querySelector('.reveal').style.display = 'block'
+            item.querySelector('.reveal-verdict').innerHTML = ok
+              ? '✅ 回答正确<span class="answer">正确答案 ' + correct + '</span>'
+              : '❌ 回答错误<span class="answer">正确答案 ' + correct + '</span>'
+            if (!ok) {
+              item.querySelector('.opt[data-letter="' + correct + '"]').classList.add('right')
+              opt.classList.add('wrong-pick')
+            }
+
+            // 错题本
+            const cur = store.get(this.answersKey(page), {})
+            cur[i] = letter
+            store.set(this.answersKey(page), cur)
+            const w = store.get(this.wrongKey(page), [])
+            if (!ok && !w.includes(i)) { w.push(i); store.set(this.wrongKey(page), w) }
+            else if (ok) store.set(this.wrongKey(page), w.filter(x => x !== i))
+
+            updateBar()
+            window.dispatchEvent(new CustomEvent('quiz:update', { detail: { page } }))
+          })
+        })
+
+        // 恢复
+        const picked = answers[i]
+        if (picked) {
+          item.classList.add('done')
+          item.querySelector('.opt[data-letter="' + picked + '"]').classList.add('picked')
+          const ok = picked === correct
+          item.classList.add(ok ? 'correct' : 'wrong')
+          item.querySelector('.reveal').style.display = 'block'
+          item.querySelector('.reveal-verdict').innerHTML = ok
+            ? '✅ 回答正确<span class="answer">正确答案 ' + correct + '</span>'
+            : '❌ 回答错误<span class="answer">正确答案 ' + correct + '</span>'
+          if (!ok) item.querySelector('.opt[data-letter="' + correct + '"]').classList.add('right')
+        }
+      })
+
+      root.querySelector('.quiz-reset').addEventListener('click', () => {
+        store.del(this.answersKey(page))
+        store.del(this.wrongKey(page))
+        root.querySelectorAll('.quiz-item').forEach(it => {
+          it.classList.remove('done', 'correct', 'wrong')
+          it.querySelectorAll('.opt').forEach(o => o.classList.remove('picked', 'right'))
+          it.querySelector('.reveal').style.display = 'none'
+        })
+        updateBar()
+        window.dispatchEvent(new CustomEvent('quiz:update'))
+      })
+
+      // 导出本学时答题记录
+      root.querySelector('.quiz-export')?.addEventListener('click', () => {
+        const cur = store.get(this.answersKey(page), {})
+        const total = root.querySelectorAll('.quiz-item').length
+        const right = root.querySelectorAll('.quiz-item.correct').length
+        const rows = []
+        for (let i = 0; i < total; i++) {
+          rows.push(`${i + 1}. ${cur[i] || '未答'}${cur[i] && cur[i] === root.querySelectorAll('.quiz-item')[i].dataset.answer ? ' ✓' : cur[i] ? ' ✗' : ''}`)
+        }
+        const blob = new Blob([
+          `阿甘系分 48 小时冲刺 · 答题记录\n${page}\n` +
+          `正确 ${right}/${total}（${Math.round((right / total) * 100)}%）\n生成时间：${new Date().toLocaleString('zh-CN')}\n\n` +
+          rows.join('\n')
+        ], { type: 'text/plain;charset=utf-8' })
+        const a = document.createElement('a')
+        a.href = URL.createObjectURL(blob)
+        a.download = page.replace(/\.md$/, '') + '-答题记录.txt'
+        a.click()
+        URL.revokeObjectURL(a.href)
+      })
+
+      updateBar()
+      return { total, page }
+    }
+  }
+
+  // ══════════════════════════════════════════
+  // 5. 全站错题本（跨页汇总）
+  // ══════════════════════════════════════════
+  const WrongBook = {
+    collect() {
+      const idx = []
+      const prefix = NS + ':' + UID + ':wrong:'
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i)
+        if (k && k.startsWith(prefix)) {
+          const page = k.slice(prefix.length)
+          const arr = store.get('wrong:' + page, [])
+          if (arr.length) idx.push({ page, count: arr.length, items: arr })
+        }
+      }
+      return idx.sort((a, b) => b.count - a.count)
+    },
+    render() {
+      const panel = document.querySelector('.wrongbook')
+      if (!panel) return
+      const idx = this.collect()
+      if (!idx.length) {
+        panel.innerHTML = '<div class="wb-empty">暂无错题记录 — 做完练习后这里会自动汇总</div>'
+        return
+      }
+      panel.innerHTML =
+        '<div class="wb-head"><span>📕 错题本</span><span class="wb-total">' +
+        idx.reduce((n, x) => n + x.count, 0) + ' 道错题 · ' + idx.length + ' 个学时</span></div>' +
+        idx.map(x =>
+          `<div class="wb-row"><a href="${x.page.replace(/\.md$/, '.html')}">${x.page.replace(/\.md$/, '')}</a>` +
+          `<span class="wb-count">${x.count} 道</span></div>`
+        ).join('') +
+        '<button class="wb-clear" data-act="wb-clear">清空错题本</button>'
+
+      panel.querySelector('[data-act="wb-clear"]')?.addEventListener('click', () => {
+        if (!confirm('确定要清空当前浏览器的错题本吗？此操作不可恢复。')) return
+        idx.forEach(x => store.del('wrong:' + x.page))
+        this.render()
+      })
+    },
+    init() { this.render(); window.addEventListener('quiz:update', () => this.render()) }
+  }
+
+  // ══════════════════════════════════════════
+  // 6. 快捷键
+  // ══════════════════════════════════════════
+  /* ---------- 章首进度条：随滚动更新「读到第几节 / 全书第几学时」 ---------- */
+  const ChapBar = {
+    init() {
+      const bar = document.getElementById('chapbar')
+      if (!bar) return
+      this.bar = bar
+      this.fill = document.getElementById('chapbarFill')
+      this.sec = document.getElementById('chapbarSec')
+      this.secs = [...document.querySelectorAll('.main h2[id], .main h3[id]')]
+      this.total = Number(bar.dataset.secTotal) || this.secs.length
+      if (!this.secs.length) return
+      this.cur = -1
+      this.onScroll = this.update.bind(this)
+      window.addEventListener('scroll', this.onScroll, { passive: true })
+      this.update()
+    },
+    update() {
+      // 以"视口上沿往下 120px"为判定线，取该位置之后最近的标题
+      const line = 140
+      let idx = 0
+      for (let i = 0; i < this.secs.length; i++) {
+        const t = this.secs[i].getBoundingClientRect().top
+        if (t - line <= 0) idx = i
+        else break
+      }
+      if (idx !== this.cur) {
+        this.cur = idx
+        if (this.sec) this.sec.textContent = (idx + 1) + ' / ' + this.total
+      }
+      // 整页滚动进度（含末尾）
+      const doc = document.documentElement
+      const max = doc.scrollHeight - doc.clientHeight
+      const p = max > 0 ? Math.min(1, Math.max(0, doc.scrollTop / max)) : 0
+      if (this.fill) this.fill.style.width = (p * 100).toFixed(2) + '%'
+    }
+  }
+
+  /* ---------- 章节导航：胶囊触发器 + 分组下拉面板 ---------- */
+  const ChapNav = {
+    root: null, trigger: null, panel: null, items: [], cursor: -1,
+
+    init() {
+      this.root = document.getElementById('chapnav')
+      if (!this.root) return
+      this.trigger = document.getElementById('navTrigger')
+      this.panel = document.getElementById('navPanel')
+      if (!this.trigger || !this.panel) return
+      this.items = [...this.panel.querySelectorAll('.nav-item')]
+
+      this.trigger.addEventListener('click', e => {
+        e.stopPropagation()
+        // ⚠️ 键盘在触发器上按 Enter/Space 时，浏览器会在 keydown 之后**再合成一次 click**。
+        //    若 keydown 里已经打开面板，这次 click 就会立刻把它关掉（表现为"按 Enter 闪一下又没了"）。
+        //    用一次性标记吞掉紧随其后的那次 click。
+        if (this._swallowClick) { this._swallowClick = false; return }
+        this.toggle()
+      })
+      // 面板内点击：跳转交给 <a> 默认行为，但要点空白处不关闭、点链接才关
+      this.panel.addEventListener('click', e => {
+        if (e.target.closest('.nav-item')) this.close()
+      })
+      // 点外部关闭
+      document.addEventListener('click', e => {
+        if (!this.root.contains(e.target)) this.close()
+      })
+      document.addEventListener('keydown', e => this.onKey(e), true)
+      // 视口变窄时自动关掉，避免面板悬在半个屏幕外
+      window.addEventListener('resize', () => { if (this.isOpen()) this.close() })
+    },
+
+    isOpen() { return !this.panel.hasAttribute('hidden') },
+
+    open() {
+      this.panel.removeAttribute('hidden')
+      this.root.classList.add('open')
+      this.trigger.setAttribute('aria-expanded', 'true')
+      // 打开后把当前页滚进视野，并让「当前项」成为键盘游标
+      const act = this.items.findIndex(a => a.classList.contains('active'))
+      this.cursor = act >= 0 ? act : 0
+      const cur = this.items[this.cursor]
+      if (cur) {
+        const box = this.panel.querySelector('.nav-panel-scroll')
+        if (box && cur.offsetTop < box.scrollTop) box.scrollTop = Math.max(0, cur.offsetTop - 12)
+        else if (box && cur.offsetTop + cur.offsetHeight > box.scrollTop + box.clientHeight)
+          box.scrollTop = cur.offsetTop + cur.offsetHeight - box.clientHeight + 12
+      }
+    },
+
+    close() {
+      if (!this.isOpen()) return
+      this.panel.setAttribute('hidden', '')
+      this.root.classList.remove('open')
+      this.trigger.setAttribute('aria-expanded', 'false')
+    },
+
+    toggle() { this.isOpen() ? this.close() : this.open() },
+
+    focusCursor() {
+      const a = this.items[this.cursor]
+      if (a) { a.focus(); return }
+      this.trigger.focus()
+    },
+
+    onKey(e) {
+      if (!this.isOpen()) {
+        // 未打开时：Enter / ↓ / Alt+↓ 直接开面板
+        if (this.root.contains(e.target) && (e.key === 'Enter' || e.key === 'ArrowDown' || e.key === ' ')) {
+          e.preventDefault()
+          this._swallowClick = true          // 吞掉紧随其后的合成 click
+          this.open()
+          this.focusCursor()
+          // 安全阀：若浏览器这次没派发 click，标记要能过期，否则下一次真鼠标点击会被吞
+          setTimeout(() => { this._swallowClick = false }, 120)
+        }
+        return
+      }
+      if (e.key === 'Escape') { e.preventDefault(); this.close(); this.trigger.focus(); return }
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        e.preventDefault()
+        const d = e.key === 'ArrowDown' ? 1 : -1
+        this.cursor = (this.cursor + d + this.items.length) % this.items.length
+        this.focusCursor()
+        return
+      }
+      if (e.key === 'Home') { e.preventDefault(); this.cursor = 0; this.focusCursor(); return }
+      if (e.key === 'End') {
+        e.preventDefault(); this.cursor = this.items.length - 1; this.focusCursor(); return
+      }
+      // Tab 走出面板就自动收起
+      if (e.key === 'Tab') this.close()
+    }
+  }
+
+  const Keys = {
+    init() {
+      document.addEventListener('keydown', e => {
+        // e.target 可能是 document（无 matches 方法），必须先判断
+        const t = e.target
+        if (t && t.nodeType === 1 && t.matches('input,textarea,select,[contenteditable]')) return
+        if (e.metaKey || e.ctrlKey || e.altKey) return
+
+        const k = e.key.toLowerCase()
+        if (k === 't') {
+          // auto 状态下先按当前实际渲染的主题取反，落成明确值
+          const cur = document.documentElement.dataset.theme
+          Theme.set(cur === 'dark' ? 'light' : 'dark')
+          e.preventDefault()
+        } else if (k === 'p') {
+          // P：跳到下一未答题并选中第一选项
+          const next = [...document.querySelectorAll('.quiz-item')]
+            .find(it => !it.classList.contains('done'))
+          if (next) {
+            next.querySelector('.opt')?.click()
+            next.scrollIntoView({ behavior: 'smooth', block: 'center' })
+          }
+          e.preventDefault()
+        } else if (k === '0') {
+          // 0：回顶部
+          window.scrollTo({ top: 0, behavior: 'smooth' })
+          e.preventDefault()
+        } else if (k === 'g') {
+          // g：上一未答题（与 P 反方向）
+          const items = [...document.querySelectorAll('.quiz-item.done')]
+          if (items.length) {
+            items[items.length - 1].scrollIntoView({ behavior: 'smooth', block: 'center' })
+          }
+          e.preventDefault()
+        } else if (k === 'j' || k === 'k') {
+          // j/k：快速滚动 1/3 页
+          const d = k === 'j' ? 1 : -1
+          window.scrollBy({ top: window.innerHeight * d * 0.6, behavior: 'smooth' })
+          e.preventDefault()
+        }
+      })
+    }
+  }
+
+  // ══════════════════════════════════════════
+  // 7. 全文搜索（当前页，Cmd/Ctrl+K 呼出）
+  // ══════════════════════════════════════════
+  const Search = {
+    init() {
+      // 索引：本页所有块级内容（标题/段落/表格行/提示框/题目）
+      const idx = []
+      const push = (text, anchor, kind) => {
+        const t = (text || '').replace(/\s+/g, ' ').trim()
+        if (t.length >= 2) idx.push({ t: t.toLowerCase(), raw: t, anchor, kind })
+      }
+      document.querySelectorAll('.main h2[id], .main h3[id], .main h4[id]').forEach(h => {
+        push(h.textContent, h.id, '标题')
+      })
+      document.querySelectorAll('.main p, .main li').forEach(el => {
+        // 找到最近的上级标题作为锚点
+        let a = null, n = el
+        while (n && n !== document.body) {
+          if (n.previousElementSibling && n.previousElementSibling.id) { a = n.previousElementSibling.id; break }
+          n = n.previousElementSibling
+        }
+        push(el.textContent, a || '', '正文')
+      })
+      document.querySelectorAll('.main tbody tr').forEach(tr => {
+        push(tr.textContent, '', '表格')
+      })
+      document.querySelectorAll('.main .block, .main .quote').forEach(b => {
+        push(b.textContent, '', '提示')
+      })
+      document.querySelectorAll('.quiz-q').forEach(q => push(q.textContent, '', '题目'))
+
+      if (!idx.length) return
+
+      // UI
+      const panel = document.createElement('div')
+      panel.className = 'search-panel'
+      panel.innerHTML = `
+        <div class="search-box">
+          <input class="search-input" type="search" placeholder="搜索本页内容…  (Esc 关闭)" autocomplete="off">
+          <span class="search-count"></span>
+        </div>
+        <ul class="search-results"></ul>`
+      document.body.appendChild(panel)
+      const input = panel.querySelector('.search-input')
+      const list = panel.querySelector('.search-results')
+      const count = panel.querySelector('.search-count')
+
+      let hits = [], cur = -1
+      const open = () => { panel.classList.add('open'); input.focus(); input.select() }
+      const close = () => { panel.classList.remove('open'); input.value = ''; list.innerHTML = ''; hits = []; cur = -1 }
+
+      function run(q) {
+        q = q.trim().toLowerCase()
+        if (!q) { list.innerHTML = ''; count.textContent = ''; hits = []; return }
+        hits = idx.filter(x => x.t.includes(q)).slice(0, 40)
+        count.textContent = hits.length ? `${hits.length} 条` : '无结果'
+        cur = hits.length ? 0 : -1
+        list.innerHTML = hits.map((h, i) => {
+          const p = h.raw.indexOf(q)
+          const snip = p < 0 ? h.raw.slice(0, 90)
+            : (p > 30 ? '…' : '') + h.raw.slice(Math.max(0, p - 30), p + 70) + (p + 70 < h.raw.length ? '…' : '')
+          return `<li class="search-hit${i === cur ? ' cur' : ''}" data-i="${i}">
+            <span class="hit-kind">${h.kind}</span><span class="hit-text">${escapeHtml(snip)}</span></li>`
+        }).join('')
+      }
+
+      function goto(i) {
+        const h = hits[i]
+        if (!h) return
+        if (h.anchor) {
+          const t = document.getElementById(h.anchor)
+          if (t) { t.scrollIntoView({ behavior: 'smooth', block: 'start' }); flash(t) }
+        }
+        // 高亮正文里的命中词
+        document.querySelectorAll('.search-mark').forEach(m => {
+          m.outerHTML = m.textContent
+        })
+        const walker = document.createTreeWalker(document.querySelector('.main'), NodeFilter.SHOW_TEXT)
+        const targets = []
+        let n
+        while ((n = walker.nextNode())) if (n.nodeValue.toLowerCase().includes(input.value.trim().toLowerCase())) targets.push(n)
+        targets.slice(0, 40).forEach(node => {
+          const frag = document.createDocumentFragment()
+          const parts = node.nodeValue.split(new RegExp('(' + escapeRe(input.value.trim()) + ')', 'ig'))
+          parts.forEach(p => {
+            if (p.toLowerCase() === input.value.trim().toLowerCase()) {
+              const m = document.createElement('mark')
+              m.className = 'search-mark'; m.textContent = p; frag.appendChild(m)
+            } else frag.appendChild(document.createTextNode(p))
+          })
+          node.parentNode.replaceChild(frag, node)
+        })
+        if (targets.length) {
+          const first = document.querySelector('.search-mark')
+          if (first) { first.scrollIntoView({ behavior: 'smooth', block: 'center' }); flash(first) }
+        }
+      }
+
+      function flash(el) {
+        el.classList.add('flash-hit')
+        setTimeout(() => el.classList.remove('flash-hit'), 1200)
+      }
+
+      input.addEventListener('input', () => run(input.value))
+      input.addEventListener('keydown', e => {
+        if (e.key === 'Escape') { close(); e.stopPropagation() }
+        else if (e.key === 'ArrowDown') { cur = Math.min(cur + 1, hits.length - 1); renderCur(); e.preventDefault() }
+        else if (e.key === 'ArrowUp') { cur = Math.max(cur - 1, 0); renderCur(); e.preventDefault() }
+        else if (e.key === 'Enter') { goto(cur); e.preventDefault() }
+      })
+      const renderCur = () => {
+        list.querySelectorAll('.search-hit').forEach((el, i) => el.classList.toggle('cur', i === cur))
+      }
+      list.addEventListener('click', e => {
+        const li = e.target.closest('.search-hit')
+        if (li) goto(Number(li.dataset.i))
+      })
+      panel.addEventListener('click', e => { if (e.target === panel) close() })
+
+      // 快捷键：/ 或 Cmd/Ctrl+K
+      document.addEventListener('keydown', e => {
+        if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); panel.classList.contains('open') ? close() : open() }
+        else if (e.key === '/' && !panel.classList.contains('open')) {
+          const t = e.target
+          if (!(t && t.nodeType === 1 && t.matches('input,textarea'))) { e.preventDefault(); open() }
+        }
+      })
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && panel.classList.contains('open')) close()
+      })
+    }
+  }
+
+  function escapeHtml(s) { return String(s).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c])) }
+  function escapeRe(s) { return String(s).replace(/[.*+?^${}()|[\]\\]/g, '\\$&') }
+
+  // ══════════════════════════════════════════
+  // 8. 专注模式：隐藏导航/目录/页脚，只留正文
+  // ══════════════════════════════════════════
+  const Focus = {
+    KEY: 'focus',
+    init() {
+      // 顶栏按钮由 Overflow 模块创建（它负责插入到正确位置），这里只绑行为
+      Focus.sync()
+      document.addEventListener('keydown', e => {
+        const t = e.target
+        if (t && t.nodeType === 1 && t.matches('input,textarea')) return
+        if (e.metaKey || e.ctrlKey || e.altKey) return
+        if (e.key.toLowerCase() === 'f') { Focus.toggle(); e.preventDefault() }
+      })
+      if (store.get(this.KEY, false)) document.documentElement.classList.add('focus-mode')
+      // 右下角退出浮标：独立于顶栏，保证专注模式下永远有一个能点的退出入口
+      const fab = document.querySelector('.focus-exit-fab')
+      if (fab) fab.addEventListener('click', () => Focus.toggle())
+      this.sync()
+    },
+    toggle() {
+      const on = !document.documentElement.classList.contains('focus-mode')
+      if (on) document.documentElement.classList.add('focus-mode')
+      else document.documentElement.classList.remove('focus-mode')
+      store.set(this.KEY, on)
+      this.sync()
+    },
+    sync() {
+      const on = document.documentElement.classList.contains('focus-mode')
+      document.querySelectorAll('.focus-btn').forEach(b => b.classList.toggle('active', on))
+    }
+  }
+
+  // ══════════════════════════════════════════
+  // 9. 字号调节（- / + 或 [ ]）
+  // ══════════════════════════════════════════
+  const FontSize = {
+    KEY: 'fontsize',
+    MIN: 13, MAX: 22, STEP: 1,
+    init() {
+      this.apply(store.get(this.KEY, 16.5))
+      document.addEventListener('keydown', e => {
+        const t = e.target
+        if (t && t.nodeType === 1 && t.matches('input,textarea')) return
+        if (e.metaKey || e.ctrlKey || e.altKey) return
+        const cur = store.get(this.KEY, 16.5)
+        if (e.key === '-' || e.key === '_') { FontSize.set(cur - FontSize.STEP); e.preventDefault() }
+        if (e.key === '=' || e.key === '+') { FontSize.set(cur + FontSize.STEP); e.preventDefault() }
+      })
+    },
+    set(v) { FontSize.apply(Math.min(FontSize.MAX, Math.max(FontSize.MIN, v))) },
+    apply(v) {
+      v = Math.round(v * 10) / 10
+      store.set(FontSize.KEY, v)
+      document.documentElement.style.setProperty('--fs-base', v + 'px')
+    }
+  }
+
+  // ══════════════════════════════════════════
+  // 10. 顶栏溢出菜单（窄屏时把次要控件收进⋯）
+  // ══════════════════════════════════════════
+  const Overflow = {
+    init() {
+      const bar = document.querySelector('.topbar')
+      const sw = document.querySelector('.theme-switch')
+      if (!bar || !sw) return
+
+      const btn = document.createElement('button')
+      btn.className = 'overflow-btn'
+      btn.type = 'button'
+      btn.title = '更多'
+      btn.setAttribute('aria-label', '更多操作')
+      btn.textContent = '⋯'
+
+      const panel = document.createElement('div')
+      panel.className = 'overflow-panel'
+
+      btn.addEventListener('click', e => {
+        e.stopPropagation()
+        const open = panel.classList.toggle('open')
+        btn.classList.toggle('active', open)
+      })
+      document.addEventListener('click', () => {
+        panel.classList.remove('open')
+        btn.classList.remove('active')
+      })
+      panel.addEventListener('click', e => e.stopPropagation())
+
+      // 把主题切换搬进去
+      sw.remove()
+      panel.appendChild(sw)
+      // 专注按钮也放进去（保留顶栏一个 focus-btn 副本给快捷键用）
+      bar.appendChild(btn)
+      bar.appendChild(panel)
+
+      // 专注模式需要顶栏留一个可见按钮
+      const fb = document.createElement('button')
+      fb.className = 'focus-btn focus-btn-top'
+      fb.type = 'button'
+      fb.title = '专注模式（F）'
+      fb.textContent = '专注'
+      fb.addEventListener('click', () => Focus.toggle())
+      bar.insertBefore(fb, btn)
+      Focus.topButton = fb
+    }
+  }
+
+  // ══════════════════════════════════════════
+  // 11. 返回顶部 + 代码复制 + 阅读时长
+  // ══════════════════════════════════════════
+  const BackTop = {
+    init() {
+      const btn = document.createElement('button')
+      btn.className = 'back-top'
+      btn.type = 'button'
+      btn.title = '返回顶部'
+      btn.setAttribute('aria-label', '返回顶部')
+      btn.textContent = '↑'
+      document.body.appendChild(btn)
+      btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }))
+      let last = 0
+      window.addEventListener('scroll', () => {
+        const y = window.scrollY
+        if (y > 500 && y !== last) btn.classList.add('show')
+        else if (y <= 500) btn.classList.remove('show')
+        last = y
+      }, { passive: true })
+    }
+  }
+
+  const CopyCode = {
+    init() {
+      document.querySelectorAll('pre').forEach(pre => {
+        // 跳过 mermaid fallback pre
+        if (pre.closest('.mermaid-err')) return
+        const wrap = document.createElement('div')
+        wrap.className = 'code-wrap'
+        pre.parentNode.insertBefore(wrap, pre)
+        wrap.appendChild(pre)
+        const btn = document.createElement('button')
+        btn.className = 'copy-btn'
+        btn.type = 'button'
+        btn.textContent = '复制'
+        btn.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(pre.textContent)
+            btn.textContent = '已复制 ✓'
+            btn.classList.add('copied')
+            setTimeout(() => { btn.textContent = '复制'; btn.classList.remove('copied') }, 1500)
+          } catch {
+            // 降级：老浏览器用 execCommand
+            const ta = document.createElement('textarea')
+            ta.value = pre.textContent
+            document.body.appendChild(ta)
+            ta.select()
+            try { document.execCommand('copy') } catch {}
+            document.body.removeChild(ta)
+            btn.textContent = '已复制 ✓'
+            setTimeout(() => { btn.textContent = '复制' }, 1500)
+          }
+        })
+        wrap.appendChild(btn)
+      })
+    }
+  }
+
+  const ReadTime = {
+    init() {
+      const h1 = document.querySelector('.main h1')
+      if (!h1) return
+      const main = document.querySelector('.main')
+      if (!main) return
+      const text = main.textContent || ''
+      // 中文阅读速度约 400 字/分钟
+      const minutes = Math.max(1, Math.round(text.length / 400))
+      const el = document.createElement('div')
+      el.className = 'read-time'
+      el.textContent = '预计阅读 ' + minutes + ' 分钟 · ' + text.length + ' 字'
+      h1.insertAdjacentElement('afterend', el)
+    }
+  }
+
+  function updateAnsweredStat() {
+    const el = document.getElementById('stat-answered')
+    if (!el) return
+    let n = 0
+    const prefix = NS + ':' + UID + ':ans:'
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i)
+      if (k && k.startsWith(prefix)) {
+        const a = store.get('ans:' + k.slice(prefix.length), {})
+        n += Object.keys(a).filter(x => a[x]).length
+      }
+    }
+    el.textContent = n
+  }
+
+  // ══════════════════════════════════════════
+  // 12. 历年真题：批量展开 + 记忆展开状态
+  // ══════════════════════════════════════════
+  const Exam = {
+    KEY: 'examOpen',
+    init() {
+      const root = document.querySelector('.exam')
+      if (!root) return
+      const chapter = root.dataset.examChapter || 'x'
+
+      // 恢复上次展开状态：{ "H07": { "2025年5月": true, ... } }
+      const saved = store.get(this.KEY, {}) || {}
+      const mine = saved[chapter] || {}
+      root.querySelectorAll('.exam-year').forEach(y => {
+        const name = y.dataset.examYear
+        // 默认：展开最近 1 套（新年优先），其余收起
+        const open = (name in mine) ? mine[name] : false
+        if (open) y.open = true
+        y.addEventListener('toggle', () => {
+          mine[name] = y.open
+          saved[chapter] = mine
+          store.set(this.KEY, saved)
+        })
+      })
+      // 单题的"看过答案"状态也要记（避免重复点开）
+      const seen = store.get('examSeen', {}) || {}
+      root.querySelectorAll('.exam-q').forEach(qd => {
+        const qid = qd.dataset.examId
+        if (seen[qid]) {
+          const a = qd.querySelector('.exam-ans')
+          if (a) a.open = true
+        }
+        const ans = qd.querySelector('.exam-ans')
+        if (ans) ans.addEventListener('toggle', () => {
+          if (ans.open) { seen[qid] = 1; store.set('examSeen', seen) }
+        })
+      })
+
+      // 批量展开/收起按钮
+      root.querySelectorAll('.exam-op').forEach(btn => {
+        btn.addEventListener('click', e => {
+          e.preventDefault()
+          const openAll = btn.dataset.examAll === '1'
+          root.querySelectorAll('.exam-subject,.exam-year').forEach(d => { d.open = openAll })
+          root.querySelectorAll('.exam-ans').forEach(d => {
+            d.open = openAll
+            if (openAll && d.parentElement.dataset.examId) seen[d.parentElement.dataset.examId] = 1
+          })
+          if (openAll) store.set('examSeen', seen)
+          // 同步年份级记忆
+          root.querySelectorAll('.exam-year').forEach(y => { mine[y.dataset.examYear] = y.open })
+          saved[chapter] = mine
+          store.set(this.KEY, saved)
+        })
+      })
+
+      // 快捷键：E = 跳到真题区块（不与既有键冲突）
+      document.addEventListener('keydown', e => {
+        const t = e.target
+        if (t && t.nodeType === 1 && t.matches('input,textarea,select,[contenteditable]')) return
+        if (e.metaKey || e.ctrlKey || e.altKey) return
+        if (e.key.toLowerCase() === 'e') {
+          e.preventDefault()
+          root.scrollIntoView({ behavior: 'smooth', block: 'start' })
+          const y = root.querySelector('.exam-year')
+          if (y) y.open = true
+        }
+      })
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    Theme.init()
+    FontSize.init()
+    Progress.init()
+    ChapBar.init()
+    document.querySelectorAll('.quiz-js').forEach(r => Quiz.init(r))
+    WrongBook.init()
+    Search.init()
+    ChapNav.init()
+    Focus.init()
+    Overflow.init()
+    Keys.init()
+    BackTop.init()
+    CopyCode.init()
+    ReadTime.init()
+    Exam.init()
+    updateAnsweredStat()
+    window.addEventListener('quiz:update', updateAnsweredStat)
+    renderMermaid()
+  })
+
+  // ══════════════════════════════════════════
+  // 8. mermaid 渲染（自定义墨绿主题，与正文同色系）
+  // ══════════════════════════════════════════
+  // 站点配色（与 design.css 的令牌保持一致）
+  const MERMAID_LIGHT = {
+    bg: '#f2f0e9', fg: '#1b211c', line: '#cdc9bd',
+    accent: '#3d5a40', accent2: '#5a8a62', accent3: '#7ea888',
+    tip: '#2d6a4f', warn: '#b8860b', danger: '#b33636'
+  }
+  const MERMAID_DARK = {
+    bg: '#1c201d', fg: '#dde5de', line: '#3a413b',
+    accent: '#8bb195', accent2: '#a9c9b1', accent3: '#c3dcc8',
+    tip: '#7fc79b', warn: '#d9b04a', danger: '#e08585'
+  }
+
+  function mermaidTheme(dark) {
+    const c = dark ? MERMAID_DARK : MERMAID_LIGHT
+    return {
+      startOnLoad: false, securityLevel: 'strict',
+      fontFamily: 'inherit',
+      theme: 'base',
+      themeVariables: {
+        background: c.bg,
+        primaryColor: c.accent + '18',
+        primaryTextColor: c.fg,
+        primaryBorderColor: c.accent2,
+        secondaryColor: c.accent2 + '20',
+        tertiaryColor: c.bg,
+        lineColor: c.line,
+        textColor: c.fg,
+        mainBkg: c.accent + '18',
+        nodeBorder: c.accent2,
+        clusterBkg: c.accent2 + '14',
+        clusterBorder: c.line,
+        titleColor: c.accent,
+        edgeLabelBackground: c.bg,
+        // 分类色：全部落在墨绿/暖褐区间，不再是默认紫
+        tertiaryColor: c.bg,
+        quaternaryColor: c.accent3 + '22',
+        noteBkgColor: c.warn + '18',
+        noteTextColor: c.fg,
+        noteBorderColor: c.warn,
+        actorBkg: c.accent2 + '28',
+        actorBorder: c.accent,
+        actorTextColor: c.fg,
+        signalColor: c.fg,
+        signalTextColor: c.fg,
+        labelBoxBkgColor: c.bg,
+        labelTextColor: c.fg,
+        loopTextColor: c.fg,
+        activationBkgColor: c.accent3 + '30',
+        pie1: c.accent, pie2: c.accent2, pie3: c.accent3,
+        pie4: c.tip, pie5: c.warn, pie6: c.danger
+      },
+      flowchart: { htmlLabels: true, curve: 'basis', useMaxWidth: true, padding: 14 },
+      sequence: { useMaxWidth: true, actorFontSize: 13, noteFontSize: 12 }
+    }
+  }
+
+  function renderMermaid() {
+    // 覆盖两类节点：未渲染的 .mermaid-src，和已渲染但主题不符的 .mermaid-wrap
+    const nodes = [...document.querySelectorAll('.mermaid-src, .mermaid-wrap[data-src]')]
+    if (!nodes.length) return
+
+    const dark = document.documentElement.dataset.theme === 'dark'
+    const theme = dark ? 'dark' : 'light'
+
+    // ① 图表库未加载（离线 / CDN 挂）→ 优雅降级：把源码摊开显示，别让图凭空消失
+    if (!window.mermaid) {
+      nodes.forEach(node => {
+        const src = node.dataset.src ||
+          (node.classList.contains('mermaid-src') ? node.textContent.trim() : '')
+        if (!src || node.classList.contains('mermaid-fallback')) return
+        node.outerHTML =
+          '<div class="mermaid-wrap mermaid-err" data-src="' + escAttr(src) + '">' +
+          '<div class="mmd-note">图表库未加载（离线）· 以下为图表源码</div>' +
+          '<pre>' + escHtml(src) + '</pre></div>'
+      })
+      return
+    }
+
+    mermaid.initialize(mermaidTheme(dark))
+
+    nodes.forEach((node, i) => {
+      const src = node.dataset.src ||
+        (node.classList.contains('mermaid-src') ? node.textContent.trim() : '')
+      if (!src) return
+      // 已按当前主题渲染过 → 跳过
+      if (node.classList.contains('mermaid-wrap') && node.dataset.theme === theme) return
+
+      const id = 'mmd' + Date.now().toString(36) + i + Math.random().toString(36).slice(2, 6)
+      const mount = (svg) => {
+        const holder = document.createElement('div')
+        holder.className = 'mermaid-wrap'
+        holder.dataset.src = src
+        holder.dataset.theme = theme
+        holder.innerHTML = svg
+        node.replaceWith(holder)
+      }
+      const fail = (err) => {
+        const holder = document.createElement('div')
+        holder.className = 'mermaid-wrap mermaid-err'
+        holder.dataset.src = src
+        holder.dataset.theme = theme
+        holder.innerHTML = '<div class="mmd-note">图表渲染失败 · 源码如下</div><pre>' +
+          escHtml(src) + '</pre>'
+        node.replaceWith(holder)
+        console.warn('[mermaid]', err)
+      }
+      try {
+        const res = mermaid.render(id, src)
+        if (res && typeof res.then === 'function') res.then(r => mount(r.svg)).catch(fail)
+        else mount(res.svg || res)
+      } catch (e) { fail(e) }
+    })
+  }
+
+  function escHtml(s) {
+    return String(s).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]))
+  }
+  function escAttr(s) {
+    return String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]))
+  }
+
+  // 主题切换后重渲染图表
+  const origApply = Theme.apply
+  Theme.apply = function () { origApply(); setTimeout(renderMermaid, 50) }
+})()</script>
+</body>
+</html>

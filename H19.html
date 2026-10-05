@@ -7,7 +7,7 @@
 <title>第 19 小时 · 信息安全（一）· 安全体系与加密认证 · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
-<meta name="build-stamp" content="2026-10-05 08:06:29">
+<meta name="build-stamp" content="2026-10-05 11:44:51">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -1927,6 +1927,166 @@ table.zebra tbody tr:hover{background:var(--accent-soft-2)}
 /* ── 平滑滚动偏移（锚点跳转不卡顶栏下） ── */
 html{scroll-padding-top:80px}
 @media(max-width:760px){html{scroll-padding-top:70px}}
+
+/* ═══════════════════════════════════════════════════════════════
+   历年真题区块 · 三级折叠（原生 details，零 JS）
+   ═══════════════════════════════════════════════════════════════ */
+.exam{margin:2.2em 0 1.6em}
+
+/* ── 统计条：常驻不折叠，避免"用户不知道里面有真题"而白做 ── */
+.exam-bar{
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  padding:12px 16px;margin-bottom:10px;
+  background:linear-gradient(180deg,var(--bg-card) 0%,var(--bg-alt) 100%);
+  border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow-1);
+}
+.exam-bar-label{font-weight:700;font-size:14px;color:var(--accent)}
+.exam-bar-stat{font-size:12.5px;color:var(--fg-3);flex:1;min-width:140px}
+.exam-bar-stat b{color:var(--fg-2);font-variant-numeric:tabular-nums}
+.exam-bar-ops{display:flex;gap:6px}
+.exam-op{
+  padding:4px 11px;font:inherit;font-size:12px;cursor:pointer;
+  background:var(--bg-card);border:1px solid var(--line-2);
+  border-radius:999px;color:var(--fg-2);
+  transition:border-color .18s var(--ease),color .18s var(--ease),background .18s var(--ease);
+}
+.exam-op:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+
+/* ── 科目级折叠 ── */
+.exam-subject{
+  border:1px solid var(--line);border-radius:var(--radius);
+  background:var(--bg-card);overflow:hidden;
+}
+.exam-subject>summary{
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  padding:12px 16px;cursor:pointer;list-style:none;
+  font-weight:600;color:var(--fg-2);
+  transition:background .18s var(--ease),color .18s var(--ease);
+}
+.exam-subject>summary::-webkit-details-marker{display:none}
+.exam-subject>summary:hover{background:var(--accent-soft);color:var(--accent)}
+.exam-subject[open]>summary{border-bottom:1px solid var(--line);background:var(--bg-alt)}
+.exam-subject-name::before{content:'▸ ';display:inline-block;transition:transform .2s var(--ease)}
+.exam-subject[open] .exam-subject-name::before{transform:rotate(90deg)}
+.exam-subject-n{font-size:12px;color:var(--fg-3);font-variant-numeric:tabular-nums}
+.exam-subject-tip{margin-left:auto;font-size:11.5px;color:var(--fg-3);opacity:.8}
+
+/* ── 年份级折叠 ── */
+.exam-year{border-bottom:1px solid var(--line)}
+.exam-year:last-child{border-bottom:0}
+.exam-year>summary{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 16px 9px 30px;cursor:pointer;list-style:none;
+  font-size:13.5px;color:var(--fg-2);
+  transition:background .16s var(--ease),color .16s var(--ease);
+}
+.exam-year>summary::-webkit-details-marker{display:none}
+.exam-year>summary:hover{background:var(--accent-soft);color:var(--accent)}
+.exam-year[open]>summary{background:var(--bg-alt)}
+.exam-year-name::before{content:'▸ ';display:inline-block;transition:transform .2s var(--ease);color:var(--fg-3)}
+.exam-year[open] .exam-year-name::before{transform:rotate(90deg)}
+.exam-year-n{font-size:11.5px;color:var(--fg-3);font-variant-numeric:tabular-nums}
+
+/* ── 单题折叠 ── */
+.exam-q{border-top:1px solid var(--line)}
+.exam-q>summary{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:9px 16px 9px 46px;cursor:pointer;list-style:none;
+  font-size:13.5px;line-height:1.6;color:var(--fg-2);
+  transition:background .16s var(--ease);
+}
+.exam-q>summary::-webkit-details-marker{display:none}
+.exam-q>summary:hover{background:var(--accent-soft)}
+.exam-q[open]>summary{background:var(--bg-alt)}
+.exam-q>summary::before{
+  content:'＋';flex-shrink:0;width:1.1em;text-align:center;
+  color:var(--fg-3);font-size:12px;line-height:1.5;
+}
+.exam-q[open]>summary::before{content:'－';color:var(--accent)}
+.exam-no{
+  flex-shrink:0;font-size:11px;color:var(--fg-3);
+  font-variant-numeric:tabular-nums;padding-top:2px;min-width:44px;
+}
+.exam-tag{
+  flex-shrink:0;font-size:10.5px;padding:1px 6px;border-radius:4px;
+  background:var(--warn-bg);color:var(--warn-fg);border:1px solid var(--warn-line);
+}
+.exam-stem-peek{
+  flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  color:var(--fg-2);
+}
+.exam-q[open] .exam-stem-peek{color:var(--fg)}
+.exam-q-body{padding:4px 16px 16px 46px}
+.exam-stem{margin:.6em 0;font-size:14.5px;line-height:1.8;color:var(--fg)}
+.exam-blank{color:var(--danger);padding:0 1px}
+.exam-opts{list-style:none;margin:.5em 0 .9em;padding:0}
+/* ⚠️ 必须清掉全局 `ul>li::before` 的圆点（本站正文列表有项目符号），
+   否则真题选项前会多出一个小圆点，位置还和字母块错开 */
+.exam-opts>li::before{content:none !important}
+.exam-opts li{
+  position:relative;padding:4px 0 4px 26px;font-size:14px;line-height:1.7;
+  border-bottom:1px dashed var(--line);
+}
+.exam-opts li:last-child{border-bottom:0}
+.exam-opts b{
+  position:absolute;left:0;top:4px;
+  display:inline-flex;align-items:center;justify-content:center;
+  width:19px;height:19px;border-radius:5px;
+  background:var(--bg-alt);border:1px solid var(--line-2);
+  font-size:11px;font-weight:700;color:var(--fg-3);
+}
+
+/* ── 答案（默认再折叠一层）── */
+.exam-ans{margin-top:.6em}
+.exam-ans>summary{
+  display:inline-flex;align-items:center;gap:6px;cursor:pointer;list-style:none;
+  padding:4px 12px;font-size:12px;
+  background:var(--accent-soft);border:1px solid var(--line-2);
+  border-radius:999px;color:var(--accent);
+  transition:background .18s var(--ease),border-color .18s var(--ease);
+}
+.exam-ans>summary::-webkit-details-marker{display:none}
+.exam-ans>summary:hover{background:var(--accent-soft-2);border-color:var(--accent)}
+.exam-ans[open]>summary{margin-bottom:8px}
+.exam-ans-line{margin:.4em 0;font-size:14px;color:var(--fg)}
+.exam-ans-line b{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:26px;height:24px;padding:0 8px;margin-left:4px;
+  border-radius:6px;background:var(--tip-bg);color:var(--tip-fg);
+  border:1px solid var(--tip-line);font-weight:700;
+}
+.exam-exp{margin:.4em 0;font-size:13.5px;line-height:1.8;color:var(--fg-2)}
+
+/* ── 窄屏 ── */
+@media(max-width:760px){
+  .exam-bar{padding:10px 12px;gap:8px}
+  .exam-bar-label{font-size:13px}
+  .exam-bar-stat{font-size:11.5px;flex-basis:100%;order:3;min-width:0}
+  .exam-bar-ops{margin-left:auto}
+  .exam-subject-tip{display:none}
+  .exam-q>summary{padding-left:16px;flex-wrap:wrap}
+  .exam-q>summary::before{display:none}
+  .exam-no{min-width:0}
+  .exam-q-body{padding-left:16px}
+  .exam-year>summary{padding-left:20px}
+  .exam-stem-peek{white-space:normal;flex-basis:100%}
+  .exam-opts li{font-size:13.5px}
+}
+
+/* ── 打印：全部自动展开（服务"可打印带水印"卖点）── */
+@media print{
+  .exam-bar,.exam-op,.exam-ans>summary{display:none !important}
+  .exam-subject,.exam-year,.exam-q{border:0 !important;background:none !important}
+  .exam-subject>summary,.exam-year>summary{
+    padding:6pt 0;background:none !important;border-bottom:1pt solid #999;
+  }
+  .exam-subject-name::before,.exam-year-name::before,.exam-q>summary::before{content:'' !important}
+  .exam-q-body,.exam-ans[open] > div,.exam-ans > div{display:block !important}
+  .exam-q{break-inside:avoid;page-break-inside:avoid}
+  .exam-stem,.exam-opts li{font-size:9.5pt}
+  .exam-exp{font-size:8.5pt;color:#333}
+}
 </style>
 </head>
 <body>
@@ -2223,6 +2383,30 @@ html{scroll-padding-top:80px}
   </div>
 </div>
 </div>
+    <section class="exam" id="exam" data-exam-chapter="9" data-exam-hour="H19"><div class="exam-bar"><span class="exam-bar-label">📚 历年真题</span><span class="exam-bar-stat">本章共 <b>46</b> 题 · 本学时 <b>23</b> 题（其余见同章其他学时）</span><span class="exam-bar-ops"><button type="button" class="exam-op" data-exam-all="1">全部展开</button><button type="button" class="exam-op" data-exam-all="0">全部收起</button></span></div><details class="exam-subject" data-exam-subject="综合知识"><summary><span class="exam-subject-name">📝 综合知识</span><span class="exam-subject-n">23 题</span><span class="exam-subject-tip">按年份展开 · 单题可点开看答案</span></summary><details class="exam-year" data-exam-year="2026年5月"><summary><span class="exam-year-name">2026年5月</span><span class="exam-year-n">4 题</span></summary><details class="exam-q" data-exam-id="2026年5月-067"><summary><span class="exam-no">第 67 题</span><span class="exam-stem-peek">下列属于强制性国家标准代号的是</span></summary><div class="exam-q-body"><p class="exam-stem">下列属于强制性国家标准代号的是</p><ul class="exam-opts"><li><b>A</b> GJB</li><li><b>B</b> GB/T</li><li><b>C</b> GB</li><li><b>D</b> ISO</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">GB=中国强制性国标；GB/T=推荐性国标；GJB=国军标；ISO=国际标准。</p></details></div></details><details class="exam-q" data-exam-id="2026年5月-051"><summary><span class="exam-no">第 51 题</span><span class="exam-stem-peek">下列关于防火墙的描述，正确的是</span></summary><div class="exam-q-body"><p class="exam-stem">下列关于防火墙的描述，正确的是</p><ul class="exam-opts"><li><b>A</b> 只能硬件实现</li><li><b>B</b> 用于隔离不同网络</li><li><b>C</b> 只能阻断病毒</li><li><b>D</b> 必须联网才能工作</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">防火墙分硬件/软件两类，核心作用是隔离网络、访问控制，无法彻底防范病毒。</p></details></div></details><details class="exam-q" data-exam-id="2026年5月-030"><summary><span class="exam-no">第 30 题</span><span class="exam-stem-peek">LGPL协议相比GPL的特点是</span></summary><div class="exam-q-body"><p class="exam-stem">LGPL协议相比GPL的特点是</p><ul class="exam-opts"><li><b>A</b> 不允许动态链接</li><li><b>B</b> 允许动态链接闭源程序</li><li><b>C</b> 完全禁止商业使用</li><li><b>D</b> 不支持修改</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">LGPL传染性弱，允许动态链接闭源程序；GPL禁止该行为。</p></details></div></details><details class="exam-q" data-exam-id="2026年5月-007"><summary><span class="exam-no">第 7 题</span><span class="exam-stem-peek">GPL协议的主要特点是</span></summary><div class="exam-q-body"><p class="exam-stem">GPL协议的主要特点是</p><ul class="exam-opts"><li><b>A</b> 允许闭源修改</li><li><b>B</b> 强传染性</li><li><b>C</b> 仅允许商业软件使用</li><li><b>D</b> 不允许二次开发</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">GPL是开源协议，具备强传染性，引用/修改GPL代码后整体软件必须开源。</p></details></div></details></details><details class="exam-year" data-exam-year="2025年5月"><summary><span class="exam-year-name">2025年5月</span><span class="exam-year-n">1 题</span></summary><details class="exam-q" data-exam-id="2025年5月-063"><summary><span class="exam-no">第 63 题</span><span class="exam-stem-peek">企业服务器遭受大规模 DDoS 攻击，但必须保证服务不中断。此时最先采取的措施是 ()</span></summary><div class="exam-q-body"><p class="exam-stem">企业服务器遭受大规模 DDoS 攻击，但必须保证服务不中断。此时最先采取的措施是 ()</p><ul class="exam-opts"><li><b>A</b> 启用云端流量清洗服务</li><li><b>B</b> 立即关闭服务器停止服务</li><li><b>C</b> 临时增加服务器带宽</li><li><b>D</b> 部署Web应用防火墙（WAF）</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">大规模DDoS攻击需要专业云端流量清洗分流海量恶意流量，保障源站持续服务；B直接停服不符合业务要求，C扩容带宽无法抵御超大流量洪水攻击，D的WAF仅能防护应用层攻击，无法处理底层流量攻击。</p></details></div></details></details><details class="exam-year" data-exam-year="2024年5月"><summary><span class="exam-year-name">2024年5月</span><span class="exam-year-n">4 题</span></summary><details class="exam-q" data-exam-id="2024年5月-060"><summary><span class="exam-no">第 60 题</span><span class="exam-stem-peek">假定用户A、B分别在I1和I2两个CA处取得了各自的证书，（）是A、B互信的必要条件。</span></summary><div class="exam-q-body"><p class="exam-stem">假定用户A、B分别在I1和I2两个CA处取得了各自的证书，（）是A、B互信的必要条件。</p><ul class="exam-opts"><li><b>A</b> B互换私钥</li><li><b>B</b> A、B互换公钥</li><li><b>C</b> I1、I2互换私钥</li><li><b>D</b> I1、I2互换公钥</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">公钥密码体系中私钥必须严格保密，因此A、C选项直接排除；A、B的公钥仅能验证单用户身份，无法打通两个CA体系的信任链；I1和I2互换公钥后，双方可互相校验对方CA签发证书的签名合法性，实现跨域用户互信。</p></details></div></details><details class="exam-q" data-exam-id="2024年5月-037"><summary><span class="exam-no">第 37 题</span><span class="exam-stem-peek">数字签名标准DSS中使用的签名算法DSA对消息m的签名验证结果为True，也不能说明（）</span></summary><div class="exam-q-body"><p class="exam-stem">数字签名标准DSS中使用的签名算法DSA对消息m的签名验证结果为True，也不能说明（）</p><ul class="exam-opts"><li><b>A</b> 接收的消息m无伪造</li><li><b>B</b> 接收的消息m无篡改</li><li><b>C</b> 接收的消息m无错误</li><li><b>D</b> 接收的消息m无泄密</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">数字签名仅能保障消息完整性、真实性、抗抵赖，无法阻止消息内容被泄露；防止泄密需要依靠数据加密技术实现。</p></details></div></details><details class="exam-q" data-exam-id="2024年5月-011"><summary><span class="exam-no">第 11 题</span><span class="exam-stem-peek">以下加密算法中，属于对称加密算法，并且加密密钥为128位，加密分组为64位的是（）</span></summary><div class="exam-q-body"><p class="exam-stem">以下加密算法中，属于对称加密算法，并且加密密钥为128位，加密分组为64位的是（）</p><ul class="exam-opts"><li><b>A</b> DES</li><li><b>B</b> 3DES</li><li><b>C</b> RSA</li><li><b>D</b> IDEA</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">IDEA是典型对称加密算法，密钥长度128bit，数据分组长度64bit；DES密钥仅56bit，3DES密钥168bit，RSA属于非对称加密体系。</p></details></div></details><details class="exam-q" data-exam-id="2024年5月-004"><summary><span class="exam-no">第 4 题</span><span class="exam-stem-peek">SSL协议由三个子协议组成，以下（）不是SSL子协议</span></summary><div class="exam-q-body"><p class="exam-stem">SSL协议由三个子协议组成，以下（）不是SSL子协议</p><ul class="exam-opts"><li><b>A</b> 握手协议</li><li><b>B</b> 记录协议</li><li><b>C</b> 警报协议</li><li><b>D</b> 传输协议</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">SSL体系仅包含握手协议、记录协议、警报协议三类子协议，不存在名为传输协议的SSL子协议。</p></details></div></details></details><details class="exam-year" data-exam-year="2023年5月"><summary><span class="exam-year-name">2023年5月</span><span class="exam-year-n">4 题</span></summary><details class="exam-q" data-exam-id="2023年5月-069"><summary><span class="exam-no">第 69 题</span><span class="exam-stem-peek">71-75. Safety critical systems are systems in which failures…</span></summary><div class="exam-q-body"><p class="exam-stem">71-75. Safety critical systems are systems in which failures may affect the environment of the system and cause injury or death to the people in that environment. The principal concept of safety specification is to identify requirements that will minimize the probability that such failure will occur. Safety requirements are primarily protection requirements and are enforced with normal system operation. They may specify that the system should be designed so that safety is maintained. In deriving safety requirements, you therefore need to find an acceptable balance between safety and functionality and avoid overprotection. A very safe system is of no practical value if it does not operate in a cost-effective way. Safety specification is usually focused on the hazards that may arise in a given situation, and the events that can lead to these hazards. The activities in the general risk-based iteration process map onto the safety specification process as follows:
+1. ( ). In safety specification, this is the hazard identification process that identifies hazards that may threaten the system.
+2. ( ). This is a process of hazard assessment to decide which hazards are the most dangerous and/or the most likely to occur. These should be prioritized when deriving safety requirements.
+3. ( ). This process is concerned with discovering the events that can lead to the occurrence of a hazard. In safety specification, the process is known as hazard analysis.
+4. ( ). This process is based on the outcome of hazard analysis and leads to identification of safety requirements. These may be concerned with ensuring that a hazard does not arise or lead to an accident or that if an accident does occur, the associated damage is minimized.
+5. ( )
+2. 评估隐患危害等级、发生概率并划分优先级，对应Risk analysis（风险分析，选B）；
+3. 溯源挖掘引发隐患的前置事件（危害分析），对应Risk decomposition（风险分解，选A）；
+4. 基于分析结果制定管控方案、降低事故损失，对应Risk reduction（风险降低，选C）；
+5. 第4步明确说明 This process is based on the outcome of (75)，即第75空承接第3步的产出，而第3步原文标注 known as hazard analysis，故第75空为hazard analysis（危害分析，选D）。
+原参考答案标注顺序D B C A B存在排版错位；经对原文逐空语义核对，第73空应为Risk decomposition(A)、第74空应为Risk reduction(C)、第75空应为hazard analysis(D)，正确顺序为D B A C D。
+（本题为第 4 空）</p><ul class="exam-opts"><li><b>A</b> Risk decomposition</li><li><b>B</b> Risk analysis</li><li><b>C</b> Risk reduction</li><li><b>D</b> Risk identification</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">本空考查第4步：based on the outcome of hazard analysis and leads to identification of safety requirements（基于分析结果制定安全需求、降低事故损失），对应Risk reduction（风险降低，选C）。</p></details></div></details><details class="exam-q" data-exam-id="2023年5月-067"><summary><span class="exam-no">第 67 题</span><span class="exam-stem-peek">71-75. Safety critical systems are systems in which failures…</span></summary><div class="exam-q-body"><p class="exam-stem">71-75. Safety critical systems are systems in which failures may affect the environment of the system and cause injury or death to the people in that environment. The principal concept of safety specification is to identify requirements that will minimize the probability that such failure will occur. Safety requirements are primarily protection requirements and are enforced with normal system operation. They may specify that the system should be designed so that safety is maintained. In deriving safety requirements, you therefore need to find an acceptable balance between safety and functionality and avoid overprotection. A very safe system is of no practical value if it does not operate in a cost-effective way. Safety specification is usually focused on the hazards that may arise in a given situation, and the events that can lead to these hazards. The activities in the general risk-based iteration process map onto the safety specification process as follows:
+1. ( ). In safety specification, this is the hazard identification process that identifies hazards that may threaten the system.
+2. ( ). This is a process of hazard assessment to decide which hazards are the most dangerous and/or the most likely to occur. These should be prioritized when deriving safety requirements.
+3. ( ). This process is concerned with discovering the events that can lead to the occurrence of a hazard. In safety specification, the process is known as hazard analysis.
+4. ( ). This process is based on the outcome of hazard analysis and leads to identification of safety requirements. These may be concerned with ensuring that a hazard does not arise or lead to an accident or that if an accident does occur, the associated damage is minimized.
+5. ( )
+2. 评估隐患危害等级、发生概率并划分优先级，对应Risk analysis（风险分析，选B）；
+3. 溯源挖掘引发隐患的前置事件（危害分析），对应Risk decomposition（风险分解，选A）；
+4. 基于分析结果制定管控方案、降低事故损失，对应Risk reduction（风险降低，选C）；
+5. 第4步明确说明 This process is based on the outcome of (75)，即第75空承接第3步的产出，而第3步原文标注 known as hazard analysis，故第75空为hazard analysis（危害分析，选D）。
+原参考答案标注顺序D B C A B存在排版错位；经对原文逐空语义核对，第73空应为Risk decomposition(A)、第74空应为Risk reduction(C)、第75空应为hazard analysis(D)，正确顺序为D B A C D。
+（本题为第 2 空）</p><ul class="exam-opts"><li><b>A</b> Risk decomposition</li><li><b>B</b> Risk analysis</li><li><b>C</b> Risk reduction</li><li><b>D</b> Risk identification</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">本空考查第2步：This is a process of hazard assessment to decide which hazards are the most dangerous and/or the most likely to occur（评估隐患的危险程度与发生概率并排序），对应Risk analysis（风险分析，选B）。</p></details></div></details><details class="exam-q" data-exam-id="2023年5月-020"><summary><span class="exam-no">第 20 题</span><span class="exam-stem-peek">国密 SSL 证书采用（ ）公钥算法体系，支持 SM2，SM3，SM4 等国密算法安全协议，国密 SSL 证书可以满足政…</span></summary><div class="exam-q-body"><p class="exam-stem">国密 SSL 证书采用（ ）公钥算法体系，支持 SM2，SM3，SM4 等国密算法安全协议，国密 SSL 证书可以满足政府机构、事业单位、大型国企、金融银行等行业客户的国产化改造和国密算法合规需求。</p><ul class="exam-opts"><li><b>A</b> SM1</li><li><b>B</b> SM2</li><li><b>C</b> SM3</li><li><b>D</b> SM4</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">SSL证书依托非对称公钥算法实现身份签名与密钥协商，国密体系中SM2是非对称公钥算法，适配SSL证书体系；SM1/SM4是对称加密算法，SM3是摘要算法。</p></details></div></details><details class="exam-q" data-exam-id="2023年5月-007"><summary><span class="exam-no">第 7 题</span><span class="exam-stem-peek">在我国商用密码算法体系中：（ ）属于摘要算法。</span></summary><div class="exam-q-body"><p class="exam-stem">在我国商用密码算法体系中：（ ）属于摘要算法。</p><ul class="exam-opts"><li><b>A</b> SM2</li><li><b>B</b> SM3</li><li><b>C</b> SM4</li><li><b>D</b> SM9</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">国密算法分类：SM1、SM4、SM7为对称算法；SM2、SM9为非对称算法；SM3是哈希信息摘要算法，用于生成固定长度消息摘要。</p></details></div></details></details><details class="exam-year" data-exam-year="2022年5月"><summary><span class="exam-year-name">2022年5月</span><span class="exam-year-n">3 题</span></summary><details class="exam-q" data-exam-id="2022年5月-061"><summary><span class="exam-no">第 61 题</span><span class="exam-tag">两空单选</span><span class="exam-tag">2 空</span><span class="exam-stem-peek">信息系统的安全是个复杂的综合体，涉及系统的方方面面，其中（61）是指保护计算机设备、设施和其他媒体免遭地震、水灾、火灾、…</span></summary><div class="exam-q-body"><p class="exam-stem">信息系统的安全是个复杂的综合体，涉及系统的方方面面，其中<b class="exam-blank">（61）</b>是指保护计算机设备、设施和其他媒体免遭地震、水灾、火灾、有害气体和其他环境事故（例如，电磁辐射等）破坏的措施和过程。<b class="exam-blank">（62）</b>是计算机信息系统安全的重要环节，其实质是保证系统的正常运行，不因偶然的或恶意的侵扰而遭到破坏，使系统可靠、连续地运行，服务不被中断。
+（本题为第 2 空）</p><ul class="exam-opts"><li><b>A</b> 淘汰</li><li><b>B</b> 继承</li><li><b>C</b> 改造</li><li><b>D</b> 集成</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">实体安全聚焦硬件、物理设施抵御自然灾害、环境事故的防护；运行安全保障系统业务持续可靠运行，抵御意外或恶意侵扰避免服务中断；信息安全聚焦数据本身的机密性、完整性保护；人员安全针对操作人员权限与行为管控。</p></details></div></details><details class="exam-q" data-exam-id="2022年5月-009"><summary><span class="exam-no">第 9 题</span><span class="exam-stem-peek">确保计算机系统机密性的方法不包括（9）。</span></summary><div class="exam-q-body"><p class="exam-stem">确保计算机系统机密性的方法不包括（9）。</p><ul class="exam-opts"><li><b>A</b> 加密</li><li><b>B</b> 认证</li><li><b>C</b> 授权</li><li><b>D</b> 备份</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">备份是保证可靠性的。</p></details></div></details><details class="exam-q" data-exam-id="2022年5月-007"><summary><span class="exam-no">第 7 题</span><span class="exam-stem-peek">（7）不属于基于生物特征的认证技术。</span></summary><div class="exam-q-body"><p class="exam-stem">（7）不属于基于生物特征的认证技术。</p><ul class="exam-opts"><li><b>A</b> 指纹识别</li><li><b>B</b> 人脸识别</li><li><b>C</b> 口令</li><li><b>D</b> 虹膜识别</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">常识。</p></details></div></details></details><details class="exam-year" data-exam-year="2020年11月"><summary><span class="exam-year-name">2020年11月</span><span class="exam-year-n">5 题</span></summary><details class="exam-q" data-exam-id="2020年11月-018"><summary><span class="exam-no">第 18 题</span><span class="exam-stem-peek">在信息安全领域，基本的安全性原则包括保密性(Confidentiality)、完整性(Integrity) 和可用性(A…</span></summary><div class="exam-q-body"><p class="exam-stem">在信息安全领域，基本的安全性原则包括保密性(Confidentiality)、完整性(Integrity) 和可用性(Availability)。(18)就是破坏系统的可用性。</p><ul class="exam-opts"><li><b>A</b> XSS跨站脚本攻击</li><li><b>B</b> DoS拒绝服务攻击</li><li><b>C</b> CSRF跨站请求伪造攻击</li><li><b>D</b> 缓冲区溢出攻击</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">DoS拒绝服务攻击通过耗尽服务器资源、滥用协议缺陷，让系统无法向合法用户提供正常服务，直接破坏可用性；XSS、CSRF主要破坏身份认证与数据完整性，缓冲区溢出多用于权限提升攻击。</p></details></div></details><details class="exam-q" data-exam-id="2020年11月-013"><summary><span class="exam-no">第 13 题</span><span class="exam-stem-peek">以下关于软件著作权产生时间的叙述中，正确的是(13)。</span></summary><div class="exam-q-body"><p class="exam-stem">以下关于软件著作权产生时间的叙述中，正确的是(13)。</p><ul class="exam-opts"><li><b>A</b> 自软件首次公开发表时</li><li><b>B</b> 自开发者有开发意图时</li><li><b>C</b> 自软件开发完成之日时</li><li><b>D</b> 自软件著作权登记时</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">我国著作权采用自动保护原则，软件著作权在软件开发完成当日自动生效，发表、登记都不是著作权取得的前置条件。</p></details></div></details><details class="exam-q" data-exam-id="2020年11月-011"><summary><span class="exam-no">第 11 题</span><span class="exam-stem-peek">我国由国家版权局主管全国软件著作权登记管理工作，指定(11)为软件著作权登记机构。</span></summary><div class="exam-q-body"><p class="exam-stem">我国由国家版权局主管全国软件著作权登记管理工作，指定(11)为软件著作权登记机构。</p><ul class="exam-opts"><li><b>A</b> 著作权登记中心</li><li><b>B</b> 国家知识产权局</li><li><b>C</b> 中国版权保护中心</li><li><b>D</b> 国家专利局</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">国家版权局官方指定中国版权保护中心作为全国计算机软件著作权的唯一登记机构，负责软件著作权登记、合同备案等全流程登记业务。</p></details></div></details><details class="exam-q" data-exam-id="2020年11月-009"><summary><span class="exam-no">第 9 题</span><span class="exam-stem-peek">根据国际标准 ITUT X.509 规定，数字证书的一般格式中会包含认证机构的签名，该数据域的作用是(9)。</span></summary><div class="exam-q-body"><p class="exam-stem">根据国际标准 ITUT X.509 规定，数字证书的一般格式中会包含认证机构的签名，该数据域的作用是(9)。</p><ul class="exam-opts"><li><b>A</b> 用于标识颁发证书的权威机构 CA</li><li><b>B</b> 用于指示建立和签署证书的 CA 的 X.509 名字</li><li><b>C</b> 用于防止证书伪造</li><li><b>D</b> 用于传递 CA 的公钥</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">X.509证书中CA的数字签名可以验证证书内容未被篡改、签发主体可信，以此防范证书被伪造、篡改的风险。</p></details></div></details><details class="exam-q" data-exam-id="2020年11月-007"><summary><span class="exam-no">第 7 题</span><span class="exam-stem-peek">SHA-256 是(7)算法。</span></summary><div class="exam-q-body"><p class="exam-stem">SHA-256 是(7)算法。</p><ul class="exam-opts"><li><b>A</b> 加密</li><li><b>B</b> 数字签名</li><li><b>C</b> 认证</li><li><b>D</b> 报文摘要</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">SHA-256属于安全哈希（SHA）算法家族，是典型的报文摘要算法，可将任意长度输入生成固定长度的哈希摘要，用于数据完整性校验。</p></details></div></details></details><details class="exam-year" data-exam-year="2019年5月"><summary><span class="exam-year-name">2019年5月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2019年5月-009"><summary><span class="exam-no">第 9 题</span><span class="exam-stem-peek">数字签名是对以数字形式存储的消息进行某种处理，产生一种类似于传统手书签名功效的信息处理过程。数字签名标准DSS中使用的签…</span></summary><div class="exam-q-body"><p class="exam-stem">数字签名是对以数字形式存储的消息进行某种处理，产生一种类似于传统手书签名功效的信息处理过程。数字签名标准DSS中使用的签名算法DSA是基于ElGamal和Schnorr两个方案而设计的。当DSA对消息m的签名验证结果为True，也不能说明（）。</p><ul class="exam-opts"><li><b>A</b> 接收的消息m无伪造</li><li><b>B</b> 接收的消息m无篡改</li><li><b>C</b> 接收的消息m无错误</li><li><b>D</b> 接收的消息m无泄密</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">数字签名可以实现防伪造、防篡改、传输纠错、发送方抗抵赖，但无法保障消息的保密性（防泄密需要依靠加密技术实现，签名使用的公钥是公开的）。</p></details></div></details><details class="exam-q" data-exam-id="2019年5月-007"><summary><span class="exam-no">第 7 题</span><span class="exam-stem-peek">若甲、乙采用非对称密钥体系进行保密通信，甲用乙的公钥加密数据文件，乙使用（）来对数据文件进行解密。</span></summary><div class="exam-q-body"><p class="exam-stem">若甲、乙采用非对称密钥体系进行保密通信，甲用乙的公钥加密数据文件，乙使用（）来对数据文件进行解密。</p><ul class="exam-opts"><li><b>A</b> 甲的公钥</li><li><b>B</b> 甲的私钥</li><li><b>C</b> 乙的公钥</li><li><b>D</b> 乙的私钥</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">非对称加密的核心特性：公钥公开用于加密，仅对应的私有密钥能完成解密；使用乙的公钥加密的数据，只能用乙保管的私钥解密。</p></details></div></details></details></details><details class="exam-subject" data-exam-subject="案例"><summary><span class="exam-subject-name">📋 案例分析</span><span class="exam-subject-n">3 题</span><span class="exam-subject-tip">情景简答 · 采分点三色标记</span></summary><div class="exam-bar"><span class="exam-bar-label">📋 案例分析</span><span class="exam-bar-stat">共 <b>3</b> 题 · 情景简答</span></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">38</span>考点：对称与非对称加密 / 混合加密 / 数字签名与认证 / 密钥管理 / 国密<br>📅 时间：2025-10-20 上午 📍 地点：集团信息安全评审<br>👤 人物：甘工（乙方·系统分析师）、郑专员（甲方·合规专员）、邓经理（甲方·运维经理）、徐总监（甲方·数智化信息部总监）<br>⚡ 冲突：录音、坐席登录、系统间接口三类对象都要保护，还要求优先用国密<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：郑专员把清单往桌上一推：&quot;录音、坐席登录、系统间接口——这三类都要说清楚怎么保护。还有，尽量用国密。&quot; 邓经理犯愁：&quot;录音一年四个 T，全量加密会不会影响性能？&quot; 徐总监补了一句：&quot;坐席还得能登录、能查看，不能一锁了之。&quot; 甘工在白板上分了三栏：录音、身份、接口。他知道，这三类对象的保护方式完全不同——量大走对称、认证与签名走非对称、两者结合才是常态。<br>补充资料：本次需重点设计录音存储、坐席身份认证与工单系统、计费系统之间的接口调用。 已知约束：录音量大需高效加密；坐席分布在多职场；接口需防篡改与防抵赖；集团要求优先采用国产密码算法（SM2/SM3/SM4）。<br>问题 1：（1）比较对称加密与非对称加密的原理、典型算法、优缺点；<br>问题 2：（2）为上述三类对象分别设计加密与认证方案；<br>问题 3：（3）说明密钥管理的主要内容与本项目做法。</p><ul class="exam-questions"><li><b>问题 1</b> （1）比较<strong>对称加密与非对称加密</strong>的原理、典型算法、优缺点；</li><li><b>问题 2</b> （2）为上述三类对象分别设计加密与认证方案；</li><li><b>问题 3</b> （3）说明密钥管理的主要内容与本项目做法。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）两类加密）：<br>- 🟢 加分：解析·加密题要&quot;原理对比 + 三类场景方案 + 密钥管理&quot;，混合加密是必答点。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🔴 核心（2）三类方案）：<br>问题 3｜参考答案要点：<br>- 🔴 核心：🔴 核心（3）密钥管理）：内容包括密钥生成、存储、分发、使用、更新（轮换）、备份与恢复、撤销与销毁、审计，以及密钥与数据分离。</div></details></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">40</span>考点：系统故障模型 / 可靠性指标与冗余计算 / 灾难恢复规划 / 安全审计与私有信息保护<br>📅 时间：2025-12-18 上午 📍 地点：项目组 + 甲方（容灾方案评审）<br>👤 人物：甘工（乙方·系统分析师）、邓经理（甲方·运维经理）、徐总监（甲方·数智化信息部总监）、徐总（甲方·分管副总）<br>⚡ 冲突：核心链路要求可用度不低于 99.9%，但当前串联链路算下来只有 96.5%<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：徐总问得很直接：&quot;万一机房出事，电话还能不能打通？&quot; 邓经理把三个环节的可用度写出来：接入网关 99.0%、AI 应答 98.0%、数据库 99.5%。 彭工补了一句：&quot;串在一起乘一下，只有 96.5%，离要求的 99.9% 差得远。&quot; 徐总监看向甘工：&quot;那要怎么补？&quot; 甘工知道，这是典型的可靠性计算 + 冗余设计问题——而且补哪儿最有效，是有讲究的。<br>补充资料：*串联组成（任一失效则链路不可用）。集团要求链路可用度不低于 0.99。此外需制定灾难恢复规划，并满足等保三级的安全审计与个人信息保护要求。<br>问题 1：（1）计算该串联链路的可靠度，判断是否满足要求；若对最薄弱环节做并联冗余，计算新的可靠度；<br>问题 2：（2）说明系统故障模型与常见可靠性指标（MTBF、MTTR、MTTF、可用性）；<br>问题 3：（3）说明灾难恢复规划（DRP）与业务持续性规划（BCP）的主要内容；<br>问题 4：（4）说明安全审计与私有信息保护的主要措施。</p><ul class="exam-questions"><li><b>问题 1</b> （1）计算该串联链路的可靠度，判断是否满足要求；若对最薄弱环节做<strong>并联冗余</strong>，计算新的可靠度；</li><li><b>问题 2</b> （2）说明<strong>系统故障模型</strong>与常见<strong>可靠性指标</strong>（MTBF、MTTR、MTTF、可用性）；</li><li><b>问题 3</b> （3）说明<strong>灾难恢复规划（DRP）</strong>与<strong>业务持续性规划（BCP）</strong>的主要内容；</li><li><b>问题 4</b> （4）说明安全审计与私有信息保护的主要措施。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）可靠性计算）：<br>- 🟢 加分：解析·可靠性必须给出计算过程；DRP/BCP 要区分&quot;恢复 IT&quot;与&quot;维持业务&quot;。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🔴 核心（2）故障模型与指标）：<br>问题 3｜参考答案要点：<br>- 🔴 核心：🔴 核心（3）DRP 与 BCP）：<br>问题 4｜参考答案要点：<br>- 🔴 核心：🔴 核心（4）安全审计与私有信息保护）：</div></details></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">42</span>📅 时间：2026-05-21 📍 地点：灾备演练现场（主备机房）<br>👤 人物：邓经理（甲方·运维经理）、甘工（乙方·系统分析师）、徐总监（甲方·数智化信息部总监）、徐总（视频观摩）、郑专员（甲方·合规专员）<br>⚡ 冲突：演练时&quot;切到备中心&quot;用了 47 分钟，远超目标的 1 分钟；更糟的是切换后有 800 条工单状态对不上<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：演练总指挥宣布&quot;主中心故障&quot;，邓经理开始切换。四十多分钟后，业务才勉强恢复——远超 1 分钟的目标。 复盘时问题一条条冒出来：备中心的应用版本比主中心旧；数据库是异步复制，切换时最后几十秒的事务没同步过来，导致 800 条工单状态不一致；DNS 缓存没提前降级，切换后部分坐席仍连到主中心；更尴尬的是，备中心的配置中心里还写着主中心的地址。 徐总在视频那头只问了一句：&quot;真出事的时候，是不是也这样？&quot; 甘工知道，没演练过的灾备等于没有灾备——这次演练最大的价值，就是把&quot;纸面上的双活&quot;打成原形。<br>补充资料：RTO → ≤1 分钟 → 47 分钟 → 极大 → 人工切换、无编排；RPO → ≤5 分钟 → 约 40 秒数据丢失 → 部分达标 → 异步复制；数据一致性 → 100% → 800 条工单状态不一致 → 不符 → 复制延迟未对账；版本一致性 → 主备同版本 → 备中心版本落后 → 不符 → 发布未覆盖备中心；DNS 切换 → 自动 → 依赖缓存失效 → 不符 → TTL 未提前降低 改进：版本同步发布、核心数据半同步、VIP/GSLB 自动切流、配置主备同步、一键编排、切换后自动对账。<br>问题 1：（1）说明容灾与业务持续性的概念，以及 RTO/RPO 的含义；<br>问题 2：（2）分析本例切换失败与数据不一致的原因，给出改进后的容灾方案；<br>问题 3：（3）说明系统可靠性指标与提高可靠性的手段；<br>问题 4：（4）说明灾难恢复规划（DRP）与演练的要点。</p><ul class="exam-questions"><li><b>问题 1</b> （1）说明<strong>容灾</strong>与<strong>业务持续性</strong>的概念，以及 <strong>RTO/RPO</strong> 的含义；</li><li><b>问题 2</b> （2）分析本例切换失败与数据不一致的原因，给出<strong>改进后的容灾方案</strong>；</li><li><b>问题 3</b> （3）说明<strong>系统可靠性</strong>指标与提高可靠性的手段；</li><li><b>问题 4</b> （4）说明灾难恢复规划（DRP）与演练的要点。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）容灾与指标）：容灾是在灾难（机房故障、自然灾害、网络中断等）发生时保障信息系统与数据可恢复的能力体系；业务持续性（BCP）是保障关键业务在灾难期间持续运作的规划（不仅恢复 IT，还包括人员、流程、供应链替代）。<br>- 🟢 加分：解析·容灾题要&quot;指标 + 原因分析 + 改进 + 演练要点&quot;，原因分析是得分核心。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🟡 支撑（2）原因与改进）：<br>问题 3｜参考答案要点：<br>- 🔴 核心：🔴 核心（3）可靠性指标与手段）：指标——MTTF（不可修复件平均寿命）、MTBF（平均故障间隔）、MTTR（平均修复时间）、可用度 A = MTBF/(MTBF+MTTR)、可靠度 R(t)、失效率 λ；串联系统 R = ΠRi，并联系统 R = 1 − Π(1−Ri)。<br>问题 4｜参考答案要点：<br>- 🔴 核心：🔴 核心（4）DRP 与演练要点）：DRP 内容——风险评估与业务影响分析（BIA）、确定 RTO/RPO、选择恢复策略（备份/冷备/热备/双活/异地多活）、编制恢复流程与人员职责、制定回退与通信机制、明确演练与维护要求。</div></details></div></details><details class="exam-subject" data-exam-subject="论文"><summary><span class="exam-subject-name">📄 论文写作</span><span class="exam-subject-n">2 题</span><span class="exam-subject-tip">论述题 · 先写再看题</span></summary><div class="exam-bar"><span class="exam-bar-label">📄 论文写作</span><span class="exam-bar-stat">共 <b>2</b> 题 · 论述题</span></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与管理和开发的软件项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细论述业内常见的访问控制策略与实现机制。</li><li><b>问题 3</b> 说明项目选用的访问控制策略与机制，并做出综合评价。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 信息安全</span><span class="exam-lv">⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与设计、开发或运维的AI信息系统项目（项目的背景、业务功能、技术架构、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 结合AI系统的业务与技术特点，详细论述AI项目全生命周期的风险识别、风险分析、风险处置方法，以及安全管理体系的建设要点。</li><li><b>问题 3</b> 结合项目实践，论述你应对数据泄露、算法偏见、模型失效、恶意攻击等风险的具体措施，总结安全与风控工作的实施经验。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · AI治理与风险管理</span><span class="exam-lv">⭐⭐⭐</span></div></div></details></section>
     <div class="wrongbook"></div>
     <div class="keyhint">
   <span class="keyhint-title">键盘快捷键</span>
@@ -3097,6 +3281,77 @@ html{scroll-padding-top:80px}
     el.textContent = n
   }
 
+  // ══════════════════════════════════════════
+  // 12. 历年真题：批量展开 + 记忆展开状态
+  // ══════════════════════════════════════════
+  const Exam = {
+    KEY: 'examOpen',
+    init() {
+      const root = document.querySelector('.exam')
+      if (!root) return
+      const chapter = root.dataset.examChapter || 'x'
+
+      // 恢复上次展开状态：{ "H07": { "2025年5月": true, ... } }
+      const saved = store.get(this.KEY, {}) || {}
+      const mine = saved[chapter] || {}
+      root.querySelectorAll('.exam-year').forEach(y => {
+        const name = y.dataset.examYear
+        // 默认：展开最近 1 套（新年优先），其余收起
+        const open = (name in mine) ? mine[name] : false
+        if (open) y.open = true
+        y.addEventListener('toggle', () => {
+          mine[name] = y.open
+          saved[chapter] = mine
+          store.set(this.KEY, saved)
+        })
+      })
+      // 单题的"看过答案"状态也要记（避免重复点开）
+      const seen = store.get('examSeen', {}) || {}
+      root.querySelectorAll('.exam-q').forEach(qd => {
+        const qid = qd.dataset.examId
+        if (seen[qid]) {
+          const a = qd.querySelector('.exam-ans')
+          if (a) a.open = true
+        }
+        const ans = qd.querySelector('.exam-ans')
+        if (ans) ans.addEventListener('toggle', () => {
+          if (ans.open) { seen[qid] = 1; store.set('examSeen', seen) }
+        })
+      })
+
+      // 批量展开/收起按钮
+      root.querySelectorAll('.exam-op').forEach(btn => {
+        btn.addEventListener('click', e => {
+          e.preventDefault()
+          const openAll = btn.dataset.examAll === '1'
+          root.querySelectorAll('.exam-subject,.exam-year').forEach(d => { d.open = openAll })
+          root.querySelectorAll('.exam-ans').forEach(d => {
+            d.open = openAll
+            if (openAll && d.parentElement.dataset.examId) seen[d.parentElement.dataset.examId] = 1
+          })
+          if (openAll) store.set('examSeen', seen)
+          // 同步年份级记忆
+          root.querySelectorAll('.exam-year').forEach(y => { mine[y.dataset.examYear] = y.open })
+          saved[chapter] = mine
+          store.set(this.KEY, saved)
+        })
+      })
+
+      // 快捷键：E = 跳到真题区块（不与既有键冲突）
+      document.addEventListener('keydown', e => {
+        const t = e.target
+        if (t && t.nodeType === 1 && t.matches('input,textarea,select,[contenteditable]')) return
+        if (e.metaKey || e.ctrlKey || e.altKey) return
+        if (e.key.toLowerCase() === 'e') {
+          e.preventDefault()
+          root.scrollIntoView({ behavior: 'smooth', block: 'start' })
+          const y = root.querySelector('.exam-year')
+          if (y) y.open = true
+        }
+      })
+    }
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
     Theme.init()
     FontSize.init()
@@ -3112,6 +3367,7 @@ html{scroll-padding-top:80px}
     BackTop.init()
     CopyCode.init()
     ReadTime.init()
+    Exam.init()
     updateAnsweredStat()
     window.addEventListener('quiz:update', updateAnsweredStat)
     renderMermaid()

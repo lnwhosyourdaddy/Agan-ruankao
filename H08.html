@@ -7,7 +7,7 @@
 <title>第 8 小时 · 分布式系统、构件与云计算 · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
-<meta name="build-stamp" content="2026-10-05 08:06:29">
+<meta name="build-stamp" content="2026-10-05 11:44:51">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -1927,6 +1927,166 @@ table.zebra tbody tr:hover{background:var(--accent-soft-2)}
 /* ── 平滑滚动偏移（锚点跳转不卡顶栏下） ── */
 html{scroll-padding-top:80px}
 @media(max-width:760px){html{scroll-padding-top:70px}}
+
+/* ═══════════════════════════════════════════════════════════════
+   历年真题区块 · 三级折叠（原生 details，零 JS）
+   ═══════════════════════════════════════════════════════════════ */
+.exam{margin:2.2em 0 1.6em}
+
+/* ── 统计条：常驻不折叠，避免"用户不知道里面有真题"而白做 ── */
+.exam-bar{
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  padding:12px 16px;margin-bottom:10px;
+  background:linear-gradient(180deg,var(--bg-card) 0%,var(--bg-alt) 100%);
+  border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow-1);
+}
+.exam-bar-label{font-weight:700;font-size:14px;color:var(--accent)}
+.exam-bar-stat{font-size:12.5px;color:var(--fg-3);flex:1;min-width:140px}
+.exam-bar-stat b{color:var(--fg-2);font-variant-numeric:tabular-nums}
+.exam-bar-ops{display:flex;gap:6px}
+.exam-op{
+  padding:4px 11px;font:inherit;font-size:12px;cursor:pointer;
+  background:var(--bg-card);border:1px solid var(--line-2);
+  border-radius:999px;color:var(--fg-2);
+  transition:border-color .18s var(--ease),color .18s var(--ease),background .18s var(--ease);
+}
+.exam-op:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+
+/* ── 科目级折叠 ── */
+.exam-subject{
+  border:1px solid var(--line);border-radius:var(--radius);
+  background:var(--bg-card);overflow:hidden;
+}
+.exam-subject>summary{
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  padding:12px 16px;cursor:pointer;list-style:none;
+  font-weight:600;color:var(--fg-2);
+  transition:background .18s var(--ease),color .18s var(--ease);
+}
+.exam-subject>summary::-webkit-details-marker{display:none}
+.exam-subject>summary:hover{background:var(--accent-soft);color:var(--accent)}
+.exam-subject[open]>summary{border-bottom:1px solid var(--line);background:var(--bg-alt)}
+.exam-subject-name::before{content:'▸ ';display:inline-block;transition:transform .2s var(--ease)}
+.exam-subject[open] .exam-subject-name::before{transform:rotate(90deg)}
+.exam-subject-n{font-size:12px;color:var(--fg-3);font-variant-numeric:tabular-nums}
+.exam-subject-tip{margin-left:auto;font-size:11.5px;color:var(--fg-3);opacity:.8}
+
+/* ── 年份级折叠 ── */
+.exam-year{border-bottom:1px solid var(--line)}
+.exam-year:last-child{border-bottom:0}
+.exam-year>summary{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 16px 9px 30px;cursor:pointer;list-style:none;
+  font-size:13.5px;color:var(--fg-2);
+  transition:background .16s var(--ease),color .16s var(--ease);
+}
+.exam-year>summary::-webkit-details-marker{display:none}
+.exam-year>summary:hover{background:var(--accent-soft);color:var(--accent)}
+.exam-year[open]>summary{background:var(--bg-alt)}
+.exam-year-name::before{content:'▸ ';display:inline-block;transition:transform .2s var(--ease);color:var(--fg-3)}
+.exam-year[open] .exam-year-name::before{transform:rotate(90deg)}
+.exam-year-n{font-size:11.5px;color:var(--fg-3);font-variant-numeric:tabular-nums}
+
+/* ── 单题折叠 ── */
+.exam-q{border-top:1px solid var(--line)}
+.exam-q>summary{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:9px 16px 9px 46px;cursor:pointer;list-style:none;
+  font-size:13.5px;line-height:1.6;color:var(--fg-2);
+  transition:background .16s var(--ease);
+}
+.exam-q>summary::-webkit-details-marker{display:none}
+.exam-q>summary:hover{background:var(--accent-soft)}
+.exam-q[open]>summary{background:var(--bg-alt)}
+.exam-q>summary::before{
+  content:'＋';flex-shrink:0;width:1.1em;text-align:center;
+  color:var(--fg-3);font-size:12px;line-height:1.5;
+}
+.exam-q[open]>summary::before{content:'－';color:var(--accent)}
+.exam-no{
+  flex-shrink:0;font-size:11px;color:var(--fg-3);
+  font-variant-numeric:tabular-nums;padding-top:2px;min-width:44px;
+}
+.exam-tag{
+  flex-shrink:0;font-size:10.5px;padding:1px 6px;border-radius:4px;
+  background:var(--warn-bg);color:var(--warn-fg);border:1px solid var(--warn-line);
+}
+.exam-stem-peek{
+  flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  color:var(--fg-2);
+}
+.exam-q[open] .exam-stem-peek{color:var(--fg)}
+.exam-q-body{padding:4px 16px 16px 46px}
+.exam-stem{margin:.6em 0;font-size:14.5px;line-height:1.8;color:var(--fg)}
+.exam-blank{color:var(--danger);padding:0 1px}
+.exam-opts{list-style:none;margin:.5em 0 .9em;padding:0}
+/* ⚠️ 必须清掉全局 `ul>li::before` 的圆点（本站正文列表有项目符号），
+   否则真题选项前会多出一个小圆点，位置还和字母块错开 */
+.exam-opts>li::before{content:none !important}
+.exam-opts li{
+  position:relative;padding:4px 0 4px 26px;font-size:14px;line-height:1.7;
+  border-bottom:1px dashed var(--line);
+}
+.exam-opts li:last-child{border-bottom:0}
+.exam-opts b{
+  position:absolute;left:0;top:4px;
+  display:inline-flex;align-items:center;justify-content:center;
+  width:19px;height:19px;border-radius:5px;
+  background:var(--bg-alt);border:1px solid var(--line-2);
+  font-size:11px;font-weight:700;color:var(--fg-3);
+}
+
+/* ── 答案（默认再折叠一层）── */
+.exam-ans{margin-top:.6em}
+.exam-ans>summary{
+  display:inline-flex;align-items:center;gap:6px;cursor:pointer;list-style:none;
+  padding:4px 12px;font-size:12px;
+  background:var(--accent-soft);border:1px solid var(--line-2);
+  border-radius:999px;color:var(--accent);
+  transition:background .18s var(--ease),border-color .18s var(--ease);
+}
+.exam-ans>summary::-webkit-details-marker{display:none}
+.exam-ans>summary:hover{background:var(--accent-soft-2);border-color:var(--accent)}
+.exam-ans[open]>summary{margin-bottom:8px}
+.exam-ans-line{margin:.4em 0;font-size:14px;color:var(--fg)}
+.exam-ans-line b{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:26px;height:24px;padding:0 8px;margin-left:4px;
+  border-radius:6px;background:var(--tip-bg);color:var(--tip-fg);
+  border:1px solid var(--tip-line);font-weight:700;
+}
+.exam-exp{margin:.4em 0;font-size:13.5px;line-height:1.8;color:var(--fg-2)}
+
+/* ── 窄屏 ── */
+@media(max-width:760px){
+  .exam-bar{padding:10px 12px;gap:8px}
+  .exam-bar-label{font-size:13px}
+  .exam-bar-stat{font-size:11.5px;flex-basis:100%;order:3;min-width:0}
+  .exam-bar-ops{margin-left:auto}
+  .exam-subject-tip{display:none}
+  .exam-q>summary{padding-left:16px;flex-wrap:wrap}
+  .exam-q>summary::before{display:none}
+  .exam-no{min-width:0}
+  .exam-q-body{padding-left:16px}
+  .exam-year>summary{padding-left:20px}
+  .exam-stem-peek{white-space:normal;flex-basis:100%}
+  .exam-opts li{font-size:13.5px}
+}
+
+/* ── 打印：全部自动展开（服务"可打印带水印"卖点）── */
+@media print{
+  .exam-bar,.exam-op,.exam-ans>summary{display:none !important}
+  .exam-subject,.exam-year,.exam-q{border:0 !important;background:none !important}
+  .exam-subject>summary,.exam-year>summary{
+    padding:6pt 0;background:none !important;border-bottom:1pt solid #999;
+  }
+  .exam-subject-name::before,.exam-year-name::before,.exam-q>summary::before{content:'' !important}
+  .exam-q-body,.exam-ans[open] > div,.exam-ans > div{display:block !important}
+  .exam-q{break-inside:avoid;page-break-inside:avoid}
+  .exam-stem,.exam-opts li{font-size:9.5pt}
+  .exam-exp{font-size:8.5pt;color:#333}
+}
 </style>
 </head>
 <body>
@@ -2242,6 +2402,7 @@ html{scroll-padding-top:80px}
   </div>
 </div>
 </div>
+    <section class="exam" id="exam" data-exam-chapter="4" data-exam-hour="H08"><div class="exam-bar"><span class="exam-bar-label">📚 历年真题</span><span class="exam-bar-stat">本章共 <b>43</b> 题 · 本学时 <b>14</b> 题（其余见同章其他学时）</span><span class="exam-bar-ops"><button type="button" class="exam-op" data-exam-all="1">全部展开</button><button type="button" class="exam-op" data-exam-all="0">全部收起</button></span></div><details class="exam-subject" data-exam-subject="综合知识"><summary><span class="exam-subject-name">📝 综合知识</span><span class="exam-subject-n">14 题</span><span class="exam-subject-tip">按年份展开 · 单题可点开看答案</span></summary><details class="exam-year" data-exam-year="2026年5月"><summary><span class="exam-year-name">2026年5月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2026年5月-040"><summary><span class="exam-no">第 40 题</span><span class="exam-stem-peek">视频会议强调实时性，适合采用</span></summary><div class="exam-q-body"><p class="exam-stem">视频会议强调实时性，适合采用</p><ul class="exam-opts"><li><b>A</b> TCP</li><li><b>B</b> FTP</li><li><b>C</b> UDP</li><li><b>D</b> SMTP</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">UDP无连接、延迟低、容忍少量丢包，适用于音视频、直播等实时场景。</p></details></div></details><details class="exam-q" data-exam-id="2026年5月-021"><summary><span class="exam-no">第 21 题</span><span class="exam-stem-peek">以太网采用的介质访问控制方式是</span></summary><div class="exam-q-body"><p class="exam-stem">以太网采用的介质访问控制方式是</p><ul class="exam-opts"><li><b>A</b> CSMA/CA</li><li><b>B</b> Token Ring</li><li><b>C</b> CSMA/CD</li><li><b>D</b> 时分复用</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">有线以太网使用CSMA/CD（载波监听+冲突检测）。</p></details></div></details></details><details class="exam-year" data-exam-year="2025年5月"><summary><span class="exam-year-name">2025年5月</span><span class="exam-year-n">3 题</span></summary><details class="exam-q" data-exam-id="2025年5月-061"><summary><span class="exam-no">第 61 题</span><span class="exam-stem-peek">当负载增大时，通过增加服务器数量来扩容，属于 ()</span></summary><div class="exam-q-body"><p class="exam-stem">当负载增大时，通过增加服务器数量来扩容，属于 ()</p><ul class="exam-opts"><li><b>A</b> 水平扩展</li><li><b>B</b> 垂直扩展</li><li><b>C</b> 混合扩展</li><li><b>D</b> 负载均衡</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">水平扩展（横向扩容）指新增服务器节点数量提升集群整体算力；垂直扩展（纵向扩容）指升级单台服务器CPU、内存等硬件配置提升单机性能。</p></details></div></details><details class="exam-q" data-exam-id="2025年5月-031"><summary><span class="exam-no">第 31 题</span><span class="exam-stem-peek">在计算机网络中，数据通过向中心节点发送数据，再由中心节点进行同步，是（）拓扑结构</span></summary><div class="exam-q-body"><p class="exam-stem">在计算机网络中，数据通过向中心节点发送数据，再由中心节点进行同步，是（）拓扑结构</p><ul class="exam-opts"><li><b>A</b> 环形</li><li><b>B</b> 星状</li><li><b>C</b> 网状</li><li><b>D</b> 总线</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">星型结构，都由中间节点负责数据转发。</p></details></div></details><details class="exam-q" data-exam-id="2025年5月-005"><summary><span class="exam-no">第 5 题</span><span class="exam-stem-peek">在web开发中Restful API设计原则不包括（）</span></summary><div class="exam-q-body"><p class="exam-stem">在web开发中Restful API设计原则不包括（）</p><ul class="exam-opts"><li><b>A</b> 无状态通信</li><li><b>B</b> 使用XML格式传输数据</li><li><b>C</b> 利用HTTP方法操作资源</li><li><b>D</b> 资源通过URI标识</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">RESTful API的核心设计原则包括无状态通信、利用HTTP方法操作资源、资源通过URI标识；REST不强制要求使用XML格式传输数据，JSON是更常用的格式，因此“使用XML格式传输数据”不属于其设计原则。</p></details></div></details></details><details class="exam-year" data-exam-year="2024年5月"><summary><span class="exam-year-name">2024年5月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2024年5月-030"><summary><span class="exam-no">第 30 题</span><span class="exam-stem-peek">以下调制方式中，信道效率最高的是（）</span></summary><div class="exam-q-body"><p class="exam-stem">以下调制方式中，信道效率最高的是（）</p><ul class="exam-opts"><li><b>A</b> SSB</li><li><b>B</b> AM</li><li><b>C</b> FM</li><li><b>D</b> PM</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">SSB单边带调幅仅保留单边频谱，占用带宽最小，信道频带利用率最高；AM双边带带宽翻倍，FM、PM属于角度调制，带宽远大于SSB。</p></details></div></details><details class="exam-q" data-exam-id="2024年5月-005"><summary><span class="exam-no">第 5 题</span><span class="exam-stem-peek">局域网的典型架构不包括（）</span></summary><div class="exam-q-body"><p class="exam-stem">局域网的典型架构不包括（）</p><ul class="exam-opts"><li><b>A</b> 点对点</li><li><b>B</b> 星型</li><li><b>C</b> 总线型</li><li><b>D</b> 环形</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">点对点是通用网络连接模式，不属于局域网专属典型拓扑架构；星型、总线型、环形均是局域网广泛使用的拓扑类型。</p></details></div></details></details><details class="exam-year" data-exam-year="2023年5月"><summary><span class="exam-year-name">2023年5月</span><span class="exam-year-n">1 题</span></summary><details class="exam-q" data-exam-id="2023年5月-008"><summary><span class="exam-no">第 8 题</span><span class="exam-stem-peek">在 OSI 参考模型中，负责对应用层消息进行压缩、加密的层次是（ ）。</span></summary><div class="exam-q-body"><p class="exam-stem">在 OSI 参考模型中，负责对应用层消息进行压缩、加密的层次是（ ）。</p><ul class="exam-opts"><li><b>A</b> 传输层</li><li><b>B</b> 会话层</li><li><b>C</b> 表示层</li><li><b>D</b> 应用层</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">OSI七层模型中，表示层专门负责数据格式处理，包含数据压缩、加密解密、字符编码转换等工作；传输层负责端到端传输，会话层管控会话建立，应用层对接业务应用。</p></details></div></details></details><details class="exam-year" data-exam-year="2022年5月"><summary><span class="exam-year-name">2022年5月</span><span class="exam-year-n">1 题</span></summary><details class="exam-q" data-exam-id="2022年5月-066"><summary><span class="exam-no">第 66 题</span><span class="exam-stem-peek">IP地址10.10.33.66/16的网络地址是（69）。</span></summary><div class="exam-q-body"><p class="exam-stem">IP地址10.10.33.66/16的网络地址是（69）。</p><ul class="exam-opts"><li><b>A</b> 10.10.0.0</li><li><b>B</b> 10.0.0.0</li><li><b>C</b> 10.10.33.0</li><li><b>D</b> 10.10.33.1</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">/16的子网掩码是255.255.0.0，前两个字节10、10属于网络部分，主机位全部清零后得到网络地址10.10.0.0。</p></details></div></details></details><details class="exam-year" data-exam-year="2021年5月"><summary><span class="exam-year-name">2021年5月</span><span class="exam-year-n">3 题</span></summary><details class="exam-q" data-exam-id="2021年5月-070"><summary><span class="exam-no">第 70 题</span><span class="exam-stem-peek">某公司的员工区域使用的IP地址段是172.16.133.128/23，该地址段中最多能够容纳的主机数量是（ ）台。</span></summary><div class="exam-q-body"><p class="exam-stem">某公司的员工区域使用的IP地址段是172.16.133.128/23，该地址段中最多能够容纳的主机数量是（ ）台。</p><ul class="exam-opts"><li><b>A</b> 254</li><li><b>B</b> 510</li><li><b>C</b> 1022</li><li><b>D</b> 2046</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">主机位共9位，理论总地址数2^9=512，减去网段的网络地址和广播地址2个不可用地址，最终可容纳主机数量为510台。</p></details></div></details><details class="exam-q" data-exam-id="2021年5月-067"><summary><span class="exam-no">第 67 题</span><span class="exam-stem-peek">以下关于AES加密算法的描述中，错误的是（ ）。</span></summary><div class="exam-q-body"><p class="exam-stem">以下关于AES加密算法的描述中，错误的是（ ）。</p><ul class="exam-opts"><li><b>A</b> AES的分组长度可以是256比特</li><li><b>B</b> AES的密钥长度可以是128比特</li><li><b>C</b> AES所用S盒的输入为8比特</li><li><b>D</b> AES是一种确定性的加密算法</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">AES标准规定明文分组长度固定为128比特，不支持256比特分组；密钥可选用128比特规格，S盒输入输出均为8比特，加密过程无随机数参与属于确定性加密，A选项描述错误。</p></details></div></details><details class="exam-q" data-exam-id="2021年5月-009"><summary><span class="exam-no">第 9 题</span><span class="exam-stem-peek">对一个新的QoS通信流进行网络资源预留，以确保有足够的资源来处理所请求的QoS流，该规则属于IntServ规定的4种用于…</span></summary><div class="exam-q-body"><p class="exam-stem">对一个新的QoS通信流进行网络资源预留，以确保有足够的资源来处理所请求的QoS流，该规则属于IntServ规定的4种用于提供QoS传输规则中的（ ）规则。</p><ul class="exam-opts"><li><b>A</b> 准入控制</li><li><b>B</b> 路由选择</li><li><b>C</b> 排队</li><li><b>D</b> 丢弃策略</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">IntServ体系的准入控制机制，就是对新请求的业务流做资源校验与预留，若剩余资源无法满足需求则拒绝该流接入网络，保障已有业务流的服务质量。</p></details></div></details></details><details class="exam-year" data-exam-year="2020年11月"><summary><span class="exam-year-name">2020年11月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2020年11月-070"><summary><span class="exam-no">第 70 题</span><span class="exam-stem-peek">为了控制 IP 报文在网络中无限转发，在 IPv4 数据报首部中设置了（70）字段。</span></summary><div class="exam-q-body"><p class="exam-stem">为了控制 IP 报文在网络中无限转发，在 IPv4 数据报首部中设置了（70）字段。</p><ul class="exam-opts"><li><b>A</b> 标识符</li><li><b>B</b> 首部长度</li><li><b>C</b> 生存期</li><li><b>D</b> 总长度</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">IPv4的生存期（TTL）字段用来限制报文最大路由跳数，从源头杜绝IP报文在网络中无限环路转发的问题。</p></details></div></details><details class="exam-q" data-exam-id="2020年11月-066"><summary><span class="exam-no">第 66 题</span><span class="exam-stem-peek">Cookie为客户端持久保持数据提供了方便，但也存在一定的弊端。下列选项中，不属于 Cookie弊端的是（66）。</span></summary><div class="exam-q-body"><p class="exam-stem">Cookie为客户端持久保持数据提供了方便，但也存在一定的弊端。下列选项中，不属于 Cookie弊端的是（66）。</p><ul class="exam-opts"><li><b>A</b> 增加流量消耗</li><li><b>B</b> 明文传输，存在安全性隐患</li><li><b>C</b> 存在敏感信息泄漏风险</li><li><b>D</b> 保存访问站点的缓存数据</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">保存站点访问缓存数据是Cookie的核心设计功能，A、B、C均是Cookie在使用过程中暴露的固有弊端。</p></details></div></details></details></details><details class="exam-subject" data-exam-subject="案例"><summary><span class="exam-subject-name">📋 案例分析</span><span class="exam-subject-n">1 题</span><span class="exam-subject-tip">情景简答 · 采分点三色标记</span></summary><div class="exam-bar"><span class="exam-bar-label">📋 案例分析</span><span class="exam-bar-stat">共 <b>1</b> 题 · 情景简答</span></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">16</span>📅 时间：2026-02-26 上午 📍 地点：某分公司坐席职场（现场排查）<br>👤 人物：甘工（乙方·系统分析师）、邓经理（甲方·运维经理）、老陶（甲方·班组长/十年老坐席）、运营商工程师（第三方·电信公司）<br>⚡ 冲突：分公司坐席普遍反映通话有杂音、断续，甲方认为是平台问题，运营商说是内网问题，互相推诿<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：老陶把耳机递给甘工：&quot;你听听，跟电流声似的，客户还以为我们信号不好。总部那边倒没事，就我们这层楼。&quot; 邓经理查了平台侧：语音流从 SBC 进来一切正常，RTP 丢包率在总部侧只有 0.2%。 运营商工程师（第三方·电信公司）远程看了专线：&quot;我们这段没问题，丢包为零。&quot; 甘工绕着职场走了一圈，发现：坐席电脑和 IP 话机接在同一个交换机上，监控摄像头、大屏、十几台电脑全在一个网段；早高峰时有人在批量导出报表；无线 AP 就装在话机旁边。他把交换机配置调出来一看——没配 VLAN，也没配 QoS。<br>补充资料：终端→接入交换机 → 8 ms → 42 ms → 0.9% → 异常（瓶颈）；接入→汇聚 → 5 ms → 6 ms → 0.1% → 正常；专线（电信公司） → 12 ms → 3 ms → 0% → 正常；SBC→平台 → 6 ms → 4 ms → 0.2% → 正常；语音要求 → ≤150 ms → ≤30 ms → ≤1% → — 接入段现状：语音/办公/监控/大屏同一网段，无 VLAN、无 QoS；AP 距话机 1.5 m。<br>问题 1：（1）指出造成语音质量问题的可能原因（至少 4 条），并说明其中的网络原理；<br>问题 2：（2）说明 VLAN、QoS 与差错控制在语音网络中的作用，给出整改方案；<br>问题 3：（3）说明数据编码与差错控制（检错重传 vs 前向纠错）的选择理由；<br>问题 4：（4）给出排查定位的方法与量化指标。</p><ul class="exam-questions"><li><b>问题 1</b> （1）指出造成语音质量问题的可能原因（至少 4 条），并说明其中的网络原理；</li><li><b>问题 2</b> （2）说明 <strong>VLAN</strong>、<strong>QoS</strong> 与<strong>差错控制</strong>在语音网络中的作用，给出整改方案；</li><li><b>问题 3</b> （3）说明<strong>数据编码</strong>与<strong>差错控制</strong>（检错重传 vs 前向纠错）的选择理由；</li><li><b>问题 4</b> （4）给出排查定位的方法与量化指标。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）原因分析）：<br>- 🟢 加分：解析·网络故障题要&quot;原因分析 + 整改 + 排查方法 + 指标&quot;，用数据定位责任。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🔴 核心（2）整改方案）：<br>问题 3｜参考答案要点：<br>- 🔴 核心：🔴 核心（3）编码与差错控制）：编码是把信息转换为适合传输的信号形式（语音常用 G.711、G.729、Opus；线路编码如曼彻斯特编码、4B/5B）。检错重传（ARQ）通过反馈重发保证可靠，但引入时延与抖动，适合非实时数据；前向纠错（FEC）加入冗余使接收端自行纠错，无需重传，适合实时语音/视频——因为重传回来的语音包已错过播放时机，无意义。<br>问题 4｜参考答案要点：<br>- 🔴 核心：🟡 支撑（4）排查与指标）：</div></details></div></details></section>
     <div class="wrongbook"></div>
     <div class="keyhint">
   <span class="keyhint-title">键盘快捷键</span>
@@ -3116,6 +3277,77 @@ html{scroll-padding-top:80px}
     el.textContent = n
   }
 
+  // ══════════════════════════════════════════
+  // 12. 历年真题：批量展开 + 记忆展开状态
+  // ══════════════════════════════════════════
+  const Exam = {
+    KEY: 'examOpen',
+    init() {
+      const root = document.querySelector('.exam')
+      if (!root) return
+      const chapter = root.dataset.examChapter || 'x'
+
+      // 恢复上次展开状态：{ "H07": { "2025年5月": true, ... } }
+      const saved = store.get(this.KEY, {}) || {}
+      const mine = saved[chapter] || {}
+      root.querySelectorAll('.exam-year').forEach(y => {
+        const name = y.dataset.examYear
+        // 默认：展开最近 1 套（新年优先），其余收起
+        const open = (name in mine) ? mine[name] : false
+        if (open) y.open = true
+        y.addEventListener('toggle', () => {
+          mine[name] = y.open
+          saved[chapter] = mine
+          store.set(this.KEY, saved)
+        })
+      })
+      // 单题的"看过答案"状态也要记（避免重复点开）
+      const seen = store.get('examSeen', {}) || {}
+      root.querySelectorAll('.exam-q').forEach(qd => {
+        const qid = qd.dataset.examId
+        if (seen[qid]) {
+          const a = qd.querySelector('.exam-ans')
+          if (a) a.open = true
+        }
+        const ans = qd.querySelector('.exam-ans')
+        if (ans) ans.addEventListener('toggle', () => {
+          if (ans.open) { seen[qid] = 1; store.set('examSeen', seen) }
+        })
+      })
+
+      // 批量展开/收起按钮
+      root.querySelectorAll('.exam-op').forEach(btn => {
+        btn.addEventListener('click', e => {
+          e.preventDefault()
+          const openAll = btn.dataset.examAll === '1'
+          root.querySelectorAll('.exam-subject,.exam-year').forEach(d => { d.open = openAll })
+          root.querySelectorAll('.exam-ans').forEach(d => {
+            d.open = openAll
+            if (openAll && d.parentElement.dataset.examId) seen[d.parentElement.dataset.examId] = 1
+          })
+          if (openAll) store.set('examSeen', seen)
+          // 同步年份级记忆
+          root.querySelectorAll('.exam-year').forEach(y => { mine[y.dataset.examYear] = y.open })
+          saved[chapter] = mine
+          store.set(this.KEY, saved)
+        })
+      })
+
+      // 快捷键：E = 跳到真题区块（不与既有键冲突）
+      document.addEventListener('keydown', e => {
+        const t = e.target
+        if (t && t.nodeType === 1 && t.matches('input,textarea,select,[contenteditable]')) return
+        if (e.metaKey || e.ctrlKey || e.altKey) return
+        if (e.key.toLowerCase() === 'e') {
+          e.preventDefault()
+          root.scrollIntoView({ behavior: 'smooth', block: 'start' })
+          const y = root.querySelector('.exam-year')
+          if (y) y.open = true
+        }
+      })
+    }
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
     Theme.init()
     FontSize.init()
@@ -3131,6 +3363,7 @@ html{scroll-padding-top:80px}
     BackTop.init()
     CopyCode.init()
     ReadTime.init()
+    Exam.init()
     updateAnsweredStat()
     window.addEventListener('quiz:update', updateAnsweredStat)
     renderMermaid()
