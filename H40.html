@@ -7,7 +7,7 @@
 <title>第 40 小时 · 信息物理系统 CPS · 闭环架构与边缘计算 · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
-<meta name="build-stamp" content="2026-10-05 11:44:51">
+<meta name="build-stamp" content="2026-10-05 15:47:03">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -405,16 +405,21 @@ img{max-width:100%;height:auto}
   border-radius:100px;
   font-size:12.5px;color:var(--accent);font-weight:600;
 }
-.cover h1{
+/* ⚠️ 封面主标题刻意用 <div> 而不是 <h1>：index.md 正文自带 `# 阿甘系分 · 48 小时
+   冲刺手册`，若封面也用 h1，一页会出现两个 h1（语义/SEO 上都是错的）。
+   视觉与 h1 完全一致 —— 字号、颜色、以及那道 72px 短横线都在下面显式声明。 */
+.cover .cover-title{
   font-size:3.5em;font-weight:800;letter-spacing:-1.6px;
   color:var(--accent);line-height:1.14;margin-bottom:16px;
 }
-/* ⚠️ 封面 h1 也继承 `.main h1::after` 那道 56px 短横线，但它是 display:block 的
-   固定宽块级元素 —— 文字居中不代表块级元素居中，会贴到左边。
-   修法：给封面这条短横线加 margin-left/right:auto 让它真正居中。 */
-.cover h1::after{
-  margin-left:auto;margin-right:auto;
+/* 复刻 `.main h1::after` 的短横线（<div> 不继承 h1 的伪元素），并水平居中 —— */
+/* 文字居中不代表块级元素居中，不加 auto 会贴到左边。 */
+.cover .cover-title::after{
+  content:'';display:block;
   width:72px;height:3px;
+  background:var(--accent);
+  margin:.5em auto 0;
+  border-radius:2px;
 }
 .cover .sub{
   font-size:1.2em;color:var(--fg-2);
@@ -845,7 +850,7 @@ pre{
   .nav{margin-left:auto;gap:2px}
   .main{padding:32px 0 80px}
   .cover{padding:48px 0 40px;margin-bottom:40px}
-  .cover h1{font-size:2.4em;letter-spacing:-.8px}
+  .cover .cover-title{font-size:2.4em;letter-spacing:-.8px}
   .cover .sub{font-size:1.05em;margin-bottom:24px}
   .cover-stats{gap:10px;margin-bottom:28px}
   .stat{min-width:76px;padding:10px 14px}
@@ -901,7 +906,7 @@ pre{
   h1,h2,h3,h4{break-after:avoid;page-break-after:avoid}
 
   .cover{padding:0 0 18px;margin-bottom:18px;text-align:left}
-  .cover h1{font-size:24pt}
+  .cover .cover-title{font-size:24pt}
   .cover-stats,.cover-badge,.cta-row{display:none !important}
 
   a[href^="http"]:after{
@@ -1256,16 +1261,14 @@ html.focus-mode .chapbar{opacity:.35;pointer-events:none}
 }
 /* 章首横幅：h1 上方加一条"章号 + 主色渐变"的装饰带，
    让每页开头有一个明确的"进入新章"仪式感（原来 h1 直接浮在正文里）。
-   ⚠️ 必须排除 .cover —— 封面 h1 自己已有顶部留白与居中布局，
-   加上横幅会与下方分隔线叠成双线（首页曾出现两条横线紧挨）。 */
-.main h1:not(.cover h1)::before{
+   （封面主标题已改成 <div class="cover-title">，不再匹配 .main h1，无需再排除。） */
+.main h1::before{
   content:'';display:block;
   width:100%;height:4px;
   background:linear-gradient(90deg,var(--accent) 0%,var(--accent-3) 42%,transparent 88%);
   border-radius:2px;
   margin-bottom:.62em;
 }
-.cover h1::before{content:none}
 .main h1::after{
   content:'';display:block;
   width:56px;height:3px;
@@ -2087,6 +2090,185 @@ html{scroll-padding-top:80px}
   .exam-stem,.exam-opts li{font-size:9.5pt}
   .exam-exp{font-size:8.5pt;color:#333}
 }
+
+/* ══════════════════════════════════════════════════════════════
+   真题区块扩展 v2 · 案例 / 论文卡片 + 全真模拟卷
+   与既有 .exam-* 体系同源：米白卡底 + 左侧 4px 色条 + 墨绿强调色
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── 案例 / 论文卡片（非 <details>，直接展开的题卡）── */
+.exam-q-case,.exam-q-essay{
+  padding:14px 16px 4px;
+  background:var(--bg-card);
+}
+.exam-q-case:hover,.exam-q-essay:hover{background:var(--bg-alt)}
+.case-head{
+  display:flex;flex-wrap:wrap;align-items:center;gap:6px;
+  padding-bottom:10px;margin-bottom:10px;
+  border-bottom:1px dashed var(--line);
+}
+.case-head .exam-no{min-width:0}
+.case-h{
+  display:flex;align-items:center;gap:6px;
+  margin:12px 0 6px;font-size:12.5px;font-weight:700;
+  letter-spacing:.06em;color:var(--accent);
+}
+.case-h::before{
+  content:'';width:4px;height:13px;border-radius:2px;
+  background:var(--accent);flex:0 0 auto;
+}
+
+/* 情景要素（📅时间 / 📍地点 / 👤人物 / ⚡冲突 / 难度总分用时） */
+.case-meta{
+  display:flex;flex-direction:column;gap:2px;
+  padding:9px 12px;margin:.4em 0 .2em;
+  background:var(--bg-alt);
+  border-left:3px solid var(--line-2);
+  border-radius:0 var(--radius-sm) var(--radius-sm) 0;
+  font-size:12.5px;line-height:1.75;color:var(--fg-3);
+}
+.case-meta strong{color:var(--fg-2);font-weight:600}
+
+/* 案例背景正文 */
+.case-scene{
+  margin:.2em 0 1em;padding:12px 14px;
+  background:var(--accent-soft);
+  border-left:3px solid var(--accent-3);
+  border-radius:0 var(--radius) var(--radius) 0;
+  font-size:14.5px;line-height:1.92;color:var(--fg);
+}
+.case-scene strong{color:var(--accent);font-weight:700}
+
+/* 题目列表 */
+.case-asks{margin:.2em 0 1em}
+ul.exam-questions{
+  list-style:none;margin:.4em 0;padding:0;
+}
+ul.exam-questions>li{
+  display:flex;gap:10px;align-items:flex-start;
+  padding:9px 0;border-bottom:1px solid var(--line);
+  font-size:14.5px;line-height:1.88;color:var(--fg);
+}
+ul.exam-questions>li:last-child{border-bottom:0}
+ul.exam-questions>li::before{content:none !important}
+.case-ask-no{
+  flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;
+  min-width:24px;height:22px;margin-top:3px;padding:0 6px;
+  border-radius:6px;background:var(--accent-soft-2);color:var(--accent);
+  font-family:var(--sans);font-size:11.5px;font-weight:700;
+  font-variant-numeric:tabular-nums;
+}
+.case-ask-t{flex:1;min-width:0}
+.case-ask-t strong{color:var(--accent);font-weight:700}
+
+/* ── 答案 / 解析 / 考点拆解 / 教材知识点 ── */
+.exam-points,.exam-keypoints,.exam-exp-more,.essay-bg{
+  padding:12px 14px;margin:8px 0;
+  border-left:4px solid var(--tip-line);
+  border-radius:0 var(--radius) var(--radius) 0;
+  background:var(--tip-bg);
+  font-size:14px;line-height:1.92;color:var(--fg);
+}
+.exam-keypoints{border-left-color:var(--accent-2);background:var(--accent-soft)}
+.exam-exp-more{border-left-color:var(--warn-line);background:var(--warn-bg);color:var(--warn-fg)}
+.essay-bg{border-left-color:var(--line-2);background:var(--bg-alt);color:var(--fg-2)}
+.exam-points strong,.exam-keypoints strong{color:var(--accent);font-weight:700}
+
+/* 教材知识点：章标签 + 可点学时胶囊 */
+.exam-textbook{
+  display:flex;flex-wrap:wrap;align-items:center;gap:6px;
+  padding:12px 14px;margin:8px 0;
+  background:var(--mem-bg);
+  border-left:4px solid var(--mem-line);
+  border-radius:0 var(--radius) var(--radius) 0;
+}
+.tb-chap{
+  font-family:var(--serif);font-size:14px;font-weight:700;color:var(--mem-fg);
+}
+.tb-hour{
+  display:inline-flex;align-items:center;
+  padding:2px 9px;border-radius:999px;
+  background:var(--bg-card);border:1px solid var(--mem-line);
+  color:var(--mem-fg) !important;font-size:12px;font-weight:600;
+  text-decoration:none;
+}
+.tb-hour:hover{background:var(--mem-line);color:var(--bg-card) !important;border-color:var(--mem-fg)}
+
+/* 模拟卷成绩/批次等小标签 */
+.exam-lv{
+  font-family:var(--sans);font-size:11.5px;color:var(--gold);
+  letter-spacing:.04em;white-space:nowrap;
+}
+.exam-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.exam-tag-en{
+  background:var(--mem-bg);color:var(--mem-fg);border-color:var(--mem-line);
+}
+.essay-batch{
+  font-family:var(--sans);font-size:11.5px;color:var(--fg-3);
+  padding:1px 8px;border:1px solid var(--line);border-radius:999px;
+}
+.exam-kp{
+  margin:.5em 0 0;font-family:var(--sans);font-size:12.5px;color:var(--fg-3);
+}
+.exam-kp::before{content:'🎯 ';font-size:11px}
+
+/* ── 全真模拟卷头部 ── */
+.mock-head{
+  padding:16px 18px;margin:0 0 12px;
+  border-radius:var(--radius-lg);
+  background:linear-gradient(135deg,var(--accent) 0%,var(--accent-2) 100%);
+  color:var(--fg-inv);
+  box-shadow:var(--shadow-2);
+}
+.mock-title{
+  font-family:var(--serif);font-size:17px;font-weight:700;
+  letter-spacing:.02em;line-height:1.5;
+}
+.mock-sub{
+  margin-top:6px;font-size:12.5px;line-height:1.75;
+  color:rgba(251,250,246,.82);
+}
+.mock-sub b{color:#fff;font-variant-numeric:tabular-nums}
+.mock-items{
+  border:1px solid var(--line);border-radius:var(--radius);
+  background:var(--bg-card);overflow:hidden;
+}
+.mock-items>.exam-q:first-child{border-top:0}
+.exam-mock .exam-subject{margin-top:14px}
+.exam-subj-only{display:block}
+
+/* 模拟卷内的综合知识答题条 */
+.exam-mock .exam-bar{
+  border-radius:var(--radius) var(--radius) 0 0;
+  border-bottom:0;
+}
+
+/* ── 窄屏 ── */
+@media(max-width:760px){
+  .exam-q-case,.exam-q-essay{padding:12px 12px 4px}
+  .case-scene,.exam-points,.exam-keypoints,.exam-exp-more,.essay-bg,.exam-textbook{
+    padding:10px 11px;font-size:13.5px;
+  }
+  ul.exam-questions>li{gap:8px;font-size:13.5px}
+  .mock-head{padding:13px 14px}
+  .mock-title{font-size:15.5px}
+}
+
+/* ── 打印：卡片不要再折叠，色条与底色转灰阶 ── */
+@media print{
+  .mock-head{background:none !important;color:#000 !important;border:1pt solid #999;
+    box-shadow:none}
+  .mock-title{font-size:13pt}
+  .mock-sub{color:#333 !important}
+  .exam-q-case,.exam-q-essay{break-inside:avoid;page-break-inside:avoid}
+  .case-scene,.exam-points,.exam-keypoints,.exam-exp-more,.essay-bg,.exam-textbook{
+    background:none !important;border-left:2pt solid #999 !important;
+  }
+  .exam-q-case,.exam-q-essay,.case-scene,.case-meta,ul.exam-questions>li{
+    font-size:9.5pt;
+  }
+  .tb-hour{color:#000 !important;border-color:#666}
+}
 </style>
 </head>
 <body>
@@ -2293,7 +2475,7 @@ html{scroll-padding-top:80px}
   </div>
 </div>
 </div>
-    <section class="exam" id="exam" data-exam-chapter="21" data-exam-hour="H40"><div class="exam-bar"><span class="exam-bar-label">📚 历年真题</span><span class="exam-bar-stat">共 <b>3</b> 题 · 来自 3 套真题</span><span class="exam-bar-ops"><button type="button" class="exam-op" data-exam-all="1">全部展开</button><button type="button" class="exam-op" data-exam-all="0">全部收起</button></span></div><details class="exam-subject" data-exam-subject="综合知识"><summary><span class="exam-subject-name">📝 综合知识</span><span class="exam-subject-n">3 题</span><span class="exam-subject-tip">按年份展开 · 单题可点开看答案</span></summary><details class="exam-year" data-exam-year="2024年5月"><summary><span class="exam-year-name">2024年5月</span><span class="exam-year-n">1 题</span></summary><details class="exam-q" data-exam-id="2024年5月-052"><summary><span class="exam-no">第 52 题</span><span class="exam-stem-peek">CPS设计风险分析，以下关于风险因素描述中，不属于特定风险的是（）。</span></summary><div class="exam-q-body"><p class="exam-stem">CPS设计风险分析，以下关于风险因素描述中，不属于特定风险的是（）。</p><ul class="exam-opts"><li><b>A</b> CPS恶劣广谱环境引发芯片失效风险</li><li><b>B</b> 人为操作引发CPS失效</li><li><b>C</b> 局部物理参数波动引发系统状态变迁</li><li><b>D</b> 局部自然现象引发CPS失效</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">广谱恶劣环境导致芯片失效属于大范围、个人无法防控的基本风险；B、C、D均是局部人为或可管控的物理事件引发的特定风险。</p></details></div></details></details><details class="exam-year" data-exam-year="2023年5月"><summary><span class="exam-year-name">2023年5月</span><span class="exam-year-n">1 题</span></summary><details class="exam-q" data-exam-id="2023年5月-024"><summary><span class="exam-no">第 24 题</span><span class="exam-stem-peek">数字孪生是形成物理世界中某一生产流程的模型及其在数字世界中的数字化镜像的过程和方法。数字孪生有五大驱动要素，包括物理世界…</span></summary><div class="exam-q-body"><p class="exam-stem">数字孪生是形成物理世界中某一生产流程的模型及其在数字世界中的数字化镜像的过程和方法。数字孪生有五大驱动要素，包括物理世界的传感器、（ ）、集成、分析和促动器，以及持续更新的数字孪生应用程序。</p><ul class="exam-opts"><li><b>A</b> 数据</li><li><b>B</b> 接口</li><li><b>C</b> 消息</li><li><b>D</b> 需求</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">本题为架构第二版教材超纲新增知识点，传感器采集物理信号后会生成海量数据，数据是串联传感器、集成、分析环节的核心要素，是数字孪生的基础驱动项。</p></details></div></details></details><details class="exam-year" data-exam-year="2021年5月"><summary><span class="exam-year-name">2021年5月</span><span class="exam-year-n">1 题</span></summary><details class="exam-q" data-exam-id="2021年5月-018"><summary><span class="exam-no">第 18 题</span><span class="exam-stem-peek">在信息物理系统（CPS）设计时，风险分析工作贯穿在整个系统生命周期的各个阶段。通常，风险分为基本风险和特定风险。特定风险…</span></summary><div class="exam-q-body"><p class="exam-stem">在信息物理系统（CPS）设计时，风险分析工作贯穿在整个系统生命周期的各个阶段。通常，风险分为基本风险和特定风险。特定风险是指与人为因素或物理环境因素突变有关的事件，可能使系统进入不安全状态，进而导致系统故障。以下关于风险因素描述中，不属于特定风险的是（ ）。</p><ul class="exam-opts"><li><b>A</b> CPS是集人机交互、物理过程和计算过程于一体的安全关键嵌入式系统，彼此之间相互融合，不可分割。由于CPS要处于不同的恶劣环境，因此，在计算系统设计时，由于环境变化所引发芯片失效的风险应作为特定风险加以考虑</li><li><b>B</b> 人为因素需要考虑触发及参与CPS运行的执行者，以及执行者为完成具体任务针对CPS所做的一系列动作</li><li><b>C</b> 物理因素的行为是一个随着时间变化的连续过程。外界的物理变化通过传感器被监测、感知，进一步将监测的信号发送给计算系统。当外界物理参数随着时间变化到某一数值会影响传感器的正常运行，从而导致系统发生状态的变迁</li><li><b>D</b> 环境中的冰雹、冰、雪、雷击、单粒子事件效应、温度和振动等因素都属于特定风险，其自然现象因素都有可能引起CPS系统的失效</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">基本风险是大范围、个人无法防控的宏观环境灾害引发的风险，A选项恶劣环境大范围导致芯片失效属于基本风险；B人为操作、C局部物理参数突变、D局部气象灾害都属于可针对性防控的特定风险。</p></details></div></details></details></details><details class="exam-subject" data-exam-subject="案例"><summary><span class="exam-subject-name">📋 案例分析</span><span class="exam-subject-n">5 题</span><span class="exam-subject-tip">情景简答 · 采分点三色标记</span></summary><div class="exam-bar"><span class="exam-bar-label">📋 案例分析</span><span class="exam-bar-stat">共 <b>5</b> 题 · 情景简答</span></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">96</span>考点：CPS 概念与区别 / 分层架构 / 典型系统构成 / 闭环四过程<br>📅 时间：2026-06-15 上午 📍 地点：集团安全运行项目启动<br>👤 人物：甘工（乙方·系统分析师）、徐总监（甲方·数智化信息部总监）、邓经理（甲方·运维经理）、郑专员（甲方·合规专员）<br>⚡ 冲突：泄漏要 3 分钟内通知到人，但关阀不能误动作、数据不能出企业<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：徐总监说得很严肃：&quot;泄漏事件，三分钟内要通知到受影响的用户，还要派出抢修。&quot; 邓经理立刻提出担心：&quot;远程关阀要是误动作，后果不堪设想。&quot; 郑专员加了一条：&quot;数据不能出企业，个人信息一样要保护。&quot; 甘工在白板上画了一个圈：感知—通信—计算—控制。他知道，这个圈要闭起来，靠的不只是技术，还有&quot;失效时怎么办&quot;的设计。<br>补充资料：量、温度、甲烷浓度、阀门开度、调压器状态；门站 1 秒一次、工商表 5 分钟一次； - 通信：门站专线/5G，调压站 NB-IoT/4G，地下室等区域存在长时间离线； - 计算：云端做管网水力模型、用气预测、泄漏定位与风险评级；边缘侧做秒级异常检测与本地联动； - 控制：远程调节调压器设定值、远程关阀、联动通风与声光报警，判定泄漏时自动触发工单与应急外呼。 要求：控制指令不得因网络抖动误动作；关阀须人工确认或双重校验；系统可用度 ≥99.9%，但控制回路的实时性优先于可用性。<br>问题 1：（1）给出 CPS 的定义与主要特征，说明 CPS 与物联网（IoT）、嵌入式系统的区别；<br>问题 2：（2）说明 CPS 的分层架构（单元级、系统级、SoS 级）并给出本项目各层功能与闭环周期；<br>问题 3：（3）说明 CPS 的典型系统构成（五部分）及本项目技术选型与关键指标。<br>问题 4：（1）说明 CPS 闭环四过程（感知、通信、计算、控制）的设计要点；<br>问题 5：（2）在&quot;实时性优先于可用性&quot;要求下，给出实时性、可靠性与降级策略；<br>问题 6：（3）说明如何满足&quot;泄漏事件 3 分钟内完成发现—通知—派单&quot;与&quot;断网可独立处置&quot;。</p><ul class="exam-questions"><li><b>问题 1</b> （1）给出 <strong>CPS</strong> 的定义与主要特征，说明 <strong>CPS 与物联网（IoT）、嵌入式系统</strong>的区别；</li><li><b>问题 2</b> （2）说明 CPS 的<strong>分层架构</strong>（单元级、系统级、SoS 级）并给出本项目各层功能与闭环周期；</li><li><b>问题 3</b> （3）说明 CPS 的<strong>典型系统构成</strong>（五部分）及本项目技术选型与关键指标。</li><li><b>问题 4</b> （1）说明 CPS 闭环四过程（感知、通信、计算、控制）的设计要点；</li><li><b>问题 5</b> （2）在&quot;实时性优先于可用性&quot;要求下，给出<strong>实时性、可靠性与降级策略</strong>；</li><li><b>问题 6</b> （3）说明如何满足&quot;泄漏事件 3 分钟内完成发现—通知—派单&quot;与&quot;断网可独立处置&quot;。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）定义与区别）：CPS 是计算进程与物理进程深度融合的一体化系统，通过感知—通信—计算—控制形成闭环，使物理系统具备&quot;可感、可知、可控&quot;能力。特征：闭环反馈、实时性、可靠性与安全性、异构集成、自治与协同、时空约束。<br>- 🟢 加分：解析·CPS 案例得分点是&quot;四过程 + 失效—安全 + 降级 + 时间预算分解&quot;。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🔴 核心（2）分层架构）：<br>问题 3｜参考答案要点：<br>- 🔴 核心：🔴 核心（3）五部分构成）：<br>问题 4｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）四过程要点）：<br>问题 5｜参考答案要点：<br>- 🔴 核心：🔴 核心（2）实时可靠与降级）：<br>问题 6｜参考答案要点：<br>- 🔴 核心：🔴 核心（3）3 分钟闭环与断网处置）：</div></details></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">97</span>考点：CPS 共性设计原则 / 跨行业对比 / 数字孪生<br>📅 时间：2026-06-28 上午 📍 地点：集团技术交流会<br>👤 人物：甘工（乙方·系统分析师）、徐总监（甲方·数智化信息部总监）、外部专家（第三方·专家）、徐总（甲方·分管副总）<br>⚡ 冲突：市里要推车路云和工业互联网，我们的管网系统能不能借鉴<br>难度：★★★　总分：9 分　建议用时：25 分钟<br>背景：徐总从市里的会议回来，带着新问题：&quot;车路云一体化和工业互联网都在推，我们这套管网监测能不能借鉴？&quot; 外部专家说：&quot;场景不一样，但底层逻辑是相通的。&quot; 徐总监追问：&quot;相通在哪？&quot; 甘工把三个领域的物理对象、控制方式和失效后果列成一张表——他要找的，是CPS 共同的那一套设计原则。<br>问题 1：请将本项目与车路云一体化、工业互联网做对比，抽象 CPS 的共性设计原则；并说明数字孪生的作用与建设要点（避免常见误区）。（9分）</p><ul class="exam-questions"><li><b>问题 1</b> 请将本项目与车路云一体化、工业互联网做对比，抽象 CPS 的共性设计原则；并说明数字孪生的作用与建设要点（避免常见误区）。（9分）<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点（9分）：<br>- 🔴 核心：🔴 核心（对比）：<br>- 🟡 支撑：物理对象：管网、阀门、调压器；车辆、路侧设施、云控平台；设备、产线、工厂<br>- 🟡 支撑：感知：压力/甲烷/流量；车载传感、雷视一体机；运行与工艺参数<br>- 🟡 支撑：控制：调压、关阀、通风；车速引导、协同决策；工艺调整、产线调度<br>- 🟡 支撑：实时性：秒~分钟级；毫秒~百毫秒（安全类）；毫秒~秒级<br>- 🟡 支撑：失效后果：爆炸、停气（人身财产）；交通事故（人身）；停产、质量事故（经济）<br>- 🟡 支撑：共性：云边端协同、闭环控制、失效—安全、时空一致、功能安全 + 信息安全<br>- 🔴 核心：①闭环反馈（感知—通信—计算—控制，CPS 的本质）；②云边端协同与分层自治（实时控制在边缘、全局优化在云端）；③失效—安全与降级（失效进入安全态而非失控）；④实时性与确定性（控制回路时延可预测）；⑤时空一致（统一时钟与坐标，多源可对齐）；⑥冗余与可靠性（传感/链路/控制冗余）；⑦功能安全与信息安全一体化；⑧可验证与可演练（仿真、数字孪生、混沌与应急演练）。<br>- 🔴 核心：为物理管网建立实时映射的虚拟模型，实现：①状态可视化（压力/流量/阀门三维呈现）；②仿真与推演（关阀方案、调压策略、泄漏扩散范围的事前仿真）；③预测性维护（预测调压器寿命与故障）；④优化调度（用气高峰的调压与储气优化）；⑤培训与演练（在孪生体上演练应急处置）。<br>- 🟡 支撑：模型与数据双驱动（机理模型 + 数据驱动融合）<br>- 🟡 支撑：实时接入与时延控制（秒级同步，区分实时态与分析态）<br>- 🟡 支撑：模型校验与校准（用真实工况反哺修正，避免&quot;孪生体与实体越走越远&quot;）；分级建设（先单点设备，再站场，再全网）；与业务系统集成（告警直接触发工单与外呼）。；数字孪生的常见误区是&quot;重三维可视化、轻模型与数据&quot;——考试时应强调模型可计算、可推演、可校验，而不只是做一个大屏动画。<br>- 🟢 加分：解析·跨行业对比要抽象共性，数字孪生要落到&quot;可计算可推演&quot;。</div></details></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">98</span>📅 时间：2026-07-14 19:20 📍 地点：城市某老旧小区 / 集团应急指挥群<br>👤 人物：甘工（乙方·系统分析师）、邓经理（甲方·运维经理）、洪经理（甲方·客服部经理）、徐总监（甲方·数智化信息部总监）、抢修队（甲方·现场）<br>⚡ 冲突：调压站甲烷浓度报警，需在 3 分钟内完成&quot;确认—通知受影响用户—派单&quot;，但通知环节卡住<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：19:20，某调压站甲烷浓度超过阈值，边缘网关立即本地联动：声光报警、站内通风启动。 十秒后平台收到事件并定位到影响范围（约 2 300 户）；事件总线广播后，派单模块 40 秒内把抢修单派给了最近的队伍。 但通知环节卡住了——AI 外呼并发只有 200 路，2 300 户要打十几分钟；而且部分用户是&quot;夜间勿扰&quot;名单，规则没配好。 徐总监在群里急问：&quot;到底几分钟能通知到人？&quot; 甘工意识到：CPS 的闭环不只是&quot;物理侧控制&quot;，还包括对社会侧（人）的通知能力——这是本题的核心考点。<br>补充资料：边缘检测 → ≤10 s → 8 s → —；事件上行 → ≤5 s → 4 s → —；云端定位定级 → ≤30 s → 26 s → —；通知受影响用户 → ≤60 s → &gt;600 s → 外呼并发仅 200 路 vs 2 300 户；派单 → ≤45 s → 40 s → —；合计 → ≤180 s → 超时 → 通知环节 改进：应急并发配额、多渠道并行（电话+短信+App+物业）、近源优先分级通知、Ⅰ级事件豁免免扰、预案化模板。<br>问题 1：（1）说明 CPS 闭环四过程在本案例中的具体体现与时间预算；<br>问题 2：（2）分析通知环节成为瓶颈的原因，给出改进方案（含分级通知与并发能力）；<br>问题 3：（3）说明实时性与可靠性设计要求，以及&quot;控制指令不能误动作&quot;如何保证；<br>问题 4：（4）说明 SoS 级协同与应急演练的要点。</p><ul class="exam-questions"><li><b>问题 1</b> （1）说明 <strong>CPS 闭环四过程</strong>在本案例中的具体体现与时间预算；</li><li><b>问题 2</b> （2）分析通知环节成为瓶颈的原因，给出<strong>改进方案</strong>（含分级通知与并发能力）；</li><li><b>问题 3</b> （3）说明<strong>实时性与可靠性</strong>设计要求，以及&quot;控制指令不能误动作&quot;如何保证；</li><li><b>问题 4</b> （4）说明 SoS 级协同与应急演练的要点。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）四过程与时间预算）：①感知（甲烷/压力传感，门站 1 秒采样，边缘 10 秒内判定超限）；②通信（工业以太网/5G 双链路上报，时钟同步，事件 ≤5 秒到平台）；③计算（云端定位影响范围与风险评级，≤30 秒）；④控制（本地声光报警 + 通风 + 站级关阀需人工确认，平台侧自动派单 ≤45 秒）。<br>- 🟢 加分：解析·CPS 应急题要&quot;四过程时间预算 + 瓶颈改进 + 防误动作 + 演练&quot;。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🟡 支撑（2）瓶颈与改进）：原因——①外呼并发资源不足（200 路 vs 2 300 户）；②通知渠道单一（只有电话）；③未做用户分级与优先级（高危/近源用户优先）；④免扰规则配置不当；⑤缺少模板与预案导致临时拼凑。<br>问题 3｜参考答案要点：<br>- 🔴 核心：🔴 核心（3）实时性与防误动作）：实时性——控制回路设为最高优先级硬实时任务、时延预算明确（本地报警 ≤1 秒）、确定性网络（工业以太网 + 时钟同步 PTP）、边缘自治。防误动作——①双重校验/人工确认（关阀属高风险）；②传感冗余与表决（双探头，防止单传感器误报）；③指令安全（鉴权、签名、时间戳 + nonce 防重放、有效期）；④动作约束（上下限、变化速率、防抖动）；⑤反馈校验（下发后回读状态，失败告警重试）；⑥可回退（一键恢复就地控制/安全态）；⑦失效—安全（失电/失通信进入安全态）。<br>问题 4｜参考答案要点：<br>- 🔴 核心：🟡 支撑（4）SoS 协同与演练）：SoS 协同——打通&quot;管网监测平台 + 客服与外呼平台 + 抢修资源调度 + 城市安全平台 + 应急/物业&quot;，统一数据标准、接口契约、时钟与位置基准、事件总线与分级处置流程，并明确数据边界与授权（个人信息不出域）。</div></details></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">99</span>📅 时间：2026-08-06 上午 📍 地点：集团数智化信息部（二期方案会）<br>👤 人物：甘工（乙方·系统分析师）、徐总监（甲方·数智化信息部总监）、谢工（乙方·机器人训练师）、龙工（乙方·数据工程师）、郑专员（甲方·合规专员）<br>⚡ 冲突：想把&quot;数字孪生 + AI 质检&quot;用到管网上，但实时性、数据质量与算力都不够<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：徐总监抛出新需求：&quot;一期管网监测只能看实时曲线，我想更进一步——建数字孪生体，能做关阀方案推演；再把 AI 质检用上，自动识别现场照片里的隐患。&quot; 谢工立刻补充：&quot;质检要能识别违章操作，我们的模型还得再训。&quot; 龙工却提了个硬问题：&quot;孪生体要实时映射，管网数据来源有七八个系统，时间戳都对不齐；而且推理要 GPU，现在 GPU 白天全给线上业务了。&quot; 郑专员最后加了一条：&quot;AI 判隐患可以，但结论要能追溯、能复核，不能让机器一句话就把工单派下去。&quot; 甘工在白板上画了两条线：一条物理线，一条数字线——他知道，这正是 CPS 与 AI 结合的典型难题。<br>补充资料：门站压力 → 1 s → 网关本地时钟 → 与平台偏差 300 ms；调压站甲烷 → 30 s → 网关本地时钟 → 漂移未校准；工商表 → 5 min → 表端时钟 → 偏差最大 2 min；视频/巡检照片 → 事件触发 → 终端时间 → 时区不统一；工单系统 → 业务事件 → 服务器时间 → 与 IoT 不同源 改进：NTP/PTP 统一时钟、统一坐标系与设备编码、事件时间 + 水位线处理乱序、时钟漂移告警、对齐过程留痕。<br>问题 1：（1）说明 CPS 与数字孪生的关系，以及数字孪生的作用与建设要点；<br>问题 2：（2）说明 AI 质检（机器视觉/多模态识别）接入 CPS 的位置与实时性要求；<br>问题 3：（3）针对&quot;多源数据时间戳对不齐&quot;，给出时空一致的解决方案；<br>问题 4：（4）说明 AI 结论可追溯、可复核的设计要求（含 2026 AI 治理要求）。</p><ul class="exam-questions"><li><b>问题 1</b> （1）说明 <strong>CPS 与数字孪生</strong>的关系，以及数字孪生的作用与建设要点；</li><li><b>问题 2</b> （2）说明 <strong>AI 质检（机器视觉/多模态识别）</strong>接入 CPS 的位置与实时性要求；</li><li><b>问题 3</b> （3）针对&quot;多源数据时间戳对不齐&quot;，给出<strong>时空一致</strong>的解决方案；</li><li><b>问题 4</b> （4）说明 AI 结论可追溯、可复核的设计要求（含 2026 AI 治理要求）。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）CPS 与数字孪生）：关系——CPS 强调&quot;计算与物理过程的闭环控制&quot;（感知—通信—计算—控制）；数字孪生是物理实体在数字空间的实时映射与仿真体，可视为 CPS 的&quot;高保真数字镜像与推演能力&quot;，两者一个重&quot;闭环控制&quot;、一个重&quot;映射与推演&quot;，在工程上互补。<br>- 🟢 加分：解析·CPS+AI 题要&quot;孪生作用与要点 + AI 接入位置 + 时空一致 + 可追溯可复核&quot;。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🟡 支撑（2）AI 质检接入位置与实时性）：接入位置——①边缘侧（现场摄像头/巡检终端做初步识别：是否佩戴安全帽、是否有明显泄漏迹象），优点是无网可用、隐私可控；②云端（做精细多模态复核、趋势分析与模型训练）；③结论回流——AI 结论进入CPS 闭环（自动生成隐患工单、触发提醒）。<br>问题 3｜参考答案要点：<br>- 🔴 核心：🟡 支撑（3）时空一致）：①统一时钟基准——全线部署 NTP/PTP 时钟同步，边缘网关带时间戳；②统一空间基准——统一坐标系与设备编码（GIS 与设备台账对齐）；③时间戳与序号——每条数据带采集时间与序列号，处理乱序与迟到数据（流水线用事件时间 + 水位线）；④数据对齐与插值——多源数据按时间窗口对齐，缺失做标记而非默认填补；⑤质量校验——时钟漂移告警、序列断号检测、异常值过滤；⑥可追溯——保留原始数据与对齐过程，便于复核。<br>问题 4｜参考答案要点：<br>- 🔴 核心：🔴 核心（4）可追溯与可复核）：①模型与版本留痕——每条 AI 结论记录模型版本、推理时间、输入来源、置信度；②可干预——人工可复核、可推翻结论，且保留复核记录；③置信度分级处置——高置信度可直接生成提示，中低置信度转人工复核后再生成工单（避免误判引发误派单）；④双人复核（高风险判定如&quot;泄漏隐患&quot;）；⑤算法备案与生成内容标识（符合 2026 AI 治理要求）；⑥数据合规——现场照片涉及人员与场所，需脱敏/授权，并限定用途与保存期限；⑦审计与抽检——定期抽检 AI 结论与人工复核的一致率，作为模型质量指标。</div></details></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">100</span>📅 时间：2026-09-18 上午 📍 地点：集团信息安全规划会<br>👤 人物：甘工（乙方·系统分析师）、郑专员（甲方·合规专员）、徐总监（甲方·数智化信息部总监）、卢总（乙方·技术总监）、电信技术经理（第三方·电信公司）<br>⚡ 冲突：CPS 控制指令要长期保密，郑专员提出&quot;抗量子密码&quot;要求，卢总觉得成本太高<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：郑专员把一份材料推过来：&quot;国家在推后量子密码迁移，管网控制系统生命周期十几二十年，现在的加密算法将来可能被量子计算机破解。&quot; 卢总皱眉：&quot;抗量子密码现在还不成熟吧？换算法要动终端、边网关、平台，成本不小。&quot; 电信公司技术经理插了一句：&quot;而且我们线路侧也涉及加密，得两边一起改。&quot; 甘工想起这几次安全演练暴露的问题——控制指令一旦被伪造，后果是关阀或停气。他知道，这已不是&quot;要不要花这笔钱&quot;，而是&quot;什么时候开始准备、怎么分步迁移&quot;。<br>补充资料：一·盘点与设计 → 0~6 个月 → 资产/算法盘点；引入密码服务抽象层 → 算法台账、可替换架构；二·混合过渡 → 6~18 个月 → 新建系统用「国密 + 候选 PQC」；存量固件支持协商 → 控制指令链路签名 + 防重放；三·全面替换 → 18 个月+ → 替换剩余链路，保留双算法与回退 → 证书与密钥体系更新 约束：PQC 密钥更大 → 报文变长，须实测对实时性（≤150 ms）与包大小的影响；终端、网关、平台与电信公司须同步改造。<br>问题 1：（1）说明 CPS 信息安全的主要威胁与防护目标；<br>问题 2：（2）说明抗量子密码（后量子密码，PQC）的背景与迁移策略；<br>问题 3：（3）给出本项目分阶段迁移方案（含密码敏捷性设计）；<br>问题 4：（4）说明车路云与低空经济等新兴 CPS 场景对安全与实时的共性要求。</p><ul class="exam-questions"><li><b>问题 1</b> （1）说明 <strong>CPS 信息安全</strong>的主要威胁与防护目标；</li><li><b>问题 2</b> （2）说明<strong>抗量子密码（后量子密码，PQC）</strong>的背景与迁移策略；</li><li><b>问题 3</b> （3）给出本项目<strong>分阶段迁移方案</strong>（含密码敏捷性设计）；</li><li><b>问题 4</b> （4）说明车路云与低空经济等新兴 CPS 场景对安全与实时的共性要求。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）威胁与防护目标）：威胁——①指令伪造/篡改（伪造关阀、调压指令）；②重放攻击（重发历史合法指令）；③设备仿冒（伪 RTU 接入）；④数据窃取（管网布局、用户信息）；⑤拒绝服务（阻断监测与通信）；⑥供应链风险（第三方组件后门）；⑦内部越权（运维权限滥用）。<br>- 🟢 加分：解析·CPS 安全题要&quot;威胁与目标 + PQC 背景策略 + 分阶段迁移 + 新兴场景共性&quot;。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🟡 支撑（2）PQC 背景与策略）：背景——现有公钥算法（RSA/ECC/SM2）依赖大整数分解与离散对数难题，未来大规模量子计算机可被 Shor 算法破解；因此需要抗量子（后量子）密码算法（基于格、编码、哈希、多变量等的方案，NIST 已推进标准化）。策略——①先做资产盘点与风险评估（哪些数据需要长期保密、哪些链路生命周期最长）；②密码敏捷性（Crypto-Agility）优先——把密码算法做成可替换的抽象层，而不是散落硬编码；③混合过渡（经典算法 + PQC 并行，兼容现有环境）；④优先保护长期敏感数据（管网设计、控制策略）；⑤跟随国密与国家标准演进，避免自创算法。<br>问题 3｜参考答案要点：<br>- 🔴 核心：🟡 支撑（3）分阶段迁移）：<br>问题 4｜参考答案要点：<br>- 🔴 核心：🟢 加分（4）新兴 CPS 场景共性要求）：车路云一体化（毫秒~百毫秒实时性、强身份认证防伪造、涉及人身安全）、低空经济（无人机通信与空域安全、链路抗干扰）、工业互联网（OT/IT 隔离、供应链安全）——共性要求为：①强实时与确定性；②设备身份与指令真实性；③功能安全与信息安全一体化；④失效—安全与降级；⑤可验证与可演练；⑥全生命周期安全（含密码算法演进，即&quot;密码敏捷性&quot;）。</div></details></div></details></section>
+    <section class="exam" id="exam" data-exam-chapter="21" data-exam-hour="H40"><div class="exam-bar"><span class="exam-bar-label">📚 历年真题</span><span class="exam-bar-stat">共 <b>3</b> 题 · 来自 3 套真题</span><span class="exam-bar-ops"><button type="button" class="exam-op" data-exam-all="1">全部展开</button><button type="button" class="exam-op" data-exam-all="0">全部收起</button></span></div><details class="exam-subject" data-exam-subject="综合知识"><summary><span class="exam-subject-name">📝 综合知识</span><span class="exam-subject-n">3 题</span><span class="exam-subject-tip">按年份展开 · 单题可点开看答案</span></summary><details class="exam-year" data-exam-year="2024年5月"><summary><span class="exam-year-name">2024年5月</span><span class="exam-year-n">1 题</span></summary><details class="exam-q" data-exam-id="2024年5月-052"><summary><span class="exam-no">第 52 题</span><span class="exam-stem-peek">CPS设计风险分析，以下关于风险因素描述中，不属于特定风险的是（）。</span></summary><div class="exam-q-body"><p class="exam-stem">CPS设计风险分析，以下关于风险因素描述中，不属于特定风险的是（）。</p><ul class="exam-opts"><li><b>A</b> CPS恶劣广谱环境引发芯片失效风险</li><li><b>B</b> 人为操作引发CPS失效</li><li><b>C</b> 局部物理参数波动引发系统状态变迁</li><li><b>D</b> 局部自然现象引发CPS失效</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">广谱恶劣环境导致芯片失效属于大范围、个人无法防控的基本风险；B、C、D均是局部人为或可管控的物理事件引发的特定风险。</p></details></div></details></details><details class="exam-year" data-exam-year="2023年5月"><summary><span class="exam-year-name">2023年5月</span><span class="exam-year-n">1 题</span></summary><details class="exam-q" data-exam-id="2023年5月-024"><summary><span class="exam-no">第 24 题</span><span class="exam-stem-peek">数字孪生是形成物理世界中某一生产流程的模型及其在数字世界中的数字化镜像的过程和方法。数字孪生有五大驱动要素，包括物理世界…</span></summary><div class="exam-q-body"><p class="exam-stem">数字孪生是形成物理世界中某一生产流程的模型及其在数字世界中的数字化镜像的过程和方法。数字孪生有五大驱动要素，包括物理世界的传感器、（ ）、集成、分析和促动器，以及持续更新的数字孪生应用程序。</p><ul class="exam-opts"><li><b>A</b> 数据</li><li><b>B</b> 接口</li><li><b>C</b> 消息</li><li><b>D</b> 需求</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">本题为架构第二版教材超纲新增知识点，传感器采集物理信号后会生成海量数据，数据是串联传感器、集成、分析环节的核心要素，是数字孪生的基础驱动项。</p></details></div></details></details><details class="exam-year" data-exam-year="2021年5月"><summary><span class="exam-year-name">2021年5月</span><span class="exam-year-n">1 题</span></summary><details class="exam-q" data-exam-id="2021年5月-018"><summary><span class="exam-no">第 18 题</span><span class="exam-stem-peek">在信息物理系统（CPS）设计时，风险分析工作贯穿在整个系统生命周期的各个阶段。通常，风险分为基本风险和特定风险。特定风险…</span></summary><div class="exam-q-body"><p class="exam-stem">在信息物理系统（CPS）设计时，风险分析工作贯穿在整个系统生命周期的各个阶段。通常，风险分为基本风险和特定风险。特定风险是指与人为因素或物理环境因素突变有关的事件，可能使系统进入不安全状态，进而导致系统故障。以下关于风险因素描述中，不属于特定风险的是（ ）。</p><ul class="exam-opts"><li><b>A</b> CPS是集人机交互、物理过程和计算过程于一体的安全关键嵌入式系统，彼此之间相互融合，不可分割。由于CPS要处于不同的恶劣环境，因此，在计算系统设计时，由于环境变化所引发芯片失效的风险应作为特定风险加以考虑</li><li><b>B</b> 人为因素需要考虑触发及参与CPS运行的执行者，以及执行者为完成具体任务针对CPS所做的一系列动作</li><li><b>C</b> 物理因素的行为是一个随着时间变化的连续过程。外界的物理变化通过传感器被监测、感知，进一步将监测的信号发送给计算系统。当外界物理参数随着时间变化到某一数值会影响传感器的正常运行，从而导致系统发生状态的变迁</li><li><b>D</b> 环境中的冰雹、冰、雪、雷击、单粒子事件效应、温度和振动等因素都属于特定风险，其自然现象因素都有可能引起CPS系统的失效</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">基本风险是大范围、个人无法防控的宏观环境灾害引发的风险，A选项恶劣环境大范围导致芯片失效属于基本风险；B人为操作、C局部物理参数突变、D局部气象灾害都属于可针对性防控的特定风险。</p></details></div></details></details></details><details class="exam-subject" data-exam-subject="案例"><summary><span class="exam-subject-name">📋 案例分析</span><span class="exam-subject-n">5 题</span><span class="exam-subject-tip">案例背景 · 题目 · 答案与解析</span></summary><div class="exam-bar"><span class="exam-bar-label">📋 案例分析</span><span class="exam-bar-stat">共 <b>5</b> 题 · 情景简答 · 采分点三色标记</span></div><div class="exam-q exam-q-case"><div class="case-head"><span class="exam-no">案例 96</span><span class="exam-tag">考点 · 燃气管网智能监测的CPS分析与设计</span><span class="exam-lv">⭐⭐⭐</span></div><div class="case-meta"><span><strong>考点</strong>：CPS 概念与区别 / 分层架构 / 典型系统构成 / 闭环四过程</span><span>📅 <strong>时间</strong>：2026-06-15 上午 📍 <strong>地点</strong>：集团安全运行项目启动</span><span>👤 <strong>人物</strong>：甘工（乙方·系统分析师）、徐总监（甲方·数智化信息部总监）、邓经理（甲方·运维经理）、郑专员（甲方·合规专员）</span><span>⚡ <strong>冲突</strong>：泄漏要 3 分钟内通知到人，但关阀不能误动作、数据不能出企业</span><span><strong>难度</strong>：★★★　<strong>总分</strong>：25 分　<strong>建议用时</strong>：25 分钟</span></div><div class="case-scene"><div class="case-h">案例背景</div><strong>背景</strong>：徐总监说得很严肃：&quot;泄漏事件，三分钟内要通知到受影响的用户，还要派出抢修。&quot; 邓经理立刻提出担心：&quot;远程关阀要是误动作，后果不堪设想。&quot; 郑专员加了一条：&quot;数据不能出企业，个人信息一样要保护。&quot; 甘工在白板上画了一个圈：<strong>感知—通信—计算—控制</strong>。他知道，这个圈要闭起来，靠的不只是技术，还有&quot;失效时怎么办&quot;的设计。<br><strong>补充资料</strong>：量、温度、甲烷浓度、阀门开度、调压器状态；门站 1 秒一次、工商表 5 分钟一次； - <strong>通信</strong>：门站专线/5G，调压站 NB-IoT/4G，地下室等区域存在长时间离线； - <strong>计算</strong>：云端做管网水力模型、用气预测、泄漏定位与风险评级；<strong>边缘侧做秒级异常检测与本地联动</strong>； - <strong>控制</strong>：远程调节调压器设定值、远程关阀、联动通风与声光报警，判定泄漏时<strong>自动触发工单与应急外呼</strong>。 要求：控制指令<strong>不得因网络抖动误动作</strong>；关阀须<strong>人工确认或双重校验</strong>；系统可用度 ≥99.9%，但<strong>控制回路的实时性优先于可用性</strong>。</div><div class="case-asks"><div class="case-h">题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">（1）给出 <strong>CPS</strong> 的定义与主要特征，说明 <strong>CPS 与物联网（IoT）、嵌入式系统</strong>的区别；</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">（2）说明 CPS 的<strong>分层架构</strong>（单元级、系统级、SoS 级）并给出本项目各层功能与闭环周期；</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">（3）说明 CPS 的<strong>典型系统构成</strong>（五部分）及本项目技术选型与关键指标。</span></li><li><span class="case-ask-no">4</span><span class="case-ask-t">（1）说明 CPS 闭环四过程（感知、通信、计算、控制）的设计要点；</span></li><li><span class="case-ask-no">5</span><span class="case-ask-t">（2）在&quot;实时性优先于可用性&quot;要求下，给出<strong>实时性、可靠性与降级策略</strong>；</span></li><li><span class="case-ask-no">6</span><span class="case-ask-t">（3）说明如何满足&quot;泄漏事件 3 分钟内完成发现—通知—派单&quot;与&quot;断网可独立处置&quot;。</span></li></ul></div><details class="exam-ans"><summary>参考答案要点（三色标记）</summary><div class="exam-points"><strong>问题 1｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（1）定义与区别）：CPS 是计算进程与物理进程深度融合的一体化系统，通过感知—通信—计算—控制形成闭环，使物理系统具备&quot;可感、可知、可控&quot;能力。特征：闭环反馈、实时性、可靠性与安全性、异构集成、自治与协同、时空约束。<br><strong>问题 2｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（2）分层架构）：<br><strong>问题 3｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（3）五部分构成）：<br><strong>问题 4｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（1）四过程要点）：<br><strong>问题 5｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（2）实时可靠与降级）：<br><strong>问题 6｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（3）3 分钟闭环与断网处置）：</div></details><details class="exam-ans"><summary>解析与加分项</summary><div class="exam-exp-more">- 🟢 加分：解析·CPS 案例得分点是&quot;四过程 + 失效—安全 + 降级 + 时间预算分解&quot;。</div></details></div><div class="exam-q exam-q-case"><div class="case-head"><span class="exam-no">案例 97</span><span class="exam-tag">考点 · 与车路云、工业互联网的对比</span><span class="exam-lv">⭐⭐⭐</span></div><div class="case-meta"><span><strong>考点</strong>：CPS 共性设计原则 / 跨行业对比 / 数字孪生</span><span>📅 <strong>时间</strong>：2026-06-28 上午 📍 <strong>地点</strong>：集团技术交流会</span><span>👤 <strong>人物</strong>：甘工（乙方·系统分析师）、徐总监（甲方·数智化信息部总监）、外部专家（第三方·专家）、徐总（甲方·分管副总）</span><span>⚡ <strong>冲突</strong>：市里要推车路云和工业互联网，我们的管网系统能不能借鉴</span><span><strong>难度</strong>：★★★　<strong>总分</strong>：9 分　<strong>建议用时</strong>：25 分钟</span></div><div class="case-scene"><div class="case-h">案例背景</div><strong>背景</strong>：徐总从市里的会议回来，带着新问题：&quot;车路云一体化和工业互联网都在推，我们这套管网监测能不能借鉴？&quot; 外部专家说：&quot;场景不一样，但底层逻辑是相通的。&quot; 徐总监追问：&quot;相通在哪？&quot; 甘工把三个领域的物理对象、控制方式和失效后果列成一张表——他要找的，是<strong>CPS 共同的那一套设计原则</strong>。</div><div class="case-asks"><div class="case-h">题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">请将本项目与<strong>车路云一体化</strong>、<strong>工业互联网</strong>做对比，抽象 CPS 的<strong>共性设计原则</strong>；并说明<strong>数字孪生</strong>的作用与建设要点（避免常见误区）。（9分）</span></li></ul></div><details class="exam-ans"><summary>参考答案要点（三色标记）</summary><div class="exam-points"><strong>问题 1｜参考答案要点（9分）</strong>：<br>- 🔴 核心：🔴 核心（对比）：<br>- 🟡 支撑：物理对象：管网、阀门、调压器；车辆、路侧设施、云控平台；设备、产线、工厂<br>- 🟡 支撑：感知：压力/甲烷/流量；车载传感、雷视一体机；运行与工艺参数<br>- 🟡 支撑：控制：调压、关阀、通风；车速引导、协同决策；工艺调整、产线调度<br>- 🟡 支撑：实时性：秒~分钟级；毫秒~百毫秒（安全类）；毫秒~秒级<br>- 🟡 支撑：失效后果：爆炸、停气（人身财产）；交通事故（人身）；停产、质量事故（经济）<br>- 🟡 支撑：共性：云边端协同、闭环控制、失效—安全、时空一致、功能安全 + 信息安全<br>- 🔴 核心：①闭环反馈（感知—通信—计算—控制，CPS 的本质）；②云边端协同与分层自治（实时控制在边缘、全局优化在云端）；③失效—安全与降级（失效进入安全态而非失控）；④实时性与确定性（控制回路时延可预测）；⑤时空一致（统一时钟与坐标，多源可对齐）；⑥冗余与可靠性（传感/链路/控制冗余）；⑦功能安全与信息安全一体化；⑧可验证与可演练（仿真、数字孪生、混沌与应急演练）。<br>- 🔴 核心：为物理管网建立实时映射的虚拟模型，实现：①状态可视化（压力/流量/阀门三维呈现）；②仿真与推演（关阀方案、调压策略、泄漏扩散范围的事前仿真）；③预测性维护（预测调压器寿命与故障）；④优化调度（用气高峰的调压与储气优化）；⑤培训与演练（在孪生体上演练应急处置）。<br>- 🟡 支撑：模型与数据双驱动（机理模型 + 数据驱动融合）<br>- 🟡 支撑：实时接入与时延控制（秒级同步，区分实时态与分析态）<br>- 🟡 支撑：模型校验与校准（用真实工况反哺修正，避免&quot;孪生体与实体越走越远&quot;）；分级建设（先单点设备，再站场，再全网）；与业务系统集成（告警直接触发工单与外呼）。；数字孪生的常见误区是&quot;重三维可视化、轻模型与数据&quot;——考试时应强调模型可计算、可推演、可校验，而不只是做一个大屏动画。</div></details><details class="exam-ans"><summary>解析与加分项</summary><div class="exam-exp-more">- 🟢 加分：解析·跨行业对比要抽象共性，数字孪生要落到&quot;可计算可推演&quot;。</div></details></div><div class="exam-q exam-q-case"><div class="case-head"><span class="exam-no">案例 98</span><span class="exam-tag">考点 · 一次泄漏报警后的三分钟</span><span class="exam-lv">⭐⭐⭐</span></div><div class="case-meta"><span>📅 <strong>时间</strong>：2026-07-14 19:20 📍 <strong>地点</strong>：城市某老旧小区 / 集团应急指挥群</span><span>👤 <strong>人物</strong>：甘工（乙方·系统分析师）、邓经理（甲方·运维经理）、洪经理（甲方·客服部经理）、徐总监（甲方·数智化信息部总监）、抢修队（甲方·现场）</span><span>⚡ <strong>冲突</strong>：调压站甲烷浓度报警，需在 3 分钟内完成&quot;确认—通知受影响用户—派单&quot;，但通知环节卡住</span><span><strong>难度</strong>：★★★　<strong>总分</strong>：25 分　<strong>建议用时</strong>：25 分钟</span></div><div class="case-scene"><div class="case-h">案例背景</div><strong>背景</strong>：19:20，某调压站甲烷浓度超过阈值，边缘网关立即本地联动：声光报警、站内通风启动。 十秒后平台收到事件并定位到影响范围（约 2 300 户）；事件总线广播后，派单模块 40 秒内把抢修单派给了最近的队伍。 但<strong>通知环节卡住了</strong>——AI 外呼并发只有 200 路，2 300 户要打十几分钟；而且部分用户是&quot;夜间勿扰&quot;名单，规则没配好。 徐总监在群里急问：&quot;到底几分钟能通知到人？&quot; 甘工意识到：CPS 的闭环不只是&quot;物理侧控制&quot;，还包括<strong>对社会侧（人）的通知能力</strong>——这是本题的核心考点。<br><strong>补充资料</strong>：边缘检测 → ≤10 s → 8 s → —；事件上行 → ≤5 s → 4 s → —；云端定位定级 → ≤30 s → 26 s → —；<strong>通知受影响用户</strong> → <strong>≤60 s</strong> → <strong>&gt;600 s</strong> → <strong>外呼并发仅 200 路 vs 2 300 户</strong>；派单 → ≤45 s → 40 s → —；<strong>合计</strong> → <strong>≤180 s</strong> → <strong>超时</strong> → 通知环节 <strong>改进</strong>：应急并发配额、多渠道并行（电话+短信+App+物业）、近源优先分级通知、Ⅰ级事件豁免免扰、预案化模板。</div><div class="case-asks"><div class="case-h">题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">（1）说明 <strong>CPS 闭环四过程</strong>在本案例中的具体体现与时间预算；</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">（2）分析通知环节成为瓶颈的原因，给出<strong>改进方案</strong>（含分级通知与并发能力）；</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">（3）说明<strong>实时性与可靠性</strong>设计要求，以及&quot;控制指令不能误动作&quot;如何保证；</span></li><li><span class="case-ask-no">4</span><span class="case-ask-t">（4）说明 <strong>SoS 级</strong>协同与应急演练的要点。</span></li></ul></div><details class="exam-ans"><summary>参考答案要点（三色标记）</summary><div class="exam-points"><strong>问题 1｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（1）四过程与时间预算）：①感知（甲烷/压力传感，门站 1 秒采样，边缘 10 秒内判定超限）；②通信（工业以太网/5G 双链路上报，时钟同步，事件 ≤5 秒到平台）；③计算（云端定位影响范围与风险评级，≤30 秒）；④控制（本地声光报警 + 通风 + 站级关阀需人工确认，平台侧自动派单 ≤45 秒）。<br><strong>问题 2｜参考答案要点</strong>：<br>- 🔴 核心：🟡 支撑（2）瓶颈与改进）：原因——①外呼并发资源不足（200 路 vs 2 300 户）；②通知渠道单一（只有电话）；③未做用户分级与优先级（高危/近源用户优先）；④免扰规则配置不当；⑤缺少模板与预案导致临时拼凑。<br><strong>问题 3｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（3）实时性与防误动作）：实时性——控制回路设为最高优先级硬实时任务、时延预算明确（本地报警 ≤1 秒）、确定性网络（工业以太网 + 时钟同步 PTP）、边缘自治。防误动作——①双重校验/人工确认（关阀属高风险）；②传感冗余与表决（双探头，防止单传感器误报）；③指令安全（鉴权、签名、时间戳 + nonce 防重放、有效期）；④动作约束（上下限、变化速率、防抖动）；⑤反馈校验（下发后回读状态，失败告警重试）；⑥可回退（一键恢复就地控制/安全态）；⑦失效—安全（失电/失通信进入安全态）。<br><strong>问题 4｜参考答案要点</strong>：<br>- 🔴 核心：🟡 支撑（4）SoS 协同与演练）：SoS 协同——打通&quot;管网监测平台 + 客服与外呼平台 + 抢修资源调度 + 城市安全平台 + 应急/物业&quot;，统一数据标准、接口契约、时钟与位置基准、事件总线与分级处置流程，并明确数据边界与授权（个人信息不出域）。</div></details><details class="exam-ans"><summary>解析与加分项</summary><div class="exam-exp-more">- 🟢 加分：解析·CPS 应急题要&quot;四过程时间预算 + 瓶颈改进 + 防误动作 + 演练&quot;。</div></details></div><div class="exam-q exam-q-case"><div class="case-head"><span class="exam-no">案例 99</span><span class="exam-tag">考点 · 数字孪生管网与AI质检的联动</span><span class="exam-lv">⭐⭐⭐</span></div><div class="case-meta"><span>📅 <strong>时间</strong>：2026-08-06 上午 📍 <strong>地点</strong>：集团数智化信息部（二期方案会）</span><span>👤 <strong>人物</strong>：甘工（乙方·系统分析师）、徐总监（甲方·数智化信息部总监）、谢工（乙方·机器人训练师）、龙工（乙方·数据工程师）、郑专员（甲方·合规专员）</span><span>⚡ <strong>冲突</strong>：想把&quot;数字孪生 + AI 质检&quot;用到管网上，但实时性、数据质量与算力都不够</span><span><strong>难度</strong>：★★★　<strong>总分</strong>：25 分　<strong>建议用时</strong>：25 分钟</span></div><div class="case-scene"><div class="case-h">案例背景</div><strong>背景</strong>：徐总监抛出新需求：&quot;一期管网监测只能看实时曲线，我想更进一步——<strong>建数字孪生体</strong>，能做关阀方案推演；再把 AI 质检用上，自动识别现场照片里的隐患。&quot; 谢工立刻补充：&quot;质检要能识别违章操作，我们的模型还得再训。&quot; 龙工却提了个硬问题：&quot;孪生体要实时映射，管网数据来源有七八个系统，时间戳都对不齐；而且推理要 GPU，现在 GPU 白天全给线上业务了。&quot; 郑专员最后加了一条：&quot;AI 判隐患可以，但<strong>结论要能追溯、能复核</strong>，不能让机器一句话就把工单派下去。&quot; 甘工在白板上画了两条线：<strong>一条物理线，一条数字线</strong>——他知道，这正是 CPS 与 AI 结合的典型难题。<br><strong>补充资料</strong>：门站压力 → 1 s → 网关本地时钟 → 与平台偏差 300 ms；调压站甲烷 → 30 s → 网关本地时钟 → 漂移未校准；工商表 → 5 min → 表端时钟 → 偏差最大 2 min；视频/巡检照片 → 事件触发 → 终端时间 → 时区不统一；工单系统 → 业务事件 → 服务器时间 → 与 IoT 不同源 <strong>改进</strong>：NTP/PTP 统一时钟、统一坐标系与设备编码、事件时间 + 水位线处理乱序、时钟漂移告警、对齐过程留痕。</div><div class="case-asks"><div class="case-h">题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">（1）说明 <strong>CPS 与数字孪生</strong>的关系，以及数字孪生的作用与建设要点；</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">（2）说明 <strong>AI 质检（机器视觉/多模态识别）</strong>接入 CPS 的位置与实时性要求；</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">（3）针对&quot;多源数据时间戳对不齐&quot;，给出<strong>时空一致</strong>的解决方案；</span></li><li><span class="case-ask-no">4</span><span class="case-ask-t">（4）说明 <strong>AI 结论可追溯、可复核</strong>的设计要求（含 2026 AI 治理要求）。</span></li></ul></div><details class="exam-ans"><summary>参考答案要点（三色标记）</summary><div class="exam-points"><strong>问题 1｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（1）CPS 与数字孪生）：关系——CPS 强调&quot;计算与物理过程的闭环控制&quot;（感知—通信—计算—控制）；数字孪生是物理实体在数字空间的实时映射与仿真体，可视为 CPS 的&quot;高保真数字镜像与推演能力&quot;，两者一个重&quot;闭环控制&quot;、一个重&quot;映射与推演&quot;，在工程上互补。<br><strong>问题 2｜参考答案要点</strong>：<br>- 🔴 核心：🟡 支撑（2）AI 质检接入位置与实时性）：接入位置——①边缘侧（现场摄像头/巡检终端做初步识别：是否佩戴安全帽、是否有明显泄漏迹象），优点是无网可用、隐私可控；②云端（做精细多模态复核、趋势分析与模型训练）；③结论回流——AI 结论进入CPS 闭环（自动生成隐患工单、触发提醒）。<br><strong>问题 3｜参考答案要点</strong>：<br>- 🔴 核心：🟡 支撑（3）时空一致）：①统一时钟基准——全线部署 NTP/PTP 时钟同步，边缘网关带时间戳；②统一空间基准——统一坐标系与设备编码（GIS 与设备台账对齐）；③时间戳与序号——每条数据带采集时间与序列号，处理乱序与迟到数据（流水线用事件时间 + 水位线）；④数据对齐与插值——多源数据按时间窗口对齐，缺失做标记而非默认填补；⑤质量校验——时钟漂移告警、序列断号检测、异常值过滤；⑥可追溯——保留原始数据与对齐过程，便于复核。<br><strong>问题 4｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（4）可追溯与可复核）：①模型与版本留痕——每条 AI 结论记录模型版本、推理时间、输入来源、置信度；②可干预——人工可复核、可推翻结论，且保留复核记录；③置信度分级处置——高置信度可直接生成提示，中低置信度转人工复核后再生成工单（避免误判引发误派单）；④双人复核（高风险判定如&quot;泄漏隐患&quot;）；⑤算法备案与生成内容标识（符合 2026 AI 治理要求）；⑥数据合规——现场照片涉及人员与场所，需脱敏/授权，并限定用途与保存期限；⑦审计与抽检——定期抽检 AI 结论与人工复核的一致率，作为模型质量指标。</div></details><details class="exam-ans"><summary>解析与加分项</summary><div class="exam-exp-more">- 🟢 加分：解析·CPS+AI 题要&quot;孪生作用与要点 + AI 接入位置 + 时空一致 + 可追溯可复核&quot;。</div></details></div><div class="exam-q exam-q-case"><div class="case-head"><span class="exam-no">案例 100</span><span class="exam-tag">考点 · 管网系统要不要&quot;抗量子&quot;</span><span class="exam-lv">⭐⭐⭐</span></div><div class="case-meta"><span>📅 <strong>时间</strong>：2026-09-18 上午 📍 <strong>地点</strong>：集团信息安全规划会</span><span>👤 <strong>人物</strong>：甘工（乙方·系统分析师）、郑专员（甲方·合规专员）、徐总监（甲方·数智化信息部总监）、卢总（乙方·技术总监）、电信技术经理（第三方·电信公司）</span><span>⚡ <strong>冲突</strong>：CPS 控制指令要长期保密，郑专员提出&quot;抗量子密码&quot;要求，卢总觉得成本太高</span><span><strong>难度</strong>：★★★　<strong>总分</strong>：25 分　<strong>建议用时</strong>：25 分钟</span></div><div class="case-scene"><div class="case-h">案例背景</div><strong>背景</strong>：郑专员把一份材料推过来：&quot;国家在推后量子密码迁移，管网控制系统生命周期十几二十年，现在的加密算法将来可能被量子计算机破解。&quot; 卢总皱眉：&quot;抗量子密码现在还不成熟吧？换算法要动终端、边网关、平台，成本不小。&quot; 电信公司技术经理插了一句：&quot;而且我们线路侧也涉及加密，得两边一起改。&quot; 甘工想起这几次安全演练暴露的问题——<strong>控制指令一旦被伪造，后果是关阀或停气</strong>。他知道，这已不是&quot;要不要花这笔钱&quot;，而是&quot;<strong>什么时候开始准备、怎么分步迁移</strong>&quot;。<br><strong>补充资料</strong>：一·盘点与设计 → 0~6 个月 → 资产/算法盘点；引入密码服务抽象层 → 算法台账、可替换架构；二·混合过渡 → 6~18 个月 → 新建系统用「国密 + 候选 PQC」；存量固件支持协商 → 控制指令链路签名 + 防重放；三·全面替换 → 18 个月+ → 替换剩余链路，保留双算法与回退 → 证书与密钥体系更新 <strong>约束</strong>：PQC 密钥更大 → 报文变长，须实测对实时性（≤150 ms）与包大小的影响；终端、网关、平台与电信公司须<strong>同步改造</strong>。</div><div class="case-asks"><div class="case-h">题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">（1）说明 <strong>CPS 信息安全</strong>的主要威胁与防护目标；</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">（2）说明<strong>抗量子密码（后量子密码，PQC）</strong>的背景与迁移策略；</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">（3）给出本项目<strong>分阶段迁移方案</strong>（含密码敏捷性设计）；</span></li><li><span class="case-ask-no">4</span><span class="case-ask-t">（4）说明<strong>车路云与低空经济</strong>等新兴 CPS 场景对安全与实时的共性要求。</span></li></ul></div><details class="exam-ans"><summary>参考答案要点（三色标记）</summary><div class="exam-points"><strong>问题 1｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（1）威胁与防护目标）：威胁——①指令伪造/篡改（伪造关阀、调压指令）；②重放攻击（重发历史合法指令）；③设备仿冒（伪 RTU 接入）；④数据窃取（管网布局、用户信息）；⑤拒绝服务（阻断监测与通信）；⑥供应链风险（第三方组件后门）；⑦内部越权（运维权限滥用）。<br><strong>问题 2｜参考答案要点</strong>：<br>- 🔴 核心：🟡 支撑（2）PQC 背景与策略）：背景——现有公钥算法（RSA/ECC/SM2）依赖大整数分解与离散对数难题，未来大规模量子计算机可被 Shor 算法破解；因此需要抗量子（后量子）密码算法（基于格、编码、哈希、多变量等的方案，NIST 已推进标准化）。策略——①先做资产盘点与风险评估（哪些数据需要长期保密、哪些链路生命周期最长）；②密码敏捷性（Crypto-Agility）优先——把密码算法做成可替换的抽象层，而不是散落硬编码；③混合过渡（经典算法 + PQC 并行，兼容现有环境）；④优先保护长期敏感数据（管网设计、控制策略）；⑤跟随国密与国家标准演进，避免自创算法。<br><strong>问题 3｜参考答案要点</strong>：<br>- 🔴 核心：🟡 支撑（3）分阶段迁移）：<br><strong>问题 4｜参考答案要点</strong>：</div></details><details class="exam-ans"><summary>解析与加分项</summary><div class="exam-exp-more">- 🟢 加分：解析·CPS 安全题要&quot;威胁与目标 + PQC 背景策略 + 分阶段迁移 + 新兴场景共性&quot;。<br>- 🔴 核心：🟢 加分（4）新兴 CPS 场景共性要求）：车路云一体化（毫秒~百毫秒实时性、强身份认证防伪造、涉及人身安全）、低空经济（无人机通信与空域安全、链路抗干扰）、工业互联网（OT/IT 隔离、供应链安全）——共性要求为：①强实时与确定性；②设备身份与指令真实性；③功能安全与信息安全一体化；④失效—安全与降级；⑤可验证与可演练；⑥全生命周期安全（含密码算法演进，即&quot;密码敏捷性&quot;）。</div></details></div></details></section>
     <div class="wrongbook"></div>
     <div class="keyhint">
   <span class="keyhint-title">键盘快捷键</span>
@@ -3176,7 +3358,9 @@ html{scroll-padding-top:80px}
     init() {
       const root = document.querySelector('.exam')
       if (!root) return
-      const chapter = root.dataset.examChapter || 'x'
+      // ⚠️ 专项页 / 全真模拟页没有 data-exam-chapter（无教材章），
+      //    旧写法一律退化成 'x' → H42~H48 共用同一个记忆键、互相串状态。
+      const chapter = root.dataset.examChapter || root.dataset.examHour || 'x'
 
       // 恢复上次展开状态：{ "H07": { "2025年5月": true, ... } }
       const saved = store.get(this.KEY, {}) || {}
@@ -3196,6 +3380,7 @@ html{scroll-padding-top:80px}
       const seen = store.get('examSeen', {}) || {}
       root.querySelectorAll('.exam-q').forEach(qd => {
         const qid = qd.dataset.examId
+        if (!qid) return
         if (seen[qid]) {
           const a = qd.querySelector('.exam-ans')
           if (a) a.open = true
@@ -3211,12 +3396,17 @@ html{scroll-padding-top:80px}
         btn.addEventListener('click', e => {
           e.preventDefault()
           const openAll = btn.dataset.examAll === '1'
-          root.querySelectorAll('.exam-subject,.exam-year').forEach(d => { d.open = openAll })
-          root.querySelectorAll('.exam-ans').forEach(d => {
-            d.open = openAll
-            if (openAll && d.parentElement.dataset.examId) seen[d.parentElement.dataset.examId] = 1
-          })
-          if (openAll) store.set('examSeen', seen)
+          // ⚠️ 必须把 .exam-q 也列进来：只开 .exam-subject/.exam-year/.exam-ans
+          //    时，单题仍折叠 → 答案藏在关闭的单题内，"全部展开"名不副实。
+          root.querySelectorAll('.exam-subject,.exam-year,.exam-q,.exam-ans')
+            .forEach(d => { d.open = openAll })
+          if (openAll) {
+            // ⚠️ 旧的 `d.parentElement.dataset.examId` 取到的是 .exam-q-body（无 id），
+            //    会把 seen[undefined] 写进 localStorage。改为直接从 .exam-q 取。
+            root.querySelectorAll('.exam-q[data-exam-id]')
+              .forEach(qd => { seen[qd.dataset.examId] = 1 })
+            store.set('examSeen', seen)
+          }
           // 同步年份级记忆
           root.querySelectorAll('.exam-year').forEach(y => { mine[y.dataset.examYear] = y.open })
           saved[chapter] = mine
@@ -3263,7 +3453,7 @@ html{scroll-padding-top:80px}
   // ══════════════════════════════════════════
   // 8. mermaid 渲染（自定义墨绿主题，与正文同色系）
   // ══════════════════════════════════════════
-  // 站点配色（与 design.css 的令牌保持一致）
+  // 站点配色（与设计令牌保持一致 —— 改主题色时这里要同步）
   const MERMAID_LIGHT = {
     bg: '#f2f0e9', fg: '#1b211c', line: '#cdc9bd',
     accent: '#3d5a40', accent2: '#5a8a62', accent3: '#7ea888',

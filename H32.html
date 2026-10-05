@@ -7,7 +7,7 @@
 <title>第 32 小时 · 软件实现与测试（二）· 测试阶段与部署发布 · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
-<meta name="build-stamp" content="2026-10-05 11:44:51">
+<meta name="build-stamp" content="2026-10-05 15:47:03">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -405,16 +405,21 @@ img{max-width:100%;height:auto}
   border-radius:100px;
   font-size:12.5px;color:var(--accent);font-weight:600;
 }
-.cover h1{
+/* ⚠️ 封面主标题刻意用 <div> 而不是 <h1>：index.md 正文自带 `# 阿甘系分 · 48 小时
+   冲刺手册`，若封面也用 h1，一页会出现两个 h1（语义/SEO 上都是错的）。
+   视觉与 h1 完全一致 —— 字号、颜色、以及那道 72px 短横线都在下面显式声明。 */
+.cover .cover-title{
   font-size:3.5em;font-weight:800;letter-spacing:-1.6px;
   color:var(--accent);line-height:1.14;margin-bottom:16px;
 }
-/* ⚠️ 封面 h1 也继承 `.main h1::after` 那道 56px 短横线，但它是 display:block 的
-   固定宽块级元素 —— 文字居中不代表块级元素居中，会贴到左边。
-   修法：给封面这条短横线加 margin-left/right:auto 让它真正居中。 */
-.cover h1::after{
-  margin-left:auto;margin-right:auto;
+/* 复刻 `.main h1::after` 的短横线（<div> 不继承 h1 的伪元素），并水平居中 —— */
+/* 文字居中不代表块级元素居中，不加 auto 会贴到左边。 */
+.cover .cover-title::after{
+  content:'';display:block;
   width:72px;height:3px;
+  background:var(--accent);
+  margin:.5em auto 0;
+  border-radius:2px;
 }
 .cover .sub{
   font-size:1.2em;color:var(--fg-2);
@@ -845,7 +850,7 @@ pre{
   .nav{margin-left:auto;gap:2px}
   .main{padding:32px 0 80px}
   .cover{padding:48px 0 40px;margin-bottom:40px}
-  .cover h1{font-size:2.4em;letter-spacing:-.8px}
+  .cover .cover-title{font-size:2.4em;letter-spacing:-.8px}
   .cover .sub{font-size:1.05em;margin-bottom:24px}
   .cover-stats{gap:10px;margin-bottom:28px}
   .stat{min-width:76px;padding:10px 14px}
@@ -901,7 +906,7 @@ pre{
   h1,h2,h3,h4{break-after:avoid;page-break-after:avoid}
 
   .cover{padding:0 0 18px;margin-bottom:18px;text-align:left}
-  .cover h1{font-size:24pt}
+  .cover .cover-title{font-size:24pt}
   .cover-stats,.cover-badge,.cta-row{display:none !important}
 
   a[href^="http"]:after{
@@ -1256,16 +1261,14 @@ html.focus-mode .chapbar{opacity:.35;pointer-events:none}
 }
 /* 章首横幅：h1 上方加一条"章号 + 主色渐变"的装饰带，
    让每页开头有一个明确的"进入新章"仪式感（原来 h1 直接浮在正文里）。
-   ⚠️ 必须排除 .cover —— 封面 h1 自己已有顶部留白与居中布局，
-   加上横幅会与下方分隔线叠成双线（首页曾出现两条横线紧挨）。 */
-.main h1:not(.cover h1)::before{
+   （封面主标题已改成 <div class="cover-title">，不再匹配 .main h1，无需再排除。） */
+.main h1::before{
   content:'';display:block;
   width:100%;height:4px;
   background:linear-gradient(90deg,var(--accent) 0%,var(--accent-3) 42%,transparent 88%);
   border-radius:2px;
   margin-bottom:.62em;
 }
-.cover h1::before{content:none}
 .main h1::after{
   content:'';display:block;
   width:56px;height:3px;
@@ -2087,6 +2090,185 @@ html{scroll-padding-top:80px}
   .exam-stem,.exam-opts li{font-size:9.5pt}
   .exam-exp{font-size:8.5pt;color:#333}
 }
+
+/* ══════════════════════════════════════════════════════════════
+   真题区块扩展 v2 · 案例 / 论文卡片 + 全真模拟卷
+   与既有 .exam-* 体系同源：米白卡底 + 左侧 4px 色条 + 墨绿强调色
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── 案例 / 论文卡片（非 <details>，直接展开的题卡）── */
+.exam-q-case,.exam-q-essay{
+  padding:14px 16px 4px;
+  background:var(--bg-card);
+}
+.exam-q-case:hover,.exam-q-essay:hover{background:var(--bg-alt)}
+.case-head{
+  display:flex;flex-wrap:wrap;align-items:center;gap:6px;
+  padding-bottom:10px;margin-bottom:10px;
+  border-bottom:1px dashed var(--line);
+}
+.case-head .exam-no{min-width:0}
+.case-h{
+  display:flex;align-items:center;gap:6px;
+  margin:12px 0 6px;font-size:12.5px;font-weight:700;
+  letter-spacing:.06em;color:var(--accent);
+}
+.case-h::before{
+  content:'';width:4px;height:13px;border-radius:2px;
+  background:var(--accent);flex:0 0 auto;
+}
+
+/* 情景要素（📅时间 / 📍地点 / 👤人物 / ⚡冲突 / 难度总分用时） */
+.case-meta{
+  display:flex;flex-direction:column;gap:2px;
+  padding:9px 12px;margin:.4em 0 .2em;
+  background:var(--bg-alt);
+  border-left:3px solid var(--line-2);
+  border-radius:0 var(--radius-sm) var(--radius-sm) 0;
+  font-size:12.5px;line-height:1.75;color:var(--fg-3);
+}
+.case-meta strong{color:var(--fg-2);font-weight:600}
+
+/* 案例背景正文 */
+.case-scene{
+  margin:.2em 0 1em;padding:12px 14px;
+  background:var(--accent-soft);
+  border-left:3px solid var(--accent-3);
+  border-radius:0 var(--radius) var(--radius) 0;
+  font-size:14.5px;line-height:1.92;color:var(--fg);
+}
+.case-scene strong{color:var(--accent);font-weight:700}
+
+/* 题目列表 */
+.case-asks{margin:.2em 0 1em}
+ul.exam-questions{
+  list-style:none;margin:.4em 0;padding:0;
+}
+ul.exam-questions>li{
+  display:flex;gap:10px;align-items:flex-start;
+  padding:9px 0;border-bottom:1px solid var(--line);
+  font-size:14.5px;line-height:1.88;color:var(--fg);
+}
+ul.exam-questions>li:last-child{border-bottom:0}
+ul.exam-questions>li::before{content:none !important}
+.case-ask-no{
+  flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;
+  min-width:24px;height:22px;margin-top:3px;padding:0 6px;
+  border-radius:6px;background:var(--accent-soft-2);color:var(--accent);
+  font-family:var(--sans);font-size:11.5px;font-weight:700;
+  font-variant-numeric:tabular-nums;
+}
+.case-ask-t{flex:1;min-width:0}
+.case-ask-t strong{color:var(--accent);font-weight:700}
+
+/* ── 答案 / 解析 / 考点拆解 / 教材知识点 ── */
+.exam-points,.exam-keypoints,.exam-exp-more,.essay-bg{
+  padding:12px 14px;margin:8px 0;
+  border-left:4px solid var(--tip-line);
+  border-radius:0 var(--radius) var(--radius) 0;
+  background:var(--tip-bg);
+  font-size:14px;line-height:1.92;color:var(--fg);
+}
+.exam-keypoints{border-left-color:var(--accent-2);background:var(--accent-soft)}
+.exam-exp-more{border-left-color:var(--warn-line);background:var(--warn-bg);color:var(--warn-fg)}
+.essay-bg{border-left-color:var(--line-2);background:var(--bg-alt);color:var(--fg-2)}
+.exam-points strong,.exam-keypoints strong{color:var(--accent);font-weight:700}
+
+/* 教材知识点：章标签 + 可点学时胶囊 */
+.exam-textbook{
+  display:flex;flex-wrap:wrap;align-items:center;gap:6px;
+  padding:12px 14px;margin:8px 0;
+  background:var(--mem-bg);
+  border-left:4px solid var(--mem-line);
+  border-radius:0 var(--radius) var(--radius) 0;
+}
+.tb-chap{
+  font-family:var(--serif);font-size:14px;font-weight:700;color:var(--mem-fg);
+}
+.tb-hour{
+  display:inline-flex;align-items:center;
+  padding:2px 9px;border-radius:999px;
+  background:var(--bg-card);border:1px solid var(--mem-line);
+  color:var(--mem-fg) !important;font-size:12px;font-weight:600;
+  text-decoration:none;
+}
+.tb-hour:hover{background:var(--mem-line);color:var(--bg-card) !important;border-color:var(--mem-fg)}
+
+/* 模拟卷成绩/批次等小标签 */
+.exam-lv{
+  font-family:var(--sans);font-size:11.5px;color:var(--gold);
+  letter-spacing:.04em;white-space:nowrap;
+}
+.exam-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.exam-tag-en{
+  background:var(--mem-bg);color:var(--mem-fg);border-color:var(--mem-line);
+}
+.essay-batch{
+  font-family:var(--sans);font-size:11.5px;color:var(--fg-3);
+  padding:1px 8px;border:1px solid var(--line);border-radius:999px;
+}
+.exam-kp{
+  margin:.5em 0 0;font-family:var(--sans);font-size:12.5px;color:var(--fg-3);
+}
+.exam-kp::before{content:'🎯 ';font-size:11px}
+
+/* ── 全真模拟卷头部 ── */
+.mock-head{
+  padding:16px 18px;margin:0 0 12px;
+  border-radius:var(--radius-lg);
+  background:linear-gradient(135deg,var(--accent) 0%,var(--accent-2) 100%);
+  color:var(--fg-inv);
+  box-shadow:var(--shadow-2);
+}
+.mock-title{
+  font-family:var(--serif);font-size:17px;font-weight:700;
+  letter-spacing:.02em;line-height:1.5;
+}
+.mock-sub{
+  margin-top:6px;font-size:12.5px;line-height:1.75;
+  color:rgba(251,250,246,.82);
+}
+.mock-sub b{color:#fff;font-variant-numeric:tabular-nums}
+.mock-items{
+  border:1px solid var(--line);border-radius:var(--radius);
+  background:var(--bg-card);overflow:hidden;
+}
+.mock-items>.exam-q:first-child{border-top:0}
+.exam-mock .exam-subject{margin-top:14px}
+.exam-subj-only{display:block}
+
+/* 模拟卷内的综合知识答题条 */
+.exam-mock .exam-bar{
+  border-radius:var(--radius) var(--radius) 0 0;
+  border-bottom:0;
+}
+
+/* ── 窄屏 ── */
+@media(max-width:760px){
+  .exam-q-case,.exam-q-essay{padding:12px 12px 4px}
+  .case-scene,.exam-points,.exam-keypoints,.exam-exp-more,.essay-bg,.exam-textbook{
+    padding:10px 11px;font-size:13.5px;
+  }
+  ul.exam-questions>li{gap:8px;font-size:13.5px}
+  .mock-head{padding:13px 14px}
+  .mock-title{font-size:15.5px}
+}
+
+/* ── 打印：卡片不要再折叠，色条与底色转灰阶 ── */
+@media print{
+  .mock-head{background:none !important;color:#000 !important;border:1pt solid #999;
+    box-shadow:none}
+  .mock-title{font-size:13pt}
+  .mock-sub{color:#333 !important}
+  .exam-q-case,.exam-q-essay{break-inside:avoid;page-break-inside:avoid}
+  .case-scene,.exam-points,.exam-keypoints,.exam-exp-more,.essay-bg,.exam-textbook{
+    background:none !important;border-left:2pt solid #999 !important;
+  }
+  .exam-q-case,.exam-q-essay,.case-scene,.case-meta,ul.exam-questions>li{
+    font-size:9.5pt;
+  }
+  .tb-hour{color:#000 !important;border-color:#666}
+}
 </style>
 </head>
 <body>
@@ -2114,7 +2296,7 @@ html{scroll-padding-top:80px}
 </div>
     
     <h1 id="第-32-小时-软件实现与测试-二-测试阶段与部署发布">第 32 小时 · 软件实现与测试（二）· 测试阶段与部署发布</h1>
-<div class="quote"><p>本学时覆盖 **14.4 测试分类（按对象 / 按阶段 / 七种新形态 / 回归-冒烟）+ 14.5 测试过程与管理<br>+ 14.6 软件部署<strong>，并附</strong>全章易错辨析 + 速记卡 + 自测清单**。<br><strong>测试四阶段（单元→集成→系统→验收）</strong>与<strong>四种发布方式</strong>是案例与论文的高频素材。</p></div>
+<div class="quote"><p>本学时覆盖 <strong>14.4 测试分类（按对象 / 按阶段 / 七种新形态 / 回归-冒烟）+ 14.5 测试过程与管理<br>+ 14.6 软件部署</strong>，并附<strong>全章易错辨析 + 速记卡 + 自测清单</strong>。<br><strong>测试四阶段（单元→集成→系统→验收）</strong>与<strong>四种发布方式</strong>是案例与论文的高频素材。</p></div>
 <div class="block gold"><div class="block-title">考情定位</div><p>四块必拿：① <strong>四阶段顺序</strong>（单元 → 集成 → 系统 → 验收，含各阶段<strong>谁来做、用什么方法</strong>）；② <strong>α vs β 测试</strong>（α 在开发场地有指导，β 在用户真实环境无指导）；③ <strong>回归 vs 冒烟</strong>（回归验证"没改坏"，冒烟验证"能跑起来"）；④ <strong>四种发布</strong>（蓝绿秒回滚但资源翻倍 / 灰度最常用 / 滚动无停机 / 影子不影响用户）。</p></div>
 <div class="block mem"><div class="block-title">记忆口诀</div><p><strong>四阶段</strong>：<strong>单元</strong>（白盒，开发做）→ <strong>集成</strong>（接口，黑+白）→ <strong>系统</strong>（完整，<strong>纯黑盒</strong>，测试团队）→ <strong>验收</strong>（用户主导，<strong>α 开发场地 / β 用户场地</strong>）。<br><strong>集成策略</strong>：一次性 · <strong>自顶向下</strong> · <strong>自底向上</strong> · <strong>三明治</strong>。<br><strong>回归 vs 冒烟</strong>：回归<strong>防改坏</strong>，冒烟<strong>验能跑</strong>（先冒烟 → 详细 → 回归）。<br><strong>四发布</strong>：<strong>蓝绿</strong>（双环境，秒回滚）· <strong>灰度/金丝雀</strong>（放量观察，最常用）· <strong>滚动</strong>（逐批替换）· <strong>影子</strong>（流量副本，不影响用户）。</p></div>
 <div class="block warning"><div class="block-title">易错陷阱</div><p><strong>α 在开发场地</strong>（用户在开发方指导下），<strong>β 在用户场地</strong>（用户自行使用）——方向别记反，两者都属<strong>验收测试</strong>。<br><strong>蓝绿部署资源开销翻倍</strong>（两套完整环境），换来的是<strong>秒级回滚</strong>。<br><strong>回滚预案必须在"制定部署计划"这一步就写好</strong>，不能等出问题才想。</p></div>
@@ -2373,7 +2555,7 @@ html{scroll-padding-top:80px}
   </div>
 </div>
 </div>
-    <section class="exam" id="exam" data-exam-chapter="14" data-exam-hour="H32"><div class="exam-bar"><span class="exam-bar-label">📚 历年真题</span><span class="exam-bar-stat">本章共 <b>13</b> 题 · 本学时 <b>6</b> 题（其余见同章其他学时）</span><span class="exam-bar-ops"><button type="button" class="exam-op" data-exam-all="1">全部展开</button><button type="button" class="exam-op" data-exam-all="0">全部收起</button></span></div><details class="exam-subject" data-exam-subject="综合知识"><summary><span class="exam-subject-name">📝 综合知识</span><span class="exam-subject-n">6 题</span><span class="exam-subject-tip">按年份展开 · 单题可点开看答案</span></summary><details class="exam-year" data-exam-year="2026年5月"><summary><span class="exam-year-name">2026年5月</span><span class="exam-year-n">4 题</span></summary><details class="exam-q" data-exam-id="2026年5月-063"><summary><span class="exam-no">第 63 题</span><span class="exam-stem-peek">测试数据99.99、100、100.01、500、500.01属于</span></summary><div class="exam-q-body"><p class="exam-stem">测试数据99.99、100、100.01、500、500.01属于</p><ul class="exam-opts"><li><b>A</b> 等价类</li><li><b>B</b> 判定表</li><li><b>C</b> 边界值</li><li><b>D</b> 因果图</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">数据围绕100、500两个临界点设计，属于典型边界值测试。</p></details></div></details><details class="exam-q" data-exam-id="2026年5月-047"><summary><span class="exam-no">第 47 题</span><span class="exam-stem-peek">下列关于测试用例的描述，错误的是</span></summary><div class="exam-q-body"><p class="exam-stem">下列关于测试用例的描述，错误的是</p><ul class="exam-opts"><li><b>A</b> 覆盖关键场景</li><li><b>B</b> 可重复</li><li><b>C</b> 明确预期结果</li><li><b>D</b> 可代替程序代码</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">测试用例是测试执行依据，无法替代程序代码。</p></details></div></details><details class="exam-q" data-exam-id="2026年5月-020"><summary><span class="exam-no">第 20 题</span><span class="exam-stem-peek">边界值分析法重点关注的是</span></summary><div class="exam-q-body"><p class="exam-stem">边界值分析法重点关注的是</p><ul class="exam-opts"><li><b>A</b> 中间值</li><li><b>B</b> 随机值</li><li><b>C</b> 输入输出边界附近数据</li><li><b>D</b> 全排列组合</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">软件缺陷大多集中在数据临界点，边界值分析法专门测试边界、极值数据。</p></details></div></details><details class="exam-q" data-exam-id="2026年5月-013"><summary><span class="exam-no">第 13 题</span><span class="exam-stem-peek">系统修复后，为确认修改未引入新问题，应进行</span></summary><div class="exam-q-body"><p class="exam-stem">系统修复后，为确认修改未引入新问题，应进行</p><ul class="exam-opts"><li><b>A</b> 单元测试</li><li><b>B</b> 冒烟测试</li><li><b>C</b> 验收测试</li><li><b>D</b> 回归测试</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">回归测试用于缺陷修复、版本变更后，验证原有功能正常，避免引入新故障。</p></details></div></details></details><details class="exam-year" data-exam-year="2025年5月"><summary><span class="exam-year-name">2025年5月</span><span class="exam-year-n">1 题</span></summary><details class="exam-q" data-exam-id="2025年5月-050"><summary><span class="exam-no">第 50 题</span><span class="exam-stem-peek">在软件测试分类中，能够进行功能测试的是 ()</span></summary><div class="exam-q-body"><p class="exam-stem">在软件测试分类中，能够进行功能测试的是 ()</p><ul class="exam-opts"><li><b>A</b> 黑盒测试</li><li><b>B</b> 白盒测试</li><li><b>C</b> 系统测试</li><li><b>D</b> 验收测试</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">送分题，功能是黑盒，结构是白盒。</p></details></div></details></details><details class="exam-year" data-exam-year="2024年5月"><summary><span class="exam-year-name">2024年5月</span><span class="exam-year-n">1 题</span></summary><details class="exam-q" data-exam-id="2024年5月-067"><summary><span class="exam-no">第 67 题</span><span class="exam-stem-peek">以下（）需要测试人员熟悉程序代码，根据代码设计对应测试用例</span></summary><div class="exam-q-body"><p class="exam-stem">以下（）需要测试人员熟悉程序代码，根据代码设计对应测试用例</p><ul class="exam-opts"><li><b>A</b> 黑盒测试</li><li><b>B</b> 白盒测试</li><li><b>C</b> 单元测试</li><li><b>D</b> 集成测试</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">白盒测试又称结构测试，要求测试人员熟悉程序内部代码实现，基于代码的控制流、数据流设计测试用例；黑盒测试无需查看代码，单元、集成测试是按阶段划分的测试类型，不强制要求熟悉源码。</p></details></div></details></details></details><details class="exam-subject" data-exam-subject="案例"><summary><span class="exam-subject-name">📋 案例分析</span><span class="exam-subject-n">2 题</span><span class="exam-subject-tip">情景简答 · 采分点三色标记</span></summary><div class="exam-bar"><span class="exam-bar-label">📋 案例分析</span><span class="exam-bar-stat">共 <b>2</b> 题 · 情景简答</span></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">64</span>考点：测试原则 / 测试阶段 / 黑盒用例设计 / 回归测试 / 测试组织<br>📅 时间：2025-11-18 上午 📍 地点：测试方案评审<br>👤 人物：甘工（乙方·系统分析师）、丁工（乙方·测试负责人）、李工（乙方·项目经理）、洪经理（甲方·客服部经理）<br>⚡ 冲突：大模型输出不确定、话术每周更新，测试怎么做得完、做得准<br>难度：★★★　总分：10 分　建议用时：25 分钟<br>背景：丁工提出难题：&quot;AI 说的话每次不完全一样，我们没法像以前那样断言&#x27;输出等于某句话&#x27;。而且话术每周都改，回归根本跑不完。&quot; 李工担心工期：&quot;测试做太细，上线就晚了。&quot; 洪经理只问：&quot;那上线出问题谁负责？&quot; 甘工在白板上写下三个词：评测集、指标、门禁——他要把&quot;主观效果&quot;变成&quot;可测指标&quot;，再把指标接进流水线。<br>补充资料：；话术库每周更新；合规要求 AI 生成内容不得出现承诺性/歧视性表述；端到端 ≤800ms；已使用大模型辅助生成约 18% 代码。<br>问题 1：（1）说明软件测试的基本原则；<br>问题 2：（2）给出单元、集成、确认、系统、验收五个阶段在本项目的测试重点；<br>问题 3：（3）说明回归测试的作用与策略。<br>问题 4：针对&quot;批量导入外呼号码&quot;功能，使用等价类划分与边界值分析设计测试用例；针对大模型输出非确定的特点，设计一套可落地的测试方案（评测集、指标、回归与合规验证）。（10分）</p><ul class="exam-questions"><li><b>问题 1</b> （1）说明软件测试的<strong>基本原则</strong>；</li><li><b>问题 2</b> （2）给出<strong>单元、集成、确认、系统、验收</strong>五个阶段在本项目的测试重点；</li><li><b>问题 3</b> （3）说明<strong>回归测试</strong>的作用与策略。</li><li><b>问题 4</b> 针对&quot;批量导入外呼号码&quot;功能，使用等价类划分与边界值分析设计测试用例；针对大模型输出非确定的特点，设计一套可落地的测试方案（评测集、指标、回归与合规验证）。（10分）<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）测试原则）：①测试应追溯到用户需求；②尽早并持续地测试（需求阶段即开始）；③程序员应避免测试自己的程序（独立测试/交叉测试）；④测试用例应包含输入与预期输出；⑤测试无法证明软件无错（穷举不可能）；⑥注意错误集群现象（缺陷集中的模块应重点测试）；⑦妥善保存测试产物（用例、缺陷、报告可追溯）；⑧Pareto 原则（80% 缺陷来自 20% 模块）。<br>- 🟢 加分：解析·用例题要&quot;具体输入值 + 预期结果&quot;，AI 测试要&quot;评测集 + 指标红线 + 影子/灰度 + 红队合规&quot;。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🔴 核心（2）五阶段重点）：<br>问题 3｜参考答案要点：<br>- 🔴 核心：🔴 核心（3）回归测试）：作用——验证修改（缺陷修复、需求变更、重构）未引入新缺陷且未破坏既有功能；是高频发布与持续集成的基础保障。策略——①用例分级（核心链路全量回归、边缘功能抽样回归）；②自动化优先（单元 + 接口 + 契约自动化，UI 自动化精简）；③精准回归（按代码变更只跑受影响用例）；④分层执行（提交级快速套件、发布级完整套件、夜间全量）；⑤每个已修复缺陷补一条回归用例；⑥与灰度 + 可观测配合，发布后按指标自动回滚。<br>问题 4｜参考答案要点（10分）：<br>- 🔴 核心：🔴 核心（等价类）：<br>- 🟡 支撑：号码格式：11 位手机号（1 开头）；位数不足/超长、含字母或特殊字符、空值、非 1 开头<br>- 🟡 支撑：文件来源：Excel/CSV/CRM 接口；非支持格式、超 10MB、无表头<br>- 🟡 支撑：号码状态：正常号；黑名单号、禁呼时段归属地号、空号/停机号<br>- 🟡 支撑：数量：1~50 000 条；0 条、超 50 000 条（超日配额）<br>- 🟡 支撑：去重：批次内重复、与历史任务重复；—<br>- 🔴 核心：数量取 0 / 1 / 50 000 / 50 001；文件行数取 0 / 1 / 上限 / 上限+1；手机号长度取 10 / 11 / 12；文件大小取 0 / 10MB / 10MB+1；并发导入取 1 / 最大并发 / 最大并发+1。<br>- 🟡 支撑：TC-001 导入 1 条正常号 → 成功且任务状态&quot;待外呼&quot;；TC-002 含 3 个黑名单号 → 自动拦截并可导出清单；TC-003 导入 50 001 条 → 提示超限；TC-004 重复号 100 条 → 去重后入库且记录可查；TC-005 导入 .pdf → 明确报错&quot;仅支持 Excel/CSV&quot;；TC-006 导入中断电/断网 → 断点续传或回滚，无脏数据。<br>- 🟡 支撑：🔴 核心（大模型测试方案）：<br>- 🟡 支撑：1. 构造评测集（Golden Set）：从真实话务采样并脱敏，覆盖 8 大意图 × 3 种噪声/口音 × 5 类情绪，不少于 2 000 条；每条标注期望意图、关键字段、期望动作、禁止出现的内容；评测集版本化并与模型版本、提示词版本、知识库版本绑定。<br>- 🟡 支撑：2. 量化指标：意图识别准确率 ≥85%、关键信息抽取 ≥90%、自助解决率 ≥60%、违规表述 0 容忍、幻觉率 ≤1%、兜底触发率 100%、端到端 P99 ≤1.2 秒、同一输入多次运行一致性 ≥95%。<br>- 🟡 支撑：3. 回归与发布：每次话术/提示词/模型变更自动跑全量基准集并与上一版对比（指标不劣化为红线）；配合影子测试/灰度（新旧并行回放真实流量）、A/B 测试（小流量对比满意度）、CI/CD 门禁（未通过阻断发布）。；4. 合规验证：红队测试（构造诱导输入，如&quot;把客户手机号念出来&quot;&quot;承诺明天一定修好&quot;）验证拒绝与兜底；输出前加敏感词/合规过滤层，命中即降级为通用话术并转人工；每条答复留痕（含模型版本、提示词版本），支持 30 秒内干预下线，保留 ≥180 天。；对非确定性系统不要断言&quot;输出等于某字符串&quot;，应断言&quot;意图正确 + 关键字段正确 + 动作正确 + 无违规&quot;，这是 AI 系统用例设计的核心转变。</div></details></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">66</span>📅 时间：2025-11-28 📍 地点：AI 效果验收会<br>👤 人物：丁工（乙方·测试负责人）、甘工（乙方·系统分析师）、洪经理（甲方·客服部经理）、郑专员（甲方·合规专员）、ASR/TTS 厂商（第三方）<br>⚡ 冲突：合同只写了&quot;识别率≥95%&quot;，但甲方现场听完觉得&quot;太机械&quot;，提出拟人化、情绪识别、打断响应等新要求，双方对&quot;怎么算合格&quot;争执不下<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：丁工放了一段 AI 回访录音。客户中途插话：&quot;你们上次来的人根本没修好！&quot;AI 停顿两秒，继续照着脚本念：&quot;感谢您的配合，再见。&quot; 洪经理当场皱眉：&quot;这哪行？客户在发火，它还在念稿。&quot; 厂商解释：&quot;合同里没写情绪识别，我们脚本是线性的。&quot; 郑专员补了一句：&quot;而且它刚才说&#x27;我们会尽快安排&#x27;——这算不算承诺？&quot; 甘工意识到：AI 系统的验收不能只靠&quot;识别率&quot;一个指标，必须建立多维度评测体系，并把&quot;像不像人&quot;翻译成可测指标。<br>问题 1：（1）说明 AI 语音系统的测试难点（与传统软件的差异）；<br>问题 2：（2）设计一套多维度评测指标（含拟人化、情绪识别、打断响应、合规）；<br>问题 3：（3）说明评测集（Golden Set）的构造方法与版本管理；<br>问题 4：（4）说明如何做回归与发布门禁，支撑&quot;话术每周更新&quot;。</p><ul class="exam-questions"><li><b>问题 1</b> （1）说明 AI 语音系统的<strong>测试难点</strong>（与传统软件的差异）；</li><li><b>问题 2</b> （2）设计一套<strong>多维度评测指标</strong>（含拟人化、情绪识别、打断响应、合规）；</li><li><b>问题 3</b> （3）说明<strong>评测集（Golden Set）</strong>的构造方法与版本管理；</li><li><b>问题 4</b> （4）说明如何做回归与发布门禁，支撑&quot;话术每周更新&quot;。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）测试难点）：①输出非确定性——同一输入两次结果可能不同，不能断言&quot;输出等于某字符串&quot;；②结果难以穷举与判定——语言生成没有唯一正确答案；③依赖概率与模型——效果随模型/语料/版本变化，且与环境噪声、口音、情绪强相关；④指标难以自动化——&quot;自然度&quot;&quot;像不像人&quot;主观；⑤数据依赖强——需要脱敏真实语料，涉及隐私合规；⑥端到端链路长（ASR→意图→话术→TTS），定位困难；⑦回归成本高——话术/提示词频繁变更。<br>- 🟢 加分：解析·AI 测试题要&quot;难点 + 多维指标 + 评测集 + 回归门禁&quot;。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🟡 支撑（2）多维度指标）：<br>问题 3｜参考答案要点：<br>- 🔴 核心：🟡 支撑（3）评测集构造）：①来源——脱敏真实话务采样（覆盖 8 大意图 × 3 种噪声/口音 × 5 类情绪，≥2000 条）+ 对抗样本（方言、含糊、诱导性提问、插话打断）；②标注——期望意图、关键字段、期望动作、禁止内容、情绪标签；③版本化并与模型版本、提示词版本、知识库版本、话术版本绑定；④分层——核心集（每次必跑）、扩展集（每周）、对抗集（发版前）；⑤隐私——评测集必须脱敏，访问受控。<br>问题 4｜参考答案要点：<br>- 🔴 核心：🟡 支撑（4）回归与门禁）：①话术/提示词/模型任一变更都触发核心集自动回归，与上一版本对比，指标不劣化为红线（如意图准确率下降 &gt;2% 或违规表述 &gt;0 即阻断）；②影子测试/双跑——新旧版本并行回放真实流量，差异超阈值告警；③灰度发布——按坐席组/百分比放量，实时看指标（转人工率、投诉率、违规率），超阈值自动回滚；④CI/CD 门禁——评测未通过不允许发布；⑤监控闭环——线上持续采集&quot;识别率、情绪切换成功率、违规率、打断时延&quot;，异常即告警并支持一键降级（切回关键词话术 + 转人工）。</div></details></div></details><details class="exam-subject" data-exam-subject="论文"><summary><span class="exam-subject-name">📄 论文写作</span><span class="exam-subject-n">5 题</span><span class="exam-subject-tip">论述题 · 先写再看题</span></summary><div class="exam-bar"><span class="exam-bar-label">📄 论文写作</span><span class="exam-bar-stat">共 <b>5</b> 题 · 论述题</span></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与管理和开发的软件项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细论述系统自动化测试的内容，以及自动化测试的优点与缺点。</li><li><b>问题 3</b> 结合项目实际，说明自动化测试的实施过程与应用效果。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 测试</span><span class="exam-lv">⭐⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与管理和开发的软件项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细论述功能测试方法、自动化测试内容以及测试工具的选择依据。</li><li><b>问题 3</b> 结合项目实际，说明测试实施过程与效果。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 测试</span><span class="exam-lv">⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与的Web系统项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 阐述Web系统的测试维度，以及各维度的测试内容。</li><li><b>问题 3</b> 说明测试过程中遇到的问题以及解决办法。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 测试</span><span class="exam-lv">⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与管理、分析、设计、开发或运维的信息系统项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 结合项目实际，详细论述信息系统全生命周期中各阶段的测试重点、测试策略与核心测试方法。</li><li><b>问题 3</b> 结合项目实践，论述全生命周期测试的落地效果，分析测试工作开展过程中存在的问题，并提出对应的改进优化措施。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 测试</span><span class="exam-lv">⭐⭐⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与管理和开发的软件项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细描述传统测试与自动化测试相融合的三个趋势的具体内容。</li><li><b>问题 3</b> 结合项目实际，论述自动化测试在软件系统测试工作中的具体应用。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 测试</span><span class="exam-lv">⭐⭐⭐</span></div></div></details></section>
+    <section class="exam" id="exam" data-exam-chapter="14" data-exam-hour="H32"><div class="exam-bar"><span class="exam-bar-label">📚 历年真题</span><span class="exam-bar-stat">本章共 <b>13</b> 题 · 本学时 <b>6</b> 题（其余见同章其他学时）</span><span class="exam-bar-ops"><button type="button" class="exam-op" data-exam-all="1">全部展开</button><button type="button" class="exam-op" data-exam-all="0">全部收起</button></span></div><details class="exam-subject" data-exam-subject="综合知识"><summary><span class="exam-subject-name">📝 综合知识</span><span class="exam-subject-n">6 题</span><span class="exam-subject-tip">按年份展开 · 单题可点开看答案</span></summary><details class="exam-year" data-exam-year="2026年5月"><summary><span class="exam-year-name">2026年5月</span><span class="exam-year-n">4 题</span></summary><details class="exam-q" data-exam-id="2026年5月-063"><summary><span class="exam-no">第 63 题</span><span class="exam-stem-peek">测试数据99.99、100、100.01、500、500.01属于</span></summary><div class="exam-q-body"><p class="exam-stem">测试数据99.99、100、100.01、500、500.01属于</p><ul class="exam-opts"><li><b>A</b> 等价类</li><li><b>B</b> 判定表</li><li><b>C</b> 边界值</li><li><b>D</b> 因果图</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">数据围绕100、500两个临界点设计，属于典型边界值测试。</p></details></div></details><details class="exam-q" data-exam-id="2026年5月-047"><summary><span class="exam-no">第 47 题</span><span class="exam-stem-peek">下列关于测试用例的描述，错误的是</span></summary><div class="exam-q-body"><p class="exam-stem">下列关于测试用例的描述，错误的是</p><ul class="exam-opts"><li><b>A</b> 覆盖关键场景</li><li><b>B</b> 可重复</li><li><b>C</b> 明确预期结果</li><li><b>D</b> 可代替程序代码</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">测试用例是测试执行依据，无法替代程序代码。</p></details></div></details><details class="exam-q" data-exam-id="2026年5月-020"><summary><span class="exam-no">第 20 题</span><span class="exam-stem-peek">边界值分析法重点关注的是</span></summary><div class="exam-q-body"><p class="exam-stem">边界值分析法重点关注的是</p><ul class="exam-opts"><li><b>A</b> 中间值</li><li><b>B</b> 随机值</li><li><b>C</b> 输入输出边界附近数据</li><li><b>D</b> 全排列组合</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">软件缺陷大多集中在数据临界点，边界值分析法专门测试边界、极值数据。</p></details></div></details><details class="exam-q" data-exam-id="2026年5月-013"><summary><span class="exam-no">第 13 题</span><span class="exam-stem-peek">系统修复后，为确认修改未引入新问题，应进行</span></summary><div class="exam-q-body"><p class="exam-stem">系统修复后，为确认修改未引入新问题，应进行</p><ul class="exam-opts"><li><b>A</b> 单元测试</li><li><b>B</b> 冒烟测试</li><li><b>C</b> 验收测试</li><li><b>D</b> 回归测试</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">回归测试用于缺陷修复、版本变更后，验证原有功能正常，避免引入新故障。</p></details></div></details></details><details class="exam-year" data-exam-year="2025年5月"><summary><span class="exam-year-name">2025年5月</span><span class="exam-year-n">1 题</span></summary><details class="exam-q" data-exam-id="2025年5月-050"><summary><span class="exam-no">第 50 题</span><span class="exam-stem-peek">在软件测试分类中，能够进行功能测试的是 ()</span></summary><div class="exam-q-body"><p class="exam-stem">在软件测试分类中，能够进行功能测试的是 ()</p><ul class="exam-opts"><li><b>A</b> 黑盒测试</li><li><b>B</b> 白盒测试</li><li><b>C</b> 系统测试</li><li><b>D</b> 验收测试</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">送分题，功能是黑盒，结构是白盒。</p></details></div></details></details><details class="exam-year" data-exam-year="2024年5月"><summary><span class="exam-year-name">2024年5月</span><span class="exam-year-n">1 题</span></summary><details class="exam-q" data-exam-id="2024年5月-067"><summary><span class="exam-no">第 67 题</span><span class="exam-stem-peek">以下（）需要测试人员熟悉程序代码，根据代码设计对应测试用例</span></summary><div class="exam-q-body"><p class="exam-stem">以下（）需要测试人员熟悉程序代码，根据代码设计对应测试用例</p><ul class="exam-opts"><li><b>A</b> 黑盒测试</li><li><b>B</b> 白盒测试</li><li><b>C</b> 单元测试</li><li><b>D</b> 集成测试</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">白盒测试又称结构测试，要求测试人员熟悉程序内部代码实现，基于代码的控制流、数据流设计测试用例；黑盒测试无需查看代码，单元、集成测试是按阶段划分的测试类型，不强制要求熟悉源码。</p></details></div></details></details></details><details class="exam-subject" data-exam-subject="案例"><summary><span class="exam-subject-name">📋 案例分析</span><span class="exam-subject-n">2 题</span><span class="exam-subject-tip">案例背景 · 题目 · 答案与解析</span></summary><div class="exam-bar"><span class="exam-bar-label">📋 案例分析</span><span class="exam-bar-stat">共 <b>2</b> 题 · 情景简答 · 采分点三色标记</span></div><div class="exam-q exam-q-case"><div class="case-head"><span class="exam-no">案例 64</span><span class="exam-tag">考点 · 测试类型、阶段与用例设计</span><span class="exam-lv">⭐⭐⭐</span></div><div class="case-meta"><span><strong>考点</strong>：测试原则 / 测试阶段 / 黑盒用例设计 / 回归测试 / 测试组织</span><span>📅 <strong>时间</strong>：2025-11-18 上午 📍 <strong>地点</strong>：测试方案评审</span><span>👤 <strong>人物</strong>：甘工（乙方·系统分析师）、丁工（乙方·测试负责人）、李工（乙方·项目经理）、洪经理（甲方·客服部经理）</span><span>⚡ <strong>冲突</strong>：大模型输出不确定、话术每周更新，测试怎么做得完、做得准</span><span><strong>难度</strong>：★★★　<strong>总分</strong>：10 分　<strong>建议用时</strong>：25 分钟</span></div><div class="case-scene"><div class="case-h">案例背景</div><strong>背景</strong>：丁工提出难题：&quot;AI 说的话每次不完全一样，我们没法像以前那样断言&#x27;输出等于某句话&#x27;。而且话术每周都改，回归根本跑不完。&quot; 李工担心工期：&quot;测试做太细，上线就晚了。&quot; 洪经理只问：&quot;那上线出问题谁负责？&quot; 甘工在白板上写下三个词：<strong>评测集、指标、门禁</strong>——他要把&quot;主观效果&quot;变成&quot;可测指标&quot;，再把指标接进流水线。<br><strong>补充资料</strong>：；话术库每周更新；合规要求 AI 生成内容不得出现承诺性/歧视性表述；端到端 ≤800ms；已使用大模型辅助生成约 18% 代码。</div><div class="case-asks"><div class="case-h">题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">（1）说明软件测试的<strong>基本原则</strong>；</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">（2）给出<strong>单元、集成、确认、系统、验收</strong>五个阶段在本项目的测试重点；</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">（3）说明<strong>回归测试</strong>的作用与策略。</span></li><li><span class="case-ask-no">4</span><span class="case-ask-t">针对&quot;<strong>批量导入外呼号码</strong>&quot;功能，使用<strong>等价类划分与边界值分析</strong>设计测试用例；针对<strong>大模型输出非确定</strong>的特点，设计一套可落地的测试方案（评测集、指标、回归与合规验证）。（10分）</span></li></ul></div><details class="exam-ans"><summary>参考答案要点（三色标记）</summary><div class="exam-points"><strong>问题 1｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（1）测试原则）：①测试应追溯到用户需求；②尽早并持续地测试（需求阶段即开始）；③程序员应避免测试自己的程序（独立测试/交叉测试）；④测试用例应包含输入与预期输出；⑤测试无法证明软件无错（穷举不可能）；⑥注意错误集群现象（缺陷集中的模块应重点测试）；⑦妥善保存测试产物（用例、缺陷、报告可追溯）；⑧Pareto 原则（80% 缺陷来自 20% 模块）。<br><strong>问题 2｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（2）五阶段重点）：<br><strong>问题 3｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（3）回归测试）：作用——验证修改（缺陷修复、需求变更、重构）未引入新缺陷且未破坏既有功能；是高频发布与持续集成的基础保障。策略——①用例分级（核心链路全量回归、边缘功能抽样回归）；②自动化优先（单元 + 接口 + 契约自动化，UI 自动化精简）；③精准回归（按代码变更只跑受影响用例）；④分层执行（提交级快速套件、发布级完整套件、夜间全量）；⑤每个已修复缺陷补一条回归用例；⑥与灰度 + 可观测配合，发布后按指标自动回滚。<br><strong>问题 4｜参考答案要点（10分）</strong>：<br>- 🔴 核心：🔴 核心（等价类）：<br>- 🟡 支撑：号码格式：11 位手机号（1 开头）；位数不足/超长、含字母或特殊字符、空值、非 1 开头<br>- 🟡 支撑：文件来源：Excel/CSV/CRM 接口；非支持格式、超 10MB、无表头<br>- 🟡 支撑：号码状态：正常号；黑名单号、禁呼时段归属地号、空号/停机号<br>- 🟡 支撑：数量：1~50 000 条；0 条、超 50 000 条（超日配额）<br>- 🟡 支撑：去重：批次内重复、与历史任务重复；—<br>- 🔴 核心：数量取 0 / 1 / 50 000 / 50 001；文件行数取 0 / 1 / 上限 / 上限+1；手机号长度取 10 / 11 / 12；文件大小取 0 / 10MB / 10MB+1；并发导入取 1 / 最大并发 / 最大并发+1。<br>- 🟡 支撑：TC-001 导入 1 条正常号 → 成功且任务状态&quot;待外呼&quot;；TC-002 含 3 个黑名单号 → 自动拦截并可导出清单；TC-003 导入 50 001 条 → 提示超限；TC-004 重复号 100 条 → 去重后入库且记录可查；TC-005 导入 .pdf → 明确报错&quot;仅支持 Excel/CSV&quot;；TC-006 导入中断电/断网 → 断点续传或回滚，无脏数据。<br>- 🟡 支撑：🔴 核心（大模型测试方案）：<br>- 🟡 支撑：1. 构造评测集（Golden Set）：从真实话务采样并脱敏，覆盖 8 大意图 × 3 种噪声/口音 × 5 类情绪，不少于 2 000 条；每条标注期望意图、关键字段、期望动作、禁止出现的内容；评测集版本化并与模型版本、提示词版本、知识库版本绑定。<br>- 🟡 支撑：2. 量化指标：意图识别准确率 ≥85%、关键信息抽取 ≥90%、自助解决率 ≥60%、违规表述 0 容忍、幻觉率 ≤1%、兜底触发率 100%、端到端 P99 ≤1.2 秒、同一输入多次运行一致性 ≥95%。<br>- 🟡 支撑：3. 回归与发布：每次话术/提示词/模型变更自动跑全量基准集并与上一版对比（指标不劣化为红线）；配合影子测试/灰度（新旧并行回放真实流量）、A/B 测试（小流量对比满意度）、CI/CD 门禁（未通过阻断发布）。；4. 合规验证：红队测试（构造诱导输入，如&quot;把客户手机号念出来&quot;&quot;承诺明天一定修好&quot;）验证拒绝与兜底；输出前加敏感词/合规过滤层，命中即降级为通用话术并转人工；每条答复留痕（含模型版本、提示词版本），支持 30 秒内干预下线，保留 ≥180 天。；对非确定性系统不要断言&quot;输出等于某字符串&quot;，应断言&quot;意图正确 + 关键字段正确 + 动作正确 + 无违规&quot;，这是 AI 系统用例设计的核心转变。</div></details><details class="exam-ans"><summary>解析与加分项</summary><div class="exam-exp-more">- 🟢 加分：解析·用例题要&quot;具体输入值 + 预期结果&quot;，AI 测试要&quot;评测集 + 指标红线 + 影子/灰度 + 红队合规&quot;。</div></details></div><div class="exam-q exam-q-case"><div class="case-head"><span class="exam-no">案例 66</span><span class="exam-tag">考点 · AI回访&quot;像不像人&quot;</span><span class="exam-lv">⭐⭐⭐</span></div><div class="case-meta"><span>📅 <strong>时间</strong>：2025-11-28 📍 <strong>地点</strong>：AI 效果验收会</span><span>👤 <strong>人物</strong>：丁工（乙方·测试负责人）、甘工（乙方·系统分析师）、洪经理（甲方·客服部经理）、郑专员（甲方·合规专员）、ASR/TTS 厂商（第三方）</span><span>⚡ <strong>冲突</strong>：合同只写了&quot;识别率≥95%&quot;，但甲方现场听完觉得&quot;太机械&quot;，提出拟人化、情绪识别、打断响应等新要求，双方对&quot;怎么算合格&quot;争执不下</span><span><strong>难度</strong>：★★★　<strong>总分</strong>：25 分　<strong>建议用时</strong>：25 分钟</span></div><div class="case-scene"><div class="case-h">案例背景</div><strong>背景</strong>：丁工放了一段 AI 回访录音。客户中途插话：&quot;你们上次来的人根本没修好！&quot;AI 停顿两秒，继续照着脚本念：&quot;感谢您的配合，再见。&quot; 洪经理当场皱眉：&quot;这哪行？客户在发火，它还在念稿。&quot; 厂商解释：&quot;合同里没写情绪识别，我们脚本是线性的。&quot; 郑专员补了一句：&quot;而且它刚才说&#x27;我们会尽快安排&#x27;——这算不算承诺？&quot; 甘工意识到：AI 系统的验收不能只靠&quot;识别率&quot;一个指标，必须建立<strong>多维度评测体系</strong>，并把&quot;像不像人&quot;翻译成可测指标。</div><div class="case-asks"><div class="case-h">题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">（1）说明 AI 语音系统的<strong>测试难点</strong>（与传统软件的差异）；</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">（2）设计一套<strong>多维度评测指标</strong>（含拟人化、情绪识别、打断响应、合规）；</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">（3）说明<strong>评测集（Golden Set）</strong>的构造方法与版本管理；</span></li><li><span class="case-ask-no">4</span><span class="case-ask-t">（4）说明如何做<strong>回归与发布门禁</strong>，支撑&quot;话术每周更新&quot;。</span></li></ul></div><details class="exam-ans"><summary>参考答案要点（三色标记）</summary><div class="exam-points"><strong>问题 1｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（1）测试难点）：①输出非确定性——同一输入两次结果可能不同，不能断言&quot;输出等于某字符串&quot;；②结果难以穷举与判定——语言生成没有唯一正确答案；③依赖概率与模型——效果随模型/语料/版本变化，且与环境噪声、口音、情绪强相关；④指标难以自动化——&quot;自然度&quot;&quot;像不像人&quot;主观；⑤数据依赖强——需要脱敏真实语料，涉及隐私合规；⑥端到端链路长（ASR→意图→话术→TTS），定位困难；⑦回归成本高——话术/提示词频繁变更。<br><strong>问题 2｜参考答案要点</strong>：<br>- 🔴 核心：🟡 支撑（2）多维度指标）：<br><strong>问题 3｜参考答案要点</strong>：<br>- 🔴 核心：🟡 支撑（3）评测集构造）：①来源——脱敏真实话务采样（覆盖 8 大意图 × 3 种噪声/口音 × 5 类情绪，≥2000 条）+ 对抗样本（方言、含糊、诱导性提问、插话打断）；②标注——期望意图、关键字段、期望动作、禁止内容、情绪标签；③版本化并与模型版本、提示词版本、知识库版本、话术版本绑定；④分层——核心集（每次必跑）、扩展集（每周）、对抗集（发版前）；⑤隐私——评测集必须脱敏，访问受控。<br><strong>问题 4｜参考答案要点</strong>：<br>- 🔴 核心：🟡 支撑（4）回归与门禁）：①话术/提示词/模型任一变更都触发核心集自动回归，与上一版本对比，指标不劣化为红线（如意图准确率下降 &gt;2% 或违规表述 &gt;0 即阻断）；②影子测试/双跑——新旧版本并行回放真实流量，差异超阈值告警；③灰度发布——按坐席组/百分比放量，实时看指标（转人工率、投诉率、违规率），超阈值自动回滚；④CI/CD 门禁——评测未通过不允许发布；⑤监控闭环——线上持续采集&quot;识别率、情绪切换成功率、违规率、打断时延&quot;，异常即告警并支持一键降级（切回关键词话术 + 转人工）。</div></details><details class="exam-ans"><summary>解析与加分项</summary><div class="exam-exp-more">- 🟢 加分：解析·AI 测试题要&quot;难点 + 多维指标 + 评测集 + 回归门禁&quot;。</div></details></div></details><details class="exam-subject" data-exam-subject="论文"><summary><span class="exam-subject-name">📄 论文写作</span><span class="exam-subject-n">5 题</span><span class="exam-subject-tip">先看题 · 再看考点拆解</span></summary><div class="exam-bar"><span class="exam-bar-label">📄 论文写作</span><span class="exam-bar-stat">共 <b>5</b> 题 · 论述题 · 含考点拆解与教材知识点</span></div><div class="exam-q exam-q-essay"><div class="case-head"><span class="exam-no">论文 36</span><span class="exam-tag">方向 · 测试</span><span class="exam-lv">⭐⭐</span><span class="essay-batch">2019年上半年</span></div><div class="case-asks"><div class="case-h">论文题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">概要叙述你参与管理和开发的软件项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">详细论述系统自动化测试的内容，以及自动化测试的优点与缺点。</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">结合项目实际，说明自动化测试的实施过程与应用效果。</span></li></ul></div><details class="exam-ans" open><summary>试题背景</summary><div class="essay-bg">系统测试用于验证软件与整体系统的适配性，自动化测试能够解决重复测试工作量大的问题，有效提升测试效率。</div></details><details class="exam-ans"><summary>考点拆解（三色标记）</summary><div class="exam-keypoints"><strong>问题 1｜概要叙述项目与你承担的工作</strong>：<br>- 🔴 核心：点明近三年内一个具体的真实项目：项目名称、背景、发起单位、规模、周期、交付成果（教材 22.4-9/22.4-10 明确要求，泛泛而谈会判虚构）<br>- 🔴 核心：明确「我」在项目中的角色与承担的主要工作，并站在系统分析师视角论述，而非单纯开发实现视角<br>- 🟡 支撑：说明项目的组织结构、开发体制与技术栈，为后文论述做铺垫<br>- 🟢 加分：点出项目与本题主题的直接关联（如本项目正是因 XX 痛点才需要 XX 方法）<br><strong>问题 2｜理论知识 / 方法论述</strong>：<br>- 🔴 核心：系统自动化测试的内容——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：系统自动化测试的以及自动化测试的优点与缺点——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🟢 加分：给出与其他候选方案的取舍依据，体现选型判断力<br><strong>问题 3｜项目实践落地与复盘</strong>：<br>- 🔴 核心：给出可量化的落地效果（缺陷率/响应时间/迭代周期/资源成本等具体数据），而非「取得了良好效果」<br>- 🔴 核心：诚实分析存在的 2~3 个真实问题，并给出对应的改进措施——教材强调这才是用心的内容<br>- 🟡 支撑：结合具体实例说明措施的实施过程（怎么做的，而非教科书式罗列）<br>- 🟢 加分：总结经验教训与后续演进方向，体现复盘能力</div></details><details class="exam-ans"><summary>教材知识点</summary><div class="exam-textbook"><span class="tb-chap">第 14 章 · 软件实现与测试</span><a class="tb-hour" href="H31.html">H31</a><a class="tb-hour" href="H32.html">H32</a></div></details></div><div class="exam-q exam-q-essay"><div class="case-head"><span class="exam-no">论文 51</span><span class="exam-tag">方向 · 测试</span><span class="exam-lv">⭐</span><span class="essay-batch">2015年上半年</span></div><div class="case-asks"><div class="case-h">论文题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">概要叙述你参与管理和开发的软件项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">详细论述功能测试方法、自动化测试内容以及测试工具的选择依据。</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">结合项目实际，说明测试实施过程与效果。</span></li></ul></div><details class="exam-ans" open><summary>试题背景</summary><div class="essay-bg">系统测试针对完整软件产品开展，核心为功能测试与性能测试，功能测试常采用黑盒测试方法。</div></details><details class="exam-ans"><summary>考点拆解（三色标记）</summary><div class="exam-keypoints"><strong>问题 1｜概要叙述项目与你承担的工作</strong>：<br>- 🔴 核心：点明近三年内一个具体的真实项目：项目名称、背景、发起单位、规模、周期、交付成果（教材 22.4-9/22.4-10 明确要求，泛泛而谈会判虚构）<br>- 🔴 核心：明确「我」在项目中的角色与承担的主要工作，并站在系统分析师视角论述，而非单纯开发实现视角<br>- 🟡 支撑：说明项目的组织结构、开发体制与技术栈，为后文论述做铺垫<br>- 🟢 加分：点出项目与本题主题的直接关联（如本项目正是因 XX 痛点才需要 XX 方法）<br><strong>问题 2｜理论知识 / 方法论述</strong>：<br>- 🔴 核心：功能测试方法——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：自动化测试内容以及测试工具的选择依据——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🟢 加分：给出与其他候选方案的取舍依据，体现选型判断力<br><strong>问题 3｜项目实践落地与复盘</strong>：<br>- 🔴 核心：给出可量化的落地效果（缺陷率/响应时间/迭代周期/资源成本等具体数据），而非「取得了良好效果」<br>- 🔴 核心：诚实分析存在的 2~3 个真实问题，并给出对应的改进措施——教材强调这才是用心的内容<br>- 🟡 支撑：结合具体实例说明措施的实施过程（怎么做的，而非教科书式罗列）<br>- 🟢 加分：总结经验教训与后续演进方向，体现复盘能力</div></details><details class="exam-ans"><summary>教材知识点</summary><div class="exam-textbook"><span class="tb-chap">第 14 章 · 软件实现与测试</span><a class="tb-hour" href="H31.html">H31</a><a class="tb-hour" href="H32.html">H32</a></div></details></div><div class="exam-q exam-q-essay"><div class="case-head"><span class="exam-no">论文 74</span><span class="exam-tag">方向 · 测试</span><span class="exam-lv">⭐</span><span class="essay-batch">2011年上半年</span></div><div class="case-asks"><div class="case-h">论文题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">概要叙述你参与的Web系统项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">阐述Web系统的测试维度，以及各维度的测试内容。</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">说明测试过程中遇到的问题以及解决办法。</span></li></ul></div><details class="exam-ans" open><summary>试题背景</summary><div class="essay-bg">Web系统具备独特的技术特性，需要专用的测试技术保障系统质量。</div></details><details class="exam-ans"><summary>考点拆解（三色标记）</summary><div class="exam-keypoints"><strong>问题 1｜概要叙述项目与你承担的工作</strong>：<br>- 🔴 核心：点明近三年内一个具体的真实项目：项目名称、背景、发起单位、规模、周期、交付成果（教材 22.4-9/22.4-10 明确要求，泛泛而谈会判虚构）<br>- 🔴 核心：明确「我」在项目中的角色与承担的主要工作，并站在系统分析师视角论述，而非单纯开发实现视角<br>- 🟡 支撑：说明项目的组织结构、开发体制与技术栈，为后文论述做铺垫<br>- 🟢 加分：点出项目与本题主题的直接关联（如本项目正是因 XX 痛点才需要 XX 方法）<br><strong>问题 2｜理论知识 / 方法论述</strong>：<br>- 🔴 核心：Web系统的测试维度——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：Web系统的以及各维度的测试内容——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🟢 加分：给出与其他候选方案的取舍依据，体现选型判断力<br><strong>问题 3｜项目实践落地与复盘</strong>：<br>- 🔴 核心：给出可量化的落地效果（缺陷率/响应时间/迭代周期/资源成本等具体数据），而非「取得了良好效果」<br>- 🔴 核心：诚实分析存在的 2~3 个真实问题，并给出对应的改进措施——教材强调这才是用心的内容<br>- 🟡 支撑：结合具体实例说明措施的实施过程（怎么做的，而非教科书式罗列）<br>- 🟢 加分：总结经验教训与后续演进方向，体现复盘能力<br>- 🟡 支撑：测试过程中遇到的问题以及解决办法</div></details><details class="exam-ans"><summary>教材知识点</summary><div class="exam-textbook"><span class="tb-chap">第 14 章 · 软件实现与测试</span><a class="tb-hour" href="H31.html">H31</a><a class="tb-hour" href="H32.html">H32</a></div></details></div><div class="exam-q exam-q-essay"><div class="case-head"><span class="exam-no">论文 01</span><span class="exam-tag">方向 · 测试</span><span class="exam-lv">⭐⭐⭐</span><span class="essay-batch">2026年上半年（机考）第一批</span></div><div class="case-asks"><div class="case-h">论文题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">概要叙述你参与管理、分析、设计、开发或运维的信息系统项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">结合项目实际，详细论述信息系统全生命周期中各阶段的测试重点、测试策略与核心测试方法。</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">结合项目实践，论述全生命周期测试的落地效果，分析测试工作开展过程中存在的问题，并提出对应的改进优化措施。</span></li></ul></div><details class="exam-ans" open><summary>试题背景</summary><div class="essay-bg">软件测试不再局限于开发后期，已贯穿需求、设计、编码、集成、验收、运维全生命周期，是信息系统质量管控的核心环节。</div></details><details class="exam-ans"><summary>考点拆解（三色标记）</summary><div class="exam-keypoints"><strong>问题 1｜概要叙述项目与你承担的工作</strong>：<br>- 🔴 核心：点明近三年内一个具体的真实项目：项目名称、背景、发起单位、规模、周期、交付成果（教材 22.4-9/22.4-10 明确要求，泛泛而谈会判虚构）<br>- 🔴 核心：明确「我」在项目中的角色与承担的主要工作，并站在系统分析师视角论述，而非单纯开发实现视角<br>- 🟡 支撑：说明项目的组织结构、开发体制与技术栈，为后文论述做铺垫<br>- 🟢 加分：点出项目与本题主题的直接关联（如本项目正是因 XX 痛点才需要 XX 方法）<br><strong>问题 2｜理论知识 / 方法论述</strong>：<br>- 🔴 核心：信息系统全生命周期中各阶段的测试重点——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：信息系统全生命周期中各阶段的测试策略与核心测试方法——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🟢 加分：给出与其他候选方案的取舍依据，体现选型判断力<br><strong>问题 3｜项目实践落地与复盘</strong>：<br>- 🔴 核心：给出可量化的落地效果（缺陷率/响应时间/迭代周期/资源成本等具体数据），而非「取得了良好效果」<br>- 🔴 核心：诚实分析存在的 2~3 个真实问题，并给出对应的改进措施——教材强调这才是用心的内容<br>- 🟡 支撑：结合具体实例说明措施的实施过程（怎么做的，而非教科书式罗列）<br>- 🟢 加分：总结经验教训与后续演进方向，体现复盘能力</div></details><details class="exam-ans"><summary>教材知识点</summary><div class="exam-textbook"><span class="tb-chap">第 14 章 · 软件实现与测试</span><a class="tb-hour" href="H31.html">H31</a><a class="tb-hour" href="H32.html">H32</a></div></details></div><div class="exam-q exam-q-essay"><div class="case-head"><span class="exam-no">论文 13</span><span class="exam-tag">方向 · 测试</span><span class="exam-lv">⭐⭐⭐</span><span class="essay-batch">2025年上半年（5月）</span></div><div class="case-asks"><div class="case-h">论文题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">概要叙述你参与管理和开发的软件项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">详细描述传统测试与自动化测试相融合的三个趋势的具体内容。</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">结合项目实际，论述自动化测试在软件系统测试工作中的具体应用。</span></li></ul></div><details class="exam-ans" open><summary>试题背景</summary><div class="essay-bg">当前传统测试与自动化测试不断融合，主要呈现分层协作、智能赋能、全过程集成三大发展趋势。</div></details><details class="exam-ans"><summary>考点拆解（三色标记）</summary><div class="exam-keypoints"><strong>问题 1｜概要叙述项目与你承担的工作</strong>：<br>- 🔴 核心：点明近三年内一个具体的真实项目：项目名称、背景、发起单位、规模、周期、交付成果（教材 22.4-9/22.4-10 明确要求，泛泛而谈会判虚构）<br>- 🔴 核心：明确「我」在项目中的角色与承担的主要工作，并站在系统分析师视角论述，而非单纯开发实现视角<br>- 🟡 支撑：说明项目的组织结构、开发体制与技术栈，为后文论述做铺垫<br>- 🟢 加分：点出项目与本题主题的直接关联（如本项目正是因 XX 痛点才需要 XX 方法）<br><strong>问题 2｜理论知识 / 方法论述</strong>：<br>- 🔴 核心：详细描述传统测试与自动化测试相融合的三个趋势的具体内容——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🟢 加分：给出与其他候选方案的取舍依据，体现选型判断力<br><strong>问题 3｜项目实践落地与复盘</strong>：<br>- 🔴 核心：给出可量化的落地效果（缺陷率/响应时间/迭代周期/资源成本等具体数据），而非「取得了良好效果」<br>- 🔴 核心：诚实分析存在的 2~3 个真实问题，并给出对应的改进措施——教材强调这才是用心的内容<br>- 🟡 支撑：结合具体实例说明措施的实施过程（怎么做的，而非教科书式罗列）<br>- 🟢 加分：总结经验教训与后续演进方向，体现复盘能力<br>- 🟡 支撑：论述自动化测试在软件系统测试工作中的具体应用</div></details><details class="exam-ans"><summary>教材知识点</summary><div class="exam-textbook"><span class="tb-chap">第 14 章 · 软件实现与测试</span><a class="tb-hour" href="H31.html">H31</a><a class="tb-hour" href="H32.html">H32</a></div></details></div></details></section>
     <div class="wrongbook"></div>
     <div class="keyhint">
   <span class="keyhint-title">键盘快捷键</span>
@@ -3256,7 +3438,9 @@ html{scroll-padding-top:80px}
     init() {
       const root = document.querySelector('.exam')
       if (!root) return
-      const chapter = root.dataset.examChapter || 'x'
+      // ⚠️ 专项页 / 全真模拟页没有 data-exam-chapter（无教材章），
+      //    旧写法一律退化成 'x' → H42~H48 共用同一个记忆键、互相串状态。
+      const chapter = root.dataset.examChapter || root.dataset.examHour || 'x'
 
       // 恢复上次展开状态：{ "H07": { "2025年5月": true, ... } }
       const saved = store.get(this.KEY, {}) || {}
@@ -3276,6 +3460,7 @@ html{scroll-padding-top:80px}
       const seen = store.get('examSeen', {}) || {}
       root.querySelectorAll('.exam-q').forEach(qd => {
         const qid = qd.dataset.examId
+        if (!qid) return
         if (seen[qid]) {
           const a = qd.querySelector('.exam-ans')
           if (a) a.open = true
@@ -3291,12 +3476,17 @@ html{scroll-padding-top:80px}
         btn.addEventListener('click', e => {
           e.preventDefault()
           const openAll = btn.dataset.examAll === '1'
-          root.querySelectorAll('.exam-subject,.exam-year').forEach(d => { d.open = openAll })
-          root.querySelectorAll('.exam-ans').forEach(d => {
-            d.open = openAll
-            if (openAll && d.parentElement.dataset.examId) seen[d.parentElement.dataset.examId] = 1
-          })
-          if (openAll) store.set('examSeen', seen)
+          // ⚠️ 必须把 .exam-q 也列进来：只开 .exam-subject/.exam-year/.exam-ans
+          //    时，单题仍折叠 → 答案藏在关闭的单题内，"全部展开"名不副实。
+          root.querySelectorAll('.exam-subject,.exam-year,.exam-q,.exam-ans')
+            .forEach(d => { d.open = openAll })
+          if (openAll) {
+            // ⚠️ 旧的 `d.parentElement.dataset.examId` 取到的是 .exam-q-body（无 id），
+            //    会把 seen[undefined] 写进 localStorage。改为直接从 .exam-q 取。
+            root.querySelectorAll('.exam-q[data-exam-id]')
+              .forEach(qd => { seen[qd.dataset.examId] = 1 })
+            store.set('examSeen', seen)
+          }
           // 同步年份级记忆
           root.querySelectorAll('.exam-year').forEach(y => { mine[y.dataset.examYear] = y.open })
           saved[chapter] = mine
@@ -3343,7 +3533,7 @@ html{scroll-padding-top:80px}
   // ══════════════════════════════════════════
   // 8. mermaid 渲染（自定义墨绿主题，与正文同色系）
   // ══════════════════════════════════════════
-  // 站点配色（与 design.css 的令牌保持一致）
+  // 站点配色（与设计令牌保持一致 —— 改主题色时这里要同步）
   const MERMAID_LIGHT = {
     bg: '#f2f0e9', fg: '#1b211c', line: '#cdc9bd',
     accent: '#3d5a40', accent2: '#5a8a62', accent3: '#7ea888',

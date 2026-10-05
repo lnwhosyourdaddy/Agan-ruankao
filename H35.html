@@ -7,7 +7,7 @@
 <title>第 35 小时 · Web 应用系统分析与设计 · 架构、缓存与测试 · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
-<meta name="build-stamp" content="2026-10-05 11:44:51">
+<meta name="build-stamp" content="2026-10-05 15:47:03">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -405,16 +405,21 @@ img{max-width:100%;height:auto}
   border-radius:100px;
   font-size:12.5px;color:var(--accent);font-weight:600;
 }
-.cover h1{
+/* ⚠️ 封面主标题刻意用 <div> 而不是 <h1>：index.md 正文自带 `# 阿甘系分 · 48 小时
+   冲刺手册`，若封面也用 h1，一页会出现两个 h1（语义/SEO 上都是错的）。
+   视觉与 h1 完全一致 —— 字号、颜色、以及那道 72px 短横线都在下面显式声明。 */
+.cover .cover-title{
   font-size:3.5em;font-weight:800;letter-spacing:-1.6px;
   color:var(--accent);line-height:1.14;margin-bottom:16px;
 }
-/* ⚠️ 封面 h1 也继承 `.main h1::after` 那道 56px 短横线，但它是 display:block 的
-   固定宽块级元素 —— 文字居中不代表块级元素居中，会贴到左边。
-   修法：给封面这条短横线加 margin-left/right:auto 让它真正居中。 */
-.cover h1::after{
-  margin-left:auto;margin-right:auto;
+/* 复刻 `.main h1::after` 的短横线（<div> 不继承 h1 的伪元素），并水平居中 —— */
+/* 文字居中不代表块级元素居中，不加 auto 会贴到左边。 */
+.cover .cover-title::after{
+  content:'';display:block;
   width:72px;height:3px;
+  background:var(--accent);
+  margin:.5em auto 0;
+  border-radius:2px;
 }
 .cover .sub{
   font-size:1.2em;color:var(--fg-2);
@@ -845,7 +850,7 @@ pre{
   .nav{margin-left:auto;gap:2px}
   .main{padding:32px 0 80px}
   .cover{padding:48px 0 40px;margin-bottom:40px}
-  .cover h1{font-size:2.4em;letter-spacing:-.8px}
+  .cover .cover-title{font-size:2.4em;letter-spacing:-.8px}
   .cover .sub{font-size:1.05em;margin-bottom:24px}
   .cover-stats{gap:10px;margin-bottom:28px}
   .stat{min-width:76px;padding:10px 14px}
@@ -901,7 +906,7 @@ pre{
   h1,h2,h3,h4{break-after:avoid;page-break-after:avoid}
 
   .cover{padding:0 0 18px;margin-bottom:18px;text-align:left}
-  .cover h1{font-size:24pt}
+  .cover .cover-title{font-size:24pt}
   .cover-stats,.cover-badge,.cta-row{display:none !important}
 
   a[href^="http"]:after{
@@ -1256,16 +1261,14 @@ html.focus-mode .chapbar{opacity:.35;pointer-events:none}
 }
 /* 章首横幅：h1 上方加一条"章号 + 主色渐变"的装饰带，
    让每页开头有一个明确的"进入新章"仪式感（原来 h1 直接浮在正文里）。
-   ⚠️ 必须排除 .cover —— 封面 h1 自己已有顶部留白与居中布局，
-   加上横幅会与下方分隔线叠成双线（首页曾出现两条横线紧挨）。 */
-.main h1:not(.cover h1)::before{
+   （封面主标题已改成 <div class="cover-title">，不再匹配 .main h1，无需再排除。） */
+.main h1::before{
   content:'';display:block;
   width:100%;height:4px;
   background:linear-gradient(90deg,var(--accent) 0%,var(--accent-3) 42%,transparent 88%);
   border-radius:2px;
   margin-bottom:.62em;
 }
-.cover h1::before{content:none}
 .main h1::after{
   content:'';display:block;
   width:56px;height:3px;
@@ -2087,6 +2090,185 @@ html{scroll-padding-top:80px}
   .exam-stem,.exam-opts li{font-size:9.5pt}
   .exam-exp{font-size:8.5pt;color:#333}
 }
+
+/* ══════════════════════════════════════════════════════════════
+   真题区块扩展 v2 · 案例 / 论文卡片 + 全真模拟卷
+   与既有 .exam-* 体系同源：米白卡底 + 左侧 4px 色条 + 墨绿强调色
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── 案例 / 论文卡片（非 <details>，直接展开的题卡）── */
+.exam-q-case,.exam-q-essay{
+  padding:14px 16px 4px;
+  background:var(--bg-card);
+}
+.exam-q-case:hover,.exam-q-essay:hover{background:var(--bg-alt)}
+.case-head{
+  display:flex;flex-wrap:wrap;align-items:center;gap:6px;
+  padding-bottom:10px;margin-bottom:10px;
+  border-bottom:1px dashed var(--line);
+}
+.case-head .exam-no{min-width:0}
+.case-h{
+  display:flex;align-items:center;gap:6px;
+  margin:12px 0 6px;font-size:12.5px;font-weight:700;
+  letter-spacing:.06em;color:var(--accent);
+}
+.case-h::before{
+  content:'';width:4px;height:13px;border-radius:2px;
+  background:var(--accent);flex:0 0 auto;
+}
+
+/* 情景要素（📅时间 / 📍地点 / 👤人物 / ⚡冲突 / 难度总分用时） */
+.case-meta{
+  display:flex;flex-direction:column;gap:2px;
+  padding:9px 12px;margin:.4em 0 .2em;
+  background:var(--bg-alt);
+  border-left:3px solid var(--line-2);
+  border-radius:0 var(--radius-sm) var(--radius-sm) 0;
+  font-size:12.5px;line-height:1.75;color:var(--fg-3);
+}
+.case-meta strong{color:var(--fg-2);font-weight:600}
+
+/* 案例背景正文 */
+.case-scene{
+  margin:.2em 0 1em;padding:12px 14px;
+  background:var(--accent-soft);
+  border-left:3px solid var(--accent-3);
+  border-radius:0 var(--radius) var(--radius) 0;
+  font-size:14.5px;line-height:1.92;color:var(--fg);
+}
+.case-scene strong{color:var(--accent);font-weight:700}
+
+/* 题目列表 */
+.case-asks{margin:.2em 0 1em}
+ul.exam-questions{
+  list-style:none;margin:.4em 0;padding:0;
+}
+ul.exam-questions>li{
+  display:flex;gap:10px;align-items:flex-start;
+  padding:9px 0;border-bottom:1px solid var(--line);
+  font-size:14.5px;line-height:1.88;color:var(--fg);
+}
+ul.exam-questions>li:last-child{border-bottom:0}
+ul.exam-questions>li::before{content:none !important}
+.case-ask-no{
+  flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;
+  min-width:24px;height:22px;margin-top:3px;padding:0 6px;
+  border-radius:6px;background:var(--accent-soft-2);color:var(--accent);
+  font-family:var(--sans);font-size:11.5px;font-weight:700;
+  font-variant-numeric:tabular-nums;
+}
+.case-ask-t{flex:1;min-width:0}
+.case-ask-t strong{color:var(--accent);font-weight:700}
+
+/* ── 答案 / 解析 / 考点拆解 / 教材知识点 ── */
+.exam-points,.exam-keypoints,.exam-exp-more,.essay-bg{
+  padding:12px 14px;margin:8px 0;
+  border-left:4px solid var(--tip-line);
+  border-radius:0 var(--radius) var(--radius) 0;
+  background:var(--tip-bg);
+  font-size:14px;line-height:1.92;color:var(--fg);
+}
+.exam-keypoints{border-left-color:var(--accent-2);background:var(--accent-soft)}
+.exam-exp-more{border-left-color:var(--warn-line);background:var(--warn-bg);color:var(--warn-fg)}
+.essay-bg{border-left-color:var(--line-2);background:var(--bg-alt);color:var(--fg-2)}
+.exam-points strong,.exam-keypoints strong{color:var(--accent);font-weight:700}
+
+/* 教材知识点：章标签 + 可点学时胶囊 */
+.exam-textbook{
+  display:flex;flex-wrap:wrap;align-items:center;gap:6px;
+  padding:12px 14px;margin:8px 0;
+  background:var(--mem-bg);
+  border-left:4px solid var(--mem-line);
+  border-radius:0 var(--radius) var(--radius) 0;
+}
+.tb-chap{
+  font-family:var(--serif);font-size:14px;font-weight:700;color:var(--mem-fg);
+}
+.tb-hour{
+  display:inline-flex;align-items:center;
+  padding:2px 9px;border-radius:999px;
+  background:var(--bg-card);border:1px solid var(--mem-line);
+  color:var(--mem-fg) !important;font-size:12px;font-weight:600;
+  text-decoration:none;
+}
+.tb-hour:hover{background:var(--mem-line);color:var(--bg-card) !important;border-color:var(--mem-fg)}
+
+/* 模拟卷成绩/批次等小标签 */
+.exam-lv{
+  font-family:var(--sans);font-size:11.5px;color:var(--gold);
+  letter-spacing:.04em;white-space:nowrap;
+}
+.exam-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.exam-tag-en{
+  background:var(--mem-bg);color:var(--mem-fg);border-color:var(--mem-line);
+}
+.essay-batch{
+  font-family:var(--sans);font-size:11.5px;color:var(--fg-3);
+  padding:1px 8px;border:1px solid var(--line);border-radius:999px;
+}
+.exam-kp{
+  margin:.5em 0 0;font-family:var(--sans);font-size:12.5px;color:var(--fg-3);
+}
+.exam-kp::before{content:'🎯 ';font-size:11px}
+
+/* ── 全真模拟卷头部 ── */
+.mock-head{
+  padding:16px 18px;margin:0 0 12px;
+  border-radius:var(--radius-lg);
+  background:linear-gradient(135deg,var(--accent) 0%,var(--accent-2) 100%);
+  color:var(--fg-inv);
+  box-shadow:var(--shadow-2);
+}
+.mock-title{
+  font-family:var(--serif);font-size:17px;font-weight:700;
+  letter-spacing:.02em;line-height:1.5;
+}
+.mock-sub{
+  margin-top:6px;font-size:12.5px;line-height:1.75;
+  color:rgba(251,250,246,.82);
+}
+.mock-sub b{color:#fff;font-variant-numeric:tabular-nums}
+.mock-items{
+  border:1px solid var(--line);border-radius:var(--radius);
+  background:var(--bg-card);overflow:hidden;
+}
+.mock-items>.exam-q:first-child{border-top:0}
+.exam-mock .exam-subject{margin-top:14px}
+.exam-subj-only{display:block}
+
+/* 模拟卷内的综合知识答题条 */
+.exam-mock .exam-bar{
+  border-radius:var(--radius) var(--radius) 0 0;
+  border-bottom:0;
+}
+
+/* ── 窄屏 ── */
+@media(max-width:760px){
+  .exam-q-case,.exam-q-essay{padding:12px 12px 4px}
+  .case-scene,.exam-points,.exam-keypoints,.exam-exp-more,.essay-bg,.exam-textbook{
+    padding:10px 11px;font-size:13.5px;
+  }
+  ul.exam-questions>li{gap:8px;font-size:13.5px}
+  .mock-head{padding:13px 14px}
+  .mock-title{font-size:15.5px}
+}
+
+/* ── 打印：卡片不要再折叠，色条与底色转灰阶 ── */
+@media print{
+  .mock-head{background:none !important;color:#000 !important;border:1pt solid #999;
+    box-shadow:none}
+  .mock-title{font-size:13pt}
+  .mock-sub{color:#333 !important}
+  .exam-q-case,.exam-q-essay{break-inside:avoid;page-break-inside:avoid}
+  .case-scene,.exam-points,.exam-keypoints,.exam-exp-more,.essay-bg,.exam-textbook{
+    background:none !important;border-left:2pt solid #999 !important;
+  }
+  .exam-q-case,.exam-q-essay,.case-scene,.case-meta,ul.exam-questions>li{
+    font-size:9.5pt;
+  }
+  .tb-hour{color:#000 !important;border-color:#666}
+}
 </style>
 </head>
 <body>
@@ -2313,7 +2495,7 @@ html{scroll-padding-top:80px}
   </div>
 </div>
 </div>
-    <section class="exam" id="exam" data-exam-chapter="16" data-exam-hour="H35"><div class="exam-bar"><span class="exam-bar-label">📚 历年真题</span><span class="exam-bar-stat">共 <b>2</b> 题 · 来自 1 套真题</span><span class="exam-bar-ops"><button type="button" class="exam-op" data-exam-all="1">全部展开</button><button type="button" class="exam-op" data-exam-all="0">全部收起</button></span></div><details class="exam-subject" data-exam-subject="综合知识"><summary><span class="exam-subject-name">📝 综合知识</span><span class="exam-subject-n">2 题</span><span class="exam-subject-tip">按年份展开 · 单题可点开看答案</span></summary><details class="exam-year" data-exam-year="2019年5月"><summary><span class="exam-year-name">2019年5月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2019年5月-034"><summary><span class="exam-no">第 34 题</span><span class="exam-stem-peek">随着对象持久化技术的发展，产生了众多持久化框架，（）是ORM的解决方案。</span></summary><div class="exam-q-body"><p class="exam-stem">随着对象持久化技术的发展，产生了众多持久化框架，（）是ORM的解决方案。</p><ul class="exam-opts"><li><b>A</b> SQL</li><li><b>B</b> CMP</li><li><b>C</b> JDO</li><li><b>D</b> iBatis</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">iBatis和Hibernate都是典型的ORM（对象关系映射）实现方案，iBatis实现Java对象到SQL的灵活映射，上手门槛低；CMP基于EJB容器规范，JDO是持久化API标准，SQL是查询语法本身。</p></details></div></details><details class="exam-q" data-exam-id="2019年5月-033"><summary><span class="exam-no">第 33 题</span><span class="exam-stem-peek">随着对象持久化技术的发展，产生了众多持久化框架，其中，（）基于EJB技术。</span></summary><div class="exam-q-body"><p class="exam-stem">随着对象持久化技术的发展，产生了众多持久化框架，其中，（）基于EJB技术。</p><ul class="exam-opts"><li><b>A</b> iBatis</li><li><b>B</b> CMP</li><li><b>C</b> JDO</li><li><b>D</b> SQL</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">CMP即容器管理持久化，依托EJB容器完成实体EJB的持久化管理，是基于EJB技术的方案；iBatis是轻量ORM框架，JDO是SUN制定的持久化标准API，SQL是结构化查询语言，均不基于EJB体系。</p></details></div></details></details></details><details class="exam-subject" data-exam-subject="案例"><summary><span class="exam-subject-name">📋 案例分析</span><span class="exam-subject-n">5 题</span><span class="exam-subject-tip">情景简答 · 采分点三色标记</span></summary><div class="exam-bar"><span class="exam-bar-label">📋 案例分析</span><span class="exam-bar-stat">共 <b>5</b> 题 · 情景简答</span></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">72</span>考点：Web 架构模式 / 通信协议选型 / 部署<br>📅 时间：2025-11-05 上午 📍 地点：工作台技术方案评审<br>👤 人物：甘工（乙方·系统分析师）、彭工（乙方·架构设计师）、邓经理（甲方·运维经理）、洪经理（甲方·客服部经理）<br>⚡ 冲突：要秒级刷新、三条语音通道、120 席并发，还要适配国产浏览器与灰度回退<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：洪经理提了三个硬要求：&quot;弹屏要秒级；坐席能用软电话、硬话机、手机三种方式接；一百二十席同时在线。&quot; 彭工补了一句：&quot;还得适配国产浏览器，上线不能停业务，要能灰度回退。&quot; 邓经理问：&quot;那协议用什么？HTTP 轮询行不行？&quot; 甘工摇头：&quot;轮询撑不住这个量级，而且语音和数据的要求完全不同——今天要按场景把协议一个个定下来。<br>补充资料：音通道——WebRTC 软电话、SIP 硬话机、移动端 App；③120 席 + 20 个班长台并发；④适配国产浏览器与国密套件，支持私有化部署；⑤页面不得缓存完整号码，操作留痕 ≥90 天；⑥6 个月内交付且不可停业务，须支持灰度与回退。<br>问题 1：（1）比较 MVC、MVP、MVVM 的差异，说明前后端分离的概念与优点，并推荐方案；<br>问题 2：（2）比较 HTTP、WebSocket、SSE、WebRTC，并为五个场景（来话弹屏、工单提交、浏览器内语音、大屏 5 秒刷新、工单系统回调）选择协议并说明理由；<br>问题 3：（3）给出部署方案（含灰度与回滚）。</p><ul class="exam-questions"><li><b>问题 1</b> （1）比较 <strong>MVC、MVP、MVVM</strong> 的差异，说明<strong>前后端分离</strong>的概念与优点，并推荐方案；</li><li><b>问题 2</b> （2）比较 <strong>HTTP、WebSocket、SSE、WebRTC</strong>，并为五个场景（来话弹屏、工单提交、浏览器内语音、大屏 5 秒刷新、工单系统回调）选择协议并说明理由；</li><li><b>问题 3</b> （3）给出部署方案（含灰度与回滚）。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）模式与选型）：<br>- 🟢 加分：解析·协议题必须&quot;技术特性 → 场景语义&quot;逐条对应。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🔴 核心（2）协议选型）：<br>问题 3｜参考答案要点：<br>- 🔴 核心：🔴 核心（3）部署方案）：①前端静态资源发布到对象存储 + CDN，后端容器化部署于 K8s；②版本化 + 不可变发布（文件 hash、镜像 tag），保留最近 N 版以便秒级回滚；③灰度发布：按坐席分组/百分比放量，支持按技能组定向灰度；④回滚：前端切回上一版本资源、后端 Helm rollback，并做回滚演练；⑤健康检查与自动摘除；⑥配置外置；⑦多环境隔离（生产与测试严格隔离）。</div></details></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">73</span>考点：Web 数据存储 / 客户端技术 / 服务器端技术 / 部署形态 / Web 测试<br>📅 时间：2025-12-02 上午 📍 地点：工作台技术评审（第二轮）<br>👤 人物：甘工（乙方·系统分析师）、彭工（乙方·架构设计师）、丁工（乙方·测试负责人）、邓经理（甲方·运维经理）<br>⚡ 冲突：工单、录音、热点、话术、检索五类数据怎么存，前端怎么测<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：彭工列了五类数据：&quot;工单要事务、录音量大、热点要毫秒级、话术结构常变、转写要全文检索——都放一个库？&quot; 邓经理摇头：&quot;那不出半年就得重构。&quot; 丁工更关心测试：&quot;前端还有大列表、实时推送、图表和音频控件，测什么、怎么测？&quot; 甘工把两件事分开：先定存储与客户端技术，再定测试清单。<br>补充资料：。前端需支持大列表、实时推送、图表与音频控件。<br>问题 1：（1）给出本项目数据存储方案与选择理由；<br>问题 2：（2）说明 Web 客户端技术与服务器端技术的主要内容；<br>问题 3：（3）给出 Web 应用测试清单与重点；<br>问题 4：（4）说明在国产浏览器与信创环境下的兼容要点。</p><ul class="exam-questions"><li><b>问题 1</b> （1）给出本项目<strong>数据存储方案</strong>与选择理由；</li><li><b>问题 2</b> （2）说明 <strong>Web 客户端技术</strong>与<strong>服务器端技术</strong>的主要内容；</li><li><b>问题 3</b> （3）给出 <strong>Web 应用测试</strong>清单与重点；</li><li><b>问题 4</b> （4）说明在国产浏览器与信创环境下的兼容要点。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）存储方案）：<br>- 🟢 加分：解析·存储题要&quot;数据特征 → 介质&quot;，信创题要落到五类差异。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🔴 核心（2）客户端与服务器端技术）：<br>问题 3｜参考答案要点：<br>- 🔴 核心：🔴 核心（3）Web 测试清单）：①功能测试（链接、表单、Cookie/Session、权限、多模块跳转）；②兼容性测试（浏览器矩阵、分辨率、移动端、小程序宿主）；③性能测试（首屏 ≤2 秒、端到端 ≤800ms、800 路并发、20 台大屏并发刷新）；④安全性测试（XSS、CSRF、SQL 注入、越权、敏感信息泄露、依赖漏洞扫描）；⑤可用性测试（断网重连、WebSocket 重连、版本回退）；⑥易用性/适老化测试；⑦回归测试（自动化覆盖核心链路）。<br>问题 4｜参考答案要点：<br>- 🔴 核心：🔴 核心（4）信创兼容要点）：①内核差异——明确最低内核版本，避免过度使用新特性（配 Babel/polyfill 与 PostCSS 降级）；②密码套件——支持 SM2/SM3/SM4，可能需双证书部署；③插件与控件——避免 ActiveX/NPAPI 等旧控件，改用 WebRTC/WebSocket 方案；④字体与输入法——中文字体渲染与表单兼容性实测；⑤打印与导出——PDF/Excel 导出与打印控件单独验证；⑥性能——国产终端配置偏低，按低端机型设基线与降级策略。</div></details></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">74</span>📅 时间：2026-01-20 上午 10 点 📍 地点：班长监控室<br>👤 人物：老陶（班长）、甘工（乙方·系统分析师）、邓经理（甲方·运维经理）、洪经理（甲方·客服部经理）<br>⚡ 冲突：20 台班长大屏同时刷新导致页面卡死、服务端 QPS 打满，还有班长反映&quot;开着半天就白屏&quot;<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：老陶敲门进来说：&quot;大屏一早就卡住了，数字不动，鼠标点哪都没反应。重启浏览器又能用，过两小时又卡。&quot; 邓经理查服务端：&quot;大屏接口 QPS 已经打到上限了——20 个班长台，每 5 秒刷一次，每个页面 12 个指标，算下来每分钟两万多次请求。&quot; 甘工打开浏览器性能面板，看到内存占用从 200MB 涨到 1.8GB，图表实例没有被销毁；而且每次刷新都重新拉全量数据，DOM 频繁重绘。 洪经理要求：&quot;大屏是我们班长的眼睛，不能卡。&quot;<br>补充资料：大屏请求量 → 20 台 × 12 指标 / 5 秒 ≈ 2.9 万次/分 → 变更才推 → 轮询风暴；服务端 QPS → 触及上限 → ≤50% 容量 → 无预聚合；页面内存 → 200 MB → 1.8 GB（2 小时） → 稳定不增长 → 图表实例未销毁；首屏 → 4.8 s → ≤2 s → 包体 3.2 MB；大屏刷新延迟 → 卡顿/白屏 → ≤5 s → 全量拉取 + 频繁重绘 优化方向：SSE/WebSocket 推送替代轮询、10 秒粒度预聚合入 Redis、dispose 释放图表、增量更新与节流渲染。<br>问题 1：（1）说明 Web 应用性能测试的指标与关注点，指出本例的性能瓶颈；<br>问题 2：（2）给出前端优化方案（首屏、渲染、内存）；<br>问题 3：（3）给出服务端优化方案（推送替代轮询、缓存、限流降级）；<br>问题 4：（4）说明 Web 应用测试中应如何验证优化效果。</p><ul class="exam-questions"><li><b>问题 1</b> （1）说明 <strong>Web 应用性能测试</strong>的指标与关注点，指出本例的性能瓶颈；</li><li><b>问题 2</b> （2）给出<strong>前端优化</strong>方案（首屏、渲染、内存）；</li><li><b>问题 3</b> （3）给出<strong>服务端优化</strong>方案（推送替代轮询、缓存、限流降级）；</li><li><b>问题 4</b> （4）说明 Web 应用测试中应如何验证优化效果。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）性能指标与瓶颈）：指标——响应时间（首屏、可交互 TTI）、吞吐量（QPS/TPS）、并发用户数、资源利用率（CPU、内存、带宽）、稳定性（长时间运行、内存泄漏）、前端指标（LCP、FID/INP、CLS 等 Core Web Vitals）。<br>- 🟢 加分：解析·Web 性能题要&quot;瓶颈定位 + 前端 + 服务端 + 验证方法&quot;，缺一不可。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🟡 支撑（2）前端优化）：①按需加载与组件复用——图表库按需引入，销毁时调用 dispose 释放实例；②虚拟列表渲染长列表，减少 DOM 节点；③合并更新——把 10 秒内的多次推送合并为一次渲染（节流）；④骨架屏与本地缓存优先渲染；⑤减少 setData/重绘（只更新变化字段）；⑥内存排查——检查定时器未清理、事件监听未解绑、WebSocket 重连堆积；⑦分包与 CDN 提升首屏。<br>问题 3｜参考答案要点：<br>- 🔴 核心：🟡 支撑（3）服务端优化）：①推送替代轮询——改用 SSE/WebSocket，&quot;变更才推&quot;，请求量下降一个数量级；②预聚合——指标按 10 秒粒度预计算写入 Redis，读请求直接取缓存；③按技能组订阅——只推该班长关心的数据；④限流与降级——大屏请求单独限流，压力大时降级为 30 秒刷新并在界面标注&quot;数据延迟&quot;；⑤读写分离与水平扩容。<br>问题 4｜参考答案要点：<br>- 🔴 核心：🔴 核心（4）验证方法）：①前端性能——用 Lighthouse/浏览器 Performance 面板测首屏、LCP/CLS；内存泄漏用堆快照对比（多次进出页面后内存是否回落）；②服务端——压测（模拟 20~40 台大屏并发订阅）、监控 QPS 与 P99、验证缓存命中率；③长时间稳定性测试——大屏连续运行 8~24 小时，观察内存与是否白屏；④弱网测试——模拟高延迟/丢包下的体验与降级；⑤回归测试——自动化覆盖核心链路，确保优化未破坏功能。</div></details></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">75</span>📅 时间：2026-04-15 上午 📍 地点：集团客服部（安全事件处置）<br>👤 人物：甘工（乙方·系统分析师）、郑专员（甲方·合规专员）、邓经理（甲方·运维经理）、老陶（甲方·班组长(十年老坐席)）、丁工（乙方·测试负责人）<br>⚡ 冲突：有坐席在群里点了一个&quot;话术更新通知&quot;链接，随后有人冒用其账号导出了客户清单<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：老陶在群里收到一条消息：&quot;【话术更新】请点击查看最新话术&quot;，点开后跳到一个长得和工作台很像的页面，他顺手输了账号密码。 半小时后，系统告警：老陶的账号从另一个城市登录，并导出了一份含完整手机号的客户清单。 郑专员脸色很难看：&quot;客户信息外泄，这是要上报的数据安全事件。&quot; 丁工查下来：工作台存在存储型 XSS 漏洞，且关键操作没有 CSRF 防护，Cookie 也没设 HttpOnly/SameSite。 甘工心里清楚：这几条都是 Web 安全的&quot;老毛病&quot;，但每一条都足以致命。<br>补充资料：存储型 XSS → 恶意脚本存入服务端，所有访问者执行 → 话术字段被注入 → 输出编码 + 白名单过滤 + CSP + HttpOnly；CSRF → 借已登录身份发起请求 → 导出操作无 Token → CSRF Token + SameSite + Origin 校验 + 二次确认；水平越权 → 同角色访问他人数据 → 导出全量客户清单 → 服务端逐请求校验数据归属（属地/技能组）；会话安全 → Cookie 被脚本读取/固定 → 未设 HttpOnly/SameSite → Secure + HttpOnly + SameSite + 短有效期；导出管控 → 导出即泄露 → 无审批无限速 → 审批 + 水印 + 限速 + 脱敏 + 审计 事件链：钓鱼链接 → 输入账号密码 → 异地登录 → 导出客户清单 → 数据安全事件需上报。<br>问题 1：（1）说明 XSS、CSRF、越权访问三类漏洞的原理与危害，并结合本例说明各自的表现；<br>问题 2：（2）给出防御措施（含 Cookie 安全、CSP、校验与二次确认）；<br>问题 3：（3）说明 Web 应用安全测试的重点与常用手段；<br>问题 4：（4）说明本次事件后的处置与改进。</p><ul class="exam-questions"><li><b>问题 1</b> （1）说明 <strong>XSS、CSRF、越权访问</strong>三类漏洞的原理与危害，并结合本例说明各自的表现；</li><li><b>问题 2</b> （2）给出<strong>防御措施</strong>（含 Cookie 安全、CSP、校验与二次确认）；</li><li><b>问题 3</b> （3）说明 <strong>Web 应用安全测试</strong>的重点与常用手段；</li><li><b>问题 4</b> （4）说明本次事件后的处置与改进。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）三类漏洞）：<br>- 🟢 加分：解析·Web 安全题要&quot;原理 + 本例表现 + 防御 + 测试 + 处置改进&quot;。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🟡 支撑（2）防御措施）：①XSS——输出编码（按 HTML/JS/URL 上下文分别编码）、富文本白名单过滤、避免 v-html/innerHTML 渲染用户输入、启用 CSP 内容安全策略、Cookie 设 HttpOnly（防脚本读取）；②CSRF——CSRF Token（每请求校验）、Cookie 设 SameSite=Lax/Strict、校验 Origin/Referer、关键操作二次确认（口令/短信）；③越权——服务端每次请求校验数据归属（属地/技能组/角色）、行级与列级权限、最小权限与职责分离；④会话与 Cookie——Secure + HttpOnly + SameSite、短有效期、登出即失效、异常登录（异地/…<br>问题 3｜参考答案要点：<br>- 🔴 核心：🟡 支撑（3）安全测试重点与手段）：重点——身份认证与会话管理、访问控制、输入校验、XSS/CSRF/SQL 注入、文件上传、敏感信息泄露、依赖组件漏洞、配置与日志。手段——静态扫描（SAST）、依赖漏洞扫描、动态扫描（DAST/漏扫）、手工渗透测试（重点测越权与逻辑漏洞）、代码评审、安全配置检查；上线前做安全测试报告与整改闭环，上线后做定期复测与监控。<br>问题 4｜参考答案要点：<br>- 🔴 核心：🟢 加分（4）处置与改进）：应急——①冻结被盗账号、强制改密与下线所有会话；②撤销导出文件、评估泄露范围并按规定上报；③排查是否有其他账号受影响；④保留日志与证据；⑤对已泄露客户做告知与风险提示。改进——①修复 XSS/CSRF/越权三类漏洞并复测；②导出功能加审批、水印、限速、脱敏与审计；③关键操作加二次认证与异常登录告警；④开展全员安全意识培训（本例起因是&quot;点链接&quot;）；⑤把安全测试纳入发布门禁，并做定期演练。</div></details></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">76</span>📅 时间：2026-03-18 上午 📍 地点：试点职场（班组长沟通会）<br>👤 人物：甘工（乙方·系统分析师）、老陶（甲方·班组长(十年老坐席)）、洪经理（甲方·客服部经理）、邓经理（甲方·运维经理）<br>⚡ 冲突：验收清单里有&quot;移动端客服工作台&quot;，但班长在车间/外勤时网络差，手机上看不了实时数据<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：老陶提了个很现实的要求：&quot;我不可能一直坐在电脑前面。有时候在站点、在路上，我就想掏手机看看现在排队多少、谁在忙——这能不能做？&quot; 洪经理立刻附和：&quot;清单里本来就写着&#x27;移动端客服工作台&#x27;。&quot; 邓经理担心：&quot;手机浏览器打开工作台，屏幕这么小，数据还实时刷新，会不会很卡？而且车间信号不好。&quot; 甘工打开手机试了一下现有的 Web 版——首屏慢、布局错位、断网直接白屏。他知道，这不是&quot;把网页塞进手机&quot;，而是要按移动 Web 的特点重新设计。<br>补充资料：PC 页面直接响应式 → 慢（4.8 s） → 无 → — → 随服务端 → ✘ 不适用；移动端简化视图 + PWA → ≤1.5 s → Service Worker 缓存 → 受限（无需相机） → 免安装、可推送 → ✔ 班长监控；原生 App → 快 → 强 → 完整 → 需发版审核 → 过重（仅看板）；小程序 → 快 → 中 → 受限 → 平台审核 → 备选 弱网要求：断网显示&quot;最后更新时间&quot;；推送降级为 30 秒轮询并标注延迟；本地不缓存完整号码。<br>问题 1：（1）说明 Web 应用特征与移动端访问带来的新挑战；<br>问题 2：（2）给出移动端客服工作台的技术方案（响应式/自适应、PWA、离线、性能）；<br>问题 3：（3）说明数据存储与同步在移动场景的设计；<br>问题 4：（4）说明移动端测试的重点。</p><ul class="exam-questions"><li><b>问题 1</b> （1）说明 <strong>Web 应用特征</strong>与移动端访问带来的新挑战；</li><li><b>问题 2</b> （2）给出移动端客服工作台的<strong>技术方案</strong>（响应式/自适应、PWA、离线、性能）；</li><li><b>问题 3</b> （3）说明<strong>数据存储与同步</strong>在移动场景的设计；</li><li><b>问题 4</b> （4）说明移动端测试的重点。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）Web 特征与挑战）：Web 应用特征——基于浏览器、无需安装、跨平台、集中部署与更新、瘦客户端、依赖网络、以 HTTP 为中心。移动端新挑战：①屏幕小、交互方式不同（触摸、手势）；②网络不稳定（弱网、断网、切换）；③设备性能与电量受限；④多终端/多浏览器兼容（含国产浏览器）；⑤安全与隐私（移动端更易丢失设备、Cookie/本地存储风险）；⑥实时性要求（班长要&quot;看现场&quot;）。<br>- 🟢 加分：解析·移动 Web 题要&quot;特征挑战 + 方案（响应式/PWA/离线/实时）+ 存储同步 + 测试&quot;。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🟡 支撑（2）技术方案）：①响应式/自适应布局——针对手机做简化视图（只保留排队数、在线坐席、告警），而非把 PC 页面缩小；②PWA（渐进式 Web 应用）——添加到主屏、Service Worker 缓存、离线可用、消息推送，兼顾免安装与体验；③离线与弱网——关键数据本地缓存 + 骨架屏，断网显示&quot;最后更新时间&quot;而非白屏；④性能优化——按需加载、数据预聚合、推送替代轮询、节流渲染；⑤实时——WebSocket/SSE 推送状态变更，弱网自动降级为 30 秒轮询并标注延迟；⑥安全——会话短有效期、设备绑定、异常登录告警、移动端不缓存完整号码。<br>问题 3｜参考答案要点：<br>- 🔴 核心：🟡 支撑（3）存储与同步）：①本地存储（IndexedDB/LocalStorage）缓存最近数据与配置，Service Worker 缓存静态资源；②增量同步——按更新时间拉取，减少流量；③冲突处理——移动端只读为主，写操作（如改派）走幂等键 + 服务端优先；④离线队列——移动端产生的操作入队，联网后提交；⑤数据安全——本地不落敏感明文，登出清除本地缓存，远程擦除能力（设备丢失场景）。<br>问题 4｜参考答案要点：<br>- 🔴 核心：🟡 支撑（4）移动端测试重点）：①兼容性（iOS/Android 各版本、不同屏幕、国产浏览器、微信内置浏览器）；②弱网/断网（高延迟、高丢包、断网恢复、飞行模式）；③性能（首屏时间、内存、耗电、长时间运行）；④离线能力（断网可查看、恢复后同步、无重复提交）；⑤易用性（单手操作、字体、误触防护、班长实操验证）；⑥安全（本地存储泄露、会话超时、越权）。</div></details></div></details><details class="exam-subject" data-exam-subject="论文"><summary><span class="exam-subject-name">📄 论文写作</span><span class="exam-subject-n">1 题</span><span class="exam-subject-tip">论述题 · 先写再看题</span></summary><div class="exam-bar"><span class="exam-bar-label">📄 论文写作</span><span class="exam-bar-stat">共 <b>1</b> 题 · 论述题</span></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 简要叙述你参与的软件开发项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 说明主流RIA客户端技术，以及各类技术的特点与优势。</li><li><b>问题 3</b> 说明项目选用的RIA技术，以及技术落地后的实施效果。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · Web应用</span><span class="exam-lv">⭐⭐</span></div></div></details></section>
+    <section class="exam" id="exam" data-exam-chapter="16" data-exam-hour="H35"><div class="exam-bar"><span class="exam-bar-label">📚 历年真题</span><span class="exam-bar-stat">共 <b>2</b> 题 · 来自 1 套真题</span><span class="exam-bar-ops"><button type="button" class="exam-op" data-exam-all="1">全部展开</button><button type="button" class="exam-op" data-exam-all="0">全部收起</button></span></div><details class="exam-subject" data-exam-subject="综合知识"><summary><span class="exam-subject-name">📝 综合知识</span><span class="exam-subject-n">2 题</span><span class="exam-subject-tip">按年份展开 · 单题可点开看答案</span></summary><details class="exam-year" data-exam-year="2019年5月"><summary><span class="exam-year-name">2019年5月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2019年5月-034"><summary><span class="exam-no">第 34 题</span><span class="exam-stem-peek">随着对象持久化技术的发展，产生了众多持久化框架，（）是ORM的解决方案。</span></summary><div class="exam-q-body"><p class="exam-stem">随着对象持久化技术的发展，产生了众多持久化框架，（）是ORM的解决方案。</p><ul class="exam-opts"><li><b>A</b> SQL</li><li><b>B</b> CMP</li><li><b>C</b> JDO</li><li><b>D</b> iBatis</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">iBatis和Hibernate都是典型的ORM（对象关系映射）实现方案，iBatis实现Java对象到SQL的灵活映射，上手门槛低；CMP基于EJB容器规范，JDO是持久化API标准，SQL是查询语法本身。</p></details></div></details><details class="exam-q" data-exam-id="2019年5月-033"><summary><span class="exam-no">第 33 题</span><span class="exam-stem-peek">随着对象持久化技术的发展，产生了众多持久化框架，其中，（）基于EJB技术。</span></summary><div class="exam-q-body"><p class="exam-stem">随着对象持久化技术的发展，产生了众多持久化框架，其中，（）基于EJB技术。</p><ul class="exam-opts"><li><b>A</b> iBatis</li><li><b>B</b> CMP</li><li><b>C</b> JDO</li><li><b>D</b> SQL</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">CMP即容器管理持久化，依托EJB容器完成实体EJB的持久化管理，是基于EJB技术的方案；iBatis是轻量ORM框架，JDO是SUN制定的持久化标准API，SQL是结构化查询语言，均不基于EJB体系。</p></details></div></details></details></details><details class="exam-subject" data-exam-subject="案例"><summary><span class="exam-subject-name">📋 案例分析</span><span class="exam-subject-n">5 题</span><span class="exam-subject-tip">案例背景 · 题目 · 答案与解析</span></summary><div class="exam-bar"><span class="exam-bar-label">📋 案例分析</span><span class="exam-bar-stat">共 <b>5</b> 题 · 情景简答 · 采分点三色标记</span></div><div class="exam-q exam-q-case"><div class="case-head"><span class="exam-no">案例 72</span><span class="exam-tag">考点 · 坐席工作台的架构与协议选型</span><span class="exam-lv">⭐⭐⭐</span></div><div class="case-meta"><span><strong>考点</strong>：Web 架构模式 / 通信协议选型 / 部署</span><span>📅 <strong>时间</strong>：2025-11-05 上午 📍 <strong>地点</strong>：工作台技术方案评审</span><span>👤 <strong>人物</strong>：甘工（乙方·系统分析师）、彭工（乙方·架构设计师）、邓经理（甲方·运维经理）、洪经理（甲方·客服部经理）</span><span>⚡ <strong>冲突</strong>：要秒级刷新、三条语音通道、120 席并发，还要适配国产浏览器与灰度回退</span><span><strong>难度</strong>：★★★　<strong>总分</strong>：25 分　<strong>建议用时</strong>：25 分钟</span></div><div class="case-scene"><div class="case-h">案例背景</div><strong>背景</strong>：洪经理提了三个硬要求：&quot;弹屏要秒级；坐席能用软电话、硬话机、手机三种方式接；一百二十席同时在线。&quot; 彭工补了一句：&quot;还得适配国产浏览器，上线不能停业务，要能灰度回退。&quot; 邓经理问：&quot;那协议用什么？HTTP 轮询行不行？&quot; 甘工摇头：&quot;轮询撑不住这个量级，而且语音和数据的要求完全不同——今天要按场景把协议一个个定下来。<br><strong>补充资料</strong>：音通道——<strong>WebRTC 软电话</strong>、<strong>SIP 硬话机</strong>、<strong>移动端 App</strong>；③120 席 + 20 个班长台并发；④适配<strong>国产浏览器</strong>与<strong>国密套件</strong>，支持私有化部署；⑤页面不得缓存完整号码，操作留痕 ≥90 天；⑥6 个月内交付且<strong>不可停业务</strong>，须支持<strong>灰度与回退</strong>。</div><div class="case-asks"><div class="case-h">题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">（1）比较 <strong>MVC、MVP、MVVM</strong> 的差异，说明<strong>前后端分离</strong>的概念与优点，并推荐方案；</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">（2）比较 <strong>HTTP、WebSocket、SSE、WebRTC</strong>，并为五个场景（来话弹屏、工单提交、浏览器内语音、大屏 5 秒刷新、工单系统回调）选择协议并说明理由；</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">（3）给出部署方案（含灰度与回滚）。</span></li></ul></div><details class="exam-ans"><summary>参考答案要点（三色标记）</summary><div class="exam-points"><strong>问题 1｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（1）模式与选型）：<br><strong>问题 2｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（2）协议选型）：<br><strong>问题 3｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（3）部署方案）：①前端静态资源发布到对象存储 + CDN，后端容器化部署于 K8s；②版本化 + 不可变发布（文件 hash、镜像 tag），保留最近 N 版以便秒级回滚；③灰度发布：按坐席分组/百分比放量，支持按技能组定向灰度；④回滚：前端切回上一版本资源、后端 Helm rollback，并做回滚演练；⑤健康检查与自动摘除；⑥配置外置；⑦多环境隔离（生产与测试严格隔离）。</div></details><details class="exam-ans"><summary>解析与加分项</summary><div class="exam-exp-more">- 🟢 加分：解析·协议题必须&quot;技术特性 → 场景语义&quot;逐条对应。</div></details></div><div class="exam-q exam-q-case"><div class="case-head"><span class="exam-no">案例 73</span><span class="exam-tag">考点 · 数据存储、客户端技术与Web测试</span><span class="exam-lv">⭐⭐⭐</span></div><div class="case-meta"><span><strong>考点</strong>：Web 数据存储 / 客户端技术 / 服务器端技术 / 部署形态 / Web 测试</span><span>📅 <strong>时间</strong>：2025-12-02 上午 📍 <strong>地点</strong>：工作台技术评审（第二轮）</span><span>👤 <strong>人物</strong>：甘工（乙方·系统分析师）、彭工（乙方·架构设计师）、丁工（乙方·测试负责人）、邓经理（甲方·运维经理）</span><span>⚡ <strong>冲突</strong>：工单、录音、热点、话术、检索五类数据怎么存，前端怎么测</span><span><strong>难度</strong>：★★★　<strong>总分</strong>：25 分　<strong>建议用时</strong>：25 分钟</span></div><div class="case-scene"><div class="case-h">案例背景</div><strong>背景</strong>：彭工列了五类数据：&quot;工单要事务、录音量大、热点要毫秒级、话术结构常变、转写要全文检索——都放一个库？&quot; 邓经理摇头：&quot;那不出半年就得重构。&quot; 丁工更关心测试：&quot;前端还有大列表、实时推送、图表和音频控件，测什么、怎么测？&quot; 甘工把两件事分开：先定<strong>存储与客户端技术</strong>，再定<strong>测试清单</strong>。<br><strong>补充资料</strong>：。前端需支持大列表、实时推送、图表与音频控件。</div><div class="case-asks"><div class="case-h">题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">（1）给出本项目<strong>数据存储方案</strong>与选择理由；</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">（2）说明 <strong>Web 客户端技术</strong>与<strong>服务器端技术</strong>的主要内容；</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">（3）给出 <strong>Web 应用测试</strong>清单与重点；</span></li><li><span class="case-ask-no">4</span><span class="case-ask-t">（4）说明在<strong>国产浏览器与信创环境</strong>下的兼容要点。</span></li></ul></div><details class="exam-ans"><summary>参考答案要点（三色标记）</summary><div class="exam-points"><strong>问题 1｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（1）存储方案）：<br><strong>问题 2｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（2）客户端与服务器端技术）：<br><strong>问题 3｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（3）Web 测试清单）：①功能测试（链接、表单、Cookie/Session、权限、多模块跳转）；②兼容性测试（浏览器矩阵、分辨率、移动端、小程序宿主）；③性能测试（首屏 ≤2 秒、端到端 ≤800ms、800 路并发、20 台大屏并发刷新）；④安全性测试（XSS、CSRF、SQL 注入、越权、敏感信息泄露、依赖漏洞扫描）；⑤可用性测试（断网重连、WebSocket 重连、版本回退）；⑥易用性/适老化测试；⑦回归测试（自动化覆盖核心链路）。<br><strong>问题 4｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（4）信创兼容要点）：①内核差异——明确最低内核版本，避免过度使用新特性（配 Babel/polyfill 与 PostCSS 降级）；②密码套件——支持 SM2/SM3/SM4，可能需双证书部署；③插件与控件——避免 ActiveX/NPAPI 等旧控件，改用 WebRTC/WebSocket 方案；④字体与输入法——中文字体渲染与表单兼容性实测；⑤打印与导出——PDF/Excel 导出与打印控件单独验证；⑥性能——国产终端配置偏低，按低端机型设基线与降级策略。</div></details><details class="exam-ans"><summary>解析与加分项</summary><div class="exam-exp-more">- 🟢 加分：解析·存储题要&quot;数据特征 → 介质&quot;，信创题要落到五类差异。</div></details></div><div class="exam-q exam-q-case"><div class="case-head"><span class="exam-no">案例 74</span><span class="exam-tag">考点 · 大屏卡死之后</span><span class="exam-lv">⭐⭐⭐</span></div><div class="case-meta"><span>📅 <strong>时间</strong>：2026-01-20 上午 10 点 📍 <strong>地点</strong>：班长监控室</span><span>👤 <strong>人物</strong>：老陶（班长）、甘工（乙方·系统分析师）、邓经理（甲方·运维经理）、洪经理（甲方·客服部经理）</span><span>⚡ <strong>冲突</strong>：20 台班长大屏同时刷新导致页面卡死、服务端 QPS 打满，还有班长反映&quot;开着半天就白屏&quot;</span><span><strong>难度</strong>：★★★　<strong>总分</strong>：25 分　<strong>建议用时</strong>：25 分钟</span></div><div class="case-scene"><div class="case-h">案例背景</div><strong>背景</strong>：老陶敲门进来说：&quot;大屏一早就卡住了，数字不动，鼠标点哪都没反应。重启浏览器又能用，过两小时又卡。&quot; 邓经理查服务端：&quot;大屏接口 QPS 已经打到上限了——20 个班长台，每 5 秒刷一次，每个页面 12 个指标，算下来每分钟两万多次请求。&quot; 甘工打开浏览器性能面板，看到内存占用从 200MB 涨到 1.8GB，<strong>图表实例没有被销毁</strong>；而且每次刷新都重新拉全量数据，DOM 频繁重绘。 洪经理要求：&quot;大屏是我们班长的眼睛，不能卡。&quot;<br><strong>补充资料</strong>：大屏请求量 → 20 台 × 12 指标 / 5 秒 ≈ 2.9 万次/分 → 变更才推 → 轮询风暴；服务端 QPS → 触及上限 → ≤50% 容量 → 无预聚合；页面内存 → 200 MB → <strong>1.8 GB</strong>（2 小时） → 稳定不增长 → 图表实例未销毁；首屏 → 4.8 s → ≤2 s → 包体 3.2 MB；大屏刷新延迟 → 卡顿/白屏 → ≤5 s → 全量拉取 + 频繁重绘 <strong>优化方向</strong>：SSE/WebSocket 推送替代轮询、10 秒粒度预聚合入 Redis、dispose 释放图表、增量更新与节流渲染。</div><div class="case-asks"><div class="case-h">题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">（1）说明 <strong>Web 应用性能测试</strong>的指标与关注点，指出本例的性能瓶颈；</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">（2）给出<strong>前端优化</strong>方案（首屏、渲染、内存）；</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">（3）给出<strong>服务端优化</strong>方案（推送替代轮询、缓存、限流降级）；</span></li><li><span class="case-ask-no">4</span><span class="case-ask-t">（4）说明 <strong>Web 应用测试</strong>中应如何验证优化效果。</span></li></ul></div><details class="exam-ans"><summary>参考答案要点（三色标记）</summary><div class="exam-points"><strong>问题 1｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（1）性能指标与瓶颈）：指标——响应时间（首屏、可交互 TTI）、吞吐量（QPS/TPS）、并发用户数、资源利用率（CPU、内存、带宽）、稳定性（长时间运行、内存泄漏）、前端指标（LCP、FID/INP、CLS 等 Core Web Vitals）。<br><strong>问题 2｜参考答案要点</strong>：<br>- 🔴 核心：🟡 支撑（2）前端优化）：①按需加载与组件复用——图表库按需引入，销毁时调用 dispose 释放实例；②虚拟列表渲染长列表，减少 DOM 节点；③合并更新——把 10 秒内的多次推送合并为一次渲染（节流）；④骨架屏与本地缓存优先渲染；⑤减少 setData/重绘（只更新变化字段）；⑥内存排查——检查定时器未清理、事件监听未解绑、WebSocket 重连堆积；⑦分包与 CDN 提升首屏。<br><strong>问题 3｜参考答案要点</strong>：<br>- 🔴 核心：🟡 支撑（3）服务端优化）：①推送替代轮询——改用 SSE/WebSocket，&quot;变更才推&quot;，请求量下降一个数量级；②预聚合——指标按 10 秒粒度预计算写入 Redis，读请求直接取缓存；③按技能组订阅——只推该班长关心的数据；④限流与降级——大屏请求单独限流，压力大时降级为 30 秒刷新并在界面标注&quot;数据延迟&quot;；⑤读写分离与水平扩容。<br><strong>问题 4｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（4）验证方法）：①前端性能——用 Lighthouse/浏览器 Performance 面板测首屏、LCP/CLS；内存泄漏用堆快照对比（多次进出页面后内存是否回落）；②服务端——压测（模拟 20~40 台大屏并发订阅）、监控 QPS 与 P99、验证缓存命中率；③长时间稳定性测试——大屏连续运行 8~24 小时，观察内存与是否白屏；④弱网测试——模拟高延迟/丢包下的体验与降级；⑤回归测试——自动化覆盖核心链路，确保优化未破坏功能。</div></details><details class="exam-ans"><summary>解析与加分项</summary><div class="exam-exp-more">- 🟢 加分：解析·Web 性能题要&quot;瓶颈定位 + 前端 + 服务端 + 验证方法&quot;，缺一不可。</div></details></div><div class="exam-q exam-q-case"><div class="case-head"><span class="exam-no">案例 75</span><span class="exam-tag">考点 · 坐席点了个链接，报表被导走了</span><span class="exam-lv">⭐⭐⭐</span></div><div class="case-meta"><span>📅 <strong>时间</strong>：2026-04-15 上午 📍 <strong>地点</strong>：集团客服部（安全事件处置）</span><span>👤 <strong>人物</strong>：甘工（乙方·系统分析师）、郑专员（甲方·合规专员）、邓经理（甲方·运维经理）、老陶（甲方·班组长(十年老坐席)）、丁工（乙方·测试负责人）</span><span>⚡ <strong>冲突</strong>：有坐席在群里点了一个&quot;话术更新通知&quot;链接，随后有人冒用其账号导出了客户清单</span><span><strong>难度</strong>：★★★　<strong>总分</strong>：25 分　<strong>建议用时</strong>：25 分钟</span></div><div class="case-scene"><div class="case-h">案例背景</div><strong>背景</strong>：老陶在群里收到一条消息：&quot;【话术更新】请点击查看最新话术&quot;，点开后跳到一个长得和工作台很像的页面，他顺手输了账号密码。 半小时后，系统告警：老陶的账号<strong>从另一个城市登录</strong>，并<strong>导出了一份含完整手机号的客户清单</strong>。 郑专员脸色很难看：&quot;客户信息外泄，这是要上报的数据安全事件。&quot; 丁工查下来：工作台存在<strong>存储型 XSS</strong> 漏洞，且关键操作<strong>没有 CSRF 防护</strong>，Cookie 也没设 HttpOnly/SameSite。 甘工心里清楚：这几条都是 Web 安全的&quot;老毛病&quot;，但每一条都足以致命。<br><strong>补充资料</strong>：存储型 XSS → 恶意脚本存入服务端，所有访问者执行 → 话术字段被注入 → 输出编码 + 白名单过滤 + CSP + HttpOnly；CSRF → 借已登录身份发起请求 → 导出操作无 Token → CSRF Token + SameSite + Origin 校验 + 二次确认；水平越权 → 同角色访问他人数据 → 导出全量客户清单 → 服务端逐请求校验数据归属（属地/技能组）；会话安全 → Cookie 被脚本读取/固定 → 未设 HttpOnly/SameSite → Secure + HttpOnly + SameSite + 短有效期；导出管控 → 导出即泄露 → 无审批无限速 → 审批 + 水印 + 限速 + 脱敏 + 审计 <strong>事件链</strong>：钓鱼链接 → 输入账号密码 → 异地登录 → 导出客户清单 → 数据安全事件需上报。</div><div class="case-asks"><div class="case-h">题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">（1）说明 <strong>XSS、CSRF、越权访问</strong>三类漏洞的原理与危害，并结合本例说明各自的表现；</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">（2）给出<strong>防御措施</strong>（含 Cookie 安全、CSP、校验与二次确认）；</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">（3）说明 <strong>Web 应用安全测试</strong>的重点与常用手段；</span></li><li><span class="case-ask-no">4</span><span class="case-ask-t">（4）说明本次事件后的<strong>处置与改进</strong>。</span></li></ul></div><details class="exam-ans"><summary>参考答案要点（三色标记）</summary><div class="exam-points"><strong>问题 1｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（1）三类漏洞）：<br><strong>问题 2｜参考答案要点</strong>：<br>- 🔴 核心：🟡 支撑（2）防御措施）：①XSS——输出编码（按 HTML/JS/URL 上下文分别编码）、富文本白名单过滤、避免 v-html/innerHTML 渲染用户输入、启用 CSP 内容安全策略、Cookie 设 HttpOnly（防脚本读取）；②CSRF——CSRF Token（每请求校验）、Cookie 设 SameSite=Lax/Strict、校验 Origin/Referer、关键操作二次确认（口令/短信）；③越权——服务端每次请求校验数据归属（属地/技能组/角色）、行级与列级权限、最小权限与职责分离；④会话与 Cookie——Secure + HttpOnly + SameSite、短有效期、登出即失效、异常登录（异地/…<br><strong>问题 3｜参考答案要点</strong>：<br>- 🔴 核心：🟡 支撑（3）安全测试重点与手段）：重点——身份认证与会话管理、访问控制、输入校验、XSS/CSRF/SQL 注入、文件上传、敏感信息泄露、依赖组件漏洞、配置与日志。手段——静态扫描（SAST）、依赖漏洞扫描、动态扫描（DAST/漏扫）、手工渗透测试（重点测越权与逻辑漏洞）、代码评审、安全配置检查；上线前做安全测试报告与整改闭环，上线后做定期复测与监控。<br><strong>问题 4｜参考答案要点</strong>：</div></details><details class="exam-ans"><summary>解析与加分项</summary><div class="exam-exp-more">- 🟢 加分：解析·Web 安全题要&quot;原理 + 本例表现 + 防御 + 测试 + 处置改进&quot;。<br>- 🔴 核心：🟢 加分（4）处置与改进）：应急——①冻结被盗账号、强制改密与下线所有会话；②撤销导出文件、评估泄露范围并按规定上报；③排查是否有其他账号受影响；④保留日志与证据；⑤对已泄露客户做告知与风险提示。改进——①修复 XSS/CSRF/越权三类漏洞并复测；②导出功能加审批、水印、限速、脱敏与审计；③关键操作加二次认证与异常登录告警；④开展全员安全意识培训（本例起因是&quot;点链接&quot;）；⑤把安全测试纳入发布门禁，并做定期演练。</div></details></div><div class="exam-q exam-q-case"><div class="case-head"><span class="exam-no">案例 76</span><span class="exam-tag">考点 · 班长要在手机上&quot;看现场&quot;</span><span class="exam-lv">⭐⭐⭐</span></div><div class="case-meta"><span>📅 <strong>时间</strong>：2026-03-18 上午 📍 <strong>地点</strong>：试点职场（班组长沟通会）</span><span>👤 <strong>人物</strong>：甘工（乙方·系统分析师）、老陶（甲方·班组长(十年老坐席)）、洪经理（甲方·客服部经理）、邓经理（甲方·运维经理）</span><span>⚡ <strong>冲突</strong>：验收清单里有&quot;移动端客服工作台&quot;，但班长在车间/外勤时网络差，手机上看不了实时数据</span><span><strong>难度</strong>：★★★　<strong>总分</strong>：25 分　<strong>建议用时</strong>：25 分钟</span></div><div class="case-scene"><div class="case-h">案例背景</div><strong>背景</strong>：老陶提了个很现实的要求：&quot;我不可能一直坐在电脑前面。有时候在站点、在路上，我就想掏手机看看现在排队多少、谁在忙——这能不能做？&quot; 洪经理立刻附和：&quot;清单里本来就写着&#x27;移动端客服工作台&#x27;。&quot; 邓经理担心：&quot;手机浏览器打开工作台，屏幕这么小，数据还实时刷新，会不会很卡？而且车间信号不好。&quot; 甘工打开手机试了一下现有的 Web 版——首屏慢、布局错位、断网直接白屏。他知道，这不是&quot;把网页塞进手机&quot;，而是要按<strong>移动 Web 的特点</strong>重新设计。<br><strong>补充资料</strong>：PC 页面直接响应式 → 慢（4.8 s） → 无 → — → 随服务端 → ✘ 不适用；<strong>移动端简化视图 + PWA</strong> → ≤1.5 s → Service Worker 缓存 → 受限（无需相机） → 免安装、可推送 → <strong>✔ 班长监控</strong>；原生 App → 快 → 强 → 完整 → 需发版审核 → 过重（仅看板）；小程序 → 快 → 中 → 受限 → 平台审核 → 备选 <strong>弱网要求</strong>：断网显示&quot;最后更新时间&quot;；推送降级为 30 秒轮询并标注延迟；本地不缓存完整号码。</div><div class="case-asks"><div class="case-h">题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">（1）说明 <strong>Web 应用特征</strong>与移动端访问带来的新挑战；</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">（2）给出移动端客服工作台的<strong>技术方案</strong>（响应式/自适应、PWA、离线、性能）；</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">（3）说明<strong>数据存储与同步</strong>在移动场景的设计；</span></li><li><span class="case-ask-no">4</span><span class="case-ask-t">（4）说明<strong>移动端测试</strong>的重点。</span></li></ul></div><details class="exam-ans"><summary>参考答案要点（三色标记）</summary><div class="exam-points"><strong>问题 1｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（1）Web 特征与挑战）：Web 应用特征——基于浏览器、无需安装、跨平台、集中部署与更新、瘦客户端、依赖网络、以 HTTP 为中心。移动端新挑战：①屏幕小、交互方式不同（触摸、手势）；②网络不稳定（弱网、断网、切换）；③设备性能与电量受限；④多终端/多浏览器兼容（含国产浏览器）；⑤安全与隐私（移动端更易丢失设备、Cookie/本地存储风险）；⑥实时性要求（班长要&quot;看现场&quot;）。<br><strong>问题 2｜参考答案要点</strong>：<br>- 🔴 核心：🟡 支撑（2）技术方案）：①响应式/自适应布局——针对手机做简化视图（只保留排队数、在线坐席、告警），而非把 PC 页面缩小；②PWA（渐进式 Web 应用）——添加到主屏、Service Worker 缓存、离线可用、消息推送，兼顾免安装与体验；③离线与弱网——关键数据本地缓存 + 骨架屏，断网显示&quot;最后更新时间&quot;而非白屏；④性能优化——按需加载、数据预聚合、推送替代轮询、节流渲染；⑤实时——WebSocket/SSE 推送状态变更，弱网自动降级为 30 秒轮询并标注延迟；⑥安全——会话短有效期、设备绑定、异常登录告警、移动端不缓存完整号码。<br><strong>问题 3｜参考答案要点</strong>：<br>- 🔴 核心：🟡 支撑（3）存储与同步）：①本地存储（IndexedDB/LocalStorage）缓存最近数据与配置，Service Worker 缓存静态资源；②增量同步——按更新时间拉取，减少流量；③冲突处理——移动端只读为主，写操作（如改派）走幂等键 + 服务端优先；④离线队列——移动端产生的操作入队，联网后提交；⑤数据安全——本地不落敏感明文，登出清除本地缓存，远程擦除能力（设备丢失场景）。<br><strong>问题 4｜参考答案要点</strong>：<br>- 🔴 核心：🟡 支撑（4）移动端测试重点）：①兼容性（iOS/Android 各版本、不同屏幕、国产浏览器、微信内置浏览器）；②弱网/断网（高延迟、高丢包、断网恢复、飞行模式）；③性能（首屏时间、内存、耗电、长时间运行）；④离线能力（断网可查看、恢复后同步、无重复提交）；⑤易用性（单手操作、字体、误触防护、班长实操验证）；⑥安全（本地存储泄露、会话超时、越权）。</div></details><details class="exam-ans"><summary>解析与加分项</summary><div class="exam-exp-more">- 🟢 加分：解析·移动 Web 题要&quot;特征挑战 + 方案（响应式/PWA/离线/实时）+ 存储同步 + 测试&quot;。</div></details></div></details><details class="exam-subject" data-exam-subject="论文"><summary><span class="exam-subject-name">📄 论文写作</span><span class="exam-subject-n">1 题</span><span class="exam-subject-tip">先看题 · 再看考点拆解</span></summary><div class="exam-bar"><span class="exam-bar-label">📄 论文写作</span><span class="exam-bar-stat">共 <b>1</b> 题 · 论述题 · 含考点拆解与教材知识点</span></div><div class="exam-q exam-q-essay"><div class="case-head"><span class="exam-no">论文 29</span><span class="exam-tag">方向 · Web应用</span><span class="exam-lv">⭐⭐</span><span class="essay-batch">2021年上半年</span></div><div class="case-asks"><div class="case-h">论文题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">简要叙述你参与的软件开发项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">说明主流RIA客户端技术，以及各类技术的特点与优势。</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">说明项目选用的RIA技术，以及技术落地后的实施效果。</span></li></ul></div><details class="exam-ans" open><summary>试题背景</summary><div class="essay-bg">富互联网应用(RIA)兼具桌面端交互体验与Web应用易部署的优势，能够提供高响应、强交互的使用体验。</div></details><details class="exam-ans"><summary>考点拆解（三色标记）</summary><div class="exam-keypoints"><strong>问题 1｜概要叙述项目与你承担的工作</strong>：<br>- 🔴 核心：点明近三年内一个具体的真实项目：项目名称、背景、发起单位、规模、周期、交付成果（教材 22.4-9/22.4-10 明确要求，泛泛而谈会判虚构）<br>- 🔴 核心：明确「我」在项目中的角色与承担的主要工作，并站在系统分析师视角论述，而非单纯开发实现视角<br>- 🟡 支撑：说明项目的组织结构、开发体制与技术栈，为后文论述做铺垫<br>- 🟢 加分：点出项目与本题主题的直接关联（如本项目正是因 XX 痛点才需要 XX 方法）<br><strong>问题 2｜理论知识 / 方法论述</strong>：<br>- 🔴 核心：主流RIA客户端技术——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：以及各类技术的特点与优势——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🟢 加分：给出与其他候选方案的取舍依据，体现选型判断力<br><strong>问题 3｜项目实践落地与复盘</strong>：<br>- 🔴 核心：给出可量化的落地效果（缺陷率/响应时间/迭代周期/资源成本等具体数据），而非「取得了良好效果」<br>- 🔴 核心：诚实分析存在的 2~3 个真实问题，并给出对应的改进措施——教材强调这才是用心的内容<br>- 🟡 支撑：结合具体实例说明措施的实施过程（怎么做的，而非教科书式罗列）<br>- 🟢 加分：总结经验教训与后续演进方向，体现复盘能力<br>- 🟡 支撑：项目选用的RIA技术</div></details><details class="exam-ans"><summary>教材知识点</summary><div class="exam-textbook"><span class="tb-chap">第 16 章 · Web应用系统</span><a class="tb-hour" href="H35.html">H35</a></div></details></div></details></section>
     <div class="wrongbook"></div>
     <div class="keyhint">
   <span class="keyhint-title">键盘快捷键</span>
@@ -3196,7 +3378,9 @@ html{scroll-padding-top:80px}
     init() {
       const root = document.querySelector('.exam')
       if (!root) return
-      const chapter = root.dataset.examChapter || 'x'
+      // ⚠️ 专项页 / 全真模拟页没有 data-exam-chapter（无教材章），
+      //    旧写法一律退化成 'x' → H42~H48 共用同一个记忆键、互相串状态。
+      const chapter = root.dataset.examChapter || root.dataset.examHour || 'x'
 
       // 恢复上次展开状态：{ "H07": { "2025年5月": true, ... } }
       const saved = store.get(this.KEY, {}) || {}
@@ -3216,6 +3400,7 @@ html{scroll-padding-top:80px}
       const seen = store.get('examSeen', {}) || {}
       root.querySelectorAll('.exam-q').forEach(qd => {
         const qid = qd.dataset.examId
+        if (!qid) return
         if (seen[qid]) {
           const a = qd.querySelector('.exam-ans')
           if (a) a.open = true
@@ -3231,12 +3416,17 @@ html{scroll-padding-top:80px}
         btn.addEventListener('click', e => {
           e.preventDefault()
           const openAll = btn.dataset.examAll === '1'
-          root.querySelectorAll('.exam-subject,.exam-year').forEach(d => { d.open = openAll })
-          root.querySelectorAll('.exam-ans').forEach(d => {
-            d.open = openAll
-            if (openAll && d.parentElement.dataset.examId) seen[d.parentElement.dataset.examId] = 1
-          })
-          if (openAll) store.set('examSeen', seen)
+          // ⚠️ 必须把 .exam-q 也列进来：只开 .exam-subject/.exam-year/.exam-ans
+          //    时，单题仍折叠 → 答案藏在关闭的单题内，"全部展开"名不副实。
+          root.querySelectorAll('.exam-subject,.exam-year,.exam-q,.exam-ans')
+            .forEach(d => { d.open = openAll })
+          if (openAll) {
+            // ⚠️ 旧的 `d.parentElement.dataset.examId` 取到的是 .exam-q-body（无 id），
+            //    会把 seen[undefined] 写进 localStorage。改为直接从 .exam-q 取。
+            root.querySelectorAll('.exam-q[data-exam-id]')
+              .forEach(qd => { seen[qd.dataset.examId] = 1 })
+            store.set('examSeen', seen)
+          }
           // 同步年份级记忆
           root.querySelectorAll('.exam-year').forEach(y => { mine[y.dataset.examYear] = y.open })
           saved[chapter] = mine
@@ -3283,7 +3473,7 @@ html{scroll-padding-top:80px}
   // ══════════════════════════════════════════
   // 8. mermaid 渲染（自定义墨绿主题，与正文同色系）
   // ══════════════════════════════════════════
-  // 站点配色（与 design.css 的令牌保持一致）
+  // 站点配色（与设计令牌保持一致 —— 改主题色时这里要同步）
   const MERMAID_LIGHT = {
     bg: '#f2f0e9', fg: '#1b211c', line: '#cdc9bd',
     accent: '#3d5a40', accent2: '#5a8a62', accent3: '#7ea888',

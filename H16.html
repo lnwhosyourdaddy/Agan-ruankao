@@ -7,7 +7,7 @@
 <title>第 16 小时 · 软件工程（三）· UML 与形式化方法 · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
-<meta name="build-stamp" content="2026-10-05 11:44:51">
+<meta name="build-stamp" content="2026-10-05 15:47:03">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -405,16 +405,21 @@ img{max-width:100%;height:auto}
   border-radius:100px;
   font-size:12.5px;color:var(--accent);font-weight:600;
 }
-.cover h1{
+/* ⚠️ 封面主标题刻意用 <div> 而不是 <h1>：index.md 正文自带 `# 阿甘系分 · 48 小时
+   冲刺手册`，若封面也用 h1，一页会出现两个 h1（语义/SEO 上都是错的）。
+   视觉与 h1 完全一致 —— 字号、颜色、以及那道 72px 短横线都在下面显式声明。 */
+.cover .cover-title{
   font-size:3.5em;font-weight:800;letter-spacing:-1.6px;
   color:var(--accent);line-height:1.14;margin-bottom:16px;
 }
-/* ⚠️ 封面 h1 也继承 `.main h1::after` 那道 56px 短横线，但它是 display:block 的
-   固定宽块级元素 —— 文字居中不代表块级元素居中，会贴到左边。
-   修法：给封面这条短横线加 margin-left/right:auto 让它真正居中。 */
-.cover h1::after{
-  margin-left:auto;margin-right:auto;
+/* 复刻 `.main h1::after` 的短横线（<div> 不继承 h1 的伪元素），并水平居中 —— */
+/* 文字居中不代表块级元素居中，不加 auto 会贴到左边。 */
+.cover .cover-title::after{
+  content:'';display:block;
   width:72px;height:3px;
+  background:var(--accent);
+  margin:.5em auto 0;
+  border-radius:2px;
 }
 .cover .sub{
   font-size:1.2em;color:var(--fg-2);
@@ -845,7 +850,7 @@ pre{
   .nav{margin-left:auto;gap:2px}
   .main{padding:32px 0 80px}
   .cover{padding:48px 0 40px;margin-bottom:40px}
-  .cover h1{font-size:2.4em;letter-spacing:-.8px}
+  .cover .cover-title{font-size:2.4em;letter-spacing:-.8px}
   .cover .sub{font-size:1.05em;margin-bottom:24px}
   .cover-stats{gap:10px;margin-bottom:28px}
   .stat{min-width:76px;padding:10px 14px}
@@ -901,7 +906,7 @@ pre{
   h1,h2,h3,h4{break-after:avoid;page-break-after:avoid}
 
   .cover{padding:0 0 18px;margin-bottom:18px;text-align:left}
-  .cover h1{font-size:24pt}
+  .cover .cover-title{font-size:24pt}
   .cover-stats,.cover-badge,.cta-row{display:none !important}
 
   a[href^="http"]:after{
@@ -1256,16 +1261,14 @@ html.focus-mode .chapbar{opacity:.35;pointer-events:none}
 }
 /* 章首横幅：h1 上方加一条"章号 + 主色渐变"的装饰带，
    让每页开头有一个明确的"进入新章"仪式感（原来 h1 直接浮在正文里）。
-   ⚠️ 必须排除 .cover —— 封面 h1 自己已有顶部留白与居中布局，
-   加上横幅会与下方分隔线叠成双线（首页曾出现两条横线紧挨）。 */
-.main h1:not(.cover h1)::before{
+   （封面主标题已改成 <div class="cover-title">，不再匹配 .main h1，无需再排除。） */
+.main h1::before{
   content:'';display:block;
   width:100%;height:4px;
   background:linear-gradient(90deg,var(--accent) 0%,var(--accent-3) 42%,transparent 88%);
   border-radius:2px;
   margin-bottom:.62em;
 }
-.cover h1::before{content:none}
 .main h1::after{
   content:'';display:block;
   width:56px;height:3px;
@@ -2087,6 +2090,185 @@ html{scroll-padding-top:80px}
   .exam-stem,.exam-opts li{font-size:9.5pt}
   .exam-exp{font-size:8.5pt;color:#333}
 }
+
+/* ══════════════════════════════════════════════════════════════
+   真题区块扩展 v2 · 案例 / 论文卡片 + 全真模拟卷
+   与既有 .exam-* 体系同源：米白卡底 + 左侧 4px 色条 + 墨绿强调色
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── 案例 / 论文卡片（非 <details>，直接展开的题卡）── */
+.exam-q-case,.exam-q-essay{
+  padding:14px 16px 4px;
+  background:var(--bg-card);
+}
+.exam-q-case:hover,.exam-q-essay:hover{background:var(--bg-alt)}
+.case-head{
+  display:flex;flex-wrap:wrap;align-items:center;gap:6px;
+  padding-bottom:10px;margin-bottom:10px;
+  border-bottom:1px dashed var(--line);
+}
+.case-head .exam-no{min-width:0}
+.case-h{
+  display:flex;align-items:center;gap:6px;
+  margin:12px 0 6px;font-size:12.5px;font-weight:700;
+  letter-spacing:.06em;color:var(--accent);
+}
+.case-h::before{
+  content:'';width:4px;height:13px;border-radius:2px;
+  background:var(--accent);flex:0 0 auto;
+}
+
+/* 情景要素（📅时间 / 📍地点 / 👤人物 / ⚡冲突 / 难度总分用时） */
+.case-meta{
+  display:flex;flex-direction:column;gap:2px;
+  padding:9px 12px;margin:.4em 0 .2em;
+  background:var(--bg-alt);
+  border-left:3px solid var(--line-2);
+  border-radius:0 var(--radius-sm) var(--radius-sm) 0;
+  font-size:12.5px;line-height:1.75;color:var(--fg-3);
+}
+.case-meta strong{color:var(--fg-2);font-weight:600}
+
+/* 案例背景正文 */
+.case-scene{
+  margin:.2em 0 1em;padding:12px 14px;
+  background:var(--accent-soft);
+  border-left:3px solid var(--accent-3);
+  border-radius:0 var(--radius) var(--radius) 0;
+  font-size:14.5px;line-height:1.92;color:var(--fg);
+}
+.case-scene strong{color:var(--accent);font-weight:700}
+
+/* 题目列表 */
+.case-asks{margin:.2em 0 1em}
+ul.exam-questions{
+  list-style:none;margin:.4em 0;padding:0;
+}
+ul.exam-questions>li{
+  display:flex;gap:10px;align-items:flex-start;
+  padding:9px 0;border-bottom:1px solid var(--line);
+  font-size:14.5px;line-height:1.88;color:var(--fg);
+}
+ul.exam-questions>li:last-child{border-bottom:0}
+ul.exam-questions>li::before{content:none !important}
+.case-ask-no{
+  flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;
+  min-width:24px;height:22px;margin-top:3px;padding:0 6px;
+  border-radius:6px;background:var(--accent-soft-2);color:var(--accent);
+  font-family:var(--sans);font-size:11.5px;font-weight:700;
+  font-variant-numeric:tabular-nums;
+}
+.case-ask-t{flex:1;min-width:0}
+.case-ask-t strong{color:var(--accent);font-weight:700}
+
+/* ── 答案 / 解析 / 考点拆解 / 教材知识点 ── */
+.exam-points,.exam-keypoints,.exam-exp-more,.essay-bg{
+  padding:12px 14px;margin:8px 0;
+  border-left:4px solid var(--tip-line);
+  border-radius:0 var(--radius) var(--radius) 0;
+  background:var(--tip-bg);
+  font-size:14px;line-height:1.92;color:var(--fg);
+}
+.exam-keypoints{border-left-color:var(--accent-2);background:var(--accent-soft)}
+.exam-exp-more{border-left-color:var(--warn-line);background:var(--warn-bg);color:var(--warn-fg)}
+.essay-bg{border-left-color:var(--line-2);background:var(--bg-alt);color:var(--fg-2)}
+.exam-points strong,.exam-keypoints strong{color:var(--accent);font-weight:700}
+
+/* 教材知识点：章标签 + 可点学时胶囊 */
+.exam-textbook{
+  display:flex;flex-wrap:wrap;align-items:center;gap:6px;
+  padding:12px 14px;margin:8px 0;
+  background:var(--mem-bg);
+  border-left:4px solid var(--mem-line);
+  border-radius:0 var(--radius) var(--radius) 0;
+}
+.tb-chap{
+  font-family:var(--serif);font-size:14px;font-weight:700;color:var(--mem-fg);
+}
+.tb-hour{
+  display:inline-flex;align-items:center;
+  padding:2px 9px;border-radius:999px;
+  background:var(--bg-card);border:1px solid var(--mem-line);
+  color:var(--mem-fg) !important;font-size:12px;font-weight:600;
+  text-decoration:none;
+}
+.tb-hour:hover{background:var(--mem-line);color:var(--bg-card) !important;border-color:var(--mem-fg)}
+
+/* 模拟卷成绩/批次等小标签 */
+.exam-lv{
+  font-family:var(--sans);font-size:11.5px;color:var(--gold);
+  letter-spacing:.04em;white-space:nowrap;
+}
+.exam-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.exam-tag-en{
+  background:var(--mem-bg);color:var(--mem-fg);border-color:var(--mem-line);
+}
+.essay-batch{
+  font-family:var(--sans);font-size:11.5px;color:var(--fg-3);
+  padding:1px 8px;border:1px solid var(--line);border-radius:999px;
+}
+.exam-kp{
+  margin:.5em 0 0;font-family:var(--sans);font-size:12.5px;color:var(--fg-3);
+}
+.exam-kp::before{content:'🎯 ';font-size:11px}
+
+/* ── 全真模拟卷头部 ── */
+.mock-head{
+  padding:16px 18px;margin:0 0 12px;
+  border-radius:var(--radius-lg);
+  background:linear-gradient(135deg,var(--accent) 0%,var(--accent-2) 100%);
+  color:var(--fg-inv);
+  box-shadow:var(--shadow-2);
+}
+.mock-title{
+  font-family:var(--serif);font-size:17px;font-weight:700;
+  letter-spacing:.02em;line-height:1.5;
+}
+.mock-sub{
+  margin-top:6px;font-size:12.5px;line-height:1.75;
+  color:rgba(251,250,246,.82);
+}
+.mock-sub b{color:#fff;font-variant-numeric:tabular-nums}
+.mock-items{
+  border:1px solid var(--line);border-radius:var(--radius);
+  background:var(--bg-card);overflow:hidden;
+}
+.mock-items>.exam-q:first-child{border-top:0}
+.exam-mock .exam-subject{margin-top:14px}
+.exam-subj-only{display:block}
+
+/* 模拟卷内的综合知识答题条 */
+.exam-mock .exam-bar{
+  border-radius:var(--radius) var(--radius) 0 0;
+  border-bottom:0;
+}
+
+/* ── 窄屏 ── */
+@media(max-width:760px){
+  .exam-q-case,.exam-q-essay{padding:12px 12px 4px}
+  .case-scene,.exam-points,.exam-keypoints,.exam-exp-more,.essay-bg,.exam-textbook{
+    padding:10px 11px;font-size:13.5px;
+  }
+  ul.exam-questions>li{gap:8px;font-size:13.5px}
+  .mock-head{padding:13px 14px}
+  .mock-title{font-size:15.5px}
+}
+
+/* ── 打印：卡片不要再折叠，色条与底色转灰阶 ── */
+@media print{
+  .mock-head{background:none !important;color:#000 !important;border:1pt solid #999;
+    box-shadow:none}
+  .mock-title{font-size:13pt}
+  .mock-sub{color:#333 !important}
+  .exam-q-case,.exam-q-essay{break-inside:avoid;page-break-inside:avoid}
+  .case-scene,.exam-points,.exam-keypoints,.exam-exp-more,.essay-bg,.exam-textbook{
+    background:none !important;border-left:2pt solid #999 !important;
+  }
+  .exam-q-case,.exam-q-essay,.case-scene,.case-meta,ul.exam-questions>li{
+    font-size:9.5pt;
+  }
+  .tb-hour{color:#000 !important;border-color:#666}
+}
 </style>
 </head>
 <body>
@@ -2424,7 +2606,7 @@ DNS协议的功能是<b class="exam-blank">（66）</b>。
 | 控制耦合 | 一个模块调用另一个模块时，传递的是控制变量，被调用模块通过该控制变量的值有选择的执行模块内的某一功能 | 控制变量、选择执行某一功能 |
 | 外部耦合 | 模块间通过软件之外的环境联合（如I/O将模块耦合到特定的设备、格式、通信协议上）时。 | 软件外部环境 |
 | 公共耦合 | 通过一个公共数据环境相互作用的那些模块间的耦合 | 公共数据结构 |
-| 内容耦合 | 当一个模块直接使用另一个模块的内部数据，或通过非正常入口转入另一个模块内部时。 | 模块内部关联 |</p><ul class="exam-opts"><li><b>A</b> 内容耦合</li><li><b>B</b> 标记耦合</li><li><b>C</b> 数据耦合</li><li><b>D</b> 控制耦合</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">内容耦合是耦合程度极高的类型，典型表现就是模块可以直接读写其他模块的内部数据，违背了信息隐藏的设计原则。</p></details></div></details><details class="exam-q" data-exam-id="2019年5月-027"><summary><span class="exam-no">第 27 题</span><span class="exam-stem-peek">结构化设计(Structured Design，SD)是一种面向（）的方法</span></summary><div class="exam-q-body"><p class="exam-stem">结构化设计(Structured Design，SD)是一种面向（）的方法</p><ul class="exam-opts"><li><b>A</b> 数据流</li><li><b>B</b> 对象</li><li><b>C</b> 模块</li><li><b>D</b> 构件</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">结构化设计SD是典型的面向数据流的自顶向下设计方法，和面向对象设计有明确区分。</p></details></div></details><details class="exam-q" data-exam-id="2019年5月-003"><summary><span class="exam-no">第 3 题</span><span class="exam-stem-peek">在线学习系统中，课程学习和课程考试都需要先检查学员的权限，“课程学习”与“检查权限”两个用例之间属于（）。</span></summary><div class="exam-q-body"><p class="exam-stem">在线学习系统中，课程学习和课程考试都需要先检查学员的权限，“课程学习”与“检查权限”两个用例之间属于（）。</p><ul class="exam-opts"><li><b>A</b> 包含关系</li><li><b>B</b> 扩展关系</li><li><b>C</b> 泛化关系</li><li><b>D</b> 关联关系</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">包含关系的特征是基础用例执行过程中必定会调用被包含的公共用例，课程学习流程必须前置执行权限检查，符合包含关系的定义。</p></details></div></details></details></details><details class="exam-subject" data-exam-subject="案例"><summary><span class="exam-subject-name">📋 案例分析</span><span class="exam-subject-n">1 题</span><span class="exam-subject-tip">情景简答 · 采分点三色标记</span></summary><div class="exam-bar"><span class="exam-bar-label">📋 案例分析</span><span class="exam-bar-stat">共 <b>1</b> 题 · 情景简答</span></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">30</span>考点：CMM/CMMI / 软件过程评估 / UML 视图与图 / 形式化方法<br>📅 时间：2025-09-25 上午 📍 地点：项目组质量例会<br>👤 人物：甘工（乙方·系统分析师）、丁工（乙方·测试负责人）、彭工（乙方·架构设计师）、徐总监（甲方·数智化信息部总监）<br>⚡ 冲突：项目质量波动大，公司要推过程改进，同时要求统一建模规范<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：徐总监来旁听质量会，开门见山：&quot;你们公司有的项目交付顺利，有的延期还一堆缺陷。有没有成熟的流程？能不能评估一下？&quot; 丁工把缺陷趋势图调出来：&quot;缺陷集中在接口变更和配置文件这两块，靠个人小心是防不住的。&quot; 彭工补充：&quot;建模也乱，有人画时序图，有人画流程图，评审时对不上。&quot; 甘工心里有数：这已经是过程问题，得从 CMMI 的视角做过程定义，同时把 UML 的视图与图形规范统一起来。<br>问题 1：（1）说明 CMM/CMMI 的成熟度等级与关键过程域思想；<br>问题 2：（2）说明软件过程评估的目的与常用方法；<br>问题 3：（3）说明 UML 的五种视图与主要图形，并指出本平台各阶段应使用哪些图；<br>问题 4：（4）简述形式化方法的特点与适用场合。</p><ul class="exam-questions"><li><b>问题 1</b> （1）说明 <strong>CMM/CMMI</strong> 的成熟度等级与关键过程域思想；</li><li><b>问题 2</b> （2）说明<strong>软件过程评估</strong>的目的与常用方法；</li><li><b>问题 3</b> （3）说明 <strong>UML</strong> 的五种视图与主要图形，并指出本平台各阶段应使用哪些图；</li><li><b>问题 4</b> （4）简述形式化方法的特点与适用场合。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）CMM/CMMI）：<br>- 🟢 加分：解析·过程改进题要&quot;五级 + KPA 思想 + 评估方法&quot;；UML 题要给&quot;五视图 + 各阶段用图&quot;。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🔴 核心（2）过程评估）：目的是识别组织过程的强项与弱项、确定成熟度/能力等级、为过程改进提供依据。常用方法：CMMI 评估（SCAMPI）、ISO/IEC 15504（SPICE）、BOOTSTRAP、6σ/精益等；步骤一般为：确定范围与目标 → 培训与准备 → 数据采集（访谈/问卷/文档审查）→ 分析与评级 → 报告与改进建议。<br>问题 3｜参考答案要点：<br>- 🔴 核心：🔴 核心（3）UML 五视图）：<br>问题 4｜参考答案要点：<br>- 🔴 核心：🔴 核心（4）形式化方法）：基于严格的数学逻辑（如谓词逻辑、集合论、状态机、代数规格）对系统进行规格说明、建模与验证，能证明系统满足某些性质，显著提高可靠性。优点：精确无二义性、可验证、能发现早期缺陷；缺点：学习成本高、建模耗时长、难以被普通工程师掌握、对大型系统不经济。适用于安全关键、高可靠领域（航空航天、轨道交通、核电、嵌入式控制、安全协议验证）。</div></details></div></details><details class="exam-subject" data-exam-subject="论文"><summary><span class="exam-subject-name">📄 论文写作</span><span class="exam-subject-n">5 题</span><span class="exam-subject-tip">论述题 · 先写再看题</span></summary><div class="exam-bar"><span class="exam-bar-label">📄 论文写作</span><span class="exam-bar-stat">共 <b>5</b> 题 · 论述题</span></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与管理和开发的软件项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 简要描述面向对象系统分析的主要步骤。</li><li><b>问题 3</b> 具体阐述项目中如何基于该方法开展信息系统分析。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 综合</span><span class="exam-lv">⭐⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 简要叙述你参与的软件开发项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 列举典型的软件开发模型，论述各模型的核心思想与技术特点。</li><li><b>问题 3</b> 结合项目实际，说明模型的选用与实施效果。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 开发方法</span><span class="exam-lv">⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与实施敏捷开发的软件项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 叙述项目采用的敏捷原则，并说明选用该原则的理由。</li><li><b>问题 3</b> 说明项目中敏捷方法的实施过程、遇到的问题以及解决办法。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 开发方法</span><span class="exam-lv">⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与开发、集成的信息系统项目（项目的背景、集成需求、技术栈、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细论述 Web 服务的核心协议（SOAP/WSDL/UDDI）、Web 服务的设计原则、基于 Web 服务的应用集成架构设计要点。</li><li><b>问题 3</b> 结合项目实践，论述 Web 服务在项目中的具体实现方式、性能优化方法，分析应用过程中遇到的问题及解决措施。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 综合</span><span class="exam-lv">⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与管理和开发的软件项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细描述基于模型开发方法、低代码自动化平台的基本概念，分别分析二者的优点与缺点。</li><li><b>问题 3</b> 结合项目实际，论述基于模型开发方法和低代码自动化平台在项目中的具体应用。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 开发方法</span><span class="exam-lv">⭐⭐⭐</span></div></div></details></section>
+| 内容耦合 | 当一个模块直接使用另一个模块的内部数据，或通过非正常入口转入另一个模块内部时。 | 模块内部关联 |</p><ul class="exam-opts"><li><b>A</b> 内容耦合</li><li><b>B</b> 标记耦合</li><li><b>C</b> 数据耦合</li><li><b>D</b> 控制耦合</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">内容耦合是耦合程度极高的类型，典型表现就是模块可以直接读写其他模块的内部数据，违背了信息隐藏的设计原则。</p></details></div></details><details class="exam-q" data-exam-id="2019年5月-027"><summary><span class="exam-no">第 27 题</span><span class="exam-stem-peek">结构化设计(Structured Design，SD)是一种面向（）的方法</span></summary><div class="exam-q-body"><p class="exam-stem">结构化设计(Structured Design，SD)是一种面向（）的方法</p><ul class="exam-opts"><li><b>A</b> 数据流</li><li><b>B</b> 对象</li><li><b>C</b> 模块</li><li><b>D</b> 构件</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">结构化设计SD是典型的面向数据流的自顶向下设计方法，和面向对象设计有明确区分。</p></details></div></details><details class="exam-q" data-exam-id="2019年5月-003"><summary><span class="exam-no">第 3 题</span><span class="exam-stem-peek">在线学习系统中，课程学习和课程考试都需要先检查学员的权限，“课程学习”与“检查权限”两个用例之间属于（）。</span></summary><div class="exam-q-body"><p class="exam-stem">在线学习系统中，课程学习和课程考试都需要先检查学员的权限，“课程学习”与“检查权限”两个用例之间属于（）。</p><ul class="exam-opts"><li><b>A</b> 包含关系</li><li><b>B</b> 扩展关系</li><li><b>C</b> 泛化关系</li><li><b>D</b> 关联关系</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">包含关系的特征是基础用例执行过程中必定会调用被包含的公共用例，课程学习流程必须前置执行权限检查，符合包含关系的定义。</p></details></div></details></details></details><details class="exam-subject" data-exam-subject="案例"><summary><span class="exam-subject-name">📋 案例分析</span><span class="exam-subject-n">1 题</span><span class="exam-subject-tip">案例背景 · 题目 · 答案与解析</span></summary><div class="exam-bar"><span class="exam-bar-label">📋 案例分析</span><span class="exam-bar-stat">共 <b>1</b> 题 · 情景简答 · 采分点三色标记</span></div><div class="exam-q exam-q-case"><div class="case-head"><span class="exam-no">案例 30</span><span class="exam-tag">考点 · 过程改进与UML</span><span class="exam-lv">⭐⭐⭐</span></div><div class="case-meta"><span><strong>考点</strong>：CMM/CMMI / 软件过程评估 / UML 视图与图 / 形式化方法</span><span>📅 <strong>时间</strong>：2025-09-25 上午 📍 <strong>地点</strong>：项目组质量例会</span><span>👤 <strong>人物</strong>：甘工（乙方·系统分析师）、丁工（乙方·测试负责人）、彭工（乙方·架构设计师）、徐总监（甲方·数智化信息部总监）</span><span>⚡ <strong>冲突</strong>：项目质量波动大，公司要推过程改进，同时要求统一建模规范</span><span><strong>难度</strong>：★★★　<strong>总分</strong>：25 分　<strong>建议用时</strong>：25 分钟</span></div><div class="case-scene"><div class="case-h">案例背景</div><strong>背景</strong>：徐总监来旁听质量会，开门见山：&quot;你们公司有的项目交付顺利，有的延期还一堆缺陷。有没有成熟的流程？能不能评估一下？&quot; 丁工把缺陷趋势图调出来：&quot;缺陷集中在接口变更和配置文件这两块，靠个人小心是防不住的。&quot; 彭工补充：&quot;建模也乱，有人画时序图，有人画流程图，评审时对不上。&quot; 甘工心里有数：这已经是<strong>过程问题</strong>，得从 CMMI 的视角做过程定义，同时把 UML 的视图与图形规范统一起来。</div><div class="case-asks"><div class="case-h">题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">（1）说明 <strong>CMM/CMMI</strong> 的成熟度等级与关键过程域思想；</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">（2）说明<strong>软件过程评估</strong>的目的与常用方法；</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">（3）说明 <strong>UML</strong> 的五种视图与主要图形，并指出本平台各阶段应使用哪些图；</span></li><li><span class="case-ask-no">4</span><span class="case-ask-t">（4）简述<strong>形式化方法</strong>的特点与适用场合。</span></li></ul></div><details class="exam-ans"><summary>参考答案要点（三色标记）</summary><div class="exam-points"><strong>问题 1｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（1）CMM/CMMI）：<br><strong>问题 2｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（2）过程评估）：目的是识别组织过程的强项与弱项、确定成熟度/能力等级、为过程改进提供依据。常用方法：CMMI 评估（SCAMPI）、ISO/IEC 15504（SPICE）、BOOTSTRAP、6σ/精益等；步骤一般为：确定范围与目标 → 培训与准备 → 数据采集（访谈/问卷/文档审查）→ 分析与评级 → 报告与改进建议。<br><strong>问题 3｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（3）UML 五视图）：<br><strong>问题 4｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（4）形式化方法）：基于严格的数学逻辑（如谓词逻辑、集合论、状态机、代数规格）对系统进行规格说明、建模与验证，能证明系统满足某些性质，显著提高可靠性。优点：精确无二义性、可验证、能发现早期缺陷；缺点：学习成本高、建模耗时长、难以被普通工程师掌握、对大型系统不经济。适用于安全关键、高可靠领域（航空航天、轨道交通、核电、嵌入式控制、安全协议验证）。</div></details><details class="exam-ans"><summary>解析与加分项</summary><div class="exam-exp-more">- 🟢 加分：解析·过程改进题要&quot;五级 + KPA 思想 + 评估方法&quot;；UML 题要给&quot;五视图 + 各阶段用图&quot;。</div></details></div></details><details class="exam-subject" data-exam-subject="论文"><summary><span class="exam-subject-name">📄 论文写作</span><span class="exam-subject-n">5 题</span><span class="exam-subject-tip">先看题 · 再看考点拆解</span></summary><div class="exam-bar"><span class="exam-bar-label">📄 论文写作</span><span class="exam-bar-stat">共 <b>5</b> 题 · 论述题 · 含考点拆解与教材知识点</span></div><div class="exam-q exam-q-essay"><div class="case-head"><span class="exam-no">论文 27</span><span class="exam-tag">方向 · 综合</span><span class="exam-lv">⭐⭐</span><span class="essay-batch">2021年上半年</span></div><div class="case-asks"><div class="case-h">论文题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">概要叙述你参与管理和开发的软件项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">简要描述面向对象系统分析的主要步骤。</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">具体阐述项目中如何基于该方法开展信息系统分析。</span></li></ul></div><details class="exam-ans" open><summary>试题背景</summary><div class="essay-bg">面向对象分析(OOAM)是完成业务调研后，依托面向对象思想拆解系统、梳理业务问题的分析方法。</div></details><details class="exam-ans"><summary>考点拆解（三色标记）</summary><div class="exam-keypoints"><strong>问题 1｜概要叙述项目与你承担的工作</strong>：<br>- 🔴 核心：点明近三年内一个具体的真实项目：项目名称、背景、发起单位、规模、周期、交付成果（教材 22.4-9/22.4-10 明确要求，泛泛而谈会判虚构）<br>- 🔴 核心：明确「我」在项目中的角色与承担的主要工作，并站在系统分析师视角论述，而非单纯开发实现视角<br>- 🟡 支撑：说明项目的组织结构、开发体制与技术栈，为后文论述做铺垫<br>- 🟢 加分：点出项目与本题主题的直接关联（如本项目正是因 XX 痛点才需要 XX 方法）<br><strong>问题 2｜理论知识 / 方法论述</strong>：<br>- 🔴 核心：简要描述面向对象系统分析的主要步骤——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🟢 加分：给出与其他候选方案的取舍依据，体现选型判断力<br><strong>问题 3｜项目实践落地与复盘</strong>：<br>- 🔴 核心：给出可量化的落地效果（缺陷率/响应时间/迭代周期/资源成本等具体数据），而非「取得了良好效果」<br>- 🔴 核心：诚实分析存在的 2~3 个真实问题，并给出对应的改进措施——教材强调这才是用心的内容<br>- 🟡 支撑：结合具体实例说明措施的实施过程（怎么做的，而非教科书式罗列）<br>- 🟢 加分：总结经验教训与后续演进方向，体现复盘能力<br>- 🟡 支撑：项目中如何基于该方法开展信息系统分析</div></details><details class="exam-ans"><summary>教材知识点</summary><div class="exam-textbook"><span class="tb-chap">第 7 章 · 软件工程</span><a class="tb-hour" href="H14.html">H14</a><a class="tb-hour" href="H15.html">H15</a><a class="tb-hour" href="H16.html">H16</a></div></details></div><div class="exam-q exam-q-essay"><div class="case-head"><span class="exam-no">论文 48</span><span class="exam-tag">方向 · 开发方法</span><span class="exam-lv">⭐</span><span class="essay-batch">2016年上半年</span></div><div class="case-asks"><div class="case-h">论文题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">简要叙述你参与的软件开发项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">列举典型的软件开发模型，论述各模型的核心思想与技术特点。</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">结合项目实际，说明模型的选用与实施效果。</span></li></ul></div><details class="exam-ans" open><summary>试题背景</summary><div class="essay-bg">软件开发模型是定义开发过程、活动、任务的结构框架，业内存在多种经典开发模型。</div></details><details class="exam-ans"><summary>考点拆解（三色标记）</summary><div class="exam-keypoints"><strong>问题 1｜概要叙述项目与你承担的工作</strong>：<br>- 🔴 核心：点明近三年内一个具体的真实项目：项目名称、背景、发起单位、规模、周期、交付成果（教材 22.4-9/22.4-10 明确要求，泛泛而谈会判虚构）<br>- 🔴 核心：明确「我」在项目中的角色与承担的主要工作，并站在系统分析师视角论述，而非单纯开发实现视角<br>- 🟡 支撑：说明项目的组织结构、开发体制与技术栈，为后文论述做铺垫<br>- 🟢 加分：点出项目与本题主题的直接关联（如本项目正是因 XX 痛点才需要 XX 方法）<br><strong>问题 2｜理论知识 / 方法论述</strong>：<br>- 🔴 核心：列举典型的软件开发模型——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：列举典型的论述各模型的核心思想与技术特点——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🟢 加分：给出与其他候选方案的取舍依据，体现选型判断力<br><strong>问题 3｜项目实践落地与复盘</strong>：<br>- 🔴 核心：给出可量化的落地效果（缺陷率/响应时间/迭代周期/资源成本等具体数据），而非「取得了良好效果」<br>- 🔴 核心：诚实分析存在的 2~3 个真实问题，并给出对应的改进措施——教材强调这才是用心的内容<br>- 🟡 支撑：结合具体实例说明措施的实施过程（怎么做的，而非教科书式罗列）<br>- 🟢 加分：总结经验教训与后续演进方向，体现复盘能力</div></details><details class="exam-ans"><summary>教材知识点</summary><div class="exam-textbook"><span class="tb-chap">第 7 章 · 软件工程</span><a class="tb-hour" href="H14.html">H14</a><a class="tb-hour" href="H15.html">H15</a><a class="tb-hour" href="H16.html">H16</a></div></details></div><div class="exam-q exam-q-essay"><div class="case-head"><span class="exam-no">论文 69</span><span class="exam-tag">方向 · 开发方法</span><span class="exam-lv">⭐</span><span class="essay-batch">2012年上半年</span></div><div class="case-asks"><div class="case-h">论文题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">概要叙述你参与实施敏捷开发的软件项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">叙述项目采用的敏捷原则，并说明选用该原则的理由。</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">说明项目中敏捷方法的实施过程、遇到的问题以及解决办法。</span></li></ul></div><details class="exam-ans" open><summary>试题背景</summary><div class="essay-bg">敏捷开发强调团队协作、高效沟通、频繁交付，能够快速适配需求变更，采用迭代模式开展开发。</div></details><details class="exam-ans"><summary>考点拆解（三色标记）</summary><div class="exam-keypoints"><strong>问题 1｜概要叙述项目与你承担的工作</strong>：<br>- 🔴 核心：点明近三年内一个具体的真实项目：项目名称、背景、发起单位、规模、周期、交付成果（教材 22.4-9/22.4-10 明确要求，泛泛而谈会判虚构）<br>- 🔴 核心：明确「我」在项目中的角色与承担的主要工作，并站在系统分析师视角论述，而非单纯开发实现视角<br>- 🟡 支撑：说明项目的组织结构、开发体制与技术栈，为后文论述做铺垫<br>- 🟢 加分：点出项目与本题主题的直接关联（如本项目正是因 XX 痛点才需要 XX 方法）<br><strong>问题 2｜理论知识 / 方法论述</strong>：<br>- 🔴 核心：项目采用的敏捷原则——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：项目采用的并说明选用该原则的理由——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🟢 加分：给出与其他候选方案的取舍依据，体现选型判断力<br><strong>问题 3｜项目实践落地与复盘</strong>：<br>- 🔴 核心：给出可量化的落地效果（缺陷率/响应时间/迭代周期/资源成本等具体数据），而非「取得了良好效果」<br>- 🔴 核心：诚实分析存在的 2~3 个真实问题，并给出对应的改进措施——教材强调这才是用心的内容<br>- 🟡 支撑：结合具体实例说明措施的实施过程（怎么做的，而非教科书式罗列）<br>- 🟢 加分：总结经验教训与后续演进方向，体现复盘能力<br>- 🟡 支撑：项目中敏捷方法的实施过程<br>- 🟡 支撑：项目中敏捷方法的遇到的问题以及解决办法</div></details><details class="exam-ans"><summary>教材知识点</summary><div class="exam-textbook"><span class="tb-chap">第 7 章 · 软件工程</span><a class="tb-hour" href="H14.html">H14</a><a class="tb-hour" href="H15.html">H15</a><a class="tb-hour" href="H16.html">H16</a></div></details></div><div class="exam-q exam-q-essay"><div class="case-head"><span class="exam-no">论文 89</span><span class="exam-tag">方向 · 综合</span><span class="exam-lv">⭐</span><span class="essay-batch">2013年下半年（11月）</span></div><div class="case-asks"><div class="case-h">论文题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">概要叙述你参与开发、集成的信息系统项目（项目的背景、集成需求、技术栈、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">详细论述 Web 服务的核心协议（SOAP/WSDL/UDDI）、Web 服务的设计原则、基于 Web 服务的应用集成架构设计要点。</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">结合项目实践，论述 Web 服务在项目中的具体实现方式、性能优化方法，分析应用过程中遇到的问题及解决措施。</span></li></ul></div><details class="exam-ans" open><summary>试题背景</summary><div class="essay-bg">Web 服务依托 SOAP、WSDL、UDDI 等标准实现跨平台、跨语言的服务调用，是企业应用集成的核心技术之一。</div></details><details class="exam-ans"><summary>考点拆解（三色标记）</summary><div class="exam-keypoints"><strong>问题 1｜概要叙述项目与你承担的工作</strong>：<br>- 🔴 核心：点明近三年内一个具体的真实项目：项目名称、背景、发起单位、规模、周期、交付成果（教材 22.4-9/22.4-10 明确要求，泛泛而谈会判虚构）<br>- 🔴 核心：明确「我」在项目中的角色与承担的主要工作，并站在系统分析师视角论述，而非单纯开发实现视角<br>- 🟡 支撑：说明项目的组织结构、开发体制与技术栈，为后文论述做铺垫<br>- 🟢 加分：点出项目与本题主题的直接关联（如本项目正是因 XX 痛点才需要 XX 方法）<br><strong>问题 2｜理论知识 / 方法论述</strong>：<br>- 🔴 核心：Web 服务的核心协议SOAP/WSDL/UDDI——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：Web 服务的Web 服务的设计原则——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：Web 服务的基于 Web 服务的应用集成架构设计要点——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🟢 加分：给出与其他候选方案的取舍依据，体现选型判断力<br><strong>问题 3｜项目实践落地与复盘</strong>：<br>- 🔴 核心：给出可量化的落地效果（缺陷率/响应时间/迭代周期/资源成本等具体数据），而非「取得了良好效果」<br>- 🔴 核心：诚实分析存在的 2~3 个真实问题，并给出对应的改进措施——教材强调这才是用心的内容<br>- 🟡 支撑：结合具体实例说明措施的实施过程（怎么做的，而非教科书式罗列）<br>- 🟢 加分：总结经验教训与后续演进方向，体现复盘能力<br>- 🟡 支撑：论述 Web 服务在项目中的具体实现方式<br>- 🟡 支撑：论述 Web 服务在项目中的性能优化方法</div></details><details class="exam-ans"><summary>教材知识点</summary><div class="exam-textbook"><span class="tb-chap">第 7 章 · 软件工程</span><a class="tb-hour" href="H14.html">H14</a><a class="tb-hour" href="H15.html">H15</a><a class="tb-hour" href="H16.html">H16</a></div></details></div><div class="exam-q exam-q-essay"><div class="case-head"><span class="exam-no">论文 15</span><span class="exam-tag">方向 · 开发方法</span><span class="exam-lv">⭐⭐⭐</span><span class="essay-batch">2025年上半年（5月）</span></div><div class="case-asks"><div class="case-h">论文题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">概要叙述你参与管理和开发的软件项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">详细描述基于模型开发方法、低代码自动化平台的基本概念，分别分析二者的优点与缺点。</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">结合项目实际，论述基于模型开发方法和低代码自动化平台在项目中的具体应用。</span></li></ul></div><details class="exam-ans" open><summary>试题背景</summary><div class="essay-bg">基于模型开发、低代码自动化平台是现阶段两种主流的信息系统开发模式，二者各有特点与适用场景。</div></details><details class="exam-ans"><summary>考点拆解（三色标记）</summary><div class="exam-keypoints"><strong>问题 1｜概要叙述项目与你承担的工作</strong>：<br>- 🔴 核心：点明近三年内一个具体的真实项目：项目名称、背景、发起单位、规模、周期、交付成果（教材 22.4-9/22.4-10 明确要求，泛泛而谈会判虚构）<br>- 🔴 核心：明确「我」在项目中的角色与承担的主要工作，并站在系统分析师视角论述，而非单纯开发实现视角<br>- 🟡 支撑：说明项目的组织结构、开发体制与技术栈，为后文论述做铺垫<br>- 🟢 加分：点出项目与本题主题的直接关联（如本项目正是因 XX 痛点才需要 XX 方法）<br><strong>问题 2｜理论知识 / 方法论述</strong>：<br>- 🔴 核心：详细描述基于模型开发方法——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：低代码自动化平台的基本概念——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：分别分析二者的优点与缺点——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🟢 加分：给出与其他候选方案的取舍依据，体现选型判断力<br><strong>问题 3｜项目实践落地与复盘</strong>：<br>- 🔴 核心：给出可量化的落地效果（缺陷率/响应时间/迭代周期/资源成本等具体数据），而非「取得了良好效果」<br>- 🔴 核心：诚实分析存在的 2~3 个真实问题，并给出对应的改进措施——教材强调这才是用心的内容<br>- 🟡 支撑：结合具体实例说明措施的实施过程（怎么做的，而非教科书式罗列）<br>- 🟢 加分：总结经验教训与后续演进方向，体现复盘能力<br>- 🟡 支撑：论述基于模型开发方法和低代码自动化平台在项目中的具体应用</div></details><details class="exam-ans"><summary>教材知识点</summary><div class="exam-textbook"><span class="tb-chap">第 7 章 · 软件工程</span><a class="tb-hour" href="H14.html">H14</a><a class="tb-hour" href="H15.html">H15</a><a class="tb-hour" href="H16.html">H16</a></div></details></div></details></section>
     <div class="wrongbook"></div>
     <div class="keyhint">
   <span class="keyhint-title">键盘快捷键</span>
@@ -3307,7 +3489,9 @@ DNS协议的功能是<b class="exam-blank">（66）</b>。
     init() {
       const root = document.querySelector('.exam')
       if (!root) return
-      const chapter = root.dataset.examChapter || 'x'
+      // ⚠️ 专项页 / 全真模拟页没有 data-exam-chapter（无教材章），
+      //    旧写法一律退化成 'x' → H42~H48 共用同一个记忆键、互相串状态。
+      const chapter = root.dataset.examChapter || root.dataset.examHour || 'x'
 
       // 恢复上次展开状态：{ "H07": { "2025年5月": true, ... } }
       const saved = store.get(this.KEY, {}) || {}
@@ -3327,6 +3511,7 @@ DNS协议的功能是<b class="exam-blank">（66）</b>。
       const seen = store.get('examSeen', {}) || {}
       root.querySelectorAll('.exam-q').forEach(qd => {
         const qid = qd.dataset.examId
+        if (!qid) return
         if (seen[qid]) {
           const a = qd.querySelector('.exam-ans')
           if (a) a.open = true
@@ -3342,12 +3527,17 @@ DNS协议的功能是<b class="exam-blank">（66）</b>。
         btn.addEventListener('click', e => {
           e.preventDefault()
           const openAll = btn.dataset.examAll === '1'
-          root.querySelectorAll('.exam-subject,.exam-year').forEach(d => { d.open = openAll })
-          root.querySelectorAll('.exam-ans').forEach(d => {
-            d.open = openAll
-            if (openAll && d.parentElement.dataset.examId) seen[d.parentElement.dataset.examId] = 1
-          })
-          if (openAll) store.set('examSeen', seen)
+          // ⚠️ 必须把 .exam-q 也列进来：只开 .exam-subject/.exam-year/.exam-ans
+          //    时，单题仍折叠 → 答案藏在关闭的单题内，"全部展开"名不副实。
+          root.querySelectorAll('.exam-subject,.exam-year,.exam-q,.exam-ans')
+            .forEach(d => { d.open = openAll })
+          if (openAll) {
+            // ⚠️ 旧的 `d.parentElement.dataset.examId` 取到的是 .exam-q-body（无 id），
+            //    会把 seen[undefined] 写进 localStorage。改为直接从 .exam-q 取。
+            root.querySelectorAll('.exam-q[data-exam-id]')
+              .forEach(qd => { seen[qd.dataset.examId] = 1 })
+            store.set('examSeen', seen)
+          }
           // 同步年份级记忆
           root.querySelectorAll('.exam-year').forEach(y => { mine[y.dataset.examYear] = y.open })
           saved[chapter] = mine
@@ -3394,7 +3584,7 @@ DNS协议的功能是<b class="exam-blank">（66）</b>。
   // ══════════════════════════════════════════
   // 8. mermaid 渲染（自定义墨绿主题，与正文同色系）
   // ══════════════════════════════════════════
-  // 站点配色（与 design.css 的令牌保持一致）
+  // 站点配色（与设计令牌保持一致 —— 改主题色时这里要同步）
   const MERMAID_LIGHT = {
     bg: '#f2f0e9', fg: '#1b211c', line: '#cdc9bd',
     accent: '#3d5a40', accent2: '#5a8a62', accent3: '#7ea888',

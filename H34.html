@@ -7,7 +7,7 @@
 <title>第 34 小时 · 系统运行与维护（二）· 系统转换与演进 · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
-<meta name="build-stamp" content="2026-10-05 11:44:51">
+<meta name="build-stamp" content="2026-10-05 15:47:03">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -405,16 +405,21 @@ img{max-width:100%;height:auto}
   border-radius:100px;
   font-size:12.5px;color:var(--accent);font-weight:600;
 }
-.cover h1{
+/* ⚠️ 封面主标题刻意用 <div> 而不是 <h1>：index.md 正文自带 `# 阿甘系分 · 48 小时
+   冲刺手册`，若封面也用 h1，一页会出现两个 h1（语义/SEO 上都是错的）。
+   视觉与 h1 完全一致 —— 字号、颜色、以及那道 72px 短横线都在下面显式声明。 */
+.cover .cover-title{
   font-size:3.5em;font-weight:800;letter-spacing:-1.6px;
   color:var(--accent);line-height:1.14;margin-bottom:16px;
 }
-/* ⚠️ 封面 h1 也继承 `.main h1::after` 那道 56px 短横线，但它是 display:block 的
-   固定宽块级元素 —— 文字居中不代表块级元素居中，会贴到左边。
-   修法：给封面这条短横线加 margin-left/right:auto 让它真正居中。 */
-.cover h1::after{
-  margin-left:auto;margin-right:auto;
+/* 复刻 `.main h1::after` 的短横线（<div> 不继承 h1 的伪元素），并水平居中 —— */
+/* 文字居中不代表块级元素居中，不加 auto 会贴到左边。 */
+.cover .cover-title::after{
+  content:'';display:block;
   width:72px;height:3px;
+  background:var(--accent);
+  margin:.5em auto 0;
+  border-radius:2px;
 }
 .cover .sub{
   font-size:1.2em;color:var(--fg-2);
@@ -845,7 +850,7 @@ pre{
   .nav{margin-left:auto;gap:2px}
   .main{padding:32px 0 80px}
   .cover{padding:48px 0 40px;margin-bottom:40px}
-  .cover h1{font-size:2.4em;letter-spacing:-.8px}
+  .cover .cover-title{font-size:2.4em;letter-spacing:-.8px}
   .cover .sub{font-size:1.05em;margin-bottom:24px}
   .cover-stats{gap:10px;margin-bottom:28px}
   .stat{min-width:76px;padding:10px 14px}
@@ -901,7 +906,7 @@ pre{
   h1,h2,h3,h4{break-after:avoid;page-break-after:avoid}
 
   .cover{padding:0 0 18px;margin-bottom:18px;text-align:left}
-  .cover h1{font-size:24pt}
+  .cover .cover-title{font-size:24pt}
   .cover-stats,.cover-badge,.cta-row{display:none !important}
 
   a[href^="http"]:after{
@@ -1256,16 +1261,14 @@ html.focus-mode .chapbar{opacity:.35;pointer-events:none}
 }
 /* 章首横幅：h1 上方加一条"章号 + 主色渐变"的装饰带，
    让每页开头有一个明确的"进入新章"仪式感（原来 h1 直接浮在正文里）。
-   ⚠️ 必须排除 .cover —— 封面 h1 自己已有顶部留白与居中布局，
-   加上横幅会与下方分隔线叠成双线（首页曾出现两条横线紧挨）。 */
-.main h1:not(.cover h1)::before{
+   （封面主标题已改成 <div class="cover-title">，不再匹配 .main h1，无需再排除。） */
+.main h1::before{
   content:'';display:block;
   width:100%;height:4px;
   background:linear-gradient(90deg,var(--accent) 0%,var(--accent-3) 42%,transparent 88%);
   border-radius:2px;
   margin-bottom:.62em;
 }
-.cover h1::before{content:none}
 .main h1::after{
   content:'';display:block;
   width:56px;height:3px;
@@ -2087,6 +2090,185 @@ html{scroll-padding-top:80px}
   .exam-stem,.exam-opts li{font-size:9.5pt}
   .exam-exp{font-size:8.5pt;color:#333}
 }
+
+/* ══════════════════════════════════════════════════════════════
+   真题区块扩展 v2 · 案例 / 论文卡片 + 全真模拟卷
+   与既有 .exam-* 体系同源：米白卡底 + 左侧 4px 色条 + 墨绿强调色
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── 案例 / 论文卡片（非 <details>，直接展开的题卡）── */
+.exam-q-case,.exam-q-essay{
+  padding:14px 16px 4px;
+  background:var(--bg-card);
+}
+.exam-q-case:hover,.exam-q-essay:hover{background:var(--bg-alt)}
+.case-head{
+  display:flex;flex-wrap:wrap;align-items:center;gap:6px;
+  padding-bottom:10px;margin-bottom:10px;
+  border-bottom:1px dashed var(--line);
+}
+.case-head .exam-no{min-width:0}
+.case-h{
+  display:flex;align-items:center;gap:6px;
+  margin:12px 0 6px;font-size:12.5px;font-weight:700;
+  letter-spacing:.06em;color:var(--accent);
+}
+.case-h::before{
+  content:'';width:4px;height:13px;border-radius:2px;
+  background:var(--accent);flex:0 0 auto;
+}
+
+/* 情景要素（📅时间 / 📍地点 / 👤人物 / ⚡冲突 / 难度总分用时） */
+.case-meta{
+  display:flex;flex-direction:column;gap:2px;
+  padding:9px 12px;margin:.4em 0 .2em;
+  background:var(--bg-alt);
+  border-left:3px solid var(--line-2);
+  border-radius:0 var(--radius-sm) var(--radius-sm) 0;
+  font-size:12.5px;line-height:1.75;color:var(--fg-3);
+}
+.case-meta strong{color:var(--fg-2);font-weight:600}
+
+/* 案例背景正文 */
+.case-scene{
+  margin:.2em 0 1em;padding:12px 14px;
+  background:var(--accent-soft);
+  border-left:3px solid var(--accent-3);
+  border-radius:0 var(--radius) var(--radius) 0;
+  font-size:14.5px;line-height:1.92;color:var(--fg);
+}
+.case-scene strong{color:var(--accent);font-weight:700}
+
+/* 题目列表 */
+.case-asks{margin:.2em 0 1em}
+ul.exam-questions{
+  list-style:none;margin:.4em 0;padding:0;
+}
+ul.exam-questions>li{
+  display:flex;gap:10px;align-items:flex-start;
+  padding:9px 0;border-bottom:1px solid var(--line);
+  font-size:14.5px;line-height:1.88;color:var(--fg);
+}
+ul.exam-questions>li:last-child{border-bottom:0}
+ul.exam-questions>li::before{content:none !important}
+.case-ask-no{
+  flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;
+  min-width:24px;height:22px;margin-top:3px;padding:0 6px;
+  border-radius:6px;background:var(--accent-soft-2);color:var(--accent);
+  font-family:var(--sans);font-size:11.5px;font-weight:700;
+  font-variant-numeric:tabular-nums;
+}
+.case-ask-t{flex:1;min-width:0}
+.case-ask-t strong{color:var(--accent);font-weight:700}
+
+/* ── 答案 / 解析 / 考点拆解 / 教材知识点 ── */
+.exam-points,.exam-keypoints,.exam-exp-more,.essay-bg{
+  padding:12px 14px;margin:8px 0;
+  border-left:4px solid var(--tip-line);
+  border-radius:0 var(--radius) var(--radius) 0;
+  background:var(--tip-bg);
+  font-size:14px;line-height:1.92;color:var(--fg);
+}
+.exam-keypoints{border-left-color:var(--accent-2);background:var(--accent-soft)}
+.exam-exp-more{border-left-color:var(--warn-line);background:var(--warn-bg);color:var(--warn-fg)}
+.essay-bg{border-left-color:var(--line-2);background:var(--bg-alt);color:var(--fg-2)}
+.exam-points strong,.exam-keypoints strong{color:var(--accent);font-weight:700}
+
+/* 教材知识点：章标签 + 可点学时胶囊 */
+.exam-textbook{
+  display:flex;flex-wrap:wrap;align-items:center;gap:6px;
+  padding:12px 14px;margin:8px 0;
+  background:var(--mem-bg);
+  border-left:4px solid var(--mem-line);
+  border-radius:0 var(--radius) var(--radius) 0;
+}
+.tb-chap{
+  font-family:var(--serif);font-size:14px;font-weight:700;color:var(--mem-fg);
+}
+.tb-hour{
+  display:inline-flex;align-items:center;
+  padding:2px 9px;border-radius:999px;
+  background:var(--bg-card);border:1px solid var(--mem-line);
+  color:var(--mem-fg) !important;font-size:12px;font-weight:600;
+  text-decoration:none;
+}
+.tb-hour:hover{background:var(--mem-line);color:var(--bg-card) !important;border-color:var(--mem-fg)}
+
+/* 模拟卷成绩/批次等小标签 */
+.exam-lv{
+  font-family:var(--sans);font-size:11.5px;color:var(--gold);
+  letter-spacing:.04em;white-space:nowrap;
+}
+.exam-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.exam-tag-en{
+  background:var(--mem-bg);color:var(--mem-fg);border-color:var(--mem-line);
+}
+.essay-batch{
+  font-family:var(--sans);font-size:11.5px;color:var(--fg-3);
+  padding:1px 8px;border:1px solid var(--line);border-radius:999px;
+}
+.exam-kp{
+  margin:.5em 0 0;font-family:var(--sans);font-size:12.5px;color:var(--fg-3);
+}
+.exam-kp::before{content:'🎯 ';font-size:11px}
+
+/* ── 全真模拟卷头部 ── */
+.mock-head{
+  padding:16px 18px;margin:0 0 12px;
+  border-radius:var(--radius-lg);
+  background:linear-gradient(135deg,var(--accent) 0%,var(--accent-2) 100%);
+  color:var(--fg-inv);
+  box-shadow:var(--shadow-2);
+}
+.mock-title{
+  font-family:var(--serif);font-size:17px;font-weight:700;
+  letter-spacing:.02em;line-height:1.5;
+}
+.mock-sub{
+  margin-top:6px;font-size:12.5px;line-height:1.75;
+  color:rgba(251,250,246,.82);
+}
+.mock-sub b{color:#fff;font-variant-numeric:tabular-nums}
+.mock-items{
+  border:1px solid var(--line);border-radius:var(--radius);
+  background:var(--bg-card);overflow:hidden;
+}
+.mock-items>.exam-q:first-child{border-top:0}
+.exam-mock .exam-subject{margin-top:14px}
+.exam-subj-only{display:block}
+
+/* 模拟卷内的综合知识答题条 */
+.exam-mock .exam-bar{
+  border-radius:var(--radius) var(--radius) 0 0;
+  border-bottom:0;
+}
+
+/* ── 窄屏 ── */
+@media(max-width:760px){
+  .exam-q-case,.exam-q-essay{padding:12px 12px 4px}
+  .case-scene,.exam-points,.exam-keypoints,.exam-exp-more,.essay-bg,.exam-textbook{
+    padding:10px 11px;font-size:13.5px;
+  }
+  ul.exam-questions>li{gap:8px;font-size:13.5px}
+  .mock-head{padding:13px 14px}
+  .mock-title{font-size:15.5px}
+}
+
+/* ── 打印：卡片不要再折叠，色条与底色转灰阶 ── */
+@media print{
+  .mock-head{background:none !important;color:#000 !important;border:1pt solid #999;
+    box-shadow:none}
+  .mock-title{font-size:13pt}
+  .mock-sub{color:#333 !important}
+  .exam-q-case,.exam-q-essay{break-inside:avoid;page-break-inside:avoid}
+  .case-scene,.exam-points,.exam-keypoints,.exam-exp-more,.essay-bg,.exam-textbook{
+    background:none !important;border-left:2pt solid #999 !important;
+  }
+  .exam-q-case,.exam-q-essay,.case-scene,.case-meta,ul.exam-questions>li{
+    font-size:9.5pt;
+  }
+  .tb-hour{color:#000 !important;border-color:#666}
+}
 </style>
 </head>
 <body>
@@ -2310,7 +2492,7 @@ html{scroll-padding-top:80px}
 </div>
     <section class="exam" id="exam" data-exam-chapter="15" data-exam-hour="H34"><div class="exam-bar"><span class="exam-bar-label">📚 历年真题</span><span class="exam-bar-stat">本章共 <b>4</b> 题 · 本学时 <b>2</b> 题（其余见同章其他学时）</span><span class="exam-bar-ops"><button type="button" class="exam-op" data-exam-all="1">全部展开</button><button type="button" class="exam-op" data-exam-all="0">全部收起</button></span></div><details class="exam-subject" data-exam-subject="综合知识"><summary><span class="exam-subject-name">📝 综合知识</span><span class="exam-subject-n">2 题</span><span class="exam-subject-tip">按年份展开 · 单题可点开看答案</span></summary><details class="exam-year" data-exam-year="2026年5月"><summary><span class="exam-year-name">2026年5月</span><span class="exam-year-n">1 题</span></summary><details class="exam-q" data-exam-id="2026年5月-045"><summary><span class="exam-no">第 45 题</span><span class="exam-stem-peek">缓存技术更适用于</span></summary><div class="exam-q-body"><p class="exam-stem">缓存技术更适用于</p><ul class="exam-opts"><li><b>A</b> 高频更新库存</li><li><b>B</b> 高频变化订单</li><li><b>C</b> 商品分类信息</li><li><b>D</b> 实时支付流水</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">缓存适合读多写少、更新频率低的数据，商品分类信息符合该特征。</p></details></div></details></details><details class="exam-year" data-exam-year="2023年5月"><summary><span class="exam-year-name">2023年5月</span><span class="exam-year-n">1 题</span></summary><details class="exam-q" data-exam-id="2023年5月-058"><summary><span class="exam-no">第 58 题</span><span class="exam-tag">两空单选</span><span class="exam-tag">2 空</span><span class="exam-stem-peek">59-60.计算机系统的( )描述了计算机系统能正常工作的时间，其指标可以是能够持续工作的时间长度，也可以是在一段时间内…</span></summary><div class="exam-q-body"><p class="exam-stem">59-60.计算机系统的( )描述了计算机系统能正常工作的时间，其指标可以是能够持续工作的时间长度，也可以是在一段时间内，能够正常工作的时间所占的百分比，计算机系统的( )，通常用吞吐率、响应时间和资源利用率等三类指标进行衡量。
 （空1）
-（空2）</p><ul class="exam-opts"><li><b>A</b> 可靠性</li><li><b>B</b> 性能</li><li><b>C</b> 易用性</li><li><b>D</b> 可测试性</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">B。解析：第一空符合可靠性的定义，衡量系统稳定不间断运行的能力；第二空性能的三大经典衡量指标就是吞吐率、响应时间、资源利用率。</p></details></div></details></details></details><details class="exam-subject" data-exam-subject="案例"><summary><span class="exam-subject-name">📋 案例分析</span><span class="exam-subject-n">2 题</span><span class="exam-subject-tip">情景简答 · 采分点三色标记</span></summary><div class="exam-bar"><span class="exam-bar-label">📋 案例分析</span><span class="exam-bar-stat">共 <b>2</b> 题 · 情景简答</span></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">69</span>考点：遗留系统评价（四象限）与演化策略 / 新旧系统转换策略 / 数据迁移 / 系统评价<br>📅 时间：2026-03-25 下午 📍 地点：系统切换方案评审<br>👤 人物：甘工（乙方·系统分析师）、徐总监（甲方·数智化信息部总监）、邓经理（甲方·运维经理）、老陶（甲方·班组长(十年老坐席)）<br>⚡ 冲突：新平台上线了老系统还在跑，运维要维护两套，老陶舍不得换<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：邓经理先倒苦水：&quot;两套系统并行，坐席一天登两个账号。我这边备份、账号、权限全要做两遍。&quot; 老陶接话：&quot;新系统那个工作台不顺手，老系统里十年的工单记录，新系统还查不全。&quot; 徐总监问甘工：&quot;老系统到底什么时候下？数据怎么办？&quot; 甘工清楚：这不是&quot;删掉就好&quot;，而是要先给老系统定位，再定切换策略和数据迁移方案。<br>补充资料：值低，技术老旧，但外部接口稳定）；③2018 年质检系统（价值中等，技术尚可，与新平台功能重叠）。集团要求：切换过程数据不丢失、业务不停摆、可平滑回退。<br>问题 1：（1）用遗留系统评价矩阵（技术水平 × 业务价值）对三套系统定位并给出演化策略；<br>问题 2：（2）说明新旧系统转换的三种策略及本项目选择；<br>问题 3：（3）说明数据迁移应遵循的原则与步骤；<br>问题 4：（4）说明系统评价的指标与方法。</p><ul class="exam-questions"><li><b>问题 1</b> （1）用<strong>遗留系统评价矩阵</strong>（技术水平 × 业务价值）对三套系统定位并给出演化策略；</li><li><b>问题 2</b> （2）说明<strong>新旧系统转换</strong>的三种策略及本项目选择；</li><li><b>问题 3</b> （3）说明<strong>数据迁移</strong>应遵循的原则与步骤；</li><li><b>问题 4</b> （4）说明系统评价的指标与方法。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）四象限与策略）：<br>- 🟢 加分：解析·遗留系统与转换是第15章最稳定考点。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🔴 核心（2）三种转换策略与选择）：<br>问题 3｜参考答案要点：<br>- 🔴 核心：🔴 核心（3）数据迁移原则与步骤）：原则——①数据不丢失（先全量备份并验证可恢复）；②一致性与完整性（主外键、约束、编码映射）；③先清洗后迁移（去重、标准化、补缺省）；④分批 + 校验对账；⑤保留回滚方案与迁移日志；⑥避开业务高峰，迁移后做业务验证；⑦信创替换还需做数据类型/字符集/时区映射与兼容性回归。<br>问题 4｜参考答案要点：<br>- 🔴 核心：🔴 核心（4）系统评价）：指标——①技术性能（可用度 99.94%、响应 800ms、吞吐、MTBF/MTTR）；②经济效益（投资回收期 3.1 年、NPV/IRR、运维成本占比、成本效益比）；③业务效益（自助解决率、AHT 下降、满意度提升、放弃率下降）；④社会与管理（合规达标、数据资产化、员工体验、决策效率）；⑤质量（缺陷密度、需求覆盖率、可维护性）。</div></details></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">71</span>📅 时间：2026-06-11 上午 10:30 📍 地点：运营值班群 + 应急复盘<br>👤 人物：邓经理（甲方·运维经理）、甘工（乙方·系统分析师）、洪经理（甲方·客服部经理）、李工（乙方·项目经理）、客户经理（第三方·电信公司）<br>⚡ 冲突：外呼任务实时接通率跌破阈值，若不停会持续占用线路并发，还可能触发运营商限流；但停任务会完不成当日指标<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：邓经理在群里喊：&quot;外呼任务接通率掉到 18% 了！还在往外呼，线路并发全占满，呼入都受影响。&quot; 洪经理第一反应是&quot;别停，今天的任务还差三千通&quot;；李工担心被运营商限流，一旦限流连呼入都会受影响。 甘工调出清单里的验收要求——&quot;任务告警与自动调控&quot;：设定实时接通阈值，低于阈值后能自动调整任务线路 / 降低呼叫并发 / 暂停任务并通知。 问题是：这套自动调控之前只当&quot;配置项&quot;做了，从没真正触发过——今天第一次实战，它就&quot;卡&quot;在了&quot;要不要自动停&quot;的判定上。<br>补充资料：黄色 → 接通率 &lt;25% → 降并发 30% → 运营群；橙色 → &lt;20% → 切换备用线路 + 降并发 50% → 运营 + 值班；红色 → &lt;15%，或连续 3 窗口不达标 → 暂停任务并释放并发 → 运营 + 值班 + 客户经理 防抖：连续 2 个窗口达标才动作/恢复；样本量 &lt;100 通不判定。恢复：连续 5 分钟达标后逐步放量。开关：自动调控策略可单独开关；人工可一键暂停/覆盖并留痕。<br>问题 1：（1）说明系统运行管理中&quot;网络资源管理&quot;与&quot;软件资源管理&quot;的内容，并分析本例的资源冲突；<br>问题 2：（2）设计任务告警与自动调控机制（阈值、动作、判定、通知、回恢复）；<br>问题 3：（3）说明故障管理中&quot;先止损后定位&quot;的原则在本例的应用；<br>问题 4：（4）说明事后应如何从维护管理角度根治。</p><ul class="exam-questions"><li><b>问题 1</b> （1）说明<strong>系统运行管理</strong>中&quot;网络资源管理&quot;与&quot;软件资源管理&quot;的内容，并分析本例的资源冲突；</li><li><b>问题 2</b> （2）设计<strong>任务告警与自动调控</strong>机制（阈值、动作、判定、通知、回恢复）；</li><li><b>问题 3</b> （3）说明<strong>故障管理</strong>中&quot;先止损后定位&quot;的原则在本例的应用；</li><li><b>问题 4</b> （4）说明事后应如何从维护管理角度根治。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）运行管理内容）：网络资源管理——拓扑与地址、带宽与流量、设备与链路监控、安全策略、容量规划与扩容；软件资源管理——软件资产台账（版本、部署、授权）、许可证与合规、补丁与升级、配置与变更、发布与回收。<br>- 🟢 加分：解析·自动调控题要&quot;阈值分级 + 动作 + 防抖恢复 + 资源隔离根治&quot;。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🟡 支撑（2）自动调控机制）：<br>问题 3｜参考答案要点：<br>- 🔴 核心：🟡 支撑（3）先止损后定位）：①止损——立即按红色阈值暂停外呼任务、释放并发，保障呼入主链路（业务优先级：呼入 &gt; 外呼）；②定位——分段排查：本方平台（并发配置、任务参数）→ 线路/运营商（是否被限流、中继状态）→ 号码池（是否被大量标记/拦截）→ 目标号码质量（空号率是否偏高）；用数据定位（各线路接通率对比、状态码分布）；③恢复——切换健康线路/号码池后小流量试探，确认回升再逐步放量；④记录——完整时间线。<br>问题 4｜参考答案要点：<br>- 🔴 核心：🟢 加分（4）根治措施）：①资源隔离——外呼与呼入使用独立并发池，互不抢占，并给呼入设保底并发；②优先级调度——呼入优先抢占，外呼可降可停；③号码池治理——监控外显号码的接通率与标记情况，自动轮换与下线低效号码；④任务参数校验——导入前校验号码质量（空号/停机预检），降低无效呼叫；⑤维护管理——把&quot;自动调控&quot;纳入定期演练（注入低接通场景验证动作生效），更新 Runbook；并把阈值、开关纳入配置中心 + 变更控制，避免误改。</div></details></div></details><details class="exam-subject" data-exam-subject="论文"><summary><span class="exam-subject-name">📄 论文写作</span><span class="exam-subject-n">7 题</span><span class="exam-subject-tip">论述题 · 先写再看题</span></summary><div class="exam-bar"><span class="exam-bar-label">📄 论文写作</span><span class="exam-bar-stat">共 <b>7</b> 题 · 论述题</span></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与管理和开发的软件项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细描述DevSecOps的主要阶段，以及各阶段的核心工作。</li><li><b>问题 3</b> 结合项目实际，说明DevSecOps的实施过程与应用效果。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 运维与安全</span><span class="exam-lv">⭐⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与管理实施的软件运维项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 任选三个智能运维成熟度级别，分别说明对应级别下系统在效率、质量、成本方面的特征。</li><li><b>问题 3</b> 结合项目实际，说明智能运维的实施过程、遇到的问题、解决办法以及最终效果。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 运维与安全</span><span class="exam-lv">⭐⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与管理开发的信息系统项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 列举两种系统容错技术，并分别解释其原理。</li><li><b>问题 3</b> 结合项目实际，说明可靠性相关技术的实施过程与效果。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 可靠性与容灾</span><span class="exam-lv">⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与维护的信息系统项目（项目的背景、系统规模、维护类型、组织结构、维护周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细论述各类软件维护的核心内容、维护过程的管理流程（问题提交、分析、修复、验证、发布）、维护过程中的风险控制要点。</li><li><b>问题 3</b> 结合项目实践，论述你在维护工作中解决的典型问题、提升维护效率的方法，总结软件维护的实施经验。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 运维与安全</span><span class="exam-lv">⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与设计、开发的信息系统项目（项目的背景、容错等级要求、业务场景、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细论述软件容错设计的核心策略（硬件容错 / 软件容错）、容错技术（冗余设计、错误检测、故障恢复）、容错系统的测试方法。</li><li><b>问题 3</b> 结合项目实例，论述容错设计的落地过程、容错效果验证，分析现有容错方案的不足并提出优化措施。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 可靠性与容灾</span><span class="exam-lv">⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与实施的信创迁移适配项目（项目的背景、原有技术栈、国产化替代目标、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细论述信创迁移适配的整体方案、实施流程、兼容性改造、数据迁移、性能调优等关键技术要点。</li><li><b>问题 3</b> 结合项目实践，论述迁移适配过程中遇到的技术难点、风险问题及对应的解决措施，总结项目整体实施经验。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 信创迁移适配</span><span class="exam-lv">⭐⭐⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与管理和开发的软件项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细描述三种及以上智能化运维的技术与对应工具。</li><li><b>问题 3</b> 结合项目实际，详细论述如何使用智能化技术开展运维工作。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 运维与安全</span><span class="exam-lv">⭐⭐⭐</span></div></div></details></section>
+（空2）</p><ul class="exam-opts"><li><b>A</b> 可靠性</li><li><b>B</b> 性能</li><li><b>C</b> 易用性</li><li><b>D</b> 可测试性</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">B。解析：第一空符合可靠性的定义，衡量系统稳定不间断运行的能力；第二空性能的三大经典衡量指标就是吞吐率、响应时间、资源利用率。</p></details></div></details></details></details><details class="exam-subject" data-exam-subject="案例"><summary><span class="exam-subject-name">📋 案例分析</span><span class="exam-subject-n">2 题</span><span class="exam-subject-tip">案例背景 · 题目 · 答案与解析</span></summary><div class="exam-bar"><span class="exam-bar-label">📋 案例分析</span><span class="exam-bar-stat">共 <b>2</b> 题 · 情景简答 · 采分点三色标记</span></div><div class="exam-q exam-q-case"><div class="case-head"><span class="exam-no">案例 69</span><span class="exam-tag">考点 · 遗留系统处置与新系统转换</span><span class="exam-lv">⭐⭐⭐</span></div><div class="case-meta"><span><strong>考点</strong>：遗留系统评价（四象限）与演化策略 / 新旧系统转换策略 / 数据迁移 / 系统评价</span><span>📅 <strong>时间</strong>：2026-03-25 下午 📍 <strong>地点</strong>：系统切换方案评审</span><span>👤 <strong>人物</strong>：甘工（乙方·系统分析师）、徐总监（甲方·数智化信息部总监）、邓经理（甲方·运维经理）、老陶（甲方·班组长(十年老坐席)）</span><span>⚡ <strong>冲突</strong>：新平台上线了老系统还在跑，运维要维护两套，老陶舍不得换</span><span><strong>难度</strong>：★★★　<strong>总分</strong>：25 分　<strong>建议用时</strong>：25 分钟</span></div><div class="case-scene"><div class="case-h">案例背景</div><strong>背景</strong>：邓经理先倒苦水：&quot;两套系统并行，坐席一天登两个账号。我这边备份、账号、权限全要做两遍。&quot; 老陶接话：&quot;新系统那个工作台不顺手，老系统里十年的工单记录，新系统还查不全。&quot; 徐总监问甘工：&quot;老系统到底什么时候下？数据怎么办？&quot; 甘工清楚：这不是&quot;删掉就好&quot;，而是要先给老系统<strong>定位</strong>，再定切换策略和数据迁移方案。<br><strong>补充资料</strong>：值低，技术老旧，但外部接口稳定）；③<strong>2018 年质检系统</strong>（价值中等，技术尚可，与新平台功能重叠）。集团要求：切换过程数据不丢失、业务不停摆、可平滑回退。</div><div class="case-asks"><div class="case-h">题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">（1）用<strong>遗留系统评价矩阵</strong>（技术水平 × 业务价值）对三套系统定位并给出演化策略；</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">（2）说明<strong>新旧系统转换</strong>的三种策略及本项目选择；</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">（3）说明<strong>数据迁移</strong>应遵循的原则与步骤；</span></li><li><span class="case-ask-no">4</span><span class="case-ask-t">（4）说明<strong>系统评价</strong>的指标与方法。</span></li></ul></div><details class="exam-ans"><summary>参考答案要点（三色标记）</summary><div class="exam-points"><strong>问题 1｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（1）四象限与策略）：<br><strong>问题 2｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（2）三种转换策略与选择）：<br><strong>问题 3｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（3）数据迁移原则与步骤）：原则——①数据不丢失（先全量备份并验证可恢复）；②一致性与完整性（主外键、约束、编码映射）；③先清洗后迁移（去重、标准化、补缺省）；④分批 + 校验对账；⑤保留回滚方案与迁移日志；⑥避开业务高峰，迁移后做业务验证；⑦信创替换还需做数据类型/字符集/时区映射与兼容性回归。<br><strong>问题 4｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（4）系统评价）：指标——①技术性能（可用度 99.94%、响应 800ms、吞吐、MTBF/MTTR）；②经济效益（投资回收期 3.1 年、NPV/IRR、运维成本占比、成本效益比）；③业务效益（自助解决率、AHT 下降、满意度提升、放弃率下降）；④社会与管理（合规达标、数据资产化、员工体验、决策效率）；⑤质量（缺陷密度、需求覆盖率、可维护性）。</div></details><details class="exam-ans"><summary>解析与加分项</summary><div class="exam-exp-more">- 🟢 加分：解析·遗留系统与转换是第15章最稳定考点。</div></details></div><div class="exam-q exam-q-case"><div class="case-head"><span class="exam-no">案例 71</span><span class="exam-tag">考点 · 接通率掉到阈值以下，系统自己&quot;刹车&quot;</span><span class="exam-lv">⭐⭐⭐</span></div><div class="case-meta"><span>📅 <strong>时间</strong>：2026-06-11 上午 10:30 📍 <strong>地点</strong>：运营值班群 + 应急复盘</span><span>👤 <strong>人物</strong>：邓经理（甲方·运维经理）、甘工（乙方·系统分析师）、洪经理（甲方·客服部经理）、李工（乙方·项目经理）、客户经理（第三方·电信公司）</span><span>⚡ <strong>冲突</strong>：外呼任务实时接通率跌破阈值，若不停会持续占用线路并发，还可能触发运营商限流；但停任务会完不成当日指标</span><span><strong>难度</strong>：★★★　<strong>总分</strong>：25 分　<strong>建议用时</strong>：25 分钟</span></div><div class="case-scene"><div class="case-h">案例背景</div><strong>背景</strong>：邓经理在群里喊：&quot;外呼任务接通率掉到 18% 了！还在往外呼，线路并发全占满，呼入都受影响。&quot; 洪经理第一反应是&quot;别停，今天的任务还差三千通&quot;；李工担心被运营商限流，一旦限流连呼入都会受影响。 甘工调出清单里的验收要求——<strong>&quot;任务告警与自动调控&quot;</strong>：设定实时接通阈值，低于阈值后能自动<strong>调整任务线路 / 降低呼叫并发 / 暂停任务</strong>并通知。 问题是：这套自动调控之前只当&quot;配置项&quot;做了，从没真正触发过——今天第一次实战，它就&quot;卡&quot;在了&quot;要不要自动停&quot;的判定上。<br><strong>补充资料</strong>：黄色 → 接通率 &lt;25% → 降并发 30% → 运营群；橙色 → &lt;20% → 切换备用线路 + 降并发 50% → 运营 + 值班；红色 → &lt;15%，或连续 3 窗口不达标 → <strong>暂停任务并释放并发</strong> → 运营 + 值班 + 客户经理 <strong>防抖</strong>：连续 2 个窗口达标才动作/恢复；样本量 &lt;100 通不判定。<strong>恢复</strong>：连续 5 分钟达标后逐步放量。<strong>开关</strong>：自动调控策略可单独开关；人工可一键暂停/覆盖并留痕。</div><div class="case-asks"><div class="case-h">题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">（1）说明<strong>系统运行管理</strong>中&quot;网络资源管理&quot;与&quot;软件资源管理&quot;的内容，并分析本例的资源冲突；</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">（2）设计<strong>任务告警与自动调控</strong>机制（阈值、动作、判定、通知、回恢复）；</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">（3）说明<strong>故障管理</strong>中&quot;先止损后定位&quot;的原则在本例的应用；</span></li><li><span class="case-ask-no">4</span><span class="case-ask-t">（4）说明事后应如何从<strong>维护管理</strong>角度根治。</span></li></ul></div><details class="exam-ans"><summary>参考答案要点（三色标记）</summary><div class="exam-points"><strong>问题 1｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（1）运行管理内容）：网络资源管理——拓扑与地址、带宽与流量、设备与链路监控、安全策略、容量规划与扩容；软件资源管理——软件资产台账（版本、部署、授权）、许可证与合规、补丁与升级、配置与变更、发布与回收。<br><strong>问题 2｜参考答案要点</strong>：<br>- 🔴 核心：🟡 支撑（2）自动调控机制）：<br><strong>问题 3｜参考答案要点</strong>：<br>- 🔴 核心：🟡 支撑（3）先止损后定位）：①止损——立即按红色阈值暂停外呼任务、释放并发，保障呼入主链路（业务优先级：呼入 &gt; 外呼）；②定位——分段排查：本方平台（并发配置、任务参数）→ 线路/运营商（是否被限流、中继状态）→ 号码池（是否被大量标记/拦截）→ 目标号码质量（空号率是否偏高）；用数据定位（各线路接通率对比、状态码分布）；③恢复——切换健康线路/号码池后小流量试探，确认回升再逐步放量；④记录——完整时间线。<br><strong>问题 4｜参考答案要点</strong>：</div></details><details class="exam-ans"><summary>解析与加分项</summary><div class="exam-exp-more">- 🟢 加分：解析·自动调控题要&quot;阈值分级 + 动作 + 防抖恢复 + 资源隔离根治&quot;。<br>- 🔴 核心：🟢 加分（4）根治措施）：①资源隔离——外呼与呼入使用独立并发池，互不抢占，并给呼入设保底并发；②优先级调度——呼入优先抢占，外呼可降可停；③号码池治理——监控外显号码的接通率与标记情况，自动轮换与下线低效号码；④任务参数校验——导入前校验号码质量（空号/停机预检），降低无效呼叫；⑤维护管理——把&quot;自动调控&quot;纳入定期演练（注入低接通场景验证动作生效），更新 Runbook；并把阈值、开关纳入配置中心 + 变更控制，避免误改。</div></details></div></details><details class="exam-subject" data-exam-subject="论文"><summary><span class="exam-subject-name">📄 论文写作</span><span class="exam-subject-n">7 题</span><span class="exam-subject-tip">先看题 · 再看考点拆解</span></summary><div class="exam-bar"><span class="exam-bar-label">📄 论文写作</span><span class="exam-bar-stat">共 <b>7</b> 题 · 论述题 · 含考点拆解与教材知识点</span></div><div class="exam-q exam-q-essay"><div class="case-head"><span class="exam-no">论文 30</span><span class="exam-tag">方向 · 运维与安全</span><span class="exam-lv">⭐⭐</span><span class="essay-batch">2021年上半年</span></div><div class="case-asks"><div class="case-h">论文题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">概要叙述你参与管理和开发的软件项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">详细描述DevSecOps的主要阶段，以及各阶段的核心工作。</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">结合项目实际，说明DevSecOps的实施过程与应用效果。</span></li></ul></div><details class="exam-ans" open><summary>试题背景</summary><div class="essay-bg">DevSecOps将安全体系融入DevOps全生命周期，是实现开发、运维、安全一体化管理的模式。</div></details><details class="exam-ans"><summary>考点拆解（三色标记）</summary><div class="exam-keypoints"><strong>问题 1｜概要叙述项目与你承担的工作</strong>：<br>- 🔴 核心：点明近三年内一个具体的真实项目：项目名称、背景、发起单位、规模、周期、交付成果（教材 22.4-9/22.4-10 明确要求，泛泛而谈会判虚构）<br>- 🔴 核心：明确「我」在项目中的角色与承担的主要工作，并站在系统分析师视角论述，而非单纯开发实现视角<br>- 🟡 支撑：说明项目的组织结构、开发体制与技术栈，为后文论述做铺垫<br>- 🟢 加分：点出项目与本题主题的直接关联（如本项目正是因 XX 痛点才需要 XX 方法）<br><strong>问题 2｜理论知识 / 方法论述</strong>：<br>- 🔴 核心：详细描述DevSecOps的主要阶段——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：详细描述DevSecOps的以及各阶段的核心工作——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🟢 加分：给出与其他候选方案的取舍依据，体现选型判断力<br><strong>问题 3｜项目实践落地与复盘</strong>：<br>- 🔴 核心：给出可量化的落地效果（缺陷率/响应时间/迭代周期/资源成本等具体数据），而非「取得了良好效果」<br>- 🔴 核心：诚实分析存在的 2~3 个真实问题，并给出对应的改进措施——教材强调这才是用心的内容<br>- 🟡 支撑：结合具体实例说明措施的实施过程（怎么做的，而非教科书式罗列）<br>- 🟢 加分：总结经验教训与后续演进方向，体现复盘能力</div></details><details class="exam-ans"><summary>教材知识点</summary><div class="exam-textbook"><span class="tb-chap">第 15 章 · 系统运行与维护</span><a class="tb-hour" href="H33.html">H33</a><a class="tb-hour" href="H34.html">H34</a></div></details></div><div class="exam-q exam-q-essay"><div class="case-head"><span class="exam-no">论文 38</span><span class="exam-tag">方向 · 运维与安全</span><span class="exam-lv">⭐⭐</span><span class="essay-batch">2019年上半年</span></div><div class="case-asks"><div class="case-h">论文题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">概要叙述你参与管理实施的软件运维项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">任选三个智能运维成熟度级别，分别说明对应级别下系统在效率、质量、成本方面的特征。</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">结合项目实际，说明智能运维的实施过程、遇到的问题、解决办法以及最终效果。</span></li></ul></div><details class="exam-ans" open><summary>试题背景</summary><div class="essay-bg">智能运维(AIOps)依托人工智能技术解决传统自动化运维的痛点，其成熟度分为尝试、单点、串联、完备、成熟五个等级。</div></details><details class="exam-ans"><summary>考点拆解（三色标记）</summary><div class="exam-keypoints"><strong>问题 1｜概要叙述项目与你承担的工作</strong>：<br>- 🔴 核心：点明近三年内一个具体的真实项目：项目名称、背景、发起单位、规模、周期、交付成果（教材 22.4-9/22.4-10 明确要求，泛泛而谈会判虚构）<br>- 🔴 核心：明确「我」在项目中的角色与承担的主要工作，并站在系统分析师视角论述，而非单纯开发实现视角<br>- 🟡 支撑：说明项目的组织结构、开发体制与技术栈，为后文论述做铺垫<br>- 🟢 加分：点出项目与本题主题的直接关联（如本项目正是因 XX 痛点才需要 XX 方法）<br><strong>问题 2｜理论知识 / 方法论述</strong>：<br>- 🔴 核心：任选三个智能运维成熟度级别——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：分别说明对应级别下系统在效率——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：成本方面的特征——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🟢 加分：给出与其他候选方案的取舍依据，体现选型判断力<br><strong>问题 3｜项目实践落地与复盘</strong>：<br>- 🔴 核心：给出可量化的落地效果（缺陷率/响应时间/迭代周期/资源成本等具体数据），而非「取得了良好效果」<br>- 🔴 核心：诚实分析存在的 2~3 个真实问题，并给出对应的改进措施——教材强调这才是用心的内容<br>- 🟡 支撑：结合具体实例说明措施的实施过程（怎么做的，而非教科书式罗列）<br>- 🟢 加分：总结经验教训与后续演进方向，体现复盘能力<br>- 🟡 支撑：说明智能运维的实施过程<br>- 🟡 支撑：说明智能运维的遇到的问题</div></details><details class="exam-ans"><summary>教材知识点</summary><div class="exam-textbook"><span class="tb-chap">第 15 章 · 系统运行与维护</span><a class="tb-hour" href="H33.html">H33</a><a class="tb-hour" href="H34.html">H34</a></div></details></div><div class="exam-q exam-q-essay"><div class="case-head"><span class="exam-no">论文 67</span><span class="exam-tag">方向 · 可靠性与容灾</span><span class="exam-lv">⭐</span><span class="essay-batch">2013年上半年</span></div><div class="case-asks"><div class="case-h">论文题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">概要叙述你参与管理开发的信息系统项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">列举两种系统容错技术，并分别解释其原理。</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">结合项目实际，说明可靠性相关技术的实施过程与效果。</span></li></ul></div><details class="exam-ans" open><summary>试题背景</summary><div class="essay-bg">可靠性分析与设计依托各类容错技术，预防系统故障，保障系统稳定运行。</div></details><details class="exam-ans"><summary>考点拆解（三色标记）</summary><div class="exam-keypoints"><strong>问题 1｜概要叙述项目与你承担的工作</strong>：<br>- 🔴 核心：点明近三年内一个具体的真实项目：项目名称、背景、发起单位、规模、周期、交付成果（教材 22.4-9/22.4-10 明确要求，泛泛而谈会判虚构）<br>- 🔴 核心：明确「我」在项目中的角色与承担的主要工作，并站在系统分析师视角论述，而非单纯开发实现视角<br>- 🟡 支撑：说明项目的组织结构、开发体制与技术栈，为后文论述做铺垫<br>- 🟢 加分：点出项目与本题主题的直接关联（如本项目正是因 XX 痛点才需要 XX 方法）<br><strong>问题 2｜理论知识 / 方法论述</strong>：<br>- 🔴 核心：列举两种系统容错技术——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：并分别解释其原理——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🟢 加分：给出与其他候选方案的取舍依据，体现选型判断力<br><strong>问题 3｜项目实践落地与复盘</strong>：<br>- 🔴 核心：给出可量化的落地效果（缺陷率/响应时间/迭代周期/资源成本等具体数据），而非「取得了良好效果」<br>- 🔴 核心：诚实分析存在的 2~3 个真实问题，并给出对应的改进措施——教材强调这才是用心的内容<br>- 🟡 支撑：结合具体实例说明措施的实施过程（怎么做的，而非教科书式罗列）<br>- 🟢 加分：总结经验教训与后续演进方向，体现复盘能力</div></details><details class="exam-ans"><summary>教材知识点</summary><div class="exam-textbook"><span class="tb-chap">第 15 章 · 系统运行与维护</span><a class="tb-hour" href="H33.html">H33</a><a class="tb-hour" href="H34.html">H34</a></div></details></div><div class="exam-q exam-q-essay"><div class="case-head"><span class="exam-no">论文 90</span><span class="exam-tag">方向 · 运维与安全</span><span class="exam-lv">⭐</span><span class="essay-batch">2013年下半年（11月）</span></div><div class="case-asks"><div class="case-h">论文题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">概要叙述你参与维护的信息系统项目（项目的背景、系统规模、维护类型、组织结构、维护周期、交付的成果等），并说明你在其中承担的工作。</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">详细论述各类软件维护的核心内容、维护过程的管理流程（问题提交、分析、修复、验证、发布）、维护过程中的风险控制要点。</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">结合项目实践，论述你在维护工作中解决的典型问题、提升维护效率的方法，总结软件维护的实施经验。</span></li></ul></div><details class="exam-ans" open><summary>试题背景</summary><div class="essay-bg">软件维护是软件生命周期的重要阶段，涵盖纠错性维护、适应性维护、完善性维护、预防性维护四类，直接影响软件的生命周期与用户体验。</div></details><details class="exam-ans"><summary>考点拆解（三色标记）</summary><div class="exam-keypoints"><strong>问题 1｜概要叙述项目与你承担的工作</strong>：<br>- 🔴 核心：点明近三年内一个具体的真实项目：项目名称、背景、发起单位、规模、周期、交付成果（教材 22.4-9/22.4-10 明确要求，泛泛而谈会判虚构）<br>- 🔴 核心：明确「我」在项目中的角色与承担的主要工作，并站在系统分析师视角论述，而非单纯开发实现视角<br>- 🟡 支撑：说明项目的组织结构、开发体制与技术栈，为后文论述做铺垫<br>- 🟢 加分：点出项目与本题主题的直接关联（如本项目正是因 XX 痛点才需要 XX 方法）<br><strong>问题 2｜理论知识 / 方法论述</strong>：<br>- 🔴 核心：各类软件维护的核心内容——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：各类软件维护的维护过程的管理流程问题提交——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：各类软件维护的分析——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🟡 支撑：各类软件维护的修复<br>- 🟡 支撑：各类软件维护的验证<br>- 🟡 支撑：各类软件维护的发布<br>- 🟢 加分：给出与其他候选方案的取舍依据，体现选型判断力<br><strong>问题 3｜项目实践落地与复盘</strong>：<br>- 🔴 核心：给出可量化的落地效果（缺陷率/响应时间/迭代周期/资源成本等具体数据），而非「取得了良好效果」<br>- 🔴 核心：诚实分析存在的 2~3 个真实问题，并给出对应的改进措施——教材强调这才是用心的内容<br>- 🟡 支撑：结合具体实例说明措施的实施过程（怎么做的，而非教科书式罗列）<br>- 🟢 加分：总结经验教训与后续演进方向，体现复盘能力<br>- 🟡 支撑：论述你在维护工作中解决的典型问题<br>- 🟡 支撑：论述你在维护工作中解决的提升维护效率的方法</div></details><details class="exam-ans"><summary>教材知识点</summary><div class="exam-textbook"><span class="tb-chap">第 15 章 · 系统运行与维护</span><a class="tb-hour" href="H33.html">H33</a><a class="tb-hour" href="H34.html">H34</a></div></details></div><div class="exam-q exam-q-essay"><div class="case-head"><span class="exam-no">论文 114</span><span class="exam-tag">方向 · 可靠性与容灾</span><span class="exam-lv">⭐</span><span class="essay-batch">2010年下半年（11月）</span></div><div class="case-asks"><div class="case-h">论文题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">概要叙述你参与设计、开发的信息系统项目（项目的背景、容错等级要求、业务场景、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">详细论述软件容错设计的核心策略（硬件容错 / 软件容错）、容错技术（冗余设计、错误检测、故障恢复）、容错系统的测试方法。</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">结合项目实例，论述容错设计的落地过程、容错效果验证，分析现有容错方案的不足并提出优化措施。</span></li></ul></div><details class="exam-ans" open><summary>试题背景</summary><div class="essay-bg">软件容错设计通过冗余、检测、恢复等手段，使软件在出现故障时仍能维持正常运行，是提升系统可靠性的核心技术。</div></details><details class="exam-ans"><summary>考点拆解（三色标记）</summary><div class="exam-keypoints"><strong>问题 1｜概要叙述项目与你承担的工作</strong>：<br>- 🔴 核心：点明近三年内一个具体的真实项目：项目名称、背景、发起单位、规模、周期、交付成果（教材 22.4-9/22.4-10 明确要求，泛泛而谈会判虚构）<br>- 🔴 核心：明确「我」在项目中的角色与承担的主要工作，并站在系统分析师视角论述，而非单纯开发实现视角<br>- 🟡 支撑：说明项目的组织结构、开发体制与技术栈，为后文论述做铺垫<br>- 🟢 加分：点出项目与本题主题的直接关联（如本项目正是因 XX 痛点才需要 XX 方法）<br><strong>问题 2｜理论知识 / 方法论述</strong>：<br>- 🔴 核心：软件容错设计的核心策略硬件容错 / 软件容错——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：软件容错设计的容错技术冗余设计——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：软件容错设计的错误检测——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🟡 支撑：软件容错设计的故障恢复<br>- 🟡 支撑：软件容错设计的容错系统的测试方法<br>- 🟢 加分：给出与其他候选方案的取舍依据，体现选型判断力<br><strong>问题 3｜项目实践落地与复盘</strong>：<br>- 🔴 核心：给出可量化的落地效果（缺陷率/响应时间/迭代周期/资源成本等具体数据），而非「取得了良好效果」<br>- 🔴 核心：诚实分析存在的 2~3 个真实问题，并给出对应的改进措施——教材强调这才是用心的内容<br>- 🟡 支撑：结合具体实例说明措施的实施过程（怎么做的，而非教科书式罗列）<br>- 🟢 加分：总结经验教训与后续演进方向，体现复盘能力<br>- 🟡 支撑：论述容错设计的落地过程</div></details><details class="exam-ans"><summary>教材知识点</summary><div class="exam-textbook"><span class="tb-chap">第 15 章 · 系统运行与维护</span><a class="tb-hour" href="H33.html">H33</a><a class="tb-hour" href="H34.html">H34</a></div></details></div><div class="exam-q exam-q-essay"><div class="case-head"><span class="exam-no">论文 04</span><span class="exam-tag">方向 · 信创迁移适配</span><span class="exam-lv">⭐⭐⭐</span><span class="essay-batch">2026年上半年（机考）第一批</span></div><div class="case-asks"><div class="case-h">论文题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">概要叙述你参与实施的信创迁移适配项目（项目的背景、原有技术栈、国产化替代目标、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">详细论述信创迁移适配的整体方案、实施流程、兼容性改造、数据迁移、性能调优等关键技术要点。</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">结合项目实践，论述迁移适配过程中遇到的技术难点、风险问题及对应的解决措施，总结项目整体实施经验。</span></li></ul></div><details class="exam-ans" open><summary>试题背景</summary><div class="essay-bg">国产化信创替代是现阶段数字化建设的重要方向，传统信息系统向国产软硬件环境完成迁移与适配，是系统改造的核心工作。</div></details><details class="exam-ans"><summary>考点拆解（三色标记）</summary><div class="exam-keypoints"><strong>问题 1｜概要叙述项目与你承担的工作</strong>：<br>- 🔴 核心：点明近三年内一个具体的真实项目：项目名称、背景、发起单位、规模、周期、交付成果（教材 22.4-9/22.4-10 明确要求，泛泛而谈会判虚构）<br>- 🔴 核心：明确「我」在项目中的角色与承担的主要工作，并站在系统分析师视角论述，而非单纯开发实现视角<br>- 🟡 支撑：说明项目的组织结构、开发体制与技术栈，为后文论述做铺垫<br>- 🟢 加分：点出项目与本题主题的直接关联（如本项目正是因 XX 痛点才需要 XX 方法）<br><strong>问题 2｜理论知识 / 方法论述</strong>：<br>- 🔴 核心：信创迁移适配的整体方案——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：信创迁移适配的实施流程——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：信创迁移适配的兼容性改造——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🟡 支撑：信创迁移适配的数据迁移<br>- 🟡 支撑：信创迁移适配的性能调优<br>- 🟢 加分：给出与其他候选方案的取舍依据，体现选型判断力<br><strong>问题 3｜项目实践落地与复盘</strong>：<br>- 🔴 核心：给出可量化的落地效果（缺陷率/响应时间/迭代周期/资源成本等具体数据），而非「取得了良好效果」<br>- 🔴 核心：诚实分析存在的 2~3 个真实问题，并给出对应的改进措施——教材强调这才是用心的内容<br>- 🟡 支撑：结合具体实例说明措施的实施过程（怎么做的，而非教科书式罗列）<br>- 🟢 加分：总结经验教训与后续演进方向，体现复盘能力<br>- 🟡 支撑：论述迁移适配过程中遇到的技术难点<br>- 🟡 支撑：论述迁移适配过程中遇到的风险问题及对应的解决措施</div></details><details class="exam-ans"><summary>教材知识点</summary><div class="exam-textbook"><span class="tb-chap">第 15 章 · 系统运行与维护</span><a class="tb-hour" href="H33.html">H33</a><a class="tb-hour" href="H34.html">H34</a></div></details></div><div class="exam-q exam-q-essay"><div class="case-head"><span class="exam-no">论文 16</span><span class="exam-tag">方向 · 运维与安全</span><span class="exam-lv">⭐⭐⭐</span><span class="essay-batch">2025年上半年（5月）</span></div><div class="case-asks"><div class="case-h">论文题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">概要叙述你参与管理和开发的软件项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">详细描述三种及以上智能化运维的技术与对应工具。</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">结合项目实际，详细论述如何使用智能化技术开展运维工作。</span></li></ul></div><details class="exam-ans" open><summary>试题背景</summary><div class="essay-bg">智能化运维依托各类新技术、新工具，大幅提升运维效率与系统稳定性，是现代IT运维的发展方向。</div></details><details class="exam-ans"><summary>考点拆解（三色标记）</summary><div class="exam-keypoints"><strong>问题 1｜概要叙述项目与你承担的工作</strong>：<br>- 🔴 核心：点明近三年内一个具体的真实项目：项目名称、背景、发起单位、规模、周期、交付成果（教材 22.4-9/22.4-10 明确要求，泛泛而谈会判虚构）<br>- 🔴 核心：明确「我」在项目中的角色与承担的主要工作，并站在系统分析师视角论述，而非单纯开发实现视角<br>- 🟡 支撑：说明项目的组织结构、开发体制与技术栈，为后文论述做铺垫<br>- 🟢 加分：点出项目与本题主题的直接关联（如本项目正是因 XX 痛点才需要 XX 方法）<br><strong>问题 2｜理论知识 / 方法论述</strong>：<br>- 🔴 核心：详细描述三种及以上智能化运维的技术与对应工具——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🟢 加分：给出与其他候选方案的取舍依据，体现选型判断力<br><strong>问题 3｜项目实践落地与复盘</strong>：<br>- 🔴 核心：给出可量化的落地效果（缺陷率/响应时间/迭代周期/资源成本等具体数据），而非「取得了良好效果」<br>- 🔴 核心：诚实分析存在的 2~3 个真实问题，并给出对应的改进措施——教材强调这才是用心的内容<br>- 🟡 支撑：结合具体实例说明措施的实施过程（怎么做的，而非教科书式罗列）<br>- 🟢 加分：总结经验教训与后续演进方向，体现复盘能力<br>- 🟡 支撑：如何使用智能化技术开展运维工作</div></details><details class="exam-ans"><summary>教材知识点</summary><div class="exam-textbook"><span class="tb-chap">第 15 章 · 系统运行与维护</span><a class="tb-hour" href="H33.html">H33</a><a class="tb-hour" href="H34.html">H34</a></div></details></div></details></section>
     <div class="wrongbook"></div>
     <div class="keyhint">
   <span class="keyhint-title">键盘快捷键</span>
@@ -3193,7 +3375,9 @@ html{scroll-padding-top:80px}
     init() {
       const root = document.querySelector('.exam')
       if (!root) return
-      const chapter = root.dataset.examChapter || 'x'
+      // ⚠️ 专项页 / 全真模拟页没有 data-exam-chapter（无教材章），
+      //    旧写法一律退化成 'x' → H42~H48 共用同一个记忆键、互相串状态。
+      const chapter = root.dataset.examChapter || root.dataset.examHour || 'x'
 
       // 恢复上次展开状态：{ "H07": { "2025年5月": true, ... } }
       const saved = store.get(this.KEY, {}) || {}
@@ -3213,6 +3397,7 @@ html{scroll-padding-top:80px}
       const seen = store.get('examSeen', {}) || {}
       root.querySelectorAll('.exam-q').forEach(qd => {
         const qid = qd.dataset.examId
+        if (!qid) return
         if (seen[qid]) {
           const a = qd.querySelector('.exam-ans')
           if (a) a.open = true
@@ -3228,12 +3413,17 @@ html{scroll-padding-top:80px}
         btn.addEventListener('click', e => {
           e.preventDefault()
           const openAll = btn.dataset.examAll === '1'
-          root.querySelectorAll('.exam-subject,.exam-year').forEach(d => { d.open = openAll })
-          root.querySelectorAll('.exam-ans').forEach(d => {
-            d.open = openAll
-            if (openAll && d.parentElement.dataset.examId) seen[d.parentElement.dataset.examId] = 1
-          })
-          if (openAll) store.set('examSeen', seen)
+          // ⚠️ 必须把 .exam-q 也列进来：只开 .exam-subject/.exam-year/.exam-ans
+          //    时，单题仍折叠 → 答案藏在关闭的单题内，"全部展开"名不副实。
+          root.querySelectorAll('.exam-subject,.exam-year,.exam-q,.exam-ans')
+            .forEach(d => { d.open = openAll })
+          if (openAll) {
+            // ⚠️ 旧的 `d.parentElement.dataset.examId` 取到的是 .exam-q-body（无 id），
+            //    会把 seen[undefined] 写进 localStorage。改为直接从 .exam-q 取。
+            root.querySelectorAll('.exam-q[data-exam-id]')
+              .forEach(qd => { seen[qd.dataset.examId] = 1 })
+            store.set('examSeen', seen)
+          }
           // 同步年份级记忆
           root.querySelectorAll('.exam-year').forEach(y => { mine[y.dataset.examYear] = y.open })
           saved[chapter] = mine
@@ -3280,7 +3470,7 @@ html{scroll-padding-top:80px}
   // ══════════════════════════════════════════
   // 8. mermaid 渲染（自定义墨绿主题，与正文同色系）
   // ══════════════════════════════════════════
-  // 站点配色（与 design.css 的令牌保持一致）
+  // 站点配色（与设计令牌保持一致 —— 改主题色时这里要同步）
   const MERMAID_LIGHT = {
     bg: '#f2f0e9', fg: '#1b211c', line: '#cdc9bd',
     accent: '#3d5a40', accent2: '#5a8a62', accent3: '#7ea888',

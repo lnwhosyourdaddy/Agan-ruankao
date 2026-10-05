@@ -7,7 +7,7 @@
 <title>第 9 小时 · 数据库系统（一）· 三级模式与关系基础 · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
-<meta name="build-stamp" content="2026-10-05 11:44:51">
+<meta name="build-stamp" content="2026-10-05 15:47:03">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -405,16 +405,21 @@ img{max-width:100%;height:auto}
   border-radius:100px;
   font-size:12.5px;color:var(--accent);font-weight:600;
 }
-.cover h1{
+/* ⚠️ 封面主标题刻意用 <div> 而不是 <h1>：index.md 正文自带 `# 阿甘系分 · 48 小时
+   冲刺手册`，若封面也用 h1，一页会出现两个 h1（语义/SEO 上都是错的）。
+   视觉与 h1 完全一致 —— 字号、颜色、以及那道 72px 短横线都在下面显式声明。 */
+.cover .cover-title{
   font-size:3.5em;font-weight:800;letter-spacing:-1.6px;
   color:var(--accent);line-height:1.14;margin-bottom:16px;
 }
-/* ⚠️ 封面 h1 也继承 `.main h1::after` 那道 56px 短横线，但它是 display:block 的
-   固定宽块级元素 —— 文字居中不代表块级元素居中，会贴到左边。
-   修法：给封面这条短横线加 margin-left/right:auto 让它真正居中。 */
-.cover h1::after{
-  margin-left:auto;margin-right:auto;
+/* 复刻 `.main h1::after` 的短横线（<div> 不继承 h1 的伪元素），并水平居中 —— */
+/* 文字居中不代表块级元素居中，不加 auto 会贴到左边。 */
+.cover .cover-title::after{
+  content:'';display:block;
   width:72px;height:3px;
+  background:var(--accent);
+  margin:.5em auto 0;
+  border-radius:2px;
 }
 .cover .sub{
   font-size:1.2em;color:var(--fg-2);
@@ -845,7 +850,7 @@ pre{
   .nav{margin-left:auto;gap:2px}
   .main{padding:32px 0 80px}
   .cover{padding:48px 0 40px;margin-bottom:40px}
-  .cover h1{font-size:2.4em;letter-spacing:-.8px}
+  .cover .cover-title{font-size:2.4em;letter-spacing:-.8px}
   .cover .sub{font-size:1.05em;margin-bottom:24px}
   .cover-stats{gap:10px;margin-bottom:28px}
   .stat{min-width:76px;padding:10px 14px}
@@ -901,7 +906,7 @@ pre{
   h1,h2,h3,h4{break-after:avoid;page-break-after:avoid}
 
   .cover{padding:0 0 18px;margin-bottom:18px;text-align:left}
-  .cover h1{font-size:24pt}
+  .cover .cover-title{font-size:24pt}
   .cover-stats,.cover-badge,.cta-row{display:none !important}
 
   a[href^="http"]:after{
@@ -1256,16 +1261,14 @@ html.focus-mode .chapbar{opacity:.35;pointer-events:none}
 }
 /* 章首横幅：h1 上方加一条"章号 + 主色渐变"的装饰带，
    让每页开头有一个明确的"进入新章"仪式感（原来 h1 直接浮在正文里）。
-   ⚠️ 必须排除 .cover —— 封面 h1 自己已有顶部留白与居中布局，
-   加上横幅会与下方分隔线叠成双线（首页曾出现两条横线紧挨）。 */
-.main h1:not(.cover h1)::before{
+   （封面主标题已改成 <div class="cover-title">，不再匹配 .main h1，无需再排除。） */
+.main h1::before{
   content:'';display:block;
   width:100%;height:4px;
   background:linear-gradient(90deg,var(--accent) 0%,var(--accent-3) 42%,transparent 88%);
   border-radius:2px;
   margin-bottom:.62em;
 }
-.cover h1::before{content:none}
 .main h1::after{
   content:'';display:block;
   width:56px;height:3px;
@@ -2087,6 +2090,185 @@ html{scroll-padding-top:80px}
   .exam-stem,.exam-opts li{font-size:9.5pt}
   .exam-exp{font-size:8.5pt;color:#333}
 }
+
+/* ══════════════════════════════════════════════════════════════
+   真题区块扩展 v2 · 案例 / 论文卡片 + 全真模拟卷
+   与既有 .exam-* 体系同源：米白卡底 + 左侧 4px 色条 + 墨绿强调色
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── 案例 / 论文卡片（非 <details>，直接展开的题卡）── */
+.exam-q-case,.exam-q-essay{
+  padding:14px 16px 4px;
+  background:var(--bg-card);
+}
+.exam-q-case:hover,.exam-q-essay:hover{background:var(--bg-alt)}
+.case-head{
+  display:flex;flex-wrap:wrap;align-items:center;gap:6px;
+  padding-bottom:10px;margin-bottom:10px;
+  border-bottom:1px dashed var(--line);
+}
+.case-head .exam-no{min-width:0}
+.case-h{
+  display:flex;align-items:center;gap:6px;
+  margin:12px 0 6px;font-size:12.5px;font-weight:700;
+  letter-spacing:.06em;color:var(--accent);
+}
+.case-h::before{
+  content:'';width:4px;height:13px;border-radius:2px;
+  background:var(--accent);flex:0 0 auto;
+}
+
+/* 情景要素（📅时间 / 📍地点 / 👤人物 / ⚡冲突 / 难度总分用时） */
+.case-meta{
+  display:flex;flex-direction:column;gap:2px;
+  padding:9px 12px;margin:.4em 0 .2em;
+  background:var(--bg-alt);
+  border-left:3px solid var(--line-2);
+  border-radius:0 var(--radius-sm) var(--radius-sm) 0;
+  font-size:12.5px;line-height:1.75;color:var(--fg-3);
+}
+.case-meta strong{color:var(--fg-2);font-weight:600}
+
+/* 案例背景正文 */
+.case-scene{
+  margin:.2em 0 1em;padding:12px 14px;
+  background:var(--accent-soft);
+  border-left:3px solid var(--accent-3);
+  border-radius:0 var(--radius) var(--radius) 0;
+  font-size:14.5px;line-height:1.92;color:var(--fg);
+}
+.case-scene strong{color:var(--accent);font-weight:700}
+
+/* 题目列表 */
+.case-asks{margin:.2em 0 1em}
+ul.exam-questions{
+  list-style:none;margin:.4em 0;padding:0;
+}
+ul.exam-questions>li{
+  display:flex;gap:10px;align-items:flex-start;
+  padding:9px 0;border-bottom:1px solid var(--line);
+  font-size:14.5px;line-height:1.88;color:var(--fg);
+}
+ul.exam-questions>li:last-child{border-bottom:0}
+ul.exam-questions>li::before{content:none !important}
+.case-ask-no{
+  flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;
+  min-width:24px;height:22px;margin-top:3px;padding:0 6px;
+  border-radius:6px;background:var(--accent-soft-2);color:var(--accent);
+  font-family:var(--sans);font-size:11.5px;font-weight:700;
+  font-variant-numeric:tabular-nums;
+}
+.case-ask-t{flex:1;min-width:0}
+.case-ask-t strong{color:var(--accent);font-weight:700}
+
+/* ── 答案 / 解析 / 考点拆解 / 教材知识点 ── */
+.exam-points,.exam-keypoints,.exam-exp-more,.essay-bg{
+  padding:12px 14px;margin:8px 0;
+  border-left:4px solid var(--tip-line);
+  border-radius:0 var(--radius) var(--radius) 0;
+  background:var(--tip-bg);
+  font-size:14px;line-height:1.92;color:var(--fg);
+}
+.exam-keypoints{border-left-color:var(--accent-2);background:var(--accent-soft)}
+.exam-exp-more{border-left-color:var(--warn-line);background:var(--warn-bg);color:var(--warn-fg)}
+.essay-bg{border-left-color:var(--line-2);background:var(--bg-alt);color:var(--fg-2)}
+.exam-points strong,.exam-keypoints strong{color:var(--accent);font-weight:700}
+
+/* 教材知识点：章标签 + 可点学时胶囊 */
+.exam-textbook{
+  display:flex;flex-wrap:wrap;align-items:center;gap:6px;
+  padding:12px 14px;margin:8px 0;
+  background:var(--mem-bg);
+  border-left:4px solid var(--mem-line);
+  border-radius:0 var(--radius) var(--radius) 0;
+}
+.tb-chap{
+  font-family:var(--serif);font-size:14px;font-weight:700;color:var(--mem-fg);
+}
+.tb-hour{
+  display:inline-flex;align-items:center;
+  padding:2px 9px;border-radius:999px;
+  background:var(--bg-card);border:1px solid var(--mem-line);
+  color:var(--mem-fg) !important;font-size:12px;font-weight:600;
+  text-decoration:none;
+}
+.tb-hour:hover{background:var(--mem-line);color:var(--bg-card) !important;border-color:var(--mem-fg)}
+
+/* 模拟卷成绩/批次等小标签 */
+.exam-lv{
+  font-family:var(--sans);font-size:11.5px;color:var(--gold);
+  letter-spacing:.04em;white-space:nowrap;
+}
+.exam-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.exam-tag-en{
+  background:var(--mem-bg);color:var(--mem-fg);border-color:var(--mem-line);
+}
+.essay-batch{
+  font-family:var(--sans);font-size:11.5px;color:var(--fg-3);
+  padding:1px 8px;border:1px solid var(--line);border-radius:999px;
+}
+.exam-kp{
+  margin:.5em 0 0;font-family:var(--sans);font-size:12.5px;color:var(--fg-3);
+}
+.exam-kp::before{content:'🎯 ';font-size:11px}
+
+/* ── 全真模拟卷头部 ── */
+.mock-head{
+  padding:16px 18px;margin:0 0 12px;
+  border-radius:var(--radius-lg);
+  background:linear-gradient(135deg,var(--accent) 0%,var(--accent-2) 100%);
+  color:var(--fg-inv);
+  box-shadow:var(--shadow-2);
+}
+.mock-title{
+  font-family:var(--serif);font-size:17px;font-weight:700;
+  letter-spacing:.02em;line-height:1.5;
+}
+.mock-sub{
+  margin-top:6px;font-size:12.5px;line-height:1.75;
+  color:rgba(251,250,246,.82);
+}
+.mock-sub b{color:#fff;font-variant-numeric:tabular-nums}
+.mock-items{
+  border:1px solid var(--line);border-radius:var(--radius);
+  background:var(--bg-card);overflow:hidden;
+}
+.mock-items>.exam-q:first-child{border-top:0}
+.exam-mock .exam-subject{margin-top:14px}
+.exam-subj-only{display:block}
+
+/* 模拟卷内的综合知识答题条 */
+.exam-mock .exam-bar{
+  border-radius:var(--radius) var(--radius) 0 0;
+  border-bottom:0;
+}
+
+/* ── 窄屏 ── */
+@media(max-width:760px){
+  .exam-q-case,.exam-q-essay{padding:12px 12px 4px}
+  .case-scene,.exam-points,.exam-keypoints,.exam-exp-more,.essay-bg,.exam-textbook{
+    padding:10px 11px;font-size:13.5px;
+  }
+  ul.exam-questions>li{gap:8px;font-size:13.5px}
+  .mock-head{padding:13px 14px}
+  .mock-title{font-size:15.5px}
+}
+
+/* ── 打印：卡片不要再折叠，色条与底色转灰阶 ── */
+@media print{
+  .mock-head{background:none !important;color:#000 !important;border:1pt solid #999;
+    box-shadow:none}
+  .mock-title{font-size:13pt}
+  .mock-sub{color:#333 !important}
+  .exam-q-case,.exam-q-essay{break-inside:avoid;page-break-inside:avoid}
+  .case-scene,.exam-points,.exam-keypoints,.exam-exp-more,.essay-bg,.exam-textbook{
+    background:none !important;border-left:2pt solid #999 !important;
+  }
+  .exam-q-case,.exam-q-essay,.case-scene,.case-meta,ul.exam-questions>li{
+    font-size:9.5pt;
+  }
+  .tb-hour{color:#000 !important;border-color:#666}
+}
 </style>
 </head>
 <body>
@@ -2318,7 +2500,7 @@ $E_4 = \pi_{A1,A4} (\sigma_{R.A3=S.A3}(\sigma_{A2&lt;&#x27;2022&#x27;}(R) \times
 如果严格按照表达式运算顺序，则查询效率最高的是（ ），将该查询转换的SQL语句为: SELECT A1, A4 FROM R, S WHERE ( )。
 （本题为第 1 空）</p><ul class="exam-opts"><li><b>A</b> E1</li><li><b>B</b> E2</li><li><b>C</b> E3</li><li><b>D</b> E4</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">E2先分别对R、S执行筛选操作，大幅压缩参与自然连接的数据量，运算量最小、效率最高；FROM R,S代表笛卡尔积，WHERE子句需要同时补充A2筛选、A4筛选、R与S的A3等值连接三个条件，使用AND逻辑连接。</p></details></div></details><details class="exam-q" data-exam-id="2023年5月-040"><summary><span class="exam-no">第 40 题</span><span class="exam-stem-peek">在数据库的安全机制中，通过建立（ ）使用户只能看到部分数据，从而保护了其它数据的安全性。</span></summary><div class="exam-q-body"><p class="exam-stem">在数据库的安全机制中，通过建立（ ）使用户只能看到部分数据，从而保护了其它数据的安全性。</p><ul class="exam-opts"><li><b>A</b> 索引</li><li><b>B</b> 视图</li><li><b>C</b> 触发器</li><li><b>D</b> 存储过程</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">视图可以对底层物理表做数据筛选封装，限定用户仅能访问授权范围内的数据，屏蔽敏感内容，是数据库常用的访问控制安全手段。</p></details></div></details></details><details class="exam-year" data-exam-year="2022年5月"><summary><span class="exam-year-name">2022年5月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2022年5月-043"><summary><span class="exam-no">第 43 题</span><span class="exam-tag">两空单选</span><span class="exam-tag">2 空</span><span class="exam-stem-peek">给定关系模式R（U,F），U={A1,A2,A3,A4}，F={A1→A2A3, A2A3→A4}，那么在关系R中（43…</span></summary><div class="exam-q-body"><p class="exam-stem">给定关系模式R（U,F），U={A1,A2,A3,A4}，F={A1→A2A3, A2A3→A4}，那么在关系R中<b class="exam-blank">（43）</b>。以下说法错误的是<b class="exam-blank">（44）</b>。
 依赖推导：A2A3联合才能推出A4，单独的A2或A3无法推出A4，因此C选项的推导结论错误。
-（本题为第 1 空）</p><ul class="exam-opts"><li><b>A</b> 有1个候选关键字A1</li><li><b>B</b> 有1个候选关键字A2A3</li><li><b>C</b> 有2个候选关键字A2和A3</li><li><b>D</b> 有2个候选关键字A1和A2A3</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">候选键求解：属性A1从未出现在函数依赖的右侧，A1可以推导出A2、A3，再进一步推出A4，能覆盖全集U，因此唯一候选键是A1；</p></details></div></details><details class="exam-q" data-exam-id="2022年5月-040"><summary><span class="exam-no">第 40 题</span><span class="exam-stem-peek">在数据库设计的需求分析、概念结构设计、逻辑结构设计和物理结构设计的四个阶段中，基本 E-R图是（40）。</span></summary><div class="exam-q-body"><p class="exam-stem">在数据库设计的需求分析、概念结构设计、逻辑结构设计和物理结构设计的四个阶段中，基本 E-R图是（40）。</p><ul class="exam-opts"><li><b>A</b> 需求分析阶段形成的文档，并作为概念结构设计阶段的设计依据</li><li><b>B</b> 逻辑结构设计阶段形成的文档，并作为概念结构设计阶段的设计依据</li><li><b>C</b> 概念结构设计阶段形成的文档，并作为逻辑结构设计阶段的设计依据</li><li><b>D</b> 概念结构设计阶段形成的文档，并作为物理设计阶段的设计依据</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">概念结构设计的核心工作是设计业务概念模型，E-R图是该阶段的标志性产出物，后续会以E-R图为依据开展逻辑结构设计，将实体与联系转换为关系模式。</p></details></div></details></details><details class="exam-year" data-exam-year="2021年5月"><summary><span class="exam-year-name">2021年5月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2021年5月-043"><summary><span class="exam-no">第 43 题</span><span class="exam-stem-peek">给定关系模式R(U,F)，其中：属性集U={A,B,C,D,E,G}，函数依赖集F={A→BC,C→D,A→D,E→G}…</span></summary><div class="exam-q-body"><p class="exam-stem">给定关系模式R(U,F)，其中：属性集U={A,B,C,D,E,G}，函数依赖集F={A→BC,C→D,A→D,E→G}。关系R中（ ）。</p><ul class="exam-opts"><li><b>A</b> 有1个候选码A</li><li><b>B</b> 有1个候选码AE</li><li><b>C</b> 有2个候选码AC和AE</li><li><b>D</b> 有2个候选码CE和AE</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">仅A、E出现在函数依赖左部，AE可通过函数依赖推导出U内全部属性，且AE的真子集A、E都无法覆盖全部属性，因此AE是唯一候选码。</p></details></div></details><details class="exam-q" data-exam-id="2021年5月-040"><summary><span class="exam-no">第 40 题</span><span class="exam-stem-peek">在数据库系统中，一般将事务的执行状态分为五种。若“事务的最后一条语句自动执行后”，事务处于（ ）状态。</span></summary><div class="exam-q-body"><p class="exam-stem">在数据库系统中，一般将事务的执行状态分为五种。若“事务的最后一条语句自动执行后”，事务处于（ ）状态。</p><ul class="exam-opts"><li><b>A</b> 活动</li><li><b>B</b> 部分提交</li><li><b>C</b> 提交</li><li><b>D</b> 失败</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">事务执行完最后一条语句后进入部分提交状态，后续完成数据持久化写入磁盘后才会进入最终的提交状态。</p></details></div></details></details><details class="exam-year" data-exam-year="2020年11月"><summary><span class="exam-year-name">2020年11月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2020年11月-043"><summary><span class="exam-no">第 43 题</span><span class="exam-stem-peek">给定关系模式 R、&lt;U,F&gt;，其中：属性集 U={A,B,C,D,E,G}，函数依赖集 F = {A→BC, C→D, …</span></summary><div class="exam-q-body"><p class="exam-stem">给定关系模式 R、&lt;U,F&gt;，其中：属性集 U={A,B,C,D,E,G}，函数依赖集 F = {A→BC, C→D, AE→G}。若将 R 分解为如下两个关系模式（43），则分解后的关系模式保持函数依赖。</p><ul class="exam-opts"><li><b>A</b> R₁(A,B,C)和R₂(D,E,G)</li><li><b>B</b> R₁(B,C,D,E)和R₂(A,E,G)</li><li><b>C</b> R₁(B,C,D)和R₂(A,E,G)</li><li><b>D</b> R₁(A,B,C,D)和R₂(A,E,G)</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">选项D拆分后，R₁(A,B,C,D)可保留函数依赖{A→BC,C→D}，R₂(A,E,G)可保留{AE→G}，合并后的依赖集和原F完全一致；其余选项拆分后都会丢失部分函数依赖，无法保持依赖。</p></details></div></details><details class="exam-q" data-exam-id="2020年11月-040"><summary><span class="exam-no">第 40 题</span><span class="exam-stem-peek">在数据库系统中，数据的并发控制是指在多用户共享的系统中，协调并发事务的执行，保证数据库的(40)不受破坏，避免用户得到不…</span></summary><div class="exam-q-body"><p class="exam-stem">在数据库系统中，数据的并发控制是指在多用户共享的系统中，协调并发事务的执行，保证数据库的(40)不受破坏，避免用户得到不正确的数据。</p><ul class="exam-opts"><li><b>A</b> 安全性</li><li><b>B</b> 可靠性</li><li><b>C</b> 兼容性</li><li><b>D</b> 完整性</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">并发控制的核心目标是管控多用户并发事务的执行顺序，规避脏读、不可重复读、幻读问题，保障数据库数据的完整性不被破坏。</p></details></div></details></details><details class="exam-year" data-exam-year="2019年5月"><summary><span class="exam-year-name">2019年5月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2019年5月-043"><summary><span class="exam-no">第 43 题</span><span class="exam-stem-peek">给定关系模式R＜U，F＞，其中：属性集U={A,B,C,D,E},函数依赖集F={AC→B,B→DE}，关系R分别有（）…</span></summary><div class="exam-q-body"><p class="exam-stem">给定关系模式R＜U，F＞，其中：属性集U={A,B,C,D,E},函数依赖集F={AC→B,B→DE}，关系R分别有（）。</p><ul class="exam-opts"><li><b>A</b> 1个非主属性和4个主属性</li><li><b>B</b> 2个非主属性和3个主属性</li><li><b>C</b> 3个非主属性和2个主属性</li><li><b>D</b> 4个非主属性和1个主属性</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">该关系唯一候选键为AC，主属性是候选键包含的A、C共2个；剩余B、D、E为非主属性，共3个。</p></details></div></details><details class="exam-q" data-exam-id="2019年5月-040"><summary><span class="exam-no">第 40 题</span><span class="exam-stem-peek">描述企业应用中的实体及其联系，属于数据库设计的（）阶段。</span></summary><div class="exam-q-body"><p class="exam-stem">描述企业应用中的实体及其联系，属于数据库设计的（）阶段。</p><ul class="exam-opts"><li><b>A</b> 需求分析</li><li><b>B</b> 概念设计</li><li><b>C</b> 逻辑设计</li><li><b>D</b> 物理设计</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">数据库概念设计阶段通过E-R图抽象业务场景里的实体、属性以及实体间联系，构建脱离具体数据库实现的概念模型；逻辑设计是将E-R图转化为关系数据表结构。</p></details></div></details></details></details><details class="exam-subject" data-exam-subject="案例"><summary><span class="exam-subject-name">📋 案例分析</span><span class="exam-subject-n">2 题</span><span class="exam-subject-tip">情景简答 · 采分点三色标记</span></summary><div class="exam-bar"><span class="exam-bar-label">📋 案例分析</span><span class="exam-bar-stat">共 <b>2</b> 题 · 情景简答</span></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">18</span>考点：三级模式与两级映像 / 数据模型 / ER 模型 / 关系规范化<br>📅 时间：2025-08-18 上午 📍 地点：项目组数据模型评审<br>👤 人物：甘工（乙方·系统分析师）、彭工（乙方·架构设计师）、傅工（乙方·开发）、邓经理（甲方·运维经理）<br>⚡ 冲突：傅工画了一张大表塞下所有字段，被指出冗余与更新异常<br>难度：★★★　总分：9 分　建议用时：25 分钟<br>背景：傅工把 ER 图投影出来，得意地说：&quot;一张工单表搞定，客户姓名、坐席姓名、技能组名称都在里面，查询不用 join，多快。&quot; 彭工当场摇头：&quot;改一次技能组名称，你要更新几万行工单；删掉最后一张工单，客户信息也没了。这叫更新异常和删除异常。&quot; 邓经理补了一刀：&quot;而且坐席姓名在每张工单里重复存，存储也浪费。&quot; 甘工接过话：&quot;这表只满足第一范式，得拆。拆到什么程度、怎么保证拆完不丢数据、依赖关系还在不在——这才是今天要定的。&quot;<br>补充资料：- 客户：客户编号、姓名、所属地市、客户等级（VIP/普通）； - 坐席：坐席工号、姓名、技能组编码、技能组名称、所属职场； - 工单：工单编号、客户编号、受理坐席工号、故障类型、紧急程度、创建时间、完成时间、处理结果、满意度； - 一个客户可有多张工单；一个坐席可受理多张工单；一个技能组包含多名坐席。 甘工初步设计了一张大表：<code>工单表(工单编号, 客户编号, 客户姓名, 客户等级, 坐席工号, 坐席姓名, 技能组编码, 技能组名称, 故障类型, 紧急程度, 创建时间, 完成时间, 处理结果, 满意度)</code>。<br>问题 1：请说明数据库系统的三级模式结构（外模式、模式、内模式）与两级映像，并说明其带来的数据独立性；再说明数据模型的三个层次。（9分）<br>问题 2：（1）请画出/描述本系统的 E-R 模型（实体、属性、联系及基数）；<br>问题 3：（2）指出甘工设计的&quot;工单表&quot;存在哪些问题（从函数依赖与范式角度分析），并将其分解到 BCNF；<br>问题 4：（3）说明分解后是否无损、是否保持函数依赖。</p><ul class="exam-questions"><li><b>问题 1</b> 请说明数据库系统的<strong>三级模式结构</strong>（外模式、模式、内模式）与<strong>两级映像</strong>，并说明其带来的<strong>数据独立性</strong>；再说明<strong>数据模型</strong>的三个层次。（9分）</li><li><b>问题 2</b> （1）请画出/描述本系统的 <strong>E-R 模型</strong>（实体、属性、联系及基数）；</li><li><b>问题 3</b> （2）指出甘工设计的&quot;工单表&quot;存在哪些问题（从函数依赖与范式角度分析），并将其分解到 <strong>BCNF</strong>；</li><li><b>问题 4</b> （3）说明分解后是否无损、是否保持函数依赖。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点（9分）：<br>- 🔴 核心：🔴 核心（三级模式）：；外模式（子模式/用户模式）：某个用户或应用所看到的数据视图，一个数据库可有多个外模式（如坐席只看脱敏后的客户视图，管理员看全量视图）；；模式（逻辑模式）：全体数据的整体逻辑结构与描述，是数据库的核心，只有一个；；内模式（存储模式）：数据在存储介质上的物理结构与存储方式（索引、压缩、分区、文件组织）。<br>- 🟡 支撑：🔴 核心（两级映像与独立性）：；外模式/模式映像：模式改变时，只需调整映像即可保持外模式不变 → 数据的逻辑独立性；；模式/内模式映像：存储结构改变时，只需调整映像即可保持模式不变 → 数据的物理独立性。<br>- 🟡 支撑：坐席工作台只展示脱敏号码（外模式 A），质检系统可查看完整通话明细（外模式 B），二者共享同一逻辑模式；把话单表改为分区表（内模式变化）不影响应用，体现了物理独立性。<br>- 🔴 核心：①概念模型（面向用户与业务，如 E-R 模型）；②逻辑模型（面向 DBMS 实现，如关系模型、层次/网状模型、面向对象模型）；③物理模型（面向存储，描述存储结构与存取方法）。<br>- 🟢 加分：三级模式的价值是&quot;把用户视图、整体逻辑、物理存储三者解耦&quot;，这也是为什么&quot;加一个字段/换存储引擎&quot;不必重写所有应用。<br>- 🟢 加分：解析·范式题要&quot;写依赖 → 判范式 → 列更新异常 → 分解 → 验证无损/依赖&quot;。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）E-R 模型）：<br>问题 3｜参考答案要点：<br>- 🔴 核心：🔴 核心（2）问题与分解）：<br>问题 4｜参考答案要点：<br>- 🔴 核心：🔴 核心（3）无损与依赖）：</div></details></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">21</span>📅 时间：2026-03-05 上午 📍 地点：集团运营分析会<br>👤 人物：甘工（乙方·系统分析师）、洪经理（甲方·客服部经理）、徐总监（甲方·数智化信息部总监）、李工（乙方·项目经理）<br>⚡ 冲突：客服部与运营部各出一份&quot;接通率&quot;报表，数字差了 7 个百分点，会上互相质疑数据造假<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：洪经理把两份报表投影出来：&quot;我这边统计 2 月接通率 92%，运营部给领导报的是 85%。同一个月、同一批电话，差七个点，这不是开玩笑吗？&quot; 运营部同事反驳：&quot;我们按&#x27;呼入量里被接起的&#x27;算，你们是不是把 AI 接的也算进去了？&quot; 徐总监脸色不好看：&quot;数据不准，我怎么向集团汇报？&quot; 甘工心里清楚：这不是造假，是口径不一致——有人算&quot;AI 接起 + 人工接起 / 总呼入&quot;，有人只算人工；有人排除了 3 秒内的早释，有人没排除；还有人把呼损重试算成了两次呼入。<br>补充资料：分子 → AI 接起 + 人工接起 → 仅人工接起 → AI 接起 + 人工接起；分母 → 总呼入量 → 总呼入量 → 有效呼入量；是否排除 3 秒早释 → 未排除 → 未排除 → 排除；是否排除重复呼入 → 未排除 → 未排除 → 排除（同号 5 分钟内计 1 次）；结果 → 92% → 85% → 待重算（预计 88%~89%） 治理要求：指标在 DWD/ADS 层只计算一次，报表标注口径与数据时间。<br>问题 1：（1）说明数据仓库的特征与体系结构，说明为什么需要独立于业务库建仓；<br>问题 2：（2）说明 OLAP 与 OLTP 的区别及 OLAP 基本操作；<br>问题 3：（3）设计本项目的 ETL 与数据分层，解决口径不一致；<br>问题 4：（4）说明数据挖掘在本项目可用于哪些分析。</p><ul class="exam-questions"><li><b>问题 1</b> （1）说明<strong>数据仓库</strong>的特征与体系结构，说明为什么需要独立于业务库建仓；</li><li><b>问题 2</b> （2）说明 <strong>OLAP</strong> 与 <strong>OLTP</strong> 的区别及 <strong>OLAP 基本操作</strong>；</li><li><b>问题 3</b> （3）设计本项目的 <strong>ETL 与数据分层</strong>，解决口径不一致；</li><li><b>问题 4</b> （4）说明数据挖掘在本项目可用于哪些分析。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）数据仓库）：特征——面向主题、集成的、相对稳定（非易失）、反映历史变化。体系结构：数据源 → ETL → 存储与管理（ODS/DWD/DWS/ADS 分层 + 数据集市）→ OLAP 引擎 → 前端展现（报表、看板、即席查询），配套元数据管理。<br>- 🟢 加分：解析·数据仓库题要&quot;特征 + 体系 + OLAP 操作 + 分层 + 指标字典治理&quot;。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🔴 核心（2）OLAP vs OLTP）：OLTP 面向事务——当前的、细节的、可更新的、面向应用，高并发短事务，规范化设计（3NF/BCNF）；OLAP 面向分析——历史的、综合的、只读为主、面向主题，低并发长查询，反规范化（星型/雪花模型）。<br>问题 3｜参考答案要点：<br>- 🔴 核心：🟡 支撑（3）ETL 与分层设计）：<br>问题 4｜参考答案要点：<br>- 🔴 核心：🔴 核心（4）数据挖掘应用）：主要任务——分类、聚类、回归/预测、关联规则、序列模式、异常检测、文本挖掘。</div></details></div></details><details class="exam-subject" data-exam-subject="论文"><summary><span class="exam-subject-name">📄 论文写作</span><span class="exam-subject-n">2 题</span><span class="exam-subject-tip">论述题 · 先写再看题</span></summary><div class="exam-bar"><span class="exam-bar-label">📄 论文写作</span><span class="exam-bar-stat">共 <b>2</b> 题 · 论述题</span></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与转化交接的信息系统项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 阐述数据抽取、数据转换、迁移后数据校验三项活动的内涵与实施要点。</li><li><b>问题 3</b> 说明项目中数据转换迁移的实施过程、遇到的问题以及对应的解决方法。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 数据工程</span><span class="exam-lv">⭐⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与设计、优化的数据库项目（项目的背景、数据规模、性能要求、数据库类型、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细论述数据库建模的方法（ER 模型、关系模型）、索引设计原则、查询优化技巧（执行计划分析、SQL 改写）、分库分表设计要点。</li><li><b>问题 3</b> 结合项目实例，论述数据库优化的实施过程、性能测试方法，分析优化效果及后续改进方向。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 数据工程</span><span class="exam-lv">⭐</span></div></div></details></section>
+（本题为第 1 空）</p><ul class="exam-opts"><li><b>A</b> 有1个候选关键字A1</li><li><b>B</b> 有1个候选关键字A2A3</li><li><b>C</b> 有2个候选关键字A2和A3</li><li><b>D</b> 有2个候选关键字A1和A2A3</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">候选键求解：属性A1从未出现在函数依赖的右侧，A1可以推导出A2、A3，再进一步推出A4，能覆盖全集U，因此唯一候选键是A1；</p></details></div></details><details class="exam-q" data-exam-id="2022年5月-040"><summary><span class="exam-no">第 40 题</span><span class="exam-stem-peek">在数据库设计的需求分析、概念结构设计、逻辑结构设计和物理结构设计的四个阶段中，基本 E-R图是（40）。</span></summary><div class="exam-q-body"><p class="exam-stem">在数据库设计的需求分析、概念结构设计、逻辑结构设计和物理结构设计的四个阶段中，基本 E-R图是（40）。</p><ul class="exam-opts"><li><b>A</b> 需求分析阶段形成的文档，并作为概念结构设计阶段的设计依据</li><li><b>B</b> 逻辑结构设计阶段形成的文档，并作为概念结构设计阶段的设计依据</li><li><b>C</b> 概念结构设计阶段形成的文档，并作为逻辑结构设计阶段的设计依据</li><li><b>D</b> 概念结构设计阶段形成的文档，并作为物理设计阶段的设计依据</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">概念结构设计的核心工作是设计业务概念模型，E-R图是该阶段的标志性产出物，后续会以E-R图为依据开展逻辑结构设计，将实体与联系转换为关系模式。</p></details></div></details></details><details class="exam-year" data-exam-year="2021年5月"><summary><span class="exam-year-name">2021年5月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2021年5月-043"><summary><span class="exam-no">第 43 题</span><span class="exam-stem-peek">给定关系模式R(U,F)，其中：属性集U={A,B,C,D,E,G}，函数依赖集F={A→BC,C→D,A→D,E→G}…</span></summary><div class="exam-q-body"><p class="exam-stem">给定关系模式R(U,F)，其中：属性集U={A,B,C,D,E,G}，函数依赖集F={A→BC,C→D,A→D,E→G}。关系R中（ ）。</p><ul class="exam-opts"><li><b>A</b> 有1个候选码A</li><li><b>B</b> 有1个候选码AE</li><li><b>C</b> 有2个候选码AC和AE</li><li><b>D</b> 有2个候选码CE和AE</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">仅A、E出现在函数依赖左部，AE可通过函数依赖推导出U内全部属性，且AE的真子集A、E都无法覆盖全部属性，因此AE是唯一候选码。</p></details></div></details><details class="exam-q" data-exam-id="2021年5月-040"><summary><span class="exam-no">第 40 题</span><span class="exam-stem-peek">在数据库系统中，一般将事务的执行状态分为五种。若“事务的最后一条语句自动执行后”，事务处于（ ）状态。</span></summary><div class="exam-q-body"><p class="exam-stem">在数据库系统中，一般将事务的执行状态分为五种。若“事务的最后一条语句自动执行后”，事务处于（ ）状态。</p><ul class="exam-opts"><li><b>A</b> 活动</li><li><b>B</b> 部分提交</li><li><b>C</b> 提交</li><li><b>D</b> 失败</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">事务执行完最后一条语句后进入部分提交状态，后续完成数据持久化写入磁盘后才会进入最终的提交状态。</p></details></div></details></details><details class="exam-year" data-exam-year="2020年11月"><summary><span class="exam-year-name">2020年11月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2020年11月-043"><summary><span class="exam-no">第 43 题</span><span class="exam-stem-peek">给定关系模式 R、&lt;U,F&gt;，其中：属性集 U={A,B,C,D,E,G}，函数依赖集 F = {A→BC, C→D, …</span></summary><div class="exam-q-body"><p class="exam-stem">给定关系模式 R、&lt;U,F&gt;，其中：属性集 U={A,B,C,D,E,G}，函数依赖集 F = {A→BC, C→D, AE→G}。若将 R 分解为如下两个关系模式（43），则分解后的关系模式保持函数依赖。</p><ul class="exam-opts"><li><b>A</b> R₁(A,B,C)和R₂(D,E,G)</li><li><b>B</b> R₁(B,C,D,E)和R₂(A,E,G)</li><li><b>C</b> R₁(B,C,D)和R₂(A,E,G)</li><li><b>D</b> R₁(A,B,C,D)和R₂(A,E,G)</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">选项D拆分后，R₁(A,B,C,D)可保留函数依赖{A→BC,C→D}，R₂(A,E,G)可保留{AE→G}，合并后的依赖集和原F完全一致；其余选项拆分后都会丢失部分函数依赖，无法保持依赖。</p></details></div></details><details class="exam-q" data-exam-id="2020年11月-040"><summary><span class="exam-no">第 40 题</span><span class="exam-stem-peek">在数据库系统中，数据的并发控制是指在多用户共享的系统中，协调并发事务的执行，保证数据库的(40)不受破坏，避免用户得到不…</span></summary><div class="exam-q-body"><p class="exam-stem">在数据库系统中，数据的并发控制是指在多用户共享的系统中，协调并发事务的执行，保证数据库的(40)不受破坏，避免用户得到不正确的数据。</p><ul class="exam-opts"><li><b>A</b> 安全性</li><li><b>B</b> 可靠性</li><li><b>C</b> 兼容性</li><li><b>D</b> 完整性</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">并发控制的核心目标是管控多用户并发事务的执行顺序，规避脏读、不可重复读、幻读问题，保障数据库数据的完整性不被破坏。</p></details></div></details></details><details class="exam-year" data-exam-year="2019年5月"><summary><span class="exam-year-name">2019年5月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2019年5月-043"><summary><span class="exam-no">第 43 题</span><span class="exam-stem-peek">给定关系模式R＜U，F＞，其中：属性集U={A,B,C,D,E},函数依赖集F={AC→B,B→DE}，关系R分别有（）…</span></summary><div class="exam-q-body"><p class="exam-stem">给定关系模式R＜U，F＞，其中：属性集U={A,B,C,D,E},函数依赖集F={AC→B,B→DE}，关系R分别有（）。</p><ul class="exam-opts"><li><b>A</b> 1个非主属性和4个主属性</li><li><b>B</b> 2个非主属性和3个主属性</li><li><b>C</b> 3个非主属性和2个主属性</li><li><b>D</b> 4个非主属性和1个主属性</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">该关系唯一候选键为AC，主属性是候选键包含的A、C共2个；剩余B、D、E为非主属性，共3个。</p></details></div></details><details class="exam-q" data-exam-id="2019年5月-040"><summary><span class="exam-no">第 40 题</span><span class="exam-stem-peek">描述企业应用中的实体及其联系，属于数据库设计的（）阶段。</span></summary><div class="exam-q-body"><p class="exam-stem">描述企业应用中的实体及其联系，属于数据库设计的（）阶段。</p><ul class="exam-opts"><li><b>A</b> 需求分析</li><li><b>B</b> 概念设计</li><li><b>C</b> 逻辑设计</li><li><b>D</b> 物理设计</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">数据库概念设计阶段通过E-R图抽象业务场景里的实体、属性以及实体间联系，构建脱离具体数据库实现的概念模型；逻辑设计是将E-R图转化为关系数据表结构。</p></details></div></details></details></details><details class="exam-subject" data-exam-subject="案例"><summary><span class="exam-subject-name">📋 案例分析</span><span class="exam-subject-n">2 题</span><span class="exam-subject-tip">案例背景 · 题目 · 答案与解析</span></summary><div class="exam-bar"><span class="exam-bar-label">📋 案例分析</span><span class="exam-bar-stat">共 <b>2</b> 题 · 情景简答 · 采分点三色标记</span></div><div class="exam-q exam-q-case"><div class="case-head"><span class="exam-no">案例 18</span><span class="exam-tag">考点 · 话务数据的建模与规范化</span><span class="exam-lv">⭐⭐⭐</span></div><div class="case-meta"><span><strong>考点</strong>：三级模式与两级映像 / 数据模型 / ER 模型 / 关系规范化</span><span>📅 <strong>时间</strong>：2025-08-18 上午 📍 <strong>地点</strong>：项目组数据模型评审</span><span>👤 <strong>人物</strong>：甘工（乙方·系统分析师）、彭工（乙方·架构设计师）、傅工（乙方·开发）、邓经理（甲方·运维经理）</span><span>⚡ <strong>冲突</strong>：傅工画了一张大表塞下所有字段，被指出冗余与更新异常</span><span><strong>难度</strong>：★★★　<strong>总分</strong>：9 分　<strong>建议用时</strong>：25 分钟</span></div><div class="case-scene"><div class="case-h">案例背景</div><strong>背景</strong>：傅工把 ER 图投影出来，得意地说：&quot;一张工单表搞定，客户姓名、坐席姓名、技能组名称都在里面，查询不用 join，多快。&quot; 彭工当场摇头：&quot;改一次技能组名称，你要更新几万行工单；删掉最后一张工单，客户信息也没了。这叫更新异常和删除异常。&quot; 邓经理补了一刀：&quot;而且坐席姓名在每张工单里重复存，存储也浪费。&quot; 甘工接过话：&quot;这表只满足第一范式，得拆。拆到什么程度、怎么保证拆完不丢数据、依赖关系还在不在——这才是今天要定的。&quot;<br><strong>补充资料</strong>：- <strong>客户</strong>：客户编号、姓名、所属地市、客户等级（VIP/普通）； - <strong>坐席</strong>：坐席工号、姓名、技能组编码、技能组名称、所属职场； - <strong>工单</strong>：工单编号、客户编号、受理坐席工号、故障类型、紧急程度、创建时间、完成时间、处理结果、满意度； - 一个客户可有多张工单；一个坐席可受理多张工单；一个技能组包含多名坐席。 甘工初步设计了一张大表：<code>工单表(工单编号, 客户编号, 客户姓名, 客户等级, 坐席工号, 坐席姓名, 技能组编码, 技能组名称, 故障类型, 紧急程度, 创建时间, 完成时间, 处理结果, 满意度)</code>。</div><div class="case-asks"><div class="case-h">题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">请说明数据库系统的<strong>三级模式结构</strong>（外模式、模式、内模式）与<strong>两级映像</strong>，并说明其带来的<strong>数据独立性</strong>；再说明<strong>数据模型</strong>的三个层次。（9分）</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">（1）请画出/描述本系统的 <strong>E-R 模型</strong>（实体、属性、联系及基数）；</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">（2）指出甘工设计的&quot;工单表&quot;存在哪些问题（从函数依赖与范式角度分析），并将其分解到 <strong>BCNF</strong>；</span></li><li><span class="case-ask-no">4</span><span class="case-ask-t">（3）说明分解后是否<strong>无损</strong>、是否<strong>保持函数依赖</strong>。</span></li></ul></div><details class="exam-ans"><summary>参考答案要点（三色标记）</summary><div class="exam-points"><strong>问题 1｜参考答案要点（9分）</strong>：<br>- 🔴 核心：🔴 核心（三级模式）：；外模式（子模式/用户模式）：某个用户或应用所看到的数据视图，一个数据库可有多个外模式（如坐席只看脱敏后的客户视图，管理员看全量视图）；；模式（逻辑模式）：全体数据的整体逻辑结构与描述，是数据库的核心，只有一个；；内模式（存储模式）：数据在存储介质上的物理结构与存储方式（索引、压缩、分区、文件组织）。<br>- 🟡 支撑：🔴 核心（两级映像与独立性）：；外模式/模式映像：模式改变时，只需调整映像即可保持外模式不变 → 数据的逻辑独立性；；模式/内模式映像：存储结构改变时，只需调整映像即可保持模式不变 → 数据的物理独立性。<br>- 🟡 支撑：坐席工作台只展示脱敏号码（外模式 A），质检系统可查看完整通话明细（外模式 B），二者共享同一逻辑模式；把话单表改为分区表（内模式变化）不影响应用，体现了物理独立性。<br>- 🔴 核心：①概念模型（面向用户与业务，如 E-R 模型）；②逻辑模型（面向 DBMS 实现，如关系模型、层次/网状模型、面向对象模型）；③物理模型（面向存储，描述存储结构与存取方法）。<br><strong>问题 2｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（1）E-R 模型）：<br><strong>问题 3｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（2）问题与分解）：<br><strong>问题 4｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（3）无损与依赖）：</div></details><details class="exam-ans"><summary>解析与加分项</summary><div class="exam-exp-more">- 🟢 加分：三级模式的价值是&quot;把用户视图、整体逻辑、物理存储三者解耦&quot;，这也是为什么&quot;加一个字段/换存储引擎&quot;不必重写所有应用。<br>- 🟢 加分：解析·范式题要&quot;写依赖 → 判范式 → 列更新异常 → 分解 → 验证无损/依赖&quot;。</div></details></div><div class="exam-q exam-q-case"><div class="case-head"><span class="exam-no">案例 21</span><span class="exam-tag">考点 · 两张报表打架</span><span class="exam-lv">⭐⭐⭐</span></div><div class="case-meta"><span>📅 <strong>时间</strong>：2026-03-05 上午 📍 <strong>地点</strong>：集团运营分析会</span><span>👤 <strong>人物</strong>：甘工（乙方·系统分析师）、洪经理（甲方·客服部经理）、徐总监（甲方·数智化信息部总监）、李工（乙方·项目经理）</span><span>⚡ <strong>冲突</strong>：客服部与运营部各出一份&quot;接通率&quot;报表，数字差了 7 个百分点，会上互相质疑数据造假</span><span><strong>难度</strong>：★★★　<strong>总分</strong>：25 分　<strong>建议用时</strong>：25 分钟</span></div><div class="case-scene"><div class="case-h">案例背景</div><strong>背景</strong>：洪经理把两份报表投影出来：&quot;我这边统计 2 月接通率 92%，运营部给领导报的是 85%。同一个月、同一批电话，差七个点，这不是开玩笑吗？&quot; 运营部同事反驳：&quot;我们按&#x27;呼入量里被接起的&#x27;算，你们是不是把 AI 接的也算进去了？&quot; 徐总监脸色不好看：&quot;数据不准，我怎么向集团汇报？&quot; 甘工心里清楚：这不是造假，是<strong>口径不一致</strong>——有人算&quot;AI 接起 + 人工接起 / 总呼入&quot;，有人只算人工；有人排除了 3 秒内的早释，有人没排除；还有人把呼损重试算成了两次呼入。<br><strong>补充资料</strong>：分子 → AI 接起 + 人工接起 → 仅人工接起 → <strong>AI 接起 + 人工接起</strong>；分母 → 总呼入量 → 总呼入量 → <strong>有效呼入量</strong>；是否排除 3 秒早释 → 未排除 → 未排除 → <strong>排除</strong>；是否排除重复呼入 → 未排除 → 未排除 → <strong>排除（同号 5 分钟内计 1 次）</strong>；结果 → 92% → 85% → 待重算（预计 88%~89%） <strong>治理要求</strong>：指标在 DWD/ADS 层<strong>只计算一次</strong>，报表标注口径与数据时间。</div><div class="case-asks"><div class="case-h">题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">（1）说明<strong>数据仓库</strong>的特征与体系结构，说明为什么需要独立于业务库建仓；</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">（2）说明 <strong>OLAP</strong> 与 <strong>OLTP</strong> 的区别及 <strong>OLAP 基本操作</strong>；</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">（3）设计本项目的 <strong>ETL 与数据分层</strong>，解决口径不一致；</span></li><li><span class="case-ask-no">4</span><span class="case-ask-t">（4）说明<strong>数据挖掘</strong>在本项目可用于哪些分析。</span></li></ul></div><details class="exam-ans"><summary>参考答案要点（三色标记）</summary><div class="exam-points"><strong>问题 1｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（1）数据仓库）：特征——面向主题、集成的、相对稳定（非易失）、反映历史变化。体系结构：数据源 → ETL → 存储与管理（ODS/DWD/DWS/ADS 分层 + 数据集市）→ OLAP 引擎 → 前端展现（报表、看板、即席查询），配套元数据管理。<br><strong>问题 2｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（2）OLAP vs OLTP）：OLTP 面向事务——当前的、细节的、可更新的、面向应用，高并发短事务，规范化设计（3NF/BCNF）；OLAP 面向分析——历史的、综合的、只读为主、面向主题，低并发长查询，反规范化（星型/雪花模型）。<br><strong>问题 3｜参考答案要点</strong>：<br>- 🔴 核心：🟡 支撑（3）ETL 与分层设计）：<br><strong>问题 4｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（4）数据挖掘应用）：主要任务——分类、聚类、回归/预测、关联规则、序列模式、异常检测、文本挖掘。</div></details><details class="exam-ans"><summary>解析与加分项</summary><div class="exam-exp-more">- 🟢 加分：解析·数据仓库题要&quot;特征 + 体系 + OLAP 操作 + 分层 + 指标字典治理&quot;。</div></details></div></details><details class="exam-subject" data-exam-subject="论文"><summary><span class="exam-subject-name">📄 论文写作</span><span class="exam-subject-n">2 题</span><span class="exam-subject-tip">先看题 · 再看考点拆解</span></summary><div class="exam-bar"><span class="exam-bar-label">📄 论文写作</span><span class="exam-bar-stat">共 <b>2</b> 题 · 论述题 · 含考点拆解与教材知识点</span></div><div class="exam-q exam-q-essay"><div class="case-head"><span class="exam-no">论文 24</span><span class="exam-tag">方向 · 数据工程</span><span class="exam-lv">⭐⭐</span><span class="essay-batch">2023年上半年</span></div><div class="case-asks"><div class="case-h">论文题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">概要叙述你参与转化交接的信息系统项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">阐述数据抽取、数据转换、迁移后数据校验三项活动的内涵与实施要点。</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">说明项目中数据转换迁移的实施过程、遇到的问题以及对应的解决方法。</span></li></ul></div><details class="exam-ans" open><summary>试题背景</summary><div class="essay-bg">数据转换与迁移是新旧系统交接的核心工作，基本原则是保障数据不丢失，迁移质量直接决定新系统能否顺利上线。</div></details><details class="exam-ans"><summary>考点拆解（三色标记）</summary><div class="exam-keypoints"><strong>问题 1｜概要叙述项目与你承担的工作</strong>：<br>- 🔴 核心：点明近三年内一个具体的真实项目：项目名称、背景、发起单位、规模、周期、交付成果（教材 22.4-9/22.4-10 明确要求，泛泛而谈会判虚构）<br>- 🔴 核心：明确「我」在项目中的角色与承担的主要工作，并站在系统分析师视角论述，而非单纯开发实现视角<br>- 🟡 支撑：说明项目的组织结构、开发体制与技术栈，为后文论述做铺垫<br>- 🟢 加分：点出项目与本题主题的直接关联（如本项目正是因 XX 痛点才需要 XX 方法）<br><strong>问题 2｜理论知识 / 方法论述</strong>：<br>- 🔴 核心：数据抽取——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：数据转换——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：迁移后数据校验三项活动的内涵与实施要点——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🟢 加分：给出与其他候选方案的取舍依据，体现选型判断力<br><strong>问题 3｜项目实践落地与复盘</strong>：<br>- 🔴 核心：给出可量化的落地效果（缺陷率/响应时间/迭代周期/资源成本等具体数据），而非「取得了良好效果」<br>- 🔴 核心：诚实分析存在的 2~3 个真实问题，并给出对应的改进措施——教材强调这才是用心的内容<br>- 🟡 支撑：结合具体实例说明措施的实施过程（怎么做的，而非教科书式罗列）<br>- 🟢 加分：总结经验教训与后续演进方向，体现复盘能力<br>- 🟡 支撑：项目中数据转换迁移的实施过程<br>- 🟡 支撑：项目中数据转换迁移的遇到的问题以及对应的解决方法</div></details><details class="exam-ans"><summary>教材知识点</summary><div class="exam-textbook"><span class="tb-chap">第 5 章 · 数据库系统</span><a class="tb-hour" href="H09.html">H09</a><a class="tb-hour" href="H10.html">H10</a><a class="tb-hour" href="H11.html">H11</a></div></details></div><div class="exam-q exam-q-essay"><div class="case-head"><span class="exam-no">论文 101</span><span class="exam-tag">方向 · 数据工程</span><span class="exam-lv">⭐</span><span class="essay-batch">2011年上半年</span></div><div class="case-asks"><div class="case-h">论文题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">概要叙述你参与设计、优化的数据库项目（项目的背景、数据规模、性能要求、数据库类型、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">详细论述数据库建模的方法（ER 模型、关系模型）、索引设计原则、查询优化技巧（执行计划分析、SQL 改写）、分库分表设计要点。</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">结合项目实例，论述数据库优化的实施过程、性能测试方法，分析优化效果及后续改进方向。</span></li></ul></div><details class="exam-ans" open><summary>试题背景</summary><div class="essay-bg">数据库系统设计与优化直接影响信息系统的性能与稳定性，涵盖数据库建模、索引设计、查询优化、存储优化等环节。</div></details><details class="exam-ans"><summary>考点拆解（三色标记）</summary><div class="exam-keypoints"><strong>问题 1｜概要叙述项目与你承担的工作</strong>：<br>- 🔴 核心：点明近三年内一个具体的真实项目：项目名称、背景、发起单位、规模、周期、交付成果（教材 22.4-9/22.4-10 明确要求，泛泛而谈会判虚构）<br>- 🔴 核心：明确「我」在项目中的角色与承担的主要工作，并站在系统分析师视角论述，而非单纯开发实现视角<br>- 🟡 支撑：说明项目的组织结构、开发体制与技术栈，为后文论述做铺垫<br>- 🟢 加分：点出项目与本题主题的直接关联（如本项目正是因 XX 痛点才需要 XX 方法）<br><strong>问题 2｜理论知识 / 方法论述</strong>：<br>- 🔴 核心：数据库建模的方法ER 模型——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：数据库建模的关系模型——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：数据库建模的索引设计原则——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🟡 支撑：数据库建模的查询优化技巧执行计划分析<br>- 🟡 支撑：数据库建模的SQL 改写<br>- 🟡 支撑：数据库建模的分库分表设计要点<br>- 🟢 加分：给出与其他候选方案的取舍依据，体现选型判断力<br><strong>问题 3｜项目实践落地与复盘</strong>：<br>- 🔴 核心：给出可量化的落地效果（缺陷率/响应时间/迭代周期/资源成本等具体数据），而非「取得了良好效果」<br>- 🔴 核心：诚实分析存在的 2~3 个真实问题，并给出对应的改进措施——教材强调这才是用心的内容<br>- 🟡 支撑：结合具体实例说明措施的实施过程（怎么做的，而非教科书式罗列）<br>- 🟢 加分：总结经验教训与后续演进方向，体现复盘能力<br>- 🟡 支撑：论述数据库优化的实施过程<br>- 🟡 支撑：性能测试方法</div></details><details class="exam-ans"><summary>教材知识点</summary><div class="exam-textbook"><span class="tb-chap">第 5 章 · 数据库系统</span><a class="tb-hour" href="H09.html">H09</a><a class="tb-hour" href="H10.html">H10</a><a class="tb-hour" href="H11.html">H11</a></div></details></div></details></section>
     <div class="wrongbook"></div>
     <div class="keyhint">
   <span class="keyhint-title">键盘快捷键</span>
@@ -3201,7 +3383,9 @@ $E_4 = \pi_{A1,A4} (\sigma_{R.A3=S.A3}(\sigma_{A2&lt;&#x27;2022&#x27;}(R) \times
     init() {
       const root = document.querySelector('.exam')
       if (!root) return
-      const chapter = root.dataset.examChapter || 'x'
+      // ⚠️ 专项页 / 全真模拟页没有 data-exam-chapter（无教材章），
+      //    旧写法一律退化成 'x' → H42~H48 共用同一个记忆键、互相串状态。
+      const chapter = root.dataset.examChapter || root.dataset.examHour || 'x'
 
       // 恢复上次展开状态：{ "H07": { "2025年5月": true, ... } }
       const saved = store.get(this.KEY, {}) || {}
@@ -3221,6 +3405,7 @@ $E_4 = \pi_{A1,A4} (\sigma_{R.A3=S.A3}(\sigma_{A2&lt;&#x27;2022&#x27;}(R) \times
       const seen = store.get('examSeen', {}) || {}
       root.querySelectorAll('.exam-q').forEach(qd => {
         const qid = qd.dataset.examId
+        if (!qid) return
         if (seen[qid]) {
           const a = qd.querySelector('.exam-ans')
           if (a) a.open = true
@@ -3236,12 +3421,17 @@ $E_4 = \pi_{A1,A4} (\sigma_{R.A3=S.A3}(\sigma_{A2&lt;&#x27;2022&#x27;}(R) \times
         btn.addEventListener('click', e => {
           e.preventDefault()
           const openAll = btn.dataset.examAll === '1'
-          root.querySelectorAll('.exam-subject,.exam-year').forEach(d => { d.open = openAll })
-          root.querySelectorAll('.exam-ans').forEach(d => {
-            d.open = openAll
-            if (openAll && d.parentElement.dataset.examId) seen[d.parentElement.dataset.examId] = 1
-          })
-          if (openAll) store.set('examSeen', seen)
+          // ⚠️ 必须把 .exam-q 也列进来：只开 .exam-subject/.exam-year/.exam-ans
+          //    时，单题仍折叠 → 答案藏在关闭的单题内，"全部展开"名不副实。
+          root.querySelectorAll('.exam-subject,.exam-year,.exam-q,.exam-ans')
+            .forEach(d => { d.open = openAll })
+          if (openAll) {
+            // ⚠️ 旧的 `d.parentElement.dataset.examId` 取到的是 .exam-q-body（无 id），
+            //    会把 seen[undefined] 写进 localStorage。改为直接从 .exam-q 取。
+            root.querySelectorAll('.exam-q[data-exam-id]')
+              .forEach(qd => { seen[qd.dataset.examId] = 1 })
+            store.set('examSeen', seen)
+          }
           // 同步年份级记忆
           root.querySelectorAll('.exam-year').forEach(y => { mine[y.dataset.examYear] = y.open })
           saved[chapter] = mine
@@ -3288,7 +3478,7 @@ $E_4 = \pi_{A1,A4} (\sigma_{R.A3=S.A3}(\sigma_{A2&lt;&#x27;2022&#x27;}(R) \times
   // ══════════════════════════════════════════
   // 8. mermaid 渲染（自定义墨绿主题，与正文同色系）
   // ══════════════════════════════════════════
-  // 站点配色（与 design.css 的令牌保持一致）
+  // 站点配色（与设计令牌保持一致 —— 改主题色时这里要同步）
   const MERMAID_LIGHT = {
     bg: '#f2f0e9', fg: '#1b211c', line: '#cdc9bd',
     accent: '#3d5a40', accent2: '#5a8a62', accent3: '#7ea888',

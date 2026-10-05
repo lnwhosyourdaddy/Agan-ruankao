@@ -7,7 +7,7 @@
 <title>第 5 小时 · 计算机系统（二）· 操作系统 · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
-<meta name="build-stamp" content="2026-10-05 11:44:51">
+<meta name="build-stamp" content="2026-10-05 15:47:03">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -405,16 +405,21 @@ img{max-width:100%;height:auto}
   border-radius:100px;
   font-size:12.5px;color:var(--accent);font-weight:600;
 }
-.cover h1{
+/* ⚠️ 封面主标题刻意用 <div> 而不是 <h1>：index.md 正文自带 `# 阿甘系分 · 48 小时
+   冲刺手册`，若封面也用 h1，一页会出现两个 h1（语义/SEO 上都是错的）。
+   视觉与 h1 完全一致 —— 字号、颜色、以及那道 72px 短横线都在下面显式声明。 */
+.cover .cover-title{
   font-size:3.5em;font-weight:800;letter-spacing:-1.6px;
   color:var(--accent);line-height:1.14;margin-bottom:16px;
 }
-/* ⚠️ 封面 h1 也继承 `.main h1::after` 那道 56px 短横线，但它是 display:block 的
-   固定宽块级元素 —— 文字居中不代表块级元素居中，会贴到左边。
-   修法：给封面这条短横线加 margin-left/right:auto 让它真正居中。 */
-.cover h1::after{
-  margin-left:auto;margin-right:auto;
+/* 复刻 `.main h1::after` 的短横线（<div> 不继承 h1 的伪元素），并水平居中 —— */
+/* 文字居中不代表块级元素居中，不加 auto 会贴到左边。 */
+.cover .cover-title::after{
+  content:'';display:block;
   width:72px;height:3px;
+  background:var(--accent);
+  margin:.5em auto 0;
+  border-radius:2px;
 }
 .cover .sub{
   font-size:1.2em;color:var(--fg-2);
@@ -845,7 +850,7 @@ pre{
   .nav{margin-left:auto;gap:2px}
   .main{padding:32px 0 80px}
   .cover{padding:48px 0 40px;margin-bottom:40px}
-  .cover h1{font-size:2.4em;letter-spacing:-.8px}
+  .cover .cover-title{font-size:2.4em;letter-spacing:-.8px}
   .cover .sub{font-size:1.05em;margin-bottom:24px}
   .cover-stats{gap:10px;margin-bottom:28px}
   .stat{min-width:76px;padding:10px 14px}
@@ -901,7 +906,7 @@ pre{
   h1,h2,h3,h4{break-after:avoid;page-break-after:avoid}
 
   .cover{padding:0 0 18px;margin-bottom:18px;text-align:left}
-  .cover h1{font-size:24pt}
+  .cover .cover-title{font-size:24pt}
   .cover-stats,.cover-badge,.cta-row{display:none !important}
 
   a[href^="http"]:after{
@@ -1256,16 +1261,14 @@ html.focus-mode .chapbar{opacity:.35;pointer-events:none}
 }
 /* 章首横幅：h1 上方加一条"章号 + 主色渐变"的装饰带，
    让每页开头有一个明确的"进入新章"仪式感（原来 h1 直接浮在正文里）。
-   ⚠️ 必须排除 .cover —— 封面 h1 自己已有顶部留白与居中布局，
-   加上横幅会与下方分隔线叠成双线（首页曾出现两条横线紧挨）。 */
-.main h1:not(.cover h1)::before{
+   （封面主标题已改成 <div class="cover-title">，不再匹配 .main h1，无需再排除。） */
+.main h1::before{
   content:'';display:block;
   width:100%;height:4px;
   background:linear-gradient(90deg,var(--accent) 0%,var(--accent-3) 42%,transparent 88%);
   border-radius:2px;
   margin-bottom:.62em;
 }
-.cover h1::before{content:none}
 .main h1::after{
   content:'';display:block;
   width:56px;height:3px;
@@ -2087,6 +2090,185 @@ html{scroll-padding-top:80px}
   .exam-stem,.exam-opts li{font-size:9.5pt}
   .exam-exp{font-size:8.5pt;color:#333}
 }
+
+/* ══════════════════════════════════════════════════════════════
+   真题区块扩展 v2 · 案例 / 论文卡片 + 全真模拟卷
+   与既有 .exam-* 体系同源：米白卡底 + 左侧 4px 色条 + 墨绿强调色
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── 案例 / 论文卡片（非 <details>，直接展开的题卡）── */
+.exam-q-case,.exam-q-essay{
+  padding:14px 16px 4px;
+  background:var(--bg-card);
+}
+.exam-q-case:hover,.exam-q-essay:hover{background:var(--bg-alt)}
+.case-head{
+  display:flex;flex-wrap:wrap;align-items:center;gap:6px;
+  padding-bottom:10px;margin-bottom:10px;
+  border-bottom:1px dashed var(--line);
+}
+.case-head .exam-no{min-width:0}
+.case-h{
+  display:flex;align-items:center;gap:6px;
+  margin:12px 0 6px;font-size:12.5px;font-weight:700;
+  letter-spacing:.06em;color:var(--accent);
+}
+.case-h::before{
+  content:'';width:4px;height:13px;border-radius:2px;
+  background:var(--accent);flex:0 0 auto;
+}
+
+/* 情景要素（📅时间 / 📍地点 / 👤人物 / ⚡冲突 / 难度总分用时） */
+.case-meta{
+  display:flex;flex-direction:column;gap:2px;
+  padding:9px 12px;margin:.4em 0 .2em;
+  background:var(--bg-alt);
+  border-left:3px solid var(--line-2);
+  border-radius:0 var(--radius-sm) var(--radius-sm) 0;
+  font-size:12.5px;line-height:1.75;color:var(--fg-3);
+}
+.case-meta strong{color:var(--fg-2);font-weight:600}
+
+/* 案例背景正文 */
+.case-scene{
+  margin:.2em 0 1em;padding:12px 14px;
+  background:var(--accent-soft);
+  border-left:3px solid var(--accent-3);
+  border-radius:0 var(--radius) var(--radius) 0;
+  font-size:14.5px;line-height:1.92;color:var(--fg);
+}
+.case-scene strong{color:var(--accent);font-weight:700}
+
+/* 题目列表 */
+.case-asks{margin:.2em 0 1em}
+ul.exam-questions{
+  list-style:none;margin:.4em 0;padding:0;
+}
+ul.exam-questions>li{
+  display:flex;gap:10px;align-items:flex-start;
+  padding:9px 0;border-bottom:1px solid var(--line);
+  font-size:14.5px;line-height:1.88;color:var(--fg);
+}
+ul.exam-questions>li:last-child{border-bottom:0}
+ul.exam-questions>li::before{content:none !important}
+.case-ask-no{
+  flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;
+  min-width:24px;height:22px;margin-top:3px;padding:0 6px;
+  border-radius:6px;background:var(--accent-soft-2);color:var(--accent);
+  font-family:var(--sans);font-size:11.5px;font-weight:700;
+  font-variant-numeric:tabular-nums;
+}
+.case-ask-t{flex:1;min-width:0}
+.case-ask-t strong{color:var(--accent);font-weight:700}
+
+/* ── 答案 / 解析 / 考点拆解 / 教材知识点 ── */
+.exam-points,.exam-keypoints,.exam-exp-more,.essay-bg{
+  padding:12px 14px;margin:8px 0;
+  border-left:4px solid var(--tip-line);
+  border-radius:0 var(--radius) var(--radius) 0;
+  background:var(--tip-bg);
+  font-size:14px;line-height:1.92;color:var(--fg);
+}
+.exam-keypoints{border-left-color:var(--accent-2);background:var(--accent-soft)}
+.exam-exp-more{border-left-color:var(--warn-line);background:var(--warn-bg);color:var(--warn-fg)}
+.essay-bg{border-left-color:var(--line-2);background:var(--bg-alt);color:var(--fg-2)}
+.exam-points strong,.exam-keypoints strong{color:var(--accent);font-weight:700}
+
+/* 教材知识点：章标签 + 可点学时胶囊 */
+.exam-textbook{
+  display:flex;flex-wrap:wrap;align-items:center;gap:6px;
+  padding:12px 14px;margin:8px 0;
+  background:var(--mem-bg);
+  border-left:4px solid var(--mem-line);
+  border-radius:0 var(--radius) var(--radius) 0;
+}
+.tb-chap{
+  font-family:var(--serif);font-size:14px;font-weight:700;color:var(--mem-fg);
+}
+.tb-hour{
+  display:inline-flex;align-items:center;
+  padding:2px 9px;border-radius:999px;
+  background:var(--bg-card);border:1px solid var(--mem-line);
+  color:var(--mem-fg) !important;font-size:12px;font-weight:600;
+  text-decoration:none;
+}
+.tb-hour:hover{background:var(--mem-line);color:var(--bg-card) !important;border-color:var(--mem-fg)}
+
+/* 模拟卷成绩/批次等小标签 */
+.exam-lv{
+  font-family:var(--sans);font-size:11.5px;color:var(--gold);
+  letter-spacing:.04em;white-space:nowrap;
+}
+.exam-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.exam-tag-en{
+  background:var(--mem-bg);color:var(--mem-fg);border-color:var(--mem-line);
+}
+.essay-batch{
+  font-family:var(--sans);font-size:11.5px;color:var(--fg-3);
+  padding:1px 8px;border:1px solid var(--line);border-radius:999px;
+}
+.exam-kp{
+  margin:.5em 0 0;font-family:var(--sans);font-size:12.5px;color:var(--fg-3);
+}
+.exam-kp::before{content:'🎯 ';font-size:11px}
+
+/* ── 全真模拟卷头部 ── */
+.mock-head{
+  padding:16px 18px;margin:0 0 12px;
+  border-radius:var(--radius-lg);
+  background:linear-gradient(135deg,var(--accent) 0%,var(--accent-2) 100%);
+  color:var(--fg-inv);
+  box-shadow:var(--shadow-2);
+}
+.mock-title{
+  font-family:var(--serif);font-size:17px;font-weight:700;
+  letter-spacing:.02em;line-height:1.5;
+}
+.mock-sub{
+  margin-top:6px;font-size:12.5px;line-height:1.75;
+  color:rgba(251,250,246,.82);
+}
+.mock-sub b{color:#fff;font-variant-numeric:tabular-nums}
+.mock-items{
+  border:1px solid var(--line);border-radius:var(--radius);
+  background:var(--bg-card);overflow:hidden;
+}
+.mock-items>.exam-q:first-child{border-top:0}
+.exam-mock .exam-subject{margin-top:14px}
+.exam-subj-only{display:block}
+
+/* 模拟卷内的综合知识答题条 */
+.exam-mock .exam-bar{
+  border-radius:var(--radius) var(--radius) 0 0;
+  border-bottom:0;
+}
+
+/* ── 窄屏 ── */
+@media(max-width:760px){
+  .exam-q-case,.exam-q-essay{padding:12px 12px 4px}
+  .case-scene,.exam-points,.exam-keypoints,.exam-exp-more,.essay-bg,.exam-textbook{
+    padding:10px 11px;font-size:13.5px;
+  }
+  ul.exam-questions>li{gap:8px;font-size:13.5px}
+  .mock-head{padding:13px 14px}
+  .mock-title{font-size:15.5px}
+}
+
+/* ── 打印：卡片不要再折叠，色条与底色转灰阶 ── */
+@media print{
+  .mock-head{background:none !important;color:#000 !important;border:1pt solid #999;
+    box-shadow:none}
+  .mock-title{font-size:13pt}
+  .mock-sub{color:#333 !important}
+  .exam-q-case,.exam-q-essay{break-inside:avoid;page-break-inside:avoid}
+  .case-scene,.exam-points,.exam-keypoints,.exam-exp-more,.essay-bg,.exam-textbook{
+    background:none !important;border-left:2pt solid #999 !important;
+  }
+  .exam-q-case,.exam-q-essay,.case-scene,.case-meta,ul.exam-questions>li{
+    font-size:9.5pt;
+  }
+  .tb-hour{color:#000 !important;border-color:#666}
+}
 </style>
 </head>
 <body>
@@ -2620,7 +2802,9 @@ P3 --&gt; P5
 P4 --&gt; P5
 P5 --&gt; P6
 flowchart TD
-Init[&quot;程序开始&lt;br/&gt;信号量 S1~S7 初始值=0&lt;br/&gt;CoBegin 并发启动所有进程&quot;]
+Init[&quot;程序开始
+信号量 S1~S7 初始值=0
+CoBegin 并发启动所有进程&quot;]
 P1_Exec[&quot;P1 执行&quot;]
 P1_V[&quot;V(S1); V(S2);&quot;]
 P1_Exec --&gt; P1_V
@@ -2661,7 +2845,9 @@ P3 --&gt; P5
 P4 --&gt; P5
 P5 --&gt; P6
 flowchart TD
-Init[&quot;程序开始&lt;br/&gt;信号量 S1~S7 初始值=0&lt;br/&gt;CoBegin 并发启动所有进程&quot;]
+Init[&quot;程序开始
+信号量 S1~S7 初始值=0
+CoBegin 并发启动所有进程&quot;]
 P1_Exec[&quot;P1 执行&quot;]
 P1_V[&quot;V(S1); V(S2);&quot;]
 P1_Exec --&gt; P1_V
@@ -2701,7 +2887,9 @@ P3 --&gt; P5
 P4 --&gt; P5
 P5 --&gt; P6
 flowchart TD
-Init[&quot;程序开始&lt;br/&gt;信号量 S1~S7 初始值=0&lt;br/&gt;CoBegin 并发启动所有进程&quot;]
+Init[&quot;程序开始
+信号量 S1~S7 初始值=0
+CoBegin 并发启动所有进程&quot;]
 P1_Exec[&quot;P1 执行&quot;]
 P1_V[&quot;V(S1); V(S2);&quot;]
 P1_Exec --&gt; P1_V
@@ -2905,7 +3093,7 @@ flowchart LR
     P2 --&gt; R2
     P2 --&gt; R1
 ```
-```</p><ul class="exam-opts"><li><b>A</b> P1、P2、P3都是非阻塞节点，该图可以化简，是非死锁的</li><li><b>B</b> P1、P2、P3都是阻塞节点，该图不可以化简，是死锁的</li><li><b>C</b> P3是非阻塞节点，P1、P2是阻塞节点，该图可以化简，是非死锁的</li><li><b>D</b> P1、P2是非阻塞节点，P3是阻塞节点，该图不可以化简，是死锁的</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">P3没有资源等待请求，可正常执行并释放占用的R1资源，后续P2、P1可以依次获得资源完成执行，资源图可以从P3开始逐层化简，系统不存在死锁。</p></details></div></details><details class="exam-q" data-exam-id="2020年11月-016"><summary><span class="exam-no">第 16 题</span><span class="exam-stem-peek">在计算机体系结构设计时，通常在 CPU 和内存之间设置小容量的 Cache 机制，以提高 CPU数据输入输出速率。通常当…</span></summary><div class="exam-q-body"><p class="exam-stem">在计算机体系结构设计时，通常在 CPU 和内存之间设置小容量的 Cache 机制，以提高 CPU数据输入输出速率。通常当 Cache 已存满数据后，新数据必须替换（淘汰）Cache 中的某些旧数据。常用的数据替换算法包括(16)</p><ul class="exam-opts"><li><b>A</b> 随机算法、先进先出（FIFO）和近期最少使用（LRU）</li><li><b>B</b> 随机算法、先进后出（FILO）和近期最少使用（LRU）</li><li><b>C</b> 轮询调度（RRS）、先进先出（FIFO）和近期最少使用（LRU）</li><li><b>D</b> 先进先出（FIFO）、近期最少使用（LRU）和最近最常使用（MRU）</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">Cache行业通用的三类替换算法为随机算法（RAND）、先进先出FIFO、近期最少使用LRU；FILO不适合缓存场景，RRS是服务器任务调度算法，MRU不是Cache主流标准算法。</p></details></div></details><details class="exam-q" data-exam-id="2020年11月-014"><summary><span class="exam-no">第 14 题</span><span class="exam-stem-peek">RISC-V 是基于精简指令集计算原理建立的开放指令集架构，以下关于 RISC-V 的说法中，不正确的是(14)。</span></summary><div class="exam-q-body"><p class="exam-stem">RISC-V 是基于精简指令集计算原理建立的开放指令集架构，以下关于 RISC-V 的说法中，不正确的是(14)。</p><ul class="exam-opts"><li><b>A</b> RISC-V 架构不仅短小精悍，而且其不同的部分还能以模块化的方式组织在一起，从而试图通过一套统一的架构满足各种不同的应用场景</li><li><b>B</b> RISC-V 基础指令集中只有 40 多条指令，加上其他模块化扩展指令总共也就几十条指令</li><li><b>C</b> RISC-VISA 可以免费使用，允许任何人设计、制造和销售 RISC-V 芯片和软件</li><li><b>D</b> RISC-V 也是 X86 架构的一种，它和 ARM 架构之间存在很大区别</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">RISC-V和ARM同属RISC精简指令集架构，x86属于CISC复杂指令集架构，RISC-V不属于x86体系；A、B、C均符合RISC-V开源、模块化、精简指令的官方特性。</p></details></div></details></details><details class="exam-year" data-exam-year="2019年5月"><summary><span class="exam-year-name">2019年5月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2019年5月-017"><summary><span class="exam-no">第 17 题</span><span class="exam-stem-peek">多核操作系统的设计方法不同于单核操作系统，一般要突破（）等方面的关键技术。</span></summary><div class="exam-q-body"><p class="exam-stem">多核操作系统的设计方法不同于单核操作系统，一般要突破（）等方面的关键技术。</p><ul class="exam-opts"><li><b>A</b> 总线设计、Cache设计、核间通信、任务调度、中断处理、同步互斥</li><li><b>B</b> 核结构、Cache设计、核间通信、可靠性设计、安全性设计、同步互斥</li><li><b>C</b> 核结构、Cache设计、核间通信、任务调度、中断处理、存储器墙设计</li><li><b>D</b> 核结构、Cache设计、核间通信、任务调度、中断处理、同步互斥</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">多核操作系统需要解决多核心特有难题：核心架构规划、多核Cache一致性维护、核心间数据通信、跨核心任务调度、多核中断分发、多线程同步互斥；总线、通用可靠性安全、存储器墙不属于多核系统专属突破点。</p></details></div></details><details class="exam-q" data-exam-id="2019年5月-015"><summary><span class="exam-no">第 15 题</span><span class="exam-stem-peek">某16位AD芯片中标注电压范围是-5V～+5V,请问该款AD芯片的分辨率是（）。</span></summary><div class="exam-q-body"><p class="exam-stem">某16位AD芯片中标注电压范围是-5V～+5V,请问该款AD芯片的分辨率是（）。</p><ul class="exam-opts"><li><b>A</b> 10V</li><li><b>B</b> 0.0763mV</li><li><b>C</b> 0.1526mV</li><li><b>D</b> 0.3052mV</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">AD分辨率计算公式：总电压跨度 ÷ 2^位数，总跨度为10V，代入计算得10÷2^16≈0.0001526V=0.1526mV。</p></details></div></details></details></details><details class="exam-subject" data-exam-subject="案例"><summary><span class="exam-subject-name">📋 案例分析</span><span class="exam-subject-n">2 题</span><span class="exam-subject-tip">情景简答 · 采分点三色标记</span></summary><div class="exam-bar"><span class="exam-bar-label">📋 案例分析</span><span class="exam-bar-stat">共 <b>2</b> 题 · 情景简答</span></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">11</span>考点：进程与线程 / 进程同步与互斥 / 死锁 / I/O 工作方式与总线<br>📅 时间：2026-01-16 上午 📍 地点：试点坐席职场<br>👤 人物：甘工（乙方·系统分析师）、邓经理（甲方·运维经理）、老陶（甲方·班组长(十年老坐席)）、小黄（甲方·新入职坐席）<br>⚡ 冲突：ACD 说坐席就绪却没人接，批量改派时系统卡死<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：试点第一天就出了怪事。老陶喊：&quot;系统把我显示成&#x27;就绪&#x27;，来话派给我，可我明明按了示忙！客户等半天没人接。&quot; 另一边，小黄在做批量改派——页面转圈，几分钟没响应。 邓经理查下来：一边是坐席状态被多处并发读写，读到的是&quot;旧值&quot;；另一边是两个改派任务互相等着对方手里的锁。 甘工意识到：这不是&quot;加个服务器&quot;能解决的，而是并发、同步与资源竞争的典型症状。<br>补充资料：上线试运行第一周出现两个故障： - 故障一：高峰期坐席状态与实际不一致——ACD 认为坐席&quot;就绪&quot;并分配来话，但坐席端显示&quot;示忙&quot;，导致来话无人接听（呼损）； - 故障二：批量改派工单时，两个进程互相等待对方持有的资源，系统卡死数分钟。<br>问题 1：（1）说明进程与线程的区别，以及进程同步与互斥的含义与常用机制；<br>问题 2：（2）分析故障一的原因并给出解决办法；<br>问题 3：（3）说明死锁产生的四个必要条件与处理办法，分析故障二；<br>问题 4：（4）说明 I/O 工作方式（程序查询、中断、DMA）的特点。</p><ul class="exam-questions"><li><b>问题 1</b> （1）说明<strong>进程与线程</strong>的区别，以及<strong>进程同步与互斥</strong>的含义与常用机制；</li><li><b>问题 2</b> （2）分析故障一的原因并给出解决办法；</li><li><b>问题 3</b> （3）说明<strong>死锁</strong>产生的四个必要条件与处理办法，分析故障二；</li><li><b>问题 4</b> （4）说明 I/O 工作方式（程序查询、中断、DMA）的特点。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）进程与线程）：进程是程序在某个数据集合上的一次执行过程，是资源分配与调度的基本单位，拥有独立的地址空间；线程是进程内的一个执行单元，是 CPU 调度的最小单位，共享进程的地址空间与资源，切换开销更小。<br>- 🟢 加分：解析·并发与 I/O 是综合知识章与案例的交叉点，答题要&quot;概念 + 故障原因分析 + 治理措施&quot;。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🔴 核心（2）故障一）：<br>问题 3｜参考答案要点：<br>- 🔴 核心：🔴 核心（3）死锁）：<br>问题 4｜参考答案要点：<br>- 🔴 核心：🔴 核心（4）I/O 工作方式）：</div></details></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">13</span>📅 时间：2025-07-22 📍 地点：甲方机房（设备到货验收）<br>👤 人物：甘工（乙方·系统分析师）、彭工（乙方·架构设计师）、邓经理（甲方·运维经理）、硬件供应商（第三方）工程师<br>⚡ 冲突：到货的服务器有三种配置，供应商推荐&quot;堆 CPU&quot;，彭工认为&quot;推理要 GPU、数据库要 SMP&quot;，双方争执不下<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：供应商工程师指着机柜：&quot;这批机器都是 64 核的通用服务器，跑你们的识别肯定够。&quot; 彭工当场反驳：&quot;语音识别和大模型推理是并行度极高的计算，堆通用 CPU 核数不如上 GPU；而数据库要的是共享内存、强一致，得用 SMP 架构的高可靠机型，不是堆核就行。&quot; 邓经理插了一句：&quot;还有那个录音存储，一年四个 T，我到底买磁盘阵列还是接你们的对象存储？&quot; 甘工知道，这三个问题分别对应多处理机结构、指令系统与并行和存储体系三块知识，必须一次讲清楚，否则到货即返工。<br>补充资料：数据库/工单服务 → SMP → 高主频、大内存、NVMe、高可靠 → 共享内存、强一致、事务密集；AI 推理（ASR/大模型） → GPU 加速节点 → 多 GPU、高带宽显存、高速互连 → 大规模并行乘加、吞吐优先；离线分析 → MPP/数仓集群 → 多节点分布存储、消息传递 → 可扩展到大规模数据集；录音归档 → 对象存储 → 大容量、生命周期策略 → 写一次读多次、成本敏感 常见误区：①用通用 CPU 堆核替代 GPU（并行度不足，遇内存带宽瓶颈）；②用磁盘阵列存录音（成本高，应用对象存储）。<br>问题 1：（1）比较 SMP 与 MPP 并说明数据库服务器与 AI 推理服务器各自适合哪种；<br>问题 2：（2）说明 CISC 与 RISC 的区别，并解释为什么&quot;堆 CPU 核数&quot;不等于提升 AI 推理性能；<br>问题 3：（3）说明 总线与 I/O 接口的作用，并给出录音存储的选型建议；<br>问题 4：（4）补充：说明虚拟存储与网络存储在本项目中的作用。</p><ul class="exam-questions"><li><b>问题 1</b> （1）比较 <strong>SMP 与 MPP</strong> 并说明数据库服务器与 AI 推理服务器各自适合哪种；</li><li><b>问题 2</b> （2）说明 <strong>CISC 与 RISC</strong> 的区别，并解释为什么&quot;堆 CPU 核数&quot;不等于提升 AI 推理性能；</li><li><b>问题 3</b> （3）说明 <strong>总线</strong>与 <strong>I/O 接口</strong>的作用，并给出录音存储的选型建议；</li><li><b>问题 4</b> （4）补充：说明虚拟存储与网络存储在本项目中的作用。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）SMP vs MPP）：SMP 对称多处理机——多个同构 CPU 共享内存与总线、统一地址空间，扩展受总线与内存带宽限制（一般数十 CPU），编程简单，适合数据库与事务处理；MPP 海量并行处理——大量独立节点（各有 CPU/内存/磁盘）经高速互连网络协作、分布存储、消息传递，扩展性强（数千节点），编程复杂，适合数据仓库与大规模分析。<br>- 🟢 加分：解析·选型题要&quot;结构对比 + 场景匹配 + 常见误区（堆核、买阵列存录音）&quot;。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🔴 核心（2）CISC/RISC 与并行）：CISC 指令多、格式可变、功能强、代码密度高（x86）；RISC 指令少、格式固定、单周期执行、便于流水与编译优化、功耗低（ARM/RISC-V）。<br>问题 3｜参考答案要点：<br>- 🔴 核心：🔴 核心（3）总线与 I/O 接口）：总线是连接各部件的公共信息通道（数据总线、地址总线、控制总线；系统总线/局部总线/外部总线），负责在 CPU、内存与 I/O 设备间传输信息，其带宽与仲裁直接影响整体性能。I/O 接口是主机与外设之间的适配逻辑，负责数据缓冲、信号与电平转换、时序匹配、设备寻址与状态反馈（如 SATA/NVMe/USB/网口控制器）。<br>问题 4｜参考答案要点：<br>- 🔴 核心：🟡 支撑（4）虚拟存储与网络存储）：虚拟存储把多级/异构存储统一为逻辑视图，屏蔽物理位置与介质差异（本项目体现为&quot;热—温—冷分级 + 统一元数据&quot;），并可通过虚拟内存扩展可用地址空间；网络存储（SAN 块级高性能、NAS 文件级共享、对象存储海量非结构化）实现共享访问、集中管理与扩展。</div></details></div></details></section>
+```</p><ul class="exam-opts"><li><b>A</b> P1、P2、P3都是非阻塞节点，该图可以化简，是非死锁的</li><li><b>B</b> P1、P2、P3都是阻塞节点，该图不可以化简，是死锁的</li><li><b>C</b> P3是非阻塞节点，P1、P2是阻塞节点，该图可以化简，是非死锁的</li><li><b>D</b> P1、P2是非阻塞节点，P3是阻塞节点，该图不可以化简，是死锁的</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">P3没有资源等待请求，可正常执行并释放占用的R1资源，后续P2、P1可以依次获得资源完成执行，资源图可以从P3开始逐层化简，系统不存在死锁。</p></details></div></details><details class="exam-q" data-exam-id="2020年11月-016"><summary><span class="exam-no">第 16 题</span><span class="exam-stem-peek">在计算机体系结构设计时，通常在 CPU 和内存之间设置小容量的 Cache 机制，以提高 CPU数据输入输出速率。通常当…</span></summary><div class="exam-q-body"><p class="exam-stem">在计算机体系结构设计时，通常在 CPU 和内存之间设置小容量的 Cache 机制，以提高 CPU数据输入输出速率。通常当 Cache 已存满数据后，新数据必须替换（淘汰）Cache 中的某些旧数据。常用的数据替换算法包括(16)</p><ul class="exam-opts"><li><b>A</b> 随机算法、先进先出（FIFO）和近期最少使用（LRU）</li><li><b>B</b> 随机算法、先进后出（FILO）和近期最少使用（LRU）</li><li><b>C</b> 轮询调度（RRS）、先进先出（FIFO）和近期最少使用（LRU）</li><li><b>D</b> 先进先出（FIFO）、近期最少使用（LRU）和最近最常使用（MRU）</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">Cache行业通用的三类替换算法为随机算法（RAND）、先进先出FIFO、近期最少使用LRU；FILO不适合缓存场景，RRS是服务器任务调度算法，MRU不是Cache主流标准算法。</p></details></div></details><details class="exam-q" data-exam-id="2020年11月-014"><summary><span class="exam-no">第 14 题</span><span class="exam-stem-peek">RISC-V 是基于精简指令集计算原理建立的开放指令集架构，以下关于 RISC-V 的说法中，不正确的是(14)。</span></summary><div class="exam-q-body"><p class="exam-stem">RISC-V 是基于精简指令集计算原理建立的开放指令集架构，以下关于 RISC-V 的说法中，不正确的是(14)。</p><ul class="exam-opts"><li><b>A</b> RISC-V 架构不仅短小精悍，而且其不同的部分还能以模块化的方式组织在一起，从而试图通过一套统一的架构满足各种不同的应用场景</li><li><b>B</b> RISC-V 基础指令集中只有 40 多条指令，加上其他模块化扩展指令总共也就几十条指令</li><li><b>C</b> RISC-VISA 可以免费使用，允许任何人设计、制造和销售 RISC-V 芯片和软件</li><li><b>D</b> RISC-V 也是 X86 架构的一种，它和 ARM 架构之间存在很大区别</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">RISC-V和ARM同属RISC精简指令集架构，x86属于CISC复杂指令集架构，RISC-V不属于x86体系；A、B、C均符合RISC-V开源、模块化、精简指令的官方特性。</p></details></div></details></details><details class="exam-year" data-exam-year="2019年5月"><summary><span class="exam-year-name">2019年5月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2019年5月-017"><summary><span class="exam-no">第 17 题</span><span class="exam-stem-peek">多核操作系统的设计方法不同于单核操作系统，一般要突破（）等方面的关键技术。</span></summary><div class="exam-q-body"><p class="exam-stem">多核操作系统的设计方法不同于单核操作系统，一般要突破（）等方面的关键技术。</p><ul class="exam-opts"><li><b>A</b> 总线设计、Cache设计、核间通信、任务调度、中断处理、同步互斥</li><li><b>B</b> 核结构、Cache设计、核间通信、可靠性设计、安全性设计、同步互斥</li><li><b>C</b> 核结构、Cache设计、核间通信、任务调度、中断处理、存储器墙设计</li><li><b>D</b> 核结构、Cache设计、核间通信、任务调度、中断处理、同步互斥</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">多核操作系统需要解决多核心特有难题：核心架构规划、多核Cache一致性维护、核心间数据通信、跨核心任务调度、多核中断分发、多线程同步互斥；总线、通用可靠性安全、存储器墙不属于多核系统专属突破点。</p></details></div></details><details class="exam-q" data-exam-id="2019年5月-015"><summary><span class="exam-no">第 15 题</span><span class="exam-stem-peek">某16位AD芯片中标注电压范围是-5V～+5V,请问该款AD芯片的分辨率是（）。</span></summary><div class="exam-q-body"><p class="exam-stem">某16位AD芯片中标注电压范围是-5V～+5V,请问该款AD芯片的分辨率是（）。</p><ul class="exam-opts"><li><b>A</b> 10V</li><li><b>B</b> 0.0763mV</li><li><b>C</b> 0.1526mV</li><li><b>D</b> 0.3052mV</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">AD分辨率计算公式：总电压跨度 ÷ 2^位数，总跨度为10V，代入计算得10÷2^16≈0.0001526V=0.1526mV。</p></details></div></details></details></details><details class="exam-subject" data-exam-subject="案例"><summary><span class="exam-subject-name">📋 案例分析</span><span class="exam-subject-n">2 题</span><span class="exam-subject-tip">案例背景 · 题目 · 答案与解析</span></summary><div class="exam-bar"><span class="exam-bar-label">📋 案例分析</span><span class="exam-bar-stat">共 <b>2</b> 题 · 情景简答 · 采分点三色标记</span></div><div class="exam-q exam-q-case"><div class="case-head"><span class="exam-no">案例 11</span><span class="exam-tag">考点 · 坐席状态同步中的进程与并发问题</span><span class="exam-lv">⭐⭐⭐</span></div><div class="case-meta"><span><strong>考点</strong>：进程与线程 / 进程同步与互斥 / 死锁 / I/O 工作方式与总线</span><span>📅 <strong>时间</strong>：2026-01-16 上午 📍 <strong>地点</strong>：试点坐席职场</span><span>👤 <strong>人物</strong>：甘工（乙方·系统分析师）、邓经理（甲方·运维经理）、老陶（甲方·班组长(十年老坐席)）、小黄（甲方·新入职坐席）</span><span>⚡ <strong>冲突</strong>：ACD 说坐席就绪却没人接，批量改派时系统卡死</span><span><strong>难度</strong>：★★★　<strong>总分</strong>：25 分　<strong>建议用时</strong>：25 分钟</span></div><div class="case-scene"><div class="case-h">案例背景</div><strong>背景</strong>：试点第一天就出了怪事。老陶喊：&quot;系统把我显示成&#x27;就绪&#x27;，来话派给我，可我明明按了示忙！客户等半天没人接。&quot; 另一边，小黄在做批量改派——页面转圈，几分钟没响应。 邓经理查下来：一边是坐席状态被多处并发读写，读到的是&quot;旧值&quot;；另一边是两个改派任务互相等着对方手里的锁。 甘工意识到：这不是&quot;加个服务器&quot;能解决的，而是<strong>并发、同步与资源竞争</strong>的典型症状。<br><strong>补充资料</strong>：上线试运行第一周出现两个故障： - <strong>故障一</strong>：高峰期坐席状态与实际不一致——ACD 认为坐席&quot;就绪&quot;并分配来话，但坐席端显示&quot;示忙&quot;，导致来话无人接听（呼损）； - <strong>故障二</strong>：批量改派工单时，两个进程互相等待对方持有的资源，系统卡死数分钟。</div><div class="case-asks"><div class="case-h">题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">（1）说明<strong>进程与线程</strong>的区别，以及<strong>进程同步与互斥</strong>的含义与常用机制；</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">（2）分析故障一的原因并给出解决办法；</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">（3）说明<strong>死锁</strong>产生的四个必要条件与处理办法，分析故障二；</span></li><li><span class="case-ask-no">4</span><span class="case-ask-t">（4）说明 <strong>I/O 工作方式</strong>（程序查询、中断、DMA）的特点。</span></li></ul></div><details class="exam-ans"><summary>参考答案要点（三色标记）</summary><div class="exam-points"><strong>问题 1｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（1）进程与线程）：进程是程序在某个数据集合上的一次执行过程，是资源分配与调度的基本单位，拥有独立的地址空间；线程是进程内的一个执行单元，是 CPU 调度的最小单位，共享进程的地址空间与资源，切换开销更小。<br><strong>问题 2｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（2）故障一）：<br><strong>问题 3｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（3）死锁）：<br><strong>问题 4｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（4）I/O 工作方式）：</div></details><details class="exam-ans"><summary>解析与加分项</summary><div class="exam-exp-more">- 🟢 加分：解析·并发与 I/O 是综合知识章与案例的交叉点，答题要&quot;概念 + 故障原因分析 + 治理措施&quot;。</div></details></div><div class="exam-q exam-q-case"><div class="case-head"><span class="exam-no">案例 13</span><span class="exam-tag">考点 · AI服务器的选型之争</span><span class="exam-lv">⭐⭐⭐</span></div><div class="case-meta"><span>📅 <strong>时间</strong>：2025-07-22 📍 <strong>地点</strong>：甲方机房（设备到货验收）</span><span>👤 <strong>人物</strong>：甘工（乙方·系统分析师）、彭工（乙方·架构设计师）、邓经理（甲方·运维经理）、硬件供应商（第三方）工程师</span><span>⚡ <strong>冲突</strong>：到货的服务器有三种配置，供应商推荐&quot;堆 CPU&quot;，彭工认为&quot;推理要 GPU、数据库要 SMP&quot;，双方争执不下</span><span><strong>难度</strong>：★★★　<strong>总分</strong>：25 分　<strong>建议用时</strong>：25 分钟</span></div><div class="case-scene"><div class="case-h">案例背景</div><strong>背景</strong>：供应商工程师指着机柜：&quot;这批机器都是 64 核的通用服务器，跑你们的识别肯定够。&quot; 彭工当场反驳：&quot;语音识别和大模型推理是<strong>并行度极高的计算</strong>，堆通用 CPU 核数不如上 GPU；而数据库要的是<strong>共享内存、强一致</strong>，得用 SMP 架构的高可靠机型，不是堆核就行。&quot; 邓经理插了一句：&quot;还有那个录音存储，一年四个 T，我到底买磁盘阵列还是接你们的对象存储？&quot; 甘工知道，这三个问题分别对应<strong>多处理机结构</strong>、<strong>指令系统与并行</strong>和<strong>存储体系</strong>三块知识，必须一次讲清楚，否则到货即返工。<br><strong>补充资料</strong>：数据库/工单服务 → <strong>SMP</strong> → 高主频、大内存、NVMe、高可靠 → 共享内存、强一致、事务密集；AI 推理（ASR/大模型） → <strong>GPU 加速节点</strong> → 多 GPU、高带宽显存、高速互连 → 大规模并行乘加、吞吐优先；离线分析 → <strong>MPP/数仓集群</strong> → 多节点分布存储、消息传递 → 可扩展到大规模数据集；录音归档 → 对象存储 → 大容量、生命周期策略 → 写一次读多次、成本敏感 <strong>常见误区</strong>：①用通用 CPU 堆核替代 GPU（并行度不足，遇内存带宽瓶颈）；②用磁盘阵列存录音（成本高，应用对象存储）。</div><div class="case-asks"><div class="case-h">题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">（1）比较 <strong>SMP 与 MPP</strong> 并说明数据库服务器与 AI 推理服务器各自适合哪种；</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">（2）说明 <strong>CISC 与 RISC</strong> 的区别，并解释为什么&quot;堆 CPU 核数&quot;不等于提升 AI 推理性能；</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">（3）说明 <strong>总线</strong>与 <strong>I/O 接口</strong>的作用，并给出录音存储的选型建议；</span></li><li><span class="case-ask-no">4</span><span class="case-ask-t">（4）补充：说明<strong>虚拟存储</strong>与<strong>网络存储</strong>在本项目中的作用。</span></li></ul></div><details class="exam-ans"><summary>参考答案要点（三色标记）</summary><div class="exam-points"><strong>问题 1｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（1）SMP vs MPP）：SMP 对称多处理机——多个同构 CPU 共享内存与总线、统一地址空间，扩展受总线与内存带宽限制（一般数十 CPU），编程简单，适合数据库与事务处理；MPP 海量并行处理——大量独立节点（各有 CPU/内存/磁盘）经高速互连网络协作、分布存储、消息传递，扩展性强（数千节点），编程复杂，适合数据仓库与大规模分析。<br><strong>问题 2｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（2）CISC/RISC 与并行）：CISC 指令多、格式可变、功能强、代码密度高（x86）；RISC 指令少、格式固定、单周期执行、便于流水与编译优化、功耗低（ARM/RISC-V）。<br><strong>问题 3｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（3）总线与 I/O 接口）：总线是连接各部件的公共信息通道（数据总线、地址总线、控制总线；系统总线/局部总线/外部总线），负责在 CPU、内存与 I/O 设备间传输信息，其带宽与仲裁直接影响整体性能。I/O 接口是主机与外设之间的适配逻辑，负责数据缓冲、信号与电平转换、时序匹配、设备寻址与状态反馈（如 SATA/NVMe/USB/网口控制器）。<br><strong>问题 4｜参考答案要点</strong>：<br>- 🔴 核心：🟡 支撑（4）虚拟存储与网络存储）：虚拟存储把多级/异构存储统一为逻辑视图，屏蔽物理位置与介质差异（本项目体现为&quot;热—温—冷分级 + 统一元数据&quot;），并可通过虚拟内存扩展可用地址空间；网络存储（SAN 块级高性能、NAS 文件级共享、对象存储海量非结构化）实现共享访问、集中管理与扩展。</div></details><details class="exam-ans"><summary>解析与加分项</summary><div class="exam-exp-more">- 🟢 加分：解析·选型题要&quot;结构对比 + 场景匹配 + 常见误区（堆核、买阵列存录音）&quot;。</div></details></div></details></section>
     <div class="wrongbook"></div>
     <div class="keyhint">
   <span class="keyhint-title">键盘快捷键</span>
@@ -3788,7 +3976,9 @@ flowchart LR
     init() {
       const root = document.querySelector('.exam')
       if (!root) return
-      const chapter = root.dataset.examChapter || 'x'
+      // ⚠️ 专项页 / 全真模拟页没有 data-exam-chapter（无教材章），
+      //    旧写法一律退化成 'x' → H42~H48 共用同一个记忆键、互相串状态。
+      const chapter = root.dataset.examChapter || root.dataset.examHour || 'x'
 
       // 恢复上次展开状态：{ "H07": { "2025年5月": true, ... } }
       const saved = store.get(this.KEY, {}) || {}
@@ -3808,6 +3998,7 @@ flowchart LR
       const seen = store.get('examSeen', {}) || {}
       root.querySelectorAll('.exam-q').forEach(qd => {
         const qid = qd.dataset.examId
+        if (!qid) return
         if (seen[qid]) {
           const a = qd.querySelector('.exam-ans')
           if (a) a.open = true
@@ -3823,12 +4014,17 @@ flowchart LR
         btn.addEventListener('click', e => {
           e.preventDefault()
           const openAll = btn.dataset.examAll === '1'
-          root.querySelectorAll('.exam-subject,.exam-year').forEach(d => { d.open = openAll })
-          root.querySelectorAll('.exam-ans').forEach(d => {
-            d.open = openAll
-            if (openAll && d.parentElement.dataset.examId) seen[d.parentElement.dataset.examId] = 1
-          })
-          if (openAll) store.set('examSeen', seen)
+          // ⚠️ 必须把 .exam-q 也列进来：只开 .exam-subject/.exam-year/.exam-ans
+          //    时，单题仍折叠 → 答案藏在关闭的单题内，"全部展开"名不副实。
+          root.querySelectorAll('.exam-subject,.exam-year,.exam-q,.exam-ans')
+            .forEach(d => { d.open = openAll })
+          if (openAll) {
+            // ⚠️ 旧的 `d.parentElement.dataset.examId` 取到的是 .exam-q-body（无 id），
+            //    会把 seen[undefined] 写进 localStorage。改为直接从 .exam-q 取。
+            root.querySelectorAll('.exam-q[data-exam-id]')
+              .forEach(qd => { seen[qd.dataset.examId] = 1 })
+            store.set('examSeen', seen)
+          }
           // 同步年份级记忆
           root.querySelectorAll('.exam-year').forEach(y => { mine[y.dataset.examYear] = y.open })
           saved[chapter] = mine
@@ -3875,7 +4071,7 @@ flowchart LR
   // ══════════════════════════════════════════
   // 8. mermaid 渲染（自定义墨绿主题，与正文同色系）
   // ══════════════════════════════════════════
-  // 站点配色（与 design.css 的令牌保持一致）
+  // 站点配色（与设计令牌保持一致 —— 改主题色时这里要同步）
   const MERMAID_LIGHT = {
     bg: '#f2f0e9', fg: '#1b211c', line: '#cdc9bd',
     accent: '#3d5a40', accent2: '#5a8a62', accent3: '#7ea888',

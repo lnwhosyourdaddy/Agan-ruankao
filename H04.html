@@ -7,7 +7,7 @@
 <title>第 4 小时 · 计算机系统（一）· 硬件与体系结构 · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
-<meta name="build-stamp" content="2026-10-05 11:44:51">
+<meta name="build-stamp" content="2026-10-05 15:47:03">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -405,16 +405,21 @@ img{max-width:100%;height:auto}
   border-radius:100px;
   font-size:12.5px;color:var(--accent);font-weight:600;
 }
-.cover h1{
+/* ⚠️ 封面主标题刻意用 <div> 而不是 <h1>：index.md 正文自带 `# 阿甘系分 · 48 小时
+   冲刺手册`，若封面也用 h1，一页会出现两个 h1（语义/SEO 上都是错的）。
+   视觉与 h1 完全一致 —— 字号、颜色、以及那道 72px 短横线都在下面显式声明。 */
+.cover .cover-title{
   font-size:3.5em;font-weight:800;letter-spacing:-1.6px;
   color:var(--accent);line-height:1.14;margin-bottom:16px;
 }
-/* ⚠️ 封面 h1 也继承 `.main h1::after` 那道 56px 短横线，但它是 display:block 的
-   固定宽块级元素 —— 文字居中不代表块级元素居中，会贴到左边。
-   修法：给封面这条短横线加 margin-left/right:auto 让它真正居中。 */
-.cover h1::after{
-  margin-left:auto;margin-right:auto;
+/* 复刻 `.main h1::after` 的短横线（<div> 不继承 h1 的伪元素），并水平居中 —— */
+/* 文字居中不代表块级元素居中，不加 auto 会贴到左边。 */
+.cover .cover-title::after{
+  content:'';display:block;
   width:72px;height:3px;
+  background:var(--accent);
+  margin:.5em auto 0;
+  border-radius:2px;
 }
 .cover .sub{
   font-size:1.2em;color:var(--fg-2);
@@ -845,7 +850,7 @@ pre{
   .nav{margin-left:auto;gap:2px}
   .main{padding:32px 0 80px}
   .cover{padding:48px 0 40px;margin-bottom:40px}
-  .cover h1{font-size:2.4em;letter-spacing:-.8px}
+  .cover .cover-title{font-size:2.4em;letter-spacing:-.8px}
   .cover .sub{font-size:1.05em;margin-bottom:24px}
   .cover-stats{gap:10px;margin-bottom:28px}
   .stat{min-width:76px;padding:10px 14px}
@@ -901,7 +906,7 @@ pre{
   h1,h2,h3,h4{break-after:avoid;page-break-after:avoid}
 
   .cover{padding:0 0 18px;margin-bottom:18px;text-align:left}
-  .cover h1{font-size:24pt}
+  .cover .cover-title{font-size:24pt}
   .cover-stats,.cover-badge,.cta-row{display:none !important}
 
   a[href^="http"]:after{
@@ -1256,16 +1261,14 @@ html.focus-mode .chapbar{opacity:.35;pointer-events:none}
 }
 /* 章首横幅：h1 上方加一条"章号 + 主色渐变"的装饰带，
    让每页开头有一个明确的"进入新章"仪式感（原来 h1 直接浮在正文里）。
-   ⚠️ 必须排除 .cover —— 封面 h1 自己已有顶部留白与居中布局，
-   加上横幅会与下方分隔线叠成双线（首页曾出现两条横线紧挨）。 */
-.main h1:not(.cover h1)::before{
+   （封面主标题已改成 <div class="cover-title">，不再匹配 .main h1，无需再排除。） */
+.main h1::before{
   content:'';display:block;
   width:100%;height:4px;
   background:linear-gradient(90deg,var(--accent) 0%,var(--accent-3) 42%,transparent 88%);
   border-radius:2px;
   margin-bottom:.62em;
 }
-.cover h1::before{content:none}
 .main h1::after{
   content:'';display:block;
   width:56px;height:3px;
@@ -2087,6 +2090,185 @@ html{scroll-padding-top:80px}
   .exam-stem,.exam-opts li{font-size:9.5pt}
   .exam-exp{font-size:8.5pt;color:#333}
 }
+
+/* ══════════════════════════════════════════════════════════════
+   真题区块扩展 v2 · 案例 / 论文卡片 + 全真模拟卷
+   与既有 .exam-* 体系同源：米白卡底 + 左侧 4px 色条 + 墨绿强调色
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── 案例 / 论文卡片（非 <details>，直接展开的题卡）── */
+.exam-q-case,.exam-q-essay{
+  padding:14px 16px 4px;
+  background:var(--bg-card);
+}
+.exam-q-case:hover,.exam-q-essay:hover{background:var(--bg-alt)}
+.case-head{
+  display:flex;flex-wrap:wrap;align-items:center;gap:6px;
+  padding-bottom:10px;margin-bottom:10px;
+  border-bottom:1px dashed var(--line);
+}
+.case-head .exam-no{min-width:0}
+.case-h{
+  display:flex;align-items:center;gap:6px;
+  margin:12px 0 6px;font-size:12.5px;font-weight:700;
+  letter-spacing:.06em;color:var(--accent);
+}
+.case-h::before{
+  content:'';width:4px;height:13px;border-radius:2px;
+  background:var(--accent);flex:0 0 auto;
+}
+
+/* 情景要素（📅时间 / 📍地点 / 👤人物 / ⚡冲突 / 难度总分用时） */
+.case-meta{
+  display:flex;flex-direction:column;gap:2px;
+  padding:9px 12px;margin:.4em 0 .2em;
+  background:var(--bg-alt);
+  border-left:3px solid var(--line-2);
+  border-radius:0 var(--radius-sm) var(--radius-sm) 0;
+  font-size:12.5px;line-height:1.75;color:var(--fg-3);
+}
+.case-meta strong{color:var(--fg-2);font-weight:600}
+
+/* 案例背景正文 */
+.case-scene{
+  margin:.2em 0 1em;padding:12px 14px;
+  background:var(--accent-soft);
+  border-left:3px solid var(--accent-3);
+  border-radius:0 var(--radius) var(--radius) 0;
+  font-size:14.5px;line-height:1.92;color:var(--fg);
+}
+.case-scene strong{color:var(--accent);font-weight:700}
+
+/* 题目列表 */
+.case-asks{margin:.2em 0 1em}
+ul.exam-questions{
+  list-style:none;margin:.4em 0;padding:0;
+}
+ul.exam-questions>li{
+  display:flex;gap:10px;align-items:flex-start;
+  padding:9px 0;border-bottom:1px solid var(--line);
+  font-size:14.5px;line-height:1.88;color:var(--fg);
+}
+ul.exam-questions>li:last-child{border-bottom:0}
+ul.exam-questions>li::before{content:none !important}
+.case-ask-no{
+  flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;
+  min-width:24px;height:22px;margin-top:3px;padding:0 6px;
+  border-radius:6px;background:var(--accent-soft-2);color:var(--accent);
+  font-family:var(--sans);font-size:11.5px;font-weight:700;
+  font-variant-numeric:tabular-nums;
+}
+.case-ask-t{flex:1;min-width:0}
+.case-ask-t strong{color:var(--accent);font-weight:700}
+
+/* ── 答案 / 解析 / 考点拆解 / 教材知识点 ── */
+.exam-points,.exam-keypoints,.exam-exp-more,.essay-bg{
+  padding:12px 14px;margin:8px 0;
+  border-left:4px solid var(--tip-line);
+  border-radius:0 var(--radius) var(--radius) 0;
+  background:var(--tip-bg);
+  font-size:14px;line-height:1.92;color:var(--fg);
+}
+.exam-keypoints{border-left-color:var(--accent-2);background:var(--accent-soft)}
+.exam-exp-more{border-left-color:var(--warn-line);background:var(--warn-bg);color:var(--warn-fg)}
+.essay-bg{border-left-color:var(--line-2);background:var(--bg-alt);color:var(--fg-2)}
+.exam-points strong,.exam-keypoints strong{color:var(--accent);font-weight:700}
+
+/* 教材知识点：章标签 + 可点学时胶囊 */
+.exam-textbook{
+  display:flex;flex-wrap:wrap;align-items:center;gap:6px;
+  padding:12px 14px;margin:8px 0;
+  background:var(--mem-bg);
+  border-left:4px solid var(--mem-line);
+  border-radius:0 var(--radius) var(--radius) 0;
+}
+.tb-chap{
+  font-family:var(--serif);font-size:14px;font-weight:700;color:var(--mem-fg);
+}
+.tb-hour{
+  display:inline-flex;align-items:center;
+  padding:2px 9px;border-radius:999px;
+  background:var(--bg-card);border:1px solid var(--mem-line);
+  color:var(--mem-fg) !important;font-size:12px;font-weight:600;
+  text-decoration:none;
+}
+.tb-hour:hover{background:var(--mem-line);color:var(--bg-card) !important;border-color:var(--mem-fg)}
+
+/* 模拟卷成绩/批次等小标签 */
+.exam-lv{
+  font-family:var(--sans);font-size:11.5px;color:var(--gold);
+  letter-spacing:.04em;white-space:nowrap;
+}
+.exam-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.exam-tag-en{
+  background:var(--mem-bg);color:var(--mem-fg);border-color:var(--mem-line);
+}
+.essay-batch{
+  font-family:var(--sans);font-size:11.5px;color:var(--fg-3);
+  padding:1px 8px;border:1px solid var(--line);border-radius:999px;
+}
+.exam-kp{
+  margin:.5em 0 0;font-family:var(--sans);font-size:12.5px;color:var(--fg-3);
+}
+.exam-kp::before{content:'🎯 ';font-size:11px}
+
+/* ── 全真模拟卷头部 ── */
+.mock-head{
+  padding:16px 18px;margin:0 0 12px;
+  border-radius:var(--radius-lg);
+  background:linear-gradient(135deg,var(--accent) 0%,var(--accent-2) 100%);
+  color:var(--fg-inv);
+  box-shadow:var(--shadow-2);
+}
+.mock-title{
+  font-family:var(--serif);font-size:17px;font-weight:700;
+  letter-spacing:.02em;line-height:1.5;
+}
+.mock-sub{
+  margin-top:6px;font-size:12.5px;line-height:1.75;
+  color:rgba(251,250,246,.82);
+}
+.mock-sub b{color:#fff;font-variant-numeric:tabular-nums}
+.mock-items{
+  border:1px solid var(--line);border-radius:var(--radius);
+  background:var(--bg-card);overflow:hidden;
+}
+.mock-items>.exam-q:first-child{border-top:0}
+.exam-mock .exam-subject{margin-top:14px}
+.exam-subj-only{display:block}
+
+/* 模拟卷内的综合知识答题条 */
+.exam-mock .exam-bar{
+  border-radius:var(--radius) var(--radius) 0 0;
+  border-bottom:0;
+}
+
+/* ── 窄屏 ── */
+@media(max-width:760px){
+  .exam-q-case,.exam-q-essay{padding:12px 12px 4px}
+  .case-scene,.exam-points,.exam-keypoints,.exam-exp-more,.essay-bg,.exam-textbook{
+    padding:10px 11px;font-size:13.5px;
+  }
+  ul.exam-questions>li{gap:8px;font-size:13.5px}
+  .mock-head{padding:13px 14px}
+  .mock-title{font-size:15.5px}
+}
+
+/* ── 打印：卡片不要再折叠，色条与底色转灰阶 ── */
+@media print{
+  .mock-head{background:none !important;color:#000 !important;border:1pt solid #999;
+    box-shadow:none}
+  .mock-title{font-size:13pt}
+  .mock-sub{color:#333 !important}
+  .exam-q-case,.exam-q-essay{break-inside:avoid;page-break-inside:avoid}
+  .case-scene,.exam-points,.exam-keypoints,.exam-exp-more,.essay-bg,.exam-textbook{
+    background:none !important;border-left:2pt solid #999 !important;
+  }
+  .exam-q-case,.exam-q-essay,.case-scene,.case-meta,ul.exam-questions>li{
+    font-size:9.5pt;
+  }
+  .tb-hour{color:#000 !important;border-color:#666}
+}
 </style>
 </head>
 <body>
@@ -2555,7 +2737,9 @@ P3 --&gt; P5
 P4 --&gt; P5
 P5 --&gt; P6
 flowchart TD
-Init[&quot;程序开始&lt;br/&gt;信号量 S1~S7 初始值=0&lt;br/&gt;CoBegin 并发启动所有进程&quot;]
+Init[&quot;程序开始
+信号量 S1~S7 初始值=0
+CoBegin 并发启动所有进程&quot;]
 P1_Exec[&quot;P1 执行&quot;]
 P1_V[&quot;V(S1); V(S2);&quot;]
 P1_Exec --&gt; P1_V
@@ -2725,7 +2909,7 @@ flowchart LR
     P2 --&gt; R1
     P3 --&gt; R1
 ```
-```</p><ul class="exam-opts"><li><b>A</b> P1、P2、P3都是阻塞节点，该图不可以化简，是死锁的</li><li><b>B</b> P1、P2、P3都是非阻塞节点，该图可以化简，是非死锁的</li><li><b>C</b> P3是非阻塞节点，P1、P2是阻塞节点，该图可以化简，是非死锁的</li><li><b>D</b> P1、P2是非阻塞节点，P3是阻塞节点，该图不可以化简，是死锁的</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">R2资源已耗尽，P1、P2、P3的资源申请都无法被满足，全部处于阻塞状态；进程间形成闭环等待，资源图没有可先行执行释放资源的非阻塞节点，无法化简，系统发生死锁。</p></details></div></details><details class="exam-q" data-exam-id="2020年11月-015"><summary><span class="exam-no">第 15 题</span><span class="exam-stem-peek">IEEE-1394 总线采用菊花链的拓扑结构时，可最多支持 63 个节点。当 1394 总线支持 1023条桥接总线时，…</span></summary><div class="exam-q-body"><p class="exam-stem">IEEE-1394 总线采用菊花链的拓扑结构时，可最多支持 63 个节点。当 1394 总线支持 1023条桥接总线时，最多可以采用菊花链的拓扑结构互连(15)个节点。</p><ul class="exam-opts"><li><b>A</b> 1023</li><li><b>B</b> 1086</li><li><b>C</b> 64449</li><li><b>D</b> 645535</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">单段IEEE-1394菊花链最多支持63个节点，1023段桥接总线可支持的总节点数=1023×63=64449。</p></details></div></details></details><details class="exam-year" data-exam-year="2019年5月"><summary><span class="exam-year-name">2019年5月</span><span class="exam-year-n">3 题</span></summary><details class="exam-q" data-exam-id="2019年5月-018"><summary><span class="exam-no">第 18 题</span><span class="exam-stem-peek">多核CPU环境下进程的调度算法一般有全局队列调度和局部队列调度两种。（）属于全局队列调度的特征。</span></summary><div class="exam-q-body"><p class="exam-stem">多核CPU环境下进程的调度算法一般有全局队列调度和局部队列调度两种。（）属于全局队列调度的特征。</p><ul class="exam-opts"><li><b>A</b> 操作系统为每个CPU维护一个任务等待队列</li><li><b>B</b> 操作系统维护一个任务等待队列</li><li><b>C</b> 任务基本上无需在多个CPU核心间切换，有利于提高Cache命中率</li><li><b>D</b> 当系统中有一个CPU核心空闲时，操作系统便从该核心的任务等待队列中选取适当的任务执行</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">全局队列调度仅设置1个全局统一的任务等待队列，所有空闲CPU都从该队列领取任务；A、C、D均是为每个CPU单独设置队列的局部调度策略的特征。</p></details></div></details><details class="exam-q" data-exam-id="2019年5月-016"><summary><span class="exam-no">第 16 题</span><span class="exam-stem-peek">以下关于多核处理器的说法中，不正确的是（）。</span></summary><div class="exam-q-body"><p class="exam-stem">以下关于多核处理器的说法中，不正确的是（）。</p><ul class="exam-opts"><li><b>A</b> 采用多核处理器可以降低计算机系统的功耗和体积</li><li><b>B</b> SMP、BMP和MP是多核处理器系统通常采用的三种结构，采用哪种结构与应用场景相关，而无须考虑硬件的组成差异</li><li><b>C</b> 在多核处理器中，计算机可以同时执行多个进程，而操作系统中的多个线程也可以并行执行</li><li><b>D</b> 多核处理器是将两个或更多的独立处理器封装在一起，集成在一个电路中</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">SMP、BMP、MP三种多核架构的硬件底层设计存在显著差异，选型不仅要匹配业务场景，还必须适配硬件本身的架构限制；A、C、D的描述均符合多核处理器的定义与优势。</p></details></div></details><details class="exam-q" data-exam-id="2019年5月-014"><summary><span class="exam-no">第 14 题</span><span class="exam-stem-peek">雷达设计人员在设计数字信号处理单元时，其处理器普遍采用DSP芯片(比如：TI公司的TMS320C63xx)，通常DSP芯…</span></summary><div class="exam-q-body"><p class="exam-stem">雷达设计人员在设计数字信号处理单元时，其处理器普遍采用DSP芯片(比如：TI公司的TMS320C63xx)，通常DSP芯片采用哈佛(HarVard)体系结构，以下关于哈佛结构特征的描述，不正确的是（）。</p><ul class="exam-opts"><li><b>A</b> 程序和数据具有独立的存储空间，允许同时取指令和取操作数，并允许在程序空间或数据空间之间互传数据</li><li><b>B</b> 处理器内部采用多总线结构，保证了在一个机器周期内可以多次访问程序空间和数据空间</li><li><b>C</b> 哈佛体系结构强调的是多功能，适合多种不同的环境和任务，强调兼容性</li><li><b>D</b> 处理器内部采用多处理单元，可以在一个指令周期内同时进行运算</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">哈佛结构的程序、数据存储空间相互独立、配备专属总线，一个机器周期仅能分别访问一次程序空间、一次数据空间，无法多次访问同一类存储空间；其余选项均是哈佛结构与DSP芯片的典型特征。</p></details></div></details></details></details><details class="exam-subject" data-exam-subject="案例"><summary><span class="exam-subject-name">📋 案例分析</span><span class="exam-subject-n">2 题</span><span class="exam-subject-tip">情景简答 · 采分点三色标记</span></summary><div class="exam-bar"><span class="exam-bar-label">📋 案例分析</span><span class="exam-bar-stat">共 <b>2</b> 题 · 情景简答</span></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">10</span>考点：存储层次结构 / Cache / RAID / 网络存储（SAN/NAS/对象存储）/ 虚拟存储 / 多处理机结构<br>📅 时间：2025-07-08 上午 📍 地点：集团机房（设备到货验收）<br>👤 人物：甘工（乙方·系统分析师）、彭工（乙方·架构设计师）、邓经理（甲方运维）、硬件供应商（第三方）<br>⚡ 冲突：录音一年 4TB、话单要秒级查、AI 要 GPU，供应商只给一种配置<br>难度：★★★　总分：20 分　建议用时：25 分钟<br>背景：供应商工程师拍着机柜：&quot;这批都是高配通用服务器，跑你们系统够了。&quot; 邓经理（甲方运维）当场摇头：&quot;录音一年四个 T，三年十二个 T，你这本地盘够吗？话单三亿行，统计报表跑一次十几秒。&quot; 彭工补了一句：&quot;还有 AI 识别和大模型，那是另一类算力。&quot; 甘工翻着需求清单——结构化话单、非结构化录音、半结构化转写文本、热点会话数据，四类数据的读写特征完全不同，一套配置根本打不住。<br>补充资料：；③ASR转写文本（约 9 亿字/年，需全文检索）；④坐席会话与热点数据（需毫秒级读取）。 现有服务器为 20 台通用 x86 服务器；AI 语音识别与大模型推理需使用 GPU。运维反馈：①统计报表查询慢；②录音存储成本上升快；③GPU 服务器资源紧张但 CPU 服务器闲置。<br>问题 1：请说明计算机存储系统的层次结构及各层的特点与作用；并针对上述四类数据给出存储方案与理由（须涉及 Cache、主存、辅存与网络存储）。（10分）<br>问题 2：请比较 SMP（对称多处理机）与 MPP（海量并行处理）结构的特点与适用场景；针对&quot;GPU 紧张但 CPU 闲置&quot;给出解决方案；并说明指令系统中 CISC 与 RISC 的区别。（10分）</p><ul class="exam-questions"><li><b>问题 1</b> 请说明计算机<strong>存储系统的层次结构</strong>及各层的特点与作用；并针对上述四类数据给出存储方案与理由（须涉及 Cache、主存、辅存与网络存储）。（10分）</li><li><b>问题 2</b> 请比较 SMP（对称多处理机）与 MPP（海量并行处理）结构的特点与适用场景；针对&quot;GPU 紧张但 CPU 闲置&quot;给出解决方案；并说明指令系统中 CISC 与 RISC 的区别。（10分）<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点（10分）：<br>- 🔴 核心：🔴 核心（层次结构，由上到下容量增大、速度降低、成本降低）：<br>- 🟡 支撑：寄存器：CPU 内部；最快、容量最小（字节~KB）；存放当前指令与数据<br>- 🟡 支撑：高速缓存 Cache：SRAM；快（ns 级）、容量小（MB 级），对程序透明；缓解 CPU 与主存速度差距，基于程序局部性（时间局部性 + 空间局部性）<br>- 🟡 支撑：主存储器：DRAM；较快、容量中等（GB 级）、易失；存放正在运行的程序与数据<br>- 🟡 支撑：辅助存储器：磁盘/SSD；慢（ms 级）、容量大（TB 级）、非易失；长期保存程序与数据<br>- 🟡 支撑：网络/离线存储：SAN/NAS/对象存储；容量近乎无限、可共享；海量数据、共享访问、备份归档<br>- 🟡 支撑：🔴 核心（四类数据方案）：<br>- 🟡 支撑：1. 坐席会话与热点数据 → Redis 缓存（相当于&quot;应用层 Cache&quot;）：利用局部性，把热点客户、话术模板、坐席状态放内存，读取毫秒级，命中率可达 95% 以上；<br>- 🟡 支撑：2. 话单数据 → SSD + 关系数据库（或列式数仓），热数据（近 7 天）入内存/列存，按日期与地市分区；<br>- 🟡 支撑：3. 录音文件 → 对象存储（非结构化、量大、成本低），配生命周期策略（30 天转低频、1 年转归档），元数据入数据库以便检索下钻；<br>- 🟡 支撑：4. 转写文本 → 文档数据库 + 全文检索（ES），兼顾结构灵活与检索性能。<br>- 🟡 支撑：RAID（RAID0 提速、RAID1 镜像、RAID5/6 兼顾性能与容错、RAID10 高性能高可用）用于数据库盘；虚拟存储把多级存储统一为逻辑视图，屏蔽物理差异（本项目体现为&quot;热温冷分级 + 统一元数据&quot;）；网络存储中 SAN（块级、高性能、适合数据库）与 NAS（文件级、共享方便）按需选择，海量非结构化优先对象存储。；录音&quot;写一次读多次、长期保存&quot;的特征决定了它不应放在数据库或高性能 SAN，而应走对象存储 + 归档，这是本题最大的成本优化点。<br>- 🟢 加分：解析·多处理机与指令系统是综合知识章的高频点，答题要给出对比表与本项目对应。<br>问题 2｜参考答案要点（10分）：<br>- 🔴 核心：🔴 核心（SMP vs MPP）：<br>- 🟡 支撑：结构：多个同构处理器共享内存与总线；大量独立节点（各有 CPU/内存/磁盘），通过高速互连网络协作<br>- 🟡 支撑：存储：共享存储（统一地址空间）；分布存储（消息传递）<br>- 🟡 支撑：扩展：受总线/共享内存限制，扩展性有限（一般 ≤ 数十 CPU）；扩展性强（可扩展到数千节点）<br>- 🟡 支撑：编程：简单（共享内存、多线程）；复杂（消息传递 MPI、数据分区）<br>- 🟡 支撑：适用：通用服务器、数据库、事务处理；数据仓库、大数据分析、科学计算<br>- 🟡 支撑：🔴 核心（GPU 紧张 / CPU 闲置的解决）：<br>- 🟡 支撑：1. 资源池化与调度——用 K8s 统一管理 CPU 与 GPU，按队列配额调度；<br>- 🟡 支撑：2. 服务分层部署——ASR 与大模型推理（GPU 密集）与规则引擎、工单、报表（CPU 密集）分别部署，各自独立伸缩；<br>- 🟡 支撑：3. 模型侧优化——模型量化/蒸馏、批处理推理、结果缓存，降低单次推理的 GPU 占用；<br>- 🟡 支撑：4. 异步化——离线质检、历史转写走夜间批处理队列，不与实时链路争抢 GPU；<br>- 🟡 支撑：5. 弹性与错峰——按话务峰谷自动扩缩容，非高峰释放 GPU 给算法团队（乙方·数据运营）训练；；6. 降级预案——GPU 不可用时降级为关键词话术（CPU 即可运行），保证可用性。；🔴 核心（CISC vs RISC）：；CISC（复杂指令系统）：指令数量多、格式可变、寻址方式丰富，单条指令功能强（如一条指令完成内存到内存的运算），目标是用更少指令完成工作；代表 x86。优点：代码密度高、兼容性强；缺点：硬件复杂、指令执行周期差异大、难以流水化。；RISC（精简指令系统）：指令数量少、格式固定、只有 load/store 访问内存、寻址方式简单，单周期执行、便于流水线与编译优化；代表 ARM、RISC-V、MIPS。优点：硬件简单、功耗低、性能高；缺点：代码密度相对较低。；本项目坐席终端（IP 话机、移动 App）多采用 ARM/RISC 架构（功耗与成本优势），而中心服务器采用 x86/CISC；信创场景下还会涉及 ARM 架构服务器与 RISC-V 终端，这正是 CISC/RISC 的现实对应。</div></details></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">12</span>📅 时间：2026-01-14 凌晨 1:20 📍 地点：阿甘科技值班室（微信群同时在线）<br>👤 人物：甘工（乙方·系统分析师）、邓经理（甲方运维）、丁工（乙方·测试负责人）、彭工（乙方·架构设计师）<br>⚡ 冲突：距全面上线还有 8 小时，数据库服务器 CPU 冲高、内存告警，有人提议&quot;先加内存顶一下&quot;<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：邓经理在群里甩了张监控截图：&quot;数据库那台 CPU 92%，内存 88%，iowait 也不低。明天早上八点就要切流量，你们看着办。&quot; 有人建议：&quot;先加内存吧，反正云主机随时能扩。&quot; 彭工反对：&quot;现在加内存是掩盖问题——得先搞清楚是缓存命中率掉了、还是慢查询把 CPU 吃满了、还是磁盘 IO 瓶颈。乱加资源明天照样崩。&quot; 甘工登录机器，看到：Cache 访问时间 5ns、主存访问 60ns，当前统计的 Cache 命中率只有 82%（压测时是 96%）；进程列表里有 3 个统计任务在跑全表扫描；录音写入任务占用大量 IO。<br>补充资料：CPU 使用率 → 92% → 55% → 异常；内存使用率 → 88% → 60% → 异常；iowait → 21% → 5% → 异常；Cache 命中率 → 82% → 96% → 下降 14 个百分点；Cache 访问时间 → 5 ns → — → 硬件参数；主存访问时间 → 60 ns → — → 硬件参数 并行任务：3 个统计任务（全表扫描）+ 录音写入任务（大 IO）。<br>问题 1：（1）计算 Cache 命中率 96% 与 82% 两种情况下的平均访存时间（假设 Cache 命中时只需访问 Cache），并说明命中率下降 14 个百分点带来的性能影响；<br>问题 2：（2）说明进程的基本状态与进程调度的概念，分析本例中 CPU 冲高的可能原因；<br>问题 3：（3）说明 I/O 控制方式（程序查询、中断、DMA）的特点，指出录音写入应采用哪种并说明原因；<br>问题 4：（4）彭工反对&quot;先加内存顶一下&quot;，请说明正确的排查思路与治理措施。</p><ul class="exam-questions"><li><b>问题 1</b> （1）计算 Cache 命中率 96% 与 82% 两种情况下的<strong>平均访存时间</strong>（假设 Cache 命中时只需访问 Cache），并说明命中率下降 14 个百分点带来的性能影响；</li><li><b>问题 2</b> （2）说明<strong>进程</strong>的基本状态与<strong>进程调度</strong>的概念，分析本例中 CPU 冲高的可能原因；</li><li><b>问题 3</b> （3）说明 <strong>I/O 控制方式</strong>（程序查询、中断、DMA）的特点，指出录音写入应采用哪种并说明原因；</li><li><b>问题 4</b> （4）彭工反对&quot;先加内存顶一下&quot;，请说明正确的排查思路与治理措施。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）Cache 计算）：<br>- 🟢 加分：解析·Cache 计算 + 进程/I/O 概念 + 排查思路，是综合知识章与运维实践的结合。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🔴 核心（2）进程与调度）：进程是程序在某个数据集合上的一次执行过程，是资源分配与调度的基本单位；基本状态为就绪、运行、阻塞（新建、终止为辅助状态），状态间因调度、等待资源、时间片到而转换。进程调度是按某种策略（先来先服务、时间片轮转、优先级、多级反馈队列）从就绪队列选进程占用 CPU。<br>问题 3｜参考答案要点：<br>- 🔴 核心：🔴 核心（3）I/O 方式）：<br>问题 4｜参考答案要点：<br>- 🔴 核心：🟡 支撑（4）排查与治理）：</div></details></div></details></section>
+```</p><ul class="exam-opts"><li><b>A</b> P1、P2、P3都是阻塞节点，该图不可以化简，是死锁的</li><li><b>B</b> P1、P2、P3都是非阻塞节点，该图可以化简，是非死锁的</li><li><b>C</b> P3是非阻塞节点，P1、P2是阻塞节点，该图可以化简，是非死锁的</li><li><b>D</b> P1、P2是非阻塞节点，P3是阻塞节点，该图不可以化简，是死锁的</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">R2资源已耗尽，P1、P2、P3的资源申请都无法被满足，全部处于阻塞状态；进程间形成闭环等待，资源图没有可先行执行释放资源的非阻塞节点，无法化简，系统发生死锁。</p></details></div></details><details class="exam-q" data-exam-id="2020年11月-015"><summary><span class="exam-no">第 15 题</span><span class="exam-stem-peek">IEEE-1394 总线采用菊花链的拓扑结构时，可最多支持 63 个节点。当 1394 总线支持 1023条桥接总线时，…</span></summary><div class="exam-q-body"><p class="exam-stem">IEEE-1394 总线采用菊花链的拓扑结构时，可最多支持 63 个节点。当 1394 总线支持 1023条桥接总线时，最多可以采用菊花链的拓扑结构互连(15)个节点。</p><ul class="exam-opts"><li><b>A</b> 1023</li><li><b>B</b> 1086</li><li><b>C</b> 64449</li><li><b>D</b> 645535</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">单段IEEE-1394菊花链最多支持63个节点，1023段桥接总线可支持的总节点数=1023×63=64449。</p></details></div></details></details><details class="exam-year" data-exam-year="2019年5月"><summary><span class="exam-year-name">2019年5月</span><span class="exam-year-n">3 题</span></summary><details class="exam-q" data-exam-id="2019年5月-018"><summary><span class="exam-no">第 18 题</span><span class="exam-stem-peek">多核CPU环境下进程的调度算法一般有全局队列调度和局部队列调度两种。（）属于全局队列调度的特征。</span></summary><div class="exam-q-body"><p class="exam-stem">多核CPU环境下进程的调度算法一般有全局队列调度和局部队列调度两种。（）属于全局队列调度的特征。</p><ul class="exam-opts"><li><b>A</b> 操作系统为每个CPU维护一个任务等待队列</li><li><b>B</b> 操作系统维护一个任务等待队列</li><li><b>C</b> 任务基本上无需在多个CPU核心间切换，有利于提高Cache命中率</li><li><b>D</b> 当系统中有一个CPU核心空闲时，操作系统便从该核心的任务等待队列中选取适当的任务执行</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">全局队列调度仅设置1个全局统一的任务等待队列，所有空闲CPU都从该队列领取任务；A、C、D均是为每个CPU单独设置队列的局部调度策略的特征。</p></details></div></details><details class="exam-q" data-exam-id="2019年5月-016"><summary><span class="exam-no">第 16 题</span><span class="exam-stem-peek">以下关于多核处理器的说法中，不正确的是（）。</span></summary><div class="exam-q-body"><p class="exam-stem">以下关于多核处理器的说法中，不正确的是（）。</p><ul class="exam-opts"><li><b>A</b> 采用多核处理器可以降低计算机系统的功耗和体积</li><li><b>B</b> SMP、BMP和MP是多核处理器系统通常采用的三种结构，采用哪种结构与应用场景相关，而无须考虑硬件的组成差异</li><li><b>C</b> 在多核处理器中，计算机可以同时执行多个进程，而操作系统中的多个线程也可以并行执行</li><li><b>D</b> 多核处理器是将两个或更多的独立处理器封装在一起，集成在一个电路中</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">SMP、BMP、MP三种多核架构的硬件底层设计存在显著差异，选型不仅要匹配业务场景，还必须适配硬件本身的架构限制；A、C、D的描述均符合多核处理器的定义与优势。</p></details></div></details><details class="exam-q" data-exam-id="2019年5月-014"><summary><span class="exam-no">第 14 题</span><span class="exam-stem-peek">雷达设计人员在设计数字信号处理单元时，其处理器普遍采用DSP芯片(比如：TI公司的TMS320C63xx)，通常DSP芯…</span></summary><div class="exam-q-body"><p class="exam-stem">雷达设计人员在设计数字信号处理单元时，其处理器普遍采用DSP芯片(比如：TI公司的TMS320C63xx)，通常DSP芯片采用哈佛(HarVard)体系结构，以下关于哈佛结构特征的描述，不正确的是（）。</p><ul class="exam-opts"><li><b>A</b> 程序和数据具有独立的存储空间，允许同时取指令和取操作数，并允许在程序空间或数据空间之间互传数据</li><li><b>B</b> 处理器内部采用多总线结构，保证了在一个机器周期内可以多次访问程序空间和数据空间</li><li><b>C</b> 哈佛体系结构强调的是多功能，适合多种不同的环境和任务，强调兼容性</li><li><b>D</b> 处理器内部采用多处理单元，可以在一个指令周期内同时进行运算</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">哈佛结构的程序、数据存储空间相互独立、配备专属总线，一个机器周期仅能分别访问一次程序空间、一次数据空间，无法多次访问同一类存储空间；其余选项均是哈佛结构与DSP芯片的典型特征。</p></details></div></details></details></details><details class="exam-subject" data-exam-subject="案例"><summary><span class="exam-subject-name">📋 案例分析</span><span class="exam-subject-n">2 题</span><span class="exam-subject-tip">案例背景 · 题目 · 答案与解析</span></summary><div class="exam-bar"><span class="exam-bar-label">📋 案例分析</span><span class="exam-bar-stat">共 <b>2</b> 题 · 情景简答 · 采分点三色标记</span></div><div class="exam-q exam-q-case"><div class="case-head"><span class="exam-no">案例 10</span><span class="exam-tag">考点 · 呼叫中心平台的存储与服务器选型</span><span class="exam-lv">⭐⭐⭐</span></div><div class="case-meta"><span><strong>考点</strong>：存储层次结构 / Cache / RAID / 网络存储（SAN/NAS/对象存储）/ 虚拟存储 / 多处理机结构</span><span>📅 <strong>时间</strong>：2025-07-08 上午 📍 <strong>地点</strong>：集团机房（设备到货验收）</span><span>👤 <strong>人物</strong>：甘工（乙方·系统分析师）、彭工（乙方·架构设计师）、邓经理（甲方运维）、硬件供应商（第三方）</span><span>⚡ <strong>冲突</strong>：录音一年 4TB、话单要秒级查、AI 要 GPU，供应商只给一种配置</span><span><strong>难度</strong>：★★★　<strong>总分</strong>：20 分　<strong>建议用时</strong>：25 分钟</span></div><div class="case-scene"><div class="case-h">案例背景</div><strong>背景</strong>：供应商工程师拍着机柜：&quot;这批都是高配通用服务器，跑你们系统够了。&quot; 邓经理（甲方运维）当场摇头：&quot;录音一年四个 T，三年十二个 T，你这本地盘够吗？话单三亿行，统计报表跑一次十几秒。&quot; 彭工补了一句：&quot;还有 AI 识别和大模型，那是另一类算力。&quot; 甘工翻着需求清单——结构化话单、非结构化录音、半结构化转写文本、热点会话数据，四类数据的读写特征完全不同，一套配置根本打不住。<br><strong>补充资料</strong>：；③ASR<strong>转写文本</strong>（约 9 亿字/年，需全文检索）；④坐席会话与热点数据（需毫秒级读取）。 现有服务器为 20 台通用 x86 服务器；AI 语音识别与大模型推理需使用 GPU。运维反馈：①统计报表查询慢；②录音存储成本上升快；③GPU 服务器资源紧张但 CPU 服务器闲置。</div><div class="case-asks"><div class="case-h">题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">请说明计算机<strong>存储系统的层次结构</strong>及各层的特点与作用；并针对上述四类数据给出存储方案与理由（须涉及 Cache、主存、辅存与网络存储）。（10分）</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">请比较 <strong>SMP（对称多处理机）</strong>与 <strong>MPP（海量并行处理）</strong>结构的特点与适用场景；针对&quot;GPU 紧张但 CPU 闲置&quot;给出解决方案；并说明<strong>指令系统</strong>中 CISC 与 RISC 的区别。（10分）</span></li></ul></div><details class="exam-ans"><summary>参考答案要点（三色标记）</summary><div class="exam-points"><strong>问题 1｜参考答案要点（10分）</strong>：<br>- 🔴 核心：🔴 核心（层次结构，由上到下容量增大、速度降低、成本降低）：<br>- 🟡 支撑：寄存器：CPU 内部；最快、容量最小（字节~KB）；存放当前指令与数据<br>- 🟡 支撑：高速缓存 Cache：SRAM；快（ns 级）、容量小（MB 级），对程序透明；缓解 CPU 与主存速度差距，基于程序局部性（时间局部性 + 空间局部性）<br>- 🟡 支撑：主存储器：DRAM；较快、容量中等（GB 级）、易失；存放正在运行的程序与数据<br>- 🟡 支撑：辅助存储器：磁盘/SSD；慢（ms 级）、容量大（TB 级）、非易失；长期保存程序与数据<br>- 🟡 支撑：网络/离线存储：SAN/NAS/对象存储；容量近乎无限、可共享；海量数据、共享访问、备份归档<br>- 🟡 支撑：🔴 核心（四类数据方案）：<br>- 🟡 支撑：1. 坐席会话与热点数据 → Redis 缓存（相当于&quot;应用层 Cache&quot;）：利用局部性，把热点客户、话术模板、坐席状态放内存，读取毫秒级，命中率可达 95% 以上；<br>- 🟡 支撑：2. 话单数据 → SSD + 关系数据库（或列式数仓），热数据（近 7 天）入内存/列存，按日期与地市分区；<br>- 🟡 支撑：3. 录音文件 → 对象存储（非结构化、量大、成本低），配生命周期策略（30 天转低频、1 年转归档），元数据入数据库以便检索下钻；<br>- 🟡 支撑：4. 转写文本 → 文档数据库 + 全文检索（ES），兼顾结构灵活与检索性能。<br>- 🟡 支撑：RAID（RAID0 提速、RAID1 镜像、RAID5/6 兼顾性能与容错、RAID10 高性能高可用）用于数据库盘；虚拟存储把多级存储统一为逻辑视图，屏蔽物理差异（本项目体现为&quot;热温冷分级 + 统一元数据&quot;）；网络存储中 SAN（块级、高性能、适合数据库）与 NAS（文件级、共享方便）按需选择，海量非结构化优先对象存储。；录音&quot;写一次读多次、长期保存&quot;的特征决定了它不应放在数据库或高性能 SAN，而应走对象存储 + 归档，这是本题最大的成本优化点。<br><strong>问题 2｜参考答案要点（10分）</strong>：<br>- 🔴 核心：🔴 核心（SMP vs MPP）：<br>- 🟡 支撑：结构：多个同构处理器共享内存与总线；大量独立节点（各有 CPU/内存/磁盘），通过高速互连网络协作<br>- 🟡 支撑：存储：共享存储（统一地址空间）；分布存储（消息传递）<br>- 🟡 支撑：扩展：受总线/共享内存限制，扩展性有限（一般 ≤ 数十 CPU）；扩展性强（可扩展到数千节点）<br>- 🟡 支撑：编程：简单（共享内存、多线程）；复杂（消息传递 MPI、数据分区）<br>- 🟡 支撑：适用：通用服务器、数据库、事务处理；数据仓库、大数据分析、科学计算<br>- 🟡 支撑：🔴 核心（GPU 紧张 / CPU 闲置的解决）：<br>- 🟡 支撑：1. 资源池化与调度——用 K8s 统一管理 CPU 与 GPU，按队列配额调度；<br>- 🟡 支撑：2. 服务分层部署——ASR 与大模型推理（GPU 密集）与规则引擎、工单、报表（CPU 密集）分别部署，各自独立伸缩；<br>- 🟡 支撑：3. 模型侧优化——模型量化/蒸馏、批处理推理、结果缓存，降低单次推理的 GPU 占用；<br>- 🟡 支撑：4. 异步化——离线质检、历史转写走夜间批处理队列，不与实时链路争抢 GPU；<br>- 🟡 支撑：5. 弹性与错峰——按话务峰谷自动扩缩容，非高峰释放 GPU 给算法团队（乙方·数据运营）训练；；6. 降级预案——GPU 不可用时降级为关键词话术（CPU 即可运行），保证可用性。；🔴 核心（CISC vs RISC）：；CISC（复杂指令系统）：指令数量多、格式可变、寻址方式丰富，单条指令功能强（如一条指令完成内存到内存的运算），目标是用更少指令完成工作；代表 x86。优点：代码密度高、兼容性强；缺点：硬件复杂、指令执行周期差异大、难以流水化。；RISC（精简指令系统）：指令数量少、格式固定、只有 load/store 访问内存、寻址方式简单，单周期执行、便于流水线与编译优化；代表 ARM、RISC-V、MIPS。优点：硬件简单、功耗低、性能高；缺点：代码密度相对较低。；本项目坐席终端（IP 话机、移动 App）多采用 ARM/RISC 架构（功耗与成本优势），而中心服务器采用 x86/CISC；信创场景下还会涉及 ARM 架构服务器与 RISC-V 终端，这正是 CISC/RISC 的现实对应。</div></details><details class="exam-ans"><summary>解析与加分项</summary><div class="exam-exp-more">- 🟢 加分：解析·多处理机与指令系统是综合知识章的高频点，答题要给出对比表与本项目对应。</div></details></div><div class="exam-q exam-q-case"><div class="case-head"><span class="exam-no">案例 12</span><span class="exam-tag">考点 · 上线前夜的服务器告警</span><span class="exam-lv">⭐⭐⭐</span></div><div class="case-meta"><span>📅 <strong>时间</strong>：2026-01-14 凌晨 1:20 📍 <strong>地点</strong>：阿甘科技值班室（微信群同时在线）</span><span>👤 <strong>人物</strong>：甘工（乙方·系统分析师）、邓经理（甲方运维）、丁工（乙方·测试负责人）、彭工（乙方·架构设计师）</span><span>⚡ <strong>冲突</strong>：距全面上线还有 8 小时，数据库服务器 CPU 冲高、内存告警，有人提议&quot;先加内存顶一下&quot;</span><span><strong>难度</strong>：★★★　<strong>总分</strong>：25 分　<strong>建议用时</strong>：25 分钟</span></div><div class="case-scene"><div class="case-h">案例背景</div><strong>背景</strong>：邓经理在群里甩了张监控截图：&quot;数据库那台 CPU 92%，内存 88%，iowait 也不低。明天早上八点就要切流量，你们看着办。&quot; 有人建议：&quot;先加内存吧，反正云主机随时能扩。&quot; 彭工反对：&quot;现在加内存是掩盖问题——得先搞清楚是缓存命中率掉了、还是慢查询把 CPU 吃满了、还是磁盘 IO 瓶颈。乱加资源明天照样崩。&quot; 甘工登录机器，看到：Cache 访问时间 5ns、主存访问 60ns，当前统计的 Cache 命中率只有 82%（压测时是 96%）；进程列表里有 3 个统计任务在跑全表扫描；录音写入任务占用大量 IO。<br><strong>补充资料</strong>：CPU 使用率 → 92% → 55% → 异常；内存使用率 → 88% → 60% → 异常；iowait → 21% → 5% → 异常；Cache 命中率 → <strong>82%</strong> → <strong>96%</strong> → 下降 14 个百分点；Cache 访问时间 → 5 ns → — → 硬件参数；主存访问时间 → 60 ns → — → 硬件参数 <strong>并行任务</strong>：3 个统计任务（全表扫描）+ 录音写入任务（大 IO）。</div><div class="case-asks"><div class="case-h">题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">（1）计算 Cache 命中率 96% 与 82% 两种情况下的<strong>平均访存时间</strong>（假设 Cache 命中时只需访问 Cache），并说明命中率下降 14 个百分点带来的性能影响；</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">（2）说明<strong>进程</strong>的基本状态与<strong>进程调度</strong>的概念，分析本例中 CPU 冲高的可能原因；</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">（3）说明 <strong>I/O 控制方式</strong>（程序查询、中断、DMA）的特点，指出录音写入应采用哪种并说明原因；</span></li><li><span class="case-ask-no">4</span><span class="case-ask-t">（4）彭工反对&quot;先加内存顶一下&quot;，请说明正确的排查思路与治理措施。</span></li></ul></div><details class="exam-ans"><summary>参考答案要点（三色标记）</summary><div class="exam-points"><strong>问题 1｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（1）Cache 计算）：<br><strong>问题 2｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（2）进程与调度）：进程是程序在某个数据集合上的一次执行过程，是资源分配与调度的基本单位；基本状态为就绪、运行、阻塞（新建、终止为辅助状态），状态间因调度、等待资源、时间片到而转换。进程调度是按某种策略（先来先服务、时间片轮转、优先级、多级反馈队列）从就绪队列选进程占用 CPU。<br><strong>问题 3｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（3）I/O 方式）：<br><strong>问题 4｜参考答案要点</strong>：<br>- 🔴 核心：🟡 支撑（4）排查与治理）：</div></details><details class="exam-ans"><summary>解析与加分项</summary><div class="exam-exp-more">- 🟢 加分：解析·Cache 计算 + 进程/I/O 概念 + 排查思路，是综合知识章与运维实践的结合。</div></details></div></details></section>
     <div class="wrongbook"></div>
     <div class="keyhint">
   <span class="keyhint-title">键盘快捷键</span>
@@ -3608,7 +3792,9 @@ flowchart LR
     init() {
       const root = document.querySelector('.exam')
       if (!root) return
-      const chapter = root.dataset.examChapter || 'x'
+      // ⚠️ 专项页 / 全真模拟页没有 data-exam-chapter（无教材章），
+      //    旧写法一律退化成 'x' → H42~H48 共用同一个记忆键、互相串状态。
+      const chapter = root.dataset.examChapter || root.dataset.examHour || 'x'
 
       // 恢复上次展开状态：{ "H07": { "2025年5月": true, ... } }
       const saved = store.get(this.KEY, {}) || {}
@@ -3628,6 +3814,7 @@ flowchart LR
       const seen = store.get('examSeen', {}) || {}
       root.querySelectorAll('.exam-q').forEach(qd => {
         const qid = qd.dataset.examId
+        if (!qid) return
         if (seen[qid]) {
           const a = qd.querySelector('.exam-ans')
           if (a) a.open = true
@@ -3643,12 +3830,17 @@ flowchart LR
         btn.addEventListener('click', e => {
           e.preventDefault()
           const openAll = btn.dataset.examAll === '1'
-          root.querySelectorAll('.exam-subject,.exam-year').forEach(d => { d.open = openAll })
-          root.querySelectorAll('.exam-ans').forEach(d => {
-            d.open = openAll
-            if (openAll && d.parentElement.dataset.examId) seen[d.parentElement.dataset.examId] = 1
-          })
-          if (openAll) store.set('examSeen', seen)
+          // ⚠️ 必须把 .exam-q 也列进来：只开 .exam-subject/.exam-year/.exam-ans
+          //    时，单题仍折叠 → 答案藏在关闭的单题内，"全部展开"名不副实。
+          root.querySelectorAll('.exam-subject,.exam-year,.exam-q,.exam-ans')
+            .forEach(d => { d.open = openAll })
+          if (openAll) {
+            // ⚠️ 旧的 `d.parentElement.dataset.examId` 取到的是 .exam-q-body（无 id），
+            //    会把 seen[undefined] 写进 localStorage。改为直接从 .exam-q 取。
+            root.querySelectorAll('.exam-q[data-exam-id]')
+              .forEach(qd => { seen[qd.dataset.examId] = 1 })
+            store.set('examSeen', seen)
+          }
           // 同步年份级记忆
           root.querySelectorAll('.exam-year').forEach(y => { mine[y.dataset.examYear] = y.open })
           saved[chapter] = mine
@@ -3695,7 +3887,7 @@ flowchart LR
   // ══════════════════════════════════════════
   // 8. mermaid 渲染（自定义墨绿主题，与正文同色系）
   // ══════════════════════════════════════════
-  // 站点配色（与 design.css 的令牌保持一致）
+  // 站点配色（与设计令牌保持一致 —— 改主题色时这里要同步）
   const MERMAID_LIGHT = {
     bg: '#f2f0e9', fg: '#1b211c', line: '#cdc9bd',
     accent: '#3d5a40', accent2: '#5a8a62', accent3: '#7ea888',

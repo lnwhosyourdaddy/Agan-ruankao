@@ -7,7 +7,7 @@
 <title>第 6 小时 · 计算机网络（一）· 数据通信与协议体系 · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
-<meta name="build-stamp" content="2026-10-05 11:44:51">
+<meta name="build-stamp" content="2026-10-05 15:47:03">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -405,16 +405,21 @@ img{max-width:100%;height:auto}
   border-radius:100px;
   font-size:12.5px;color:var(--accent);font-weight:600;
 }
-.cover h1{
+/* ⚠️ 封面主标题刻意用 <div> 而不是 <h1>：index.md 正文自带 `# 阿甘系分 · 48 小时
+   冲刺手册`，若封面也用 h1，一页会出现两个 h1（语义/SEO 上都是错的）。
+   视觉与 h1 完全一致 —— 字号、颜色、以及那道 72px 短横线都在下面显式声明。 */
+.cover .cover-title{
   font-size:3.5em;font-weight:800;letter-spacing:-1.6px;
   color:var(--accent);line-height:1.14;margin-bottom:16px;
 }
-/* ⚠️ 封面 h1 也继承 `.main h1::after` 那道 56px 短横线，但它是 display:block 的
-   固定宽块级元素 —— 文字居中不代表块级元素居中，会贴到左边。
-   修法：给封面这条短横线加 margin-left/right:auto 让它真正居中。 */
-.cover h1::after{
-  margin-left:auto;margin-right:auto;
+/* 复刻 `.main h1::after` 的短横线（<div> 不继承 h1 的伪元素），并水平居中 —— */
+/* 文字居中不代表块级元素居中，不加 auto 会贴到左边。 */
+.cover .cover-title::after{
+  content:'';display:block;
   width:72px;height:3px;
+  background:var(--accent);
+  margin:.5em auto 0;
+  border-radius:2px;
 }
 .cover .sub{
   font-size:1.2em;color:var(--fg-2);
@@ -845,7 +850,7 @@ pre{
   .nav{margin-left:auto;gap:2px}
   .main{padding:32px 0 80px}
   .cover{padding:48px 0 40px;margin-bottom:40px}
-  .cover h1{font-size:2.4em;letter-spacing:-.8px}
+  .cover .cover-title{font-size:2.4em;letter-spacing:-.8px}
   .cover .sub{font-size:1.05em;margin-bottom:24px}
   .cover-stats{gap:10px;margin-bottom:28px}
   .stat{min-width:76px;padding:10px 14px}
@@ -901,7 +906,7 @@ pre{
   h1,h2,h3,h4{break-after:avoid;page-break-after:avoid}
 
   .cover{padding:0 0 18px;margin-bottom:18px;text-align:left}
-  .cover h1{font-size:24pt}
+  .cover .cover-title{font-size:24pt}
   .cover-stats,.cover-badge,.cta-row{display:none !important}
 
   a[href^="http"]:after{
@@ -1256,16 +1261,14 @@ html.focus-mode .chapbar{opacity:.35;pointer-events:none}
 }
 /* 章首横幅：h1 上方加一条"章号 + 主色渐变"的装饰带，
    让每页开头有一个明确的"进入新章"仪式感（原来 h1 直接浮在正文里）。
-   ⚠️ 必须排除 .cover —— 封面 h1 自己已有顶部留白与居中布局，
-   加上横幅会与下方分隔线叠成双线（首页曾出现两条横线紧挨）。 */
-.main h1:not(.cover h1)::before{
+   （封面主标题已改成 <div class="cover-title">，不再匹配 .main h1，无需再排除。） */
+.main h1::before{
   content:'';display:block;
   width:100%;height:4px;
   background:linear-gradient(90deg,var(--accent) 0%,var(--accent-3) 42%,transparent 88%);
   border-radius:2px;
   margin-bottom:.62em;
 }
-.cover h1::before{content:none}
 .main h1::after{
   content:'';display:block;
   width:56px;height:3px;
@@ -2087,6 +2090,185 @@ html{scroll-padding-top:80px}
   .exam-stem,.exam-opts li{font-size:9.5pt}
   .exam-exp{font-size:8.5pt;color:#333}
 }
+
+/* ══════════════════════════════════════════════════════════════
+   真题区块扩展 v2 · 案例 / 论文卡片 + 全真模拟卷
+   与既有 .exam-* 体系同源：米白卡底 + 左侧 4px 色条 + 墨绿强调色
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── 案例 / 论文卡片（非 <details>，直接展开的题卡）── */
+.exam-q-case,.exam-q-essay{
+  padding:14px 16px 4px;
+  background:var(--bg-card);
+}
+.exam-q-case:hover,.exam-q-essay:hover{background:var(--bg-alt)}
+.case-head{
+  display:flex;flex-wrap:wrap;align-items:center;gap:6px;
+  padding-bottom:10px;margin-bottom:10px;
+  border-bottom:1px dashed var(--line);
+}
+.case-head .exam-no{min-width:0}
+.case-h{
+  display:flex;align-items:center;gap:6px;
+  margin:12px 0 6px;font-size:12.5px;font-weight:700;
+  letter-spacing:.06em;color:var(--accent);
+}
+.case-h::before{
+  content:'';width:4px;height:13px;border-radius:2px;
+  background:var(--accent);flex:0 0 auto;
+}
+
+/* 情景要素（📅时间 / 📍地点 / 👤人物 / ⚡冲突 / 难度总分用时） */
+.case-meta{
+  display:flex;flex-direction:column;gap:2px;
+  padding:9px 12px;margin:.4em 0 .2em;
+  background:var(--bg-alt);
+  border-left:3px solid var(--line-2);
+  border-radius:0 var(--radius-sm) var(--radius-sm) 0;
+  font-size:12.5px;line-height:1.75;color:var(--fg-3);
+}
+.case-meta strong{color:var(--fg-2);font-weight:600}
+
+/* 案例背景正文 */
+.case-scene{
+  margin:.2em 0 1em;padding:12px 14px;
+  background:var(--accent-soft);
+  border-left:3px solid var(--accent-3);
+  border-radius:0 var(--radius) var(--radius) 0;
+  font-size:14.5px;line-height:1.92;color:var(--fg);
+}
+.case-scene strong{color:var(--accent);font-weight:700}
+
+/* 题目列表 */
+.case-asks{margin:.2em 0 1em}
+ul.exam-questions{
+  list-style:none;margin:.4em 0;padding:0;
+}
+ul.exam-questions>li{
+  display:flex;gap:10px;align-items:flex-start;
+  padding:9px 0;border-bottom:1px solid var(--line);
+  font-size:14.5px;line-height:1.88;color:var(--fg);
+}
+ul.exam-questions>li:last-child{border-bottom:0}
+ul.exam-questions>li::before{content:none !important}
+.case-ask-no{
+  flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;
+  min-width:24px;height:22px;margin-top:3px;padding:0 6px;
+  border-radius:6px;background:var(--accent-soft-2);color:var(--accent);
+  font-family:var(--sans);font-size:11.5px;font-weight:700;
+  font-variant-numeric:tabular-nums;
+}
+.case-ask-t{flex:1;min-width:0}
+.case-ask-t strong{color:var(--accent);font-weight:700}
+
+/* ── 答案 / 解析 / 考点拆解 / 教材知识点 ── */
+.exam-points,.exam-keypoints,.exam-exp-more,.essay-bg{
+  padding:12px 14px;margin:8px 0;
+  border-left:4px solid var(--tip-line);
+  border-radius:0 var(--radius) var(--radius) 0;
+  background:var(--tip-bg);
+  font-size:14px;line-height:1.92;color:var(--fg);
+}
+.exam-keypoints{border-left-color:var(--accent-2);background:var(--accent-soft)}
+.exam-exp-more{border-left-color:var(--warn-line);background:var(--warn-bg);color:var(--warn-fg)}
+.essay-bg{border-left-color:var(--line-2);background:var(--bg-alt);color:var(--fg-2)}
+.exam-points strong,.exam-keypoints strong{color:var(--accent);font-weight:700}
+
+/* 教材知识点：章标签 + 可点学时胶囊 */
+.exam-textbook{
+  display:flex;flex-wrap:wrap;align-items:center;gap:6px;
+  padding:12px 14px;margin:8px 0;
+  background:var(--mem-bg);
+  border-left:4px solid var(--mem-line);
+  border-radius:0 var(--radius) var(--radius) 0;
+}
+.tb-chap{
+  font-family:var(--serif);font-size:14px;font-weight:700;color:var(--mem-fg);
+}
+.tb-hour{
+  display:inline-flex;align-items:center;
+  padding:2px 9px;border-radius:999px;
+  background:var(--bg-card);border:1px solid var(--mem-line);
+  color:var(--mem-fg) !important;font-size:12px;font-weight:600;
+  text-decoration:none;
+}
+.tb-hour:hover{background:var(--mem-line);color:var(--bg-card) !important;border-color:var(--mem-fg)}
+
+/* 模拟卷成绩/批次等小标签 */
+.exam-lv{
+  font-family:var(--sans);font-size:11.5px;color:var(--gold);
+  letter-spacing:.04em;white-space:nowrap;
+}
+.exam-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.exam-tag-en{
+  background:var(--mem-bg);color:var(--mem-fg);border-color:var(--mem-line);
+}
+.essay-batch{
+  font-family:var(--sans);font-size:11.5px;color:var(--fg-3);
+  padding:1px 8px;border:1px solid var(--line);border-radius:999px;
+}
+.exam-kp{
+  margin:.5em 0 0;font-family:var(--sans);font-size:12.5px;color:var(--fg-3);
+}
+.exam-kp::before{content:'🎯 ';font-size:11px}
+
+/* ── 全真模拟卷头部 ── */
+.mock-head{
+  padding:16px 18px;margin:0 0 12px;
+  border-radius:var(--radius-lg);
+  background:linear-gradient(135deg,var(--accent) 0%,var(--accent-2) 100%);
+  color:var(--fg-inv);
+  box-shadow:var(--shadow-2);
+}
+.mock-title{
+  font-family:var(--serif);font-size:17px;font-weight:700;
+  letter-spacing:.02em;line-height:1.5;
+}
+.mock-sub{
+  margin-top:6px;font-size:12.5px;line-height:1.75;
+  color:rgba(251,250,246,.82);
+}
+.mock-sub b{color:#fff;font-variant-numeric:tabular-nums}
+.mock-items{
+  border:1px solid var(--line);border-radius:var(--radius);
+  background:var(--bg-card);overflow:hidden;
+}
+.mock-items>.exam-q:first-child{border-top:0}
+.exam-mock .exam-subject{margin-top:14px}
+.exam-subj-only{display:block}
+
+/* 模拟卷内的综合知识答题条 */
+.exam-mock .exam-bar{
+  border-radius:var(--radius) var(--radius) 0 0;
+  border-bottom:0;
+}
+
+/* ── 窄屏 ── */
+@media(max-width:760px){
+  .exam-q-case,.exam-q-essay{padding:12px 12px 4px}
+  .case-scene,.exam-points,.exam-keypoints,.exam-exp-more,.essay-bg,.exam-textbook{
+    padding:10px 11px;font-size:13.5px;
+  }
+  ul.exam-questions>li{gap:8px;font-size:13.5px}
+  .mock-head{padding:13px 14px}
+  .mock-title{font-size:15.5px}
+}
+
+/* ── 打印：卡片不要再折叠，色条与底色转灰阶 ── */
+@media print{
+  .mock-head{background:none !important;color:#000 !important;border:1pt solid #999;
+    box-shadow:none}
+  .mock-title{font-size:13pt}
+  .mock-sub{color:#333 !important}
+  .exam-q-case,.exam-q-essay{break-inside:avoid;page-break-inside:avoid}
+  .case-scene,.exam-points,.exam-keypoints,.exam-exp-more,.essay-bg,.exam-textbook{
+    background:none !important;border-left:2pt solid #999 !important;
+  }
+  .exam-q-case,.exam-q-essay,.case-scene,.case-meta,ul.exam-questions>li{
+    font-size:9.5pt;
+  }
+  .tb-hour{color:#000 !important;border-color:#666}
+}
 </style>
 </head>
 <body>
@@ -2203,13 +2385,13 @@ html{scroll-padding-top:80px}
 <p>📶数字数据 → 模拟信道：三种调制方式</p>
 <p>调幅 AM / ASK</p>
 <p><strong>载波振幅</strong>随基带数字信号变化<br>例：1 = 有载波输出，0 = 无载波输出</p>
-<p>又称<strong>幅移键控</strong><br>容易实现、技术简单，但抗干扰能力差**</p>
+<p>又称<strong>幅移键控</strong><br>容易实现、技术简单，但抗干扰能力差</p>
 <p>调频 FM / FSK</p>
 <p><strong>载波频率</strong>随基带数字信号变化<br>例：1 用频率 f₁，0 用频率 f₂</p>
-<p>又称<strong>频移键控</strong><br>容易实现、技术简单，抗干扰能力较强**</p>
+<p>又称<strong>频移键控</strong><br>容易实现、技术简单，抗干扰能力较强</p>
 <p>调相 PM / PSK</p>
 <p><strong>载波初始相位</strong>随基带数字信号变化<br>例：1 = 相位 180°，0 = 相位 0°</p>
-<p>又称<strong>相移键控</strong><br>抗干扰能力较强，但实现技术比较复杂**</p>
+<p>又称<strong>相移键控</strong><br>抗干扰能力较强，但实现技术比较复杂</p>
 <p>💡 <strong>调制 = 波形变换 / 频谱变换</strong>：将数字信号的频谱变换成适合模拟信道传输的频谱。三者的差别在<strong>"变的那个参量"</strong>——振幅、频率、相位。</p>
 <p>口诀：<strong>幅易差，频较稳，相抗强但复杂</strong></p>
 <p>⚠️ <strong>常考对比</strong>：抗干扰能力 <strong>PM / FSK 强于 AM</strong>；实现复杂度 <strong>PM 最高</strong>。<br>题干给"抗干扰能力最强/较复杂" → 选<strong>调相 PSK</strong>。</p>
@@ -2391,7 +2573,7 @@ html{scroll-padding-top:80px}
   </div>
 </div>
 </div>
-    <section class="exam" id="exam" data-exam-chapter="4" data-exam-hour="H06"><div class="exam-bar"><span class="exam-bar-label">📚 历年真题</span><span class="exam-bar-stat">本章共 <b>43</b> 题 · 本学时 <b>15</b> 题（其余见同章其他学时）</span><span class="exam-bar-ops"><button type="button" class="exam-op" data-exam-all="1">全部展开</button><button type="button" class="exam-op" data-exam-all="0">全部收起</button></span></div><details class="exam-subject" data-exam-subject="综合知识"><summary><span class="exam-subject-name">📝 综合知识</span><span class="exam-subject-n">15 题</span><span class="exam-subject-tip">按年份展开 · 单题可点开看答案</span></summary><details class="exam-year" data-exam-year="2026年5月"><summary><span class="exam-year-name">2026年5月</span><span class="exam-year-n">3 题</span></summary><details class="exam-q" data-exam-id="2026年5月-064"><summary><span class="exam-no">第 64 题</span><span class="exam-stem-peek">IPSec中用于身份认证与数据完整性保护的是</span></summary><div class="exam-q-body"><p class="exam-stem">IPSec中用于身份认证与数据完整性保护的是</p><ul class="exam-opts"><li><b>A</b> AH</li><li><b>B</b> ESP</li><li><b>C</b> SSL</li><li><b>D</b> SSH</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">AH协议负责身份认证与数据完整性；ESP侧重数据加密。</p></details></div></details><details class="exam-q" data-exam-id="2026年5月-034"><summary><span class="exam-no">第 34 题</span><span class="exam-stem-peek">无线局域网通常采用</span></summary><div class="exam-q-body"><p class="exam-stem">无线局域网通常采用</p><ul class="exam-opts"><li><b>A</b> CSMA/CD</li><li><b>B</b> CSMA/CA</li><li><b>C</b> Token Bus</li><li><b>D</b> FDDI</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">无线信号无法边发边监听冲突，WLAN使用CSMA/CA（冲突避免）。</p></details></div></details><details class="exam-q" data-exam-id="2026年5月-006"><summary><span class="exam-no">第 6 题</span><span class="exam-stem-peek">下列属于安全远程登录协议的是</span></summary><div class="exam-q-body"><p class="exam-stem">下列属于安全远程登录协议的是</p><ul class="exam-opts"><li><b>A</b> FTP</li><li><b>B</b> SNMP</li><li><b>C</b> SSH</li><li><b>D</b> Telnet</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">Telnet为明文传输不安全，SSH是加密型安全远程登录协议；FTP用于文件传输，SNMP用于网络设备管理。</p></details></div></details></details><details class="exam-year" data-exam-year="2025年5月"><summary><span class="exam-year-name">2025年5月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2025年5月-060"><summary><span class="exam-no">第 60 题</span><span class="exam-stem-peek">在电子商务中，要保障电商交易记录数据不被篡改，应采用 () 技术。</span></summary><div class="exam-q-body"><p class="exam-stem">在电子商务中，要保障电商交易记录数据不被篡改，应采用 () 技术。</p><ul class="exam-opts"><li><b>A</b> 数字签名</li><li><b>B</b> 对称加密</li><li><b>C</b> 区块链</li><li><b>D</b> 链式哈希</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">区块链本质是分布式共享账本，依靠共识机制实现全节点共同维护历史数据，单节点无法私自修改交易记录；数字签名、链式哈希仅能保障单次传输的数据完整性，无法实现全链路历史记录防篡改。</p></details></div></details><details class="exam-q" data-exam-id="2025年5月-028"><summary><span class="exam-no">第 28 题</span><span class="exam-stem-peek">下面（）不是基于 TCP 协议的</span></summary><div class="exam-q-body"><p class="exam-stem">下面（）不是基于 TCP 协议的</p><ul class="exam-opts"><li><b>A</b> FTP</li><li><b>B</b> Telnet</li><li><b>C</b> SNMP</li><li><b>D</b> SMTP</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">送分题了，SNMP 是基于 UDP 的，是简单网络管理协议。</p></details></div></details></details><details class="exam-year" data-exam-year="2024年5月"><summary><span class="exam-year-name">2024年5月</span><span class="exam-year-n">3 题</span></summary><details class="exam-q" data-exam-id="2024年5月-035"><summary><span class="exam-no">第 35 题</span><span class="exam-stem-peek">信息网络三网融合最终做到三网合一，以下（）不属于这三网之一</span></summary><div class="exam-q-body"><p class="exam-stem">信息网络三网融合最终做到三网合一，以下（）不属于这三网之一</p><ul class="exam-opts"><li><b>A</b> 电信网</li><li><b>B</b> 广播电视网</li><li><b>C</b> 移动通信网</li><li><b>D</b> 计算机网</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">移动通信网是电信网的业务分支，三网融合定义的三大主体网络为电信网、广播电视网、计算机互联网。</p></details></div></details><details class="exam-q" data-exam-id="2024年5月-018"><summary><span class="exam-no">第 18 题</span><span class="exam-stem-peek">循环冗余校验码（Cyclic Redundancy Check ，CRC）是数据通信领域中最常用的一种差错校验码，该校验…</span></summary><div class="exam-q-body"><p class="exam-stem">循环冗余校验码（Cyclic Redundancy Check ，CRC）是数据通信领域中最常用的一种差错校验码，该校验方法中，使用多项式除法（模2除法）运算后的余数为校验字段。若数据信息为1100，生成多项式为 X3+X+1（即1011），则 CRC 编码是（）。</p><ul class="exam-opts"><li><b>A</b> 1100010</li><li><b>B</b> 1011010</li><li><b>C</b> 1100011</li><li><b>D</b> 1011110</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">按照CRC标准计算流程，最终将原始信息1100与校验余数010拼接，得到完整CRC编码1100010。</p></details></div></details><details class="exam-q" data-exam-id="2024年5月-003"><summary><span class="exam-no">第 3 题</span><span class="exam-stem-peek">SSL协议用于提供安全的http服务，SSL协议属于OSI模型中的（）</span></summary><div class="exam-q-body"><p class="exam-stem">SSL协议用于提供安全的http服务，SSL协议属于OSI模型中的（）</p><ul class="exam-opts"><li><b>A</b> 网络层</li><li><b>B</b> 传输层</li><li><b>C</b> 表示层</li><li><b>D</b> 应用层</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">SSL是工作在传输层的安全协议，可在传输层为上层应用提供身份认证、数据加密等安全能力，常配合HTTP协议实现HTTPS加密访问。</p></details></div></details></details><details class="exam-year" data-exam-year="2023年5月"><summary><span class="exam-year-name">2023年5月</span><span class="exam-year-n">1 题</span></summary><details class="exam-q" data-exam-id="2023年5月-006"><summary><span class="exam-no">第 6 题</span><span class="exam-stem-peek">Modem 的主要作用是（ ）。</span></summary><div class="exam-q-body"><p class="exam-stem">Modem 的主要作用是（ ）。</p><ul class="exam-opts"><li><b>A</b> 数模转换</li><li><b>B</b> 路由转发</li><li><b>C</b> 认证</li><li><b>D</b> 地址转换</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">Modem即调制解调器，核心功能是完成数字信号与模拟信号的互相转换（数模/模数转换），适配电话模拟线路传输计算机数字信号；路由转发、认证、地址转换不是Modem的功能。</p></details></div></details></details><details class="exam-year" data-exam-year="2022年5月"><summary><span class="exam-year-name">2022年5月</span><span class="exam-year-n">1 题</span></summary><details class="exam-q" data-exam-id="2022年5月-064"><summary><span class="exam-no">第 64 题</span><span class="exam-stem-peek">下列协议中，不属于电子邮件收发协议的是（67）。</span></summary><div class="exam-q-body"><p class="exam-stem">下列协议中，不属于电子邮件收发协议的是（67）。</p><ul class="exam-opts"><li><b>A</b> SMTP</li><li><b>B</b> POP</li><li><b>C</b> IMAP</li><li><b>D</b> FTP</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">SMTP是邮件发送协议，POP3、IMAP是邮件接收协议；FTP是文件传输协议，用于通用文件上传下载，不参与电子邮件收发流程。</p></details></div></details></details><details class="exam-year" data-exam-year="2021年5月"><summary><span class="exam-year-name">2021年5月</span><span class="exam-year-n">3 题</span></summary><details class="exam-q" data-exam-id="2021年5月-069"><summary><span class="exam-no">第 69 题</span><span class="exam-stem-peek">某主机无法上网，查看“本地连接”属性中的数据发送情况，发现只有发送没有接收，造成该主机网络故障的原因最有可能是（ ）。</span></summary><div class="exam-q-body"><p class="exam-stem">某主机无法上网，查看“本地连接”属性中的数据发送情况，发现只有发送没有接收，造成该主机网络故障的原因最有可能是（ ）。</p><ul class="exam-opts"><li><b>A</b> IP地址配置错误</li><li><b>B</b> 网络协议配置错误</li><li><b>C</b> 网络没有物理连接</li><li><b>D</b> DNS配置不正确</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">物理断开、协议配置错误会直接无法发送任何数据；DNS仅负责域名解析，用IP可绕过；IP地址/网关配置错误时主机能向外发送广播、请求包，但无法收到合法回包，出现只发不收的现象。</p></details></div></details><details class="exam-q" data-exam-id="2021年5月-066"><summary><span class="exam-no">第 66 题</span><span class="exam-stem-peek">数据包通过防火墙时，不能依据（ ）进行过滤。</span></summary><div class="exam-q-body"><p class="exam-stem">数据包通过防火墙时，不能依据（ ）进行过滤。</p><ul class="exam-opts"><li><b>A</b> 源和目的IP地址</li><li><b>B</b> 源和目的端口</li><li><b>C</b> IP协议号</li><li><b>D</b> 负载内容</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">传统包过滤防火墙仅能解析报文头部信息完成访问控制，无法深入识别数据包应用层的负载内容，因此不能依据负载内容做过滤判断。</p></details></div></details><details class="exam-q" data-exam-id="2021年5月-007"><summary><span class="exam-no">第 7 题</span><span class="exam-stem-peek">在浏览器地址栏输入192.168.1.1访问网页时，首先执行的操作是（ ）。</span></summary><div class="exam-q-body"><p class="exam-stem">在浏览器地址栏输入192.168.1.1访问网页时，首先执行的操作是（ ）。</p><ul class="exam-opts"><li><b>A</b> 域名解析</li><li><b>B</b> 解释执行</li><li><b>C</b> 发送页面请求报文</li><li><b>D</b> 建立TCP连接</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">输入的是IP地址，无需进行DNS域名解析；浏览器会先和目标IP的对应端口完成TCP三次握手建立连接，之后才会发送HTTP请求报文获取页面。</p></details></div></details></details><details class="exam-year" data-exam-year="2020年11月"><summary><span class="exam-year-name">2020年11月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2020年11月-068"><summary><span class="exam-no">第 68 题</span><span class="exam-stem-peek">用户在登录 FTP 服务器的过程中，建立 TCP 连接时使用的默认端口号是 （68）。</span></summary><div class="exam-q-body"><p class="exam-stem">用户在登录 FTP 服务器的过程中，建立 TCP 连接时使用的默认端口号是 （68）。</p><ul class="exam-opts"><li><b>A</b> 20</li><li><b>B</b> 21</li><li><b>C</b> 22</li><li><b>D</b> 23</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">FTP会话建立、身份认证、命令交互全程通过21号控制端口完成TCP连接，20号仅用于后续文件数据传输。</p></details></div></details><details class="exam-q" data-exam-id="2020年11月-065"><summary><span class="exam-no">第 65 题</span><span class="exam-stem-peek">Telnet 是用于远程访问服务器的常用协议。下列关于 Telnet 的描述中，不正确的是（65）。</span></summary><div class="exam-q-body"><p class="exam-stem">Telnet 是用于远程访问服务器的常用协议。下列关于 Telnet 的描述中，不正确的是（65）。</p><ul class="exam-opts"><li><b>A</b> 可传输数据和口令</li><li><b>B</b> 默认端口号是23</li><li><b>C</b> 一种安全的通信协议</li><li><b>D</b> 用TCP作为传输层协议</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">Telnet采用明文传输机制，登录口令、操作指令都会裸传，极易被抓包窃取，不属于安全通信协议。</p></details></div></details></details></details><details class="exam-subject" data-exam-subject="案例"><summary><span class="exam-subject-name">📋 案例分析</span><span class="exam-subject-n">2 题</span><span class="exam-subject-tip">情景简答 · 采分点三色标记</span></summary><div class="exam-bar"><span class="exam-bar-label">📋 案例分析</span><span class="exam-bar-stat">共 <b>2</b> 题 · 情景简答</span></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">14</span>考点：网络规划与设计 / 差错控制 / QoS / 语音网络关键指标<br>📅 时间：2025-07-22 上午 📍 地点：集团新职场（网络规划评审）<br>👤 人物：甘工（乙方·系统分析师）、徐总监（甲方·数智化信息部总监）、邓经理（甲方·运维经理）、运营商工程师（第三方·电信公司）<br>⚡ 冲突：120 席要上，语音/办公/监控/大屏挤在一个网段，VLAN 与 QoS 没规划<br>难度：★★★　总分：10 分　建议用时：25 分钟<br>背景：新职场装修完，邓经理拿着网络拓扑图来找甘工：&quot;语音、办公、监控、大屏，全让我塞在一个网段里了，这样行吗？&quot; 运营商工程师（第三方·电信公司）提醒：&quot;语音最怕延迟和抖动，你们不隔离，监控视频一跑，电话就卡。&quot; 徐总监只给了一个约束：&quot;120 席，下个月就要用。&quot; 甘工看着那张图——地址只有一个 /24，四个业务域要分开，还要给语音留优先级。这是道规划题，也是道计算题。<br>补充资料：工作台 Web 访问；③班长监控大屏；④与工单系统、计费系统的内网接口；⑤互联网出口（用于 SaaS 能力与地图服务）。 甘工调研后提出：语音与管理网必须隔离；语音对时延、抖动、丢包敏感；现有地址段为 192.168.10.0/24，需划分为 4 个子网（坐席语音、坐席办公、监控与大屏、DMZ 接口区），每个子网至少容纳 50 台设备。<br>问题 1：（1）请给出子网划分方案（写出每个子网的网络地址、掩码、可用主机范围与广播地址）；<br>问题 2：（2）说明 OSI 七层与 TCP/IP 四层的对应关系，并指出 SIP、RTP、HTTP、TLS 分别位于哪一层；<br>问题 3：（3）说明差错控制的常用方式与适用场景。<br>问题 4：请说明网络规划与设计的主要内容与步骤；针对语音质量要求给出 QoS 与隔离方案；并列出语音网络的关键指标与阈值。（10分）</p><ul class="exam-questions"><li><b>问题 1</b> （1）请给出<strong>子网划分方案</strong>（写出每个子网的网络地址、掩码、可用主机范围与广播地址）；</li><li><b>问题 2</b> （2）说明 <strong>OSI 七层与 TCP/IP 四层</strong>的对应关系，并指出 SIP、RTP、HTTP、TLS 分别位于哪一层；</li><li><b>问题 3</b> （3）说明<strong>差错控制</strong>的常用方式与适用场景。</li><li><b>问题 4</b> 请说明网络规划与设计的主要内容与步骤；针对语音质量要求给出 QoS 与隔离方案；并列出语音网络的关键指标与阈值。（10分）<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）子网划分）：需 4 个子网且每子网 ≥50 台主机。主机位需满足 2^h − 2 ≥ 50 → h ≥ 6；原为 /24（8 位主机位），故借 2 位作子网位，掩码为 /26（255.255.255.192），每子网 62 个可用地址。<br>- 🟢 加分：解析·网络规划题要&quot;步骤 + 分区/QoS 方案 + 可量化指标表&quot;。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🔴 核心（2）层次对应）：<br>问题 3｜参考答案要点：<br>- 🔴 核心：🔴 核心（3）差错控制）：①检错重传（ARQ）：接收端检错后请求重发，包括停等 ARQ、后退 N 帧 ARQ、选择重传 ARQ；可靠但引入时延，适用于非实时数据（工单、报表）。②前向纠错（FEC）：发送端加入冗余，接收端自行纠错，无需重传，适合实时语音/视频（重传已无意义）。③检错丢弃：实时业务中对损坏帧直接丢弃（语音可用丢包隐藏 PLC 掩盖）。<br>问题 4｜参考答案要点（10分）：<br>- 🔴 核心：🔴 核心（规划与设计）：；网络规划：①需求分析（业务类型、带宽、用户数、可靠性、安全合规）；②现状调研；③网络拓扑与地址规划（含 VLAN、子网）；④带宽与容量规划（按峰值预留 30%~50%）；⑤技术选型（路由交换、无线、专线）；⑥安全规划（分区、ACL、防火墙、VPN）；⑦可靠性与容灾规划（双链路、双机）；⑧投资与实施计划。；网络设计：逻辑设计（拓扑、VLAN、IP、路由、QoS、安全策略）→ 物理设计（设备选型、布线、机房）→ 实施与验收设计（测试方案、割接与回退）。<br>- 🟡 支撑：🟡 支撑（QoS 与隔离方案）：<br>- 🟡 支撑：1. 网络分区：语音网、办公网、监控网、DMZ 划分 VLAN 并通过防火墙/ACL 隔离，语音 VLAN 独立广播域；<br>- 🟡 支撑：2. QoS 策略：对 RTP 流做 DSCP EF（加速转发）标记 + 优先级队列（PQ/LLQ），保证语音优先；对 SIP 信令给次高优先级；对大屏与报表流量做带宽限制；<br>- 🟡 支撑：3. 带宽保障：按 120 路 × 每路约 100kbps（G.711 约 87kbps + 开销）≈ 12Mbps，按峰值 1.5 倍预留；<br>- 🟡 支撑：4. 链路冗余：语音走专线 + 互联网备份双链路，故障自动切换；<br>- 🟡 支撑：5. 边界防护：SBC（会话边界控制器）部署在语音网边界，做 NAT 穿越、防攻击与访问控制。<br>- 🟡 支撑：🔴 核心（关键指标）：<br>- 🟡 支撑：时延（单向）：≤150ms（优秀 &lt;100ms），否则对话有明显延迟感<br>- 🟡 支撑：抖动（Jitter）：≤30ms，通过抖动缓冲吸收<br>- 🟡 支撑：丢包率：≤1%（语音），超过 3% 音质明显劣化<br>- 🟡 支撑：带宽：按并发路数 × 单路带宽 × 峰值系数；MOS 分：≥4.0（可接受 ≥3.6）；可用性：语音接入 ≥99.99%；本项目&quot;WebRTC 软电话掉线&quot;的排查思路正是沿这些指标逐段定位——终端 → 接入网络 → SBC → 内网 → 平台，先量化再定位（呼应真实故障处理经验）。</div></details></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">17</span>📅 时间：2026-06-18 📍 地点：集团信息部会议室<br>👤 人物：甘工（乙方·系统分析师）、徐总监（甲方·数智化信息部总监）、邓经理（甲方·运维经理）、云平台售前（第三方）<br>⚡ 冲突：集团机房要搬迁，云厂商建议&quot;全量上公有云&quot;，徐总监坚持&quot;核心数据不出企业&quot;，邓经理担心搬迁割接风险<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：云厂商售前讲得很动听：&quot;全部迁到公有云，弹性扩缩容，你们不用再管机房。&quot; 徐总监当场打断：&quot;客户手机号、身份证、录音全在库里，出了事谁负责？监管来检查我们怎么交代？&quot; 邓经理更关心实操：&quot;搬迁那天业务能停多久？割接失败了怎么回退？&quot; 甘工翻着调研笔记：平台有实时链路（呼入接入、AI 应答）、批处理（质检、统计）、以及算法团队（乙方·数据运营）正在做的模型训练——三类负载特征完全不同，不可能&quot;一刀切&quot;。<br>补充资料：实时链路（呼入接入/AI 应答） → 7×24、低时延、不可中断 → 私有云（双机房） → 双活 + 灰度切流；批处理（质检/统计） → 夜间集中、可延迟 → 私有云 → 分批切换，并行校验 2 周；模型训练 → 弹性、GPU 密集 → 私有云为主 + 公有云弹性 → 按需申请、数据脱敏后出云 割接窗口：业务低峰 00:30~04:30；回退时限 30 分钟；回退判定：核心指标（接通率/时延）未达标。<br>问题 1：（1）说明云计算的服务模式（IaaS/PaaS/SaaS）与部署模式，并给出本项目的云策略；<br>问题 2：（2）说明 Web 服务与中间件的作用，给出搬迁中的集成与互操作设计；<br>问题 3：（3）给出机房搬迁/系统迁移的割接方案（含风险控制）；<br>问题 4：（4）说明分布式系统的主要特征与本项目的 CAP 取舍。</p><ul class="exam-questions"><li><b>问题 1</b> （1）说明<strong>云计算</strong>的服务模式（IaaS/PaaS/SaaS）与部署模式，并给出本项目的云策略；</li><li><b>问题 2</b> （2）说明 <strong>Web 服务</strong>与<strong>中间件</strong>的作用，给出搬迁中的集成与互操作设计；</li><li><b>问题 3</b> （3）给出<strong>机房搬迁/系统迁移</strong>的割接方案（含风险控制）；</li><li><b>问题 4</b> （4）说明分布式系统的主要特征与本项目的 CAP 取舍。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）云计算）：<br>- 🟢 加分：解析·云与迁移题要&quot;服务/部署模式 + 策略 + 割接 + CAP 取舍&quot;。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🔴 核心（2）Web 服务与中间件）：Web 服务是通过标准协议与接口契约（REST/JSON + HTTPS、或 SOAP/WSDL）实现跨平台跨语言互操作的技术，用于把系统能力开放为可调用接口（本项目的工单/话务查询接口）。中间件位于操作系统与应用之间，屏蔽异构性与分布性，主要类别：消息中间件（Kafka/RabbitMQ，异步解耦削峰）、RPC/服务框架（gRPC/Dubbo）、数据访问中间件（ORM/连接池/缓存）、API 网关、配置与服务发现。<br>问题 3｜参考答案要点：<br>- 🔴 核心：🟡 支撑（3）割接方案）：①前期：资产盘点与依赖梳理（含 IP、域名、证书、专线）、新环境全量部署并做演练（至少两次）；②数据：先全量备份并验证可恢复，采用双写/增量同步缩短停机窗口；③割接：选择业务低峰（凌晨）+ 分批切换（先统计/质检，再外呼，最后呼入核心链路）；④DNS/切流：降低 TTL，按百分比灰度；⑤回退：保留快速回退开关（DNS 回切/流量切回旧机房），设定回退判定条件与时限（如 30 分钟内核心指标未达标即回退）；⑥验证：割接后做业务验证（拨测、工单、报表）与观察期（24~72 小时专人值守）；⑦沟通：提前通知用户与坐席，准备应急预案。<br>问题 4｜参考答案要点：<br>- 🔴 核心：🔴 核心（4）分布式特征与 CAP）：特征——分布性、并发性、自治性、缺乏全局时钟、故障独立性（部分失效），追求透明性（访问/位置/并发/故障透明）与可扩展性。CAP——一致性 C、可用性 A、分区容错 P 三者最多取其二，P 通常必须保留，故实际在 C 与 A 间权衡。</div></details></div></details></section>
+    <section class="exam" id="exam" data-exam-chapter="4" data-exam-hour="H06"><div class="exam-bar"><span class="exam-bar-label">📚 历年真题</span><span class="exam-bar-stat">本章共 <b>43</b> 题 · 本学时 <b>15</b> 题（其余见同章其他学时）</span><span class="exam-bar-ops"><button type="button" class="exam-op" data-exam-all="1">全部展开</button><button type="button" class="exam-op" data-exam-all="0">全部收起</button></span></div><details class="exam-subject" data-exam-subject="综合知识"><summary><span class="exam-subject-name">📝 综合知识</span><span class="exam-subject-n">15 题</span><span class="exam-subject-tip">按年份展开 · 单题可点开看答案</span></summary><details class="exam-year" data-exam-year="2026年5月"><summary><span class="exam-year-name">2026年5月</span><span class="exam-year-n">3 题</span></summary><details class="exam-q" data-exam-id="2026年5月-064"><summary><span class="exam-no">第 64 题</span><span class="exam-stem-peek">IPSec中用于身份认证与数据完整性保护的是</span></summary><div class="exam-q-body"><p class="exam-stem">IPSec中用于身份认证与数据完整性保护的是</p><ul class="exam-opts"><li><b>A</b> AH</li><li><b>B</b> ESP</li><li><b>C</b> SSL</li><li><b>D</b> SSH</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">AH协议负责身份认证与数据完整性；ESP侧重数据加密。</p></details></div></details><details class="exam-q" data-exam-id="2026年5月-034"><summary><span class="exam-no">第 34 题</span><span class="exam-stem-peek">无线局域网通常采用</span></summary><div class="exam-q-body"><p class="exam-stem">无线局域网通常采用</p><ul class="exam-opts"><li><b>A</b> CSMA/CD</li><li><b>B</b> CSMA/CA</li><li><b>C</b> Token Bus</li><li><b>D</b> FDDI</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">无线信号无法边发边监听冲突，WLAN使用CSMA/CA（冲突避免）。</p></details></div></details><details class="exam-q" data-exam-id="2026年5月-006"><summary><span class="exam-no">第 6 题</span><span class="exam-stem-peek">下列属于安全远程登录协议的是</span></summary><div class="exam-q-body"><p class="exam-stem">下列属于安全远程登录协议的是</p><ul class="exam-opts"><li><b>A</b> FTP</li><li><b>B</b> SNMP</li><li><b>C</b> SSH</li><li><b>D</b> Telnet</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">Telnet为明文传输不安全，SSH是加密型安全远程登录协议；FTP用于文件传输，SNMP用于网络设备管理。</p></details></div></details></details><details class="exam-year" data-exam-year="2025年5月"><summary><span class="exam-year-name">2025年5月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2025年5月-060"><summary><span class="exam-no">第 60 题</span><span class="exam-stem-peek">在电子商务中，要保障电商交易记录数据不被篡改，应采用 () 技术。</span></summary><div class="exam-q-body"><p class="exam-stem">在电子商务中，要保障电商交易记录数据不被篡改，应采用 () 技术。</p><ul class="exam-opts"><li><b>A</b> 数字签名</li><li><b>B</b> 对称加密</li><li><b>C</b> 区块链</li><li><b>D</b> 链式哈希</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">区块链本质是分布式共享账本，依靠共识机制实现全节点共同维护历史数据，单节点无法私自修改交易记录；数字签名、链式哈希仅能保障单次传输的数据完整性，无法实现全链路历史记录防篡改。</p></details></div></details><details class="exam-q" data-exam-id="2025年5月-028"><summary><span class="exam-no">第 28 题</span><span class="exam-stem-peek">下面（）不是基于 TCP 协议的</span></summary><div class="exam-q-body"><p class="exam-stem">下面（）不是基于 TCP 协议的</p><ul class="exam-opts"><li><b>A</b> FTP</li><li><b>B</b> Telnet</li><li><b>C</b> SNMP</li><li><b>D</b> SMTP</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">送分题了，SNMP 是基于 UDP 的，是简单网络管理协议。</p></details></div></details></details><details class="exam-year" data-exam-year="2024年5月"><summary><span class="exam-year-name">2024年5月</span><span class="exam-year-n">3 题</span></summary><details class="exam-q" data-exam-id="2024年5月-035"><summary><span class="exam-no">第 35 题</span><span class="exam-stem-peek">信息网络三网融合最终做到三网合一，以下（）不属于这三网之一</span></summary><div class="exam-q-body"><p class="exam-stem">信息网络三网融合最终做到三网合一，以下（）不属于这三网之一</p><ul class="exam-opts"><li><b>A</b> 电信网</li><li><b>B</b> 广播电视网</li><li><b>C</b> 移动通信网</li><li><b>D</b> 计算机网</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">移动通信网是电信网的业务分支，三网融合定义的三大主体网络为电信网、广播电视网、计算机互联网。</p></details></div></details><details class="exam-q" data-exam-id="2024年5月-018"><summary><span class="exam-no">第 18 题</span><span class="exam-stem-peek">循环冗余校验码（Cyclic Redundancy Check ，CRC）是数据通信领域中最常用的一种差错校验码，该校验…</span></summary><div class="exam-q-body"><p class="exam-stem">循环冗余校验码（Cyclic Redundancy Check ，CRC）是数据通信领域中最常用的一种差错校验码，该校验方法中，使用多项式除法（模2除法）运算后的余数为校验字段。若数据信息为1100，生成多项式为 X3+X+1（即1011），则 CRC 编码是（）。</p><ul class="exam-opts"><li><b>A</b> 1100010</li><li><b>B</b> 1011010</li><li><b>C</b> 1100011</li><li><b>D</b> 1011110</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">按照CRC标准计算流程，最终将原始信息1100与校验余数010拼接，得到完整CRC编码1100010。</p></details></div></details><details class="exam-q" data-exam-id="2024年5月-003"><summary><span class="exam-no">第 3 题</span><span class="exam-stem-peek">SSL协议用于提供安全的http服务，SSL协议属于OSI模型中的（）</span></summary><div class="exam-q-body"><p class="exam-stem">SSL协议用于提供安全的http服务，SSL协议属于OSI模型中的（）</p><ul class="exam-opts"><li><b>A</b> 网络层</li><li><b>B</b> 传输层</li><li><b>C</b> 表示层</li><li><b>D</b> 应用层</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">SSL是工作在传输层的安全协议，可在传输层为上层应用提供身份认证、数据加密等安全能力，常配合HTTP协议实现HTTPS加密访问。</p></details></div></details></details><details class="exam-year" data-exam-year="2023年5月"><summary><span class="exam-year-name">2023年5月</span><span class="exam-year-n">1 题</span></summary><details class="exam-q" data-exam-id="2023年5月-006"><summary><span class="exam-no">第 6 题</span><span class="exam-stem-peek">Modem 的主要作用是（ ）。</span></summary><div class="exam-q-body"><p class="exam-stem">Modem 的主要作用是（ ）。</p><ul class="exam-opts"><li><b>A</b> 数模转换</li><li><b>B</b> 路由转发</li><li><b>C</b> 认证</li><li><b>D</b> 地址转换</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">Modem即调制解调器，核心功能是完成数字信号与模拟信号的互相转换（数模/模数转换），适配电话模拟线路传输计算机数字信号；路由转发、认证、地址转换不是Modem的功能。</p></details></div></details></details><details class="exam-year" data-exam-year="2022年5月"><summary><span class="exam-year-name">2022年5月</span><span class="exam-year-n">1 题</span></summary><details class="exam-q" data-exam-id="2022年5月-064"><summary><span class="exam-no">第 64 题</span><span class="exam-stem-peek">下列协议中，不属于电子邮件收发协议的是（67）。</span></summary><div class="exam-q-body"><p class="exam-stem">下列协议中，不属于电子邮件收发协议的是（67）。</p><ul class="exam-opts"><li><b>A</b> SMTP</li><li><b>B</b> POP</li><li><b>C</b> IMAP</li><li><b>D</b> FTP</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">SMTP是邮件发送协议，POP3、IMAP是邮件接收协议；FTP是文件传输协议，用于通用文件上传下载，不参与电子邮件收发流程。</p></details></div></details></details><details class="exam-year" data-exam-year="2021年5月"><summary><span class="exam-year-name">2021年5月</span><span class="exam-year-n">3 题</span></summary><details class="exam-q" data-exam-id="2021年5月-069"><summary><span class="exam-no">第 69 题</span><span class="exam-stem-peek">某主机无法上网，查看“本地连接”属性中的数据发送情况，发现只有发送没有接收，造成该主机网络故障的原因最有可能是（ ）。</span></summary><div class="exam-q-body"><p class="exam-stem">某主机无法上网，查看“本地连接”属性中的数据发送情况，发现只有发送没有接收，造成该主机网络故障的原因最有可能是（ ）。</p><ul class="exam-opts"><li><b>A</b> IP地址配置错误</li><li><b>B</b> 网络协议配置错误</li><li><b>C</b> 网络没有物理连接</li><li><b>D</b> DNS配置不正确</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">物理断开、协议配置错误会直接无法发送任何数据；DNS仅负责域名解析，用IP可绕过；IP地址/网关配置错误时主机能向外发送广播、请求包，但无法收到合法回包，出现只发不收的现象。</p></details></div></details><details class="exam-q" data-exam-id="2021年5月-066"><summary><span class="exam-no">第 66 题</span><span class="exam-stem-peek">数据包通过防火墙时，不能依据（ ）进行过滤。</span></summary><div class="exam-q-body"><p class="exam-stem">数据包通过防火墙时，不能依据（ ）进行过滤。</p><ul class="exam-opts"><li><b>A</b> 源和目的IP地址</li><li><b>B</b> 源和目的端口</li><li><b>C</b> IP协议号</li><li><b>D</b> 负载内容</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">传统包过滤防火墙仅能解析报文头部信息完成访问控制，无法深入识别数据包应用层的负载内容，因此不能依据负载内容做过滤判断。</p></details></div></details><details class="exam-q" data-exam-id="2021年5月-007"><summary><span class="exam-no">第 7 题</span><span class="exam-stem-peek">在浏览器地址栏输入192.168.1.1访问网页时，首先执行的操作是（ ）。</span></summary><div class="exam-q-body"><p class="exam-stem">在浏览器地址栏输入192.168.1.1访问网页时，首先执行的操作是（ ）。</p><ul class="exam-opts"><li><b>A</b> 域名解析</li><li><b>B</b> 解释执行</li><li><b>C</b> 发送页面请求报文</li><li><b>D</b> 建立TCP连接</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">输入的是IP地址，无需进行DNS域名解析；浏览器会先和目标IP的对应端口完成TCP三次握手建立连接，之后才会发送HTTP请求报文获取页面。</p></details></div></details></details><details class="exam-year" data-exam-year="2020年11月"><summary><span class="exam-year-name">2020年11月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2020年11月-068"><summary><span class="exam-no">第 68 题</span><span class="exam-stem-peek">用户在登录 FTP 服务器的过程中，建立 TCP 连接时使用的默认端口号是 （68）。</span></summary><div class="exam-q-body"><p class="exam-stem">用户在登录 FTP 服务器的过程中，建立 TCP 连接时使用的默认端口号是 （68）。</p><ul class="exam-opts"><li><b>A</b> 20</li><li><b>B</b> 21</li><li><b>C</b> 22</li><li><b>D</b> 23</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">FTP会话建立、身份认证、命令交互全程通过21号控制端口完成TCP连接，20号仅用于后续文件数据传输。</p></details></div></details><details class="exam-q" data-exam-id="2020年11月-065"><summary><span class="exam-no">第 65 题</span><span class="exam-stem-peek">Telnet 是用于远程访问服务器的常用协议。下列关于 Telnet 的描述中，不正确的是（65）。</span></summary><div class="exam-q-body"><p class="exam-stem">Telnet 是用于远程访问服务器的常用协议。下列关于 Telnet 的描述中，不正确的是（65）。</p><ul class="exam-opts"><li><b>A</b> 可传输数据和口令</li><li><b>B</b> 默认端口号是23</li><li><b>C</b> 一种安全的通信协议</li><li><b>D</b> 用TCP作为传输层协议</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">Telnet采用明文传输机制，登录口令、操作指令都会裸传，极易被抓包窃取，不属于安全通信协议。</p></details></div></details></details></details><details class="exam-subject" data-exam-subject="案例"><summary><span class="exam-subject-name">📋 案例分析</span><span class="exam-subject-n">2 题</span><span class="exam-subject-tip">案例背景 · 题目 · 答案与解析</span></summary><div class="exam-bar"><span class="exam-bar-label">📋 案例分析</span><span class="exam-bar-stat">共 <b>2</b> 题 · 情景简答 · 采分点三色标记</span></div><div class="exam-q exam-q-case"><div class="case-head"><span class="exam-no">案例 14</span><span class="exam-tag">考点 · 呼叫中心网络规划与语音质量保障</span><span class="exam-lv">⭐⭐⭐</span></div><div class="case-meta"><span><strong>考点</strong>：网络规划与设计 / 差错控制 / QoS / 语音网络关键指标</span><span>📅 <strong>时间</strong>：2025-07-22 上午 📍 <strong>地点</strong>：集团新职场（网络规划评审）</span><span>👤 <strong>人物</strong>：甘工（乙方·系统分析师）、徐总监（甲方·数智化信息部总监）、邓经理（甲方·运维经理）、运营商工程师（第三方·电信公司）</span><span>⚡ <strong>冲突</strong>：120 席要上，语音/办公/监控/大屏挤在一个网段，VLAN 与 QoS 没规划</span><span><strong>难度</strong>：★★★　<strong>总分</strong>：10 分　<strong>建议用时</strong>：25 分钟</span></div><div class="case-scene"><div class="case-h">案例背景</div><strong>背景</strong>：新职场装修完，邓经理拿着网络拓扑图来找甘工：&quot;语音、办公、监控、大屏，全让我塞在一个网段里了，这样行吗？&quot; 运营商工程师（第三方·电信公司）提醒：&quot;语音最怕延迟和抖动，你们不隔离，监控视频一跑，电话就卡。&quot; 徐总监只给了一个约束：&quot;120 席，下个月就要用。&quot; 甘工看着那张图——地址只有一个 /24，四个业务域要分开，还要给语音留优先级。这是道<strong>规划题</strong>，也是道<strong>计算题</strong>。<br><strong>补充资料</strong>：工作台 Web 访问；③班长监控大屏；④与工单系统、计费系统的内网接口；⑤互联网出口（用于 SaaS 能力与地图服务）。 甘工调研后提出：语音与管理网必须隔离；语音对<strong>时延、抖动、丢包</strong>敏感；现有地址段为 <strong>192.168.10.0/24</strong>，需划分为 4 个子网（坐席语音、坐席办公、监控与大屏、DMZ 接口区），每个子网至少容纳 <strong>50 台</strong>设备。</div><div class="case-asks"><div class="case-h">题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">（1）请给出<strong>子网划分方案</strong>（写出每个子网的网络地址、掩码、可用主机范围与广播地址）；</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">（2）说明 <strong>OSI 七层与 TCP/IP 四层</strong>的对应关系，并指出 SIP、RTP、HTTP、TLS 分别位于哪一层；</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">（3）说明<strong>差错控制</strong>的常用方式与适用场景。</span></li><li><span class="case-ask-no">4</span><span class="case-ask-t">请说明<strong>网络规划与设计</strong>的主要内容与步骤；针对语音质量要求给出 <strong>QoS 与隔离方案</strong>；并列出语音网络的关键指标与阈值。（10分）</span></li></ul></div><details class="exam-ans"><summary>参考答案要点（三色标记）</summary><div class="exam-points"><strong>问题 1｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（1）子网划分）：需 4 个子网且每子网 ≥50 台主机。主机位需满足 2^h − 2 ≥ 50 → h ≥ 6；原为 /24（8 位主机位），故借 2 位作子网位，掩码为 /26（255.255.255.192），每子网 62 个可用地址。<br><strong>问题 2｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（2）层次对应）：<br><strong>问题 3｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（3）差错控制）：①检错重传（ARQ）：接收端检错后请求重发，包括停等 ARQ、后退 N 帧 ARQ、选择重传 ARQ；可靠但引入时延，适用于非实时数据（工单、报表）。②前向纠错（FEC）：发送端加入冗余，接收端自行纠错，无需重传，适合实时语音/视频（重传已无意义）。③检错丢弃：实时业务中对损坏帧直接丢弃（语音可用丢包隐藏 PLC 掩盖）。<br><strong>问题 4｜参考答案要点（10分）</strong>：<br>- 🔴 核心：🔴 核心（规划与设计）：；网络规划：①需求分析（业务类型、带宽、用户数、可靠性、安全合规）；②现状调研；③网络拓扑与地址规划（含 VLAN、子网）；④带宽与容量规划（按峰值预留 30%~50%）；⑤技术选型（路由交换、无线、专线）；⑥安全规划（分区、ACL、防火墙、VPN）；⑦可靠性与容灾规划（双链路、双机）；⑧投资与实施计划。；网络设计：逻辑设计（拓扑、VLAN、IP、路由、QoS、安全策略）→ 物理设计（设备选型、布线、机房）→ 实施与验收设计（测试方案、割接与回退）。<br>- 🟡 支撑：🟡 支撑（QoS 与隔离方案）：<br>- 🟡 支撑：1. 网络分区：语音网、办公网、监控网、DMZ 划分 VLAN 并通过防火墙/ACL 隔离，语音 VLAN 独立广播域；<br>- 🟡 支撑：2. QoS 策略：对 RTP 流做 DSCP EF（加速转发）标记 + 优先级队列（PQ/LLQ），保证语音优先；对 SIP 信令给次高优先级；对大屏与报表流量做带宽限制；<br>- 🟡 支撑：3. 带宽保障：按 120 路 × 每路约 100kbps（G.711 约 87kbps + 开销）≈ 12Mbps，按峰值 1.5 倍预留；<br>- 🟡 支撑：4. 链路冗余：语音走专线 + 互联网备份双链路，故障自动切换；<br>- 🟡 支撑：5. 边界防护：SBC（会话边界控制器）部署在语音网边界，做 NAT 穿越、防攻击与访问控制。<br>- 🟡 支撑：🔴 核心（关键指标）：<br>- 🟡 支撑：时延（单向）：≤150ms（优秀 &lt;100ms），否则对话有明显延迟感<br>- 🟡 支撑：抖动（Jitter）：≤30ms，通过抖动缓冲吸收<br>- 🟡 支撑：丢包率：≤1%（语音），超过 3% 音质明显劣化<br>- 🟡 支撑：带宽：按并发路数 × 单路带宽 × 峰值系数；MOS 分：≥4.0（可接受 ≥3.6）；可用性：语音接入 ≥99.99%；本项目&quot;WebRTC 软电话掉线&quot;的排查思路正是沿这些指标逐段定位——终端 → 接入网络 → SBC → 内网 → 平台，先量化再定位（呼应真实故障处理经验）。</div></details><details class="exam-ans"><summary>解析与加分项</summary><div class="exam-exp-more">- 🟢 加分：解析·网络规划题要&quot;步骤 + 分区/QoS 方案 + 可量化指标表&quot;。</div></details></div><div class="exam-q exam-q-case"><div class="case-head"><span class="exam-no">案例 17</span><span class="exam-tag">考点 · 机房搬迁与混合云</span><span class="exam-lv">⭐⭐⭐</span></div><div class="case-meta"><span>📅 <strong>时间</strong>：2026-06-18 📍 <strong>地点</strong>：集团信息部会议室</span><span>👤 <strong>人物</strong>：甘工（乙方·系统分析师）、徐总监（甲方·数智化信息部总监）、邓经理（甲方·运维经理）、云平台售前（第三方）</span><span>⚡ <strong>冲突</strong>：集团机房要搬迁，云厂商建议&quot;全量上公有云&quot;，徐总监坚持&quot;核心数据不出企业&quot;，邓经理担心搬迁割接风险</span><span><strong>难度</strong>：★★★　<strong>总分</strong>：25 分　<strong>建议用时</strong>：25 分钟</span></div><div class="case-scene"><div class="case-h">案例背景</div><strong>背景</strong>：云厂商售前讲得很动听：&quot;全部迁到公有云，弹性扩缩容，你们不用再管机房。&quot; 徐总监当场打断：&quot;客户手机号、身份证、录音全在库里，出了事谁负责？监管来检查我们怎么交代？&quot; 邓经理更关心实操：&quot;搬迁那天业务能停多久？割接失败了怎么回退？&quot; 甘工翻着调研笔记：平台有实时链路（呼入接入、AI 应答）、批处理（质检、统计）、以及算法团队（乙方·数据运营）正在做的模型训练——三类负载特征完全不同，不可能&quot;一刀切&quot;。<br><strong>补充资料</strong>：实时链路（呼入接入/AI 应答） → 7×24、低时延、不可中断 → 私有云（双机房） → 双活 + 灰度切流；批处理（质检/统计） → 夜间集中、可延迟 → 私有云 → 分批切换，并行校验 2 周；模型训练 → 弹性、GPU 密集 → 私有云为主 + 公有云弹性 → 按需申请、数据脱敏后出云 <strong>割接窗口</strong>：业务低峰 00:30~04:30；回退时限 30 分钟；回退判定：核心指标（接通率/时延）未达标。</div><div class="case-asks"><div class="case-h">题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">（1）说明<strong>云计算</strong>的服务模式（IaaS/PaaS/SaaS）与部署模式，并给出本项目的云策略；</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">（2）说明 <strong>Web 服务</strong>与<strong>中间件</strong>的作用，给出搬迁中的集成与互操作设计；</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">（3）给出<strong>机房搬迁/系统迁移</strong>的割接方案（含风险控制）；</span></li><li><span class="case-ask-no">4</span><span class="case-ask-t">（4）说明<strong>分布式系统</strong>的主要特征与本项目的 CAP 取舍。</span></li></ul></div><details class="exam-ans"><summary>参考答案要点（三色标记）</summary><div class="exam-points"><strong>问题 1｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（1）云计算）：<br><strong>问题 2｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（2）Web 服务与中间件）：Web 服务是通过标准协议与接口契约（REST/JSON + HTTPS、或 SOAP/WSDL）实现跨平台跨语言互操作的技术，用于把系统能力开放为可调用接口（本项目的工单/话务查询接口）。中间件位于操作系统与应用之间，屏蔽异构性与分布性，主要类别：消息中间件（Kafka/RabbitMQ，异步解耦削峰）、RPC/服务框架（gRPC/Dubbo）、数据访问中间件（ORM/连接池/缓存）、API 网关、配置与服务发现。<br><strong>问题 3｜参考答案要点</strong>：<br>- 🔴 核心：🟡 支撑（3）割接方案）：①前期：资产盘点与依赖梳理（含 IP、域名、证书、专线）、新环境全量部署并做演练（至少两次）；②数据：先全量备份并验证可恢复，采用双写/增量同步缩短停机窗口；③割接：选择业务低峰（凌晨）+ 分批切换（先统计/质检，再外呼，最后呼入核心链路）；④DNS/切流：降低 TTL，按百分比灰度；⑤回退：保留快速回退开关（DNS 回切/流量切回旧机房），设定回退判定条件与时限（如 30 分钟内核心指标未达标即回退）；⑥验证：割接后做业务验证（拨测、工单、报表）与观察期（24~72 小时专人值守）；⑦沟通：提前通知用户与坐席，准备应急预案。<br><strong>问题 4｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（4）分布式特征与 CAP）：特征——分布性、并发性、自治性、缺乏全局时钟、故障独立性（部分失效），追求透明性（访问/位置/并发/故障透明）与可扩展性。CAP——一致性 C、可用性 A、分区容错 P 三者最多取其二，P 通常必须保留，故实际在 C 与 A 间权衡。</div></details><details class="exam-ans"><summary>解析与加分项</summary><div class="exam-exp-more">- 🟢 加分：解析·云与迁移题要&quot;服务/部署模式 + 策略 + 割接 + CAP 取舍&quot;。</div></details></div></details></section>
     <div class="wrongbook"></div>
     <div class="keyhint">
   <span class="keyhint-title">键盘快捷键</span>
@@ -3274,7 +3456,9 @@ html{scroll-padding-top:80px}
     init() {
       const root = document.querySelector('.exam')
       if (!root) return
-      const chapter = root.dataset.examChapter || 'x'
+      // ⚠️ 专项页 / 全真模拟页没有 data-exam-chapter（无教材章），
+      //    旧写法一律退化成 'x' → H42~H48 共用同一个记忆键、互相串状态。
+      const chapter = root.dataset.examChapter || root.dataset.examHour || 'x'
 
       // 恢复上次展开状态：{ "H07": { "2025年5月": true, ... } }
       const saved = store.get(this.KEY, {}) || {}
@@ -3294,6 +3478,7 @@ html{scroll-padding-top:80px}
       const seen = store.get('examSeen', {}) || {}
       root.querySelectorAll('.exam-q').forEach(qd => {
         const qid = qd.dataset.examId
+        if (!qid) return
         if (seen[qid]) {
           const a = qd.querySelector('.exam-ans')
           if (a) a.open = true
@@ -3309,12 +3494,17 @@ html{scroll-padding-top:80px}
         btn.addEventListener('click', e => {
           e.preventDefault()
           const openAll = btn.dataset.examAll === '1'
-          root.querySelectorAll('.exam-subject,.exam-year').forEach(d => { d.open = openAll })
-          root.querySelectorAll('.exam-ans').forEach(d => {
-            d.open = openAll
-            if (openAll && d.parentElement.dataset.examId) seen[d.parentElement.dataset.examId] = 1
-          })
-          if (openAll) store.set('examSeen', seen)
+          // ⚠️ 必须把 .exam-q 也列进来：只开 .exam-subject/.exam-year/.exam-ans
+          //    时，单题仍折叠 → 答案藏在关闭的单题内，"全部展开"名不副实。
+          root.querySelectorAll('.exam-subject,.exam-year,.exam-q,.exam-ans')
+            .forEach(d => { d.open = openAll })
+          if (openAll) {
+            // ⚠️ 旧的 `d.parentElement.dataset.examId` 取到的是 .exam-q-body（无 id），
+            //    会把 seen[undefined] 写进 localStorage。改为直接从 .exam-q 取。
+            root.querySelectorAll('.exam-q[data-exam-id]')
+              .forEach(qd => { seen[qd.dataset.examId] = 1 })
+            store.set('examSeen', seen)
+          }
           // 同步年份级记忆
           root.querySelectorAll('.exam-year').forEach(y => { mine[y.dataset.examYear] = y.open })
           saved[chapter] = mine
@@ -3361,7 +3551,7 @@ html{scroll-padding-top:80px}
   // ══════════════════════════════════════════
   // 8. mermaid 渲染（自定义墨绿主题，与正文同色系）
   // ══════════════════════════════════════════
-  // 站点配色（与 design.css 的令牌保持一致）
+  // 站点配色（与设计令牌保持一致 —— 改主题色时这里要同步）
   const MERMAID_LIGHT = {
     bg: '#f2f0e9', fg: '#1b211c', line: '#cdc9bd',
     accent: '#3d5a40', accent2: '#5a8a62', accent3: '#7ea888',

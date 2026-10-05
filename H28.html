@@ -7,7 +7,7 @@
 <title>第 28 小时 · 软件架构设计（三）· 质量属性与 ATAM 评估 · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
-<meta name="build-stamp" content="2026-10-05 11:44:51">
+<meta name="build-stamp" content="2026-10-05 15:47:03">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -405,16 +405,21 @@ img{max-width:100%;height:auto}
   border-radius:100px;
   font-size:12.5px;color:var(--accent);font-weight:600;
 }
-.cover h1{
+/* ⚠️ 封面主标题刻意用 <div> 而不是 <h1>：index.md 正文自带 `# 阿甘系分 · 48 小时
+   冲刺手册`，若封面也用 h1，一页会出现两个 h1（语义/SEO 上都是错的）。
+   视觉与 h1 完全一致 —— 字号、颜色、以及那道 72px 短横线都在下面显式声明。 */
+.cover .cover-title{
   font-size:3.5em;font-weight:800;letter-spacing:-1.6px;
   color:var(--accent);line-height:1.14;margin-bottom:16px;
 }
-/* ⚠️ 封面 h1 也继承 `.main h1::after` 那道 56px 短横线，但它是 display:block 的
-   固定宽块级元素 —— 文字居中不代表块级元素居中，会贴到左边。
-   修法：给封面这条短横线加 margin-left/right:auto 让它真正居中。 */
-.cover h1::after{
-  margin-left:auto;margin-right:auto;
+/* 复刻 `.main h1::after` 的短横线（<div> 不继承 h1 的伪元素），并水平居中 —— */
+/* 文字居中不代表块级元素居中，不加 auto 会贴到左边。 */
+.cover .cover-title::after{
+  content:'';display:block;
   width:72px;height:3px;
+  background:var(--accent);
+  margin:.5em auto 0;
+  border-radius:2px;
 }
 .cover .sub{
   font-size:1.2em;color:var(--fg-2);
@@ -845,7 +850,7 @@ pre{
   .nav{margin-left:auto;gap:2px}
   .main{padding:32px 0 80px}
   .cover{padding:48px 0 40px;margin-bottom:40px}
-  .cover h1{font-size:2.4em;letter-spacing:-.8px}
+  .cover .cover-title{font-size:2.4em;letter-spacing:-.8px}
   .cover .sub{font-size:1.05em;margin-bottom:24px}
   .cover-stats{gap:10px;margin-bottom:28px}
   .stat{min-width:76px;padding:10px 14px}
@@ -901,7 +906,7 @@ pre{
   h1,h2,h3,h4{break-after:avoid;page-break-after:avoid}
 
   .cover{padding:0 0 18px;margin-bottom:18px;text-align:left}
-  .cover h1{font-size:24pt}
+  .cover .cover-title{font-size:24pt}
   .cover-stats,.cover-badge,.cta-row{display:none !important}
 
   a[href^="http"]:after{
@@ -1256,16 +1261,14 @@ html.focus-mode .chapbar{opacity:.35;pointer-events:none}
 }
 /* 章首横幅：h1 上方加一条"章号 + 主色渐变"的装饰带，
    让每页开头有一个明确的"进入新章"仪式感（原来 h1 直接浮在正文里）。
-   ⚠️ 必须排除 .cover —— 封面 h1 自己已有顶部留白与居中布局，
-   加上横幅会与下方分隔线叠成双线（首页曾出现两条横线紧挨）。 */
-.main h1:not(.cover h1)::before{
+   （封面主标题已改成 <div class="cover-title">，不再匹配 .main h1，无需再排除。） */
+.main h1::before{
   content:'';display:block;
   width:100%;height:4px;
   background:linear-gradient(90deg,var(--accent) 0%,var(--accent-3) 42%,transparent 88%);
   border-radius:2px;
   margin-bottom:.62em;
 }
-.cover h1::before{content:none}
 .main h1::after{
   content:'';display:block;
   width:56px;height:3px;
@@ -2087,6 +2090,185 @@ html{scroll-padding-top:80px}
   .exam-stem,.exam-opts li{font-size:9.5pt}
   .exam-exp{font-size:8.5pt;color:#333}
 }
+
+/* ══════════════════════════════════════════════════════════════
+   真题区块扩展 v2 · 案例 / 论文卡片 + 全真模拟卷
+   与既有 .exam-* 体系同源：米白卡底 + 左侧 4px 色条 + 墨绿强调色
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── 案例 / 论文卡片（非 <details>，直接展开的题卡）── */
+.exam-q-case,.exam-q-essay{
+  padding:14px 16px 4px;
+  background:var(--bg-card);
+}
+.exam-q-case:hover,.exam-q-essay:hover{background:var(--bg-alt)}
+.case-head{
+  display:flex;flex-wrap:wrap;align-items:center;gap:6px;
+  padding-bottom:10px;margin-bottom:10px;
+  border-bottom:1px dashed var(--line);
+}
+.case-head .exam-no{min-width:0}
+.case-h{
+  display:flex;align-items:center;gap:6px;
+  margin:12px 0 6px;font-size:12.5px;font-weight:700;
+  letter-spacing:.06em;color:var(--accent);
+}
+.case-h::before{
+  content:'';width:4px;height:13px;border-radius:2px;
+  background:var(--accent);flex:0 0 auto;
+}
+
+/* 情景要素（📅时间 / 📍地点 / 👤人物 / ⚡冲突 / 难度总分用时） */
+.case-meta{
+  display:flex;flex-direction:column;gap:2px;
+  padding:9px 12px;margin:.4em 0 .2em;
+  background:var(--bg-alt);
+  border-left:3px solid var(--line-2);
+  border-radius:0 var(--radius-sm) var(--radius-sm) 0;
+  font-size:12.5px;line-height:1.75;color:var(--fg-3);
+}
+.case-meta strong{color:var(--fg-2);font-weight:600}
+
+/* 案例背景正文 */
+.case-scene{
+  margin:.2em 0 1em;padding:12px 14px;
+  background:var(--accent-soft);
+  border-left:3px solid var(--accent-3);
+  border-radius:0 var(--radius) var(--radius) 0;
+  font-size:14.5px;line-height:1.92;color:var(--fg);
+}
+.case-scene strong{color:var(--accent);font-weight:700}
+
+/* 题目列表 */
+.case-asks{margin:.2em 0 1em}
+ul.exam-questions{
+  list-style:none;margin:.4em 0;padding:0;
+}
+ul.exam-questions>li{
+  display:flex;gap:10px;align-items:flex-start;
+  padding:9px 0;border-bottom:1px solid var(--line);
+  font-size:14.5px;line-height:1.88;color:var(--fg);
+}
+ul.exam-questions>li:last-child{border-bottom:0}
+ul.exam-questions>li::before{content:none !important}
+.case-ask-no{
+  flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;
+  min-width:24px;height:22px;margin-top:3px;padding:0 6px;
+  border-radius:6px;background:var(--accent-soft-2);color:var(--accent);
+  font-family:var(--sans);font-size:11.5px;font-weight:700;
+  font-variant-numeric:tabular-nums;
+}
+.case-ask-t{flex:1;min-width:0}
+.case-ask-t strong{color:var(--accent);font-weight:700}
+
+/* ── 答案 / 解析 / 考点拆解 / 教材知识点 ── */
+.exam-points,.exam-keypoints,.exam-exp-more,.essay-bg{
+  padding:12px 14px;margin:8px 0;
+  border-left:4px solid var(--tip-line);
+  border-radius:0 var(--radius) var(--radius) 0;
+  background:var(--tip-bg);
+  font-size:14px;line-height:1.92;color:var(--fg);
+}
+.exam-keypoints{border-left-color:var(--accent-2);background:var(--accent-soft)}
+.exam-exp-more{border-left-color:var(--warn-line);background:var(--warn-bg);color:var(--warn-fg)}
+.essay-bg{border-left-color:var(--line-2);background:var(--bg-alt);color:var(--fg-2)}
+.exam-points strong,.exam-keypoints strong{color:var(--accent);font-weight:700}
+
+/* 教材知识点：章标签 + 可点学时胶囊 */
+.exam-textbook{
+  display:flex;flex-wrap:wrap;align-items:center;gap:6px;
+  padding:12px 14px;margin:8px 0;
+  background:var(--mem-bg);
+  border-left:4px solid var(--mem-line);
+  border-radius:0 var(--radius) var(--radius) 0;
+}
+.tb-chap{
+  font-family:var(--serif);font-size:14px;font-weight:700;color:var(--mem-fg);
+}
+.tb-hour{
+  display:inline-flex;align-items:center;
+  padding:2px 9px;border-radius:999px;
+  background:var(--bg-card);border:1px solid var(--mem-line);
+  color:var(--mem-fg) !important;font-size:12px;font-weight:600;
+  text-decoration:none;
+}
+.tb-hour:hover{background:var(--mem-line);color:var(--bg-card) !important;border-color:var(--mem-fg)}
+
+/* 模拟卷成绩/批次等小标签 */
+.exam-lv{
+  font-family:var(--sans);font-size:11.5px;color:var(--gold);
+  letter-spacing:.04em;white-space:nowrap;
+}
+.exam-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.exam-tag-en{
+  background:var(--mem-bg);color:var(--mem-fg);border-color:var(--mem-line);
+}
+.essay-batch{
+  font-family:var(--sans);font-size:11.5px;color:var(--fg-3);
+  padding:1px 8px;border:1px solid var(--line);border-radius:999px;
+}
+.exam-kp{
+  margin:.5em 0 0;font-family:var(--sans);font-size:12.5px;color:var(--fg-3);
+}
+.exam-kp::before{content:'🎯 ';font-size:11px}
+
+/* ── 全真模拟卷头部 ── */
+.mock-head{
+  padding:16px 18px;margin:0 0 12px;
+  border-radius:var(--radius-lg);
+  background:linear-gradient(135deg,var(--accent) 0%,var(--accent-2) 100%);
+  color:var(--fg-inv);
+  box-shadow:var(--shadow-2);
+}
+.mock-title{
+  font-family:var(--serif);font-size:17px;font-weight:700;
+  letter-spacing:.02em;line-height:1.5;
+}
+.mock-sub{
+  margin-top:6px;font-size:12.5px;line-height:1.75;
+  color:rgba(251,250,246,.82);
+}
+.mock-sub b{color:#fff;font-variant-numeric:tabular-nums}
+.mock-items{
+  border:1px solid var(--line);border-radius:var(--radius);
+  background:var(--bg-card);overflow:hidden;
+}
+.mock-items>.exam-q:first-child{border-top:0}
+.exam-mock .exam-subject{margin-top:14px}
+.exam-subj-only{display:block}
+
+/* 模拟卷内的综合知识答题条 */
+.exam-mock .exam-bar{
+  border-radius:var(--radius) var(--radius) 0 0;
+  border-bottom:0;
+}
+
+/* ── 窄屏 ── */
+@media(max-width:760px){
+  .exam-q-case,.exam-q-essay{padding:12px 12px 4px}
+  .case-scene,.exam-points,.exam-keypoints,.exam-exp-more,.essay-bg,.exam-textbook{
+    padding:10px 11px;font-size:13.5px;
+  }
+  ul.exam-questions>li{gap:8px;font-size:13.5px}
+  .mock-head{padding:13px 14px}
+  .mock-title{font-size:15.5px}
+}
+
+/* ── 打印：卡片不要再折叠，色条与底色转灰阶 ── */
+@media print{
+  .mock-head{background:none !important;color:#000 !important;border:1pt solid #999;
+    box-shadow:none}
+  .mock-title{font-size:13pt}
+  .mock-sub{color:#333 !important}
+  .exam-q-case,.exam-q-essay{break-inside:avoid;page-break-inside:avoid}
+  .case-scene,.exam-points,.exam-keypoints,.exam-exp-more,.essay-bg,.exam-textbook{
+    background:none !important;border-left:2pt solid #999 !important;
+  }
+  .exam-q-case,.exam-q-essay,.case-scene,.case-meta,ul.exam-questions>li{
+    font-size:9.5pt;
+  }
+  .tb-hour{color:#000 !important;border-color:#666}
+}
 </style>
 </head>
 <body>
@@ -2118,7 +2300,7 @@ html{scroll-padding-top:80px}
 <div class="block gold"><div class="block-title">考情定位</div><p>四块必拿：① <strong>ABSDM 六子过程</strong>（架构需求·设计·实现·复审·演化·文档化）；② <strong>质量属性场景六要素</strong>（刺激源·刺激·环境·状态·构件·响应+度量）；③ <strong>ATAM 的目的</strong>（早期识别风险 + 评估质量属性，<strong>不评分排名</strong>）；④ <strong>质量属性两类划分</strong>（功能质量属性 vs 质量的质量属性）。</p></div>
 <div class="block mem"><div class="block-title">记忆口诀</div><p><strong>ABSDM 六步</strong>：<strong>需求 → 设计 → 实现 → 复审 → 演化 → 文档化</strong>（特色是"复审"与"演化"）。<br><strong>质量属性场景六要素</strong>：刺激源 · 刺激 · 环境 · 状态 · 构件 · <strong>响应 + 响应度量</strong>。<br><strong>质量属性分两类</strong>：<strong>功能质量属性</strong>（可用性/安全性/性能/可修改性/易用性）vs <strong>质量的质量属性</strong>（可测试性/可观察性/边界清晰度）。<br><strong>ATAM = 架构权衡分析法</strong>，定性分析风险，不打分。</p></div>
 <div class="block warning"><div class="block-title">易错陷阱</div><p><strong>ATAM 不给最终评分排名</strong>——它是<strong>定性的风险与敏感点分析</strong>，别答成"评估总分"。<br><strong>质量属性场景六要素里没有"触发者"</strong>——规范叫法是"<strong>刺激源（Source of Stimulus）</strong>"。<br><strong>"质量的质量属性"不是"性能质量属性"</strong>——它指对质量属性本身的质量（可测试性、可观察性）。<br><strong>架构演化贯穿全过程</strong>，不是只在维护阶段。</p></div>
-<div class="block gold"><div class="block-title">论文可用句</div><p>在质量属性保障上，我依据<strong>质量属性场景</strong>六要素为每项属性定义可度量目标：以"<strong>峰值 200 并发下单、响应时间 < 2s</strong>"作为性能场景，以"<strong>单机故障后 30s 内自动切换、期间零数据丢失</strong>"作为可用性场景；在开发早期引入 <strong>ATAM</strong>，组织利益相关者对这两项场景做架构权衡分析，识别出"共享数据库成为性能瓶颈"这一风险点，并据此把订单写入改为消息队列异步化 + 幂等消费，把响应时间从 3.4s 降到 860ms。</p></div>
+<div class="block gold"><div class="block-title">论文可用句</div><p>在质量属性保障上，我依据<strong>质量属性场景</strong>六要素为每项属性定义可度量目标：以"峰值 200 并发下单、响应时间 < 2s<strong>"作为性能场景，以"</strong>单机故障后 30s 内自动切换、期间零数据丢失<strong>"作为可用性场景；在开发早期引入 </strong>ATAM，组织利益相关者对这两项场景做架构权衡分析，识别出"共享数据库成为性能瓶颈"这一风险点，并据此把订单写入改为消息队列异步化 + 幂等消费，把响应时间从 3.4s 降到 860ms。</p></div>
 <h2 id="第-12-章知识骨架">第 12 章知识骨架</h2>
 <div class="fig fig-mermaid"><div class="mermaid-src" data-src="mindmap
  root((12 软件架构设计))
@@ -2373,7 +2555,7 @@ html{scroll-padding-top:80px}
 ①业务模式向信息模型的转变
 ②业务需求向信息功能的映射
 ③企业基础数据向企业信息的抽象
-④业务逻辑向功能逻辑的演化</p><ul class="exam-opts"><li><b>A</b> ①②③</li><li><b>B</b> ①②④</li><li><b>C</b> ①③④</li><li><b>D</b> ②③④</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">企业信息架构是将企业业务实体抽象成为信息对象，将企业的业务运作模式抽象为信息对象的属性和方法，建立面向对象的企业信息模型。企业信息架构实现从业务模式向信息模型的转变，业务需求向信息功能的映射，企业基础数据向企业信息的抽象。企业信息架构对企业业务进行建模，它能独立于技术的发展和变化，并能帮助项目中业务人员和技术人员之间的沟通。</p></details></div></details></details></details><details class="exam-subject" data-exam-subject="案例"><summary><span class="exam-subject-name">📋 案例分析</span><span class="exam-subject-n">1 题</span><span class="exam-subject-tip">情景简答 · 采分点三色标记</span></summary><div class="exam-bar"><span class="exam-bar-label">📋 案例分析</span><span class="exam-bar-stat">共 <b>1</b> 题 · 情景简答</span></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">56</span>📅 时间：2025-07-15 📍 地点：项目组架构评审会（甲方列席）<br>👤 人物：彭工（架构师）、甘工（乙方·系统分析师）、李工（乙方·项目经理）、丁工（乙方·测试负责人）、邓经理（运维）、徐总监（甲方·数智化信息部总监）<br>⚡ 冲突：彭工的方案技术优雅但没考虑运维与工期，邓经理指出&quot;你画的这个，我们运维不了&quot;，徐总监质疑&quot;能不能按期交付&quot;<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：彭工打开架构图讲了四十分钟：分层清晰、服务拆分合理、事件驱动优雅、还引入了服务网格。 李工先算工期：&quot;按这个方案，光服务网格的落地和调优就要一个半月，工期里没有。&quot; 邓经理更直接：&quot;你这三十多个服务，日志、监控、告警怎么接？我们运维就三个人。出问题你们谁负责定位？还有——所有服务都走网格，1~3 毫秒的额外延迟，你算进 800ms 预算了吗？&quot; 徐总监最后一句最扎心：&quot;架构是好看，但我关心的是明年还能不能改得动。&quot; 彭工一时语塞。甘工知道：架构方案不是技术问题，而是质量属性与约束的权衡问题——需要一次正式的架构复审。<br>补充资料：服务网格 → 全量引入（30+ 服务） → 工期 +1.5 个月；延迟 +1~3 ms；运维仅 3 人 → 核心链路试点，其余用 SDK/网关；可观测性 → 三支柱齐全 → 日志规范、告警分派责任未定 → 先建三支柱 + Runbook，再上网格；延迟预算 → 未把网格开销计入 → 端到端 ≤800 ms 会超 → 主链路预留 3 ms，压缩其他环节；架构落地分期 → 一次到位 → 工期 11 个月 → 分必做（拆分/契约/注册/配置/可观测）与选做（网格/多活/混沌） 质量属性场景（性能示例）：刺激源=来电客户；刺激=发起语音报修；环境=并发 800 路；制品=AI 应答链路；响应=完成识别与播报；度量=P99 ≤1.2 s。<br>问题 1：（1）说明架构复审的重点与参与角色，并说明本例评审中暴露的三类问题；<br>问题 2：（2）说明质量属性场景与架构战术的关系，为邓经理提出的&quot;可维护性/运维&quot;诉求给出战术；<br>问题 3：（3）针对&quot;服务网格延迟&quot;与&quot;工期&quot;两个约束，给出架构方案的调整建议；<br>问题 4：（4）说明架构文档化应记录哪些内容，以保证&quot;明年还改得动&quot;。</p><ul class="exam-questions"><li><b>问题 1</b> （1）说明<strong>架构复审</strong>的重点与参与角色，并说明本例评审中暴露的三类问题；</li><li><b>问题 2</b> （2）说明<strong>质量属性场景</strong>与<strong>架构战术</strong>的关系，为邓经理提出的&quot;可维护性/运维&quot;诉求给出战术；</li><li><b>问题 3</b> （3）针对&quot;服务网格延迟&quot;与&quot;工期&quot;两个约束，给出架构方案的<strong>调整建议</strong>；</li><li><b>问题 4</b> （4）说明架构文档化应记录哪些内容，以保证&quot;明年还改得动&quot;。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）复审重点与角色）：重点——①需求与质量属性是否被覆盖；②风格与战术是否恰当；③构件职责、接口与耦合是否合理；④是否存在单点故障、性能瓶颈、安全弱点；⑤架构决策是否有记录与理由；⑥是否可实现（技术/团队/工期/成本）；⑦风险识别与缓解措施。<br>- 🟢 加分：解析·架构复审题要&quot;重点 + 角色 + 本例问题 + 战术 + 文档化&quot;，体现运维视角。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🔴 核心（2）质量属性场景与战术）：质量属性场景用刺激源、刺激、环境、制品、响应、响应度量六要素把&quot;可维护性&quot;等模糊诉求变成可验证的目标；架构战术是为达成某个质量属性而采取的设计决策（如冗余提升可用性、缓存提升性能）。<br>问题 3｜参考答案要点：<br>- 🔴 核心：🟡 支撑（3）方案调整建议）：<br>问题 4｜参考答案要点：<br>- 🔴 核心：🔴 核心（4）架构文档化内容）：①架构愿景、业务目标与约束；②架构需求（功能 + 质量属性场景 + 约束）；③架构视图（4+1：用例/逻辑/进程/实现/部署）；④构件与接口规格；⑤架构决策记录 ADR（选了什么、为什么、被否决方案及原因）；⑥质量属性分析（敏感点、权衡点、风险与非风险）；⑦部署与运维说明；⑧词汇表与假设；⑨演进计划。</div></details></div></details><details class="exam-subject" data-exam-subject="论文"><summary><span class="exam-subject-name">📄 论文写作</span><span class="exam-subject-n">4 题</span><span class="exam-subject-tip">论述题 · 先写再看题</span></summary><div class="exam-bar"><span class="exam-bar-label">📄 论文写作</span><span class="exam-bar-stat">共 <b>4</b> 题 · 论述题</span></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与管理开发的集成项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细论述各层次集成对应的主流技术。</li><li><b>问题 3</b> 结合项目实际，说明技术实现方案、实施过程与落地效果。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 架构设计</span><span class="exam-lv">⭐⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与的集成项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 论述ESB的核心功能、主流产品，说明项目的产品选型理由。</li><li><b>问题 3</b> 说明基于ESB开展集成工作遇到的问题以及解决办法。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 架构设计</span><span class="exam-lv">⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与设计的信息系统项目（项目的背景、复用目标、架构规模、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细论述复用架构设计的原则、可复用构件的提取方法、主流复用架构风格（如构件化架构、微内核架构）、复用框架的搭建要点。</li><li><b>问题 3</b> 结合项目实践，论述复用架构落地过程中的问题（如构件适配性差）及解决措施，总结复用架构的实施效果。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 架构设计</span><span class="exam-lv">⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与管理和开发的软件项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 简要描述ABSD软件设计的6个主要阶段，以及各阶段的核心活动。</li><li><b>问题 3</b> 具体阐述在项目中，如何基于ABSD方法完成软件系统的设计工作。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 架构设计</span><span class="exam-lv">⭐⭐⭐</span></div></div></details></section>
+④业务逻辑向功能逻辑的演化</p><ul class="exam-opts"><li><b>A</b> ①②③</li><li><b>B</b> ①②④</li><li><b>C</b> ①③④</li><li><b>D</b> ②③④</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">企业信息架构是将企业业务实体抽象成为信息对象，将企业的业务运作模式抽象为信息对象的属性和方法，建立面向对象的企业信息模型。企业信息架构实现从业务模式向信息模型的转变，业务需求向信息功能的映射，企业基础数据向企业信息的抽象。企业信息架构对企业业务进行建模，它能独立于技术的发展和变化，并能帮助项目中业务人员和技术人员之间的沟通。</p></details></div></details></details></details><details class="exam-subject" data-exam-subject="案例"><summary><span class="exam-subject-name">📋 案例分析</span><span class="exam-subject-n">1 题</span><span class="exam-subject-tip">案例背景 · 题目 · 答案与解析</span></summary><div class="exam-bar"><span class="exam-bar-label">📋 案例分析</span><span class="exam-bar-stat">共 <b>1</b> 题 · 情景简答 · 采分点三色标记</span></div><div class="exam-q exam-q-case"><div class="case-head"><span class="exam-no">案例 56</span><span class="exam-tag">考点 · 架构评审会上的三个&quot;不行&quot;</span><span class="exam-lv">⭐⭐⭐</span></div><div class="case-meta"><span>📅 <strong>时间</strong>：2025-07-15 📍 <strong>地点</strong>：项目组架构评审会（甲方列席）</span><span>👤 <strong>人物</strong>：彭工（架构师）、甘工（乙方·系统分析师）、李工（乙方·项目经理）、丁工（乙方·测试负责人）、邓经理（运维）、徐总监（甲方·数智化信息部总监）</span><span>⚡ <strong>冲突</strong>：彭工的方案技术优雅但没考虑运维与工期，邓经理指出&quot;你画的这个，我们运维不了&quot;，徐总监质疑&quot;能不能按期交付&quot;</span><span><strong>难度</strong>：★★★　<strong>总分</strong>：25 分　<strong>建议用时</strong>：25 分钟</span></div><div class="case-scene"><div class="case-h">案例背景</div><strong>背景</strong>：彭工打开架构图讲了四十分钟：分层清晰、服务拆分合理、事件驱动优雅、还引入了服务网格。 李工先算工期：&quot;按这个方案，光服务网格的落地和调优就要一个半月，工期里没有。&quot; 邓经理更直接：&quot;你这三十多个服务，日志、监控、告警怎么接？我们运维就三个人。出问题你们谁负责定位？还有——所有服务都走网格，1~3 毫秒的额外延迟，你算进 800ms 预算了吗？&quot; 徐总监最后一句最扎心：&quot;架构是好看，但我关心的是<strong>明年还能不能改得动</strong>。&quot; 彭工一时语塞。甘工知道：<strong>架构方案不是技术问题，而是质量属性与约束的权衡问题</strong>——需要一次正式的<strong>架构复审</strong>。<br><strong>补充资料</strong>：服务网格 → 全量引入（30+ 服务） → 工期 +1.5 个月；延迟 +1~3 ms；运维仅 3 人 → <strong>核心链路试点</strong>，其余用 SDK/网关；可观测性 → 三支柱齐全 → 日志规范、告警分派责任未定 → 先建三支柱 + Runbook，再上网格；延迟预算 → 未把网格开销计入 → 端到端 ≤800 ms 会超 → 主链路预留 3 ms，压缩其他环节；架构落地分期 → 一次到位 → 工期 11 个月 → 分必做（拆分/契约/注册/配置/可观测）与选做（网格/多活/混沌） <strong>质量属性场景（性能示例）</strong>：刺激源=来电客户；刺激=发起语音报修；环境=并发 800 路；制品=AI 应答链路；响应=完成识别与播报；度量=P99 ≤1.2 s。</div><div class="case-asks"><div class="case-h">题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">（1）说明<strong>架构复审</strong>的重点与参与角色，并说明本例评审中暴露的三类问题；</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">（2）说明<strong>质量属性场景</strong>与<strong>架构战术</strong>的关系，为邓经理提出的&quot;可维护性/运维&quot;诉求给出战术；</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">（3）针对&quot;服务网格延迟&quot;与&quot;工期&quot;两个约束，给出架构方案的<strong>调整建议</strong>；</span></li><li><span class="case-ask-no">4</span><span class="case-ask-t">（4）说明<strong>架构文档化</strong>应记录哪些内容，以保证&quot;明年还改得动&quot;。</span></li></ul></div><details class="exam-ans"><summary>参考答案要点（三色标记）</summary><div class="exam-points"><strong>问题 1｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（1）复审重点与角色）：重点——①需求与质量属性是否被覆盖；②风格与战术是否恰当；③构件职责、接口与耦合是否合理；④是否存在单点故障、性能瓶颈、安全弱点；⑤架构决策是否有记录与理由；⑥是否可实现（技术/团队/工期/成本）；⑦风险识别与缓解措施。<br><strong>问题 2｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（2）质量属性场景与战术）：质量属性场景用刺激源、刺激、环境、制品、响应、响应度量六要素把&quot;可维护性&quot;等模糊诉求变成可验证的目标；架构战术是为达成某个质量属性而采取的设计决策（如冗余提升可用性、缓存提升性能）。<br><strong>问题 3｜参考答案要点</strong>：<br>- 🔴 核心：🟡 支撑（3）方案调整建议）：<br><strong>问题 4｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（4）架构文档化内容）：①架构愿景、业务目标与约束；②架构需求（功能 + 质量属性场景 + 约束）；③架构视图（4+1：用例/逻辑/进程/实现/部署）；④构件与接口规格；⑤架构决策记录 ADR（选了什么、为什么、被否决方案及原因）；⑥质量属性分析（敏感点、权衡点、风险与非风险）；⑦部署与运维说明；⑧词汇表与假设；⑨演进计划。</div></details><details class="exam-ans"><summary>解析与加分项</summary><div class="exam-exp-more">- 🟢 加分：解析·架构复审题要&quot;重点 + 角色 + 本例问题 + 战术 + 文档化&quot;，体现运维视角。</div></details></div></details><details class="exam-subject" data-exam-subject="论文"><summary><span class="exam-subject-name">📄 论文写作</span><span class="exam-subject-n">4 题</span><span class="exam-subject-tip">先看题 · 再看考点拆解</span></summary><div class="exam-bar"><span class="exam-bar-label">📄 论文写作</span><span class="exam-bar-stat">共 <b>4</b> 题 · 论述题 · 含考点拆解与教材知识点</span></div><div class="exam-q exam-q-essay"><div class="case-head"><span class="exam-no">论文 44</span><span class="exam-tag">方向 · 架构设计</span><span class="exam-lv">⭐⭐</span><span class="essay-batch">2017年上半年</span></div><div class="case-asks"><div class="case-h">论文题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">概要叙述你参与管理开发的集成项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">详细论述各层次集成对应的主流技术。</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">结合项目实际，说明技术实现方案、实施过程与落地效果。</span></li></ul></div><details class="exam-ans" open><summary>试题背景</summary><div class="essay-bg">企业应用集成(EAI)分为表示层、数据层、控制层、业务流程层集成，核心作用是消除企业内部信息孤岛。</div></details><details class="exam-ans"><summary>考点拆解（三色标记）</summary><div class="exam-keypoints"><strong>问题 1｜概要叙述项目与你承担的工作</strong>：<br>- 🔴 核心：点明近三年内一个具体的真实项目：项目名称、背景、发起单位、规模、周期、交付成果（教材 22.4-9/22.4-10 明确要求，泛泛而谈会判虚构）<br>- 🔴 核心：明确「我」在项目中的角色与承担的主要工作，并站在系统分析师视角论述，而非单纯开发实现视角<br>- 🟡 支撑：说明项目的组织结构、开发体制与技术栈，为后文论述做铺垫<br>- 🟢 加分：点出项目与本题主题的直接关联（如本项目正是因 XX 痛点才需要 XX 方法）<br><strong>问题 2｜理论知识 / 方法论述</strong>：<br>- 🔴 核心：各层次集成对应的主流技术——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🟢 加分：给出与其他候选方案的取舍依据，体现选型判断力<br><strong>问题 3｜项目实践落地与复盘</strong>：<br>- 🔴 核心：给出可量化的落地效果（缺陷率/响应时间/迭代周期/资源成本等具体数据），而非「取得了良好效果」<br>- 🔴 核心：诚实分析存在的 2~3 个真实问题，并给出对应的改进措施——教材强调这才是用心的内容<br>- 🟡 支撑：结合具体实例说明措施的实施过程（怎么做的，而非教科书式罗列）<br>- 🟢 加分：总结经验教训与后续演进方向，体现复盘能力<br>- 🟡 支撑：说明技术实现方案</div></details><details class="exam-ans"><summary>教材知识点</summary><div class="exam-textbook"><span class="tb-chap">第 12 章 · 软件架构设计</span><a class="tb-hour" href="H26.html">H26</a><a class="tb-hour" href="H27.html">H27</a><a class="tb-hour" href="H28.html">H28</a></div></details></div><div class="exam-q exam-q-essay"><div class="case-head"><span class="exam-no">论文 81</span><span class="exam-tag">方向 · 架构设计</span><span class="exam-lv">⭐</span><span class="essay-batch">2009年上半年</span></div><div class="case-asks"><div class="case-h">论文题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">概要叙述你参与的集成项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">论述ESB的核心功能、主流产品，说明项目的产品选型理由。</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">说明基于ESB开展集成工作遇到的问题以及解决办法。</span></li></ul></div><details class="exam-ans" open><summary>试题背景</summary><div class="essay-bg">企业服务总线(ESB)是面向服务架构下的集成技术，采用总线架构，具备开放标准、易扩展的特点。</div></details><details class="exam-ans"><summary>考点拆解（三色标记）</summary><div class="exam-keypoints"><strong>问题 1｜概要叙述项目与你承担的工作</strong>：<br>- 🔴 核心：点明近三年内一个具体的真实项目：项目名称、背景、发起单位、规模、周期、交付成果（教材 22.4-9/22.4-10 明确要求，泛泛而谈会判虚构）<br>- 🔴 核心：明确「我」在项目中的角色与承担的主要工作，并站在系统分析师视角论述，而非单纯开发实现视角<br>- 🟡 支撑：说明项目的组织结构、开发体制与技术栈，为后文论述做铺垫<br>- 🟢 加分：点出项目与本题主题的直接关联（如本项目正是因 XX 痛点才需要 XX 方法）<br><strong>问题 2｜理论知识 / 方法论述</strong>：<br>- 🔴 核心：ESB的核心功能——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：ESB的主流产品——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：ESB的说明项目的产品选型理由——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🟢 加分：给出与其他候选方案的取舍依据，体现选型判断力<br><strong>问题 3｜项目实践落地与复盘</strong>：<br>- 🔴 核心：给出可量化的落地效果（缺陷率/响应时间/迭代周期/资源成本等具体数据），而非「取得了良好效果」<br>- 🔴 核心：诚实分析存在的 2~3 个真实问题，并给出对应的改进措施——教材强调这才是用心的内容<br>- 🟡 支撑：结合具体实例说明措施的实施过程（怎么做的，而非教科书式罗列）<br>- 🟢 加分：总结经验教训与后续演进方向，体现复盘能力<br>- 🟡 支撑：基于ESB开展集成工作遇到的问题以及解决办法</div></details><details class="exam-ans"><summary>教材知识点</summary><div class="exam-textbook"><span class="tb-chap">第 12 章 · 软件架构设计</span><a class="tb-hour" href="H26.html">H26</a><a class="tb-hour" href="H27.html">H27</a><a class="tb-hour" href="H28.html">H28</a></div></details></div><div class="exam-q exam-q-essay"><div class="case-head"><span class="exam-no">论文 110</span><span class="exam-tag">方向 · 架构设计</span><span class="exam-lv">⭐</span><span class="essay-batch">2010年上半年</span></div><div class="case-asks"><div class="case-h">论文题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">概要叙述你参与设计的信息系统项目（项目的背景、复用目标、架构规模、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">详细论述复用架构设计的原则、可复用构件的提取方法、主流复用架构风格（如构件化架构、微内核架构）、复用框架的搭建要点。</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">结合项目实践，论述复用架构落地过程中的问题（如构件适配性差）及解决措施，总结复用架构的实施效果。</span></li></ul></div><details class="exam-ans" open><summary>试题背景</summary><div class="essay-bg">软件复用架构设计是从架构层面规划复用体系，涵盖可复用构件设计、架构风格选择、复用框架搭建等，是规模化复用的核心基础。</div></details><details class="exam-ans"><summary>考点拆解（三色标记）</summary><div class="exam-keypoints"><strong>问题 1｜概要叙述项目与你承担的工作</strong>：<br>- 🔴 核心：点明近三年内一个具体的真实项目：项目名称、背景、发起单位、规模、周期、交付成果（教材 22.4-9/22.4-10 明确要求，泛泛而谈会判虚构）<br>- 🔴 核心：明确「我」在项目中的角色与承担的主要工作，并站在系统分析师视角论述，而非单纯开发实现视角<br>- 🟡 支撑：说明项目的组织结构、开发体制与技术栈，为后文论述做铺垫<br>- 🟢 加分：点出项目与本题主题的直接关联（如本项目正是因 XX 痛点才需要 XX 方法）<br><strong>问题 2｜理论知识 / 方法论述</strong>：<br>- 🔴 核心：复用架构设计的原则——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：复用架构设计的可复用构件的提取方法——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：复用架构设计的主流复用架构风格如构件化架构——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🟡 支撑：复用架构设计的微内核架构<br>- 🟡 支撑：复用架构设计的复用框架的搭建要点<br>- 🟢 加分：给出与其他候选方案的取舍依据，体现选型判断力<br><strong>问题 3｜项目实践落地与复盘</strong>：<br>- 🔴 核心：给出可量化的落地效果（缺陷率/响应时间/迭代周期/资源成本等具体数据），而非「取得了良好效果」<br>- 🔴 核心：诚实分析存在的 2~3 个真实问题，并给出对应的改进措施——教材强调这才是用心的内容<br>- 🟡 支撑：结合具体实例说明措施的实施过程（怎么做的，而非教科书式罗列）<br>- 🟢 加分：总结经验教训与后续演进方向，体现复盘能力<br>- 🟡 支撑：论述复用架构落地过程中的问题如构件适配性差及解决措施</div></details><details class="exam-ans"><summary>教材知识点</summary><div class="exam-textbook"><span class="tb-chap">第 12 章 · 软件架构设计</span><a class="tb-hour" href="H26.html">H26</a><a class="tb-hour" href="H27.html">H27</a><a class="tb-hour" href="H28.html">H28</a></div></details></div><div class="exam-q exam-q-essay"><div class="case-head"><span class="exam-no">论文 17</span><span class="exam-tag">方向 · 架构设计</span><span class="exam-lv">⭐⭐⭐</span><span class="essay-batch">2024年上半年</span></div><div class="case-asks"><div class="case-h">论文题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">概要叙述你参与管理和开发的软件项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">简要描述ABSD软件设计的6个主要阶段，以及各阶段的核心活动。</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">具体阐述在项目中，如何基于ABSD方法完成软件系统的设计工作。</span></li></ul></div><details class="exam-ans" open><summary>试题背景</summary><div class="essay-bg">基于架构的软件设计(ABSD)强调由商业、质量和功能需求驱动软件架构设计，支持需求演化，是自顶向下递归细化的设计方法，需求抽取分析可与设计工作并行开展。</div></details><details class="exam-ans"><summary>考点拆解（三色标记）</summary><div class="exam-keypoints"><strong>问题 1｜概要叙述项目与你承担的工作</strong>：<br>- 🔴 核心：点明近三年内一个具体的真实项目：项目名称、背景、发起单位、规模、周期、交付成果（教材 22.4-9/22.4-10 明确要求，泛泛而谈会判虚构）<br>- 🔴 核心：明确「我」在项目中的角色与承担的主要工作，并站在系统分析师视角论述，而非单纯开发实现视角<br>- 🟡 支撑：说明项目的组织结构、开发体制与技术栈，为后文论述做铺垫<br>- 🟢 加分：点出项目与本题主题的直接关联（如本项目正是因 XX 痛点才需要 XX 方法）<br><strong>问题 2｜理论知识 / 方法论述</strong>：<br>- 🔴 核心：简要描述ABSD软件设计的6个主要阶段——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：简要描述ABSD软件设计的以及各阶段的核心活动——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🟢 加分：给出与其他候选方案的取舍依据，体现选型判断力<br><strong>问题 3｜项目实践落地与复盘</strong>：<br>- 🔴 核心：给出可量化的落地效果（缺陷率/响应时间/迭代周期/资源成本等具体数据），而非「取得了良好效果」<br>- 🔴 核心：诚实分析存在的 2~3 个真实问题，并给出对应的改进措施——教材强调这才是用心的内容<br>- 🟡 支撑：结合具体实例说明措施的实施过程（怎么做的，而非教科书式罗列）<br>- 🟢 加分：总结经验教训与后续演进方向，体现复盘能力<br>- 🟡 支撑：在项目中<br>- 🟡 支撑：如何基于ABSD方法完成软件系统的设计工作</div></details><details class="exam-ans"><summary>教材知识点</summary><div class="exam-textbook"><span class="tb-chap">第 12 章 · 软件架构设计</span><a class="tb-hour" href="H26.html">H26</a><a class="tb-hour" href="H27.html">H27</a><a class="tb-hour" href="H28.html">H28</a></div></details></div></details></section>
     <div class="wrongbook"></div>
     <div class="keyhint">
   <span class="keyhint-title">键盘快捷键</span>
@@ -3256,7 +3438,9 @@ html{scroll-padding-top:80px}
     init() {
       const root = document.querySelector('.exam')
       if (!root) return
-      const chapter = root.dataset.examChapter || 'x'
+      // ⚠️ 专项页 / 全真模拟页没有 data-exam-chapter（无教材章），
+      //    旧写法一律退化成 'x' → H42~H48 共用同一个记忆键、互相串状态。
+      const chapter = root.dataset.examChapter || root.dataset.examHour || 'x'
 
       // 恢复上次展开状态：{ "H07": { "2025年5月": true, ... } }
       const saved = store.get(this.KEY, {}) || {}
@@ -3276,6 +3460,7 @@ html{scroll-padding-top:80px}
       const seen = store.get('examSeen', {}) || {}
       root.querySelectorAll('.exam-q').forEach(qd => {
         const qid = qd.dataset.examId
+        if (!qid) return
         if (seen[qid]) {
           const a = qd.querySelector('.exam-ans')
           if (a) a.open = true
@@ -3291,12 +3476,17 @@ html{scroll-padding-top:80px}
         btn.addEventListener('click', e => {
           e.preventDefault()
           const openAll = btn.dataset.examAll === '1'
-          root.querySelectorAll('.exam-subject,.exam-year').forEach(d => { d.open = openAll })
-          root.querySelectorAll('.exam-ans').forEach(d => {
-            d.open = openAll
-            if (openAll && d.parentElement.dataset.examId) seen[d.parentElement.dataset.examId] = 1
-          })
-          if (openAll) store.set('examSeen', seen)
+          // ⚠️ 必须把 .exam-q 也列进来：只开 .exam-subject/.exam-year/.exam-ans
+          //    时，单题仍折叠 → 答案藏在关闭的单题内，"全部展开"名不副实。
+          root.querySelectorAll('.exam-subject,.exam-year,.exam-q,.exam-ans')
+            .forEach(d => { d.open = openAll })
+          if (openAll) {
+            // ⚠️ 旧的 `d.parentElement.dataset.examId` 取到的是 .exam-q-body（无 id），
+            //    会把 seen[undefined] 写进 localStorage。改为直接从 .exam-q 取。
+            root.querySelectorAll('.exam-q[data-exam-id]')
+              .forEach(qd => { seen[qd.dataset.examId] = 1 })
+            store.set('examSeen', seen)
+          }
           // 同步年份级记忆
           root.querySelectorAll('.exam-year').forEach(y => { mine[y.dataset.examYear] = y.open })
           saved[chapter] = mine
@@ -3343,7 +3533,7 @@ html{scroll-padding-top:80px}
   // ══════════════════════════════════════════
   // 8. mermaid 渲染（自定义墨绿主题，与正文同色系）
   // ══════════════════════════════════════════
-  // 站点配色（与 design.css 的令牌保持一致）
+  // 站点配色（与设计令牌保持一致 —— 改主题色时这里要同步）
   const MERMAID_LIGHT = {
     bg: '#f2f0e9', fg: '#1b211c', line: '#cdc9bd',
     accent: '#3d5a40', accent2: '#5a8a62', accent3: '#7ea888',

@@ -7,7 +7,7 @@
 <title>第 10 小时 · 数据库系统（二）· 范式与事务并发控制 · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
-<meta name="build-stamp" content="2026-10-05 11:44:51">
+<meta name="build-stamp" content="2026-10-05 15:47:03">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -405,16 +405,21 @@ img{max-width:100%;height:auto}
   border-radius:100px;
   font-size:12.5px;color:var(--accent);font-weight:600;
 }
-.cover h1{
+/* ⚠️ 封面主标题刻意用 <div> 而不是 <h1>：index.md 正文自带 `# 阿甘系分 · 48 小时
+   冲刺手册`，若封面也用 h1，一页会出现两个 h1（语义/SEO 上都是错的）。
+   视觉与 h1 完全一致 —— 字号、颜色、以及那道 72px 短横线都在下面显式声明。 */
+.cover .cover-title{
   font-size:3.5em;font-weight:800;letter-spacing:-1.6px;
   color:var(--accent);line-height:1.14;margin-bottom:16px;
 }
-/* ⚠️ 封面 h1 也继承 `.main h1::after` 那道 56px 短横线，但它是 display:block 的
-   固定宽块级元素 —— 文字居中不代表块级元素居中，会贴到左边。
-   修法：给封面这条短横线加 margin-left/right:auto 让它真正居中。 */
-.cover h1::after{
-  margin-left:auto;margin-right:auto;
+/* 复刻 `.main h1::after` 的短横线（<div> 不继承 h1 的伪元素），并水平居中 —— */
+/* 文字居中不代表块级元素居中，不加 auto 会贴到左边。 */
+.cover .cover-title::after{
+  content:'';display:block;
   width:72px;height:3px;
+  background:var(--accent);
+  margin:.5em auto 0;
+  border-radius:2px;
 }
 .cover .sub{
   font-size:1.2em;color:var(--fg-2);
@@ -845,7 +850,7 @@ pre{
   .nav{margin-left:auto;gap:2px}
   .main{padding:32px 0 80px}
   .cover{padding:48px 0 40px;margin-bottom:40px}
-  .cover h1{font-size:2.4em;letter-spacing:-.8px}
+  .cover .cover-title{font-size:2.4em;letter-spacing:-.8px}
   .cover .sub{font-size:1.05em;margin-bottom:24px}
   .cover-stats{gap:10px;margin-bottom:28px}
   .stat{min-width:76px;padding:10px 14px}
@@ -901,7 +906,7 @@ pre{
   h1,h2,h3,h4{break-after:avoid;page-break-after:avoid}
 
   .cover{padding:0 0 18px;margin-bottom:18px;text-align:left}
-  .cover h1{font-size:24pt}
+  .cover .cover-title{font-size:24pt}
   .cover-stats,.cover-badge,.cta-row{display:none !important}
 
   a[href^="http"]:after{
@@ -1256,16 +1261,14 @@ html.focus-mode .chapbar{opacity:.35;pointer-events:none}
 }
 /* 章首横幅：h1 上方加一条"章号 + 主色渐变"的装饰带，
    让每页开头有一个明确的"进入新章"仪式感（原来 h1 直接浮在正文里）。
-   ⚠️ 必须排除 .cover —— 封面 h1 自己已有顶部留白与居中布局，
-   加上横幅会与下方分隔线叠成双线（首页曾出现两条横线紧挨）。 */
-.main h1:not(.cover h1)::before{
+   （封面主标题已改成 <div class="cover-title">，不再匹配 .main h1，无需再排除。） */
+.main h1::before{
   content:'';display:block;
   width:100%;height:4px;
   background:linear-gradient(90deg,var(--accent) 0%,var(--accent-3) 42%,transparent 88%);
   border-radius:2px;
   margin-bottom:.62em;
 }
-.cover h1::before{content:none}
 .main h1::after{
   content:'';display:block;
   width:56px;height:3px;
@@ -2087,6 +2090,185 @@ html{scroll-padding-top:80px}
   .exam-stem,.exam-opts li{font-size:9.5pt}
   .exam-exp{font-size:8.5pt;color:#333}
 }
+
+/* ══════════════════════════════════════════════════════════════
+   真题区块扩展 v2 · 案例 / 论文卡片 + 全真模拟卷
+   与既有 .exam-* 体系同源：米白卡底 + 左侧 4px 色条 + 墨绿强调色
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── 案例 / 论文卡片（非 <details>，直接展开的题卡）── */
+.exam-q-case,.exam-q-essay{
+  padding:14px 16px 4px;
+  background:var(--bg-card);
+}
+.exam-q-case:hover,.exam-q-essay:hover{background:var(--bg-alt)}
+.case-head{
+  display:flex;flex-wrap:wrap;align-items:center;gap:6px;
+  padding-bottom:10px;margin-bottom:10px;
+  border-bottom:1px dashed var(--line);
+}
+.case-head .exam-no{min-width:0}
+.case-h{
+  display:flex;align-items:center;gap:6px;
+  margin:12px 0 6px;font-size:12.5px;font-weight:700;
+  letter-spacing:.06em;color:var(--accent);
+}
+.case-h::before{
+  content:'';width:4px;height:13px;border-radius:2px;
+  background:var(--accent);flex:0 0 auto;
+}
+
+/* 情景要素（📅时间 / 📍地点 / 👤人物 / ⚡冲突 / 难度总分用时） */
+.case-meta{
+  display:flex;flex-direction:column;gap:2px;
+  padding:9px 12px;margin:.4em 0 .2em;
+  background:var(--bg-alt);
+  border-left:3px solid var(--line-2);
+  border-radius:0 var(--radius-sm) var(--radius-sm) 0;
+  font-size:12.5px;line-height:1.75;color:var(--fg-3);
+}
+.case-meta strong{color:var(--fg-2);font-weight:600}
+
+/* 案例背景正文 */
+.case-scene{
+  margin:.2em 0 1em;padding:12px 14px;
+  background:var(--accent-soft);
+  border-left:3px solid var(--accent-3);
+  border-radius:0 var(--radius) var(--radius) 0;
+  font-size:14.5px;line-height:1.92;color:var(--fg);
+}
+.case-scene strong{color:var(--accent);font-weight:700}
+
+/* 题目列表 */
+.case-asks{margin:.2em 0 1em}
+ul.exam-questions{
+  list-style:none;margin:.4em 0;padding:0;
+}
+ul.exam-questions>li{
+  display:flex;gap:10px;align-items:flex-start;
+  padding:9px 0;border-bottom:1px solid var(--line);
+  font-size:14.5px;line-height:1.88;color:var(--fg);
+}
+ul.exam-questions>li:last-child{border-bottom:0}
+ul.exam-questions>li::before{content:none !important}
+.case-ask-no{
+  flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;
+  min-width:24px;height:22px;margin-top:3px;padding:0 6px;
+  border-radius:6px;background:var(--accent-soft-2);color:var(--accent);
+  font-family:var(--sans);font-size:11.5px;font-weight:700;
+  font-variant-numeric:tabular-nums;
+}
+.case-ask-t{flex:1;min-width:0}
+.case-ask-t strong{color:var(--accent);font-weight:700}
+
+/* ── 答案 / 解析 / 考点拆解 / 教材知识点 ── */
+.exam-points,.exam-keypoints,.exam-exp-more,.essay-bg{
+  padding:12px 14px;margin:8px 0;
+  border-left:4px solid var(--tip-line);
+  border-radius:0 var(--radius) var(--radius) 0;
+  background:var(--tip-bg);
+  font-size:14px;line-height:1.92;color:var(--fg);
+}
+.exam-keypoints{border-left-color:var(--accent-2);background:var(--accent-soft)}
+.exam-exp-more{border-left-color:var(--warn-line);background:var(--warn-bg);color:var(--warn-fg)}
+.essay-bg{border-left-color:var(--line-2);background:var(--bg-alt);color:var(--fg-2)}
+.exam-points strong,.exam-keypoints strong{color:var(--accent);font-weight:700}
+
+/* 教材知识点：章标签 + 可点学时胶囊 */
+.exam-textbook{
+  display:flex;flex-wrap:wrap;align-items:center;gap:6px;
+  padding:12px 14px;margin:8px 0;
+  background:var(--mem-bg);
+  border-left:4px solid var(--mem-line);
+  border-radius:0 var(--radius) var(--radius) 0;
+}
+.tb-chap{
+  font-family:var(--serif);font-size:14px;font-weight:700;color:var(--mem-fg);
+}
+.tb-hour{
+  display:inline-flex;align-items:center;
+  padding:2px 9px;border-radius:999px;
+  background:var(--bg-card);border:1px solid var(--mem-line);
+  color:var(--mem-fg) !important;font-size:12px;font-weight:600;
+  text-decoration:none;
+}
+.tb-hour:hover{background:var(--mem-line);color:var(--bg-card) !important;border-color:var(--mem-fg)}
+
+/* 模拟卷成绩/批次等小标签 */
+.exam-lv{
+  font-family:var(--sans);font-size:11.5px;color:var(--gold);
+  letter-spacing:.04em;white-space:nowrap;
+}
+.exam-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.exam-tag-en{
+  background:var(--mem-bg);color:var(--mem-fg);border-color:var(--mem-line);
+}
+.essay-batch{
+  font-family:var(--sans);font-size:11.5px;color:var(--fg-3);
+  padding:1px 8px;border:1px solid var(--line);border-radius:999px;
+}
+.exam-kp{
+  margin:.5em 0 0;font-family:var(--sans);font-size:12.5px;color:var(--fg-3);
+}
+.exam-kp::before{content:'🎯 ';font-size:11px}
+
+/* ── 全真模拟卷头部 ── */
+.mock-head{
+  padding:16px 18px;margin:0 0 12px;
+  border-radius:var(--radius-lg);
+  background:linear-gradient(135deg,var(--accent) 0%,var(--accent-2) 100%);
+  color:var(--fg-inv);
+  box-shadow:var(--shadow-2);
+}
+.mock-title{
+  font-family:var(--serif);font-size:17px;font-weight:700;
+  letter-spacing:.02em;line-height:1.5;
+}
+.mock-sub{
+  margin-top:6px;font-size:12.5px;line-height:1.75;
+  color:rgba(251,250,246,.82);
+}
+.mock-sub b{color:#fff;font-variant-numeric:tabular-nums}
+.mock-items{
+  border:1px solid var(--line);border-radius:var(--radius);
+  background:var(--bg-card);overflow:hidden;
+}
+.mock-items>.exam-q:first-child{border-top:0}
+.exam-mock .exam-subject{margin-top:14px}
+.exam-subj-only{display:block}
+
+/* 模拟卷内的综合知识答题条 */
+.exam-mock .exam-bar{
+  border-radius:var(--radius) var(--radius) 0 0;
+  border-bottom:0;
+}
+
+/* ── 窄屏 ── */
+@media(max-width:760px){
+  .exam-q-case,.exam-q-essay{padding:12px 12px 4px}
+  .case-scene,.exam-points,.exam-keypoints,.exam-exp-more,.essay-bg,.exam-textbook{
+    padding:10px 11px;font-size:13.5px;
+  }
+  ul.exam-questions>li{gap:8px;font-size:13.5px}
+  .mock-head{padding:13px 14px}
+  .mock-title{font-size:15.5px}
+}
+
+/* ── 打印：卡片不要再折叠，色条与底色转灰阶 ── */
+@media print{
+  .mock-head{background:none !important;color:#000 !important;border:1pt solid #999;
+    box-shadow:none}
+  .mock-title{font-size:13pt}
+  .mock-sub{color:#333 !important}
+  .exam-q-case,.exam-q-essay{break-inside:avoid;page-break-inside:avoid}
+  .case-scene,.exam-points,.exam-keypoints,.exam-exp-more,.essay-bg,.exam-textbook{
+    background:none !important;border-left:2pt solid #999 !important;
+  }
+  .exam-q-case,.exam-q-essay,.case-scene,.case-meta,ul.exam-questions>li{
+    font-size:9.5pt;
+  }
+  .tb-hour{color:#000 !important;border-color:#666}
+}
 </style>
 </head>
 <body>
@@ -2422,7 +2604,7 @@ html{scroll-padding-top:80px}
   </div>
 </div>
 </div>
-    <section class="exam" id="exam" data-exam-chapter="5" data-exam-hour="H10"><div class="exam-bar"><span class="exam-bar-label">📚 历年真题</span><span class="exam-bar-stat">本章共 <b>52</b> 题 · 本学时 <b>17</b> 题（其余见同章其他学时）</span><span class="exam-bar-ops"><button type="button" class="exam-op" data-exam-all="1">全部展开</button><button type="button" class="exam-op" data-exam-all="0">全部收起</button></span></div><details class="exam-subject" data-exam-subject="综合知识"><summary><span class="exam-subject-name">📝 综合知识</span><span class="exam-subject-n">17 题</span><span class="exam-subject-tip">按年份展开 · 单题可点开看答案</span></summary><details class="exam-year" data-exam-year="2026年5月"><summary><span class="exam-year-name">2026年5月</span><span class="exam-year-n">3 题</span></summary><details class="exam-q" data-exam-id="2026年5月-060"><summary><span class="exam-no">第 60 题</span><span class="exam-stem-peek">关系存在重复组，首先违反</span></summary><div class="exam-q-body"><p class="exam-stem">关系存在重复组，首先违反</p><ul class="exam-opts"><li><b>A</b> 1NF</li><li><b>B</b> 2NF</li><li><b>C</b> 3NF</li><li><b>D</b> BCNF</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">第一范式（1NF）强制要求：数据表不允许存在重复组、多值属性。</p></details></div></details><details class="exam-q" data-exam-id="2026年5月-016"><summary><span class="exam-no">第 16 题</span><span class="exam-stem-peek">关系数据库规范化，3NF在2NF基础上消除了</span></summary><div class="exam-q-body"><p class="exam-stem">关系数据库规范化，3NF在2NF基础上消除了</p><ul class="exam-opts"><li><b>A</b> 部分函数依赖</li><li><b>B</b> 传递函数依赖</li><li><b>C</b> 多值依赖</li><li><b>D</b> 非平凡依赖</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">2NF消除非主属性部分函数依赖，3NF在此基础上消除非主属性传递函数依赖。</p></details></div></details><details class="exam-q" data-exam-id="2026年5月-001"><summary><span class="exam-no">第 1 题</span><span class="exam-stem-peek">在数据库事务隔离级别中，可避免脏读、不可重复读和幻读的是</span></summary><div class="exam-q-body"><p class="exam-stem">在数据库事务隔离级别中，可避免脏读、不可重复读和幻读的是</p><ul class="exam-opts"><li><b>A</b> 读未提交</li><li><b>B</b> 读已提交</li><li><b>C</b> 可重复读</li><li><b>D</b> 串行化</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">串行化是数据库最高隔离级别，可彻底规避脏读、不可重复读、幻读三类问题。</p></details></div></details></details><details class="exam-year" data-exam-year="2025年5月"><summary><span class="exam-year-name">2025年5月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2025年5月-037"><summary><span class="exam-no">第 37 题</span><span class="exam-stem-peek">数据库事务日志最核心的作用是 ()</span></summary><div class="exam-q-body"><p class="exam-stem">数据库事务日志最核心的作用是 ()</p><ul class="exam-opts"><li><b>A</b> 提供数据库操作的详细审计跟踪，用于安全监控和合规性检查。</li><li><b>B</b> 优化数据库查询性能，通过记录访问模式辅助查询优化器。</li><li><b>C</b> 作为主数据库与从数据库之间进行数据同步的主要依据（在复制场景中）。</li><li><b>D</b> 在系统发生故障（如崩溃）后，确保数据库能够恢复到一致且正确的状态，保障数据的持久性和事务的原子性。</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">数据库日志其实有很多作用，这里说的 ACD 都是其作用，但最核心的作用，还是用来保证数据的持久性，发生故障用来恢复数据。</p></details></div></details><details class="exam-q" data-exam-id="2025年5月-018"><summary><span class="exam-no">第 18 题</span><span class="exam-stem-peek">数据库的CAP理论中，分布式系统无法同时满足（）</span></summary><div class="exam-q-body"><p class="exam-stem">数据库的CAP理论中，分布式系统无法同时满足（）</p><ul class="exam-opts"><li><b>A</b> 分区容忍与一致性</li><li><b>B</b> 一致性和可用性</li><li><b>C</b> 一致性和分区容忍</li><li><b>D</b> 可用性和分区容忍</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">CAP理论是对于一个分布式系统，一致性（Consistency）、可用性（Availability）和分区容忍性（Partition tolerance）三个特点最多只能三选二。如果选择了 CP（一致性和分区容忍性），那么就要考虑 ACID。如果选择了 AP（可用性和分区容忍性），那么就要考虑 BASE。如果选择了 CA（一致性和可用性），那么在网络发生分区的时候，将不能进行完整的操作。分布式系统，肯定是要满足 P 的，那就是 CA 无法再同时满足了。</p></details></div></details></details><details class="exam-year" data-exam-year="2024年5月"><summary><span class="exam-year-name">2024年5月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2024年5月-071"><summary><span class="exam-no">第 71 题</span><span class="exam-stem-peek">（）是指一个事务的执行不能被其他事务干扰。它要求即使有多个事务并发执行，但看上去每个事务按串行调度执行一样。这一性质也称…</span></summary><div class="exam-q-body"><p class="exam-stem">（）是指一个事务的执行不能被其他事务干扰。它要求即使有多个事务并发执行，但看上去每个事务按串行调度执行一样。这一性质也称为可串行性，也就是说，系统允许的任何交错操作调度等价于一个串行调度。</p><ul class="exam-opts"><li><b>A</b> 原子性</li><li><b>B</b> 隔离性</li><li><b>C</b> 一致性</li><li><b>D</b> 持久性</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">事务隔离性要求多并发事务的执行互相隔离、互不干扰，交错调度的最终执行效果和事务依次串行执行完全一致；原子性指事务不可拆分，一致性指数据约束前后保持合法，持久性指提交的修改永久生效。</p></details></div></details><details class="exam-q" data-exam-id="2024年5月-049"><summary><span class="exam-no">第 49 题</span><span class="exam-stem-peek">数据分片将数据库整体逻辑结构分解为合适的逻辑单位（片段），然后由分布模式来定义片段及其副本在各场地的物理分布，数据分片原…</span></summary><div class="exam-q-body"><p class="exam-stem">数据分片将数据库整体逻辑结构分解为合适的逻辑单位（片段），然后由分布模式来定义片段及其副本在各场地的物理分布，数据分片原则不包括（）</p><ul class="exam-opts"><li><b>A</b> 完整性</li><li><b>B</b> 重构性</li><li><b>C</b> 相交性</li><li><b>D</b> 不相交性</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">数据分片需要满足完整性、可重构性、不相交性，相交性会造成数据重复冗余、一致性冲突，不属于分片设计原则。</p></details></div></details></details><details class="exam-year" data-exam-year="2023年5月"><summary><span class="exam-year-name">2023年5月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2023年5月-045"><summary><span class="exam-no">第 45 题</span><span class="exam-stem-peek">某银行信息管理系统采用分布式数据库系统，以便对本地储户的存储业务能够在本地正常进行而不依赖于其他场地的数据库，这种情况称…</span></summary><div class="exam-q-body"><p class="exam-stem">某银行信息管理系统采用分布式数据库系统，以便对本地储户的存储业务能够在本地正常进行而不依赖于其他场地的数据库，这种情况称为分布式数据库的（ ）。</p><ul class="exam-opts"><li><b>A</b> 分布性</li><li><b>B</b> 共享性</li><li><b>C</b> 可用性</li><li><b>D</b> 自治性</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">分布式数据库的自治性特征，允许每个场地独立管理本地数据、开展本地业务，不会因其他站点故障中断本地服务。</p></details></div></details><details class="exam-q" data-exam-id="2023年5月-042"><summary><span class="exam-no">第 42 题</span><span class="exam-stem-peek">给定关系模式R(U, F)，其中U为属性集，U={X, Y, Z}，F是U上的一组函数依赖。函数依赖的公理系统(Arms…</span></summary><div class="exam-q-body"><p class="exam-stem">给定关系模式R(U, F)，其中U为属性集，U={X, Y, Z}，F是U上的一组函数依赖。函数依赖的公理系统(Armstrong公理系统)中的（ ）是指“若X→Y，X→Z，则X→YZ为F所蕴涵”。</p><ul class="exam-opts"><li><b>A</b> 自反率</li><li><b>B</b> 传递率</li><li><b>C</b> 增广律</li><li><b>D</b> 合并规则</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">合并规则定义为：若X→Y、X→Z同时成立，可推导出X→YZ；自反律是属性子集推导规则，增广律用于给左右侧添加属性，传递律用于链式依赖推导。</p></details></div></details></details><details class="exam-year" data-exam-year="2022年5月"><summary><span class="exam-year-name">2022年5月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2022年5月-045"><summary><span class="exam-no">第 45 题</span><span class="exam-stem-peek">在数据库的安全机制中。通过提供（45）供第三方开发人员通用进行数据更新，从而保证数据库的关系模式不被第三方所获取。</span></summary><div class="exam-q-body"><p class="exam-stem">在数据库的安全机制中。通过提供（45）供第三方开发人员通用进行数据更新，从而保证数据库的关系模式不被第三方所获取。</p><ul class="exam-opts"><li><b>A</b> 索引</li><li><b>B</b> 视图</li><li><b>C</b> 触发器</li><li><b>D</b> 存储过程</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">存储过程可被第三方主动调用完成指定的数据更新操作，调用方无需接触底层数据表结构，能隐藏关系模式细节；触发器是被动触发执行，不符合第三方主动调用的场景。</p></details></div></details><details class="exam-q" data-exam-id="2022年5月-042"><summary><span class="exam-no">第 42 题</span><span class="exam-stem-peek">给定关系 R（A,B,C,D,E）和关系 S（D,E,F,G），对其进行自然连接运算 R ⋈S 后其结果集的属性列为（4…</span></summary><div class="exam-q-body"><p class="exam-stem">给定关系 R（A,B,C,D,E）和关系 S（D,E,F,G），对其进行自然连接运算 R ⋈S 后其结果集的属性列为（42）。</p><ul class="exam-opts"><li><b>A</b> R.A, R.B, R.C, R.D, R.E, S.D, S.E</li><li><b>B</b> R.A, R.B, R.C, R.D, R.E, S.F, S.G</li><li><b>C</b> R.A, R.B, R.C, R.D, R.E, S.E, S.F</li><li><b>D</b> R.A, R.B, RC, R.D, R.E, S.D, S.E, S.F, S.G</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">自然连接会合并两个关系的相同属性并去重，保留R全部属性A、B、C、D、E，再追加S中不重复的F、G，最终属性序列为R.A,R.B,R.C,R.D,R.E,S.F,S.G。</p></details></div></details></details><details class="exam-year" data-exam-year="2021年5月"><summary><span class="exam-year-name">2021年5月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2021年5月-045"><summary><span class="exam-no">第 45 题</span><span class="exam-stem-peek">分布式数据库系统中的两阶段提交协议（Two Phase Commit Protocol，2PC 协议）包含协调者和参与者…</span></summary><div class="exam-q-body"><p class="exam-stem">分布式数据库系统中的两阶段提交协议（Two Phase Commit Protocol，2PC 协议）包含协调者和参与者，通常有如下操作指令。满足2PC的正常序列是（ ）。①协调者向参与者发prepare消息 ②参与者向协调者发回ready消息 ③参与者向协调者发回abort消息 ④协调者向参与者发commit消息 ⑤协调者向参与者发rollback消息</p><ul class="exam-opts"><li><b>A</b> ①②④</li><li><b>B</b> ①②⑤</li><li><b>C</b> ②③④</li><li><b>D</b> ②③⑤</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">事务正常成功执行的流程：表决阶段协调者发送prepare(①)，所有参与者返回ready(②)；执行阶段协调者下发commit(④)完成全局提交，abort和rollback属于异常回滚分支。</p></details></div></details><details class="exam-q" data-exam-id="2021年5月-042"><summary><span class="exam-no">第 42 题</span><span class="exam-stem-peek">在数据库系统中，视图实际上是一个（ ）。</span></summary><div class="exam-q-body"><p class="exam-stem">在数据库系统中，视图实际上是一个（ ）。</p><ul class="exam-opts"><li><b>A</b> 真实存在的表，并保存了待查询的数据</li><li><b>B</b> 真实存在的表，只有部分数据来源于基本表</li><li><b>C</b> 虚拟表，查询时只能从1个基本表中导出的表</li><li><b>D</b> 虚拟表，查询时可以从1个或多个基本表或视图中导出的表</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">视图是基于查询语句定义的虚拟表，不会物理存储数据，执行查询时会动态从一个或多个基本表、已创建的视图中生成结果集。</p></details></div></details></details><details class="exam-year" data-exam-year="2020年11月"><summary><span class="exam-year-name">2020年11月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2020年11月-045"><summary><span class="exam-no">第 45 题</span><span class="exam-stem-peek">数据的物理独立性和逻辑独立性分别是通过修改（45）来完成的。</span></summary><div class="exam-q-body"><p class="exam-stem">数据的物理独立性和逻辑独立性分别是通过修改（45）来完成的。</p><ul class="exam-opts"><li><b>A</b> 外模式与内模式之间的映像、模式与内模式之间的映像</li><li><b>B</b> 外模式与内模式之间的映像、外模式与模式之间的映像</li><li><b>C</b> 外模式与模式之间的映像、模式与内模式之间的映像</li><li><b>D</b> 模式与内模式之间的映像、外模式与模式之间的映像</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">物理独立性：物理存储（内模式）变化时，修改<strong>模式/内模式映像</strong>，上层逻辑结构不变，应用程序无需改动；逻辑独立性：全局逻辑（模式）变化时，修改<strong>外模式/模式映像</strong>，用户视图不变，应用程序无需改动。</p></details></div></details><details class="exam-q" data-exam-id="2020年11月-042"><summary><span class="exam-no">第 42 题</span><span class="exam-stem-peek">给定关系模式 R、&lt;U,F&gt;，其中：属性集 U={A,B,C,D,E,G}，函数依赖集 F = {A→BC, C→D, …</span></summary><div class="exam-q-body"><p class="exam-stem">给定关系模式 R、&lt;U,F&gt;，其中：属性集 U={A,B,C,D,E,G}，函数依赖集 F = {A→BC, C→D, AE→G}。因为（42）₊F=U，且满足最小性，所以其为 R 的候选码；</p><ul class="exam-opts"><li><b>A</b> (AB)⁺_F</li><li><b>B</b> (AD)⁺_F</li><li><b>C</b> (AE)⁺_F</li><li><b>D</b> (CD)⁺_F</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">候选码判定要求属性闭包能推导出全部属性U，且真子集不满足该条件。AE仅出现在函数依赖左部，推导后可覆盖全部属性U，是该关系唯一的候选码。</p></details></div></details></details><details class="exam-year" data-exam-year="2019年5月"><summary><span class="exam-year-name">2019年5月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2019年5月-045"><summary><span class="exam-no">第 45 题</span><span class="exam-stem-peek">若要将部门表Demp中name列的修改权限赋予用户Ming，并允许Ming将该限授予他人，完整SQL语句：GRANT U…</span></summary><div class="exam-q-body"><p class="exam-stem">若要将部门表Demp中name列的修改权限赋予用户Ming，并允许Ming将该限授予他人，完整SQL语句：GRANT UPDATE(name) ON TABLE Demp TO Ming （）</p><ul class="exam-opts"><li><b>A</b> FOR ALL</li><li><b>B</b> CASCADE</li><li><b>C</b> WITH GRANT OPTION</li><li><b>D</b> WITH CHECK OPTION</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">SQL授权语法中，WITH GRANT OPTION用于赋予被授权用户将该权限转授给其他用户的能力；CASCADE用于级联删除操作，WITH CHECK OPTION用于视图的数据写入约束校验。</p></details></div></details><details class="exam-q" data-exam-id="2019年5月-042"><summary><span class="exam-no">第 42 题</span><span class="exam-stem-peek">给定关系模式R＜U，F＞，其中：属性集U={A,B,C,D,E},函数依赖集F={AC→B,B→DE}。关系R（）。</span></summary><div class="exam-q-body"><p class="exam-stem">给定关系模式R＜U，F＞，其中：属性集U={A,B,C,D,E},函数依赖集F={AC→B,B→DE}。关系R（）。</p><ul class="exam-opts"><li><b>A</b> 只有1个候选关键字AC</li><li><b>B</b> 只有1个候选关键字AB</li><li><b>C</b> 有2个候选关键字AC和BC</li><li><b>D</b> 有2个候选关键字AC和AB</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">属性A、C从未出现在函数依赖的右部，必然属于候选键；AC可以推导出B，再由B推导出D、E，能覆盖全部属性U，因此AC是唯一候选关键字。</p></details></div></details></details></details><details class="exam-subject" data-exam-subject="案例"><summary><span class="exam-subject-name">📋 案例分析</span><span class="exam-subject-n">2 题</span><span class="exam-subject-tip">情景简答 · 采分点三色标记</span></summary><div class="exam-bar"><span class="exam-bar-label">📋 案例分析</span><span class="exam-bar-stat">共 <b>2</b> 题 · 情景简答</span></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">19</span>考点：数据库性能优化 / 备份与恢复 / 安全性与完整性 / 并发控制<br>📅 时间：2026-04-20 上午 📍 地点：集团运维值班室<br>👤 人物：甘工（乙方·系统分析师）、邓经理（甲方·运维经理）、丁工（乙方·测试负责人）、郑专员（甲方·合规专员）<br>⚡ 冲突：报表 15 秒、导入变慢 27 分钟、误删 2 万条只恢复出一半<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：邓经理把三个问题一起抛出来：&quot;统计报表十五秒；批量导入十万条话单从三分钟变成二十七分钟；上周误删两万条工单，备份只恢复到四个小时前，还少了一截。&quot; 丁工补了一句：&quot;还有安全扫描——坐席能查到别的地市的客户。&quot; 郑专员脸色不好看：&quot;个人信息出问题，是要上报的。&quot; 甘工一看就知道：这三件事看着不相干，其实都指向数据库性能、备份恢复与安全控制的同一套短板。<br>补充资料：3 分钟变成 27 分钟；③一次误操作删除了当天 2 万条工单，靠备份恢复了 4 小时前的数据，仍丢失部分工单；④安全扫描发现坐席可查询非授权地市的客户信息。<br>问题 1：（1）分析查询慢与导入慢的原因，给出优化措施；<br>问题 2：（2）说明数据库备份与恢复的主要方式，并设计本项目的备份策略（含 RPO/RTO）；<br>问题 3：（3）说明数据库安全性与完整性控制措施，解决越权查询问题；<br>问题 4：（4）说明并发控制的主要机制。</p><ul class="exam-questions"><li><b>问题 1</b> （1）分析查询慢与导入慢的原因，给出优化措施；</li><li><b>问题 2</b> （2）说明数据库<strong>备份与恢复</strong>的主要方式，并设计本项目的备份策略（含 RPO/RTO）；</li><li><b>问题 3</b> （3）说明数据库<strong>安全性</strong>与<strong>完整性</strong>控制措施，解决越权查询问题；</li><li><b>问题 4</b> （4）说明并发控制的主要机制。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）性能问题与优化）：<br>- 🟢 加分：解析·数据库运维题要&quot;原因分析 + 具体参数/策略 + RPO/RTO 量化&quot;。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🔴 核心（2）备份恢复与策略）：<br>问题 3｜参考答案要点：<br>- 🔴 核心：🔴 核心（3）安全与完整性）：<br>问题 4｜参考答案要点：<br>- 🔴 核心：🔴 核心（4）并发控制）：主要机制为封锁（共享锁 S / 排他锁 X，以及意向锁）与封锁协议（一级/二级/三级、两段锁协议 2PL）、事务隔离级别（读未提交/读已提交/可重复读/串行化）、MVCC 多版本并发控制、乐观锁（版本号）与悲观锁、死锁检测与解除（超时、等待图、回滚牺牲者）。</div></details></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">22</span>📅 时间：2026-04-11 下午 3 点 📍 地点：甲方运维值班室<br>👤 人物：邓经理（甲方·运维经理）、甘工（乙方·系统分析师）、丁工（乙方·测试负责人）、郑专员（合规部）<br>⚡ 冲突：运维人员误执行删除语句，删除当天 2 万条工单；靠备份只恢复到 4 小时前，且恢复后仍缺数据<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：邓经理满头大汗：&quot;我本来想删测试库的，连接串选错了，直接把生产工单表 2 万条记录删了！&quot; 大家赶紧恢复：全备份是昨晚 22:00 的，差异备份中午 12:00，binlog 从 12:00 开始归档——恢复到 11:40 左右就断了，因为 binlog 归档是每 30 分钟一次，最后 20 分钟的事务丢失。 郑专员随后追问：&quot;恢复过程有没有留痕？被删的客户信息有没有可能已经外泄？&quot; 甘工意识到：这次事故暴露的不只是&quot;误操作&quot;，而是备份策略、权限管控与审计三方面的系统性缺口。<br>补充资料：全量备份 → 每日 22:00 一次 → 每周一次 + 每日差异备；事务日志归档 → 每 30 分钟 → ≤5 分钟（准实时）；延迟从库 → 无 → 延迟 1~2 小时（防误删）；恢复演练 → 从未演练 → 每月一次并出报告；RPO → 实测约 20 分钟 → ≤5 分钟；RTO → 未测 → ≤30 分钟 误删影响：删除工单 2 万条，恢复点距事故 20 分钟，丢失约 20 分钟数据。<br>问题 1：（1）说明数据库备份的类型与恢复方式，指出本例备份策略的缺陷并重新设计（含 RPO/RTO）；<br>问题 2：（2）说明并发控制与事务的基本机制，说明删除类操作应如何防护；<br>问题 3：（3）说明数据库安全性控制措施，防止误操作与越权；<br>问题 4：（4）说明安全审计与私有信息保护在本例中的要求。</p><ul class="exam-questions"><li><b>问题 1</b> （1）说明<strong>数据库备份</strong>的类型与<strong>恢复</strong>方式，指出本例备份策略的缺陷并重新设计（含 RPO/RTO）；</li><li><b>问题 2</b> （2）说明<strong>并发控制</strong>与<strong>事务</strong>的基本机制，说明删除类操作应如何防护；</li><li><b>问题 3</b> （3）说明数据库<strong>安全性</strong>控制措施，防止误操作与越权；</li><li><b>问题 4</b> （4）说明安全审计与私有信息保护在本例中的要求。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）备份与恢复）：<br>- 🟢 加分：解析·恢复与安全题要&quot;策略量化 + 防护机制 + 审计合规&quot;，并指出系统性问题。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🔴 核心（2）并发控制与事务）：事务具有 ACID（原子性、一致性、隔离性、持久性）。并发控制机制：封锁（S 锁/X 锁、意向锁）、三级封锁协议与两段锁协议（2PL）、隔离级别（读未提交/读已提交/可重复读/串行化）、MVCC、乐观锁（版本号）/悲观锁、死锁检测与解除。<br>问题 3｜参考答案要点：<br>- 🔴 核心：🔴 核心（3）安全性措施）：①用户标识与鉴别（强口令 + 双因素）；②存取控制：DAC（自主授权）、MAC（安全标签强制）、RBAC（角色授权）——运维按角色授予最小权限，生产库高危权限单独审批；③视图机制（脱敏视图）；④审计（所有敏感操作留痕）；⑤加密（传输 TLS、存储加密、备份加密）；⑥备份与恢复安全（备份介质访问控制）。<br>问题 4｜参考答案要点：<br>- 🔴 核心：🟡 支撑（4）审计与私有信息保护）：</div></details></div></details><details class="exam-subject" data-exam-subject="论文"><summary><span class="exam-subject-name">📄 论文写作</span><span class="exam-subject-n">2 题</span><span class="exam-subject-tip">论述题 · 先写再看题</span></summary><div class="exam-bar"><span class="exam-bar-label">📄 论文写作</span><span class="exam-bar-stat">共 <b>2</b> 题 · 论述题</span></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与设计、开发的商务智能系统项目（项目的背景、业务决策需求、数据来源、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细论述 BI 系统的架构设计（数据源层、ETL 层、数据仓库层、分析层、展示层）、核心功能模块（多维分析、OLAP、数据挖掘、报表引擎）的设计要点。</li><li><b>问题 3</b> 结合项目实践，论述 BI 系统实施过程中的数据整合难点、分析模型设计问题及解决方法，总结系统对企业决策的支撑效果。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 数据工程</span><span class="exam-lv">⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与管理和开发的软件项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 简要描述多源数据集成的3种核心技术。</li><li><b>问题 3</b> 具体阐述项目中如何应用多源数据集成方法完成方案设计与功能实现。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 数据工程</span><span class="exam-lv">⭐⭐⭐</span></div></div></details></section>
+    <section class="exam" id="exam" data-exam-chapter="5" data-exam-hour="H10"><div class="exam-bar"><span class="exam-bar-label">📚 历年真题</span><span class="exam-bar-stat">本章共 <b>52</b> 题 · 本学时 <b>17</b> 题（其余见同章其他学时）</span><span class="exam-bar-ops"><button type="button" class="exam-op" data-exam-all="1">全部展开</button><button type="button" class="exam-op" data-exam-all="0">全部收起</button></span></div><details class="exam-subject" data-exam-subject="综合知识"><summary><span class="exam-subject-name">📝 综合知识</span><span class="exam-subject-n">17 题</span><span class="exam-subject-tip">按年份展开 · 单题可点开看答案</span></summary><details class="exam-year" data-exam-year="2026年5月"><summary><span class="exam-year-name">2026年5月</span><span class="exam-year-n">3 题</span></summary><details class="exam-q" data-exam-id="2026年5月-060"><summary><span class="exam-no">第 60 题</span><span class="exam-stem-peek">关系存在重复组，首先违反</span></summary><div class="exam-q-body"><p class="exam-stem">关系存在重复组，首先违反</p><ul class="exam-opts"><li><b>A</b> 1NF</li><li><b>B</b> 2NF</li><li><b>C</b> 3NF</li><li><b>D</b> BCNF</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">第一范式（1NF）强制要求：数据表不允许存在重复组、多值属性。</p></details></div></details><details class="exam-q" data-exam-id="2026年5月-016"><summary><span class="exam-no">第 16 题</span><span class="exam-stem-peek">关系数据库规范化，3NF在2NF基础上消除了</span></summary><div class="exam-q-body"><p class="exam-stem">关系数据库规范化，3NF在2NF基础上消除了</p><ul class="exam-opts"><li><b>A</b> 部分函数依赖</li><li><b>B</b> 传递函数依赖</li><li><b>C</b> 多值依赖</li><li><b>D</b> 非平凡依赖</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">2NF消除非主属性部分函数依赖，3NF在此基础上消除非主属性传递函数依赖。</p></details></div></details><details class="exam-q" data-exam-id="2026年5月-001"><summary><span class="exam-no">第 1 题</span><span class="exam-stem-peek">在数据库事务隔离级别中，可避免脏读、不可重复读和幻读的是</span></summary><div class="exam-q-body"><p class="exam-stem">在数据库事务隔离级别中，可避免脏读、不可重复读和幻读的是</p><ul class="exam-opts"><li><b>A</b> 读未提交</li><li><b>B</b> 读已提交</li><li><b>C</b> 可重复读</li><li><b>D</b> 串行化</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">串行化是数据库最高隔离级别，可彻底规避脏读、不可重复读、幻读三类问题。</p></details></div></details></details><details class="exam-year" data-exam-year="2025年5月"><summary><span class="exam-year-name">2025年5月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2025年5月-037"><summary><span class="exam-no">第 37 题</span><span class="exam-stem-peek">数据库事务日志最核心的作用是 ()</span></summary><div class="exam-q-body"><p class="exam-stem">数据库事务日志最核心的作用是 ()</p><ul class="exam-opts"><li><b>A</b> 提供数据库操作的详细审计跟踪，用于安全监控和合规性检查。</li><li><b>B</b> 优化数据库查询性能，通过记录访问模式辅助查询优化器。</li><li><b>C</b> 作为主数据库与从数据库之间进行数据同步的主要依据（在复制场景中）。</li><li><b>D</b> 在系统发生故障（如崩溃）后，确保数据库能够恢复到一致且正确的状态，保障数据的持久性和事务的原子性。</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">数据库日志其实有很多作用，这里说的 ACD 都是其作用，但最核心的作用，还是用来保证数据的持久性，发生故障用来恢复数据。</p></details></div></details><details class="exam-q" data-exam-id="2025年5月-018"><summary><span class="exam-no">第 18 题</span><span class="exam-stem-peek">数据库的CAP理论中，分布式系统无法同时满足（）</span></summary><div class="exam-q-body"><p class="exam-stem">数据库的CAP理论中，分布式系统无法同时满足（）</p><ul class="exam-opts"><li><b>A</b> 分区容忍与一致性</li><li><b>B</b> 一致性和可用性</li><li><b>C</b> 一致性和分区容忍</li><li><b>D</b> 可用性和分区容忍</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">CAP理论是对于一个分布式系统，一致性（Consistency）、可用性（Availability）和分区容忍性（Partition tolerance）三个特点最多只能三选二。如果选择了 CP（一致性和分区容忍性），那么就要考虑 ACID。如果选择了 AP（可用性和分区容忍性），那么就要考虑 BASE。如果选择了 CA（一致性和可用性），那么在网络发生分区的时候，将不能进行完整的操作。分布式系统，肯定是要满足 P 的，那就是 CA 无法再同时满足了。</p></details></div></details></details><details class="exam-year" data-exam-year="2024年5月"><summary><span class="exam-year-name">2024年5月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2024年5月-071"><summary><span class="exam-no">第 71 题</span><span class="exam-stem-peek">（）是指一个事务的执行不能被其他事务干扰。它要求即使有多个事务并发执行，但看上去每个事务按串行调度执行一样。这一性质也称…</span></summary><div class="exam-q-body"><p class="exam-stem">（）是指一个事务的执行不能被其他事务干扰。它要求即使有多个事务并发执行，但看上去每个事务按串行调度执行一样。这一性质也称为可串行性，也就是说，系统允许的任何交错操作调度等价于一个串行调度。</p><ul class="exam-opts"><li><b>A</b> 原子性</li><li><b>B</b> 隔离性</li><li><b>C</b> 一致性</li><li><b>D</b> 持久性</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">事务隔离性要求多并发事务的执行互相隔离、互不干扰，交错调度的最终执行效果和事务依次串行执行完全一致；原子性指事务不可拆分，一致性指数据约束前后保持合法，持久性指提交的修改永久生效。</p></details></div></details><details class="exam-q" data-exam-id="2024年5月-049"><summary><span class="exam-no">第 49 题</span><span class="exam-stem-peek">数据分片将数据库整体逻辑结构分解为合适的逻辑单位（片段），然后由分布模式来定义片段及其副本在各场地的物理分布，数据分片原…</span></summary><div class="exam-q-body"><p class="exam-stem">数据分片将数据库整体逻辑结构分解为合适的逻辑单位（片段），然后由分布模式来定义片段及其副本在各场地的物理分布，数据分片原则不包括（）</p><ul class="exam-opts"><li><b>A</b> 完整性</li><li><b>B</b> 重构性</li><li><b>C</b> 相交性</li><li><b>D</b> 不相交性</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">数据分片需要满足完整性、可重构性、不相交性，相交性会造成数据重复冗余、一致性冲突，不属于分片设计原则。</p></details></div></details></details><details class="exam-year" data-exam-year="2023年5月"><summary><span class="exam-year-name">2023年5月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2023年5月-045"><summary><span class="exam-no">第 45 题</span><span class="exam-stem-peek">某银行信息管理系统采用分布式数据库系统，以便对本地储户的存储业务能够在本地正常进行而不依赖于其他场地的数据库，这种情况称…</span></summary><div class="exam-q-body"><p class="exam-stem">某银行信息管理系统采用分布式数据库系统，以便对本地储户的存储业务能够在本地正常进行而不依赖于其他场地的数据库，这种情况称为分布式数据库的（ ）。</p><ul class="exam-opts"><li><b>A</b> 分布性</li><li><b>B</b> 共享性</li><li><b>C</b> 可用性</li><li><b>D</b> 自治性</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">分布式数据库的自治性特征，允许每个场地独立管理本地数据、开展本地业务，不会因其他站点故障中断本地服务。</p></details></div></details><details class="exam-q" data-exam-id="2023年5月-042"><summary><span class="exam-no">第 42 题</span><span class="exam-stem-peek">给定关系模式R(U, F)，其中U为属性集，U={X, Y, Z}，F是U上的一组函数依赖。函数依赖的公理系统(Arms…</span></summary><div class="exam-q-body"><p class="exam-stem">给定关系模式R(U, F)，其中U为属性集，U={X, Y, Z}，F是U上的一组函数依赖。函数依赖的公理系统(Armstrong公理系统)中的（ ）是指“若X→Y，X→Z，则X→YZ为F所蕴涵”。</p><ul class="exam-opts"><li><b>A</b> 自反率</li><li><b>B</b> 传递率</li><li><b>C</b> 增广律</li><li><b>D</b> 合并规则</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">合并规则定义为：若X→Y、X→Z同时成立，可推导出X→YZ；自反律是属性子集推导规则，增广律用于给左右侧添加属性，传递律用于链式依赖推导。</p></details></div></details></details><details class="exam-year" data-exam-year="2022年5月"><summary><span class="exam-year-name">2022年5月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2022年5月-045"><summary><span class="exam-no">第 45 题</span><span class="exam-stem-peek">在数据库的安全机制中。通过提供（45）供第三方开发人员通用进行数据更新，从而保证数据库的关系模式不被第三方所获取。</span></summary><div class="exam-q-body"><p class="exam-stem">在数据库的安全机制中。通过提供（45）供第三方开发人员通用进行数据更新，从而保证数据库的关系模式不被第三方所获取。</p><ul class="exam-opts"><li><b>A</b> 索引</li><li><b>B</b> 视图</li><li><b>C</b> 触发器</li><li><b>D</b> 存储过程</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">存储过程可被第三方主动调用完成指定的数据更新操作，调用方无需接触底层数据表结构，能隐藏关系模式细节；触发器是被动触发执行，不符合第三方主动调用的场景。</p></details></div></details><details class="exam-q" data-exam-id="2022年5月-042"><summary><span class="exam-no">第 42 题</span><span class="exam-stem-peek">给定关系 R（A,B,C,D,E）和关系 S（D,E,F,G），对其进行自然连接运算 R ⋈S 后其结果集的属性列为（4…</span></summary><div class="exam-q-body"><p class="exam-stem">给定关系 R（A,B,C,D,E）和关系 S（D,E,F,G），对其进行自然连接运算 R ⋈S 后其结果集的属性列为（42）。</p><ul class="exam-opts"><li><b>A</b> R.A, R.B, R.C, R.D, R.E, S.D, S.E</li><li><b>B</b> R.A, R.B, R.C, R.D, R.E, S.F, S.G</li><li><b>C</b> R.A, R.B, R.C, R.D, R.E, S.E, S.F</li><li><b>D</b> R.A, R.B, RC, R.D, R.E, S.D, S.E, S.F, S.G</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">自然连接会合并两个关系的相同属性并去重，保留R全部属性A、B、C、D、E，再追加S中不重复的F、G，最终属性序列为R.A,R.B,R.C,R.D,R.E,S.F,S.G。</p></details></div></details></details><details class="exam-year" data-exam-year="2021年5月"><summary><span class="exam-year-name">2021年5月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2021年5月-045"><summary><span class="exam-no">第 45 题</span><span class="exam-stem-peek">分布式数据库系统中的两阶段提交协议（Two Phase Commit Protocol，2PC 协议）包含协调者和参与者…</span></summary><div class="exam-q-body"><p class="exam-stem">分布式数据库系统中的两阶段提交协议（Two Phase Commit Protocol，2PC 协议）包含协调者和参与者，通常有如下操作指令。满足2PC的正常序列是（ ）。①协调者向参与者发prepare消息 ②参与者向协调者发回ready消息 ③参与者向协调者发回abort消息 ④协调者向参与者发commit消息 ⑤协调者向参与者发rollback消息</p><ul class="exam-opts"><li><b>A</b> ①②④</li><li><b>B</b> ①②⑤</li><li><b>C</b> ②③④</li><li><b>D</b> ②③⑤</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">事务正常成功执行的流程：表决阶段协调者发送prepare(①)，所有参与者返回ready(②)；执行阶段协调者下发commit(④)完成全局提交，abort和rollback属于异常回滚分支。</p></details></div></details><details class="exam-q" data-exam-id="2021年5月-042"><summary><span class="exam-no">第 42 题</span><span class="exam-stem-peek">在数据库系统中，视图实际上是一个（ ）。</span></summary><div class="exam-q-body"><p class="exam-stem">在数据库系统中，视图实际上是一个（ ）。</p><ul class="exam-opts"><li><b>A</b> 真实存在的表，并保存了待查询的数据</li><li><b>B</b> 真实存在的表，只有部分数据来源于基本表</li><li><b>C</b> 虚拟表，查询时只能从1个基本表中导出的表</li><li><b>D</b> 虚拟表，查询时可以从1个或多个基本表或视图中导出的表</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">视图是基于查询语句定义的虚拟表，不会物理存储数据，执行查询时会动态从一个或多个基本表、已创建的视图中生成结果集。</p></details></div></details></details><details class="exam-year" data-exam-year="2020年11月"><summary><span class="exam-year-name">2020年11月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2020年11月-045"><summary><span class="exam-no">第 45 题</span><span class="exam-stem-peek">数据的物理独立性和逻辑独立性分别是通过修改（45）来完成的。</span></summary><div class="exam-q-body"><p class="exam-stem">数据的物理独立性和逻辑独立性分别是通过修改（45）来完成的。</p><ul class="exam-opts"><li><b>A</b> 外模式与内模式之间的映像、模式与内模式之间的映像</li><li><b>B</b> 外模式与内模式之间的映像、外模式与模式之间的映像</li><li><b>C</b> 外模式与模式之间的映像、模式与内模式之间的映像</li><li><b>D</b> 模式与内模式之间的映像、外模式与模式之间的映像</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">物理独立性：物理存储（内模式）变化时，修改<strong>模式/内模式映像</strong>，上层逻辑结构不变，应用程序无需改动；逻辑独立性：全局逻辑（模式）变化时，修改<strong>外模式/模式映像</strong>，用户视图不变，应用程序无需改动。</p></details></div></details><details class="exam-q" data-exam-id="2020年11月-042"><summary><span class="exam-no">第 42 题</span><span class="exam-stem-peek">给定关系模式 R、&lt;U,F&gt;，其中：属性集 U={A,B,C,D,E,G}，函数依赖集 F = {A→BC, C→D, …</span></summary><div class="exam-q-body"><p class="exam-stem">给定关系模式 R、&lt;U,F&gt;，其中：属性集 U={A,B,C,D,E,G}，函数依赖集 F = {A→BC, C→D, AE→G}。因为（42）₊F=U，且满足最小性，所以其为 R 的候选码；</p><ul class="exam-opts"><li><b>A</b> (AB)⁺_F</li><li><b>B</b> (AD)⁺_F</li><li><b>C</b> (AE)⁺_F</li><li><b>D</b> (CD)⁺_F</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">候选码判定要求属性闭包能推导出全部属性U，且真子集不满足该条件。AE仅出现在函数依赖左部，推导后可覆盖全部属性U，是该关系唯一的候选码。</p></details></div></details></details><details class="exam-year" data-exam-year="2019年5月"><summary><span class="exam-year-name">2019年5月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2019年5月-045"><summary><span class="exam-no">第 45 题</span><span class="exam-stem-peek">若要将部门表Demp中name列的修改权限赋予用户Ming，并允许Ming将该限授予他人，完整SQL语句：GRANT U…</span></summary><div class="exam-q-body"><p class="exam-stem">若要将部门表Demp中name列的修改权限赋予用户Ming，并允许Ming将该限授予他人，完整SQL语句：GRANT UPDATE(name) ON TABLE Demp TO Ming （）</p><ul class="exam-opts"><li><b>A</b> FOR ALL</li><li><b>B</b> CASCADE</li><li><b>C</b> WITH GRANT OPTION</li><li><b>D</b> WITH CHECK OPTION</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">SQL授权语法中，WITH GRANT OPTION用于赋予被授权用户将该权限转授给其他用户的能力；CASCADE用于级联删除操作，WITH CHECK OPTION用于视图的数据写入约束校验。</p></details></div></details><details class="exam-q" data-exam-id="2019年5月-042"><summary><span class="exam-no">第 42 题</span><span class="exam-stem-peek">给定关系模式R＜U，F＞，其中：属性集U={A,B,C,D,E},函数依赖集F={AC→B,B→DE}。关系R（）。</span></summary><div class="exam-q-body"><p class="exam-stem">给定关系模式R＜U，F＞，其中：属性集U={A,B,C,D,E},函数依赖集F={AC→B,B→DE}。关系R（）。</p><ul class="exam-opts"><li><b>A</b> 只有1个候选关键字AC</li><li><b>B</b> 只有1个候选关键字AB</li><li><b>C</b> 有2个候选关键字AC和BC</li><li><b>D</b> 有2个候选关键字AC和AB</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">属性A、C从未出现在函数依赖的右部，必然属于候选键；AC可以推导出B，再由B推导出D、E，能覆盖全部属性U，因此AC是唯一候选关键字。</p></details></div></details></details></details><details class="exam-subject" data-exam-subject="案例"><summary><span class="exam-subject-name">📋 案例分析</span><span class="exam-subject-n">2 题</span><span class="exam-subject-tip">案例背景 · 题目 · 答案与解析</span></summary><div class="exam-bar"><span class="exam-bar-label">📋 案例分析</span><span class="exam-bar-stat">共 <b>2</b> 题 · 情景简答 · 采分点三色标记</span></div><div class="exam-q exam-q-case"><div class="case-head"><span class="exam-no">案例 19</span><span class="exam-tag">考点 · 性能优化、备份恢复与数据安全</span><span class="exam-lv">⭐⭐⭐</span></div><div class="case-meta"><span><strong>考点</strong>：数据库性能优化 / 备份与恢复 / 安全性与完整性 / 并发控制</span><span>📅 <strong>时间</strong>：2026-04-20 上午 📍 <strong>地点</strong>：集团运维值班室</span><span>👤 <strong>人物</strong>：甘工（乙方·系统分析师）、邓经理（甲方·运维经理）、丁工（乙方·测试负责人）、郑专员（甲方·合规专员）</span><span>⚡ <strong>冲突</strong>：报表 15 秒、导入变慢 27 分钟、误删 2 万条只恢复出一半</span><span><strong>难度</strong>：★★★　<strong>总分</strong>：25 分　<strong>建议用时</strong>：25 分钟</span></div><div class="case-scene"><div class="case-h">案例背景</div><strong>背景</strong>：邓经理把三个问题一起抛出来：&quot;统计报表十五秒；批量导入十万条话单从三分钟变成二十七分钟；上周误删两万条工单，备份只恢复到四个小时前，还少了一截。&quot; 丁工补了一句：&quot;还有安全扫描——坐席能查到别的地市的客户。&quot; 郑专员脸色不好看：&quot;个人信息出问题，是要上报的。&quot; 甘工一看就知道：这三件事看着不相干，其实都指向数据库<strong>性能、备份恢复与安全控制</strong>的同一套短板。<br><strong>补充资料</strong>：3 分钟变成 27 分钟；③一次误操作删除了当天 2 万条工单，靠备份恢复了 4 小时前的数据，仍丢失部分工单；④安全扫描发现坐席可查询非授权地市的客户信息。</div><div class="case-asks"><div class="case-h">题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">（1）分析查询慢与导入慢的原因，给出优化措施；</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">（2）说明数据库<strong>备份与恢复</strong>的主要方式，并设计本项目的备份策略（含 RPO/RTO）；</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">（3）说明数据库<strong>安全性</strong>与<strong>完整性</strong>控制措施，解决越权查询问题；</span></li><li><span class="case-ask-no">4</span><span class="case-ask-t">（4）说明<strong>并发控制</strong>的主要机制。</span></li></ul></div><details class="exam-ans"><summary>参考答案要点（三色标记）</summary><div class="exam-points"><strong>问题 1｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（1）性能问题与优化）：<br><strong>问题 2｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（2）备份恢复与策略）：<br><strong>问题 3｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（3）安全与完整性）：<br><strong>问题 4｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（4）并发控制）：主要机制为封锁（共享锁 S / 排他锁 X，以及意向锁）与封锁协议（一级/二级/三级、两段锁协议 2PL）、事务隔离级别（读未提交/读已提交/可重复读/串行化）、MVCC 多版本并发控制、乐观锁（版本号）与悲观锁、死锁检测与解除（超时、等待图、回滚牺牲者）。</div></details><details class="exam-ans"><summary>解析与加分项</summary><div class="exam-exp-more">- 🟢 加分：解析·数据库运维题要&quot;原因分析 + 具体参数/策略 + RPO/RTO 量化&quot;。</div></details></div><div class="exam-q exam-q-case"><div class="case-head"><span class="exam-no">案例 22</span><span class="exam-tag">考点 · 一次误删引发的恢复演练</span><span class="exam-lv">⭐⭐⭐</span></div><div class="case-meta"><span>📅 <strong>时间</strong>：2026-04-11 下午 3 点 📍 <strong>地点</strong>：甲方运维值班室</span><span>👤 <strong>人物</strong>：邓经理（甲方·运维经理）、甘工（乙方·系统分析师）、丁工（乙方·测试负责人）、郑专员（合规部）</span><span>⚡ <strong>冲突</strong>：运维人员误执行删除语句，删除当天 2 万条工单；靠备份只恢复到 4 小时前，且恢复后仍缺数据</span><span><strong>难度</strong>：★★★　<strong>总分</strong>：25 分　<strong>建议用时</strong>：25 分钟</span></div><div class="case-scene"><div class="case-h">案例背景</div><strong>背景</strong>：邓经理满头大汗：&quot;我本来想删测试库的，连接串选错了，直接把生产工单表 2 万条记录删了！&quot; 大家赶紧恢复：全备份是昨晚 22:00 的，差异备份中午 12:00，binlog 从 12:00 开始归档——<strong>恢复到 11:40 左右就断了</strong>，因为 binlog 归档是每 30 分钟一次，最后 20 分钟的事务丢失。 郑专员随后追问：&quot;恢复过程有没有留痕？被删的客户信息有没有可能已经外泄？&quot; 甘工意识到：这次事故暴露的不只是&quot;误操作&quot;，而是<strong>备份策略、权限管控与审计</strong>三方面的系统性缺口。<br><strong>补充资料</strong>：全量备份 → 每日 22:00 一次 → 每周一次 + 每日差异备；事务日志归档 → 每 30 分钟 → <strong>≤5 分钟</strong>（准实时）；延迟从库 → 无 → <strong>延迟 1~2 小时</strong>（防误删）；恢复演练 → 从未演练 → <strong>每月一次</strong>并出报告；RPO → 实测约 20 分钟 → <strong>≤5 分钟</strong>；RTO → 未测 → <strong>≤30 分钟</strong> <strong>误删影响</strong>：删除工单 2 万条，恢复点距事故 20 分钟，<strong>丢失约 20 分钟数据</strong>。</div><div class="case-asks"><div class="case-h">题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">（1）说明<strong>数据库备份</strong>的类型与<strong>恢复</strong>方式，指出本例备份策略的缺陷并重新设计（含 RPO/RTO）；</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">（2）说明<strong>并发控制</strong>与<strong>事务</strong>的基本机制，说明删除类操作应如何防护；</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">（3）说明数据库<strong>安全性</strong>控制措施，防止误操作与越权；</span></li><li><span class="case-ask-no">4</span><span class="case-ask-t">（4）说明<strong>安全审计</strong>与<strong>私有信息保护</strong>在本例中的要求。</span></li></ul></div><details class="exam-ans"><summary>参考答案要点（三色标记）</summary><div class="exam-points"><strong>问题 1｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（1）备份与恢复）：<br><strong>问题 2｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（2）并发控制与事务）：事务具有 ACID（原子性、一致性、隔离性、持久性）。并发控制机制：封锁（S 锁/X 锁、意向锁）、三级封锁协议与两段锁协议（2PL）、隔离级别（读未提交/读已提交/可重复读/串行化）、MVCC、乐观锁（版本号）/悲观锁、死锁检测与解除。<br><strong>问题 3｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（3）安全性措施）：①用户标识与鉴别（强口令 + 双因素）；②存取控制：DAC（自主授权）、MAC（安全标签强制）、RBAC（角色授权）——运维按角色授予最小权限，生产库高危权限单独审批；③视图机制（脱敏视图）；④审计（所有敏感操作留痕）；⑤加密（传输 TLS、存储加密、备份加密）；⑥备份与恢复安全（备份介质访问控制）。<br><strong>问题 4｜参考答案要点</strong>：<br>- 🔴 核心：🟡 支撑（4）审计与私有信息保护）：</div></details><details class="exam-ans"><summary>解析与加分项</summary><div class="exam-exp-more">- 🟢 加分：解析·恢复与安全题要&quot;策略量化 + 防护机制 + 审计合规&quot;，并指出系统性问题。</div></details></div></details><details class="exam-subject" data-exam-subject="论文"><summary><span class="exam-subject-name">📄 论文写作</span><span class="exam-subject-n">2 题</span><span class="exam-subject-tip">先看题 · 再看考点拆解</span></summary><div class="exam-bar"><span class="exam-bar-label">📄 论文写作</span><span class="exam-bar-stat">共 <b>2</b> 题 · 论述题 · 含考点拆解与教材知识点</span></div><div class="exam-q exam-q-essay"><div class="case-head"><span class="exam-no">论文 63</span><span class="exam-tag">方向 · 数据工程</span><span class="exam-lv">⭐</span><span class="essay-batch">2014年下半年（11月）</span></div><div class="case-asks"><div class="case-h">论文题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">概要叙述你参与设计、开发的商务智能系统项目（项目的背景、业务决策需求、数据来源、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">详细论述 BI 系统的架构设计（数据源层、ETL 层、数据仓库层、分析层、展示层）、核心功能模块（多维分析、OLAP、数据挖掘、报表引擎）的设计要点。</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">结合项目实践，论述 BI 系统实施过程中的数据整合难点、分析模型设计问题及解决方法，总结系统对企业决策的支撑效果。</span></li></ul></div><details class="exam-ans" open><summary>试题背景</summary><div class="essay-bg">商务智能（BI）系统通过数据抽取、转换、加载（ETL）、数据仓库建设、多维分析与报表展示，为企业决策提供数据支撑。</div></details><details class="exam-ans"><summary>考点拆解（三色标记）</summary><div class="exam-keypoints"><strong>问题 1｜概要叙述项目与你承担的工作</strong>：<br>- 🔴 核心：点明近三年内一个具体的真实项目：项目名称、背景、发起单位、规模、周期、交付成果（教材 22.4-9/22.4-10 明确要求，泛泛而谈会判虚构）<br>- 🔴 核心：明确「我」在项目中的角色与承担的主要工作，并站在系统分析师视角论述，而非单纯开发实现视角<br>- 🟡 支撑：说明项目的组织结构、开发体制与技术栈，为后文论述做铺垫<br>- 🟢 加分：点出项目与本题主题的直接关联（如本项目正是因 XX 痛点才需要 XX 方法）<br><strong>问题 2｜理论知识 / 方法论述</strong>：<br>- 🔴 核心：BI 系统的架构设计数据源层——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：BI 系统的ETL 层——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：BI 系统的数据仓库层——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🟡 支撑：BI 系统的分析层<br>- 🟡 支撑：BI 系统的展示层<br>- 🟡 支撑：BI 系统的核心功能模块多维分析<br>- 🟢 加分：给出与其他候选方案的取舍依据，体现选型判断力<br><strong>问题 3｜项目实践落地与复盘</strong>：<br>- 🔴 核心：给出可量化的落地效果（缺陷率/响应时间/迭代周期/资源成本等具体数据），而非「取得了良好效果」<br>- 🔴 核心：诚实分析存在的 2~3 个真实问题，并给出对应的改进措施——教材强调这才是用心的内容<br>- 🟡 支撑：结合具体实例说明措施的实施过程（怎么做的，而非教科书式罗列）<br>- 🟢 加分：总结经验教训与后续演进方向，体现复盘能力<br>- 🟡 支撑：论述 BI 系统实施过程中的数据整合难点<br>- 🟡 支撑：论述 BI 系统实施过程中的分析模型设计问题及解决方法</div></details><details class="exam-ans"><summary>教材知识点</summary><div class="exam-textbook"><span class="tb-chap">第 5 章 · 数据库系统</span><a class="tb-hour" href="H09.html">H09</a><a class="tb-hour" href="H10.html">H10</a><a class="tb-hour" href="H11.html">H11</a></div></details></div><div class="exam-q exam-q-essay"><div class="case-head"><span class="exam-no">论文 19</span><span class="exam-tag">方向 · 数据工程</span><span class="exam-lv">⭐⭐⭐</span><span class="essay-batch">2024年上半年</span></div><div class="case-asks"><div class="case-h">论文题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">概要叙述你参与管理和开发的软件项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">简要描述多源数据集成的3种核心技术。</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">具体阐述项目中如何应用多源数据集成方法完成方案设计与功能实现。</span></li></ul></div><details class="exam-ans" open><summary>试题背景</summary><div class="essay-bg">多源数据集成能够将分散、格式多样的数据整合至统一存储载体，实现数据交换，消除数据冗余与不一致问题，提升数据质量，为业务决策提供支撑。</div></details><details class="exam-ans"><summary>考点拆解（三色标记）</summary><div class="exam-keypoints"><strong>问题 1｜概要叙述项目与你承担的工作</strong>：<br>- 🔴 核心：点明近三年内一个具体的真实项目：项目名称、背景、发起单位、规模、周期、交付成果（教材 22.4-9/22.4-10 明确要求，泛泛而谈会判虚构）<br>- 🔴 核心：明确「我」在项目中的角色与承担的主要工作，并站在系统分析师视角论述，而非单纯开发实现视角<br>- 🟡 支撑：说明项目的组织结构、开发体制与技术栈，为后文论述做铺垫<br>- 🟢 加分：点出项目与本题主题的直接关联（如本项目正是因 XX 痛点才需要 XX 方法）<br><strong>问题 2｜理论知识 / 方法论述</strong>：<br>- 🔴 核心：简要描述多源数据集成的3种核心技术——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🟢 加分：给出与其他候选方案的取舍依据，体现选型判断力<br><strong>问题 3｜项目实践落地与复盘</strong>：<br>- 🔴 核心：给出可量化的落地效果（缺陷率/响应时间/迭代周期/资源成本等具体数据），而非「取得了良好效果」<br>- 🔴 核心：诚实分析存在的 2~3 个真实问题，并给出对应的改进措施——教材强调这才是用心的内容<br>- 🟡 支撑：结合具体实例说明措施的实施过程（怎么做的，而非教科书式罗列）<br>- 🟢 加分：总结经验教训与后续演进方向，体现复盘能力<br>- 🟡 支撑：项目中如何应用多源数据集成方法完成方案设计与功能实现</div></details><details class="exam-ans"><summary>教材知识点</summary><div class="exam-textbook"><span class="tb-chap">第 5 章 · 数据库系统</span><a class="tb-hour" href="H09.html">H09</a><a class="tb-hour" href="H10.html">H10</a><a class="tb-hour" href="H11.html">H11</a></div></details></div></details></section>
     <div class="wrongbook"></div>
     <div class="keyhint">
   <span class="keyhint-title">键盘快捷键</span>
@@ -3305,7 +3487,9 @@ html{scroll-padding-top:80px}
     init() {
       const root = document.querySelector('.exam')
       if (!root) return
-      const chapter = root.dataset.examChapter || 'x'
+      // ⚠️ 专项页 / 全真模拟页没有 data-exam-chapter（无教材章），
+      //    旧写法一律退化成 'x' → H42~H48 共用同一个记忆键、互相串状态。
+      const chapter = root.dataset.examChapter || root.dataset.examHour || 'x'
 
       // 恢复上次展开状态：{ "H07": { "2025年5月": true, ... } }
       const saved = store.get(this.KEY, {}) || {}
@@ -3325,6 +3509,7 @@ html{scroll-padding-top:80px}
       const seen = store.get('examSeen', {}) || {}
       root.querySelectorAll('.exam-q').forEach(qd => {
         const qid = qd.dataset.examId
+        if (!qid) return
         if (seen[qid]) {
           const a = qd.querySelector('.exam-ans')
           if (a) a.open = true
@@ -3340,12 +3525,17 @@ html{scroll-padding-top:80px}
         btn.addEventListener('click', e => {
           e.preventDefault()
           const openAll = btn.dataset.examAll === '1'
-          root.querySelectorAll('.exam-subject,.exam-year').forEach(d => { d.open = openAll })
-          root.querySelectorAll('.exam-ans').forEach(d => {
-            d.open = openAll
-            if (openAll && d.parentElement.dataset.examId) seen[d.parentElement.dataset.examId] = 1
-          })
-          if (openAll) store.set('examSeen', seen)
+          // ⚠️ 必须把 .exam-q 也列进来：只开 .exam-subject/.exam-year/.exam-ans
+          //    时，单题仍折叠 → 答案藏在关闭的单题内，"全部展开"名不副实。
+          root.querySelectorAll('.exam-subject,.exam-year,.exam-q,.exam-ans')
+            .forEach(d => { d.open = openAll })
+          if (openAll) {
+            // ⚠️ 旧的 `d.parentElement.dataset.examId` 取到的是 .exam-q-body（无 id），
+            //    会把 seen[undefined] 写进 localStorage。改为直接从 .exam-q 取。
+            root.querySelectorAll('.exam-q[data-exam-id]')
+              .forEach(qd => { seen[qd.dataset.examId] = 1 })
+            store.set('examSeen', seen)
+          }
           // 同步年份级记忆
           root.querySelectorAll('.exam-year').forEach(y => { mine[y.dataset.examYear] = y.open })
           saved[chapter] = mine
@@ -3392,7 +3582,7 @@ html{scroll-padding-top:80px}
   // ══════════════════════════════════════════
   // 8. mermaid 渲染（自定义墨绿主题，与正文同色系）
   // ══════════════════════════════════════════
-  // 站点配色（与 design.css 的令牌保持一致）
+  // 站点配色（与设计令牌保持一致 —— 改主题色时这里要同步）
   const MERMAID_LIGHT = {
     bg: '#f2f0e9', fg: '#1b211c', line: '#cdc9bd',
     accent: '#3d5a40', accent2: '#5a8a62', accent3: '#7ea888',

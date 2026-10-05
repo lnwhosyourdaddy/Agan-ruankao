@@ -7,7 +7,7 @@
 <title>第 19 小时 · 信息安全（一）· 安全体系与加密认证 · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
-<meta name="build-stamp" content="2026-10-05 11:44:51">
+<meta name="build-stamp" content="2026-10-05 15:47:03">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -405,16 +405,21 @@ img{max-width:100%;height:auto}
   border-radius:100px;
   font-size:12.5px;color:var(--accent);font-weight:600;
 }
-.cover h1{
+/* ⚠️ 封面主标题刻意用 <div> 而不是 <h1>：index.md 正文自带 `# 阿甘系分 · 48 小时
+   冲刺手册`，若封面也用 h1，一页会出现两个 h1（语义/SEO 上都是错的）。
+   视觉与 h1 完全一致 —— 字号、颜色、以及那道 72px 短横线都在下面显式声明。 */
+.cover .cover-title{
   font-size:3.5em;font-weight:800;letter-spacing:-1.6px;
   color:var(--accent);line-height:1.14;margin-bottom:16px;
 }
-/* ⚠️ 封面 h1 也继承 `.main h1::after` 那道 56px 短横线，但它是 display:block 的
-   固定宽块级元素 —— 文字居中不代表块级元素居中，会贴到左边。
-   修法：给封面这条短横线加 margin-left/right:auto 让它真正居中。 */
-.cover h1::after{
-  margin-left:auto;margin-right:auto;
+/* 复刻 `.main h1::after` 的短横线（<div> 不继承 h1 的伪元素），并水平居中 —— */
+/* 文字居中不代表块级元素居中，不加 auto 会贴到左边。 */
+.cover .cover-title::after{
+  content:'';display:block;
   width:72px;height:3px;
+  background:var(--accent);
+  margin:.5em auto 0;
+  border-radius:2px;
 }
 .cover .sub{
   font-size:1.2em;color:var(--fg-2);
@@ -845,7 +850,7 @@ pre{
   .nav{margin-left:auto;gap:2px}
   .main{padding:32px 0 80px}
   .cover{padding:48px 0 40px;margin-bottom:40px}
-  .cover h1{font-size:2.4em;letter-spacing:-.8px}
+  .cover .cover-title{font-size:2.4em;letter-spacing:-.8px}
   .cover .sub{font-size:1.05em;margin-bottom:24px}
   .cover-stats{gap:10px;margin-bottom:28px}
   .stat{min-width:76px;padding:10px 14px}
@@ -901,7 +906,7 @@ pre{
   h1,h2,h3,h4{break-after:avoid;page-break-after:avoid}
 
   .cover{padding:0 0 18px;margin-bottom:18px;text-align:left}
-  .cover h1{font-size:24pt}
+  .cover .cover-title{font-size:24pt}
   .cover-stats,.cover-badge,.cta-row{display:none !important}
 
   a[href^="http"]:after{
@@ -1256,16 +1261,14 @@ html.focus-mode .chapbar{opacity:.35;pointer-events:none}
 }
 /* 章首横幅：h1 上方加一条"章号 + 主色渐变"的装饰带，
    让每页开头有一个明确的"进入新章"仪式感（原来 h1 直接浮在正文里）。
-   ⚠️ 必须排除 .cover —— 封面 h1 自己已有顶部留白与居中布局，
-   加上横幅会与下方分隔线叠成双线（首页曾出现两条横线紧挨）。 */
-.main h1:not(.cover h1)::before{
+   （封面主标题已改成 <div class="cover-title">，不再匹配 .main h1，无需再排除。） */
+.main h1::before{
   content:'';display:block;
   width:100%;height:4px;
   background:linear-gradient(90deg,var(--accent) 0%,var(--accent-3) 42%,transparent 88%);
   border-radius:2px;
   margin-bottom:.62em;
 }
-.cover h1::before{content:none}
 .main h1::after{
   content:'';display:block;
   width:56px;height:3px;
@@ -2087,6 +2090,185 @@ html{scroll-padding-top:80px}
   .exam-stem,.exam-opts li{font-size:9.5pt}
   .exam-exp{font-size:8.5pt;color:#333}
 }
+
+/* ══════════════════════════════════════════════════════════════
+   真题区块扩展 v2 · 案例 / 论文卡片 + 全真模拟卷
+   与既有 .exam-* 体系同源：米白卡底 + 左侧 4px 色条 + 墨绿强调色
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── 案例 / 论文卡片（非 <details>，直接展开的题卡）── */
+.exam-q-case,.exam-q-essay{
+  padding:14px 16px 4px;
+  background:var(--bg-card);
+}
+.exam-q-case:hover,.exam-q-essay:hover{background:var(--bg-alt)}
+.case-head{
+  display:flex;flex-wrap:wrap;align-items:center;gap:6px;
+  padding-bottom:10px;margin-bottom:10px;
+  border-bottom:1px dashed var(--line);
+}
+.case-head .exam-no{min-width:0}
+.case-h{
+  display:flex;align-items:center;gap:6px;
+  margin:12px 0 6px;font-size:12.5px;font-weight:700;
+  letter-spacing:.06em;color:var(--accent);
+}
+.case-h::before{
+  content:'';width:4px;height:13px;border-radius:2px;
+  background:var(--accent);flex:0 0 auto;
+}
+
+/* 情景要素（📅时间 / 📍地点 / 👤人物 / ⚡冲突 / 难度总分用时） */
+.case-meta{
+  display:flex;flex-direction:column;gap:2px;
+  padding:9px 12px;margin:.4em 0 .2em;
+  background:var(--bg-alt);
+  border-left:3px solid var(--line-2);
+  border-radius:0 var(--radius-sm) var(--radius-sm) 0;
+  font-size:12.5px;line-height:1.75;color:var(--fg-3);
+}
+.case-meta strong{color:var(--fg-2);font-weight:600}
+
+/* 案例背景正文 */
+.case-scene{
+  margin:.2em 0 1em;padding:12px 14px;
+  background:var(--accent-soft);
+  border-left:3px solid var(--accent-3);
+  border-radius:0 var(--radius) var(--radius) 0;
+  font-size:14.5px;line-height:1.92;color:var(--fg);
+}
+.case-scene strong{color:var(--accent);font-weight:700}
+
+/* 题目列表 */
+.case-asks{margin:.2em 0 1em}
+ul.exam-questions{
+  list-style:none;margin:.4em 0;padding:0;
+}
+ul.exam-questions>li{
+  display:flex;gap:10px;align-items:flex-start;
+  padding:9px 0;border-bottom:1px solid var(--line);
+  font-size:14.5px;line-height:1.88;color:var(--fg);
+}
+ul.exam-questions>li:last-child{border-bottom:0}
+ul.exam-questions>li::before{content:none !important}
+.case-ask-no{
+  flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;
+  min-width:24px;height:22px;margin-top:3px;padding:0 6px;
+  border-radius:6px;background:var(--accent-soft-2);color:var(--accent);
+  font-family:var(--sans);font-size:11.5px;font-weight:700;
+  font-variant-numeric:tabular-nums;
+}
+.case-ask-t{flex:1;min-width:0}
+.case-ask-t strong{color:var(--accent);font-weight:700}
+
+/* ── 答案 / 解析 / 考点拆解 / 教材知识点 ── */
+.exam-points,.exam-keypoints,.exam-exp-more,.essay-bg{
+  padding:12px 14px;margin:8px 0;
+  border-left:4px solid var(--tip-line);
+  border-radius:0 var(--radius) var(--radius) 0;
+  background:var(--tip-bg);
+  font-size:14px;line-height:1.92;color:var(--fg);
+}
+.exam-keypoints{border-left-color:var(--accent-2);background:var(--accent-soft)}
+.exam-exp-more{border-left-color:var(--warn-line);background:var(--warn-bg);color:var(--warn-fg)}
+.essay-bg{border-left-color:var(--line-2);background:var(--bg-alt);color:var(--fg-2)}
+.exam-points strong,.exam-keypoints strong{color:var(--accent);font-weight:700}
+
+/* 教材知识点：章标签 + 可点学时胶囊 */
+.exam-textbook{
+  display:flex;flex-wrap:wrap;align-items:center;gap:6px;
+  padding:12px 14px;margin:8px 0;
+  background:var(--mem-bg);
+  border-left:4px solid var(--mem-line);
+  border-radius:0 var(--radius) var(--radius) 0;
+}
+.tb-chap{
+  font-family:var(--serif);font-size:14px;font-weight:700;color:var(--mem-fg);
+}
+.tb-hour{
+  display:inline-flex;align-items:center;
+  padding:2px 9px;border-radius:999px;
+  background:var(--bg-card);border:1px solid var(--mem-line);
+  color:var(--mem-fg) !important;font-size:12px;font-weight:600;
+  text-decoration:none;
+}
+.tb-hour:hover{background:var(--mem-line);color:var(--bg-card) !important;border-color:var(--mem-fg)}
+
+/* 模拟卷成绩/批次等小标签 */
+.exam-lv{
+  font-family:var(--sans);font-size:11.5px;color:var(--gold);
+  letter-spacing:.04em;white-space:nowrap;
+}
+.exam-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.exam-tag-en{
+  background:var(--mem-bg);color:var(--mem-fg);border-color:var(--mem-line);
+}
+.essay-batch{
+  font-family:var(--sans);font-size:11.5px;color:var(--fg-3);
+  padding:1px 8px;border:1px solid var(--line);border-radius:999px;
+}
+.exam-kp{
+  margin:.5em 0 0;font-family:var(--sans);font-size:12.5px;color:var(--fg-3);
+}
+.exam-kp::before{content:'🎯 ';font-size:11px}
+
+/* ── 全真模拟卷头部 ── */
+.mock-head{
+  padding:16px 18px;margin:0 0 12px;
+  border-radius:var(--radius-lg);
+  background:linear-gradient(135deg,var(--accent) 0%,var(--accent-2) 100%);
+  color:var(--fg-inv);
+  box-shadow:var(--shadow-2);
+}
+.mock-title{
+  font-family:var(--serif);font-size:17px;font-weight:700;
+  letter-spacing:.02em;line-height:1.5;
+}
+.mock-sub{
+  margin-top:6px;font-size:12.5px;line-height:1.75;
+  color:rgba(251,250,246,.82);
+}
+.mock-sub b{color:#fff;font-variant-numeric:tabular-nums}
+.mock-items{
+  border:1px solid var(--line);border-radius:var(--radius);
+  background:var(--bg-card);overflow:hidden;
+}
+.mock-items>.exam-q:first-child{border-top:0}
+.exam-mock .exam-subject{margin-top:14px}
+.exam-subj-only{display:block}
+
+/* 模拟卷内的综合知识答题条 */
+.exam-mock .exam-bar{
+  border-radius:var(--radius) var(--radius) 0 0;
+  border-bottom:0;
+}
+
+/* ── 窄屏 ── */
+@media(max-width:760px){
+  .exam-q-case,.exam-q-essay{padding:12px 12px 4px}
+  .case-scene,.exam-points,.exam-keypoints,.exam-exp-more,.essay-bg,.exam-textbook{
+    padding:10px 11px;font-size:13.5px;
+  }
+  ul.exam-questions>li{gap:8px;font-size:13.5px}
+  .mock-head{padding:13px 14px}
+  .mock-title{font-size:15.5px}
+}
+
+/* ── 打印：卡片不要再折叠，色条与底色转灰阶 ── */
+@media print{
+  .mock-head{background:none !important;color:#000 !important;border:1pt solid #999;
+    box-shadow:none}
+  .mock-title{font-size:13pt}
+  .mock-sub{color:#333 !important}
+  .exam-q-case,.exam-q-essay{break-inside:avoid;page-break-inside:avoid}
+  .case-scene,.exam-points,.exam-keypoints,.exam-exp-more,.essay-bg,.exam-textbook{
+    background:none !important;border-left:2pt solid #999 !important;
+  }
+  .exam-q-case,.exam-q-essay,.case-scene,.case-meta,ul.exam-questions>li{
+    font-size:9.5pt;
+  }
+  .tb-hour{color:#000 !important;border-color:#666}
+}
 </style>
 </head>
 <body>
@@ -2206,7 +2388,7 @@ html{scroll-padding-top:80px}
 <p>加密是对数据进行<strong>编码变换</strong>，使其看起来毫无含义，但同时仍保持<strong>可恢复</strong>形式的过程。</p>
 <p>被变换的数据称<strong>明文</strong>，变换后的数据称<strong>密文</strong>。</p>
 <p>加密机制是最广泛使用的安全机制，有助于保护信息的<strong>机密性</strong>和<strong>完整性</strong>，有助于识别信息来源。</p>
-<p>传统加密算法（两类）**</p>
+<p>传统加密算法（两类）</p>
 <p>· <strong>代换加密</strong>：用密文字母表<strong>代替</strong>明文字母——字母本身变，位置不变</p>
 <p>· <strong>置换加密</strong>：将明文字母<strong>重新排列</strong>——字母本身不变，位置变</p>
 <p>弱点：算法和密钥密切相关，可利用字母统计知识破译</p>
@@ -2248,7 +2430,7 @@ html{scroll-padding-top:80px}
 <p>③ 将数字信封和加密后的信息一起发送</p>
 <p>④ 接收方先用<strong>自己的私钥</strong>打开数字信封，得到对称密钥</p>
 <p>⑤ 再用对称密钥解开加密信息</p>
-<p>这种技术的安全性相当高。**</p>
+<p>这种技术的安全性相当高。</p>
 <p>💡 <strong>谁在用</strong>：<strong>HTTPS / SSL</strong>、<strong>PGP</strong>（邮件加密）都用混合加密。</p>
 <p>SSL 教材原话："发送时信息用<strong>对称密钥</strong>加密，对称密钥用<strong>非对称算法</strong>加密，再把两个包绑在一起传送过去。"</p>
 <h3 id="s9-2-2-认证技术-数字签名">9.2.2 认证技术 · 数字签名 ⭐</h3>
@@ -2306,7 +2488,7 @@ html{scroll-padding-top:80px}
 <p>· <strong>静态分发</strong>：预配置技术（点对点 / 一对多发 / 网格状）。<strong>银行清算、军事指挥、数据库系统中的主流技术</strong></p>
 <p>· <strong>动态分发</strong>："请求、分发"机制，用于建立<strong>实时通信中的会话密钥</strong></p>
 <p>· 无论静态或动态，都基于<strong>秘密信道（物理通道）</strong>进行</p>
-<p>信任逻辑：集中式的主管方管理模式 · 单位负责制 · 主内**</p>
+<p>信任逻辑：集中式的主管方管理模式 · 单位负责制 · 主内</p>
 <p>🌐PKI · 公钥基础设施</p>
 <p><strong>适用：开放网</strong>。解决了分发密钥时依赖秘密信道的问题。</p>
 <p><strong>基本构成</strong>：CA、数字证书库、<strong>密钥备份及恢复系统</strong>、<strong>证书作废系统</strong>、应用接口</p>
@@ -2406,7 +2588,7 @@ html{scroll-padding-top:80px}
 5. 第4步明确说明 This process is based on the outcome of (75)，即第75空承接第3步的产出，而第3步原文标注 known as hazard analysis，故第75空为hazard analysis（危害分析，选D）。
 原参考答案标注顺序D B C A B存在排版错位；经对原文逐空语义核对，第73空应为Risk decomposition(A)、第74空应为Risk reduction(C)、第75空应为hazard analysis(D)，正确顺序为D B A C D。
 （本题为第 2 空）</p><ul class="exam-opts"><li><b>A</b> Risk decomposition</li><li><b>B</b> Risk analysis</li><li><b>C</b> Risk reduction</li><li><b>D</b> Risk identification</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">本空考查第2步：This is a process of hazard assessment to decide which hazards are the most dangerous and/or the most likely to occur（评估隐患的危险程度与发生概率并排序），对应Risk analysis（风险分析，选B）。</p></details></div></details><details class="exam-q" data-exam-id="2023年5月-020"><summary><span class="exam-no">第 20 题</span><span class="exam-stem-peek">国密 SSL 证书采用（ ）公钥算法体系，支持 SM2，SM3，SM4 等国密算法安全协议，国密 SSL 证书可以满足政…</span></summary><div class="exam-q-body"><p class="exam-stem">国密 SSL 证书采用（ ）公钥算法体系，支持 SM2，SM3，SM4 等国密算法安全协议，国密 SSL 证书可以满足政府机构、事业单位、大型国企、金融银行等行业客户的国产化改造和国密算法合规需求。</p><ul class="exam-opts"><li><b>A</b> SM1</li><li><b>B</b> SM2</li><li><b>C</b> SM3</li><li><b>D</b> SM4</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">SSL证书依托非对称公钥算法实现身份签名与密钥协商，国密体系中SM2是非对称公钥算法，适配SSL证书体系；SM1/SM4是对称加密算法，SM3是摘要算法。</p></details></div></details><details class="exam-q" data-exam-id="2023年5月-007"><summary><span class="exam-no">第 7 题</span><span class="exam-stem-peek">在我国商用密码算法体系中：（ ）属于摘要算法。</span></summary><div class="exam-q-body"><p class="exam-stem">在我国商用密码算法体系中：（ ）属于摘要算法。</p><ul class="exam-opts"><li><b>A</b> SM2</li><li><b>B</b> SM3</li><li><b>C</b> SM4</li><li><b>D</b> SM9</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">国密算法分类：SM1、SM4、SM7为对称算法；SM2、SM9为非对称算法；SM3是哈希信息摘要算法，用于生成固定长度消息摘要。</p></details></div></details></details><details class="exam-year" data-exam-year="2022年5月"><summary><span class="exam-year-name">2022年5月</span><span class="exam-year-n">3 题</span></summary><details class="exam-q" data-exam-id="2022年5月-061"><summary><span class="exam-no">第 61 题</span><span class="exam-tag">两空单选</span><span class="exam-tag">2 空</span><span class="exam-stem-peek">信息系统的安全是个复杂的综合体，涉及系统的方方面面，其中（61）是指保护计算机设备、设施和其他媒体免遭地震、水灾、火灾、…</span></summary><div class="exam-q-body"><p class="exam-stem">信息系统的安全是个复杂的综合体，涉及系统的方方面面，其中<b class="exam-blank">（61）</b>是指保护计算机设备、设施和其他媒体免遭地震、水灾、火灾、有害气体和其他环境事故（例如，电磁辐射等）破坏的措施和过程。<b class="exam-blank">（62）</b>是计算机信息系统安全的重要环节，其实质是保证系统的正常运行，不因偶然的或恶意的侵扰而遭到破坏，使系统可靠、连续地运行，服务不被中断。
-（本题为第 2 空）</p><ul class="exam-opts"><li><b>A</b> 淘汰</li><li><b>B</b> 继承</li><li><b>C</b> 改造</li><li><b>D</b> 集成</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">实体安全聚焦硬件、物理设施抵御自然灾害、环境事故的防护；运行安全保障系统业务持续可靠运行，抵御意外或恶意侵扰避免服务中断；信息安全聚焦数据本身的机密性、完整性保护；人员安全针对操作人员权限与行为管控。</p></details></div></details><details class="exam-q" data-exam-id="2022年5月-009"><summary><span class="exam-no">第 9 题</span><span class="exam-stem-peek">确保计算机系统机密性的方法不包括（9）。</span></summary><div class="exam-q-body"><p class="exam-stem">确保计算机系统机密性的方法不包括（9）。</p><ul class="exam-opts"><li><b>A</b> 加密</li><li><b>B</b> 认证</li><li><b>C</b> 授权</li><li><b>D</b> 备份</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">备份是保证可靠性的。</p></details></div></details><details class="exam-q" data-exam-id="2022年5月-007"><summary><span class="exam-no">第 7 题</span><span class="exam-stem-peek">（7）不属于基于生物特征的认证技术。</span></summary><div class="exam-q-body"><p class="exam-stem">（7）不属于基于生物特征的认证技术。</p><ul class="exam-opts"><li><b>A</b> 指纹识别</li><li><b>B</b> 人脸识别</li><li><b>C</b> 口令</li><li><b>D</b> 虹膜识别</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">常识。</p></details></div></details></details><details class="exam-year" data-exam-year="2020年11月"><summary><span class="exam-year-name">2020年11月</span><span class="exam-year-n">5 题</span></summary><details class="exam-q" data-exam-id="2020年11月-018"><summary><span class="exam-no">第 18 题</span><span class="exam-stem-peek">在信息安全领域，基本的安全性原则包括保密性(Confidentiality)、完整性(Integrity) 和可用性(A…</span></summary><div class="exam-q-body"><p class="exam-stem">在信息安全领域，基本的安全性原则包括保密性(Confidentiality)、完整性(Integrity) 和可用性(Availability)。(18)就是破坏系统的可用性。</p><ul class="exam-opts"><li><b>A</b> XSS跨站脚本攻击</li><li><b>B</b> DoS拒绝服务攻击</li><li><b>C</b> CSRF跨站请求伪造攻击</li><li><b>D</b> 缓冲区溢出攻击</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">DoS拒绝服务攻击通过耗尽服务器资源、滥用协议缺陷，让系统无法向合法用户提供正常服务，直接破坏可用性；XSS、CSRF主要破坏身份认证与数据完整性，缓冲区溢出多用于权限提升攻击。</p></details></div></details><details class="exam-q" data-exam-id="2020年11月-013"><summary><span class="exam-no">第 13 题</span><span class="exam-stem-peek">以下关于软件著作权产生时间的叙述中，正确的是(13)。</span></summary><div class="exam-q-body"><p class="exam-stem">以下关于软件著作权产生时间的叙述中，正确的是(13)。</p><ul class="exam-opts"><li><b>A</b> 自软件首次公开发表时</li><li><b>B</b> 自开发者有开发意图时</li><li><b>C</b> 自软件开发完成之日时</li><li><b>D</b> 自软件著作权登记时</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">我国著作权采用自动保护原则，软件著作权在软件开发完成当日自动生效，发表、登记都不是著作权取得的前置条件。</p></details></div></details><details class="exam-q" data-exam-id="2020年11月-011"><summary><span class="exam-no">第 11 题</span><span class="exam-stem-peek">我国由国家版权局主管全国软件著作权登记管理工作，指定(11)为软件著作权登记机构。</span></summary><div class="exam-q-body"><p class="exam-stem">我国由国家版权局主管全国软件著作权登记管理工作，指定(11)为软件著作权登记机构。</p><ul class="exam-opts"><li><b>A</b> 著作权登记中心</li><li><b>B</b> 国家知识产权局</li><li><b>C</b> 中国版权保护中心</li><li><b>D</b> 国家专利局</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">国家版权局官方指定中国版权保护中心作为全国计算机软件著作权的唯一登记机构，负责软件著作权登记、合同备案等全流程登记业务。</p></details></div></details><details class="exam-q" data-exam-id="2020年11月-009"><summary><span class="exam-no">第 9 题</span><span class="exam-stem-peek">根据国际标准 ITUT X.509 规定，数字证书的一般格式中会包含认证机构的签名，该数据域的作用是(9)。</span></summary><div class="exam-q-body"><p class="exam-stem">根据国际标准 ITUT X.509 规定，数字证书的一般格式中会包含认证机构的签名，该数据域的作用是(9)。</p><ul class="exam-opts"><li><b>A</b> 用于标识颁发证书的权威机构 CA</li><li><b>B</b> 用于指示建立和签署证书的 CA 的 X.509 名字</li><li><b>C</b> 用于防止证书伪造</li><li><b>D</b> 用于传递 CA 的公钥</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">X.509证书中CA的数字签名可以验证证书内容未被篡改、签发主体可信，以此防范证书被伪造、篡改的风险。</p></details></div></details><details class="exam-q" data-exam-id="2020年11月-007"><summary><span class="exam-no">第 7 题</span><span class="exam-stem-peek">SHA-256 是(7)算法。</span></summary><div class="exam-q-body"><p class="exam-stem">SHA-256 是(7)算法。</p><ul class="exam-opts"><li><b>A</b> 加密</li><li><b>B</b> 数字签名</li><li><b>C</b> 认证</li><li><b>D</b> 报文摘要</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">SHA-256属于安全哈希（SHA）算法家族，是典型的报文摘要算法，可将任意长度输入生成固定长度的哈希摘要，用于数据完整性校验。</p></details></div></details></details><details class="exam-year" data-exam-year="2019年5月"><summary><span class="exam-year-name">2019年5月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2019年5月-009"><summary><span class="exam-no">第 9 题</span><span class="exam-stem-peek">数字签名是对以数字形式存储的消息进行某种处理，产生一种类似于传统手书签名功效的信息处理过程。数字签名标准DSS中使用的签…</span></summary><div class="exam-q-body"><p class="exam-stem">数字签名是对以数字形式存储的消息进行某种处理，产生一种类似于传统手书签名功效的信息处理过程。数字签名标准DSS中使用的签名算法DSA是基于ElGamal和Schnorr两个方案而设计的。当DSA对消息m的签名验证结果为True，也不能说明（）。</p><ul class="exam-opts"><li><b>A</b> 接收的消息m无伪造</li><li><b>B</b> 接收的消息m无篡改</li><li><b>C</b> 接收的消息m无错误</li><li><b>D</b> 接收的消息m无泄密</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">数字签名可以实现防伪造、防篡改、传输纠错、发送方抗抵赖，但无法保障消息的保密性（防泄密需要依靠加密技术实现，签名使用的公钥是公开的）。</p></details></div></details><details class="exam-q" data-exam-id="2019年5月-007"><summary><span class="exam-no">第 7 题</span><span class="exam-stem-peek">若甲、乙采用非对称密钥体系进行保密通信，甲用乙的公钥加密数据文件，乙使用（）来对数据文件进行解密。</span></summary><div class="exam-q-body"><p class="exam-stem">若甲、乙采用非对称密钥体系进行保密通信，甲用乙的公钥加密数据文件，乙使用（）来对数据文件进行解密。</p><ul class="exam-opts"><li><b>A</b> 甲的公钥</li><li><b>B</b> 甲的私钥</li><li><b>C</b> 乙的公钥</li><li><b>D</b> 乙的私钥</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">非对称加密的核心特性：公钥公开用于加密，仅对应的私有密钥能完成解密；使用乙的公钥加密的数据，只能用乙保管的私钥解密。</p></details></div></details></details></details><details class="exam-subject" data-exam-subject="案例"><summary><span class="exam-subject-name">📋 案例分析</span><span class="exam-subject-n">3 题</span><span class="exam-subject-tip">情景简答 · 采分点三色标记</span></summary><div class="exam-bar"><span class="exam-bar-label">📋 案例分析</span><span class="exam-bar-stat">共 <b>3</b> 题 · 情景简答</span></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">38</span>考点：对称与非对称加密 / 混合加密 / 数字签名与认证 / 密钥管理 / 国密<br>📅 时间：2025-10-20 上午 📍 地点：集团信息安全评审<br>👤 人物：甘工（乙方·系统分析师）、郑专员（甲方·合规专员）、邓经理（甲方·运维经理）、徐总监（甲方·数智化信息部总监）<br>⚡ 冲突：录音、坐席登录、系统间接口三类对象都要保护，还要求优先用国密<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：郑专员把清单往桌上一推：&quot;录音、坐席登录、系统间接口——这三类都要说清楚怎么保护。还有，尽量用国密。&quot; 邓经理犯愁：&quot;录音一年四个 T，全量加密会不会影响性能？&quot; 徐总监补了一句：&quot;坐席还得能登录、能查看，不能一锁了之。&quot; 甘工在白板上分了三栏：录音、身份、接口。他知道，这三类对象的保护方式完全不同——量大走对称、认证与签名走非对称、两者结合才是常态。<br>补充资料：本次需重点设计录音存储、坐席身份认证与工单系统、计费系统之间的接口调用。 已知约束：录音量大需高效加密；坐席分布在多职场；接口需防篡改与防抵赖；集团要求优先采用国产密码算法（SM2/SM3/SM4）。<br>问题 1：（1）比较对称加密与非对称加密的原理、典型算法、优缺点；<br>问题 2：（2）为上述三类对象分别设计加密与认证方案；<br>问题 3：（3）说明密钥管理的主要内容与本项目做法。</p><ul class="exam-questions"><li><b>问题 1</b> （1）比较<strong>对称加密与非对称加密</strong>的原理、典型算法、优缺点；</li><li><b>问题 2</b> （2）为上述三类对象分别设计加密与认证方案；</li><li><b>问题 3</b> （3）说明密钥管理的主要内容与本项目做法。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）两类加密）：<br>- 🟢 加分：解析·加密题要&quot;原理对比 + 三类场景方案 + 密钥管理&quot;，混合加密是必答点。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🔴 核心（2）三类方案）：<br>问题 3｜参考答案要点：<br>- 🔴 核心：🔴 核心（3）密钥管理）：内容包括密钥生成、存储、分发、使用、更新（轮换）、备份与恢复、撤销与销毁、审计，以及密钥与数据分离。</div></details></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">40</span>考点：系统故障模型 / 可靠性指标与冗余计算 / 灾难恢复规划 / 安全审计与私有信息保护<br>📅 时间：2025-12-18 上午 📍 地点：项目组 + 甲方（容灾方案评审）<br>👤 人物：甘工（乙方·系统分析师）、邓经理（甲方·运维经理）、徐总监（甲方·数智化信息部总监）、徐总（甲方·分管副总）<br>⚡ 冲突：核心链路要求可用度不低于 99.9%，但当前串联链路算下来只有 96.5%<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：徐总问得很直接：&quot;万一机房出事，电话还能不能打通？&quot; 邓经理把三个环节的可用度写出来：接入网关 99.0%、AI 应答 98.0%、数据库 99.5%。 彭工补了一句：&quot;串在一起乘一下，只有 96.5%，离要求的 99.9% 差得远。&quot; 徐总监看向甘工：&quot;那要怎么补？&quot; 甘工知道，这是典型的可靠性计算 + 冗余设计问题——而且补哪儿最有效，是有讲究的。<br>补充资料：*串联组成（任一失效则链路不可用）。集团要求链路可用度不低于 0.99。此外需制定灾难恢复规划，并满足等保三级的安全审计与个人信息保护要求。<br>问题 1：（1）计算该串联链路的可靠度，判断是否满足要求；若对最薄弱环节做并联冗余，计算新的可靠度；<br>问题 2：（2）说明系统故障模型与常见可靠性指标（MTBF、MTTR、MTTF、可用性）；<br>问题 3：（3）说明灾难恢复规划（DRP）与业务持续性规划（BCP）的主要内容；<br>问题 4：（4）说明安全审计与私有信息保护的主要措施。</p><ul class="exam-questions"><li><b>问题 1</b> （1）计算该串联链路的可靠度，判断是否满足要求；若对最薄弱环节做<strong>并联冗余</strong>，计算新的可靠度；</li><li><b>问题 2</b> （2）说明<strong>系统故障模型</strong>与常见<strong>可靠性指标</strong>（MTBF、MTTR、MTTF、可用性）；</li><li><b>问题 3</b> （3）说明<strong>灾难恢复规划（DRP）</strong>与<strong>业务持续性规划（BCP）</strong>的主要内容；</li><li><b>问题 4</b> （4）说明安全审计与私有信息保护的主要措施。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）可靠性计算）：<br>- 🟢 加分：解析·可靠性必须给出计算过程；DRP/BCP 要区分&quot;恢复 IT&quot;与&quot;维持业务&quot;。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🔴 核心（2）故障模型与指标）：<br>问题 3｜参考答案要点：<br>- 🔴 核心：🔴 核心（3）DRP 与 BCP）：<br>问题 4｜参考答案要点：<br>- 🔴 核心：🔴 核心（4）安全审计与私有信息保护）：</div></details></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">42</span>📅 时间：2026-05-21 📍 地点：灾备演练现场（主备机房）<br>👤 人物：邓经理（甲方·运维经理）、甘工（乙方·系统分析师）、徐总监（甲方·数智化信息部总监）、徐总（视频观摩）、郑专员（甲方·合规专员）<br>⚡ 冲突：演练时&quot;切到备中心&quot;用了 47 分钟，远超目标的 1 分钟；更糟的是切换后有 800 条工单状态对不上<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：演练总指挥宣布&quot;主中心故障&quot;，邓经理开始切换。四十多分钟后，业务才勉强恢复——远超 1 分钟的目标。 复盘时问题一条条冒出来：备中心的应用版本比主中心旧；数据库是异步复制，切换时最后几十秒的事务没同步过来，导致 800 条工单状态不一致；DNS 缓存没提前降级，切换后部分坐席仍连到主中心；更尴尬的是，备中心的配置中心里还写着主中心的地址。 徐总在视频那头只问了一句：&quot;真出事的时候，是不是也这样？&quot; 甘工知道，没演练过的灾备等于没有灾备——这次演练最大的价值，就是把&quot;纸面上的双活&quot;打成原形。<br>补充资料：RTO → ≤1 分钟 → 47 分钟 → 极大 → 人工切换、无编排；RPO → ≤5 分钟 → 约 40 秒数据丢失 → 部分达标 → 异步复制；数据一致性 → 100% → 800 条工单状态不一致 → 不符 → 复制延迟未对账；版本一致性 → 主备同版本 → 备中心版本落后 → 不符 → 发布未覆盖备中心；DNS 切换 → 自动 → 依赖缓存失效 → 不符 → TTL 未提前降低 改进：版本同步发布、核心数据半同步、VIP/GSLB 自动切流、配置主备同步、一键编排、切换后自动对账。<br>问题 1：（1）说明容灾与业务持续性的概念，以及 RTO/RPO 的含义；<br>问题 2：（2）分析本例切换失败与数据不一致的原因，给出改进后的容灾方案；<br>问题 3：（3）说明系统可靠性指标与提高可靠性的手段；<br>问题 4：（4）说明灾难恢复规划（DRP）与演练的要点。</p><ul class="exam-questions"><li><b>问题 1</b> （1）说明<strong>容灾</strong>与<strong>业务持续性</strong>的概念，以及 <strong>RTO/RPO</strong> 的含义；</li><li><b>问题 2</b> （2）分析本例切换失败与数据不一致的原因，给出<strong>改进后的容灾方案</strong>；</li><li><b>问题 3</b> （3）说明<strong>系统可靠性</strong>指标与提高可靠性的手段；</li><li><b>问题 4</b> （4）说明灾难恢复规划（DRP）与演练的要点。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）容灾与指标）：容灾是在灾难（机房故障、自然灾害、网络中断等）发生时保障信息系统与数据可恢复的能力体系；业务持续性（BCP）是保障关键业务在灾难期间持续运作的规划（不仅恢复 IT，还包括人员、流程、供应链替代）。<br>- 🟢 加分：解析·容灾题要&quot;指标 + 原因分析 + 改进 + 演练要点&quot;，原因分析是得分核心。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🟡 支撑（2）原因与改进）：<br>问题 3｜参考答案要点：<br>- 🔴 核心：🔴 核心（3）可靠性指标与手段）：指标——MTTF（不可修复件平均寿命）、MTBF（平均故障间隔）、MTTR（平均修复时间）、可用度 A = MTBF/(MTBF+MTTR)、可靠度 R(t)、失效率 λ；串联系统 R = ΠRi，并联系统 R = 1 − Π(1−Ri)。<br>问题 4｜参考答案要点：<br>- 🔴 核心：🔴 核心（4）DRP 与演练要点）：DRP 内容——风险评估与业务影响分析（BIA）、确定 RTO/RPO、选择恢复策略（备份/冷备/热备/双活/异地多活）、编制恢复流程与人员职责、制定回退与通信机制、明确演练与维护要求。</div></details></div></details><details class="exam-subject" data-exam-subject="论文"><summary><span class="exam-subject-name">📄 论文写作</span><span class="exam-subject-n">2 题</span><span class="exam-subject-tip">论述题 · 先写再看题</span></summary><div class="exam-bar"><span class="exam-bar-label">📄 论文写作</span><span class="exam-bar-stat">共 <b>2</b> 题 · 论述题</span></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与管理和开发的软件项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细论述业内常见的访问控制策略与实现机制。</li><li><b>问题 3</b> 说明项目选用的访问控制策略与机制，并做出综合评价。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 信息安全</span><span class="exam-lv">⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与设计、开发或运维的AI信息系统项目（项目的背景、业务功能、技术架构、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 结合AI系统的业务与技术特点，详细论述AI项目全生命周期的风险识别、风险分析、风险处置方法，以及安全管理体系的建设要点。</li><li><b>问题 3</b> 结合项目实践，论述你应对数据泄露、算法偏见、模型失效、恶意攻击等风险的具体措施，总结安全与风控工作的实施经验。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · AI治理与风险管理</span><span class="exam-lv">⭐⭐⭐</span></div></div></details></section>
+（本题为第 2 空）</p><ul class="exam-opts"><li><b>A</b> 淘汰</li><li><b>B</b> 继承</li><li><b>C</b> 改造</li><li><b>D</b> 集成</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">实体安全聚焦硬件、物理设施抵御自然灾害、环境事故的防护；运行安全保障系统业务持续可靠运行，抵御意外或恶意侵扰避免服务中断；信息安全聚焦数据本身的机密性、完整性保护；人员安全针对操作人员权限与行为管控。</p></details></div></details><details class="exam-q" data-exam-id="2022年5月-009"><summary><span class="exam-no">第 9 题</span><span class="exam-stem-peek">确保计算机系统机密性的方法不包括（9）。</span></summary><div class="exam-q-body"><p class="exam-stem">确保计算机系统机密性的方法不包括（9）。</p><ul class="exam-opts"><li><b>A</b> 加密</li><li><b>B</b> 认证</li><li><b>C</b> 授权</li><li><b>D</b> 备份</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">备份是保证可靠性的。</p></details></div></details><details class="exam-q" data-exam-id="2022年5月-007"><summary><span class="exam-no">第 7 题</span><span class="exam-stem-peek">（7）不属于基于生物特征的认证技术。</span></summary><div class="exam-q-body"><p class="exam-stem">（7）不属于基于生物特征的认证技术。</p><ul class="exam-opts"><li><b>A</b> 指纹识别</li><li><b>B</b> 人脸识别</li><li><b>C</b> 口令</li><li><b>D</b> 虹膜识别</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">常识。</p></details></div></details></details><details class="exam-year" data-exam-year="2020年11月"><summary><span class="exam-year-name">2020年11月</span><span class="exam-year-n">5 题</span></summary><details class="exam-q" data-exam-id="2020年11月-018"><summary><span class="exam-no">第 18 题</span><span class="exam-stem-peek">在信息安全领域，基本的安全性原则包括保密性(Confidentiality)、完整性(Integrity) 和可用性(A…</span></summary><div class="exam-q-body"><p class="exam-stem">在信息安全领域，基本的安全性原则包括保密性(Confidentiality)、完整性(Integrity) 和可用性(Availability)。(18)就是破坏系统的可用性。</p><ul class="exam-opts"><li><b>A</b> XSS跨站脚本攻击</li><li><b>B</b> DoS拒绝服务攻击</li><li><b>C</b> CSRF跨站请求伪造攻击</li><li><b>D</b> 缓冲区溢出攻击</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">DoS拒绝服务攻击通过耗尽服务器资源、滥用协议缺陷，让系统无法向合法用户提供正常服务，直接破坏可用性；XSS、CSRF主要破坏身份认证与数据完整性，缓冲区溢出多用于权限提升攻击。</p></details></div></details><details class="exam-q" data-exam-id="2020年11月-013"><summary><span class="exam-no">第 13 题</span><span class="exam-stem-peek">以下关于软件著作权产生时间的叙述中，正确的是(13)。</span></summary><div class="exam-q-body"><p class="exam-stem">以下关于软件著作权产生时间的叙述中，正确的是(13)。</p><ul class="exam-opts"><li><b>A</b> 自软件首次公开发表时</li><li><b>B</b> 自开发者有开发意图时</li><li><b>C</b> 自软件开发完成之日时</li><li><b>D</b> 自软件著作权登记时</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">我国著作权采用自动保护原则，软件著作权在软件开发完成当日自动生效，发表、登记都不是著作权取得的前置条件。</p></details></div></details><details class="exam-q" data-exam-id="2020年11月-011"><summary><span class="exam-no">第 11 题</span><span class="exam-stem-peek">我国由国家版权局主管全国软件著作权登记管理工作，指定(11)为软件著作权登记机构。</span></summary><div class="exam-q-body"><p class="exam-stem">我国由国家版权局主管全国软件著作权登记管理工作，指定(11)为软件著作权登记机构。</p><ul class="exam-opts"><li><b>A</b> 著作权登记中心</li><li><b>B</b> 国家知识产权局</li><li><b>C</b> 中国版权保护中心</li><li><b>D</b> 国家专利局</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">国家版权局官方指定中国版权保护中心作为全国计算机软件著作权的唯一登记机构，负责软件著作权登记、合同备案等全流程登记业务。</p></details></div></details><details class="exam-q" data-exam-id="2020年11月-009"><summary><span class="exam-no">第 9 题</span><span class="exam-stem-peek">根据国际标准 ITUT X.509 规定，数字证书的一般格式中会包含认证机构的签名，该数据域的作用是(9)。</span></summary><div class="exam-q-body"><p class="exam-stem">根据国际标准 ITUT X.509 规定，数字证书的一般格式中会包含认证机构的签名，该数据域的作用是(9)。</p><ul class="exam-opts"><li><b>A</b> 用于标识颁发证书的权威机构 CA</li><li><b>B</b> 用于指示建立和签署证书的 CA 的 X.509 名字</li><li><b>C</b> 用于防止证书伪造</li><li><b>D</b> 用于传递 CA 的公钥</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">X.509证书中CA的数字签名可以验证证书内容未被篡改、签发主体可信，以此防范证书被伪造、篡改的风险。</p></details></div></details><details class="exam-q" data-exam-id="2020年11月-007"><summary><span class="exam-no">第 7 题</span><span class="exam-stem-peek">SHA-256 是(7)算法。</span></summary><div class="exam-q-body"><p class="exam-stem">SHA-256 是(7)算法。</p><ul class="exam-opts"><li><b>A</b> 加密</li><li><b>B</b> 数字签名</li><li><b>C</b> 认证</li><li><b>D</b> 报文摘要</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">SHA-256属于安全哈希（SHA）算法家族，是典型的报文摘要算法，可将任意长度输入生成固定长度的哈希摘要，用于数据完整性校验。</p></details></div></details></details><details class="exam-year" data-exam-year="2019年5月"><summary><span class="exam-year-name">2019年5月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2019年5月-009"><summary><span class="exam-no">第 9 题</span><span class="exam-stem-peek">数字签名是对以数字形式存储的消息进行某种处理，产生一种类似于传统手书签名功效的信息处理过程。数字签名标准DSS中使用的签…</span></summary><div class="exam-q-body"><p class="exam-stem">数字签名是对以数字形式存储的消息进行某种处理，产生一种类似于传统手书签名功效的信息处理过程。数字签名标准DSS中使用的签名算法DSA是基于ElGamal和Schnorr两个方案而设计的。当DSA对消息m的签名验证结果为True，也不能说明（）。</p><ul class="exam-opts"><li><b>A</b> 接收的消息m无伪造</li><li><b>B</b> 接收的消息m无篡改</li><li><b>C</b> 接收的消息m无错误</li><li><b>D</b> 接收的消息m无泄密</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">数字签名可以实现防伪造、防篡改、传输纠错、发送方抗抵赖，但无法保障消息的保密性（防泄密需要依靠加密技术实现，签名使用的公钥是公开的）。</p></details></div></details><details class="exam-q" data-exam-id="2019年5月-007"><summary><span class="exam-no">第 7 题</span><span class="exam-stem-peek">若甲、乙采用非对称密钥体系进行保密通信，甲用乙的公钥加密数据文件，乙使用（）来对数据文件进行解密。</span></summary><div class="exam-q-body"><p class="exam-stem">若甲、乙采用非对称密钥体系进行保密通信，甲用乙的公钥加密数据文件，乙使用（）来对数据文件进行解密。</p><ul class="exam-opts"><li><b>A</b> 甲的公钥</li><li><b>B</b> 甲的私钥</li><li><b>C</b> 乙的公钥</li><li><b>D</b> 乙的私钥</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">非对称加密的核心特性：公钥公开用于加密，仅对应的私有密钥能完成解密；使用乙的公钥加密的数据，只能用乙保管的私钥解密。</p></details></div></details></details></details><details class="exam-subject" data-exam-subject="案例"><summary><span class="exam-subject-name">📋 案例分析</span><span class="exam-subject-n">3 题</span><span class="exam-subject-tip">案例背景 · 题目 · 答案与解析</span></summary><div class="exam-bar"><span class="exam-bar-label">📋 案例分析</span><span class="exam-bar-stat">共 <b>3</b> 题 · 情景简答 · 采分点三色标记</span></div><div class="exam-q exam-q-case"><div class="case-head"><span class="exam-no">案例 38</span><span class="exam-tag">考点 · 通话录音与坐席访问的加密认证设计</span><span class="exam-lv">⭐⭐⭐</span></div><div class="case-meta"><span><strong>考点</strong>：对称与非对称加密 / 混合加密 / 数字签名与认证 / 密钥管理 / 国密</span><span>📅 <strong>时间</strong>：2025-10-20 上午 📍 <strong>地点</strong>：集团信息安全评审</span><span>👤 <strong>人物</strong>：甘工（乙方·系统分析师）、郑专员（甲方·合规专员）、邓经理（甲方·运维经理）、徐总监（甲方·数智化信息部总监）</span><span>⚡ <strong>冲突</strong>：录音、坐席登录、系统间接口三类对象都要保护，还要求优先用国密</span><span><strong>难度</strong>：★★★　<strong>总分</strong>：25 分　<strong>建议用时</strong>：25 分钟</span></div><div class="case-scene"><div class="case-h">案例背景</div><strong>背景</strong>：郑专员把清单往桌上一推：&quot;录音、坐席登录、系统间接口——这三类都要说清楚怎么保护。还有，尽量用国密。&quot; 邓经理犯愁：&quot;录音一年四个 T，全量加密会不会影响性能？&quot; 徐总监补了一句：&quot;坐席还得能登录、能查看，不能一锁了之。&quot; 甘工在白板上分了三栏：录音、身份、接口。他知道，这三类对象的保护方式<strong>完全不同</strong>——量大走对称、认证与签名走非对称、两者结合才是常态。<br><strong>补充资料</strong>：本次需重点设计<strong>录音存储</strong>、<strong>坐席身份认证</strong>与工单系统、计费系统之间的接口调用<strong>。 已知约束：录音量大需高效加密；坐席分布在多职场；接口需防篡改与防抵赖；集团要求优先采用</strong>国产密码算法（SM2/SM3/SM4）。</div><div class="case-asks"><div class="case-h">题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">（1）比较<strong>对称加密与非对称加密</strong>的原理、典型算法、优缺点；</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">（2）为上述三类对象分别设计加密与认证方案；</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">（3）说明<strong>密钥管理</strong>的主要内容与本项目做法。</span></li></ul></div><details class="exam-ans"><summary>参考答案要点（三色标记）</summary><div class="exam-points"><strong>问题 1｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（1）两类加密）：<br><strong>问题 2｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（2）三类方案）：<br><strong>问题 3｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（3）密钥管理）：内容包括密钥生成、存储、分发、使用、更新（轮换）、备份与恢复、撤销与销毁、审计，以及密钥与数据分离。</div></details><details class="exam-ans"><summary>解析与加分项</summary><div class="exam-exp-more">- 🟢 加分：解析·加密题要&quot;原理对比 + 三类场景方案 + 密钥管理&quot;，混合加密是必答点。</div></details></div><div class="exam-q exam-q-case"><div class="case-head"><span class="exam-no">案例 40</span><span class="exam-tag">考点 · 容灾、可靠性与安全管理</span><span class="exam-lv">⭐⭐⭐</span></div><div class="case-meta"><span><strong>考点</strong>：系统故障模型 / 可靠性指标与冗余计算 / 灾难恢复规划 / 安全审计与私有信息保护</span><span>📅 <strong>时间</strong>：2025-12-18 上午 📍 <strong>地点</strong>：项目组 + 甲方（容灾方案评审）</span><span>👤 <strong>人物</strong>：甘工（乙方·系统分析师）、邓经理（甲方·运维经理）、徐总监（甲方·数智化信息部总监）、徐总（甲方·分管副总）</span><span>⚡ <strong>冲突</strong>：核心链路要求可用度不低于 99.9%，但当前串联链路算下来只有 96.5%</span><span><strong>难度</strong>：★★★　<strong>总分</strong>：25 分　<strong>建议用时</strong>：25 分钟</span></div><div class="case-scene"><div class="case-h">案例背景</div><strong>背景</strong>：徐总问得很直接：&quot;万一机房出事，电话还能不能打通？&quot; 邓经理把三个环节的可用度写出来：接入网关 99.0%、AI 应答 98.0%、数据库 99.5%。 彭工补了一句：&quot;串在一起乘一下，只有 96.5%，离要求的 99.9% 差得远。&quot; 徐总监看向甘工：&quot;那要怎么补？&quot; 甘工知道，这是典型的<strong>可靠性计算 + 冗余设计</strong>问题——而且补哪儿最有效，是有讲究的。<br><strong>补充资料</strong>：*串联组成（任一失效则链路不可用）。集团要求链路可用度不低于 <strong>0.99</strong>。此外需制定灾难恢复规划，并满足等保三级的安全审计与个人信息保护要求。</div><div class="case-asks"><div class="case-h">题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">（1）计算该串联链路的可靠度，判断是否满足要求；若对最薄弱环节做<strong>并联冗余</strong>，计算新的可靠度；</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">（2）说明<strong>系统故障模型</strong>与常见<strong>可靠性指标</strong>（MTBF、MTTR、MTTF、可用性）；</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">（3）说明<strong>灾难恢复规划（DRP）</strong>与<strong>业务持续性规划（BCP）</strong>的主要内容；</span></li><li><span class="case-ask-no">4</span><span class="case-ask-t">（4）说明<strong>安全审计</strong>与<strong>私有信息保护</strong>的主要措施。</span></li></ul></div><details class="exam-ans"><summary>参考答案要点（三色标记）</summary><div class="exam-points"><strong>问题 1｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（1）可靠性计算）：<br><strong>问题 2｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（2）故障模型与指标）：<br><strong>问题 3｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（3）DRP 与 BCP）：<br><strong>问题 4｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（4）安全审计与私有信息保护）：</div></details><details class="exam-ans"><summary>解析与加分项</summary><div class="exam-exp-more">- 🟢 加分：解析·可靠性必须给出计算过程；DRP/BCP 要区分&quot;恢复 IT&quot;与&quot;维持业务&quot;。</div></details></div><div class="exam-q exam-q-case"><div class="case-head"><span class="exam-no">案例 42</span><span class="exam-tag">考点 · 灾备演练暴露的真相</span><span class="exam-lv">⭐⭐⭐</span></div><div class="case-meta"><span>📅 <strong>时间</strong>：2026-05-21 📍 <strong>地点</strong>：灾备演练现场（主备机房）</span><span>👤 <strong>人物</strong>：邓经理（甲方·运维经理）、甘工（乙方·系统分析师）、徐总监（甲方·数智化信息部总监）、徐总（视频观摩）、郑专员（甲方·合规专员）</span><span>⚡ <strong>冲突</strong>：演练时&quot;切到备中心&quot;用了 47 分钟，远超目标的 1 分钟；更糟的是切换后有 800 条工单状态对不上</span><span><strong>难度</strong>：★★★　<strong>总分</strong>：25 分　<strong>建议用时</strong>：25 分钟</span></div><div class="case-scene"><div class="case-h">案例背景</div><strong>背景</strong>：演练总指挥宣布&quot;主中心故障&quot;，邓经理开始切换。四十多分钟后，业务才勉强恢复——<strong>远超 1 分钟的目标</strong>。 复盘时问题一条条冒出来：备中心的应用版本比主中心旧；数据库是<strong>异步复制</strong>，切换时最后几十秒的事务没同步过来，导致 800 条工单状态不一致；DNS 缓存没提前降级，切换后部分坐席仍连到主中心；更尴尬的是，<strong>备中心的配置中心里还写着主中心的地址</strong>。 徐总在视频那头只问了一句：&quot;真出事的时候，是不是也这样？&quot; 甘工知道，<strong>没演练过的灾备等于没有灾备</strong>——这次演练最大的价值，就是把&quot;纸面上的双活&quot;打成原形。<br><strong>补充资料</strong>：RTO → ≤1 分钟 → <strong>47 分钟</strong> → 极大 → 人工切换、无编排；RPO → ≤5 分钟 → 约 40 秒数据丢失 → 部分达标 → 异步复制；数据一致性 → 100% → 800 条工单状态不一致 → 不符 → 复制延迟未对账；版本一致性 → 主备同版本 → 备中心版本落后 → 不符 → 发布未覆盖备中心；DNS 切换 → 自动 → 依赖缓存失效 → 不符 → TTL 未提前降低 <strong>改进</strong>：版本同步发布、核心数据半同步、VIP/GSLB 自动切流、配置主备同步、一键编排、切换后自动对账。</div><div class="case-asks"><div class="case-h">题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">（1）说明<strong>容灾</strong>与<strong>业务持续性</strong>的概念，以及 <strong>RTO/RPO</strong> 的含义；</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">（2）分析本例切换失败与数据不一致的原因，给出<strong>改进后的容灾方案</strong>；</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">（3）说明<strong>系统可靠性</strong>指标与提高可靠性的手段；</span></li><li><span class="case-ask-no">4</span><span class="case-ask-t">（4）说明<strong>灾难恢复规划（DRP）</strong>与<strong>演练</strong>的要点。</span></li></ul></div><details class="exam-ans"><summary>参考答案要点（三色标记）</summary><div class="exam-points"><strong>问题 1｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（1）容灾与指标）：容灾是在灾难（机房故障、自然灾害、网络中断等）发生时保障信息系统与数据可恢复的能力体系；业务持续性（BCP）是保障关键业务在灾难期间持续运作的规划（不仅恢复 IT，还包括人员、流程、供应链替代）。<br><strong>问题 2｜参考答案要点</strong>：<br>- 🔴 核心：🟡 支撑（2）原因与改进）：<br><strong>问题 3｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（3）可靠性指标与手段）：指标——MTTF（不可修复件平均寿命）、MTBF（平均故障间隔）、MTTR（平均修复时间）、可用度 A = MTBF/(MTBF+MTTR)、可靠度 R(t)、失效率 λ；串联系统 R = ΠRi，并联系统 R = 1 − Π(1−Ri)。<br><strong>问题 4｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（4）DRP 与演练要点）：DRP 内容——风险评估与业务影响分析（BIA）、确定 RTO/RPO、选择恢复策略（备份/冷备/热备/双活/异地多活）、编制恢复流程与人员职责、制定回退与通信机制、明确演练与维护要求。</div></details><details class="exam-ans"><summary>解析与加分项</summary><div class="exam-exp-more">- 🟢 加分：解析·容灾题要&quot;指标 + 原因分析 + 改进 + 演练要点&quot;，原因分析是得分核心。</div></details></div></details><details class="exam-subject" data-exam-subject="论文"><summary><span class="exam-subject-name">📄 论文写作</span><span class="exam-subject-n">2 题</span><span class="exam-subject-tip">先看题 · 再看考点拆解</span></summary><div class="exam-bar"><span class="exam-bar-label">📄 论文写作</span><span class="exam-bar-stat">共 <b>2</b> 题 · 论述题 · 含考点拆解与教材知识点</span></div><div class="exam-q exam-q-essay"><div class="case-head"><span class="exam-no">论文 79</span><span class="exam-tag">方向 · 信息安全</span><span class="exam-lv">⭐</span><span class="essay-batch">2010年上半年</span></div><div class="case-asks"><div class="case-h">论文题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">概要叙述你参与管理和开发的软件项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">详细论述业内常见的访问控制策略与实现机制。</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">说明项目选用的访问控制策略与机制，并做出综合评价。</span></li></ul></div><details class="exam-ans" open><summary>试题背景</summary><div class="essay-bg">访问控制是保障系统资源不被非法使用的核心机制，也是信息安全的重要组成部分。</div></details><details class="exam-ans"><summary>考点拆解（三色标记）</summary><div class="exam-keypoints"><strong>问题 1｜概要叙述项目与你承担的工作</strong>：<br>- 🔴 核心：点明近三年内一个具体的真实项目：项目名称、背景、发起单位、规模、周期、交付成果（教材 22.4-9/22.4-10 明确要求，泛泛而谈会判虚构）<br>- 🔴 核心：明确「我」在项目中的角色与承担的主要工作，并站在系统分析师视角论述，而非单纯开发实现视角<br>- 🟡 支撑：说明项目的组织结构、开发体制与技术栈，为后文论述做铺垫<br>- 🟢 加分：点出项目与本题主题的直接关联（如本项目正是因 XX 痛点才需要 XX 方法）<br><strong>问题 2｜理论知识 / 方法论述</strong>：<br>- 🔴 核心：业内常见的访问控制策略与实现机制——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🟢 加分：给出与其他候选方案的取舍依据，体现选型判断力<br><strong>问题 3｜项目实践落地与复盘</strong>：<br>- 🔴 核心：给出可量化的落地效果（缺陷率/响应时间/迭代周期/资源成本等具体数据），而非「取得了良好效果」<br>- 🔴 核心：诚实分析存在的 2~3 个真实问题，并给出对应的改进措施——教材强调这才是用心的内容<br>- 🟡 支撑：结合具体实例说明措施的实施过程（怎么做的，而非教科书式罗列）<br>- 🟢 加分：总结经验教训与后续演进方向，体现复盘能力<br>- 🟡 支撑：项目选用的访问控制策略与机制<br>- 🟡 支撑：项目选用的并做出综合评价</div></details><details class="exam-ans"><summary>教材知识点</summary><div class="exam-textbook"><span class="tb-chap">第 9 章 · 信息安全</span><a class="tb-hour" href="H19.html">H19</a><a class="tb-hour" href="H20.html">H20</a></div></details></div><div class="exam-q exam-q-essay"><div class="case-head"><span class="exam-no">论文 07</span><span class="exam-tag">方向 · AI治理与风险管理</span><span class="exam-lv">⭐⭐⭐</span><span class="essay-batch">2026年上半年（机考）第二批</span></div><div class="case-asks"><div class="case-h">论文题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">概要叙述你参与设计、开发或运维的AI信息系统项目（项目的背景、业务功能、技术架构、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">结合AI系统的业务与技术特点，详细论述AI项目全生命周期的风险识别、风险分析、风险处置方法，以及安全管理体系的建设要点。</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">结合项目实践，论述你应对数据泄露、算法偏见、模型失效、恶意攻击等风险的具体措施，总结安全与风控工作的实施经验。</span></li></ul></div><details class="exam-ans" open><summary>试题背景</summary><div class="essay-bg">AI系统具备数据驱动、算法自主决策等特性，相较于传统信息系统，衍生出数据安全、算法风险、伦理风险等新型风险。</div></details><details class="exam-ans"><summary>考点拆解（三色标记）</summary><div class="exam-keypoints"><strong>问题 1｜概要叙述项目与你承担的工作</strong>：<br>- 🔴 核心：点明近三年内一个具体的真实项目：项目名称、背景、发起单位、规模、周期、交付成果（教材 22.4-9/22.4-10 明确要求，泛泛而谈会判虚构）<br>- 🔴 核心：明确「我」在项目中的角色与承担的主要工作，并站在系统分析师视角论述，而非单纯开发实现视角<br>- 🟡 支撑：说明项目的组织结构、开发体制与技术栈，为后文论述做铺垫<br>- 🟢 加分：点出项目与本题主题的直接关联（如本项目正是因 XX 痛点才需要 XX 方法）<br><strong>问题 2｜理论知识 / 方法论述</strong>：<br>- 🔴 核心：结合AI系统的业务与技术特点——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：结合AI系统的详细论述AI项目全生命周期的风险识别——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：结合AI系统的风险分析——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🟡 支撑：结合AI系统的风险处置方法<br>- 🟡 支撑：结合AI系统的以及安全管理体系的建设要点<br>- 🟢 加分：给出与其他候选方案的取舍依据，体现选型判断力<br><strong>问题 3｜项目实践落地与复盘</strong>：<br>- 🔴 核心：给出可量化的落地效果（缺陷率/响应时间/迭代周期/资源成本等具体数据），而非「取得了良好效果」<br>- 🔴 核心：诚实分析存在的 2~3 个真实问题，并给出对应的改进措施——教材强调这才是用心的内容<br>- 🟡 支撑：结合具体实例说明措施的实施过程（怎么做的，而非教科书式罗列）<br>- 🟢 加分：总结经验教训与后续演进方向，体现复盘能力<br>- 🟡 支撑：论述你应对数据泄露<br>- 🟡 支撑：算法偏见</div></details><details class="exam-ans"><summary>教材知识点</summary><div class="exam-textbook"><span class="tb-chap">第 9 章 · 信息安全</span><a class="tb-hour" href="H19.html">H19</a><a class="tb-hour" href="H20.html">H20</a></div></details></div></details></section>
     <div class="wrongbook"></div>
     <div class="keyhint">
   <span class="keyhint-title">键盘快捷键</span>
@@ -3289,7 +3471,9 @@ html{scroll-padding-top:80px}
     init() {
       const root = document.querySelector('.exam')
       if (!root) return
-      const chapter = root.dataset.examChapter || 'x'
+      // ⚠️ 专项页 / 全真模拟页没有 data-exam-chapter（无教材章），
+      //    旧写法一律退化成 'x' → H42~H48 共用同一个记忆键、互相串状态。
+      const chapter = root.dataset.examChapter || root.dataset.examHour || 'x'
 
       // 恢复上次展开状态：{ "H07": { "2025年5月": true, ... } }
       const saved = store.get(this.KEY, {}) || {}
@@ -3309,6 +3493,7 @@ html{scroll-padding-top:80px}
       const seen = store.get('examSeen', {}) || {}
       root.querySelectorAll('.exam-q').forEach(qd => {
         const qid = qd.dataset.examId
+        if (!qid) return
         if (seen[qid]) {
           const a = qd.querySelector('.exam-ans')
           if (a) a.open = true
@@ -3324,12 +3509,17 @@ html{scroll-padding-top:80px}
         btn.addEventListener('click', e => {
           e.preventDefault()
           const openAll = btn.dataset.examAll === '1'
-          root.querySelectorAll('.exam-subject,.exam-year').forEach(d => { d.open = openAll })
-          root.querySelectorAll('.exam-ans').forEach(d => {
-            d.open = openAll
-            if (openAll && d.parentElement.dataset.examId) seen[d.parentElement.dataset.examId] = 1
-          })
-          if (openAll) store.set('examSeen', seen)
+          // ⚠️ 必须把 .exam-q 也列进来：只开 .exam-subject/.exam-year/.exam-ans
+          //    时，单题仍折叠 → 答案藏在关闭的单题内，"全部展开"名不副实。
+          root.querySelectorAll('.exam-subject,.exam-year,.exam-q,.exam-ans')
+            .forEach(d => { d.open = openAll })
+          if (openAll) {
+            // ⚠️ 旧的 `d.parentElement.dataset.examId` 取到的是 .exam-q-body（无 id），
+            //    会把 seen[undefined] 写进 localStorage。改为直接从 .exam-q 取。
+            root.querySelectorAll('.exam-q[data-exam-id]')
+              .forEach(qd => { seen[qd.dataset.examId] = 1 })
+            store.set('examSeen', seen)
+          }
           // 同步年份级记忆
           root.querySelectorAll('.exam-year').forEach(y => { mine[y.dataset.examYear] = y.open })
           saved[chapter] = mine
@@ -3376,7 +3566,7 @@ html{scroll-padding-top:80px}
   // ══════════════════════════════════════════
   // 8. mermaid 渲染（自定义墨绿主题，与正文同色系）
   // ══════════════════════════════════════════
-  // 站点配色（与 design.css 的令牌保持一致）
+  // 站点配色（与设计令牌保持一致 —— 改主题色时这里要同步）
   const MERMAID_LIGHT = {
     bg: '#f2f0e9', fg: '#1b211c', line: '#cdc9bd',
     accent: '#3d5a40', accent2: '#5a8a62', accent3: '#7ea888',

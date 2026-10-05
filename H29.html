@@ -7,7 +7,7 @@
 <title>第 29 小时 · 系统设计（一）· 结构化设计与面向对象设计 · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
-<meta name="build-stamp" content="2026-10-05 11:44:51">
+<meta name="build-stamp" content="2026-10-05 15:47:03">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -405,16 +405,21 @@ img{max-width:100%;height:auto}
   border-radius:100px;
   font-size:12.5px;color:var(--accent);font-weight:600;
 }
-.cover h1{
+/* ⚠️ 封面主标题刻意用 <div> 而不是 <h1>：index.md 正文自带 `# 阿甘系分 · 48 小时
+   冲刺手册`，若封面也用 h1，一页会出现两个 h1（语义/SEO 上都是错的）。
+   视觉与 h1 完全一致 —— 字号、颜色、以及那道 72px 短横线都在下面显式声明。 */
+.cover .cover-title{
   font-size:3.5em;font-weight:800;letter-spacing:-1.6px;
   color:var(--accent);line-height:1.14;margin-bottom:16px;
 }
-/* ⚠️ 封面 h1 也继承 `.main h1::after` 那道 56px 短横线，但它是 display:block 的
-   固定宽块级元素 —— 文字居中不代表块级元素居中，会贴到左边。
-   修法：给封面这条短横线加 margin-left/right:auto 让它真正居中。 */
-.cover h1::after{
-  margin-left:auto;margin-right:auto;
+/* 复刻 `.main h1::after` 的短横线（<div> 不继承 h1 的伪元素），并水平居中 —— */
+/* 文字居中不代表块级元素居中，不加 auto 会贴到左边。 */
+.cover .cover-title::after{
+  content:'';display:block;
   width:72px;height:3px;
+  background:var(--accent);
+  margin:.5em auto 0;
+  border-radius:2px;
 }
 .cover .sub{
   font-size:1.2em;color:var(--fg-2);
@@ -845,7 +850,7 @@ pre{
   .nav{margin-left:auto;gap:2px}
   .main{padding:32px 0 80px}
   .cover{padding:48px 0 40px;margin-bottom:40px}
-  .cover h1{font-size:2.4em;letter-spacing:-.8px}
+  .cover .cover-title{font-size:2.4em;letter-spacing:-.8px}
   .cover .sub{font-size:1.05em;margin-bottom:24px}
   .cover-stats{gap:10px;margin-bottom:28px}
   .stat{min-width:76px;padding:10px 14px}
@@ -901,7 +906,7 @@ pre{
   h1,h2,h3,h4{break-after:avoid;page-break-after:avoid}
 
   .cover{padding:0 0 18px;margin-bottom:18px;text-align:left}
-  .cover h1{font-size:24pt}
+  .cover .cover-title{font-size:24pt}
   .cover-stats,.cover-badge,.cta-row{display:none !important}
 
   a[href^="http"]:after{
@@ -1256,16 +1261,14 @@ html.focus-mode .chapbar{opacity:.35;pointer-events:none}
 }
 /* 章首横幅：h1 上方加一条"章号 + 主色渐变"的装饰带，
    让每页开头有一个明确的"进入新章"仪式感（原来 h1 直接浮在正文里）。
-   ⚠️ 必须排除 .cover —— 封面 h1 自己已有顶部留白与居中布局，
-   加上横幅会与下方分隔线叠成双线（首页曾出现两条横线紧挨）。 */
-.main h1:not(.cover h1)::before{
+   （封面主标题已改成 <div class="cover-title">，不再匹配 .main h1，无需再排除。） */
+.main h1::before{
   content:'';display:block;
   width:100%;height:4px;
   background:linear-gradient(90deg,var(--accent) 0%,var(--accent-3) 42%,transparent 88%);
   border-radius:2px;
   margin-bottom:.62em;
 }
-.cover h1::before{content:none}
 .main h1::after{
   content:'';display:block;
   width:56px;height:3px;
@@ -2087,6 +2090,185 @@ html{scroll-padding-top:80px}
   .exam-stem,.exam-opts li{font-size:9.5pt}
   .exam-exp{font-size:8.5pt;color:#333}
 }
+
+/* ══════════════════════════════════════════════════════════════
+   真题区块扩展 v2 · 案例 / 论文卡片 + 全真模拟卷
+   与既有 .exam-* 体系同源：米白卡底 + 左侧 4px 色条 + 墨绿强调色
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── 案例 / 论文卡片（非 <details>，直接展开的题卡）── */
+.exam-q-case,.exam-q-essay{
+  padding:14px 16px 4px;
+  background:var(--bg-card);
+}
+.exam-q-case:hover,.exam-q-essay:hover{background:var(--bg-alt)}
+.case-head{
+  display:flex;flex-wrap:wrap;align-items:center;gap:6px;
+  padding-bottom:10px;margin-bottom:10px;
+  border-bottom:1px dashed var(--line);
+}
+.case-head .exam-no{min-width:0}
+.case-h{
+  display:flex;align-items:center;gap:6px;
+  margin:12px 0 6px;font-size:12.5px;font-weight:700;
+  letter-spacing:.06em;color:var(--accent);
+}
+.case-h::before{
+  content:'';width:4px;height:13px;border-radius:2px;
+  background:var(--accent);flex:0 0 auto;
+}
+
+/* 情景要素（📅时间 / 📍地点 / 👤人物 / ⚡冲突 / 难度总分用时） */
+.case-meta{
+  display:flex;flex-direction:column;gap:2px;
+  padding:9px 12px;margin:.4em 0 .2em;
+  background:var(--bg-alt);
+  border-left:3px solid var(--line-2);
+  border-radius:0 var(--radius-sm) var(--radius-sm) 0;
+  font-size:12.5px;line-height:1.75;color:var(--fg-3);
+}
+.case-meta strong{color:var(--fg-2);font-weight:600}
+
+/* 案例背景正文 */
+.case-scene{
+  margin:.2em 0 1em;padding:12px 14px;
+  background:var(--accent-soft);
+  border-left:3px solid var(--accent-3);
+  border-radius:0 var(--radius) var(--radius) 0;
+  font-size:14.5px;line-height:1.92;color:var(--fg);
+}
+.case-scene strong{color:var(--accent);font-weight:700}
+
+/* 题目列表 */
+.case-asks{margin:.2em 0 1em}
+ul.exam-questions{
+  list-style:none;margin:.4em 0;padding:0;
+}
+ul.exam-questions>li{
+  display:flex;gap:10px;align-items:flex-start;
+  padding:9px 0;border-bottom:1px solid var(--line);
+  font-size:14.5px;line-height:1.88;color:var(--fg);
+}
+ul.exam-questions>li:last-child{border-bottom:0}
+ul.exam-questions>li::before{content:none !important}
+.case-ask-no{
+  flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;
+  min-width:24px;height:22px;margin-top:3px;padding:0 6px;
+  border-radius:6px;background:var(--accent-soft-2);color:var(--accent);
+  font-family:var(--sans);font-size:11.5px;font-weight:700;
+  font-variant-numeric:tabular-nums;
+}
+.case-ask-t{flex:1;min-width:0}
+.case-ask-t strong{color:var(--accent);font-weight:700}
+
+/* ── 答案 / 解析 / 考点拆解 / 教材知识点 ── */
+.exam-points,.exam-keypoints,.exam-exp-more,.essay-bg{
+  padding:12px 14px;margin:8px 0;
+  border-left:4px solid var(--tip-line);
+  border-radius:0 var(--radius) var(--radius) 0;
+  background:var(--tip-bg);
+  font-size:14px;line-height:1.92;color:var(--fg);
+}
+.exam-keypoints{border-left-color:var(--accent-2);background:var(--accent-soft)}
+.exam-exp-more{border-left-color:var(--warn-line);background:var(--warn-bg);color:var(--warn-fg)}
+.essay-bg{border-left-color:var(--line-2);background:var(--bg-alt);color:var(--fg-2)}
+.exam-points strong,.exam-keypoints strong{color:var(--accent);font-weight:700}
+
+/* 教材知识点：章标签 + 可点学时胶囊 */
+.exam-textbook{
+  display:flex;flex-wrap:wrap;align-items:center;gap:6px;
+  padding:12px 14px;margin:8px 0;
+  background:var(--mem-bg);
+  border-left:4px solid var(--mem-line);
+  border-radius:0 var(--radius) var(--radius) 0;
+}
+.tb-chap{
+  font-family:var(--serif);font-size:14px;font-weight:700;color:var(--mem-fg);
+}
+.tb-hour{
+  display:inline-flex;align-items:center;
+  padding:2px 9px;border-radius:999px;
+  background:var(--bg-card);border:1px solid var(--mem-line);
+  color:var(--mem-fg) !important;font-size:12px;font-weight:600;
+  text-decoration:none;
+}
+.tb-hour:hover{background:var(--mem-line);color:var(--bg-card) !important;border-color:var(--mem-fg)}
+
+/* 模拟卷成绩/批次等小标签 */
+.exam-lv{
+  font-family:var(--sans);font-size:11.5px;color:var(--gold);
+  letter-spacing:.04em;white-space:nowrap;
+}
+.exam-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.exam-tag-en{
+  background:var(--mem-bg);color:var(--mem-fg);border-color:var(--mem-line);
+}
+.essay-batch{
+  font-family:var(--sans);font-size:11.5px;color:var(--fg-3);
+  padding:1px 8px;border:1px solid var(--line);border-radius:999px;
+}
+.exam-kp{
+  margin:.5em 0 0;font-family:var(--sans);font-size:12.5px;color:var(--fg-3);
+}
+.exam-kp::before{content:'🎯 ';font-size:11px}
+
+/* ── 全真模拟卷头部 ── */
+.mock-head{
+  padding:16px 18px;margin:0 0 12px;
+  border-radius:var(--radius-lg);
+  background:linear-gradient(135deg,var(--accent) 0%,var(--accent-2) 100%);
+  color:var(--fg-inv);
+  box-shadow:var(--shadow-2);
+}
+.mock-title{
+  font-family:var(--serif);font-size:17px;font-weight:700;
+  letter-spacing:.02em;line-height:1.5;
+}
+.mock-sub{
+  margin-top:6px;font-size:12.5px;line-height:1.75;
+  color:rgba(251,250,246,.82);
+}
+.mock-sub b{color:#fff;font-variant-numeric:tabular-nums}
+.mock-items{
+  border:1px solid var(--line);border-radius:var(--radius);
+  background:var(--bg-card);overflow:hidden;
+}
+.mock-items>.exam-q:first-child{border-top:0}
+.exam-mock .exam-subject{margin-top:14px}
+.exam-subj-only{display:block}
+
+/* 模拟卷内的综合知识答题条 */
+.exam-mock .exam-bar{
+  border-radius:var(--radius) var(--radius) 0 0;
+  border-bottom:0;
+}
+
+/* ── 窄屏 ── */
+@media(max-width:760px){
+  .exam-q-case,.exam-q-essay{padding:12px 12px 4px}
+  .case-scene,.exam-points,.exam-keypoints,.exam-exp-more,.essay-bg,.exam-textbook{
+    padding:10px 11px;font-size:13.5px;
+  }
+  ul.exam-questions>li{gap:8px;font-size:13.5px}
+  .mock-head{padding:13px 14px}
+  .mock-title{font-size:15.5px}
+}
+
+/* ── 打印：卡片不要再折叠，色条与底色转灰阶 ── */
+@media print{
+  .mock-head{background:none !important;color:#000 !important;border:1pt solid #999;
+    box-shadow:none}
+  .mock-title{font-size:13pt}
+  .mock-sub{color:#333 !important}
+  .exam-q-case,.exam-q-essay{break-inside:avoid;page-break-inside:avoid}
+  .case-scene,.exam-points,.exam-keypoints,.exam-exp-more,.essay-bg,.exam-textbook{
+    background:none !important;border-left:2pt solid #999 !important;
+  }
+  .exam-q-case,.exam-q-essay,.case-scene,.case-meta,ul.exam-questions>li{
+    font-size:9.5pt;
+  }
+  .tb-hour{color:#000 !important;border-color:#666}
+}
 </style>
 </head>
 <body>
@@ -2114,7 +2296,7 @@ html{scroll-padding-top:80px}
 </div>
     
     <h1 id="第-29-小时-系统设计-一-结构化设计与面向对象设计">第 29 小时 · 系统设计（一）· 结构化设计与面向对象设计</h1>
-<div class="quote"><p>第 13 章<strong>真题占比 3.8%</strong>（21/557）。本学时覆盖 **13.1 概述 + 13.2 流程设计<br>+ 13.3 结构化设计 SD + 13.4 面向对象设计**。<br><strong>耦合七级 / 内聚七级的排序</strong>是本章乃至全书最经典的排序题，务必一字不差背下来。</p></div>
+<div class="quote"><p>第 13 章<strong>真题占比 3.8%</strong>（21/557）。本学时覆盖 <strong>13.1 概述 + 13.2 流程设计<br>+ 13.3 结构化设计 SD + 13.4 面向对象设计</strong>。<br><strong>耦合七级 / 内聚七级的排序</strong>是本章乃至全书最经典的排序题，务必一字不差背下来。</p></div>
 <div class="block gold"><div class="block-title">考情定位</div><p>四块必拿：① <strong>耦合七级排序</strong>（非直接 → 数据 → 标记 → 控制 → 外部 → 公共 → 内容，<strong>越低越好</strong>）；② <strong>内聚七级排序</strong>（功能 → 顺序 → 通信 → 过程 → 时间 → 逻辑 → 偶然，<strong>越高越好</strong>）；③ <strong>高内聚低耦合</strong>总原则（方向相反，别记成"都高"）；④ <strong>SOLID 五大原则</strong>（尤其<strong>开闭</strong>与<strong>依赖倒置</strong>）。</p></div>
 <div class="block mem"><div class="block-title">记忆口诀</div><p><strong>耦合七级（低→高 = 好→坏）</strong>：<strong>非直接 · 数据 · 标记 · 控制 · 外部 · 公共 · 内容</strong>。<br><strong>内聚七级（高→低 = 好→坏）</strong>：<strong>功能 · 顺序 · 通信 · 过程 · 时间 · 逻辑 · 偶然</strong>。<br><strong>总原则</strong>：<strong>内聚要高，耦合要低</strong>（方向相反！）。<br><strong>SOLID</strong>：<strong>S</strong> 单一职责 ｜ <strong>O</strong> 开闭（扩展开放、修改关闭）｜ <strong>L</strong> 里氏替换 ｜ <strong>I</strong> 接口隔离 ｜ <strong>D</strong> 依赖倒置（<strong>都依赖抽象</strong>）。</p></div>
 <div class="block warning"><div class="block-title">易错陷阱</div><p><strong>顺序内聚 vs 过程内聚</strong>：顺序<strong>有数据流</strong>（前一输出=后一输入），过程<strong>只有执行次序</strong>。<br><strong>内容耦合是最坏的耦合</strong>（直接访问对方内部），<strong>功能内聚是最好的内聚</strong>。<br><strong>依赖倒置</strong> = <strong>高层不依赖低层，二者都依赖抽象</strong>——不是"高层依赖低层"（那是传统分层）。</p></div>
@@ -2374,7 +2556,9 @@ html{scroll-padding-top:80px}
 5.表现层。是用户所能看见的一切，包括字体的大小、导航栏的颜色、整体给人的感觉等。在这一层，内容、功能和美学汇集在一起产生一个最终设计，从而满足其他层面的所有要求。</p></details></div></details></details><details class="exam-year" data-exam-year="2022年5月"><summary><span class="exam-year-name">2022年5月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2022年5月-030"><summary><span class="exam-no">第 30 题</span><span class="exam-tag">两空单选</span><span class="exam-tag">2 空</span><span class="exam-stem-peek">工作流参考模型（Workflow Reference Model，WRM）包含6个基本模块，分别是（29）、工作流引擎、…</span></summary><div class="exam-q-body"><p class="exam-stem">工作流参考模型（Workflow Reference Model，WRM）包含6个基本模块，分别是<b class="exam-blank">（29）</b>、工作流引擎、流程定义工具、<b class="exam-blank">（30）</b>、调用应用和管理监控工具。
 ```mermaid
 flowchart TD
-A[流程定义工具] -.接口一.-&gt; B[工作流接口及交换格式&lt;br/&gt;工作流执行服务&lt;br/&gt;工作流引擎]
+A[流程定义工具] -.接口一.-&gt; B[工作流接口及交换格式
+工作流执行服务
+工作流引擎]
 C[管理监控工具] -.接口五.-&gt; B
 D[其他工作流执行服务] -.接口四.-&gt; B
 E[客户端应用] -.接口二.-&gt; B
@@ -2383,7 +2567,7 @@ F[调用应用] -.接口三.-&gt; B
 （本题为第 2 空）</p><ul class="exam-opts"><li><b>A</b> 客户端应用</li><li><b>B</b> 服务端应用</li><li><b>C</b> 部署端应用</li><li><b>D</b> 网络端应用</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">工作流参考模型WRM的6个基本模块为：工作流执行服务、工作流引擎、流程定义工具、客户端应用、调用应用、管理监控工具；流程定义工具通过接口一对接核心工作流执行服务，客户端应用通过接口二对接，调用应用通过接口三对接，跨系统执行服务通过接口四互通，管理监控工具通过接口五对接核心服务。</p></details></div></details><details class="exam-q" data-exam-id="2022年5月-028"><summary><span class="exam-no">第 28 题</span><span class="exam-stem-peek">工作流管理系统（Workflow Management System，WFMS）通过软件定义、创建工作流并管理其执行。其…</span></summary><div class="exam-q-body"><p class="exam-stem">工作流管理系统（Workflow Management System，WFMS）通过软件定义、创建工作流并管理其执行。其中，监控和管理进度完成情况和数据所处状态、工作分配与均衡情况等执行中的业务，体现着工作流管理系统（28）的基本功能。</p><ul class="exam-opts"><li><b>A</b> 工作流执行</li><li><b>B</b> 业务过程的设计和实现</li><li><b>C</b> 业务过程管理和分析</li><li><b>D</b> 对工作流进行建模</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">WFMS 将业务流程中工作如何组织与协调的规则抽象出来，在 WFMS 的协助下，开发人员遵从一定的编程接口和约定，就可以开发出更具灵活性的事务处理系统，用户无需重新开发即可更改工作流程，以适应业务的变更。WFMS 的基本功能体现在以下几个方面：
 （1）对工作流进行建模。即定义工作流，包括具体的活动和规则等，所创建的模型是同时可以被人和计算机所“理解”的，工作流对应现实世界的业务处理过程，不能改变真实业务的处理逻辑。
 （2）工作流执行。遵循工作流模型来创建和执行实际的工作流，即通过 WFMS 可以执行多个工作项。
-（3）业务过程的管理和分析。监控和管理执行中的业务（工作流），例如，进度完成情况和数据所处状态、工作分配与均衡情况等。</p></details></div></details></details><details class="exam-year" data-exam-year="2020年11月"><summary><span class="exam-year-name">2020年11月</span><span class="exam-year-n">1 题</span></summary><details class="exam-q" data-exam-id="2020年11月-028"><summary><span class="exam-no">第 28 题</span><span class="exam-stem-peek">WfMS的基本功能体现在对工作流进行建模、工作流执行和(28)。</span></summary><div class="exam-q-body"><p class="exam-stem">WfMS的基本功能体现在对工作流进行建模、工作流执行和(28)。</p><ul class="exam-opts"><li><b>A</b> 业务过程的实现</li><li><b>B</b> 业务过程的设计和实现</li><li><b>C</b> 业务过程的管理和分析</li><li><b>D</b> 业务过程的监控</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">WfMS三大基础能力分别是工作流建模、流程实例执行、业务全流程的管理与数据分析优化。</p></details></div></details></details></details><details class="exam-subject" data-exam-subject="案例"><summary><span class="exam-subject-name">📋 案例分析</span><span class="exam-subject-n">3 题</span><span class="exam-subject-tip">情景简答 · 采分点三色标记</span></summary><div class="exam-bar"><span class="exam-bar-label">📋 案例分析</span><span class="exam-bar-stat">共 <b>3</b> 题 · 情景简答</span></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">58</span>考点：工作流管理系统 / 流程设计工具（判定表/判定树）/ 耦合与内聚 / 扇入扇出<br>📅 时间：2025-08-20 上午 📍 地点：项目组设计评审<br>👤 人物：甘工（乙方·系统分析师）、彭工（乙方·架构设计师）、傅工（乙方·开发）、邓经理（甲方·运维经理）<br>⚡ 冲突：路由规则复杂（客户等级/意图/紧急程度/排队状态），模块划分耦合严重<br>难度：★★★　总分：9 分　建议用时：25 分钟<br>背景：傅工把路由模块的代码结构贴出来：路由引擎里直接读写工单库、查排队、算技能组，一个模块干了四件事。 彭工当场指出：&quot;这叫公共耦合——工单表结构一改，路由就跟着崩。&quot; 邓经理补了一句：&quot;那个&#x27;公共工具&#x27;包更离谱，日期、日志、加密、排队计算全塞在一起。&quot; 甘工拿起笔：&quot;今天要解决两件事：一是路由规则怎么表达清楚，二是模块怎么拆才不互相拖累。<br>补充资料：接进入优先队列；投诉类直接转人工专席；查询类优先 AI 自助；报修类按紧急程度（Ⅰ~Ⅳ级）决定响应时限并派单。同时，若当前排队人数超过阈值或等待超过 60 秒，则触发溢出策略（转语音留言或转其他技能组）。 项目组初步划分模块：<code>路由引擎</code>（规则加载、技能组查询、排队查询、工单存储）、<code>通知服务</code>、<code>统计报表</code>、<code>公共工具</code>（日期、日志、加密、排队计算）。<br>问题 1：请用判定表表达呼入路由规则（条件桩至少包含客户等级、意图、紧急程度），并说明判定表的化简方法；再说明工作流管理系统（WFMS）的构成与作用。（9分）<br>问题 2：（1）指出上述模块划分中耦合度较高的两处并给出降耦方法；<br>问题 3：（2）指出&quot;公共工具&quot;模块的内聚问题及改进；<br>问题 4：（3）说明扇入扇出的设计原则，并指出本例中高扇入模块应如何设计；<br>问题 5：（4）说明耦合与内聚的类型与强弱排序。</p><ul class="exam-questions"><li><b>问题 1</b> 请用<strong>判定表</strong>表达呼入路由规则（条件桩至少包含客户等级、意图、紧急程度），并说明判定表的化简方法；再说明<strong>工作流管理系统（WFMS）</strong>的构成与作用。（9分）</li><li><b>问题 2</b> （1）指出上述模块划分中<strong>耦合度较高</strong>的两处并给出降耦方法；</li><li><b>问题 3</b> （2）指出&quot;公共工具&quot;模块的<strong>内聚问题</strong>及改进；</li><li><b>问题 4</b> （3）说明<strong>扇入扇出</strong>的设计原则，并指出本例中高扇入模块应如何设计；</li><li><b>问题 5</b> （4）说明耦合与内聚的类型与强弱排序。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点（9分）：<br>- 🔴 核心：🔴 核心（判定表）：<br>- 🟡 支撑：C1 客户等级 = VIP：Y；N；N；N；N；—<br>- 🟡 支撑：C2 意图 = 投诉：—；Y；N；N；N；N<br>- 🟡 支撑：C3 意图 = 报修：—；—；Y；Y；N；N<br>- 🟡 支撑：C4 紧急程度 = Ⅰ/Ⅱ级：—；—；Y；N；—；—<br>- 🟡 支撑：C5 意图 = 查询：—；—；—；—；Y；N<br>- 🟡 支撑：C6 意图 = 预约：—；—；—；—；N；Y<br>- 🟡 支撑：A1 进优先队列 + 优先坐席：✔<br>- 🟡 支撑：A2 直转投诉专席 + 升级提醒：✔<br>- 🟡 支撑：A3 立即派单 + 电话催办（15 分钟/2 小时）：✔<br>- 🟡 支撑：A4 按 24 小时时限生成工单：✔<br>- 🟡 支撑：A5 AI 自助答复（查不到再转人工）：✔；A6 生成预约单 + 短信确认：✔；合并&quot;无关条件&quot;相同的列——若两列的动作完全相同且仅有一个条件取值不同、其余条件均为&quot;无关（—）&quot;，则可合并并把该条件改为&quot;—&quot;（如把 R3 与 R4 按紧急程度合并后仅保留差异条件）；化简后规则数更少、更易于用规则引擎实现。；由工作流引擎（解析流程定义、调度实例、路由与状态推进）、流程定义工具（图形化建模）、任务列表/客户端（待办与已办）、管理与监控工具（实例查询、超时告警、绩效统计）、集成接口组成。作用是把业务流程逻辑从应用代码中分离，实现流程的可配置、可监控、可优化，支持自动分派、超时升级与审计追溯。；本项目把判定表落地为&quot;规则引擎配置 + 策略模式代码&quot;，运营可后台调整阈值而无需发版，正是可修改性质量属性的体现。<br>- 🟢 加分：解析·耦合内聚题必须&quot;先定性（哪一级）再给改法&quot;。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）高耦合与降耦）：<br>问题 3｜参考答案要点：<br>- 🔴 核心：🔴 核心（2）内聚问题）：&quot;公共工具&quot;把日期、日志、加密、排队计算堆在一起，属偶然内聚/逻辑内聚（最低级），任何修改都影响所有调用方。改进：按职责拆为 DateUtil、LogUtil、CryptoUtil（功能内聚）；而&quot;排队计算&quot;属业务规则，应下沉为 QueueService 领域服务，由路由引擎调用。<br>问题 4｜参考答案要点：<br>- 🔴 核心：🔴 核心（3）扇入扇出）：原则是&quot;增加扇入、减少扇出&quot;——扇入高表示该模块被多处复用（好事，但要求接口稳定）；扇出高表示模块调用太多下级（通常 3~4 为宜，过高说明职责过重）。本例中工单服务与通知服务扇入最高，设计要点：①接口稳定且版本化；②接口隔离，避免调用方依赖不需要的方法；③通知服务抽象为 Notifier 接口（短信/推送/站内信分别实现），新增渠道零改动。<br>问题 5｜参考答案要点：<br>- 🔴 核心：🔴 核心（4）强弱排序）：耦合（高→低）：内容耦合 &gt; 公共耦合 &gt; 外部耦合 &gt; 控制耦合 &gt; 标记耦合 &gt; 数据耦合 &gt; 非直接耦合；内聚（低→高）：偶然内聚 &lt; 逻辑内聚 &lt; 时间内聚 &lt; 过程内聚 &lt; 通信内聚 &lt; 顺序内聚 &lt; 功能内聚。目标是低耦合、高内聚。</div></details></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">60</span>考点：输入设计原则与校验 / 输出设计 / 人机交互设计目标与原则<br>📅 时间：2025-10-15 上午 📍 地点：坐席工作台原型评审<br>👤 人物：甘工（乙方·系统分析师）、老陶（甲方·班组长(十年老坐席)）、小黄（甲方·新入职坐席）、洪经理（甲方·客服部经理）<br>⚡ 冲突：批量导入号码、弹屏、话术推荐、大屏——老陶嫌难用，小黄老误操作<br>难度：★★★　总分：10 分　建议用时：25 分钟<br>背景：老陶第一个发言：&quot;这新工作台，我找个&#x27;转接&#x27;按钮找半天，还是老系统顺手。&quot; 小黄更惨：&quot;我昨天把三张工单派错技能组了。&quot; 洪经理看着甘工：&quot;是不是设计有问题？&quot; 甘工没有急着辩解——他注意到&quot;派单&quot;和&quot;改派&quot;两个按钮长得几乎一样，而批量导入号码时没有任何校验提示。这是输入设计与人机交互的典型问题。<br>补充资料：均年龄偏大，部分老员工对新技术接受慢；大屏供班组长远程监控。<br>问题 1：请给出输入设计的原则与本项目的校验规则；说明输出设计的原则与大屏指标选型；并说明人机交互设计的目标与三条落地要求。（10分）</p><ul class="exam-questions"><li><b>问题 1</b> 请给出输入设计的原则与本项目的校验规则；说明输出设计的原则与大屏指标选型；并说明人机交互设计的目标与三条落地要求。（10分）<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点（10分）：<br>- 🔴 核心：①最小量原则（只收集必需信息）；②尽早校验（前端 + 服务端双重）；③简单性（默认值、下拉选择、自动填充）；④少转换（避免手工换算与拼接）；⑤减少操作步骤（快捷键、批量导入、一键复用）。<br>- 🔴 核心：①号码格式校验（手机 11 位、固话带区号）与批量去重；②禁呼时段与黑名单联动校验（命中即拦截并给出明确原因）；③超量发送预警（批量短信超阈值自动拦截并告警）；④地址按&quot;+市/区县&quot;规则规范化；⑤必填与业务规则校验（漏气工单必须填写&quot;是否有异味/是否开窗&quot;）；⑥文件大小与格式限制（仅 Excel/CSV）。<br>- 🔴 核心：①确有必要（先问&quot;谁看、看完做什么决策&quot;）；②格式符合用户习惯（Excel/图表）；③易读性与可视化（饼图占比、折线趋势、地图下钻）；④可追溯（报表可下钻明细、明细可回放录音）；⑤时效与一致（延迟 ≤60 秒、误差 ≤1%）。<br>- 🟡 支撑：当前排队数、放弃率、平均通话时长、服务水平（20 秒接起率）、AI 自助解决率、转人工率、意图热点分布、各技能组负载、异常高亮预警。<br>- 🔴 核心：目标——易学、易用、高效（可表述为&quot;可用性目标：有效性、效率、满意度&quot;）。三条落地要求：①一致性（工作台、App、大屏的术语、配色与操作流程统一）；②及时反馈与容错（每步操作有反馈，错误提示说清&quot;为什么 + 怎么改&quot;，支持撤销，关键操作二次确认）；③减少记忆负担与适老化（关键信息默认展开、字号可调、高频操作一键完成、提供新手引导与速查卡、保留简化视图），并满足无障碍要求。<br>- 🟢 加分：若涉及大模型话术推荐，应提供&quot;可解释 + 可干预&quot;（显示推荐依据、支持一键替换），避免坐席盲信。<br>- 🟢 加分：解析·输入输出与人机交互题要&quot;原则 + 本项目具体化&quot;。</div></details></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">62</span>📅 时间：2025-09-18 📍 地点：项目组设计评审（AI 外呼模块）<br>👤 人物：甘工（乙方·系统分析师）、彭工（乙方·架构设计师）、傅工（乙方·开发）、邓经理（甲方·运维经理）、洪经理（甲方·客服部经理）<br>⚡ 冲突：外呼要支持&quot;外显号码池轮询、接通后 X 秒放音、未接/空号/关机状态码识别、重呼与短信策略&quot;，傅工想用 if-else 一路写下去<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：洪经理列了一串外呼策略要求：&quot;外显号码要轮询，不能老用一个号被标记；接通后不能直接放音，得等个一两秒；未接、空号、关机要能分开统计；未接通的可以按策略重呼，也可以发短信。&quot; 傅工打开 IDE 就开始写：<code>if (status == NO_ANSWER) { ... } else if (status == OFF_HOOK) ...</code> 彭工按住他：&quot;你写三条现在是三行，等甲方再加五种状态码、三种重呼策略、两套短信模板，这一坨 if-else 谁维护？而且外呼时段、节假日、号码池权重都要能改——你打算每次改都发版吗？&quot; 甘工决定用策略模式 + 状态机 + 配置外置重构这一块。<br>问题 1：（1）说明策略模式的结构与适用场景，并用它重构&quot;拨打策略引擎&quot;；<br>问题 2：（2）用状态转换图描述一次外呼呼叫的生命周期（含未接/空号/关机/接通/完成）；<br>问题 3：（3）说明配置外置与热更新的设计（号码池权重、等待秒数、重呼次数、短信模板）；<br>问题 4：（4）说明设计原则（开闭、单一职责、依赖倒置）在本方案中的体现。</p><ul class="exam-questions"><li><b>问题 1</b> （1）说明<strong>策略模式</strong>的结构与适用场景，并用它重构&quot;拨打策略引擎&quot;；</li><li><b>问题 2</b> （2）用<strong>状态转换图</strong>描述一次外呼呼叫的生命周期（含未接/空号/关机/接通/完成）；</li><li><b>问题 3</b> （3）说明<strong>配置外置与热更新</strong>的设计（号码池权重、等待秒数、重呼次数、短信模板）；</li><li><b>问题 4</b> （4）说明设计原则（开闭、单一职责、依赖倒置）在本方案中的体现。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）策略模式）：结构——Strategy（抽象策略，定义算法接口）、ConcreteStrategy（具体策略：号码池轮询策略、延迟放音策略、状态码判定策略、重呼策略、短信策略）、Context（上下文，持有一个策略引用并在运行时调用）。<br>- 🟢 加分：解析·策略模式题要&quot;结构 + 重构清单 + 状态图 + 配置化 + 原则&quot;。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🔴 核心（2）外呼状态图）：<br>问题 3｜参考答案要点：<br>- 🔴 核心：🟡 支撑（3）配置外置与热更新）：①配置项——号码池清单与权重、接通后等待秒数、重呼次数与间隔、状态码—动作映射、短信模板（按渠道/状态码）、服务时段与节假日、并发上限；②存入配置中心，支持版本化、灰度、回滚、审计；③客户端监听变更 + 本地缓存 + 变更失效，实现热更新且不牺牲性能；④校验与防错——阈值上下限、模板变量存在性校验，非法配置不允许保存；异常时自动回退默认配置；⑤敏感配置（号码池）走审批 + 加密存储。<br>问题 4｜参考答案要点：<br>- 🔴 核心：🔴 核心（4）设计原则体现）：</div></details></div></details><details class="exam-subject" data-exam-subject="论文"><summary><span class="exam-subject-name">📄 论文写作</span><span class="exam-subject-n">7 题</span><span class="exam-subject-tip">论述题 · 先写再看题</span></summary><div class="exam-bar"><span class="exam-bar-label">📄 论文写作</span><span class="exam-bar-stat">共 <b>7</b> 题 · 论述题</span></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与管理和开发的软件项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 简要描述面向对象设计的三种设计原则。</li><li><b>问题 3</b> 具体阐述项目中如何遵循相关设计原则开展信息系统设计。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 系统设计</span><span class="exam-lv">⭐⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 简要叙述你参与的软件开发项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 说明处理流程设计工具的类别，并为每类工具列举至少一种实例。</li><li><b>问题 3</b> 说明项目选用的流程设计工具、实施过程以及应用效果。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 系统设计</span><span class="exam-lv">⭐⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与设计、开发的信息系统项目（项目的背景、业务场景、技术架构、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细论述面向对象设计的核心原则（如单一职责、开闭原则、里氏替换等）、类与对象的设计方法、交互机制设计要点。</li><li><b>问题 3</b> 结合项目实践，论述面向对象设计在项目中的具体落地方式、遇到的设计难点及解决思路，总结实施效果。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 系统设计</span><span class="exam-lv">⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与设计、开发的分布式系统项目（项目的背景、业务场景、节点规模、性能要求、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细论述分布式系统的核心设计原则（一致性、可用性、分区容错性）、关键技术（分布式锁、负载均衡、数据同步、一致性协议）及实施要点。</li><li><b>问题 3</b> 结合项目实例，论述分布式系统实现过程中遇到的一致性问题、性能瓶颈及解决方法，总结实施经验。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 专项系统类型</span><span class="exam-lv">⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与设计、开发的嵌入式系统项目（项目的背景、应用场景、实时性要求、硬件平台、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细论述嵌入式系统的架构设计（硬件层、驱动层、操作系统层、应用层）、实时性设计要点、资源优化方法（内存 / 存储 / 功耗）。</li><li><b>问题 3</b> 结合项目实例，论述系统实现过程中的调试难点、稳定性优化措施，总结嵌入式系统开发的经验教训。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 专项系统类型</span><span class="exam-lv">⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与设计、开发的实时系统项目（项目的背景、实时性指标、应用场景、硬件平台、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细论述实时系统的架构设计、任务调度算法（如优先级调度、时间片轮转）、中断处理设计、资源冲突解决方法。</li><li><b>问题 3</b> 结合项目实例，论述系统实现过程中的实时性测试方法、性能优化措施，总结实时系统开发的经验。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 专项系统类型</span><span class="exam-lv">⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与设计、开发的分布式数据库项目（项目的背景、数据分布需求、节点规模、性能要求、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细论述分布式数据库的架构设计（分片 / 复制）、分布式事务处理方法（2PC/3PC/TCC）、数据同步策略、查询优化要点。</li><li><b>问题 3</b> 结合项目实例，论述系统实现过程中的一致性问题、节点故障应对方法，总结分布式数据库实施的经验教训。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 专项系统类型</span><span class="exam-lv">⭐</span></div></div></details></section>
+（3）业务过程的管理和分析。监控和管理执行中的业务（工作流），例如，进度完成情况和数据所处状态、工作分配与均衡情况等。</p></details></div></details></details><details class="exam-year" data-exam-year="2020年11月"><summary><span class="exam-year-name">2020年11月</span><span class="exam-year-n">1 题</span></summary><details class="exam-q" data-exam-id="2020年11月-028"><summary><span class="exam-no">第 28 题</span><span class="exam-stem-peek">WfMS的基本功能体现在对工作流进行建模、工作流执行和(28)。</span></summary><div class="exam-q-body"><p class="exam-stem">WfMS的基本功能体现在对工作流进行建模、工作流执行和(28)。</p><ul class="exam-opts"><li><b>A</b> 业务过程的实现</li><li><b>B</b> 业务过程的设计和实现</li><li><b>C</b> 业务过程的管理和分析</li><li><b>D</b> 业务过程的监控</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">WfMS三大基础能力分别是工作流建模、流程实例执行、业务全流程的管理与数据分析优化。</p></details></div></details></details></details><details class="exam-subject" data-exam-subject="案例"><summary><span class="exam-subject-name">📋 案例分析</span><span class="exam-subject-n">3 题</span><span class="exam-subject-tip">案例背景 · 题目 · 答案与解析</span></summary><div class="exam-bar"><span class="exam-bar-label">📋 案例分析</span><span class="exam-bar-stat">共 <b>3</b> 题 · 情景简答 · 采分点三色标记</span></div><div class="exam-q exam-q-case"><div class="case-head"><span class="exam-no">案例 58</span><span class="exam-tag">考点 · 呼入路由的流程设计与模块结构</span><span class="exam-lv">⭐⭐⭐</span></div><div class="case-meta"><span><strong>考点</strong>：工作流管理系统 / 流程设计工具（判定表/判定树）/ 耦合与内聚 / 扇入扇出</span><span>📅 <strong>时间</strong>：2025-08-20 上午 📍 <strong>地点</strong>：项目组设计评审</span><span>👤 <strong>人物</strong>：甘工（乙方·系统分析师）、彭工（乙方·架构设计师）、傅工（乙方·开发）、邓经理（甲方·运维经理）</span><span>⚡ <strong>冲突</strong>：路由规则复杂（客户等级/意图/紧急程度/排队状态），模块划分耦合严重</span><span><strong>难度</strong>：★★★　<strong>总分</strong>：9 分　<strong>建议用时</strong>：25 分钟</span></div><div class="case-scene"><div class="case-h">案例背景</div><strong>背景</strong>：傅工把路由模块的代码结构贴出来：路由引擎里直接读写工单库、查排队、算技能组，一个模块干了四件事。 彭工当场指出：&quot;这叫公共耦合——工单表结构一改，路由就跟着崩。&quot; 邓经理补了一句：&quot;那个&#x27;公共工具&#x27;包更离谱，日期、日志、加密、排队计算全塞在一起。&quot; 甘工拿起笔：&quot;今天要解决两件事：一是路由规则怎么表达清楚，二是模块怎么拆才不互相拖累。<br><strong>补充资料</strong>：接进入优先队列；投诉类直接转人工专席；查询类优先 AI 自助；报修类按<strong>紧急程度</strong>（Ⅰ~Ⅳ级）决定响应时限并派单。同时，若<strong>当前排队人数超过阈值</strong>或<strong>等待超过 60 秒</strong>，则触发溢出策略（转语音留言或转其他技能组）。 项目组初步划分模块：<code>路由引擎</code>（规则加载、技能组查询、排队查询、工单存储）、<code>通知服务</code>、<code>统计报表</code>、<code>公共工具</code>（日期、日志、加密、排队计算）。</div><div class="case-asks"><div class="case-h">题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">请用<strong>判定表</strong>表达呼入路由规则（条件桩至少包含客户等级、意图、紧急程度），并说明判定表的化简方法；再说明<strong>工作流管理系统（WFMS）</strong>的构成与作用。（9分）</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">（1）指出上述模块划分中<strong>耦合度较高</strong>的两处并给出降耦方法；</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">（2）指出&quot;公共工具&quot;模块的<strong>内聚问题</strong>及改进；</span></li><li><span class="case-ask-no">4</span><span class="case-ask-t">（3）说明<strong>扇入扇出</strong>的设计原则，并指出本例中高扇入模块应如何设计；</span></li><li><span class="case-ask-no">5</span><span class="case-ask-t">（4）说明<strong>耦合与内聚</strong>的类型与强弱排序。</span></li></ul></div><details class="exam-ans"><summary>参考答案要点（三色标记）</summary><div class="exam-points"><strong>问题 1｜参考答案要点（9分）</strong>：<br>- 🔴 核心：🔴 核心（判定表）：<br>- 🟡 支撑：C1 客户等级 = VIP：Y；N；N；N；N；—<br>- 🟡 支撑：C2 意图 = 投诉：—；Y；N；N；N；N<br>- 🟡 支撑：C3 意图 = 报修：—；—；Y；Y；N；N<br>- 🟡 支撑：C4 紧急程度 = Ⅰ/Ⅱ级：—；—；Y；N；—；—<br>- 🟡 支撑：C5 意图 = 查询：—；—；—；—；Y；N<br>- 🟡 支撑：C6 意图 = 预约：—；—；—；—；N；Y<br>- 🟡 支撑：A1 进优先队列 + 优先坐席：✔<br>- 🟡 支撑：A2 直转投诉专席 + 升级提醒：✔<br>- 🟡 支撑：A3 立即派单 + 电话催办（15 分钟/2 小时）：✔<br>- 🟡 支撑：A4 按 24 小时时限生成工单：✔<br>- 🟡 支撑：A5 AI 自助答复（查不到再转人工）：✔；A6 生成预约单 + 短信确认：✔；合并&quot;无关条件&quot;相同的列——若两列的动作完全相同且仅有一个条件取值不同、其余条件均为&quot;无关（—）&quot;，则可合并并把该条件改为&quot;—&quot;（如把 R3 与 R4 按紧急程度合并后仅保留差异条件）；化简后规则数更少、更易于用规则引擎实现。；由工作流引擎（解析流程定义、调度实例、路由与状态推进）、流程定义工具（图形化建模）、任务列表/客户端（待办与已办）、管理与监控工具（实例查询、超时告警、绩效统计）、集成接口组成。作用是把业务流程逻辑从应用代码中分离，实现流程的可配置、可监控、可优化，支持自动分派、超时升级与审计追溯。；本项目把判定表落地为&quot;规则引擎配置 + 策略模式代码&quot;，运营可后台调整阈值而无需发版，正是可修改性质量属性的体现。<br><strong>问题 2｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（1）高耦合与降耦）：<br><strong>问题 3｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（2）内聚问题）：&quot;公共工具&quot;把日期、日志、加密、排队计算堆在一起，属偶然内聚/逻辑内聚（最低级），任何修改都影响所有调用方。改进：按职责拆为 DateUtil、LogUtil、CryptoUtil（功能内聚）；而&quot;排队计算&quot;属业务规则，应下沉为 QueueService 领域服务，由路由引擎调用。<br><strong>问题 4｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（3）扇入扇出）：原则是&quot;增加扇入、减少扇出&quot;——扇入高表示该模块被多处复用（好事，但要求接口稳定）；扇出高表示模块调用太多下级（通常 3~4 为宜，过高说明职责过重）。本例中工单服务与通知服务扇入最高，设计要点：①接口稳定且版本化；②接口隔离，避免调用方依赖不需要的方法；③通知服务抽象为 Notifier 接口（短信/推送/站内信分别实现），新增渠道零改动。<br><strong>问题 5｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（4）强弱排序）：耦合（高→低）：内容耦合 &gt; 公共耦合 &gt; 外部耦合 &gt; 控制耦合 &gt; 标记耦合 &gt; 数据耦合 &gt; 非直接耦合；内聚（低→高）：偶然内聚 &lt; 逻辑内聚 &lt; 时间内聚 &lt; 过程内聚 &lt; 通信内聚 &lt; 顺序内聚 &lt; 功能内聚。目标是低耦合、高内聚。</div></details><details class="exam-ans"><summary>解析与加分项</summary><div class="exam-exp-more">- 🟢 加分：解析·耦合内聚题必须&quot;先定性（哪一级）再给改法&quot;。</div></details></div><div class="exam-q exam-q-case"><div class="case-head"><span class="exam-no">案例 60</span><span class="exam-tag">考点 · 输入输出设计与人机交互</span><span class="exam-lv">⭐⭐⭐</span></div><div class="case-meta"><span><strong>考点</strong>：输入设计原则与校验 / 输出设计 / 人机交互设计目标与原则</span><span>📅 <strong>时间</strong>：2025-10-15 上午 📍 <strong>地点</strong>：坐席工作台原型评审</span><span>👤 <strong>人物</strong>：甘工（乙方·系统分析师）、老陶（甲方·班组长(十年老坐席)）、小黄（甲方·新入职坐席）、洪经理（甲方·客服部经理）</span><span>⚡ <strong>冲突</strong>：批量导入号码、弹屏、话术推荐、大屏——老陶嫌难用，小黄老误操作</span><span><strong>难度</strong>：★★★　<strong>总分</strong>：10 分　<strong>建议用时</strong>：25 分钟</span></div><div class="case-scene"><div class="case-h">案例背景</div><strong>背景</strong>：老陶第一个发言：&quot;这新工作台，我找个&#x27;转接&#x27;按钮找半天，还是老系统顺手。&quot; 小黄更惨：&quot;我昨天把三张工单派错技能组了。&quot; 洪经理看着甘工：&quot;是不是设计有问题？&quot; 甘工没有急着辩解——他注意到&quot;派单&quot;和&quot;改派&quot;两个按钮长得几乎一样，而批量导入号码时没有任何校验提示。这是<strong>输入设计与人机交互</strong>的典型问题。<br><strong>补充资料</strong>：均年龄偏大，部分老员工对新技术接受慢；大屏供班组长远程监控。</div><div class="case-asks"><div class="case-h">题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">请给出<strong>输入设计</strong>的原则与本项目的校验规则；说明<strong>输出设计</strong>的原则与大屏指标选型；并说明<strong>人机交互设计</strong>的目标与三条落地要求。（10分）</span></li></ul></div><details class="exam-ans"><summary>参考答案要点（三色标记）</summary><div class="exam-points"><strong>问题 1｜参考答案要点（10分）</strong>：<br>- 🔴 核心：①最小量原则（只收集必需信息）；②尽早校验（前端 + 服务端双重）；③简单性（默认值、下拉选择、自动填充）；④少转换（避免手工换算与拼接）；⑤减少操作步骤（快捷键、批量导入、一键复用）。<br>- 🔴 核心：①号码格式校验（手机 11 位、固话带区号）与批量去重；②禁呼时段与黑名单联动校验（命中即拦截并给出明确原因）；③超量发送预警（批量短信超阈值自动拦截并告警）；④地址按&quot;+市/区县&quot;规则规范化；⑤必填与业务规则校验（漏气工单必须填写&quot;是否有异味/是否开窗&quot;）；⑥文件大小与格式限制（仅 Excel/CSV）。<br>- 🔴 核心：①确有必要（先问&quot;谁看、看完做什么决策&quot;）；②格式符合用户习惯（Excel/图表）；③易读性与可视化（饼图占比、折线趋势、地图下钻）；④可追溯（报表可下钻明细、明细可回放录音）；⑤时效与一致（延迟 ≤60 秒、误差 ≤1%）。<br>- 🟡 支撑：当前排队数、放弃率、平均通话时长、服务水平（20 秒接起率）、AI 自助解决率、转人工率、意图热点分布、各技能组负载、异常高亮预警。<br>- 🔴 核心：目标——易学、易用、高效（可表述为&quot;可用性目标：有效性、效率、满意度&quot;）。三条落地要求：①一致性（工作台、App、大屏的术语、配色与操作流程统一）；②及时反馈与容错（每步操作有反馈，错误提示说清&quot;为什么 + 怎么改&quot;，支持撤销，关键操作二次确认）；③减少记忆负担与适老化（关键信息默认展开、字号可调、高频操作一键完成、提供新手引导与速查卡、保留简化视图），并满足无障碍要求。</div></details><details class="exam-ans"><summary>解析与加分项</summary><div class="exam-exp-more">- 🟢 加分：若涉及大模型话术推荐，应提供&quot;可解释 + 可干预&quot;（显示推荐依据、支持一键替换），避免坐席盲信。<br>- 🟢 加分：解析·输入输出与人机交互题要&quot;原则 + 本项目具体化&quot;。</div></details></div><div class="exam-q exam-q-case"><div class="case-head"><span class="exam-no">案例 62</span><span class="exam-tag">考点 · 外显号码池与拨打策略引擎</span><span class="exam-lv">⭐⭐⭐</span></div><div class="case-meta"><span>📅 <strong>时间</strong>：2025-09-18 📍 <strong>地点</strong>：项目组设计评审（AI 外呼模块）</span><span>👤 <strong>人物</strong>：甘工（乙方·系统分析师）、彭工（乙方·架构设计师）、傅工（乙方·开发）、邓经理（甲方·运维经理）、洪经理（甲方·客服部经理）</span><span>⚡ <strong>冲突</strong>：外呼要支持&quot;外显号码池轮询、接通后 X 秒放音、未接/空号/关机状态码识别、重呼与短信策略&quot;，傅工想用 if-else 一路写下去</span><span><strong>难度</strong>：★★★　<strong>总分</strong>：25 分　<strong>建议用时</strong>：25 分钟</span></div><div class="case-scene"><div class="case-h">案例背景</div><strong>背景</strong>：洪经理列了一串外呼策略要求：&quot;外显号码要轮询，不能老用一个号被标记；接通后不能直接放音，得等个一两秒；未接、空号、关机要能分开统计；未接通的可以按策略重呼，也可以发短信。&quot; 傅工打开 IDE 就开始写：<code>if (status == NO_ANSWER) { ... } else if (status == OFF_HOOK) ...</code> 彭工按住他：&quot;你写三条现在是三行，等甲方再加五种状态码、三种重呼策略、两套短信模板，这一坨 if-else 谁维护？而且<strong>外呼时段、节假日、号码池权重</strong>都要能改——你打算每次改都发版吗？&quot; 甘工决定用<strong>策略模式 + 状态机 + 配置外置</strong>重构这一块。</div><div class="case-asks"><div class="case-h">题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">（1）说明<strong>策略模式</strong>的结构与适用场景，并用它重构&quot;拨打策略引擎&quot;；</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">（2）用<strong>状态转换图</strong>描述一次外呼呼叫的生命周期（含未接/空号/关机/接通/完成）；</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">（3）说明<strong>配置外置与热更新</strong>的设计（号码池权重、等待秒数、重呼次数、短信模板）；</span></li><li><span class="case-ask-no">4</span><span class="case-ask-t">（4）说明<strong>设计原则</strong>（开闭、单一职责、依赖倒置）在本方案中的体现。</span></li></ul></div><details class="exam-ans"><summary>参考答案要点（三色标记）</summary><div class="exam-points"><strong>问题 1｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（1）策略模式）：结构——Strategy（抽象策略，定义算法接口）、ConcreteStrategy（具体策略：号码池轮询策略、延迟放音策略、状态码判定策略、重呼策略、短信策略）、Context（上下文，持有一个策略引用并在运行时调用）。<br><strong>问题 2｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（2）外呼状态图）：<br><strong>问题 3｜参考答案要点</strong>：<br>- 🔴 核心：🟡 支撑（3）配置外置与热更新）：①配置项——号码池清单与权重、接通后等待秒数、重呼次数与间隔、状态码—动作映射、短信模板（按渠道/状态码）、服务时段与节假日、并发上限；②存入配置中心，支持版本化、灰度、回滚、审计；③客户端监听变更 + 本地缓存 + 变更失效，实现热更新且不牺牲性能；④校验与防错——阈值上下限、模板变量存在性校验，非法配置不允许保存；异常时自动回退默认配置；⑤敏感配置（号码池）走审批 + 加密存储。<br><strong>问题 4｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（4）设计原则体现）：</div></details><details class="exam-ans"><summary>解析与加分项</summary><div class="exam-exp-more">- 🟢 加分：解析·策略模式题要&quot;结构 + 重构清单 + 状态图 + 配置化 + 原则&quot;。</div></details></div></details><details class="exam-subject" data-exam-subject="论文"><summary><span class="exam-subject-name">📄 论文写作</span><span class="exam-subject-n">7 题</span><span class="exam-subject-tip">先看题 · 再看考点拆解</span></summary><div class="exam-bar"><span class="exam-bar-label">📄 论文写作</span><span class="exam-bar-stat">共 <b>7</b> 题 · 论述题 · 含考点拆解与教材知识点</span></div><div class="exam-q exam-q-essay"><div class="case-head"><span class="exam-no">论文 26</span><span class="exam-tag">方向 · 系统设计</span><span class="exam-lv">⭐⭐</span><span class="essay-batch">2022年上半年</span></div><div class="case-asks"><div class="case-h">论文题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">概要叙述你参与管理和开发的软件项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">简要描述面向对象设计的三种设计原则。</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">具体阐述项目中如何遵循相关设计原则开展信息系统设计。</span></li></ul></div><details class="exam-ans" open><summary>试题背景</summary><div class="essay-bg">面向对象设计将数据结构与对应操作封装于对象之中，设计思想贴近现实业务场景，是主流的软件设计方法。</div></details><details class="exam-ans"><summary>考点拆解（三色标记）</summary><div class="exam-keypoints"><strong>问题 1｜概要叙述项目与你承担的工作</strong>：<br>- 🔴 核心：点明近三年内一个具体的真实项目：项目名称、背景、发起单位、规模、周期、交付成果（教材 22.4-9/22.4-10 明确要求，泛泛而谈会判虚构）<br>- 🔴 核心：明确「我」在项目中的角色与承担的主要工作，并站在系统分析师视角论述，而非单纯开发实现视角<br>- 🟡 支撑：说明项目的组织结构、开发体制与技术栈，为后文论述做铺垫<br>- 🟢 加分：点出项目与本题主题的直接关联（如本项目正是因 XX 痛点才需要 XX 方法）<br><strong>问题 2｜理论知识 / 方法论述</strong>：<br>- 🔴 核心：简要描述面向对象设计的三种设计原则——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🟢 加分：给出与其他候选方案的取舍依据，体现选型判断力<br><strong>问题 3｜项目实践落地与复盘</strong>：<br>- 🔴 核心：给出可量化的落地效果（缺陷率/响应时间/迭代周期/资源成本等具体数据），而非「取得了良好效果」<br>- 🔴 核心：诚实分析存在的 2~3 个真实问题，并给出对应的改进措施——教材强调这才是用心的内容<br>- 🟡 支撑：结合具体实例说明措施的实施过程（怎么做的，而非教科书式罗列）<br>- 🟢 加分：总结经验教训与后续演进方向，体现复盘能力<br>- 🟡 支撑：项目中如何遵循相关设计原则开展信息系统设计</div></details><details class="exam-ans"><summary>教材知识点</summary><div class="exam-textbook"><span class="tb-chap">第 13 章 · 系统设计</span><a class="tb-hour" href="H29.html">H29</a><a class="tb-hour" href="H30.html">H30</a></div></details></div><div class="exam-q exam-q-essay"><div class="case-head"><span class="exam-no">论文 37</span><span class="exam-tag">方向 · 系统设计</span><span class="exam-lv">⭐⭐</span><span class="essay-batch">2019年上半年</span></div><div class="case-asks"><div class="case-h">论文题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">简要叙述你参与的软件开发项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">说明处理流程设计工具的类别，并为每类工具列举至少一种实例。</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">说明项目选用的流程设计工具、实施过程以及应用效果。</span></li></ul></div><details class="exam-ans" open><summary>试题背景</summary><div class="essay-bg">处理流程设计(PFD)用于明确模块之间的关联关系与模块内部功能逻辑，为系统实现提供技术依据。</div></details><details class="exam-ans"><summary>考点拆解（三色标记）</summary><div class="exam-keypoints"><strong>问题 1｜概要叙述项目与你承担的工作</strong>：<br>- 🔴 核心：点明近三年内一个具体的真实项目：项目名称、背景、发起单位、规模、周期、交付成果（教材 22.4-9/22.4-10 明确要求，泛泛而谈会判虚构）<br>- 🔴 核心：明确「我」在项目中的角色与承担的主要工作，并站在系统分析师视角论述，而非单纯开发实现视角<br>- 🟡 支撑：说明项目的组织结构、开发体制与技术栈，为后文论述做铺垫<br>- 🟢 加分：点出项目与本题主题的直接关联（如本项目正是因 XX 痛点才需要 XX 方法）<br><strong>问题 2｜理论知识 / 方法论述</strong>：<br>- 🔴 核心：处理流程设计工具的类别——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：处理流程设计工具的并为每类工具列举至少一种实例——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🟢 加分：给出与其他候选方案的取舍依据，体现选型判断力<br><strong>问题 3｜项目实践落地与复盘</strong>：<br>- 🔴 核心：给出可量化的落地效果（缺陷率/响应时间/迭代周期/资源成本等具体数据），而非「取得了良好效果」<br>- 🔴 核心：诚实分析存在的 2~3 个真实问题，并给出对应的改进措施——教材强调这才是用心的内容<br>- 🟡 支撑：结合具体实例说明措施的实施过程（怎么做的，而非教科书式罗列）<br>- 🟢 加分：总结经验教训与后续演进方向，体现复盘能力<br>- 🟡 支撑：项目选用的流程设计工具</div></details><details class="exam-ans"><summary>教材知识点</summary><div class="exam-textbook"><span class="tb-chap">第 13 章 · 系统设计</span><a class="tb-hour" href="H29.html">H29</a><a class="tb-hour" href="H30.html">H30</a></div></details></div><div class="exam-q exam-q-essay"><div class="case-head"><span class="exam-no">论文 54</span><span class="exam-tag">方向 · 系统设计</span><span class="exam-lv">⭐</span><span class="essay-batch">2015年下半年（11月）</span></div><div class="case-asks"><div class="case-h">论文题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">概要叙述你参与设计、开发的信息系统项目（项目的背景、业务场景、技术架构、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">详细论述面向对象设计的核心原则（如单一职责、开闭原则、里氏替换等）、类与对象的设计方法、交互机制设计要点。</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">结合项目实践，论述面向对象设计在项目中的具体落地方式、遇到的设计难点及解决思路，总结实施效果。</span></li></ul></div><details class="exam-ans" open><summary>试题背景</summary><div class="essay-bg">面向对象设计是现代软件研发的主流方法，其封装、继承、多态三大特性能够有效提升系统的可维护性与可扩展性。</div></details><details class="exam-ans"><summary>考点拆解（三色标记）</summary><div class="exam-keypoints"><strong>问题 1｜概要叙述项目与你承担的工作</strong>：<br>- 🔴 核心：点明近三年内一个具体的真实项目：项目名称、背景、发起单位、规模、周期、交付成果（教材 22.4-9/22.4-10 明确要求，泛泛而谈会判虚构）<br>- 🔴 核心：明确「我」在项目中的角色与承担的主要工作，并站在系统分析师视角论述，而非单纯开发实现视角<br>- 🟡 支撑：说明项目的组织结构、开发体制与技术栈，为后文论述做铺垫<br>- 🟢 加分：点出项目与本题主题的直接关联（如本项目正是因 XX 痛点才需要 XX 方法）<br><strong>问题 2｜理论知识 / 方法论述</strong>：<br>- 🔴 核心：面向对象设计的核心原则如单一职责——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：面向对象设计的开闭原则——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：面向对象设计的里氏替换等——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🟡 支撑：面向对象设计的类与对象的设计方法<br>- 🟡 支撑：面向对象设计的交互机制设计要点<br>- 🟢 加分：给出与其他候选方案的取舍依据，体现选型判断力<br><strong>问题 3｜项目实践落地与复盘</strong>：<br>- 🔴 核心：给出可量化的落地效果（缺陷率/响应时间/迭代周期/资源成本等具体数据），而非「取得了良好效果」<br>- 🔴 核心：诚实分析存在的 2~3 个真实问题，并给出对应的改进措施——教材强调这才是用心的内容<br>- 🟡 支撑：结合具体实例说明措施的实施过程（怎么做的，而非教科书式罗列）<br>- 🟢 加分：总结经验教训与后续演进方向，体现复盘能力<br>- 🟡 支撑：论述面向对象设计在项目中的具体落地方式<br>- 🟡 支撑：论述面向对象设计在项目中的遇到的设计难点及解决思路</div></details><details class="exam-ans"><summary>教材知识点</summary><div class="exam-textbook"><span class="tb-chap">第 13 章 · 系统设计</span><a class="tb-hour" href="H29.html">H29</a><a class="tb-hour" href="H30.html">H30</a></div></details></div><div class="exam-q exam-q-essay"><div class="case-head"><span class="exam-no">论文 61</span><span class="exam-tag">方向 · 专项系统类型</span><span class="exam-lv">⭐</span><span class="essay-batch">2014年下半年（11月）</span></div><div class="case-asks"><div class="case-h">论文题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">概要叙述你参与设计、开发的分布式系统项目（项目的背景、业务场景、节点规模、性能要求、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">详细论述分布式系统的核心设计原则（一致性、可用性、分区容错性）、关键技术（分布式锁、负载均衡、数据同步、一致性协议）及实施要点。</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">结合项目实例，论述分布式系统实现过程中遇到的一致性问题、性能瓶颈及解决方法，总结实施经验。</span></li></ul></div><details class="exam-ans" open><summary>试题背景</summary><div class="essay-bg">分布式系统依托网络将多个独立节点协同工作，能够提升系统的可扩展性、可用性与性能，是大型信息系统的主流架构形态。</div></details><details class="exam-ans"><summary>考点拆解（三色标记）</summary><div class="exam-keypoints"><strong>问题 1｜概要叙述项目与你承担的工作</strong>：<br>- 🔴 核心：点明近三年内一个具体的真实项目：项目名称、背景、发起单位、规模、周期、交付成果（教材 22.4-9/22.4-10 明确要求，泛泛而谈会判虚构）<br>- 🔴 核心：明确「我」在项目中的角色与承担的主要工作，并站在系统分析师视角论述，而非单纯开发实现视角<br>- 🟡 支撑：说明项目的组织结构、开发体制与技术栈，为后文论述做铺垫<br>- 🟢 加分：点出项目与本题主题的直接关联（如本项目正是因 XX 痛点才需要 XX 方法）<br><strong>问题 2｜理论知识 / 方法论述</strong>：<br>- 🔴 核心：分布式系统的核心设计原则一致性——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：分布式系统的可用性——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：分布式系统的分区容错性——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🟡 支撑：分布式系统的关键技术分布式锁<br>- 🟡 支撑：分布式系统的负载均衡<br>- 🟡 支撑：分布式系统的数据同步<br>- 🟢 加分：给出与其他候选方案的取舍依据，体现选型判断力<br><strong>问题 3｜项目实践落地与复盘</strong>：<br>- 🔴 核心：给出可量化的落地效果（缺陷率/响应时间/迭代周期/资源成本等具体数据），而非「取得了良好效果」<br>- 🔴 核心：诚实分析存在的 2~3 个真实问题，并给出对应的改进措施——教材强调这才是用心的内容<br>- 🟡 支撑：结合具体实例说明措施的实施过程（怎么做的，而非教科书式罗列）<br>- 🟢 加分：总结经验教训与后续演进方向，体现复盘能力<br>- 🟡 支撑：论述分布式系统实现过程中遇到的一致性问题<br>- 🟡 支撑：性能瓶颈及解决方法</div></details><details class="exam-ans"><summary>教材知识点</summary><div class="exam-textbook"><span class="tb-chap">第 13 章 · 系统设计</span><a class="tb-hour" href="H29.html">H29</a><a class="tb-hour" href="H30.html">H30</a></div></details></div><div class="exam-q exam-q-essay"><div class="case-head"><span class="exam-no">论文 93</span><span class="exam-tag">方向 · 专项系统类型</span><span class="exam-lv">⭐</span><span class="essay-batch">2012年上半年</span></div><div class="case-asks"><div class="case-h">论文题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">概要叙述你参与设计、开发的嵌入式系统项目（项目的背景、应用场景、实时性要求、硬件平台、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">详细论述嵌入式系统的架构设计（硬件层、驱动层、操作系统层、应用层）、实时性设计要点、资源优化方法（内存 / 存储 / 功耗）。</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">结合项目实例，论述系统实现过程中的调试难点、稳定性优化措施，总结嵌入式系统开发的经验教训。</span></li></ul></div><details class="exam-ans" open><summary>试题背景</summary><div class="essay-bg">嵌入式系统兼具硬件与软件特性，需满足实时性、可靠性、资源受限等特殊要求，广泛应用于工业控制、智能终端等场景。</div></details><details class="exam-ans"><summary>考点拆解（三色标记）</summary><div class="exam-keypoints"><strong>问题 1｜概要叙述项目与你承担的工作</strong>：<br>- 🔴 核心：点明近三年内一个具体的真实项目：项目名称、背景、发起单位、规模、周期、交付成果（教材 22.4-9/22.4-10 明确要求，泛泛而谈会判虚构）<br>- 🔴 核心：明确「我」在项目中的角色与承担的主要工作，并站在系统分析师视角论述，而非单纯开发实现视角<br>- 🟡 支撑：说明项目的组织结构、开发体制与技术栈，为后文论述做铺垫<br>- 🟢 加分：点出项目与本题主题的直接关联（如本项目正是因 XX 痛点才需要 XX 方法）<br><strong>问题 2｜理论知识 / 方法论述</strong>：<br>- 🔴 核心：嵌入式系统的架构设计硬件层——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：嵌入式系统的驱动层——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：嵌入式系统的操作系统层——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🟡 支撑：嵌入式系统的应用层<br>- 🟡 支撑：嵌入式系统的实时性设计要点<br>- 🟡 支撑：嵌入式系统的资源优化方法内存 / 存储 / 功耗<br>- 🟢 加分：给出与其他候选方案的取舍依据，体现选型判断力<br><strong>问题 3｜项目实践落地与复盘</strong>：<br>- 🔴 核心：给出可量化的落地效果（缺陷率/响应时间/迭代周期/资源成本等具体数据），而非「取得了良好效果」<br>- 🔴 核心：诚实分析存在的 2~3 个真实问题，并给出对应的改进措施——教材强调这才是用心的内容<br>- 🟡 支撑：结合具体实例说明措施的实施过程（怎么做的，而非教科书式罗列）<br>- 🟢 加分：总结经验教训与后续演进方向，体现复盘能力<br>- 🟡 支撑：论述系统实现过程中的调试难点<br>- 🟡 支撑：稳定性优化措施</div></details><details class="exam-ans"><summary>教材知识点</summary><div class="exam-textbook"><span class="tb-chap">第 13 章 · 系统设计</span><a class="tb-hour" href="H29.html">H29</a><a class="tb-hour" href="H30.html">H30</a></div></details></div><div class="exam-q exam-q-essay"><div class="case-head"><span class="exam-no">论文 105</span><span class="exam-tag">方向 · 专项系统类型</span><span class="exam-lv">⭐</span><span class="essay-batch">2011年下半年（11月）</span></div><div class="case-asks"><div class="case-h">论文题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">概要叙述你参与设计、开发的实时系统项目（项目的背景、实时性指标、应用场景、硬件平台、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">详细论述实时系统的架构设计、任务调度算法（如优先级调度、时间片轮转）、中断处理设计、资源冲突解决方法。</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">结合项目实例，论述系统实现过程中的实时性测试方法、性能优化措施，总结实时系统开发的经验。</span></li></ul></div><details class="exam-ans" open><summary>试题背景</summary><div class="essay-bg">实时系统需在规定时间内完成任务响应与处理，分为硬实时与软实时两类，广泛应用于工业自动化、航空航天等领域。</div></details><details class="exam-ans"><summary>考点拆解（三色标记）</summary><div class="exam-keypoints"><strong>问题 1｜概要叙述项目与你承担的工作</strong>：<br>- 🔴 核心：点明近三年内一个具体的真实项目：项目名称、背景、发起单位、规模、周期、交付成果（教材 22.4-9/22.4-10 明确要求，泛泛而谈会判虚构）<br>- 🔴 核心：明确「我」在项目中的角色与承担的主要工作，并站在系统分析师视角论述，而非单纯开发实现视角<br>- 🟡 支撑：说明项目的组织结构、开发体制与技术栈，为后文论述做铺垫<br>- 🟢 加分：点出项目与本题主题的直接关联（如本项目正是因 XX 痛点才需要 XX 方法）<br><strong>问题 2｜理论知识 / 方法论述</strong>：<br>- 🔴 核心：实时系统的架构设计——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：实时系统的任务调度算法如优先级调度——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：实时系统的时间片轮转——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🟡 支撑：实时系统的中断处理设计<br>- 🟡 支撑：实时系统的资源冲突解决方法<br>- 🟢 加分：给出与其他候选方案的取舍依据，体现选型判断力<br><strong>问题 3｜项目实践落地与复盘</strong>：<br>- 🔴 核心：给出可量化的落地效果（缺陷率/响应时间/迭代周期/资源成本等具体数据），而非「取得了良好效果」<br>- 🔴 核心：诚实分析存在的 2~3 个真实问题，并给出对应的改进措施——教材强调这才是用心的内容<br>- 🟡 支撑：结合具体实例说明措施的实施过程（怎么做的，而非教科书式罗列）<br>- 🟢 加分：总结经验教训与后续演进方向，体现复盘能力<br>- 🟡 支撑：论述系统实现过程中的实时性测试方法<br>- 🟡 支撑：性能优化措施</div></details><details class="exam-ans"><summary>教材知识点</summary><div class="exam-textbook"><span class="tb-chap">第 13 章 · 系统设计</span><a class="tb-hour" href="H29.html">H29</a><a class="tb-hour" href="H30.html">H30</a></div></details></div><div class="exam-q exam-q-essay"><div class="case-head"><span class="exam-no">论文 109</span><span class="exam-tag">方向 · 专项系统类型</span><span class="exam-lv">⭐</span><span class="essay-batch">2010年上半年</span></div><div class="case-asks"><div class="case-h">论文题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">概要叙述你参与设计、开发的分布式数据库项目（项目的背景、数据分布需求、节点规模、性能要求、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">详细论述分布式数据库的架构设计（分片 / 复制）、分布式事务处理方法（2PC/3PC/TCC）、数据同步策略、查询优化要点。</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">结合项目实例，论述系统实现过程中的一致性问题、节点故障应对方法，总结分布式数据库实施的经验教训。</span></li></ul></div><details class="exam-ans" open><summary>试题背景</summary><div class="essay-bg">分布式数据库系统将数据分散存储在多个节点，需解决数据一致性、分布式事务、查询优化等问题，是大型系统的核心数据存储方案。</div></details><details class="exam-ans"><summary>考点拆解（三色标记）</summary><div class="exam-keypoints"><strong>问题 1｜概要叙述项目与你承担的工作</strong>：<br>- 🔴 核心：点明近三年内一个具体的真实项目：项目名称、背景、发起单位、规模、周期、交付成果（教材 22.4-9/22.4-10 明确要求，泛泛而谈会判虚构）<br>- 🔴 核心：明确「我」在项目中的角色与承担的主要工作，并站在系统分析师视角论述，而非单纯开发实现视角<br>- 🟡 支撑：说明项目的组织结构、开发体制与技术栈，为后文论述做铺垫<br>- 🟢 加分：点出项目与本题主题的直接关联（如本项目正是因 XX 痛点才需要 XX 方法）<br><strong>问题 2｜理论知识 / 方法论述</strong>：<br>- 🔴 核心：分布式数据库的架构设计分片 / 复制——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：分布式数据库的分布式事务处理方法2PC/3PC/TCC——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：分布式数据库的数据同步策略——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🟡 支撑：分布式数据库的查询优化要点<br>- 🟢 加分：给出与其他候选方案的取舍依据，体现选型判断力<br><strong>问题 3｜项目实践落地与复盘</strong>：<br>- 🔴 核心：给出可量化的落地效果（缺陷率/响应时间/迭代周期/资源成本等具体数据），而非「取得了良好效果」<br>- 🔴 核心：诚实分析存在的 2~3 个真实问题，并给出对应的改进措施——教材强调这才是用心的内容<br>- 🟡 支撑：结合具体实例说明措施的实施过程（怎么做的，而非教科书式罗列）<br>- 🟢 加分：总结经验教训与后续演进方向，体现复盘能力<br>- 🟡 支撑：论述系统实现过程中的一致性问题<br>- 🟡 支撑：节点故障应对方法</div></details><details class="exam-ans"><summary>教材知识点</summary><div class="exam-textbook"><span class="tb-chap">第 13 章 · 系统设计</span><a class="tb-hour" href="H29.html">H29</a><a class="tb-hour" href="H30.html">H30</a></div></details></div></details></section>
     <div class="wrongbook"></div>
     <div class="keyhint">
   <span class="keyhint-title">键盘快捷键</span>
@@ -3266,7 +3450,9 @@ F[调用应用] -.接口三.-&gt; B
     init() {
       const root = document.querySelector('.exam')
       if (!root) return
-      const chapter = root.dataset.examChapter || 'x'
+      // ⚠️ 专项页 / 全真模拟页没有 data-exam-chapter（无教材章），
+      //    旧写法一律退化成 'x' → H42~H48 共用同一个记忆键、互相串状态。
+      const chapter = root.dataset.examChapter || root.dataset.examHour || 'x'
 
       // 恢复上次展开状态：{ "H07": { "2025年5月": true, ... } }
       const saved = store.get(this.KEY, {}) || {}
@@ -3286,6 +3472,7 @@ F[调用应用] -.接口三.-&gt; B
       const seen = store.get('examSeen', {}) || {}
       root.querySelectorAll('.exam-q').forEach(qd => {
         const qid = qd.dataset.examId
+        if (!qid) return
         if (seen[qid]) {
           const a = qd.querySelector('.exam-ans')
           if (a) a.open = true
@@ -3301,12 +3488,17 @@ F[调用应用] -.接口三.-&gt; B
         btn.addEventListener('click', e => {
           e.preventDefault()
           const openAll = btn.dataset.examAll === '1'
-          root.querySelectorAll('.exam-subject,.exam-year').forEach(d => { d.open = openAll })
-          root.querySelectorAll('.exam-ans').forEach(d => {
-            d.open = openAll
-            if (openAll && d.parentElement.dataset.examId) seen[d.parentElement.dataset.examId] = 1
-          })
-          if (openAll) store.set('examSeen', seen)
+          // ⚠️ 必须把 .exam-q 也列进来：只开 .exam-subject/.exam-year/.exam-ans
+          //    时，单题仍折叠 → 答案藏在关闭的单题内，"全部展开"名不副实。
+          root.querySelectorAll('.exam-subject,.exam-year,.exam-q,.exam-ans')
+            .forEach(d => { d.open = openAll })
+          if (openAll) {
+            // ⚠️ 旧的 `d.parentElement.dataset.examId` 取到的是 .exam-q-body（无 id），
+            //    会把 seen[undefined] 写进 localStorage。改为直接从 .exam-q 取。
+            root.querySelectorAll('.exam-q[data-exam-id]')
+              .forEach(qd => { seen[qd.dataset.examId] = 1 })
+            store.set('examSeen', seen)
+          }
           // 同步年份级记忆
           root.querySelectorAll('.exam-year').forEach(y => { mine[y.dataset.examYear] = y.open })
           saved[chapter] = mine
@@ -3353,7 +3545,7 @@ F[调用应用] -.接口三.-&gt; B
   // ══════════════════════════════════════════
   // 8. mermaid 渲染（自定义墨绿主题，与正文同色系）
   // ══════════════════════════════════════════
-  // 站点配色（与 design.css 的令牌保持一致）
+  // 站点配色（与设计令牌保持一致 —— 改主题色时这里要同步）
   const MERMAID_LIGHT = {
     bg: '#f2f0e9', fg: '#1b211c', line: '#cdc9bd',
     accent: '#3d5a40', accent2: '#5a8a62', accent3: '#7ea888',

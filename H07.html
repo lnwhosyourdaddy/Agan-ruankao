@@ -7,7 +7,7 @@
 <title>第 7 小时 · 计算机网络（二）· TCP/IP 与网络工程 · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
-<meta name="build-stamp" content="2026-10-05 11:44:51">
+<meta name="build-stamp" content="2026-10-05 15:47:03">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -405,16 +405,21 @@ img{max-width:100%;height:auto}
   border-radius:100px;
   font-size:12.5px;color:var(--accent);font-weight:600;
 }
-.cover h1{
+/* ⚠️ 封面主标题刻意用 <div> 而不是 <h1>：index.md 正文自带 `# 阿甘系分 · 48 小时
+   冲刺手册`，若封面也用 h1，一页会出现两个 h1（语义/SEO 上都是错的）。
+   视觉与 h1 完全一致 —— 字号、颜色、以及那道 72px 短横线都在下面显式声明。 */
+.cover .cover-title{
   font-size:3.5em;font-weight:800;letter-spacing:-1.6px;
   color:var(--accent);line-height:1.14;margin-bottom:16px;
 }
-/* ⚠️ 封面 h1 也继承 `.main h1::after` 那道 56px 短横线，但它是 display:block 的
-   固定宽块级元素 —— 文字居中不代表块级元素居中，会贴到左边。
-   修法：给封面这条短横线加 margin-left/right:auto 让它真正居中。 */
-.cover h1::after{
-  margin-left:auto;margin-right:auto;
+/* 复刻 `.main h1::after` 的短横线（<div> 不继承 h1 的伪元素），并水平居中 —— */
+/* 文字居中不代表块级元素居中，不加 auto 会贴到左边。 */
+.cover .cover-title::after{
+  content:'';display:block;
   width:72px;height:3px;
+  background:var(--accent);
+  margin:.5em auto 0;
+  border-radius:2px;
 }
 .cover .sub{
   font-size:1.2em;color:var(--fg-2);
@@ -845,7 +850,7 @@ pre{
   .nav{margin-left:auto;gap:2px}
   .main{padding:32px 0 80px}
   .cover{padding:48px 0 40px;margin-bottom:40px}
-  .cover h1{font-size:2.4em;letter-spacing:-.8px}
+  .cover .cover-title{font-size:2.4em;letter-spacing:-.8px}
   .cover .sub{font-size:1.05em;margin-bottom:24px}
   .cover-stats{gap:10px;margin-bottom:28px}
   .stat{min-width:76px;padding:10px 14px}
@@ -901,7 +906,7 @@ pre{
   h1,h2,h3,h4{break-after:avoid;page-break-after:avoid}
 
   .cover{padding:0 0 18px;margin-bottom:18px;text-align:left}
-  .cover h1{font-size:24pt}
+  .cover .cover-title{font-size:24pt}
   .cover-stats,.cover-badge,.cta-row{display:none !important}
 
   a[href^="http"]:after{
@@ -1256,16 +1261,14 @@ html.focus-mode .chapbar{opacity:.35;pointer-events:none}
 }
 /* 章首横幅：h1 上方加一条"章号 + 主色渐变"的装饰带，
    让每页开头有一个明确的"进入新章"仪式感（原来 h1 直接浮在正文里）。
-   ⚠️ 必须排除 .cover —— 封面 h1 自己已有顶部留白与居中布局，
-   加上横幅会与下方分隔线叠成双线（首页曾出现两条横线紧挨）。 */
-.main h1:not(.cover h1)::before{
+   （封面主标题已改成 <div class="cover-title">，不再匹配 .main h1，无需再排除。） */
+.main h1::before{
   content:'';display:block;
   width:100%;height:4px;
   background:linear-gradient(90deg,var(--accent) 0%,var(--accent-3) 42%,transparent 88%);
   border-radius:2px;
   margin-bottom:.62em;
 }
-.cover h1::before{content:none}
 .main h1::after{
   content:'';display:block;
   width:56px;height:3px;
@@ -2087,6 +2090,185 @@ html{scroll-padding-top:80px}
   .exam-stem,.exam-opts li{font-size:9.5pt}
   .exam-exp{font-size:8.5pt;color:#333}
 }
+
+/* ══════════════════════════════════════════════════════════════
+   真题区块扩展 v2 · 案例 / 论文卡片 + 全真模拟卷
+   与既有 .exam-* 体系同源：米白卡底 + 左侧 4px 色条 + 墨绿强调色
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── 案例 / 论文卡片（非 <details>，直接展开的题卡）── */
+.exam-q-case,.exam-q-essay{
+  padding:14px 16px 4px;
+  background:var(--bg-card);
+}
+.exam-q-case:hover,.exam-q-essay:hover{background:var(--bg-alt)}
+.case-head{
+  display:flex;flex-wrap:wrap;align-items:center;gap:6px;
+  padding-bottom:10px;margin-bottom:10px;
+  border-bottom:1px dashed var(--line);
+}
+.case-head .exam-no{min-width:0}
+.case-h{
+  display:flex;align-items:center;gap:6px;
+  margin:12px 0 6px;font-size:12.5px;font-weight:700;
+  letter-spacing:.06em;color:var(--accent);
+}
+.case-h::before{
+  content:'';width:4px;height:13px;border-radius:2px;
+  background:var(--accent);flex:0 0 auto;
+}
+
+/* 情景要素（📅时间 / 📍地点 / 👤人物 / ⚡冲突 / 难度总分用时） */
+.case-meta{
+  display:flex;flex-direction:column;gap:2px;
+  padding:9px 12px;margin:.4em 0 .2em;
+  background:var(--bg-alt);
+  border-left:3px solid var(--line-2);
+  border-radius:0 var(--radius-sm) var(--radius-sm) 0;
+  font-size:12.5px;line-height:1.75;color:var(--fg-3);
+}
+.case-meta strong{color:var(--fg-2);font-weight:600}
+
+/* 案例背景正文 */
+.case-scene{
+  margin:.2em 0 1em;padding:12px 14px;
+  background:var(--accent-soft);
+  border-left:3px solid var(--accent-3);
+  border-radius:0 var(--radius) var(--radius) 0;
+  font-size:14.5px;line-height:1.92;color:var(--fg);
+}
+.case-scene strong{color:var(--accent);font-weight:700}
+
+/* 题目列表 */
+.case-asks{margin:.2em 0 1em}
+ul.exam-questions{
+  list-style:none;margin:.4em 0;padding:0;
+}
+ul.exam-questions>li{
+  display:flex;gap:10px;align-items:flex-start;
+  padding:9px 0;border-bottom:1px solid var(--line);
+  font-size:14.5px;line-height:1.88;color:var(--fg);
+}
+ul.exam-questions>li:last-child{border-bottom:0}
+ul.exam-questions>li::before{content:none !important}
+.case-ask-no{
+  flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;
+  min-width:24px;height:22px;margin-top:3px;padding:0 6px;
+  border-radius:6px;background:var(--accent-soft-2);color:var(--accent);
+  font-family:var(--sans);font-size:11.5px;font-weight:700;
+  font-variant-numeric:tabular-nums;
+}
+.case-ask-t{flex:1;min-width:0}
+.case-ask-t strong{color:var(--accent);font-weight:700}
+
+/* ── 答案 / 解析 / 考点拆解 / 教材知识点 ── */
+.exam-points,.exam-keypoints,.exam-exp-more,.essay-bg{
+  padding:12px 14px;margin:8px 0;
+  border-left:4px solid var(--tip-line);
+  border-radius:0 var(--radius) var(--radius) 0;
+  background:var(--tip-bg);
+  font-size:14px;line-height:1.92;color:var(--fg);
+}
+.exam-keypoints{border-left-color:var(--accent-2);background:var(--accent-soft)}
+.exam-exp-more{border-left-color:var(--warn-line);background:var(--warn-bg);color:var(--warn-fg)}
+.essay-bg{border-left-color:var(--line-2);background:var(--bg-alt);color:var(--fg-2)}
+.exam-points strong,.exam-keypoints strong{color:var(--accent);font-weight:700}
+
+/* 教材知识点：章标签 + 可点学时胶囊 */
+.exam-textbook{
+  display:flex;flex-wrap:wrap;align-items:center;gap:6px;
+  padding:12px 14px;margin:8px 0;
+  background:var(--mem-bg);
+  border-left:4px solid var(--mem-line);
+  border-radius:0 var(--radius) var(--radius) 0;
+}
+.tb-chap{
+  font-family:var(--serif);font-size:14px;font-weight:700;color:var(--mem-fg);
+}
+.tb-hour{
+  display:inline-flex;align-items:center;
+  padding:2px 9px;border-radius:999px;
+  background:var(--bg-card);border:1px solid var(--mem-line);
+  color:var(--mem-fg) !important;font-size:12px;font-weight:600;
+  text-decoration:none;
+}
+.tb-hour:hover{background:var(--mem-line);color:var(--bg-card) !important;border-color:var(--mem-fg)}
+
+/* 模拟卷成绩/批次等小标签 */
+.exam-lv{
+  font-family:var(--sans);font-size:11.5px;color:var(--gold);
+  letter-spacing:.04em;white-space:nowrap;
+}
+.exam-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.exam-tag-en{
+  background:var(--mem-bg);color:var(--mem-fg);border-color:var(--mem-line);
+}
+.essay-batch{
+  font-family:var(--sans);font-size:11.5px;color:var(--fg-3);
+  padding:1px 8px;border:1px solid var(--line);border-radius:999px;
+}
+.exam-kp{
+  margin:.5em 0 0;font-family:var(--sans);font-size:12.5px;color:var(--fg-3);
+}
+.exam-kp::before{content:'🎯 ';font-size:11px}
+
+/* ── 全真模拟卷头部 ── */
+.mock-head{
+  padding:16px 18px;margin:0 0 12px;
+  border-radius:var(--radius-lg);
+  background:linear-gradient(135deg,var(--accent) 0%,var(--accent-2) 100%);
+  color:var(--fg-inv);
+  box-shadow:var(--shadow-2);
+}
+.mock-title{
+  font-family:var(--serif);font-size:17px;font-weight:700;
+  letter-spacing:.02em;line-height:1.5;
+}
+.mock-sub{
+  margin-top:6px;font-size:12.5px;line-height:1.75;
+  color:rgba(251,250,246,.82);
+}
+.mock-sub b{color:#fff;font-variant-numeric:tabular-nums}
+.mock-items{
+  border:1px solid var(--line);border-radius:var(--radius);
+  background:var(--bg-card);overflow:hidden;
+}
+.mock-items>.exam-q:first-child{border-top:0}
+.exam-mock .exam-subject{margin-top:14px}
+.exam-subj-only{display:block}
+
+/* 模拟卷内的综合知识答题条 */
+.exam-mock .exam-bar{
+  border-radius:var(--radius) var(--radius) 0 0;
+  border-bottom:0;
+}
+
+/* ── 窄屏 ── */
+@media(max-width:760px){
+  .exam-q-case,.exam-q-essay{padding:12px 12px 4px}
+  .case-scene,.exam-points,.exam-keypoints,.exam-exp-more,.essay-bg,.exam-textbook{
+    padding:10px 11px;font-size:13.5px;
+  }
+  ul.exam-questions>li{gap:8px;font-size:13.5px}
+  .mock-head{padding:13px 14px}
+  .mock-title{font-size:15.5px}
+}
+
+/* ── 打印：卡片不要再折叠，色条与底色转灰阶 ── */
+@media print{
+  .mock-head{background:none !important;color:#000 !important;border:1pt solid #999;
+    box-shadow:none}
+  .mock-title{font-size:13pt}
+  .mock-sub{color:#333 !important}
+  .exam-q-case,.exam-q-essay{break-inside:avoid;page-break-inside:avoid}
+  .case-scene,.exam-points,.exam-keypoints,.exam-exp-more,.essay-bg,.exam-textbook{
+    background:none !important;border-left:2pt solid #999 !important;
+  }
+  .exam-q-case,.exam-q-essay,.case-scene,.case-meta,ul.exam-questions>li{
+    font-size:9.5pt;
+  }
+  .tb-hour{color:#000 !important;border-color:#666}
+}
 </style>
 </head>
 <body>
@@ -2226,7 +2408,7 @@ html{scroll-padding-top:80px}
 <p>③<strong>增强的组播与对流支持</strong>：为 <strong>QoS</strong> 提供良好网络平台</p>
 <p>④<strong>自动配置支持</strong>：对 DHCP 的改进和扩展</p>
 <p>⑤<strong>更高的安全性</strong>：可对网络层数据加密、对 IP 报文校验</p>
-<p>IPv4 → IPv6 过渡三技术**：</p>
+<p>IPv4 → IPv6 过渡三技术：</p>
 <ul><li><strong>隧道技术</strong>：解决 <strong>IPv6 节点之间</strong>通过 IPv4 网络通信</li><li><strong>双协议栈技术</strong>：使 IPv4 与 IPv6 <strong>共存于同一设备和网络</strong></li><li><strong>翻译技术</strong>：使<strong>纯 IPv6 节点与纯 IPv4 节点</strong>之间可以通信</li></ul>
 <h2 id="s4-3-局域网-广域网-网络工程">4.3 局域网 · 广域网 · 网络工程</h2>
 <h3 id="s4-3-1-局域网-特点与四种拓扑">4.3.1 局域网 · 特点与四种拓扑</h3>
@@ -2269,7 +2451,7 @@ html{scroll-padding-top:80px}
 <p>💡 <strong>广域网三类</strong>：<strong>公共传输网络</strong>（电路交换 / 分组交换）· <strong>专用传输网络</strong>（DDN）· <strong>无线传输网络</strong>（GSM / TD-SCDMA / WCDMA / CDMA-2000 / LTE / 5G）</p>
 <p>🏗️网络工程三阶段</p>
 <p>网络规划<br>需求分析 · 可行性研究 · 现有网络分析<br>→<br>网络设计<br>总体目标原则 · 逻辑结构 · 物理结构<br>→<br>网络实施<br>7 步</p>
-<p>分层设计三层次**（大型互连网络必用）：</p>
+<p>分层设计三层次（大型互连网络必用）：</p>
 <ul><li><strong>核心层</strong>：网络主干，<strong>高速转发通信</strong>，提供优化可靠骨干传输；<strong>高可靠性、高性能、高吞吐量</strong>；常采用<strong>双星（树）结构 + 链路聚合</strong></li><li><strong>汇聚层</strong>：核心与接入的分界面；<strong>访问策略控制、数据包处理、过滤、寻址</strong>；比接入层<strong>性能更高、接口更少、交换速率更高</strong></li><li><strong>接入层</strong>：直接面向用户连接；<strong>低成本、高端口密度</strong></li></ul>
 <p><strong>网络实施 7 步</strong>：工程实施计划 → 设备到货验收 → 设备安装（综合布线是隐蔽工程，覆盖后排障代价高）→ 系统测试（<strong>设备/系统/应用</strong>三层次）→ 系统试运行 → 用户培训 → 系统转换（<strong>直接 / 并行 / 分段</strong>）</p>
 <h2 id="上集易错辨析-TOP-10">上集易错辨析 TOP 10</h2>
@@ -2356,13 +2538,14 @@ D. 轮询：严格按顺序平均分配请求，无视服务器性能差异，�
 flowchart L…</span></summary><div class="exam-q-body"><p class="exam-stem">依据香农理论，假设频率为 2MHZ，信噪比为 30db 时，通信带宽为（）
 ```mermaid
 flowchart LR
-W[带宽W] --&gt;|噪声影响| C1[香农理论&lt;br/&gt;C = W log₂(1+S/N)]
+W[带宽W] --&gt;|噪声影响| C1[香农理论
+C = W log₂(1+S/N)]
 C1 --&gt; C[极限数据速率C(bps)]
 W --&gt;|B=2W| B[码元速度B 波特(Baud)]
 调制技术 --&gt; B
 B --&gt;|R = B log₂N| R[数据速率R(bps)]
 N[码元种类数N] --&gt; R
-```</p><ul class="exam-opts"><li><b>A</b> 10M</li><li><b>B</b> 20M</li><li><b>C</b> 30M</li><li><b>D</b> 40M</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">香农信道容量公式为C=Wlog₂(1+S/N)，先将分贝信噪比换算为功率比1000，代入带宽2MHz计算得到极限通信速率约20MHz。</p></details></div></details><details class="exam-q" data-exam-id="2024年5月-007"><summary><span class="exam-no">第 7 题</span><span class="exam-stem-peek">FTP是文件传输协议，是基于（）传输层协议实现的</span></summary><div class="exam-q-body"><p class="exam-stem">FTP是文件传输协议，是基于（）传输层协议实现的</p><ul class="exam-opts"><li><b>A</b> UDP</li><li><b>B</b> TCP</li><li><b>C</b> IP</li><li><b>D</b> HTTP</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">FTP依托TCP协议搭建控制通道与数据通道，依靠TCP的可靠传输特性保障文件完整传输；UDP为不可靠协议，IP属于网络层协议，HTTP属于应用层协议。</p></details></div></details></details><details class="exam-year" data-exam-year="2023年5月"><summary><span class="exam-year-name">2023年5月</span><span class="exam-year-n">1 题</span></summary><details class="exam-q" data-exam-id="2023年5月-009"><summary><span class="exam-no">第 9 题</span><span class="exam-stem-peek">下面用于收取电子邮件的协议是（ ）。</span></summary><div class="exam-q-body"><p class="exam-stem">下面用于收取电子邮件的协议是（ ）。</p><ul class="exam-opts"><li><b>A</b> SMTP</li><li><b>B</b> SNMP</li><li><b>C</b> ICMP</li><li><b>D</b> POP3</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">邮件协议分工：POP3/IMAP用于从服务器收取邮件，SMTP用于发送邮件；SNMP是网络管理协议，ICMP是网络控制报文协议。</p></details></div></details></details><details class="exam-year" data-exam-year="2022年5月"><summary><span class="exam-year-name">2022年5月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2022年5月-067"><summary><span class="exam-no">第 67 题</span><span class="exam-stem-peek">IP报文首部不包含（70）</span></summary><div class="exam-q-body"><p class="exam-stem">IP报文首部不包含（70）</p><ul class="exam-opts"><li><b>A</b> 版本号</li><li><b>B</b> 源目的MAC</li><li><b>C</b> 生存时间</li><li><b>D</b> 源/目的IP</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">IP是网络层协议，首部包含IP版本号、TTL生存时间、源IP地址、目的IP地址；源MAC、目的MAC是数据链路层以太网帧头部的字段，不会出现在IP报文首部中。</p></details></div></details><details class="exam-q" data-exam-id="2022年5月-006"><summary><span class="exam-no">第 6 题</span><span class="exam-stem-peek">TCP/IP的四层模型中，每一层都提供了安全协议，下列属于网络层安全协议的是（6）。</span></summary><div class="exam-q-body"><p class="exam-stem">TCP/IP的四层模型中，每一层都提供了安全协议，下列属于网络层安全协议的是（6）。</p><ul class="exam-opts"><li><b>A</b> HTTPS</li><li><b>B</b> SSH</li><li><b>C</b> IPSec</li><li><b>D</b> Socks</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">从IP也应该可以联想到。</p></details></div></details></details><details class="exam-year" data-exam-year="2021年5月"><summary><span class="exam-year-name">2021年5月</span><span class="exam-year-n">3 题</span></summary><details class="exam-q" data-exam-id="2021年5月-068"><summary><span class="exam-no">第 68 题</span><span class="exam-stem-peek">在对服务器的日志进行分析时，发现某一时间段，网络中有大量包含“USER”“PASS”负载的数据，该异常行为最可能是（ ）…</span></summary><div class="exam-q-body"><p class="exam-stem">在对服务器的日志进行分析时，发现某一时间段，网络中有大量包含“USER”“PASS”负载的数据，该异常行为最可能是（ ）。</p><ul class="exam-opts"><li><b>A</b> ICMP泛洪攻击</li><li><b>B</b> 端口扫描</li><li><b>C</b> 弱口令扫描</li><li><b>D</b> TCP泛洪攻击</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">USER、PASS是账号口令交互的专用指令，大量重复出现代表攻击者正在使用密码字典尝试破解登录口令，属于典型的弱口令扫描暴力破解行为。</p></details></div></details><details class="exam-q" data-exam-id="2021年5月-065"><summary><span class="exam-no">第 65 题</span><span class="exam-stem-peek">通常使用（ ）为IP数据报文进行加密。</span></summary><div class="exam-q-body"><p class="exam-stem">通常使用（ ）为IP数据报文进行加密。</p><ul class="exam-opts"><li><b>A</b> IPSec</li><li><b>B</b> PP2P</li><li><b>C</b> HTTPS</li><li><b>D</b> TLS</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">IPSec工作在TCP/IP体系的网络层，专门针对IP层的原始数据报文提供加密、完整性校验、身份认证保护；其余选项工作层级不匹配IP报文加密需求。</p></details></div></details><details class="exam-q" data-exam-id="2021年5月-006"><summary><span class="exam-no">第 6 题</span><span class="exam-stem-peek">光信号在单模光纤中是以（ ）方式传输。</span></summary><div class="exam-q-body"><p class="exam-stem">光信号在单模光纤中是以（ ）方式传输。</p><ul class="exam-opts"><li><b>A</b> 直线传输</li><li><b>B</b> 渐变反射</li><li><b>C</b> 突变反射</li><li><b>D</b> 无线收发</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">光纤分为多模、单模两类，多模依靠突变/渐变反射实现多路径传输，单模的光信号沿单一方向直线传输，传输距离更远、衰减小。</p></details></div></details></details><details class="exam-year" data-exam-year="2020年11月"><summary><span class="exam-year-name">2020年11月</span><span class="exam-year-n">1 题</span></summary><details class="exam-q" data-exam-id="2020年11月-067"><summary><span class="exam-no">第 67 题</span><span class="exam-stem-peek">使用电子邮件客户端从服务器下载邮件，能实现邮件的移动、删除等操作在客户端和邮箱上更新同步，所使用的电子邮件接收协议是（6…</span></summary><div class="exam-q-body"><p class="exam-stem">使用电子邮件客户端从服务器下载邮件，能实现邮件的移动、删除等操作在客户端和邮箱上更新同步，所使用的电子邮件接收协议是（67）。</p><ul class="exam-opts"><li><b>A</b> SMTP</li><li><b>B</b> POP3</li><li><b>C</b> IMAP4</li><li><b>D</b> MIME</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">IMAP4协议可实现客户端和邮件服务器双向状态同步，在线操作邮件的所有改动都会同步到云端邮箱，满足题目同步需求；SMTP是发信协议、POP3无同步能力、MIME是邮件格式扩展标准。</p></details></div></details></details></details><details class="exam-subject" data-exam-subject="案例"><summary><span class="exam-subject-name">📋 案例分析</span><span class="exam-subject-n">1 题</span><span class="exam-subject-tip">情景简答 · 采分点三色标记</span></summary><div class="exam-bar"><span class="exam-bar-label">📋 案例分析</span><span class="exam-bar-stat">共 <b>1</b> 题 · 情景简答</span></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">15</span>考点：分布式系统特征与 CAP / 构件与中间件 / Web 服务 / 云计算部署模式<br>📅 时间：2025-08-05 下午 📍 地点：项目组架构讨论<br>👤 人物：甘工（乙方·系统分析师）、彭工（乙方·架构设计师）、李工（乙方·项目经理）、郑专员（甲方·合规专员）<br>⚡ 冲突：服务要用不同语言写、机房间网络抖动、数据不能出企业<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：彭工摊开架构图：&quot;二期要拆服务，有的用 Java，有的用 Go，还有算法那边的 Python——调用和鉴权怎么统一？&quot; 李工更关心现实问题：&quot;两个机房之间网络抖一下，一部分坐席能看到工单、一部分看不到，这算谁的？&quot; 郑专员最后加了一条硬约束：&quot;客户数据不能出企业，公有云只能看，不能放。&quot; 甘工知道，这几件事指向同一组答案：分布式系统的特征、中间件的分工，以及云的边界。<br>补充资料：发语言不同（Java/Go/Python），调用与鉴权方式不统一；③集团要求核心数据不出企业，但希望高峰时能借用公有云弹性算力。<br>问题 1：（1）说明分布式系统的主要特征与 CAP 理论，并分析本案例应选择 CP 还是 AP；<br>问题 2：（2）说明中间件的主要类别与作用，并给出本项目的中间件选型；<br>问题 3：（3）说明云计算的部署模式，为本项目给出云策略；<br>问题 4：（4）说明 Web 服务的核心技术与作用。</p><ul class="exam-questions"><li><b>问题 1</b> （1）说明<strong>分布式系统</strong>的主要特征与 CAP 理论，并分析本案例应选择 CP 还是 AP；</li><li><b>问题 2</b> （2）说明<strong>中间件</strong>的主要类别与作用，并给出本项目的中间件选型；</li><li><b>问题 3</b> （3）说明<strong>云计算</strong>的部署模式，为本项目给出云策略；</li><li><b>问题 4</b> （4）说明 Web 服务的核心技术与作用。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）分布式与 CAP）：<br>- 🟢 加分：解析·分布式与云题要&quot;特征 + CAP 取舍 + 中间件分类 + 云策略&quot;，取舍必须落到具体数据。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🔴 核心（2）中间件与选型）：中间件是位于操作系统与应用之间的可复用基础软件，屏蔽异构性与分布性。主要类别：<br>问题 3｜参考答案要点：<br>- 🔴 核心：🔴 核心（3）云部署模式与策略）：<br>问题 4｜参考答案要点：<br>- 🔴 核心：🔴 核心（4）Web 服务）：核心技术 SOAP/WSDL/UDDI（传统） 与 REST/JSON、OpenAPI（主流），以及 XML/JSON、HTTP(S)、SOA/微服务 思想；作用——跨平台、跨语言的系统互操作，通过标准接口与契约实现松耦合集成（本项目对外提供工单与话务查询接口即属此类）。</div></details></div></details></section>
+```</p><ul class="exam-opts"><li><b>A</b> 10M</li><li><b>B</b> 20M</li><li><b>C</b> 30M</li><li><b>D</b> 40M</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">香农信道容量公式为C=Wlog₂(1+S/N)，先将分贝信噪比换算为功率比1000，代入带宽2MHz计算得到极限通信速率约20MHz。</p></details></div></details><details class="exam-q" data-exam-id="2024年5月-007"><summary><span class="exam-no">第 7 题</span><span class="exam-stem-peek">FTP是文件传输协议，是基于（）传输层协议实现的</span></summary><div class="exam-q-body"><p class="exam-stem">FTP是文件传输协议，是基于（）传输层协议实现的</p><ul class="exam-opts"><li><b>A</b> UDP</li><li><b>B</b> TCP</li><li><b>C</b> IP</li><li><b>D</b> HTTP</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">FTP依托TCP协议搭建控制通道与数据通道，依靠TCP的可靠传输特性保障文件完整传输；UDP为不可靠协议，IP属于网络层协议，HTTP属于应用层协议。</p></details></div></details></details><details class="exam-year" data-exam-year="2023年5月"><summary><span class="exam-year-name">2023年5月</span><span class="exam-year-n">1 题</span></summary><details class="exam-q" data-exam-id="2023年5月-009"><summary><span class="exam-no">第 9 题</span><span class="exam-stem-peek">下面用于收取电子邮件的协议是（ ）。</span></summary><div class="exam-q-body"><p class="exam-stem">下面用于收取电子邮件的协议是（ ）。</p><ul class="exam-opts"><li><b>A</b> SMTP</li><li><b>B</b> SNMP</li><li><b>C</b> ICMP</li><li><b>D</b> POP3</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">邮件协议分工：POP3/IMAP用于从服务器收取邮件，SMTP用于发送邮件；SNMP是网络管理协议，ICMP是网络控制报文协议。</p></details></div></details></details><details class="exam-year" data-exam-year="2022年5月"><summary><span class="exam-year-name">2022年5月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2022年5月-067"><summary><span class="exam-no">第 67 题</span><span class="exam-stem-peek">IP报文首部不包含（70）</span></summary><div class="exam-q-body"><p class="exam-stem">IP报文首部不包含（70）</p><ul class="exam-opts"><li><b>A</b> 版本号</li><li><b>B</b> 源目的MAC</li><li><b>C</b> 生存时间</li><li><b>D</b> 源/目的IP</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">IP是网络层协议，首部包含IP版本号、TTL生存时间、源IP地址、目的IP地址；源MAC、目的MAC是数据链路层以太网帧头部的字段，不会出现在IP报文首部中。</p></details></div></details><details class="exam-q" data-exam-id="2022年5月-006"><summary><span class="exam-no">第 6 题</span><span class="exam-stem-peek">TCP/IP的四层模型中，每一层都提供了安全协议，下列属于网络层安全协议的是（6）。</span></summary><div class="exam-q-body"><p class="exam-stem">TCP/IP的四层模型中，每一层都提供了安全协议，下列属于网络层安全协议的是（6）。</p><ul class="exam-opts"><li><b>A</b> HTTPS</li><li><b>B</b> SSH</li><li><b>C</b> IPSec</li><li><b>D</b> Socks</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">从IP也应该可以联想到。</p></details></div></details></details><details class="exam-year" data-exam-year="2021年5月"><summary><span class="exam-year-name">2021年5月</span><span class="exam-year-n">3 题</span></summary><details class="exam-q" data-exam-id="2021年5月-068"><summary><span class="exam-no">第 68 题</span><span class="exam-stem-peek">在对服务器的日志进行分析时，发现某一时间段，网络中有大量包含“USER”“PASS”负载的数据，该异常行为最可能是（ ）…</span></summary><div class="exam-q-body"><p class="exam-stem">在对服务器的日志进行分析时，发现某一时间段，网络中有大量包含“USER”“PASS”负载的数据，该异常行为最可能是（ ）。</p><ul class="exam-opts"><li><b>A</b> ICMP泛洪攻击</li><li><b>B</b> 端口扫描</li><li><b>C</b> 弱口令扫描</li><li><b>D</b> TCP泛洪攻击</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">USER、PASS是账号口令交互的专用指令，大量重复出现代表攻击者正在使用密码字典尝试破解登录口令，属于典型的弱口令扫描暴力破解行为。</p></details></div></details><details class="exam-q" data-exam-id="2021年5月-065"><summary><span class="exam-no">第 65 题</span><span class="exam-stem-peek">通常使用（ ）为IP数据报文进行加密。</span></summary><div class="exam-q-body"><p class="exam-stem">通常使用（ ）为IP数据报文进行加密。</p><ul class="exam-opts"><li><b>A</b> IPSec</li><li><b>B</b> PP2P</li><li><b>C</b> HTTPS</li><li><b>D</b> TLS</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">IPSec工作在TCP/IP体系的网络层，专门针对IP层的原始数据报文提供加密、完整性校验、身份认证保护；其余选项工作层级不匹配IP报文加密需求。</p></details></div></details><details class="exam-q" data-exam-id="2021年5月-006"><summary><span class="exam-no">第 6 题</span><span class="exam-stem-peek">光信号在单模光纤中是以（ ）方式传输。</span></summary><div class="exam-q-body"><p class="exam-stem">光信号在单模光纤中是以（ ）方式传输。</p><ul class="exam-opts"><li><b>A</b> 直线传输</li><li><b>B</b> 渐变反射</li><li><b>C</b> 突变反射</li><li><b>D</b> 无线收发</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">光纤分为多模、单模两类，多模依靠突变/渐变反射实现多路径传输，单模的光信号沿单一方向直线传输，传输距离更远、衰减小。</p></details></div></details></details><details class="exam-year" data-exam-year="2020年11月"><summary><span class="exam-year-name">2020年11月</span><span class="exam-year-n">1 题</span></summary><details class="exam-q" data-exam-id="2020年11月-067"><summary><span class="exam-no">第 67 题</span><span class="exam-stem-peek">使用电子邮件客户端从服务器下载邮件，能实现邮件的移动、删除等操作在客户端和邮箱上更新同步，所使用的电子邮件接收协议是（6…</span></summary><div class="exam-q-body"><p class="exam-stem">使用电子邮件客户端从服务器下载邮件，能实现邮件的移动、删除等操作在客户端和邮箱上更新同步，所使用的电子邮件接收协议是（67）。</p><ul class="exam-opts"><li><b>A</b> SMTP</li><li><b>B</b> POP3</li><li><b>C</b> IMAP4</li><li><b>D</b> MIME</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">IMAP4协议可实现客户端和邮件服务器双向状态同步，在线操作邮件的所有改动都会同步到云端邮箱，满足题目同步需求；SMTP是发信协议、POP3无同步能力、MIME是邮件格式扩展标准。</p></details></div></details></details></details><details class="exam-subject" data-exam-subject="案例"><summary><span class="exam-subject-name">📋 案例分析</span><span class="exam-subject-n">1 题</span><span class="exam-subject-tip">案例背景 · 题目 · 答案与解析</span></summary><div class="exam-bar"><span class="exam-bar-label">📋 案例分析</span><span class="exam-bar-stat">共 <b>1</b> 题 · 情景简答 · 采分点三色标记</span></div><div class="exam-q exam-q-case"><div class="case-head"><span class="exam-no">案例 15</span><span class="exam-tag">考点 · 分布式系统、中间件与云部署</span><span class="exam-lv">⭐⭐⭐</span></div><div class="case-meta"><span><strong>考点</strong>：分布式系统特征与 CAP / 构件与中间件 / Web 服务 / 云计算部署模式</span><span>📅 <strong>时间</strong>：2025-08-05 下午 📍 <strong>地点</strong>：项目组架构讨论</span><span>👤 <strong>人物</strong>：甘工（乙方·系统分析师）、彭工（乙方·架构设计师）、李工（乙方·项目经理）、郑专员（甲方·合规专员）</span><span>⚡ <strong>冲突</strong>：服务要用不同语言写、机房间网络抖动、数据不能出企业</span><span><strong>难度</strong>：★★★　<strong>总分</strong>：25 分　<strong>建议用时</strong>：25 分钟</span></div><div class="case-scene"><div class="case-h">案例背景</div><strong>背景</strong>：彭工摊开架构图：&quot;二期要拆服务，有的用 Java，有的用 Go，还有算法那边的 Python——调用和鉴权怎么统一？&quot; 李工更关心现实问题：&quot;两个机房之间网络抖一下，一部分坐席能看到工单、一部分看不到，这算谁的？&quot; 郑专员最后加了一条硬约束：&quot;客户数据不能出企业，公有云只能看，不能放。&quot; 甘工知道，这几件事指向同一组答案：<strong>分布式系统的特征、中间件的分工，以及云的边界</strong>。<br><strong>补充资料</strong>：发语言不同（Java/Go/Python），调用与鉴权方式不统一；③集团要求核心数据不出企业，但希望高峰时能借用公有云弹性算力。</div><div class="case-asks"><div class="case-h">题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">（1）说明<strong>分布式系统</strong>的主要特征与 CAP 理论，并分析本案例应选择 CP 还是 AP；</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">（2）说明<strong>中间件</strong>的主要类别与作用，并给出本项目的中间件选型；</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">（3）说明<strong>云计算</strong>的部署模式，为本项目给出云策略；</span></li><li><span class="case-ask-no">4</span><span class="case-ask-t">（4）说明 <strong>Web 服务</strong>的核心技术与作用。</span></li></ul></div><details class="exam-ans"><summary>参考答案要点（三色标记）</summary><div class="exam-points"><strong>问题 1｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（1）分布式与 CAP）：<br><strong>问题 2｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（2）中间件与选型）：中间件是位于操作系统与应用之间的可复用基础软件，屏蔽异构性与分布性。主要类别：<br><strong>问题 3｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（3）云部署模式与策略）：<br><strong>问题 4｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（4）Web 服务）：核心技术 SOAP/WSDL/UDDI（传统） 与 REST/JSON、OpenAPI（主流），以及 XML/JSON、HTTP(S)、SOA/微服务 思想；作用——跨平台、跨语言的系统互操作，通过标准接口与契约实现松耦合集成（本项目对外提供工单与话务查询接口即属此类）。</div></details><details class="exam-ans"><summary>解析与加分项</summary><div class="exam-exp-more">- 🟢 加分：解析·分布式与云题要&quot;特征 + CAP 取舍 + 中间件分类 + 云策略&quot;，取舍必须落到具体数据。</div></details></div></details></section>
     <div class="wrongbook"></div>
     <div class="keyhint">
   <span class="keyhint-title">键盘快捷键</span>
@@ -3245,7 +3428,9 @@ N[码元种类数N] --&gt; R
     init() {
       const root = document.querySelector('.exam')
       if (!root) return
-      const chapter = root.dataset.examChapter || 'x'
+      // ⚠️ 专项页 / 全真模拟页没有 data-exam-chapter（无教材章），
+      //    旧写法一律退化成 'x' → H42~H48 共用同一个记忆键、互相串状态。
+      const chapter = root.dataset.examChapter || root.dataset.examHour || 'x'
 
       // 恢复上次展开状态：{ "H07": { "2025年5月": true, ... } }
       const saved = store.get(this.KEY, {}) || {}
@@ -3265,6 +3450,7 @@ N[码元种类数N] --&gt; R
       const seen = store.get('examSeen', {}) || {}
       root.querySelectorAll('.exam-q').forEach(qd => {
         const qid = qd.dataset.examId
+        if (!qid) return
         if (seen[qid]) {
           const a = qd.querySelector('.exam-ans')
           if (a) a.open = true
@@ -3280,12 +3466,17 @@ N[码元种类数N] --&gt; R
         btn.addEventListener('click', e => {
           e.preventDefault()
           const openAll = btn.dataset.examAll === '1'
-          root.querySelectorAll('.exam-subject,.exam-year').forEach(d => { d.open = openAll })
-          root.querySelectorAll('.exam-ans').forEach(d => {
-            d.open = openAll
-            if (openAll && d.parentElement.dataset.examId) seen[d.parentElement.dataset.examId] = 1
-          })
-          if (openAll) store.set('examSeen', seen)
+          // ⚠️ 必须把 .exam-q 也列进来：只开 .exam-subject/.exam-year/.exam-ans
+          //    时，单题仍折叠 → 答案藏在关闭的单题内，"全部展开"名不副实。
+          root.querySelectorAll('.exam-subject,.exam-year,.exam-q,.exam-ans')
+            .forEach(d => { d.open = openAll })
+          if (openAll) {
+            // ⚠️ 旧的 `d.parentElement.dataset.examId` 取到的是 .exam-q-body（无 id），
+            //    会把 seen[undefined] 写进 localStorage。改为直接从 .exam-q 取。
+            root.querySelectorAll('.exam-q[data-exam-id]')
+              .forEach(qd => { seen[qd.dataset.examId] = 1 })
+            store.set('examSeen', seen)
+          }
           // 同步年份级记忆
           root.querySelectorAll('.exam-year').forEach(y => { mine[y.dataset.examYear] = y.open })
           saved[chapter] = mine
@@ -3332,7 +3523,7 @@ N[码元种类数N] --&gt; R
   // ══════════════════════════════════════════
   // 8. mermaid 渲染（自定义墨绿主题，与正文同色系）
   // ══════════════════════════════════════════
-  // 站点配色（与 design.css 的令牌保持一致）
+  // 站点配色（与设计令牌保持一致 —— 改主题色时这里要同步）
   const MERMAID_LIGHT = {
     bg: '#f2f0e9', fg: '#1b211c', line: '#cdc9bd',
     accent: '#3d5a40', accent2: '#5a8a62', accent3: '#7ea888',

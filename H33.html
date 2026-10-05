@@ -7,7 +7,7 @@
 <title>第 33 小时 · 系统运行与维护（一）· 运维指标与软件维护 · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
-<meta name="build-stamp" content="2026-10-05 11:44:51">
+<meta name="build-stamp" content="2026-10-05 15:47:03">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -405,16 +405,21 @@ img{max-width:100%;height:auto}
   border-radius:100px;
   font-size:12.5px;color:var(--accent);font-weight:600;
 }
-.cover h1{
+/* ⚠️ 封面主标题刻意用 <div> 而不是 <h1>：index.md 正文自带 `# 阿甘系分 · 48 小时
+   冲刺手册`，若封面也用 h1，一页会出现两个 h1（语义/SEO 上都是错的）。
+   视觉与 h1 完全一致 —— 字号、颜色、以及那道 72px 短横线都在下面显式声明。 */
+.cover .cover-title{
   font-size:3.5em;font-weight:800;letter-spacing:-1.6px;
   color:var(--accent);line-height:1.14;margin-bottom:16px;
 }
-/* ⚠️ 封面 h1 也继承 `.main h1::after` 那道 56px 短横线，但它是 display:block 的
-   固定宽块级元素 —— 文字居中不代表块级元素居中，会贴到左边。
-   修法：给封面这条短横线加 margin-left/right:auto 让它真正居中。 */
-.cover h1::after{
-  margin-left:auto;margin-right:auto;
+/* 复刻 `.main h1::after` 的短横线（<div> 不继承 h1 的伪元素），并水平居中 —— */
+/* 文字居中不代表块级元素居中，不加 auto 会贴到左边。 */
+.cover .cover-title::after{
+  content:'';display:block;
   width:72px;height:3px;
+  background:var(--accent);
+  margin:.5em auto 0;
+  border-radius:2px;
 }
 .cover .sub{
   font-size:1.2em;color:var(--fg-2);
@@ -845,7 +850,7 @@ pre{
   .nav{margin-left:auto;gap:2px}
   .main{padding:32px 0 80px}
   .cover{padding:48px 0 40px;margin-bottom:40px}
-  .cover h1{font-size:2.4em;letter-spacing:-.8px}
+  .cover .cover-title{font-size:2.4em;letter-spacing:-.8px}
   .cover .sub{font-size:1.05em;margin-bottom:24px}
   .cover-stats{gap:10px;margin-bottom:28px}
   .stat{min-width:76px;padding:10px 14px}
@@ -901,7 +906,7 @@ pre{
   h1,h2,h3,h4{break-after:avoid;page-break-after:avoid}
 
   .cover{padding:0 0 18px;margin-bottom:18px;text-align:left}
-  .cover h1{font-size:24pt}
+  .cover .cover-title{font-size:24pt}
   .cover-stats,.cover-badge,.cta-row{display:none !important}
 
   a[href^="http"]:after{
@@ -1256,16 +1261,14 @@ html.focus-mode .chapbar{opacity:.35;pointer-events:none}
 }
 /* 章首横幅：h1 上方加一条"章号 + 主色渐变"的装饰带，
    让每页开头有一个明确的"进入新章"仪式感（原来 h1 直接浮在正文里）。
-   ⚠️ 必须排除 .cover —— 封面 h1 自己已有顶部留白与居中布局，
-   加上横幅会与下方分隔线叠成双线（首页曾出现两条横线紧挨）。 */
-.main h1:not(.cover h1)::before{
+   （封面主标题已改成 <div class="cover-title">，不再匹配 .main h1，无需再排除。） */
+.main h1::before{
   content:'';display:block;
   width:100%;height:4px;
   background:linear-gradient(90deg,var(--accent) 0%,var(--accent-3) 42%,transparent 88%);
   border-radius:2px;
   margin-bottom:.62em;
 }
-.cover h1::before{content:none}
 .main h1::after{
   content:'';display:block;
   width:56px;height:3px;
@@ -2087,6 +2090,185 @@ html{scroll-padding-top:80px}
   .exam-stem,.exam-opts li{font-size:9.5pt}
   .exam-exp{font-size:8.5pt;color:#333}
 }
+
+/* ══════════════════════════════════════════════════════════════
+   真题区块扩展 v2 · 案例 / 论文卡片 + 全真模拟卷
+   与既有 .exam-* 体系同源：米白卡底 + 左侧 4px 色条 + 墨绿强调色
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── 案例 / 论文卡片（非 <details>，直接展开的题卡）── */
+.exam-q-case,.exam-q-essay{
+  padding:14px 16px 4px;
+  background:var(--bg-card);
+}
+.exam-q-case:hover,.exam-q-essay:hover{background:var(--bg-alt)}
+.case-head{
+  display:flex;flex-wrap:wrap;align-items:center;gap:6px;
+  padding-bottom:10px;margin-bottom:10px;
+  border-bottom:1px dashed var(--line);
+}
+.case-head .exam-no{min-width:0}
+.case-h{
+  display:flex;align-items:center;gap:6px;
+  margin:12px 0 6px;font-size:12.5px;font-weight:700;
+  letter-spacing:.06em;color:var(--accent);
+}
+.case-h::before{
+  content:'';width:4px;height:13px;border-radius:2px;
+  background:var(--accent);flex:0 0 auto;
+}
+
+/* 情景要素（📅时间 / 📍地点 / 👤人物 / ⚡冲突 / 难度总分用时） */
+.case-meta{
+  display:flex;flex-direction:column;gap:2px;
+  padding:9px 12px;margin:.4em 0 .2em;
+  background:var(--bg-alt);
+  border-left:3px solid var(--line-2);
+  border-radius:0 var(--radius-sm) var(--radius-sm) 0;
+  font-size:12.5px;line-height:1.75;color:var(--fg-3);
+}
+.case-meta strong{color:var(--fg-2);font-weight:600}
+
+/* 案例背景正文 */
+.case-scene{
+  margin:.2em 0 1em;padding:12px 14px;
+  background:var(--accent-soft);
+  border-left:3px solid var(--accent-3);
+  border-radius:0 var(--radius) var(--radius) 0;
+  font-size:14.5px;line-height:1.92;color:var(--fg);
+}
+.case-scene strong{color:var(--accent);font-weight:700}
+
+/* 题目列表 */
+.case-asks{margin:.2em 0 1em}
+ul.exam-questions{
+  list-style:none;margin:.4em 0;padding:0;
+}
+ul.exam-questions>li{
+  display:flex;gap:10px;align-items:flex-start;
+  padding:9px 0;border-bottom:1px solid var(--line);
+  font-size:14.5px;line-height:1.88;color:var(--fg);
+}
+ul.exam-questions>li:last-child{border-bottom:0}
+ul.exam-questions>li::before{content:none !important}
+.case-ask-no{
+  flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;
+  min-width:24px;height:22px;margin-top:3px;padding:0 6px;
+  border-radius:6px;background:var(--accent-soft-2);color:var(--accent);
+  font-family:var(--sans);font-size:11.5px;font-weight:700;
+  font-variant-numeric:tabular-nums;
+}
+.case-ask-t{flex:1;min-width:0}
+.case-ask-t strong{color:var(--accent);font-weight:700}
+
+/* ── 答案 / 解析 / 考点拆解 / 教材知识点 ── */
+.exam-points,.exam-keypoints,.exam-exp-more,.essay-bg{
+  padding:12px 14px;margin:8px 0;
+  border-left:4px solid var(--tip-line);
+  border-radius:0 var(--radius) var(--radius) 0;
+  background:var(--tip-bg);
+  font-size:14px;line-height:1.92;color:var(--fg);
+}
+.exam-keypoints{border-left-color:var(--accent-2);background:var(--accent-soft)}
+.exam-exp-more{border-left-color:var(--warn-line);background:var(--warn-bg);color:var(--warn-fg)}
+.essay-bg{border-left-color:var(--line-2);background:var(--bg-alt);color:var(--fg-2)}
+.exam-points strong,.exam-keypoints strong{color:var(--accent);font-weight:700}
+
+/* 教材知识点：章标签 + 可点学时胶囊 */
+.exam-textbook{
+  display:flex;flex-wrap:wrap;align-items:center;gap:6px;
+  padding:12px 14px;margin:8px 0;
+  background:var(--mem-bg);
+  border-left:4px solid var(--mem-line);
+  border-radius:0 var(--radius) var(--radius) 0;
+}
+.tb-chap{
+  font-family:var(--serif);font-size:14px;font-weight:700;color:var(--mem-fg);
+}
+.tb-hour{
+  display:inline-flex;align-items:center;
+  padding:2px 9px;border-radius:999px;
+  background:var(--bg-card);border:1px solid var(--mem-line);
+  color:var(--mem-fg) !important;font-size:12px;font-weight:600;
+  text-decoration:none;
+}
+.tb-hour:hover{background:var(--mem-line);color:var(--bg-card) !important;border-color:var(--mem-fg)}
+
+/* 模拟卷成绩/批次等小标签 */
+.exam-lv{
+  font-family:var(--sans);font-size:11.5px;color:var(--gold);
+  letter-spacing:.04em;white-space:nowrap;
+}
+.exam-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.exam-tag-en{
+  background:var(--mem-bg);color:var(--mem-fg);border-color:var(--mem-line);
+}
+.essay-batch{
+  font-family:var(--sans);font-size:11.5px;color:var(--fg-3);
+  padding:1px 8px;border:1px solid var(--line);border-radius:999px;
+}
+.exam-kp{
+  margin:.5em 0 0;font-family:var(--sans);font-size:12.5px;color:var(--fg-3);
+}
+.exam-kp::before{content:'🎯 ';font-size:11px}
+
+/* ── 全真模拟卷头部 ── */
+.mock-head{
+  padding:16px 18px;margin:0 0 12px;
+  border-radius:var(--radius-lg);
+  background:linear-gradient(135deg,var(--accent) 0%,var(--accent-2) 100%);
+  color:var(--fg-inv);
+  box-shadow:var(--shadow-2);
+}
+.mock-title{
+  font-family:var(--serif);font-size:17px;font-weight:700;
+  letter-spacing:.02em;line-height:1.5;
+}
+.mock-sub{
+  margin-top:6px;font-size:12.5px;line-height:1.75;
+  color:rgba(251,250,246,.82);
+}
+.mock-sub b{color:#fff;font-variant-numeric:tabular-nums}
+.mock-items{
+  border:1px solid var(--line);border-radius:var(--radius);
+  background:var(--bg-card);overflow:hidden;
+}
+.mock-items>.exam-q:first-child{border-top:0}
+.exam-mock .exam-subject{margin-top:14px}
+.exam-subj-only{display:block}
+
+/* 模拟卷内的综合知识答题条 */
+.exam-mock .exam-bar{
+  border-radius:var(--radius) var(--radius) 0 0;
+  border-bottom:0;
+}
+
+/* ── 窄屏 ── */
+@media(max-width:760px){
+  .exam-q-case,.exam-q-essay{padding:12px 12px 4px}
+  .case-scene,.exam-points,.exam-keypoints,.exam-exp-more,.essay-bg,.exam-textbook{
+    padding:10px 11px;font-size:13.5px;
+  }
+  ul.exam-questions>li{gap:8px;font-size:13.5px}
+  .mock-head{padding:13px 14px}
+  .mock-title{font-size:15.5px}
+}
+
+/* ── 打印：卡片不要再折叠，色条与底色转灰阶 ── */
+@media print{
+  .mock-head{background:none !important;color:#000 !important;border:1pt solid #999;
+    box-shadow:none}
+  .mock-title{font-size:13pt}
+  .mock-sub{color:#333 !important}
+  .exam-q-case,.exam-q-essay{break-inside:avoid;page-break-inside:avoid}
+  .case-scene,.exam-points,.exam-keypoints,.exam-exp-more,.essay-bg,.exam-textbook{
+    background:none !important;border-left:2pt solid #999 !important;
+  }
+  .exam-q-case,.exam-q-essay,.case-scene,.case-meta,ul.exam-questions>li{
+    font-size:9.5pt;
+  }
+  .tb-hour{color:#000 !important;border-color:#666}
+}
 </style>
 </head>
 <body>
@@ -2115,7 +2297,7 @@ html{scroll-padding-top:80px}
     
     <h1 id="第-33-小时-系统运行与维护-一-运维指标与软件维护">第 33 小时 · 系统运行与维护（一）· 运维指标与软件维护</h1>
 <div class="quote"><p>第 15 章<strong>真题占比 1.1%</strong>（6/557）—— 全书权重最低的一章，但<strong>运维四个 MT 与软件维护四类几乎每年都见</strong>，<br>而且是<strong>论文的优质素材</strong>（可维护性、技术债、遗留系统改造都能写进论文）。<br>本学时覆盖 <strong>15.1 运维技术指标 + 15.2 运行管理 + 15.3 故障管理 + 15.4 软件维护 + 15.5 系统评价 + 15.6 遗留系统</strong>。</p></div>
-<div class="block gold"><div class="block-title">考情定位</div><p>四块必拿：① <strong>四个 MT 关系</strong>（<strong>MTBF = MTTF + MTTR</strong>）与<strong>可用度公式</strong>（A = MTBF/(MTBF+MTTR)）；② <strong>可用度与停机时间换算</strong>（99.9% ≈ 8.76 h/年，<strong>每多一个 9 缩小 10 倍</strong>）；③ <strong>软件维护四类及占比</strong>（<strong>完善性最大 ≈50%，预防性最小 <5%</strong>）；④ <strong>遗留系统四象限</strong>（高价值+低水平 → <strong>改造或替换</strong>）。</p></div>
+<div class="block gold"><div class="block-title">考情定位</div><p>四块必拿：① <strong>四个 MT 关系</strong>（<strong>MTBF = MTTF + MTTR</strong>）与<strong>可用度公式</strong>（A = MTBF/(MTBF+MTTR)）；② <strong>可用度与停机时间换算</strong>（99.9% ≈ 8.76 h/年，<strong>每多一个 9 缩小 10 倍</strong>）；③ <strong>软件维护四类及占比</strong>（完善性最大 ≈50%，预防性最小 <5%<strong>）；④ </strong>遗留系统四象限<strong>（高价值+低水平 → </strong>改造或替换）。</p></div>
 <div class="block mem"><div class="block-title">记忆口诀</div><p><strong>四个 MT</strong>：<strong>MTTF</strong> 平均失效时间 ｜ <strong>MTTR</strong> 平均修复时间 ｜ <strong>MTBF</strong> 平均故障间隔 ｜ <strong>MTBF = MTTF + MTTR</strong>。<br><strong>可用度 A</strong> = MTBF/(MTBF+MTTR) —— 提高只有两条路：<strong>延长 MTTF 或 缩短 MTTR</strong>。<br><strong>停机换算</strong>（8760 h/年）：99% → <strong>87.6 h</strong> ｜ 99.9% → <strong>8.76 h</strong> ｜ 99.99% → <strong>52.6 min</strong> ｜ 99.999% → <strong>5.26 min</strong>。<br><strong>维护四类</strong>：<strong>改正性</strong>（修 bug）· <strong>适应性</strong>（适应环境）· <strong>完善性</strong>（增强，<strong>最大</strong>）· <strong>预防性</strong>（重构备将来，<strong>最小</strong>）。<br><strong>故障五活动</strong>：<strong>发现 → 定位 → 恢复 → 复盘 → 预防</strong>（<strong>恢复优先于定位</strong>）。</p></div>
 <div class="block warning"><div class="block-title">易错陷阱</div><p><strong>可用度公式别记成 MTTF/(MTTF+MTTR) 与 MTBF/(MTBF+MTTR) 二选一</strong> —— 两者<strong>等价</strong>（因为 MTBF = MTTF + MTTR），用哪个都行。<br><strong>完善性维护是占比最大的</strong>（约 50%），不是改正性——很多人直觉以为"维护就是修 bug"。<br><strong>故障处理原则：先恢复、后定位</strong>（先止损让用户能用，再查根因）。</p></div>
 <div class="block gold"><div class="block-title">论文可用句</div><p>在可维护性治理上，我把<strong>完善性维护</strong>与<strong>预防性维护</strong>纳入常态化迭代：完善性维护承接业务方新增需求（占维护工作量约 55%，主要用于报表与审批流扩展）；预防性维护每季度安排一次，专项偿还技术债——将核心交易链路按<strong>高内聚低耦合</strong>重新划分模块，补充关键接口的契约测试与接口文档。实施一年后，该链路的平均变更交付周期从 5.2 天缩短到 1.8 天，因修改引入的缺陷数下降 61%，系统可维护性显著提升。</p></div>
@@ -2274,12 +2456,12 @@ html{scroll-padding-top:80px}
     <div class="reveal-explain"><strong>四个 MT</strong>：<strong>MTTF（Mean Time To Failure）</strong>——系统<strong>平均能正常运行多久才失效</strong>（用于<strong>不可修复</strong>系统）；<strong>MTTR（Mean Time To Repair）</strong>——<strong>平均修复一次故障所需</strong>的时间（含发现、定位、修复、恢复）；<strong>MTBF（Mean Time Between Failures）</strong>——<strong>两次故障之间的平均间隔</strong>（用于<strong>可修复</strong>系统）；三者关系：<strong>MTBF = MTTF + MTTR</strong>（正常运行一段 + 修一段 = 到下次故障的间隔）。⚠️ <strong>可用度 A = MTBF / (MTBF + MTTR)</strong> = <strong>MTTF / (MTTF + MTTR)</strong>，要提高可用度只有两条路：<strong>延长 MTTF</strong> 或 <strong>缩短 MTTR</strong>。</div>
     <div class="reveal-ref">第15章 · 15.1 运维技术指标 · 四个 MT</div>
   </div>
-</div><div class="quiz-item" data-answer="A" data-explain="&lt;strong&gt;软件维护四类&lt;/strong&gt;：&lt;strong&gt;① 改正性维护&lt;/strong&gt;（&lt;strong&gt;修 bug&lt;/strong&gt;，纠正在特定使用条件下暴露的错误）｜&lt;strong&gt;② 适应性维护&lt;/strong&gt;（&lt;strong&gt;适应环境变化&lt;/strong&gt;，如操作系统升级、数据库迁移、法规变更）｜&lt;strong&gt;③ 完善性维护&lt;/strong&gt;（&lt;strong&gt;增强功能与性能&lt;/strong&gt;，响应用户新需求，&lt;strong&gt;占比最大，约 50%~60%&lt;/strong&gt;）｜&lt;strong&gt;④ 预防性维护&lt;/strong&gt;（&lt;strong&gt;为将来的维护做准备&lt;/strong&gt;，如重构、补充文档、提升可维护性，&lt;strong&gt;占比最小，通常 &lt;5%&lt;/strong&gt;）。⚠️ 排序：&lt;strong&gt;完善性 &gt; 适应性 &gt; 改正性 &gt; 预防性&lt;/strong&gt;（典型比例 50% / 25% / 20% / 5%，教材略有出入但&lt;strong&gt;完善性最大、预防性最小&lt;/strong&gt;是共识）。" data-ref="第15章 · 15.4 软件维护 · 四类维护">
+</div><div class="quiz-item" data-answer="A" data-explain="&lt;strong&gt;软件维护四类&lt;/strong&gt;：&lt;strong&gt;① 改正性维护&lt;/strong&gt;（&lt;strong&gt;修 bug&lt;/strong&gt;，纠正在特定使用条件下暴露的错误）｜&lt;strong&gt;② 适应性维护&lt;/strong&gt;（&lt;strong&gt;适应环境变化&lt;/strong&gt;，如操作系统升级、数据库迁移、法规变更）｜&lt;strong&gt;③ 完善性维护&lt;/strong&gt;（&lt;strong&gt;增强功能与性能&lt;/strong&gt;，响应用户新需求，&lt;strong&gt;占比最大，约 50%~60%&lt;/strong&gt;）｜&lt;strong&gt;④ 预防性维护&lt;/strong&gt;（&lt;strong&gt;为将来的维护做准备&lt;/strong&gt;，如重构、补充文档、提升可维护性，占比最小，通常 &lt;5%&lt;strong&gt;）。⚠️ 排序：&lt;/strong&gt;完善性 &gt; 适应性 &gt; 改正性 &gt; 预防性&lt;strong&gt;（典型比例 50% / 25% / 20% / 5%，教材略有出入但&lt;/strong&gt;完善性最大、预防性最小是共识）。" data-ref="第15章 · 15.4 软件维护 · 四类维护">
   <div class="quiz-q"><span class="qn">2</span>软件维护的四类维护中，在实际项目中占比最大（约 50%~60%）的是：</div>
   <div class="opts"><div class="opt" data-letter="A"><span class="letter">A</span><span class="txt">完善性维护</span></div><div class="opt" data-letter="B"><span class="letter">B</span><span class="txt">改正性维护</span></div><div class="opt" data-letter="C"><span class="letter">C</span><span class="txt">适应性维护</span></div><div class="opt" data-letter="D"><span class="letter">D</span><span class="txt">预防性维护</span></div></div>
   <div class="reveal" style="display:none">
     <div class="reveal-verdict"></div>
-    <div class="reveal-explain"><strong>软件维护四类</strong>：<strong>① 改正性维护</strong>（<strong>修 bug</strong>，纠正在特定使用条件下暴露的错误）｜<strong>② 适应性维护</strong>（<strong>适应环境变化</strong>，如操作系统升级、数据库迁移、法规变更）｜<strong>③ 完善性维护</strong>（<strong>增强功能与性能</strong>，响应用户新需求，<strong>占比最大，约 50%~60%</strong>）｜<strong>④ 预防性维护</strong>（<strong>为将来的维护做准备</strong>，如重构、补充文档、提升可维护性，<strong>占比最小，通常 <5%</strong>）。⚠️ 排序：<strong>完善性 > 适应性 > 改正性 > 预防性</strong>（典型比例 50% / 25% / 20% / 5%，教材略有出入但<strong>完善性最大、预防性最小</strong>是共识）。</div>
+    <div class="reveal-explain"><strong>软件维护四类</strong>：<strong>① 改正性维护</strong>（<strong>修 bug</strong>，纠正在特定使用条件下暴露的错误）｜<strong>② 适应性维护</strong>（<strong>适应环境变化</strong>，如操作系统升级、数据库迁移、法规变更）｜<strong>③ 完善性维护</strong>（<strong>增强功能与性能</strong>，响应用户新需求，<strong>占比最大，约 50%~60%</strong>）｜<strong>④ 预防性维护</strong>（<strong>为将来的维护做准备</strong>，如重构、补充文档、提升可维护性，占比最小，通常 <5%<strong>）。⚠️ 排序：</strong>完善性 > 适应性 > 改正性 > 预防性<strong>（典型比例 50% / 25% / 20% / 5%，教材略有出入但</strong>完善性最大、预防性最小是共识）。</div>
     <div class="reveal-ref">第15章 · 15.4 软件维护 · 四类维护</div>
   </div>
 </div><div class="quiz-item" data-answer="A" data-explain="&lt;strong&gt;故障管理五活动&lt;/strong&gt;：&lt;strong&gt;① 故障发现&lt;/strong&gt;（监控告警，越快越好）→ &lt;strong&gt;② 故障定位&lt;/strong&gt;（确定根因，靠日志/链路追踪/可观测性）→ &lt;strong&gt;③ 故障恢复&lt;/strong&gt;（&lt;strong&gt;先止损再根治&lt;/strong&gt;：降级、限流、回滚、切流）→ &lt;strong&gt;④ 故障分析/复盘&lt;/strong&gt;（定级、时间线、根因、改进项，&lt;strong&gt;不追责、重改进&lt;/strong&gt;）→ &lt;strong&gt;⑤ 故障预防&lt;/strong&gt;（把改进项落地，演练、容量规划、混沌工程）。⚠️ 关键原则：&lt;strong&gt;恢复优先于定位&lt;/strong&gt;（先让用户能用，再查为什么）。" data-ref="第15章 · 15.3 故障管理 · 五活动">
@@ -2316,7 +2498,7 @@ html{scroll-padding-top:80px}
   </div>
 </div>
 </div>
-    <section class="exam" id="exam" data-exam-chapter="15" data-exam-hour="H33"><div class="exam-bar"><span class="exam-bar-label">📚 历年真题</span><span class="exam-bar-stat">本章共 <b>4</b> 题 · 本学时 <b>2</b> 题（其余见同章其他学时）</span><span class="exam-bar-ops"><button type="button" class="exam-op" data-exam-all="1">全部展开</button><button type="button" class="exam-op" data-exam-all="0">全部收起</button></span></div><details class="exam-subject" data-exam-subject="综合知识"><summary><span class="exam-subject-name">📝 综合知识</span><span class="exam-subject-n">2 题</span><span class="exam-subject-tip">按年份展开 · 单题可点开看答案</span></summary><details class="exam-year" data-exam-year="2026年5月"><summary><span class="exam-year-name">2026年5月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2026年5月-050"><summary><span class="exam-no">第 50 题</span><span class="exam-stem-peek">系统运行14天，每天24小时，共4次故障，MTBF为</span></summary><div class="exam-q-body"><p class="exam-stem">系统运行14天，每天24小时，共4次故障，MTBF为</p><ul class="exam-opts"><li><b>A</b> 72</li><li><b>B</b> 84</li><li><b>C</b> 96</li><li><b>D</b> 112</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">总运行时长=14×24=336小时，MTBF=336÷4=84小时。</p></details></div></details><details class="exam-q" data-exam-id="2026年5月-029"><summary><span class="exam-no">第 29 题</span><span class="exam-stem-peek">平均故障间隔时间MTBF的计算公式是</span></summary><div class="exam-q-body"><p class="exam-stem">平均故障间隔时间MTBF的计算公式是</p><ul class="exam-opts"><li><b>A</b> 总运行时间/故障次数</li><li><b>B</b> 故障次数/运行时间</li><li><b>C</b> 修复时间/故障次数</li><li><b>D</b> 总时间×故障率</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">MTBF（平均无故障时间）= 系统总正常运行时长 ÷ 故障发生次数。</p></details></div></details></details></details><details class="exam-subject" data-exam-subject="案例"><summary><span class="exam-subject-name">📋 案例分析</span><span class="exam-subject-n">2 题</span><span class="exam-subject-tip">情景简答 · 采分点三色标记</span></summary><div class="exam-bar"><span class="exam-bar-label">📋 案例分析</span><span class="exam-bar-stat">共 <b>2</b> 题 · 情景简答</span></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">68</span>考点：MTTF/MTBF/MTTR/MTTA / 可用性计算 / 故障管理五活动 / 维护分类<br>📅 时间：2026-03-20 上午 📍 地点：运维季度复盘<br>👤 人物：甘工（乙方·系统分析师）、邓经理（甲方·运维经理）、李工（乙方·项目经理）、洪经理（甲方·客服部经理）<br>⚡ 冲突：一年九次故障、停机 5.2 小时，邓经理算不清可用度，甘工要先算清楚再谈改进<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：邓经理把运维记录摊开：&quot;一年九次故障，累计停机五点二小时；每次修复平均三十五分钟，其中定位二十二分钟；告警到人平均八分钟。&quot; 李工问：&quot;这些数说明什么？&quot; 洪经理更关心：&quot;上次 ASR 那个故障，到底算修好了没有？&quot; 甘工知道，光说&quot;问题不大&quot;没用——先把MTBF、MTTR、MTTA、可用度算出来，才谈得上改。<br>补充资料：钟（其中定位 22 分钟）；告警到运维开始响应平均 8 分钟。 期间发生一次重大故障：ASR 服务因第三方 SDK 显存泄漏连续崩溃，通过&quot;回退版本 + 限流降级&quot;恢复。此外，为适配新法规新增&quot;AI 答复留痕审计&quot;功能；为提升性能对统计模块做了重构。<br>问题 1：（1）辨析 MTTF、MTBF、MTTR、MTTA 的含义与口径；<br>问题 2：（2）计算 MTBF、MTTR、MTTA 与年度可用性（保留两位小数）；<br>问题 3：（3）判断两项工作（新增留痕功能、修复显存泄漏）各属哪类软件维护；<br>问题 4：（4）说明故障管理的五个活动及本例&quot;收尾&quot;工作。</p><ul class="exam-questions"><li><b>问题 1</b> （1）辨析 <strong>MTTF、MTBF、MTTR、MTTA</strong> 的含义与口径；</li><li><b>问题 2</b> （2）计算 <strong>MTBF、MTTR、MTTA 与年度可用性</strong>（保留两位小数）；</li><li><b>问题 3</b> （3）判断两项工作（新增留痕功能、修复显存泄漏）各属哪类<strong>软件维护</strong>；</li><li><b>问题 4</b> （4）说明故障管理的五个活动及本例&quot;收尾&quot;工作。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）四指标）：<br>- 🟢 加分：解析·指标题要写清&quot;含什么不含什么&quot;；维护分类要抓住&quot;适应法规 vs 修缺陷&quot;。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🔴 核心（2）计算）：<br>问题 3｜参考答案要点：<br>- 🔴 核心：🔴 核心（3）维护分类）：<br>问题 4｜参考答案要点：<br>- 🔴 核心：🔴 核心（4）故障管理五活动与收尾）：</div></details></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">70</span>📅 时间：2026-04-08 凌晨 2:40 📍 地点：值班电话会（全员远程）<br>👤 人物：邓经理（甲方运维）、甘工（乙方·系统分析师）、丁工（乙方·测试负责人）、洪经理（被惊动）<br>⚡ 冲突：监控大屏一切正常，但客户投诉&quot;打不进来&quot;，等发现时已影响 40 分钟<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：凌晨两点四十，洪经理的电话把所有人叫醒：&quot;客户在业主群里炸了，说 400 打不通！&quot; 邓经理立刻看监控：CPU、内存、接口成功率全绿。&quot;奇怪，指标都正常啊。&quot; 甘工让坐席试拨，发现电话能接通但没有声音——AI 不说话，客户等几秒就挂了。 继续查：ASR 服务健康检查通过（进程在），但它调用的模型服务返回空，返回码 200、body 为空字符串；而健康检查只探活不探业务，所以&quot;看起来一切正常&quot;。 丁工苦笑：&quot;这叫静默失败——监控没坏，是监控没监到点上。&quot;<br>补充资料：基础设施 → CPU/内存/磁盘/网络/GPU → ✔ → —；服务层 → QPS、成功率、P99、队列积压 → ✔ → —；业务层 → 来话量、AI 应答率、空应答数、转人工率、放弃率 → ✘ → 静默失败无法发现；体验层 → 端到端拨测（有声音、能识别） → ✘ → 无主动探测；依赖层 → 第三方模型业务级探活 → ✘ → 只探活不探业务 故障时间线：02:40 客户投诉 → 02:48 试拨发现无声音 → 03:20 降级止损 → 03:35 恢复 → 影响约 40 分钟。<br>问题 1：（1）说明系统故障管理的五个活动，指出本例在&quot;故障监视&quot;环节的缺失；<br>问题 2：（2）说明应建立哪些监控指标与告警（分层设计），避免静默失败；<br>问题 3：（3）说明故障调查与排查恢复的正确顺序；<br>问题 4：（4）说明本例&quot;收尾&quot;应完成的工作。</p><ul class="exam-questions"><li><b>问题 1</b> （1）说明<strong>系统故障管理</strong>的五个活动，指出本例在&quot;故障监视&quot;环节的缺失；</li><li><b>问题 2</b> （2）说明应建立哪些<strong>监控指标与告警</strong>（分层设计），避免静默失败；</li><li><b>问题 3</b> （3）说明<strong>故障调查与排查恢复</strong>的正确顺序；</li><li><b>问题 4</b> （4）说明本例&quot;收尾&quot;应完成的工作。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）五活动与缺失）：监视（采集指标/日志/链路，阈值告警）→ 调查（确认影响面、收集现场、定级）→ 排查与恢复（先止损后定位，含重启、切流、降级、回退）→ 收尾（确认恢复、核对数据一致、关闭告警、通知）→ 分析与报告（时间线、根因、改进项，沉淀知识库）。<br>- 🟢 加分：解析·故障管理题要&quot;五活动 + 监控分层 + 排查顺序 + 收尾&quot;，业务拨测是亮点。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🟡 支撑（2）分层监控设计）：<br>问题 3｜参考答案要点：<br>- 🔴 核心：🔴 核心（3）排查恢复顺序）：①先止损——把 AI 应答降级为&quot;按键菜单 + 转人工/留言&quot;，保证客户能打通；②快速定位——沿链路（接入 → 路由 → ASR → 模型 → TTS）逐段探测，对比&quot;资源指标&quot;与&quot;业务结果&quot;的差异，定位到模型服务返回空；③恢复——重启/切换模型服务或回退版本，恢复后逐步放量观察；④验证——端到端拨测确认&quot;有声音、能识别&quot;；⑤记录——记入故障时间线。<br>问题 4｜参考答案要点：<br>- 🔴 核心：🟡 支撑（4）收尾工作）：①确认服务恢复且业务指标回归正常（应答率、接通率）；②核对故障期间的数据一致性（呼损是否有记录、未接通是否需补呼、工单是否缺漏）；③解除降级、关闭告警、通知干系人（含洪经理与客服一线）；④故障报告——时间线（02:40 发现 → 03:20 止损 → 03:35 恢复）、影响面（约 X 通来电、时长 40 分钟）、根因（模型服务异常返回空 + 健康检查未覆盖业务结果）、改进项（业务就绪探针、端到端拨测、空应答告警、降级预案演练）+ 责任人与期限；⑤复盘与演练——把&quot;模型返回空&quot;注入混沌演练，验证降级链路可用。</div></details></div></details><details class="exam-subject" data-exam-subject="论文"><summary><span class="exam-subject-name">📄 论文写作</span><span class="exam-subject-n">7 题</span><span class="exam-subject-tip">论述题 · 先写再看题</span></summary><div class="exam-bar"><span class="exam-bar-label">📄 论文写作</span><span class="exam-bar-stat">共 <b>7</b> 题 · 论述题</span></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与管理和开发的软件项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 结合项目实际，说明项目引入DevOps的驱动因素。</li><li><b>问题 3</b> 结合项目实践，说明引入DevOps之后，对应用发布流程与交付模式产生的影响。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 运维与安全</span><span class="exam-lv">⭐⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与管理和开发的软件项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细论述遗留系统的评价活动，以及业内常见的遗留系统演化策略。</li><li><b>问题 3</b> 结合项目实际，说明遗留系统评价、策略选择、方案实施的全过程以及最终效果。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 遗留系统演化</span><span class="exam-lv">⭐⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与设计、运维的信息系统项目（项目的背景、业务重要性、数据规模、可用性要求、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细论述容灾备份的等级划分、主流备份策略（全量 / 增量 / 差异备份）、容灾架构（本地容灾、异地容灾、双活 / 多活架构）的设计要点。</li><li><b>问题 3</b> 结合项目实例，论述容灾备份方案的落地过程、测试验证方法，分析方案存在的不足并提出优化方向。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 可靠性与容灾</span><span class="exam-lv">⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与管理和开发的软件项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 说明软件维护的三种类型、影响软件可维护性的因素，以及提升可维护性的方法。</li><li><b>问题 3</b> 结合项目实际，说明软件维护工作的开展过程，以及可维护性优化的实施效果。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 运维与安全</span><span class="exam-lv">⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与设计、开发的信息系统项目（项目的背景、可靠性指标要求、业务场景、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细论述软件可靠性设计的核心原则、容错设计方法（如 N 版本编程、恢复块）、故障检测与恢复机制设计要点。</li><li><b>问题 3</b> 结合项目实例，论述可靠性设计的落地过程、可靠性测试方法，分析现有设计的不足并提出优化措施。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 可靠性与容灾</span><span class="exam-lv">⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与设计、开发或运维的云原生信息系统项目（项目的背景、业务场景、可用性指标要求、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细论述云原生系统高可用设计策略、容错机制、容灾方案；同时阐述日志、指标、分布式链路追踪三位一体的可观测性体系构建方法。</li><li><b>问题 3</b> 结合项目实例，论述高可用与可观测性体系的落地效果，分析现有体系存在的短板，并给出优化改进方案。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 高可用与可观测性</span><span class="exam-lv">⭐⭐⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你负责运维的云平台/云信息系统项目（项目的背景、部署架构、业务特点、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细论述云计算运维的核心工作内容、关键技术、运维体系建设流程。</li><li><b>问题 3</b> 结合项目实践，论述你如何解决云运维中的性能瓶颈、资源浪费、系统故障等问题，总结云运维实施经验与优化策略。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 运维与安全</span><span class="exam-lv">⭐⭐⭐</span></div></div></details></section>
+    <section class="exam" id="exam" data-exam-chapter="15" data-exam-hour="H33"><div class="exam-bar"><span class="exam-bar-label">📚 历年真题</span><span class="exam-bar-stat">本章共 <b>4</b> 题 · 本学时 <b>2</b> 题（其余见同章其他学时）</span><span class="exam-bar-ops"><button type="button" class="exam-op" data-exam-all="1">全部展开</button><button type="button" class="exam-op" data-exam-all="0">全部收起</button></span></div><details class="exam-subject" data-exam-subject="综合知识"><summary><span class="exam-subject-name">📝 综合知识</span><span class="exam-subject-n">2 题</span><span class="exam-subject-tip">按年份展开 · 单题可点开看答案</span></summary><details class="exam-year" data-exam-year="2026年5月"><summary><span class="exam-year-name">2026年5月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2026年5月-050"><summary><span class="exam-no">第 50 题</span><span class="exam-stem-peek">系统运行14天，每天24小时，共4次故障，MTBF为</span></summary><div class="exam-q-body"><p class="exam-stem">系统运行14天，每天24小时，共4次故障，MTBF为</p><ul class="exam-opts"><li><b>A</b> 72</li><li><b>B</b> 84</li><li><b>C</b> 96</li><li><b>D</b> 112</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">总运行时长=14×24=336小时，MTBF=336÷4=84小时。</p></details></div></details><details class="exam-q" data-exam-id="2026年5月-029"><summary><span class="exam-no">第 29 题</span><span class="exam-stem-peek">平均故障间隔时间MTBF的计算公式是</span></summary><div class="exam-q-body"><p class="exam-stem">平均故障间隔时间MTBF的计算公式是</p><ul class="exam-opts"><li><b>A</b> 总运行时间/故障次数</li><li><b>B</b> 故障次数/运行时间</li><li><b>C</b> 修复时间/故障次数</li><li><b>D</b> 总时间×故障率</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">MTBF（平均无故障时间）= 系统总正常运行时长 ÷ 故障发生次数。</p></details></div></details></details></details><details class="exam-subject" data-exam-subject="案例"><summary><span class="exam-subject-name">📋 案例分析</span><span class="exam-subject-n">2 题</span><span class="exam-subject-tip">案例背景 · 题目 · 答案与解析</span></summary><div class="exam-bar"><span class="exam-bar-label">📋 案例分析</span><span class="exam-bar-stat">共 <b>2</b> 题 · 情景简答 · 采分点三色标记</span></div><div class="exam-q exam-q-case"><div class="case-head"><span class="exam-no">案例 68</span><span class="exam-tag">考点 · 运维指标计算与故障管理</span><span class="exam-lv">⭐⭐⭐</span></div><div class="case-meta"><span><strong>考点</strong>：MTTF/MTBF/MTTR/MTTA / 可用性计算 / 故障管理五活动 / 维护分类</span><span>📅 <strong>时间</strong>：2026-03-20 上午 📍 <strong>地点</strong>：运维季度复盘</span><span>👤 <strong>人物</strong>：甘工（乙方·系统分析师）、邓经理（甲方·运维经理）、李工（乙方·项目经理）、洪经理（甲方·客服部经理）</span><span>⚡ <strong>冲突</strong>：一年九次故障、停机 5.2 小时，邓经理算不清可用度，甘工要先算清楚再谈改进</span><span><strong>难度</strong>：★★★　<strong>总分</strong>：25 分　<strong>建议用时</strong>：25 分钟</span></div><div class="case-scene"><div class="case-h">案例背景</div><strong>背景</strong>：邓经理把运维记录摊开：&quot;一年九次故障，累计停机五点二小时；每次修复平均三十五分钟，其中定位二十二分钟；告警到人平均八分钟。&quot; 李工问：&quot;这些数说明什么？&quot; 洪经理更关心：&quot;上次 ASR 那个故障，到底算修好了没有？&quot; 甘工知道，光说&quot;问题不大&quot;没用——先把<strong>MTBF、MTTR、MTTA、可用度</strong>算出来，才谈得上改。<br><strong>补充资料</strong>：钟<strong>（其中定位 22 分钟）；告警到运维开始响应平均 </strong>8 分钟。 期间发生一次重大故障：ASR 服务因第三方 SDK 显存泄漏连续崩溃，通过&quot;回退版本 + 限流降级&quot;恢复。此外，为适配新法规新增&quot;AI 答复留痕审计&quot;功能；为提升性能对统计模块做了重构。</div><div class="case-asks"><div class="case-h">题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">（1）辨析 <strong>MTTF、MTBF、MTTR、MTTA</strong> 的含义与口径；</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">（2）计算 <strong>MTBF、MTTR、MTTA 与年度可用性</strong>（保留两位小数）；</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">（3）判断两项工作（新增留痕功能、修复显存泄漏）各属哪类<strong>软件维护</strong>；</span></li><li><span class="case-ask-no">4</span><span class="case-ask-t">（4）说明<strong>故障管理</strong>的五个活动及本例&quot;收尾&quot;工作。</span></li></ul></div><details class="exam-ans"><summary>参考答案要点（三色标记）</summary><div class="exam-points"><strong>问题 1｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（1）四指标）：<br><strong>问题 2｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（2）计算）：<br><strong>问题 3｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（3）维护分类）：<br><strong>问题 4｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（4）故障管理五活动与收尾）：</div></details><details class="exam-ans"><summary>解析与加分项</summary><div class="exam-exp-more">- 🟢 加分：解析·指标题要写清&quot;含什么不含什么&quot;；维护分类要抓住&quot;适应法规 vs 修缺陷&quot;。</div></details></div><div class="exam-q exam-q-case"><div class="case-head"><span class="exam-no">案例 70</span><span class="exam-tag">考点 · 一次&quot;看不见&quot;的故障</span><span class="exam-lv">⭐⭐⭐</span></div><div class="case-meta"><span>📅 <strong>时间</strong>：2026-04-08 凌晨 2:40 📍 <strong>地点</strong>：值班电话会（全员远程）</span><span>👤 <strong>人物</strong>：邓经理（甲方运维）、甘工（乙方·系统分析师）、丁工（乙方·测试负责人）、洪经理（被惊动）</span><span>⚡ <strong>冲突</strong>：监控大屏一切正常，但客户投诉&quot;打不进来&quot;，等发现时已影响 40 分钟</span><span><strong>难度</strong>：★★★　<strong>总分</strong>：25 分　<strong>建议用时</strong>：25 分钟</span></div><div class="case-scene"><div class="case-h">案例背景</div><strong>背景</strong>：凌晨两点四十，洪经理的电话把所有人叫醒：&quot;客户在业主群里炸了，说 400 打不通！&quot; 邓经理立刻看监控：CPU、内存、接口成功率全绿。&quot;奇怪，指标都正常啊。&quot; 甘工让坐席试拨，发现<strong>电话能接通但没有声音</strong>——AI 不说话，客户等几秒就挂了。 继续查：ASR 服务健康检查通过（进程在），但<strong>它调用的模型服务返回空</strong>，返回码 200、body 为空字符串；而健康检查只探活不探业务，所以&quot;看起来一切正常&quot;。 丁工苦笑：&quot;这叫<strong>静默失败</strong>——监控没坏，是监控没监到点上。&quot;<br><strong>补充资料</strong>：基础设施 → CPU/内存/磁盘/网络/GPU → ✔ → —；服务层 → QPS、成功率、P99、队列积压 → ✔ → —；<strong>业务层</strong> → 来话量、<strong>AI 应答率、空应答数</strong>、转人工率、放弃率 → <strong>✘</strong> → 静默失败无法发现；体验层 → <strong>端到端拨测（有声音、能识别）</strong> → ✘ → 无主动探测；依赖层 → 第三方模型<strong>业务级探活</strong> → ✘ → 只探活不探业务 <strong>故障时间线</strong>：02:40 客户投诉 → 02:48 试拨发现无声音 → 03:20 降级止损 → 03:35 恢复 → 影响约 40 分钟。</div><div class="case-asks"><div class="case-h">题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">（1）说明<strong>系统故障管理</strong>的五个活动，指出本例在&quot;故障监视&quot;环节的缺失；</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">（2）说明应建立哪些<strong>监控指标与告警</strong>（分层设计），避免静默失败；</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">（3）说明<strong>故障调查与排查恢复</strong>的正确顺序；</span></li><li><span class="case-ask-no">4</span><span class="case-ask-t">（4）说明本例&quot;收尾&quot;应完成的工作。</span></li></ul></div><details class="exam-ans"><summary>参考答案要点（三色标记）</summary><div class="exam-points"><strong>问题 1｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（1）五活动与缺失）：监视（采集指标/日志/链路，阈值告警）→ 调查（确认影响面、收集现场、定级）→ 排查与恢复（先止损后定位，含重启、切流、降级、回退）→ 收尾（确认恢复、核对数据一致、关闭告警、通知）→ 分析与报告（时间线、根因、改进项，沉淀知识库）。<br><strong>问题 2｜参考答案要点</strong>：<br>- 🔴 核心：🟡 支撑（2）分层监控设计）：<br><strong>问题 3｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（3）排查恢复顺序）：①先止损——把 AI 应答降级为&quot;按键菜单 + 转人工/留言&quot;，保证客户能打通；②快速定位——沿链路（接入 → 路由 → ASR → 模型 → TTS）逐段探测，对比&quot;资源指标&quot;与&quot;业务结果&quot;的差异，定位到模型服务返回空；③恢复——重启/切换模型服务或回退版本，恢复后逐步放量观察；④验证——端到端拨测确认&quot;有声音、能识别&quot;；⑤记录——记入故障时间线。<br><strong>问题 4｜参考答案要点</strong>：<br>- 🔴 核心：🟡 支撑（4）收尾工作）：①确认服务恢复且业务指标回归正常（应答率、接通率）；②核对故障期间的数据一致性（呼损是否有记录、未接通是否需补呼、工单是否缺漏）；③解除降级、关闭告警、通知干系人（含洪经理与客服一线）；④故障报告——时间线（02:40 发现 → 03:20 止损 → 03:35 恢复）、影响面（约 X 通来电、时长 40 分钟）、根因（模型服务异常返回空 + 健康检查未覆盖业务结果）、改进项（业务就绪探针、端到端拨测、空应答告警、降级预案演练）+ 责任人与期限；⑤复盘与演练——把&quot;模型返回空&quot;注入混沌演练，验证降级链路可用。</div></details><details class="exam-ans"><summary>解析与加分项</summary><div class="exam-exp-more">- 🟢 加分：解析·故障管理题要&quot;五活动 + 监控分层 + 排查顺序 + 收尾&quot;，业务拨测是亮点。</div></details></div></details><details class="exam-subject" data-exam-subject="论文"><summary><span class="exam-subject-name">📄 论文写作</span><span class="exam-subject-n">7 题</span><span class="exam-subject-tip">先看题 · 再看考点拆解</span></summary><div class="exam-bar"><span class="exam-bar-label">📄 论文写作</span><span class="exam-bar-stat">共 <b>7</b> 题 · 论述题 · 含考点拆解与教材知识点</span></div><div class="exam-q exam-q-essay"><div class="case-head"><span class="exam-no">论文 22</span><span class="exam-tag">方向 · 运维与安全</span><span class="exam-lv">⭐⭐</span><span class="essay-batch">2023年上半年</span></div><div class="case-asks"><div class="case-h">论文题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">概要叙述你参与管理和开发的软件项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">结合项目实际，说明项目引入DevOps的驱动因素。</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">结合项目实践，说明引入DevOps之后，对应用发布流程与交付模式产生的影响。</span></li></ul></div><details class="exam-ans" open><summary>试题背景</summary><div class="essay-bg">DevOps是一套促进开发、运维、测试团队协同工作的方法体系，通过自动化流程提升软件整体交付效率。</div></details><details class="exam-ans"><summary>考点拆解（三色标记）</summary><div class="exam-keypoints"><strong>问题 1｜概要叙述项目与你承担的工作</strong>：<br>- 🔴 核心：点明近三年内一个具体的真实项目：项目名称、背景、发起单位、规模、周期、交付成果（教材 22.4-9/22.4-10 明确要求，泛泛而谈会判虚构）<br>- 🔴 核心：明确「我」在项目中的角色与承担的主要工作，并站在系统分析师视角论述，而非单纯开发实现视角<br>- 🟡 支撑：说明项目的组织结构、开发体制与技术栈，为后文论述做铺垫<br>- 🟢 加分：点出项目与本题主题的直接关联（如本项目正是因 XX 痛点才需要 XX 方法）<br><strong>问题 2｜理论知识 / 方法论述</strong>：<br>- 🔴 核心：说明项目引入DevOps的驱动因素——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🟢 加分：给出与其他候选方案的取舍依据，体现选型判断力<br><strong>问题 3｜项目实践落地与复盘</strong>：<br>- 🔴 核心：给出可量化的落地效果（缺陷率/响应时间/迭代周期/资源成本等具体数据），而非「取得了良好效果」<br>- 🔴 核心：诚实分析存在的 2~3 个真实问题，并给出对应的改进措施——教材强调这才是用心的内容<br>- 🟡 支撑：结合具体实例说明措施的实施过程（怎么做的，而非教科书式罗列）<br>- 🟢 加分：总结经验教训与后续演进方向，体现复盘能力<br>- 🟡 支撑：说明引入DevOps之后<br>- 🟡 支撑：对应用发布流程与交付模式产生的影响</div></details><details class="exam-ans"><summary>教材知识点</summary><div class="exam-textbook"><span class="tb-chap">第 15 章 · 系统运行与维护</span><a class="tb-hour" href="H33.html">H33</a><a class="tb-hour" href="H34.html">H34</a></div></details></div><div class="exam-q exam-q-essay"><div class="case-head"><span class="exam-no">论文 34</span><span class="exam-tag">方向 · 遗留系统演化</span><span class="exam-lv">⭐⭐</span><span class="essay-batch">2020年上半年</span></div><div class="case-asks"><div class="case-h">论文题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">概要叙述你参与管理和开发的软件项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">详细论述遗留系统的评价活动，以及业内常见的遗留系统演化策略。</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">结合项目实际，说明遗留系统评价、策略选择、方案实施的全过程以及最终效果。</span></li></ul></div><details class="exam-ans" open><summary>试题背景</summary><div class="essay-bg">遗留系统难以适配新的业务需求与技术架构，需要结合系统综合评价结果，制定对应的演化策略。</div></details><details class="exam-ans"><summary>考点拆解（三色标记）</summary><div class="exam-keypoints"><strong>问题 1｜概要叙述项目与你承担的工作</strong>：<br>- 🔴 核心：点明近三年内一个具体的真实项目：项目名称、背景、发起单位、规模、周期、交付成果（教材 22.4-9/22.4-10 明确要求，泛泛而谈会判虚构）<br>- 🔴 核心：明确「我」在项目中的角色与承担的主要工作，并站在系统分析师视角论述，而非单纯开发实现视角<br>- 🟡 支撑：说明项目的组织结构、开发体制与技术栈，为后文论述做铺垫<br>- 🟢 加分：点出项目与本题主题的直接关联（如本项目正是因 XX 痛点才需要 XX 方法）<br><strong>问题 2｜理论知识 / 方法论述</strong>：<br>- 🔴 核心：遗留系统的评价活动——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：遗留系统的以及业内常见的遗留系统演化策略——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🟢 加分：给出与其他候选方案的取舍依据，体现选型判断力<br><strong>问题 3｜项目实践落地与复盘</strong>：<br>- 🔴 核心：给出可量化的落地效果（缺陷率/响应时间/迭代周期/资源成本等具体数据），而非「取得了良好效果」<br>- 🔴 核心：诚实分析存在的 2~3 个真实问题，并给出对应的改进措施——教材强调这才是用心的内容<br>- 🟡 支撑：结合具体实例说明措施的实施过程（怎么做的，而非教科书式罗列）<br>- 🟢 加分：总结经验教训与后续演进方向，体现复盘能力<br>- 🟡 支撑：说明遗留系统评价<br>- 🟡 支撑：策略选择</div></details><details class="exam-ans"><summary>教材知识点</summary><div class="exam-textbook"><span class="tb-chap">第 15 章 · 系统运行与维护</span><a class="tb-hour" href="H33.html">H33</a><a class="tb-hour" href="H34.html">H34</a></div></details></div><div class="exam-q exam-q-essay"><div class="case-head"><span class="exam-no">论文 53</span><span class="exam-tag">方向 · 可靠性与容灾</span><span class="exam-lv">⭐</span><span class="essay-batch">2015年下半年（11月）</span></div><div class="case-asks"><div class="case-h">论文题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">概要叙述你参与设计、运维的信息系统项目（项目的背景、业务重要性、数据规模、可用性要求、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">详细论述容灾备份的等级划分、主流备份策略（全量 / 增量 / 差异备份）、容灾架构（本地容灾、异地容灾、双活 / 多活架构）的设计要点。</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">结合项目实例，论述容灾备份方案的落地过程、测试验证方法，分析方案存在的不足并提出优化方向。</span></li></ul></div><details class="exam-ans" open><summary>试题背景</summary><div class="essay-bg">企业核心信息系统面临自然灾害、硬件故障、人为误操作等风险，容灾与备份设计是保障系统连续性、数据安全性的核心环节。</div></details><details class="exam-ans"><summary>考点拆解（三色标记）</summary><div class="exam-keypoints"><strong>问题 1｜概要叙述项目与你承担的工作</strong>：<br>- 🔴 核心：点明近三年内一个具体的真实项目：项目名称、背景、发起单位、规模、周期、交付成果（教材 22.4-9/22.4-10 明确要求，泛泛而谈会判虚构）<br>- 🔴 核心：明确「我」在项目中的角色与承担的主要工作，并站在系统分析师视角论述，而非单纯开发实现视角<br>- 🟡 支撑：说明项目的组织结构、开发体制与技术栈，为后文论述做铺垫<br>- 🟢 加分：点出项目与本题主题的直接关联（如本项目正是因 XX 痛点才需要 XX 方法）<br><strong>问题 2｜理论知识 / 方法论述</strong>：<br>- 🔴 核心：容灾备份的等级划分——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：容灾备份的主流备份策略全量 / 增量 / 差异备份——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：容灾备份的容灾架构本地容灾——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🟡 支撑：容灾备份的异地容灾<br>- 🟡 支撑：容灾备份的双活 / 多活架构的设计要点<br>- 🟢 加分：给出与其他候选方案的取舍依据，体现选型判断力<br><strong>问题 3｜项目实践落地与复盘</strong>：<br>- 🔴 核心：给出可量化的落地效果（缺陷率/响应时间/迭代周期/资源成本等具体数据），而非「取得了良好效果」<br>- 🔴 核心：诚实分析存在的 2~3 个真实问题，并给出对应的改进措施——教材强调这才是用心的内容<br>- 🟡 支撑：结合具体实例说明措施的实施过程（怎么做的，而非教科书式罗列）<br>- 🟢 加分：总结经验教训与后续演进方向，体现复盘能力<br>- 🟡 支撑：论述容灾备份方案的落地过程<br>- 🟡 支撑：测试验证方法</div></details><details class="exam-ans"><summary>教材知识点</summary><div class="exam-textbook"><span class="tb-chap">第 15 章 · 系统运行与维护</span><a class="tb-hour" href="H33.html">H33</a><a class="tb-hour" href="H34.html">H34</a></div></details></div><div class="exam-q exam-q-essay"><div class="case-head"><span class="exam-no">论文 76</span><span class="exam-tag">方向 · 运维与安全</span><span class="exam-lv">⭐</span><span class="essay-batch">2010年上半年</span></div><div class="case-asks"><div class="case-h">论文题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">概要叙述你参与管理和开发的软件项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">说明软件维护的三种类型、影响软件可维护性的因素，以及提升可维护性的方法。</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">结合项目实际，说明软件维护工作的开展过程，以及可维护性优化的实施效果。</span></li></ul></div><details class="exam-ans" open><summary>试题背景</summary><div class="essay-bg">软件维护阶段的成本占软件全生命周期成本的50%-90%，可维护性代表软件被理解、校正、适配修改的难易程度。</div></details><details class="exam-ans"><summary>考点拆解（三色标记）</summary><div class="exam-keypoints"><strong>问题 1｜概要叙述项目与你承担的工作</strong>：<br>- 🔴 核心：点明近三年内一个具体的真实项目：项目名称、背景、发起单位、规模、周期、交付成果（教材 22.4-9/22.4-10 明确要求，泛泛而谈会判虚构）<br>- 🔴 核心：明确「我」在项目中的角色与承担的主要工作，并站在系统分析师视角论述，而非单纯开发实现视角<br>- 🟡 支撑：说明项目的组织结构、开发体制与技术栈，为后文论述做铺垫<br>- 🟢 加分：点出项目与本题主题的直接关联（如本项目正是因 XX 痛点才需要 XX 方法）<br><strong>问题 2｜理论知识 / 方法论述</strong>：<br>- 🔴 核心：软件维护的三种类型——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：软件维护的影响软件可维护性的因素——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：软件维护的以及提升可维护性的方法——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🟢 加分：给出与其他候选方案的取舍依据，体现选型判断力<br><strong>问题 3｜项目实践落地与复盘</strong>：<br>- 🔴 核心：给出可量化的落地效果（缺陷率/响应时间/迭代周期/资源成本等具体数据），而非「取得了良好效果」<br>- 🔴 核心：诚实分析存在的 2~3 个真实问题，并给出对应的改进措施——教材强调这才是用心的内容<br>- 🟡 支撑：结合具体实例说明措施的实施过程（怎么做的，而非教科书式罗列）<br>- 🟢 加分：总结经验教训与后续演进方向，体现复盘能力<br>- 🟡 支撑：说明软件维护工作的开展过程</div></details><details class="exam-ans"><summary>教材知识点</summary><div class="exam-textbook"><span class="tb-chap">第 15 章 · 系统运行与维护</span><a class="tb-hour" href="H33.html">H33</a><a class="tb-hour" href="H34.html">H34</a></div></details></div><div class="exam-q exam-q-essay"><div class="case-head"><span class="exam-no">论文 98</span><span class="exam-tag">方向 · 可靠性与容灾</span><span class="exam-lv">⭐</span><span class="essay-batch">2012年下半年（11月）</span></div><div class="case-asks"><div class="case-h">论文题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">概要叙述你参与设计、开发的信息系统项目（项目的背景、可靠性指标要求、业务场景、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">详细论述软件可靠性设计的核心原则、容错设计方法（如 N 版本编程、恢复块）、故障检测与恢复机制设计要点。</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">结合项目实例，论述可靠性设计的落地过程、可靠性测试方法，分析现有设计的不足并提出优化措施。</span></li></ul></div><details class="exam-ans" open><summary>试题背景</summary><div class="essay-bg">软件可靠性设计是提升软件无故障运行能力的核心手段，涵盖容错设计、冗余设计、错误处理、故障恢复等技术。</div></details><details class="exam-ans"><summary>考点拆解（三色标记）</summary><div class="exam-keypoints"><strong>问题 1｜概要叙述项目与你承担的工作</strong>：<br>- 🔴 核心：点明近三年内一个具体的真实项目：项目名称、背景、发起单位、规模、周期、交付成果（教材 22.4-9/22.4-10 明确要求，泛泛而谈会判虚构）<br>- 🔴 核心：明确「我」在项目中的角色与承担的主要工作，并站在系统分析师视角论述，而非单纯开发实现视角<br>- 🟡 支撑：说明项目的组织结构、开发体制与技术栈，为后文论述做铺垫<br>- 🟢 加分：点出项目与本题主题的直接关联（如本项目正是因 XX 痛点才需要 XX 方法）<br><strong>问题 2｜理论知识 / 方法论述</strong>：<br>- 🔴 核心：软件可靠性设计的核心原则——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：软件可靠性设计的容错设计方法如 N 版本编程——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：软件可靠性设计的恢复块——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🟡 支撑：软件可靠性设计的故障检测与恢复机制设计要点<br>- 🟢 加分：给出与其他候选方案的取舍依据，体现选型判断力<br><strong>问题 3｜项目实践落地与复盘</strong>：<br>- 🔴 核心：给出可量化的落地效果（缺陷率/响应时间/迭代周期/资源成本等具体数据），而非「取得了良好效果」<br>- 🔴 核心：诚实分析存在的 2~3 个真实问题，并给出对应的改进措施——教材强调这才是用心的内容<br>- 🟡 支撑：结合具体实例说明措施的实施过程（怎么做的，而非教科书式罗列）<br>- 🟢 加分：总结经验教训与后续演进方向，体现复盘能力<br>- 🟡 支撑：论述可靠性设计的落地过程<br>- 🟡 支撑：可靠性测试方法</div></details><details class="exam-ans"><summary>教材知识点</summary><div class="exam-textbook"><span class="tb-chap">第 15 章 · 系统运行与维护</span><a class="tb-hour" href="H33.html">H33</a><a class="tb-hour" href="H34.html">H34</a></div></details></div><div class="exam-q exam-q-essay"><div class="case-head"><span class="exam-no">论文 03</span><span class="exam-tag">方向 · 高可用与可观测性</span><span class="exam-lv">⭐⭐⭐</span><span class="essay-batch">2026年上半年（机考）第一批</span></div><div class="case-asks"><div class="case-h">论文题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">概要叙述你参与设计、开发或运维的云原生信息系统项目（项目的背景、业务场景、可用性指标要求、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">详细论述云原生系统高可用设计策略、容错机制、容灾方案；同时阐述日志、指标、分布式链路追踪三位一体的可观测性体系构建方法。</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">结合项目实例，论述高可用与可观测性体系的落地效果，分析现有体系存在的短板，并给出优化改进方案。</span></li></ul></div><details class="exam-ans" open><summary>试题背景</summary><div class="essay-bg">云原生架构依托容器、微服务、DevOps等技术体系构建，高可用保障与可观测性体系是系统长期稳定运行的重要支撑。</div></details><details class="exam-ans"><summary>考点拆解（三色标记）</summary><div class="exam-keypoints"><strong>问题 1｜概要叙述项目与你承担的工作</strong>：<br>- 🔴 核心：点明近三年内一个具体的真实项目：项目名称、背景、发起单位、规模、周期、交付成果（教材 22.4-9/22.4-10 明确要求，泛泛而谈会判虚构）<br>- 🔴 核心：明确「我」在项目中的角色与承担的主要工作，并站在系统分析师视角论述，而非单纯开发实现视角<br>- 🟡 支撑：说明项目的组织结构、开发体制与技术栈，为后文论述做铺垫<br>- 🟢 加分：点出项目与本题主题的直接关联（如本项目正是因 XX 痛点才需要 XX 方法）<br><strong>问题 2｜理论知识 / 方法论述</strong>：<br>- 🔴 核心：云原生系统高可用设计策略——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：容错机制——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：容灾方案——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🟡 支撑：同时阐述日志<br>- 🟡 支撑：分布式链路追踪三位一体的可观测性体系构建方法<br>- 🟢 加分：给出与其他候选方案的取舍依据，体现选型判断力<br><strong>问题 3｜项目实践落地与复盘</strong>：<br>- 🔴 核心：给出可量化的落地效果（缺陷率/响应时间/迭代周期/资源成本等具体数据），而非「取得了良好效果」<br>- 🔴 核心：诚实分析存在的 2~3 个真实问题，并给出对应的改进措施——教材强调这才是用心的内容<br>- 🟡 支撑：结合具体实例说明措施的实施过程（怎么做的，而非教科书式罗列）<br>- 🟢 加分：总结经验教训与后续演进方向，体现复盘能力<br>- 🟡 支撑：分析现有体系存在的短板</div></details><details class="exam-ans"><summary>教材知识点</summary><div class="exam-textbook"><span class="tb-chap">第 15 章 · 系统运行与维护</span><a class="tb-hour" href="H33.html">H33</a><a class="tb-hour" href="H34.html">H34</a></div></details></div><div class="exam-q exam-q-essay"><div class="case-head"><span class="exam-no">论文 12</span><span class="exam-tag">方向 · 运维与安全</span><span class="exam-lv">⭐⭐⭐</span><span class="essay-batch">2025年下半年（11月）</span></div><div class="case-asks"><div class="case-h">论文题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">概要叙述你负责运维的云平台/云信息系统项目（项目的背景、部署架构、业务特点、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">详细论述云计算运维的核心工作内容、关键技术、运维体系建设流程。</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">结合项目实践，论述你如何解决云运维中的性能瓶颈、资源浪费、系统故障等问题，总结云运维实施经验与优化策略。</span></li></ul></div><details class="exam-ans" open><summary>试题背景</summary><div class="essay-bg">随着云计算技术普及，传统运维逐步转向云运维，涵盖资源管理、监控告警、高可用保障、安全运维、自动化运维等内容。</div></details><details class="exam-ans"><summary>考点拆解（三色标记）</summary><div class="exam-keypoints"><strong>问题 1｜概要叙述项目与你承担的工作</strong>：<br>- 🔴 核心：点明近三年内一个具体的真实项目：项目名称、背景、发起单位、规模、周期、交付成果（教材 22.4-9/22.4-10 明确要求，泛泛而谈会判虚构）<br>- 🔴 核心：明确「我」在项目中的角色与承担的主要工作，并站在系统分析师视角论述，而非单纯开发实现视角<br>- 🟡 支撑：说明项目的组织结构、开发体制与技术栈，为后文论述做铺垫<br>- 🟢 加分：点出项目与本题主题的直接关联（如本项目正是因 XX 痛点才需要 XX 方法）<br><strong>问题 2｜理论知识 / 方法论述</strong>：<br>- 🔴 核心：云计算运维的核心工作内容——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：云计算运维的关键技术——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：云计算运维的运维体系建设流程——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🟢 加分：给出与其他候选方案的取舍依据，体现选型判断力<br><strong>问题 3｜项目实践落地与复盘</strong>：<br>- 🔴 核心：给出可量化的落地效果（缺陷率/响应时间/迭代周期/资源成本等具体数据），而非「取得了良好效果」<br>- 🔴 核心：诚实分析存在的 2~3 个真实问题，并给出对应的改进措施——教材强调这才是用心的内容<br>- 🟡 支撑：结合具体实例说明措施的实施过程（怎么做的，而非教科书式罗列）<br>- 🟢 加分：总结经验教训与后续演进方向，体现复盘能力<br>- 🟡 支撑：论述你如何解决云运维中的性能瓶颈<br>- 🟡 支撑：论述你如何解决云运维中的资源浪费</div></details><details class="exam-ans"><summary>教材知识点</summary><div class="exam-textbook"><span class="tb-chap">第 15 章 · 系统运行与维护</span><a class="tb-hour" href="H33.html">H33</a><a class="tb-hour" href="H34.html">H34</a></div></details></div></details></section>
     <div class="wrongbook"></div>
     <div class="keyhint">
   <span class="keyhint-title">键盘快捷键</span>
@@ -3199,7 +3381,9 @@ html{scroll-padding-top:80px}
     init() {
       const root = document.querySelector('.exam')
       if (!root) return
-      const chapter = root.dataset.examChapter || 'x'
+      // ⚠️ 专项页 / 全真模拟页没有 data-exam-chapter（无教材章），
+      //    旧写法一律退化成 'x' → H42~H48 共用同一个记忆键、互相串状态。
+      const chapter = root.dataset.examChapter || root.dataset.examHour || 'x'
 
       // 恢复上次展开状态：{ "H07": { "2025年5月": true, ... } }
       const saved = store.get(this.KEY, {}) || {}
@@ -3219,6 +3403,7 @@ html{scroll-padding-top:80px}
       const seen = store.get('examSeen', {}) || {}
       root.querySelectorAll('.exam-q').forEach(qd => {
         const qid = qd.dataset.examId
+        if (!qid) return
         if (seen[qid]) {
           const a = qd.querySelector('.exam-ans')
           if (a) a.open = true
@@ -3234,12 +3419,17 @@ html{scroll-padding-top:80px}
         btn.addEventListener('click', e => {
           e.preventDefault()
           const openAll = btn.dataset.examAll === '1'
-          root.querySelectorAll('.exam-subject,.exam-year').forEach(d => { d.open = openAll })
-          root.querySelectorAll('.exam-ans').forEach(d => {
-            d.open = openAll
-            if (openAll && d.parentElement.dataset.examId) seen[d.parentElement.dataset.examId] = 1
-          })
-          if (openAll) store.set('examSeen', seen)
+          // ⚠️ 必须把 .exam-q 也列进来：只开 .exam-subject/.exam-year/.exam-ans
+          //    时，单题仍折叠 → 答案藏在关闭的单题内，"全部展开"名不副实。
+          root.querySelectorAll('.exam-subject,.exam-year,.exam-q,.exam-ans')
+            .forEach(d => { d.open = openAll })
+          if (openAll) {
+            // ⚠️ 旧的 `d.parentElement.dataset.examId` 取到的是 .exam-q-body（无 id），
+            //    会把 seen[undefined] 写进 localStorage。改为直接从 .exam-q 取。
+            root.querySelectorAll('.exam-q[data-exam-id]')
+              .forEach(qd => { seen[qd.dataset.examId] = 1 })
+            store.set('examSeen', seen)
+          }
           // 同步年份级记忆
           root.querySelectorAll('.exam-year').forEach(y => { mine[y.dataset.examYear] = y.open })
           saved[chapter] = mine
@@ -3286,7 +3476,7 @@ html{scroll-padding-top:80px}
   // ══════════════════════════════════════════
   // 8. mermaid 渲染（自定义墨绿主题，与正文同色系）
   // ══════════════════════════════════════════
-  // 站点配色（与 design.css 的令牌保持一致）
+  // 站点配色（与设计令牌保持一致 —— 改主题色时这里要同步）
   const MERMAID_LIGHT = {
     bg: '#f2f0e9', fg: '#1b211c', line: '#cdc9bd',
     accent: '#3d5a40', accent2: '#5a8a62', accent3: '#7ea888',

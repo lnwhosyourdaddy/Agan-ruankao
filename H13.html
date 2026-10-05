@@ -7,7 +7,7 @@
 <title>第 13 小时 · 企业信息化（二）· 信息系统与商务 · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
-<meta name="build-stamp" content="2026-10-05 11:44:51">
+<meta name="build-stamp" content="2026-10-05 15:47:03">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -405,16 +405,21 @@ img{max-width:100%;height:auto}
   border-radius:100px;
   font-size:12.5px;color:var(--accent);font-weight:600;
 }
-.cover h1{
+/* ⚠️ 封面主标题刻意用 <div> 而不是 <h1>：index.md 正文自带 `# 阿甘系分 · 48 小时
+   冲刺手册`，若封面也用 h1，一页会出现两个 h1（语义/SEO 上都是错的）。
+   视觉与 h1 完全一致 —— 字号、颜色、以及那道 72px 短横线都在下面显式声明。 */
+.cover .cover-title{
   font-size:3.5em;font-weight:800;letter-spacing:-1.6px;
   color:var(--accent);line-height:1.14;margin-bottom:16px;
 }
-/* ⚠️ 封面 h1 也继承 `.main h1::after` 那道 56px 短横线，但它是 display:block 的
-   固定宽块级元素 —— 文字居中不代表块级元素居中，会贴到左边。
-   修法：给封面这条短横线加 margin-left/right:auto 让它真正居中。 */
-.cover h1::after{
-  margin-left:auto;margin-right:auto;
+/* 复刻 `.main h1::after` 的短横线（<div> 不继承 h1 的伪元素），并水平居中 —— */
+/* 文字居中不代表块级元素居中，不加 auto 会贴到左边。 */
+.cover .cover-title::after{
+  content:'';display:block;
   width:72px;height:3px;
+  background:var(--accent);
+  margin:.5em auto 0;
+  border-radius:2px;
 }
 .cover .sub{
   font-size:1.2em;color:var(--fg-2);
@@ -845,7 +850,7 @@ pre{
   .nav{margin-left:auto;gap:2px}
   .main{padding:32px 0 80px}
   .cover{padding:48px 0 40px;margin-bottom:40px}
-  .cover h1{font-size:2.4em;letter-spacing:-.8px}
+  .cover .cover-title{font-size:2.4em;letter-spacing:-.8px}
   .cover .sub{font-size:1.05em;margin-bottom:24px}
   .cover-stats{gap:10px;margin-bottom:28px}
   .stat{min-width:76px;padding:10px 14px}
@@ -901,7 +906,7 @@ pre{
   h1,h2,h3,h4{break-after:avoid;page-break-after:avoid}
 
   .cover{padding:0 0 18px;margin-bottom:18px;text-align:left}
-  .cover h1{font-size:24pt}
+  .cover .cover-title{font-size:24pt}
   .cover-stats,.cover-badge,.cta-row{display:none !important}
 
   a[href^="http"]:after{
@@ -1256,16 +1261,14 @@ html.focus-mode .chapbar{opacity:.35;pointer-events:none}
 }
 /* 章首横幅：h1 上方加一条"章号 + 主色渐变"的装饰带，
    让每页开头有一个明确的"进入新章"仪式感（原来 h1 直接浮在正文里）。
-   ⚠️ 必须排除 .cover —— 封面 h1 自己已有顶部留白与居中布局，
-   加上横幅会与下方分隔线叠成双线（首页曾出现两条横线紧挨）。 */
-.main h1:not(.cover h1)::before{
+   （封面主标题已改成 <div class="cover-title">，不再匹配 .main h1，无需再排除。） */
+.main h1::before{
   content:'';display:block;
   width:100%;height:4px;
   background:linear-gradient(90deg,var(--accent) 0%,var(--accent-3) 42%,transparent 88%);
   border-radius:2px;
   margin-bottom:.62em;
 }
-.cover h1::before{content:none}
 .main h1::after{
   content:'';display:block;
   width:56px;height:3px;
@@ -2087,6 +2090,185 @@ html{scroll-padding-top:80px}
   .exam-stem,.exam-opts li{font-size:9.5pt}
   .exam-exp{font-size:8.5pt;color:#333}
 }
+
+/* ══════════════════════════════════════════════════════════════
+   真题区块扩展 v2 · 案例 / 论文卡片 + 全真模拟卷
+   与既有 .exam-* 体系同源：米白卡底 + 左侧 4px 色条 + 墨绿强调色
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── 案例 / 论文卡片（非 <details>，直接展开的题卡）── */
+.exam-q-case,.exam-q-essay{
+  padding:14px 16px 4px;
+  background:var(--bg-card);
+}
+.exam-q-case:hover,.exam-q-essay:hover{background:var(--bg-alt)}
+.case-head{
+  display:flex;flex-wrap:wrap;align-items:center;gap:6px;
+  padding-bottom:10px;margin-bottom:10px;
+  border-bottom:1px dashed var(--line);
+}
+.case-head .exam-no{min-width:0}
+.case-h{
+  display:flex;align-items:center;gap:6px;
+  margin:12px 0 6px;font-size:12.5px;font-weight:700;
+  letter-spacing:.06em;color:var(--accent);
+}
+.case-h::before{
+  content:'';width:4px;height:13px;border-radius:2px;
+  background:var(--accent);flex:0 0 auto;
+}
+
+/* 情景要素（📅时间 / 📍地点 / 👤人物 / ⚡冲突 / 难度总分用时） */
+.case-meta{
+  display:flex;flex-direction:column;gap:2px;
+  padding:9px 12px;margin:.4em 0 .2em;
+  background:var(--bg-alt);
+  border-left:3px solid var(--line-2);
+  border-radius:0 var(--radius-sm) var(--radius-sm) 0;
+  font-size:12.5px;line-height:1.75;color:var(--fg-3);
+}
+.case-meta strong{color:var(--fg-2);font-weight:600}
+
+/* 案例背景正文 */
+.case-scene{
+  margin:.2em 0 1em;padding:12px 14px;
+  background:var(--accent-soft);
+  border-left:3px solid var(--accent-3);
+  border-radius:0 var(--radius) var(--radius) 0;
+  font-size:14.5px;line-height:1.92;color:var(--fg);
+}
+.case-scene strong{color:var(--accent);font-weight:700}
+
+/* 题目列表 */
+.case-asks{margin:.2em 0 1em}
+ul.exam-questions{
+  list-style:none;margin:.4em 0;padding:0;
+}
+ul.exam-questions>li{
+  display:flex;gap:10px;align-items:flex-start;
+  padding:9px 0;border-bottom:1px solid var(--line);
+  font-size:14.5px;line-height:1.88;color:var(--fg);
+}
+ul.exam-questions>li:last-child{border-bottom:0}
+ul.exam-questions>li::before{content:none !important}
+.case-ask-no{
+  flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;
+  min-width:24px;height:22px;margin-top:3px;padding:0 6px;
+  border-radius:6px;background:var(--accent-soft-2);color:var(--accent);
+  font-family:var(--sans);font-size:11.5px;font-weight:700;
+  font-variant-numeric:tabular-nums;
+}
+.case-ask-t{flex:1;min-width:0}
+.case-ask-t strong{color:var(--accent);font-weight:700}
+
+/* ── 答案 / 解析 / 考点拆解 / 教材知识点 ── */
+.exam-points,.exam-keypoints,.exam-exp-more,.essay-bg{
+  padding:12px 14px;margin:8px 0;
+  border-left:4px solid var(--tip-line);
+  border-radius:0 var(--radius) var(--radius) 0;
+  background:var(--tip-bg);
+  font-size:14px;line-height:1.92;color:var(--fg);
+}
+.exam-keypoints{border-left-color:var(--accent-2);background:var(--accent-soft)}
+.exam-exp-more{border-left-color:var(--warn-line);background:var(--warn-bg);color:var(--warn-fg)}
+.essay-bg{border-left-color:var(--line-2);background:var(--bg-alt);color:var(--fg-2)}
+.exam-points strong,.exam-keypoints strong{color:var(--accent);font-weight:700}
+
+/* 教材知识点：章标签 + 可点学时胶囊 */
+.exam-textbook{
+  display:flex;flex-wrap:wrap;align-items:center;gap:6px;
+  padding:12px 14px;margin:8px 0;
+  background:var(--mem-bg);
+  border-left:4px solid var(--mem-line);
+  border-radius:0 var(--radius) var(--radius) 0;
+}
+.tb-chap{
+  font-family:var(--serif);font-size:14px;font-weight:700;color:var(--mem-fg);
+}
+.tb-hour{
+  display:inline-flex;align-items:center;
+  padding:2px 9px;border-radius:999px;
+  background:var(--bg-card);border:1px solid var(--mem-line);
+  color:var(--mem-fg) !important;font-size:12px;font-weight:600;
+  text-decoration:none;
+}
+.tb-hour:hover{background:var(--mem-line);color:var(--bg-card) !important;border-color:var(--mem-fg)}
+
+/* 模拟卷成绩/批次等小标签 */
+.exam-lv{
+  font-family:var(--sans);font-size:11.5px;color:var(--gold);
+  letter-spacing:.04em;white-space:nowrap;
+}
+.exam-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.exam-tag-en{
+  background:var(--mem-bg);color:var(--mem-fg);border-color:var(--mem-line);
+}
+.essay-batch{
+  font-family:var(--sans);font-size:11.5px;color:var(--fg-3);
+  padding:1px 8px;border:1px solid var(--line);border-radius:999px;
+}
+.exam-kp{
+  margin:.5em 0 0;font-family:var(--sans);font-size:12.5px;color:var(--fg-3);
+}
+.exam-kp::before{content:'🎯 ';font-size:11px}
+
+/* ── 全真模拟卷头部 ── */
+.mock-head{
+  padding:16px 18px;margin:0 0 12px;
+  border-radius:var(--radius-lg);
+  background:linear-gradient(135deg,var(--accent) 0%,var(--accent-2) 100%);
+  color:var(--fg-inv);
+  box-shadow:var(--shadow-2);
+}
+.mock-title{
+  font-family:var(--serif);font-size:17px;font-weight:700;
+  letter-spacing:.02em;line-height:1.5;
+}
+.mock-sub{
+  margin-top:6px;font-size:12.5px;line-height:1.75;
+  color:rgba(251,250,246,.82);
+}
+.mock-sub b{color:#fff;font-variant-numeric:tabular-nums}
+.mock-items{
+  border:1px solid var(--line);border-radius:var(--radius);
+  background:var(--bg-card);overflow:hidden;
+}
+.mock-items>.exam-q:first-child{border-top:0}
+.exam-mock .exam-subject{margin-top:14px}
+.exam-subj-only{display:block}
+
+/* 模拟卷内的综合知识答题条 */
+.exam-mock .exam-bar{
+  border-radius:var(--radius) var(--radius) 0 0;
+  border-bottom:0;
+}
+
+/* ── 窄屏 ── */
+@media(max-width:760px){
+  .exam-q-case,.exam-q-essay{padding:12px 12px 4px}
+  .case-scene,.exam-points,.exam-keypoints,.exam-exp-more,.essay-bg,.exam-textbook{
+    padding:10px 11px;font-size:13.5px;
+  }
+  ul.exam-questions>li{gap:8px;font-size:13.5px}
+  .mock-head{padding:13px 14px}
+  .mock-title{font-size:15.5px}
+}
+
+/* ── 打印：卡片不要再折叠，色条与底色转灰阶 ── */
+@media print{
+  .mock-head{background:none !important;color:#000 !important;border:1pt solid #999;
+    box-shadow:none}
+  .mock-title{font-size:13pt}
+  .mock-sub{color:#333 !important}
+  .exam-q-case,.exam-q-essay{break-inside:avoid;page-break-inside:avoid}
+  .case-scene,.exam-points,.exam-keypoints,.exam-exp-more,.essay-bg,.exam-textbook{
+    background:none !important;border-left:2pt solid #999 !important;
+  }
+  .exam-q-case,.exam-q-essay,.case-scene,.case-meta,ul.exam-questions>li{
+    font-size:9.5pt;
+  }
+  .tb-hour{color:#000 !important;border-color:#666}
+}
 </style>
 </head>
 <body>
@@ -2142,13 +2324,13 @@ html{scroll-padding-top:80px}
 <p>🛠️两种典型开发模式</p>
 <p><strong>方式一 · 二次开发</strong></p>
 <p>在供应商的<strong>套装软件</strong>上做二次开发。</p>
-<p>优势**：投资相对较少，建设期明显缩短；套装软件架构好、性能稳</p>
-<p>劣势<strong>：套装软件采用</strong>行业先进管理理念**，不一定和企业原来的业务实践一致 → 要求企业向标准靠拢，很难满足个性化需求</p>
+<p>优势：投资相对较少，建设期明显缩短；套装软件架构好、性能稳</p>
+<p>劣势<strong>：套装软件采用</strong>行业先进管理理念，不一定和企业原来的业务实践一致 → 要求企业向标准靠拢，很难满足个性化需求</p>
 <p>VS</p>
 <p><strong>方式二 · 定制开发</strong></p>
 <p>从企业<strong>个性化需求</strong>出发做系统定制。</p>
-<p>优势**：能满足特定企业的需求</p>
-<p>劣势<strong>：很难全面考虑扩展性、稳定性等架构因素；不能快速适应需求变化；</strong>周期长、效率不高、投资较大、实施风险大**</p>
+<p>优势：能满足特定企业的需求</p>
+<p>劣势<strong>：很难全面考虑扩展性、稳定性等架构因素；不能快速适应需求变化；</strong>周期长、效率不高、投资较大、实施风险大</p>
 <p>💡 两种模式<strong>目的相同</strong>，但在<strong>实施、维护和扩充</strong>等方面各有特色。缓解定制开发不利因素的一条路是利用 <strong>Web Service</strong> 技术，集成原来构建的各种彼此孤立的应用系统。</p>
 <p>🚀ERP 实施过程</p>
 <p>1明确观点、统一认识、<strong>建立实施团队</strong></p>
@@ -2280,7 +2462,7 @@ html{scroll-padding-top:80px}
 <p>📁PDM · 产品数据管理</p>
 <p>一门用来管理所有与产品相关<strong>信息</strong>（零件信息、配置、文档、CAD 文件、结构、权限信息等）和所有与产品相关<strong>过程</strong>（过程定义和管理）的技术。</p>
 <p>PDM 系统是一种<strong>软件框架</strong>，可帮助企业实现对产品相关<strong>数据、开发过程以及使用者</strong>进行集成与管理。</p>
-<p>主要功能**：数据库和文档管理 · 产品结构与配置管理 · 生命周期管理和流程管理 · 集成开发接口</p>
+<p>主要功能：数据库和文档管理 · 产品结构与配置管理 · 生命周期管理和流程管理 · 集成开发接口</p>
 <p>背景：信息化带来"<strong>数据爆炸</strong>"和"<strong>数据混乱</strong>"，大量数据文件因缺少统一管理和调度，变成"死数据"或"垃圾数据"</p>
 <p>VS</p>
 <p>♻️PLM · 产品生命周期管理</p>
@@ -2399,7 +2581,7 @@ html{scroll-padding-top:80px}
 <p>国家电商标准体系四个分体系：<strong>基础技术标准 · 业务标准 · 支撑体系标准 · 监督管理标准</strong></p>
 <p>🛠️电商技术五大类</p>
 <ul><li>网络数据通信技术</li><li>电子数据交换技术</li><li>安全技术</li><li>电子支付技术</li><li>数据库技术</li></ul>
-<p><strong>电子商务的优势</strong>：降低营销成本 · 提高销售效率 · 扩大销售渠道 · 提高服务质量 · 大数据分析。<br>劣势**：搜索功能不够完善；网络自身的局限性导致无法从网上得到商品的全部信息；交易的安全性得不到保障。</p>
+<p><strong>电子商务的优势</strong>：降低营销成本 · 提高销售效率 · 扩大销售渠道 · 提高服务质量 · 大数据分析。<br>劣势：搜索功能不够完善；网络自身的局限性导致无法从网上得到商品的全部信息；交易的安全性得不到保障。</p>
 <h2 id="s6-6-电子政务">6.6 电子政务</h2>
 <h3 id="s6-6-电子政务-业务模型">6.6 电子政务 · 业务模型</h3>
 <p><strong>电子政务</strong>是政府机构应用现代信息和通信技术，将管理和服务通过网络技术进行集成，在网络上实现<strong>政府组织结构和工作流程的优化重组</strong>，<strong>超越时间、空间与部门分隔的限制</strong>，全方位地向社会提供优质、规范、透明、符合国际水准的管理和服务。</p>
@@ -2446,7 +2628,7 @@ html{scroll-padding-top:80px}
 <p>· 主要利用 <strong>Intranet</strong> 建立有效的行政办公和员工管理体系</p>
 <p>口诀：<strong>G 在前是政府，后一位是对象 —— G(政府) 对 G(政府) / B(企业) / C(公民) / E(公务员)</strong>；G2E 是另外三个的基础。</p>
 <h2 id="s6-7-业务流程重组-BPR">6.7 业务流程重组 BPR</h2>
-<h3 id="s6-7-业务流程重组-BPR">6.7 业务流程重组 BPR ⭐</h3>
+<h3 id="s6-7-业务流程重组-BPR-2">6.7 业务流程重组 BPR ⭐</h3>
 <p><strong>BPR</strong> 是针对企业业务流程的<strong>基本问题进行反思</strong>，并对它进行<strong>彻底的重新设计</strong>，使业绩取得<strong>显著性的提高</strong>。</p>
 <p>与目标管理、全面质量管理、战略管理等理论相比，BPR 要求企业管理人员<strong>从根本上重新思考业已形成的基本信念</strong>，即对长期以来企业所遵循的基本信念（<strong>分工思想、等级制度、规模经营、标准化生产</strong>等体制性问题）进行重新思考。这就需要打破原有的思维定势，进行创造性思维。</p>
 <p>💥创始人定义的四个核心内容</p>
@@ -2519,7 +2701,7 @@ html{scroll-padding-top:80px}
 <p>最高层</p>
 <p>④ 业务流程集成</p>
 <ul><li>也称<strong>过程集成</strong>。超越了数据和系统，由一系列<strong>基于标准的、统一数据格式的工作流</strong>组成。</li><li>要实现企业内部应用之间、本企业与其他伙伴之间的<strong>端到端业务流程管理</strong></li><li>含应用集成、B2B 集成、自动化流程管理、人工流程管理、企业门户</li></ul>
-<p>什么时候用数据集成<strong>：① 需要对多种信息源产生的数据做</strong>综合分析和决策<strong>；② 要处理一些</strong>多个应用需要访问的公用信息库<strong>；③ 需要从某数据源获得数据来</strong>更新另一个数据源**，特别是两者数据格式不相同时。</p>
+<p>什么时候用数据集成<strong>：① 需要对多种信息源产生的数据做</strong>综合分析和决策<strong>；② 要处理一些</strong>多个应用需要访问的公用信息库<strong>；③ 需要从某数据源获得数据来</strong>更新另一个数据源，特别是两者数据格式不相同时。</p>
 <p>口诀：<strong>数据 → 应用（控制）→ 流程 → 界面</strong>——范围由小到大、深度由浅到深。</p>
 <p>注意：界面集成最浅但最常用；控制集成灵活性最高。</p>
 <p>⚠️ <strong>顺序陷阱</strong>：常见的记法是"数据 → 应用 → 流程 → 界面"，但教材里"表示集成"是"<strong>比较原始和最浅层次</strong>"的，只是排列位置放在第一个讲。<strong>考"最深层次"就答业务流程集成</strong>；考"最浅层次"就答表示集成。</p>
@@ -2790,30 +2972,56 @@ html{scroll-padding-top:80px}
 ```merm…</span></summary><div class="exam-q-body"><p class="exam-stem">IRP 的过程大致可以分为 7 个步骤，其中（）步骤的主要工作是子系统定义、功能模块定义和程序单元定义。
 ```mermaid
 flowchart TD
-    A[&quot;征求业务和信息部门初步意见&quot;] --&gt; B[&quot;业务需求分析&lt;br/&gt;职能域分析&lt;br/&gt;业务域定义&lt;br/&gt;业务流程梳理&quot;]
-    A --&gt; C[&quot;数据需求分析&lt;br/&gt;用户视图收集&lt;br/&gt;用户视图分组、分析&lt;br/&gt;数据元素分析&quot;]
+    A[&quot;征求业务和信息部门初步意见&quot;] --&gt; B[&quot;业务需求分析
+职能域分析
+业务域定义
+业务流程梳理&quot;]
+    A --&gt; C[&quot;数据需求分析
+用户视图收集
+用户视图分组、分析
+数据元素分析&quot;]
     B --&gt; D[&quot;IRM基础标准&quot;]
     C --&gt; D
-    D --&gt; E[&quot;系统功能建模&lt;br/&gt;子系统定义&lt;br/&gt;功能模块定义&lt;br/&gt;程序单元定义&quot;]
-    D --&gt; F[&quot;系统数据建模&lt;br/&gt;主题数据库定义&lt;br/&gt;基本表定义&lt;br/&gt;扩展表定义&quot;]
-    E &lt;--&gt; G[&quot;业务模型&lt;br/&gt;数据模型&quot;]
+    D --&gt; E[&quot;系统功能建模
+子系统定义
+功能模块定义
+程序单元定义&quot;]
+    D --&gt; F[&quot;系统数据建模
+主题数据库定义
+基本表定义
+扩展表定义&quot;]
+    E &lt;--&gt; G[&quot;业务模型
+数据模型&quot;]
     F &lt;--&gt; G
     E --&gt; H[&quot;关联模型（CU矩阵）&quot;]
     F --&gt; H
 ```
 ```mermaid
 flowchart TD
-    A[&quot;征求业务和信息部门初步意见&quot;] --&gt; B[&quot;业务需求分析&lt;br/&gt;职能域分析&lt;br/&gt;业务域定义&lt;br/&gt;业务流程梳理&quot;]
-    A --&gt; C[&quot;数据需求分析&lt;br/&gt;用户视图收集&lt;br/&gt;用户视图分组、分析&lt;br/&gt;数据元素分析&quot;]
+    A[&quot;征求业务和信息部门初步意见&quot;] --&gt; B[&quot;业务需求分析
+职能域分析
+业务域定义
+业务流程梳理&quot;]
+    A --&gt; C[&quot;数据需求分析
+用户视图收集
+用户视图分组、分析
+数据元素分析&quot;]
     B --&gt; D[&quot;IRM基础标准&quot;]
     C --&gt; D
-    D --&gt; E[&quot;系统功能建模&lt;br/&gt;子系统定义&lt;br/&gt;功能模块定义&lt;br/&gt;程序单元定义&quot;]
-    D --&gt; F[&quot;系统数据建模&lt;br/&gt;主题数据库定义&lt;br/&gt;基本表定义&lt;br/&gt;扩展表定义&quot;]
-    E &lt;--&gt; G[&quot;业务模型&lt;br/&gt;数据模型&quot;]
+    D --&gt; E[&quot;系统功能建模
+子系统定义
+功能模块定义
+程序单元定义&quot;]
+    D --&gt; F[&quot;系统数据建模
+主题数据库定义
+基本表定义
+扩展表定义&quot;]
+    E &lt;--&gt; G[&quot;业务模型
+数据模型&quot;]
     F &lt;--&gt; G
     E --&gt; H[&quot;关联模型（CU矩阵）&quot;]
     F --&gt; H
-```</p><ul class="exam-opts"><li><b>A</b> 系统功能建模</li><li><b>B</b> 业务流程分解</li><li><b>C</b> 系统架构建模</li><li><b>D</b> 系统业务重组</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">系统功能建模环节完成子系统拆分、功能模块划分、程序单元的定义设计，对应题干的工作内容。</p></details></div></details><details class="exam-q" data-exam-id="2019年5月-022"><summary><span class="exam-no">第 22 题</span><span class="exam-stem-peek">IRP 的过程大致可以分为 7 个步骤，其中（）步骤的主要工作是用户视图收集、分组、分析和数据元素分析；</span></summary><div class="exam-q-body"><p class="exam-stem">IRP 的过程大致可以分为 7 个步骤，其中（）步骤的主要工作是用户视图收集、分组、分析和数据元素分析；</p><ul class="exam-opts"><li><b>A</b> 业务流程分析</li><li><b>B</b> 数据需求分析</li><li><b>C</b> 业务需求分析</li><li><b>D</b> 关联模型分析</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">数据需求分析阶段的核心工作就是完成用户视图的收集、分组、分析以及数据元素的梳理分析，匹配题干描述。</p></details></div></details><details class="exam-q" data-exam-id="2019年5月-020"><summary><span class="exam-no">第 20 题</span><span class="exam-stem-peek">（）管理则关心企业管理人员如何获取和处理信息(流程和方法)且强调企业中信息资源的重要性。</span></summary><div class="exam-q-body"><p class="exam-stem">（）管理则关心企业管理人员如何获取和处理信息(流程和方法)且强调企业中信息资源的重要性。</p><ul class="exam-opts"><li><b>A</b> 信息处理</li><li><b>B</b> 流程重组</li><li><b>C</b> 组织机构</li><li><b>D</b> 业务方法</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">信息处理管理聚焦于设计信息获取、流转、加工的流程规范与落地方法，面向企业管理人员的业务使用需求，突出信息资源的业务价值。</p></details></div></details></details></details><details class="exam-subject" data-exam-subject="案例"><summary><span class="exam-subject-name">📋 案例分析</span><span class="exam-subject-n">2 题</span><span class="exam-subject-tip">情景简答 · 采分点三色标记</span></summary><div class="exam-bar"><span class="exam-bar-label">📋 案例分析</span><span class="exam-bar-stat">共 <b>2</b> 题 · 情景简答</span></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">24</span>考点：CRM/SCM/PDM/PLM/KM/BI/企业门户/DSS 辨析 / 信息系统开发方法<br>📅 时间：2025-06-25 下午 📍 地点：集团信息化需求梳理会<br>👤 人物：甘工（乙方·系统分析师）、徐总监（甲方·数智化信息部总监）、洪经理（甲方·客服部经理）、徐总（甲方·分管副总）<br>⚡ 冲突：管理层把 CRM、PDM、BI、DSS 混着说，怕买错系统<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：会上有人提议：&quot;客服系统不就是 CRM 吗？&quot;&quot;再上一套 BI 吧&quot;&quot;要不要买个 DSS？&quot; 洪经理插话：&quot;我们有几十张报表了，再上一个系统，坐席看哪个？&quot; 徐总拍板前问甘工：&quot;这些到底有什么区别？别买错了。&quot; 甘工心里有数：这几件事分别对应CRM、BI、DSS、知识管理，混为一谈的结果一定是&quot;买回来没人用&quot;。<br>补充资料：PDM 管理话术与知识库。<br>问题 1：（1）辨析 CRM、SCM、PDM、PLM、KM、BI、企业门户、DSS 八个概念及其在本集团的适用边界；<br>问题 2：（2）说明电子商务的类型、特征与优势，并判断集团网上商城属于哪类；<br>问题 3：（3）比较信息系统开发方法（结构化方法、面向对象方法、原型法、敏捷方法）的特点与适用。</p><ul class="exam-questions"><li><b>问题 1</b> （1）辨析 <strong>CRM、SCM、PDM、PLM、KM、BI、企业门户、DSS</strong> 八个概念及其在本集团的适用边界；</li><li><b>问题 2</b> （2）说明<strong>电子商务</strong>的类型、特征与优势，并判断集团网上商城属于哪类；</li><li><b>问题 3</b> （3）比较信息系统开发方法（结构化方法、面向对象方法、原型法、敏捷方法）的特点与适用。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）八个概念辨析）：<br>- 🟢 加分：解析·八概念辨析必须给出&quot;核心 + 本集团边界&quot;，开发方法要给出本项目选择。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🔴 核心（2）电子商务）：<br>问题 3｜参考答案要点：<br>- 🔴 核心：🔴 核心（3）开发方法比较）：</div></details></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">26</span>📅 时间：2025-06-12 📍 地点：集团信息部会议室（信息资源规划启动会）<br>👤 人物：甘工（乙方·系统分析师）、徐总监（甲方·数智化信息部总监）、洪经理（甲方·客服部经理）、计费厂商（第三方·业务系统）代表（第三方）、郑专员（甲方·合规专员）<br>⚡ 冲突：要统一客户主数据，但客服、计费、工单三个系统各有各的&quot;客户&quot;，谁都不肯改自己的编码<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：徐总监开场：&quot;同一户人在四个系统里有四个编码、三个手机号，AI 根本认不出客户。这次 IRP 必须把客户主数据统一。&quot; 洪经理先急了：&quot;我们客服系统这套编码用了十年，坐席都背熟了，改了怎么查历史？&quot; 计费厂商代表更直接：&quot;改主键要动我们三十多张表，工作量你们出钱吗？&quot; 郑专员补了一句：&quot;统一归统一，个人信息的共享得有授权和边界，不能建个大库谁都能查。&quot; 甘工知道，技术上建主数据不难，难的是&quot;谁来定标准、谁来维护、谁有责任&quot;。<br>补充资料：客服系统 → CUST-10 位流水 → 是 → 脱敏存储 → 洪经理；工单系统 → WO-C 开头编码 → 是 → 明文 → 魏工；计费系统 → 8 位数字码 → 是 → 明文 → 计费厂商；网上商城 → U+手机号 → 是 → 明文 → 市场部 目标方案：统一客户 ID（全局唯一、终身不变）+ 各系统原编码作别名映射；由 MDM 统一维护与分发。<br>问题 1：（1）说明信息资源管理（IRM）的主要内容与信息资源规划（IRP）的主要工作；<br>问题 2：（2）说明信息分类编码的原则与作用，并给出本项目的编码方案与治理机制；<br>问题 3：（3）说明信息资源网建设的内容；<br>问题 4：（4）针对三个系统的阻力，给出推进策略。</p><ul class="exam-questions"><li><b>问题 1</b> （1）说明<strong>信息资源管理（IRM）</strong>的主要内容与<strong>信息资源规划（IRP）</strong>的主要工作；</li><li><b>问题 2</b> （2）说明<strong>信息分类编码</strong>的原则与作用，并给出本项目的编码方案与治理机制；</li><li><b>问题 3</b> （3）说明<strong>信息资源网</strong>建设的内容；</li><li><b>问题 4</b> （4）针对三个系统的阻力，给出推进策略。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）IRM 与 IRP）：IRM 内容——①制定信息资源的规范与标准；②开展信息资源规划；③建设信息资源网；④信息的采集、加工、存储、共享与利用；⑤信息安全与生命周期管理。意义是把信息作为战略资源管理，消除孤岛、支撑决策。<br>- 🟢 加分：解析·IRP 题要&quot;工作内容 + 编码方案 + 治理机制 + 推进策略&quot;。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🔴 核心（2）编码与治理）：原则——唯一性、稳定性、可扩充性、简明性、规范性、兼容性（与国标/行标衔接）、可识别性。作用——统一语言、消除歧义、支撑共享与关联、便于统计与分析、是系统集成的基础。<br>问题 3｜参考答案要点：<br>- 🔴 核心：🟡 支撑（3）信息资源网）：以主题数据库为核心，通过统一的数据标准、编码体系、交换与共享平台（ESB/API 网关/数据共享交换平台）、目录与元数据管理，把分散在各系统的信息资源连成可共享、可交换、可追溯的网络；建设内容包括网络与平台、信息资源目录、交换共享机制、安全与管理体系、运维与评价。<br>问题 4｜参考答案要点：<br>- 🔴 核心：🟢 加分（4）推进策略）：①高层挂帅（请徐总发文，把主数据治理列为集团级任务）；②先易后难（先统一客户与组织，再统一设备与产品）；③兼容存量（别名映射 + 双轨运行，不强行改存量系统主键，降低厂商阻力）；④增量必用新标准（新建系统、新数据一律走 MDM，逐步收敛）；⑤试点见效（选一个地市先跑通，用&quot;AI 识别率提升&quot;的实际收益说服洪经理）；⑥考核挂钩（把数据质量指标纳入部门考核）；⑦合规并行（同步做分类分级与授权，打消郑专员顾虑）。</div></details></div></details><details class="exam-subject" data-exam-subject="论文"><summary><span class="exam-subject-name">📄 论文写作</span><span class="exam-subject-n">4 题</span><span class="exam-subject-tip">论述题 · 先写再看题</span></summary><div class="exam-bar"><span class="exam-bar-label">📄 论文写作</span><span class="exam-bar-stat">共 <b>4</b> 题 · 论述题</span></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与的知识管理系统项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 分析信息化背景下知识管理的各个阶段，以及各阶段的核心工作。</li><li><b>问题 3</b> 介绍项目中知识管理系统的模块划分与功能设计。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 业务应用系统</span><span class="exam-lv">⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与设计、开发的 SCM 系统项目（项目的背景、企业供应链模式、建设目标、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细论述 SCM 系统的架构设计、核心功能模块（采购管理、库存优化、需求预测、物流跟踪）、供应链协同设计要点。</li><li><b>问题 3</b> 结合项目实践，论述系统实现过程中的数据同步难点、跨企业集成问题及解决方法，总结系统实施效果。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 行业应用系统</span><span class="exam-lv">⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与设计、开发的 KM 系统项目（项目的背景、企业知识类型、建设目标、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细论述 KM 系统的架构设计、核心功能模块（知识图谱、文档管理、智能检索、协作分享）、知识安全与权限设计要点。</li><li><b>问题 3</b> 结合项目实践，论述系统实现过程中的知识分类难点、用户 Adoption 提升方法，总结系统实施效果。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 业务应用系统</span><span class="exam-lv">⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与设计、开发的物流信息系统项目（项目的背景、物流业务模式、用户规模、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细论述物流信息系统的架构设计、核心功能模块（WMS/TMS/OMS）、GPS/GIS 集成设计、数据可视化设计要点。</li><li><b>问题 3</b> 结合项目实践，论述系统实现过程中的多系统集成难点、实时轨迹跟踪优化方法，总结系统实施效果。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 行业应用系统</span><span class="exam-lv">⭐</span></div></div></details></section>
+```</p><ul class="exam-opts"><li><b>A</b> 系统功能建模</li><li><b>B</b> 业务流程分解</li><li><b>C</b> 系统架构建模</li><li><b>D</b> 系统业务重组</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">系统功能建模环节完成子系统拆分、功能模块划分、程序单元的定义设计，对应题干的工作内容。</p></details></div></details><details class="exam-q" data-exam-id="2019年5月-022"><summary><span class="exam-no">第 22 题</span><span class="exam-stem-peek">IRP 的过程大致可以分为 7 个步骤，其中（）步骤的主要工作是用户视图收集、分组、分析和数据元素分析；</span></summary><div class="exam-q-body"><p class="exam-stem">IRP 的过程大致可以分为 7 个步骤，其中（）步骤的主要工作是用户视图收集、分组、分析和数据元素分析；</p><ul class="exam-opts"><li><b>A</b> 业务流程分析</li><li><b>B</b> 数据需求分析</li><li><b>C</b> 业务需求分析</li><li><b>D</b> 关联模型分析</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>B</b></p><p class="exam-exp">数据需求分析阶段的核心工作就是完成用户视图的收集、分组、分析以及数据元素的梳理分析，匹配题干描述。</p></details></div></details><details class="exam-q" data-exam-id="2019年5月-020"><summary><span class="exam-no">第 20 题</span><span class="exam-stem-peek">（）管理则关心企业管理人员如何获取和处理信息(流程和方法)且强调企业中信息资源的重要性。</span></summary><div class="exam-q-body"><p class="exam-stem">（）管理则关心企业管理人员如何获取和处理信息(流程和方法)且强调企业中信息资源的重要性。</p><ul class="exam-opts"><li><b>A</b> 信息处理</li><li><b>B</b> 流程重组</li><li><b>C</b> 组织机构</li><li><b>D</b> 业务方法</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">信息处理管理聚焦于设计信息获取、流转、加工的流程规范与落地方法，面向企业管理人员的业务使用需求，突出信息资源的业务价值。</p></details></div></details></details></details><details class="exam-subject" data-exam-subject="案例"><summary><span class="exam-subject-name">📋 案例分析</span><span class="exam-subject-n">2 题</span><span class="exam-subject-tip">案例背景 · 题目 · 答案与解析</span></summary><div class="exam-bar"><span class="exam-bar-label">📋 案例分析</span><span class="exam-bar-stat">共 <b>2</b> 题 · 情景简答 · 采分点三色标记</span></div><div class="exam-q exam-q-case"><div class="case-head"><span class="exam-no">案例 24</span><span class="exam-tag">考点 · 企业信息系统辨析与选型</span><span class="exam-lv">⭐⭐⭐</span></div><div class="case-meta"><span><strong>考点</strong>：CRM/SCM/PDM/PLM/KM/BI/企业门户/DSS 辨析 / 信息系统开发方法</span><span>📅 <strong>时间</strong>：2025-06-25 下午 📍 <strong>地点</strong>：集团信息化需求梳理会</span><span>👤 <strong>人物</strong>：甘工（乙方·系统分析师）、徐总监（甲方·数智化信息部总监）、洪经理（甲方·客服部经理）、徐总（甲方·分管副总）</span><span>⚡ <strong>冲突</strong>：管理层把 CRM、PDM、BI、DSS 混着说，怕买错系统</span><span><strong>难度</strong>：★★★　<strong>总分</strong>：25 分　<strong>建议用时</strong>：25 分钟</span></div><div class="case-scene"><div class="case-h">案例背景</div><strong>背景</strong>：会上有人提议：&quot;客服系统不就是 CRM 吗？&quot;&quot;再上一套 BI 吧&quot;&quot;要不要买个 DSS？&quot; 洪经理插话：&quot;我们有几十张报表了，再上一个系统，坐席看哪个？&quot; 徐总拍板前问甘工：&quot;这些到底有什么区别？别买错了。&quot; 甘工心里有数：这几件事分别对应<strong>CRM、BI、DSS、知识管理</strong>，混为一谈的结果一定是&quot;买回来没人用&quot;。<br><strong>补充资料</strong>：PDM 管理话术与知识库。</div><div class="case-asks"><div class="case-h">题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">（1）辨析 <strong>CRM、SCM、PDM、PLM、KM、BI、企业门户、DSS</strong> 八个概念及其在本集团的适用边界；</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">（2）说明<strong>电子商务</strong>的类型、特征与优势，并判断集团网上商城属于哪类；</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">（3）比较<strong>信息系统开发方法</strong>（结构化方法、面向对象方法、原型法、敏捷方法）的特点与适用。</span></li></ul></div><details class="exam-ans"><summary>参考答案要点（三色标记）</summary><div class="exam-points"><strong>问题 1｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（1）八个概念辨析）：<br><strong>问题 2｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（2）电子商务）：<br><strong>问题 3｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（3）开发方法比较）：</div></details><details class="exam-ans"><summary>解析与加分项</summary><div class="exam-exp-more">- 🟢 加分：解析·八概念辨析必须给出&quot;核心 + 本集团边界&quot;，开发方法要给出本项目选择。</div></details></div><div class="exam-q exam-q-case"><div class="case-head"><span class="exam-no">案例 26</span><span class="exam-tag">考点 · 主数据谁说了算</span><span class="exam-lv">⭐⭐⭐</span></div><div class="case-meta"><span>📅 <strong>时间</strong>：2025-06-12 📍 <strong>地点</strong>：集团信息部会议室（信息资源规划启动会）</span><span>👤 <strong>人物</strong>：甘工（乙方·系统分析师）、徐总监（甲方·数智化信息部总监）、洪经理（甲方·客服部经理）、计费厂商（第三方·业务系统）代表（第三方）、郑专员（甲方·合规专员）</span><span>⚡ <strong>冲突</strong>：要统一客户主数据，但客服、计费、工单三个系统各有各的&quot;客户&quot;，谁都不肯改自己的编码</span><span><strong>难度</strong>：★★★　<strong>总分</strong>：25 分　<strong>建议用时</strong>：25 分钟</span></div><div class="case-scene"><div class="case-h">案例背景</div><strong>背景</strong>：徐总监开场：&quot;同一户人在四个系统里有四个编码、三个手机号，AI 根本认不出客户。这次 IRP 必须把客户主数据统一。&quot; 洪经理先急了：&quot;我们客服系统这套编码用了十年，坐席都背熟了，改了怎么查历史？&quot; 计费厂商代表更直接：&quot;改主键要动我们三十多张表，工作量你们出钱吗？&quot; 郑专员补了一句：&quot;统一归统一，个人信息的共享得有授权和边界，不能建个大库谁都能查。&quot; 甘工知道，<strong>技术上建主数据不难，难的是&quot;谁来定标准、谁来维护、谁有责任&quot;</strong>。<br><strong>补充资料</strong>：客服系统 → CUST-10 位流水 → 是 → 脱敏存储 → 洪经理；工单系统 → WO-C 开头编码 → 是 → 明文 → 魏工；计费系统 → 8 位数字码 → 是 → 明文 → 计费厂商；网上商城 → U+手机号 → 是 → 明文 → 市场部 <strong>目标方案</strong>：统一客户 ID（全局唯一、终身不变）+ 各系统原编码作<strong>别名映射</strong>；由 MDM 统一维护与分发。</div><div class="case-asks"><div class="case-h">题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">（1）说明<strong>信息资源管理（IRM）</strong>的主要内容与<strong>信息资源规划（IRP）</strong>的主要工作；</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">（2）说明<strong>信息分类编码</strong>的原则与作用，并给出本项目的编码方案与治理机制；</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">（3）说明<strong>信息资源网</strong>建设的内容；</span></li><li><span class="case-ask-no">4</span><span class="case-ask-t">（4）针对三个系统的阻力，给出推进策略。</span></li></ul></div><details class="exam-ans"><summary>参考答案要点（三色标记）</summary><div class="exam-points"><strong>问题 1｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（1）IRM 与 IRP）：IRM 内容——①制定信息资源的规范与标准；②开展信息资源规划；③建设信息资源网；④信息的采集、加工、存储、共享与利用；⑤信息安全与生命周期管理。意义是把信息作为战略资源管理，消除孤岛、支撑决策。<br><strong>问题 2｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（2）编码与治理）：原则——唯一性、稳定性、可扩充性、简明性、规范性、兼容性（与国标/行标衔接）、可识别性。作用——统一语言、消除歧义、支撑共享与关联、便于统计与分析、是系统集成的基础。<br><strong>问题 3｜参考答案要点</strong>：<br>- 🔴 核心：🟡 支撑（3）信息资源网）：以主题数据库为核心，通过统一的数据标准、编码体系、交换与共享平台（ESB/API 网关/数据共享交换平台）、目录与元数据管理，把分散在各系统的信息资源连成可共享、可交换、可追溯的网络；建设内容包括网络与平台、信息资源目录、交换共享机制、安全与管理体系、运维与评价。<br><strong>问题 4｜参考答案要点</strong>：</div></details><details class="exam-ans"><summary>解析与加分项</summary><div class="exam-exp-more">- 🟢 加分：解析·IRP 题要&quot;工作内容 + 编码方案 + 治理机制 + 推进策略&quot;。<br>- 🔴 核心：🟢 加分（4）推进策略）：①高层挂帅（请徐总发文，把主数据治理列为集团级任务）；②先易后难（先统一客户与组织，再统一设备与产品）；③兼容存量（别名映射 + 双轨运行，不强行改存量系统主键，降低厂商阻力）；④增量必用新标准（新建系统、新数据一律走 MDM，逐步收敛）；⑤试点见效（选一个地市先跑通，用&quot;AI 识别率提升&quot;的实际收益说服洪经理）；⑥考核挂钩（把数据质量指标纳入部门考核）；⑦合规并行（同步做分类分级与授权，打消郑专员顾虑）。</div></details></div></details><details class="exam-subject" data-exam-subject="论文"><summary><span class="exam-subject-name">📄 论文写作</span><span class="exam-subject-n">4 题</span><span class="exam-subject-tip">先看题 · 再看考点拆解</span></summary><div class="exam-bar"><span class="exam-bar-label">📄 论文写作</span><span class="exam-bar-stat">共 <b>4</b> 题 · 论述题 · 含考点拆解与教材知识点</span></div><div class="exam-q exam-q-essay"><div class="case-head"><span class="exam-no">论文 70</span><span class="exam-tag">方向 · 业务应用系统</span><span class="exam-lv">⭐</span><span class="essay-batch">2012年上半年</span></div><div class="case-asks"><div class="case-h">论文题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">概要叙述你参与的知识管理系统项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">分析信息化背景下知识管理的各个阶段，以及各阶段的核心工作。</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">介绍项目中知识管理系统的模块划分与功能设计。</span></li></ul></div><details class="exam-ans" open><summary>试题背景</summary><div class="essay-bg">企业知识管理依托信息技术挖掘、利用知识资源，提升企业综合竞争力。</div></details><details class="exam-ans"><summary>考点拆解（三色标记）</summary><div class="exam-keypoints"><strong>问题 1｜概要叙述项目与你承担的工作</strong>：<br>- 🔴 核心：点明近三年内一个具体的真实项目：项目名称、背景、发起单位、规模、周期、交付成果（教材 22.4-9/22.4-10 明确要求，泛泛而谈会判虚构）<br>- 🔴 核心：明确「我」在项目中的角色与承担的主要工作，并站在系统分析师视角论述，而非单纯开发实现视角<br>- 🟡 支撑：说明项目的组织结构、开发体制与技术栈，为后文论述做铺垫<br>- 🟢 加分：点出项目与本题主题的直接关联（如本项目正是因 XX 痛点才需要 XX 方法）<br><strong>问题 2｜理论知识 / 方法论述</strong>：<br>- 🔴 核心：信息化背景下知识管理的各个阶段——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：信息化背景下知识管理的以及各阶段的核心工作——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🟢 加分：给出与其他候选方案的取舍依据，体现选型判断力<br><strong>问题 3｜项目实践落地与复盘</strong>：<br>- 🔴 核心：给出可量化的落地效果（缺陷率/响应时间/迭代周期/资源成本等具体数据），而非「取得了良好效果」<br>- 🔴 核心：诚实分析存在的 2~3 个真实问题，并给出对应的改进措施——教材强调这才是用心的内容<br>- 🟡 支撑：结合具体实例说明措施的实施过程（怎么做的，而非教科书式罗列）<br>- 🟢 加分：总结经验教训与后续演进方向，体现复盘能力<br>- 🟡 支撑：项目中知识管理系统的模块划分与功能设计</div></details><details class="exam-ans"><summary>教材知识点</summary><div class="exam-textbook"><span class="tb-chap">第 6 章 · 企业信息化</span><a class="tb-hour" href="H12.html">H12</a><a class="tb-hour" href="H13.html">H13</a></div></details></div><div class="exam-q exam-q-essay"><div class="case-head"><span class="exam-no">论文 99</span><span class="exam-tag">方向 · 行业应用系统</span><span class="exam-lv">⭐</span><span class="essay-batch">2012年下半年（11月）</span></div><div class="case-asks"><div class="case-h">论文题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">概要叙述你参与设计、开发的 SCM 系统项目（项目的背景、企业供应链模式、建设目标、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">详细论述 SCM 系统的架构设计、核心功能模块（采购管理、库存优化、需求预测、物流跟踪）、供应链协同设计要点。</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">结合项目实践，论述系统实现过程中的数据同步难点、跨企业集成问题及解决方法，总结系统实施效果。</span></li></ul></div><details class="exam-ans" open><summary>试题背景</summary><div class="essay-bg">供应链管理（SCM）系统整合采购、库存、生产、物流等环节，是企业实现供应链协同、降本增效的核心系统。</div></details><details class="exam-ans"><summary>考点拆解（三色标记）</summary><div class="exam-keypoints"><strong>问题 1｜概要叙述项目与你承担的工作</strong>：<br>- 🔴 核心：点明近三年内一个具体的真实项目：项目名称、背景、发起单位、规模、周期、交付成果（教材 22.4-9/22.4-10 明确要求，泛泛而谈会判虚构）<br>- 🔴 核心：明确「我」在项目中的角色与承担的主要工作，并站在系统分析师视角论述，而非单纯开发实现视角<br>- 🟡 支撑：说明项目的组织结构、开发体制与技术栈，为后文论述做铺垫<br>- 🟢 加分：点出项目与本题主题的直接关联（如本项目正是因 XX 痛点才需要 XX 方法）<br><strong>问题 2｜理论知识 / 方法论述</strong>：<br>- 🔴 核心：SCM 系统的架构设计——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：SCM 系统的核心功能模块采购管理——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：SCM 系统的库存优化——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🟡 支撑：SCM 系统的需求预测<br>- 🟡 支撑：SCM 系统的物流跟踪<br>- 🟡 支撑：SCM 系统的供应链协同设计要点<br>- 🟢 加分：给出与其他候选方案的取舍依据，体现选型判断力<br><strong>问题 3｜项目实践落地与复盘</strong>：<br>- 🔴 核心：给出可量化的落地效果（缺陷率/响应时间/迭代周期/资源成本等具体数据），而非「取得了良好效果」<br>- 🔴 核心：诚实分析存在的 2~3 个真实问题，并给出对应的改进措施——教材强调这才是用心的内容<br>- 🟡 支撑：结合具体实例说明措施的实施过程（怎么做的，而非教科书式罗列）<br>- 🟢 加分：总结经验教训与后续演进方向，体现复盘能力<br>- 🟡 支撑：论述系统实现过程中的数据同步难点<br>- 🟡 支撑：论述系统实现过程中的跨企业集成问题及解决方法</div></details><details class="exam-ans"><summary>教材知识点</summary><div class="exam-textbook"><span class="tb-chap">第 6 章 · 企业信息化</span><a class="tb-hour" href="H12.html">H12</a><a class="tb-hour" href="H13.html">H13</a></div></details></div><div class="exam-q exam-q-essay"><div class="case-head"><span class="exam-no">论文 107</span><span class="exam-tag">方向 · 业务应用系统</span><span class="exam-lv">⭐</span><span class="essay-batch">2011年下半年（11月）</span></div><div class="case-asks"><div class="case-h">论文题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">概要叙述你参与设计、开发的 KM 系统项目（项目的背景、企业知识类型、建设目标、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">详细论述 KM 系统的架构设计、核心功能模块（知识图谱、文档管理、智能检索、协作分享）、知识安全与权限设计要点。</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">结合项目实践，论述系统实现过程中的知识分类难点、用户 Adoption 提升方法，总结系统实施效果。</span></li></ul></div><details class="exam-ans" open><summary>试题背景</summary><div class="essay-bg">知识管理（KM）系统整合知识采集、存储、共享、检索、应用等功能，是企业沉淀知识、提升组织学习能力的核心系统。</div></details><details class="exam-ans"><summary>考点拆解（三色标记）</summary><div class="exam-keypoints"><strong>问题 1｜概要叙述项目与你承担的工作</strong>：<br>- 🔴 核心：点明近三年内一个具体的真实项目：项目名称、背景、发起单位、规模、周期、交付成果（教材 22.4-9/22.4-10 明确要求，泛泛而谈会判虚构）<br>- 🔴 核心：明确「我」在项目中的角色与承担的主要工作，并站在系统分析师视角论述，而非单纯开发实现视角<br>- 🟡 支撑：说明项目的组织结构、开发体制与技术栈，为后文论述做铺垫<br>- 🟢 加分：点出项目与本题主题的直接关联（如本项目正是因 XX 痛点才需要 XX 方法）<br><strong>问题 2｜理论知识 / 方法论述</strong>：<br>- 🔴 核心：KM 系统的架构设计——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：KM 系统的核心功能模块知识图谱——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：KM 系统的文档管理——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🟡 支撑：KM 系统的智能检索<br>- 🟡 支撑：KM 系统的协作分享<br>- 🟡 支撑：KM 系统的知识安全与权限设计要点<br>- 🟢 加分：给出与其他候选方案的取舍依据，体现选型判断力<br><strong>问题 3｜项目实践落地与复盘</strong>：<br>- 🔴 核心：给出可量化的落地效果（缺陷率/响应时间/迭代周期/资源成本等具体数据），而非「取得了良好效果」<br>- 🔴 核心：诚实分析存在的 2~3 个真实问题，并给出对应的改进措施——教材强调这才是用心的内容<br>- 🟡 支撑：结合具体实例说明措施的实施过程（怎么做的，而非教科书式罗列）<br>- 🟢 加分：总结经验教训与后续演进方向，体现复盘能力<br>- 🟡 支撑：论述系统实现过程中的知识分类难点<br>- 🟡 支撑：论述系统实现过程中的用户 Adoption 提升方法</div></details><details class="exam-ans"><summary>教材知识点</summary><div class="exam-textbook"><span class="tb-chap">第 6 章 · 企业信息化</span><a class="tb-hour" href="H12.html">H12</a><a class="tb-hour" href="H13.html">H13</a></div></details></div><div class="exam-q exam-q-essay"><div class="case-head"><span class="exam-no">论文 115</span><span class="exam-tag">方向 · 行业应用系统</span><span class="exam-lv">⭐</span><span class="essay-batch">2010年下半年（11月）</span></div><div class="case-asks"><div class="case-h">论文题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">概要叙述你参与设计、开发的物流信息系统项目（项目的背景、物流业务模式、用户规模、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">详细论述物流信息系统的架构设计、核心功能模块（WMS/TMS/OMS）、GPS/GIS 集成设计、数据可视化设计要点。</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">结合项目实践，论述系统实现过程中的多系统集成难点、实时轨迹跟踪优化方法，总结系统实施效果。</span></li></ul></div><details class="exam-ans" open><summary>试题背景</summary><div class="essay-bg">物流信息系统整合仓储管理、运输管理、订单管理、轨迹跟踪等功能，是物流企业提升运营效率、降低成本的核心系统。</div></details><details class="exam-ans"><summary>考点拆解（三色标记）</summary><div class="exam-keypoints"><strong>问题 1｜概要叙述项目与你承担的工作</strong>：<br>- 🔴 核心：点明近三年内一个具体的真实项目：项目名称、背景、发起单位、规模、周期、交付成果（教材 22.4-9/22.4-10 明确要求，泛泛而谈会判虚构）<br>- 🔴 核心：明确「我」在项目中的角色与承担的主要工作，并站在系统分析师视角论述，而非单纯开发实现视角<br>- 🟡 支撑：说明项目的组织结构、开发体制与技术栈，为后文论述做铺垫<br>- 🟢 加分：点出项目与本题主题的直接关联（如本项目正是因 XX 痛点才需要 XX 方法）<br><strong>问题 2｜理论知识 / 方法论述</strong>：<br>- 🔴 核心：物流信息系统的架构设计——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：物流信息系统的核心功能模块WMS/TMS/OMS——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：物流信息系统的GPS/GIS 集成设计——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🟡 支撑：物流信息系统的数据可视化设计要点<br>- 🟢 加分：给出与其他候选方案的取舍依据，体现选型判断力<br><strong>问题 3｜项目实践落地与复盘</strong>：<br>- 🔴 核心：给出可量化的落地效果（缺陷率/响应时间/迭代周期/资源成本等具体数据），而非「取得了良好效果」<br>- 🔴 核心：诚实分析存在的 2~3 个真实问题，并给出对应的改进措施——教材强调这才是用心的内容<br>- 🟡 支撑：结合具体实例说明措施的实施过程（怎么做的，而非教科书式罗列）<br>- 🟢 加分：总结经验教训与后续演进方向，体现复盘能力<br>- 🟡 支撑：论述系统实现过程中的多系统集成难点<br>- 🟡 支撑：论述系统实现过程中的实时轨迹跟踪优化方法</div></details><details class="exam-ans"><summary>教材知识点</summary><div class="exam-textbook"><span class="tb-chap">第 6 章 · 企业信息化</span><a class="tb-hour" href="H12.html">H12</a><a class="tb-hour" href="H13.html">H13</a></div></details></div></details></section>
     <div class="wrongbook"></div>
     <div class="keyhint">
   <span class="keyhint-title">键盘快捷键</span>
@@ -3696,7 +3904,9 @@ flowchart TD
     init() {
       const root = document.querySelector('.exam')
       if (!root) return
-      const chapter = root.dataset.examChapter || 'x'
+      // ⚠️ 专项页 / 全真模拟页没有 data-exam-chapter（无教材章），
+      //    旧写法一律退化成 'x' → H42~H48 共用同一个记忆键、互相串状态。
+      const chapter = root.dataset.examChapter || root.dataset.examHour || 'x'
 
       // 恢复上次展开状态：{ "H07": { "2025年5月": true, ... } }
       const saved = store.get(this.KEY, {}) || {}
@@ -3716,6 +3926,7 @@ flowchart TD
       const seen = store.get('examSeen', {}) || {}
       root.querySelectorAll('.exam-q').forEach(qd => {
         const qid = qd.dataset.examId
+        if (!qid) return
         if (seen[qid]) {
           const a = qd.querySelector('.exam-ans')
           if (a) a.open = true
@@ -3731,12 +3942,17 @@ flowchart TD
         btn.addEventListener('click', e => {
           e.preventDefault()
           const openAll = btn.dataset.examAll === '1'
-          root.querySelectorAll('.exam-subject,.exam-year').forEach(d => { d.open = openAll })
-          root.querySelectorAll('.exam-ans').forEach(d => {
-            d.open = openAll
-            if (openAll && d.parentElement.dataset.examId) seen[d.parentElement.dataset.examId] = 1
-          })
-          if (openAll) store.set('examSeen', seen)
+          // ⚠️ 必须把 .exam-q 也列进来：只开 .exam-subject/.exam-year/.exam-ans
+          //    时，单题仍折叠 → 答案藏在关闭的单题内，"全部展开"名不副实。
+          root.querySelectorAll('.exam-subject,.exam-year,.exam-q,.exam-ans')
+            .forEach(d => { d.open = openAll })
+          if (openAll) {
+            // ⚠️ 旧的 `d.parentElement.dataset.examId` 取到的是 .exam-q-body（无 id），
+            //    会把 seen[undefined] 写进 localStorage。改为直接从 .exam-q 取。
+            root.querySelectorAll('.exam-q[data-exam-id]')
+              .forEach(qd => { seen[qd.dataset.examId] = 1 })
+            store.set('examSeen', seen)
+          }
           // 同步年份级记忆
           root.querySelectorAll('.exam-year').forEach(y => { mine[y.dataset.examYear] = y.open })
           saved[chapter] = mine
@@ -3783,7 +3999,7 @@ flowchart TD
   // ══════════════════════════════════════════
   // 8. mermaid 渲染（自定义墨绿主题，与正文同色系）
   // ══════════════════════════════════════════
-  // 站点配色（与 design.css 的令牌保持一致）
+  // 站点配色（与设计令牌保持一致 —— 改主题色时这里要同步）
   const MERMAID_LIGHT = {
     bg: '#f2f0e9', fg: '#1b211c', line: '#cdc9bd',
     accent: '#3d5a40', accent2: '#5a8a62', accent3: '#7ea888',

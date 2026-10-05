@@ -7,7 +7,7 @@
 <title>第 38 小时 · 大数据处理系统分析与设计 · Lambda/Kappa 架构 · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
-<meta name="build-stamp" content="2026-10-05 11:44:51">
+<meta name="build-stamp" content="2026-10-05 15:47:03">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -405,16 +405,21 @@ img{max-width:100%;height:auto}
   border-radius:100px;
   font-size:12.5px;color:var(--accent);font-weight:600;
 }
-.cover h1{
+/* ⚠️ 封面主标题刻意用 <div> 而不是 <h1>：index.md 正文自带 `# 阿甘系分 · 48 小时
+   冲刺手册`，若封面也用 h1，一页会出现两个 h1（语义/SEO 上都是错的）。
+   视觉与 h1 完全一致 —— 字号、颜色、以及那道 72px 短横线都在下面显式声明。 */
+.cover .cover-title{
   font-size:3.5em;font-weight:800;letter-spacing:-1.6px;
   color:var(--accent);line-height:1.14;margin-bottom:16px;
 }
-/* ⚠️ 封面 h1 也继承 `.main h1::after` 那道 56px 短横线，但它是 display:block 的
-   固定宽块级元素 —— 文字居中不代表块级元素居中，会贴到左边。
-   修法：给封面这条短横线加 margin-left/right:auto 让它真正居中。 */
-.cover h1::after{
-  margin-left:auto;margin-right:auto;
+/* 复刻 `.main h1::after` 的短横线（<div> 不继承 h1 的伪元素），并水平居中 —— */
+/* 文字居中不代表块级元素居中，不加 auto 会贴到左边。 */
+.cover .cover-title::after{
+  content:'';display:block;
   width:72px;height:3px;
+  background:var(--accent);
+  margin:.5em auto 0;
+  border-radius:2px;
 }
 .cover .sub{
   font-size:1.2em;color:var(--fg-2);
@@ -845,7 +850,7 @@ pre{
   .nav{margin-left:auto;gap:2px}
   .main{padding:32px 0 80px}
   .cover{padding:48px 0 40px;margin-bottom:40px}
-  .cover h1{font-size:2.4em;letter-spacing:-.8px}
+  .cover .cover-title{font-size:2.4em;letter-spacing:-.8px}
   .cover .sub{font-size:1.05em;margin-bottom:24px}
   .cover-stats{gap:10px;margin-bottom:28px}
   .stat{min-width:76px;padding:10px 14px}
@@ -901,7 +906,7 @@ pre{
   h1,h2,h3,h4{break-after:avoid;page-break-after:avoid}
 
   .cover{padding:0 0 18px;margin-bottom:18px;text-align:left}
-  .cover h1{font-size:24pt}
+  .cover .cover-title{font-size:24pt}
   .cover-stats,.cover-badge,.cta-row{display:none !important}
 
   a[href^="http"]:after{
@@ -1256,16 +1261,14 @@ html.focus-mode .chapbar{opacity:.35;pointer-events:none}
 }
 /* 章首横幅：h1 上方加一条"章号 + 主色渐变"的装饰带，
    让每页开头有一个明确的"进入新章"仪式感（原来 h1 直接浮在正文里）。
-   ⚠️ 必须排除 .cover —— 封面 h1 自己已有顶部留白与居中布局，
-   加上横幅会与下方分隔线叠成双线（首页曾出现两条横线紧挨）。 */
-.main h1:not(.cover h1)::before{
+   （封面主标题已改成 <div class="cover-title">，不再匹配 .main h1，无需再排除。） */
+.main h1::before{
   content:'';display:block;
   width:100%;height:4px;
   background:linear-gradient(90deg,var(--accent) 0%,var(--accent-3) 42%,transparent 88%);
   border-radius:2px;
   margin-bottom:.62em;
 }
-.cover h1::before{content:none}
 .main h1::after{
   content:'';display:block;
   width:56px;height:3px;
@@ -2087,6 +2090,185 @@ html{scroll-padding-top:80px}
   .exam-stem,.exam-opts li{font-size:9.5pt}
   .exam-exp{font-size:8.5pt;color:#333}
 }
+
+/* ══════════════════════════════════════════════════════════════
+   真题区块扩展 v2 · 案例 / 论文卡片 + 全真模拟卷
+   与既有 .exam-* 体系同源：米白卡底 + 左侧 4px 色条 + 墨绿强调色
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── 案例 / 论文卡片（非 <details>，直接展开的题卡）── */
+.exam-q-case,.exam-q-essay{
+  padding:14px 16px 4px;
+  background:var(--bg-card);
+}
+.exam-q-case:hover,.exam-q-essay:hover{background:var(--bg-alt)}
+.case-head{
+  display:flex;flex-wrap:wrap;align-items:center;gap:6px;
+  padding-bottom:10px;margin-bottom:10px;
+  border-bottom:1px dashed var(--line);
+}
+.case-head .exam-no{min-width:0}
+.case-h{
+  display:flex;align-items:center;gap:6px;
+  margin:12px 0 6px;font-size:12.5px;font-weight:700;
+  letter-spacing:.06em;color:var(--accent);
+}
+.case-h::before{
+  content:'';width:4px;height:13px;border-radius:2px;
+  background:var(--accent);flex:0 0 auto;
+}
+
+/* 情景要素（📅时间 / 📍地点 / 👤人物 / ⚡冲突 / 难度总分用时） */
+.case-meta{
+  display:flex;flex-direction:column;gap:2px;
+  padding:9px 12px;margin:.4em 0 .2em;
+  background:var(--bg-alt);
+  border-left:3px solid var(--line-2);
+  border-radius:0 var(--radius-sm) var(--radius-sm) 0;
+  font-size:12.5px;line-height:1.75;color:var(--fg-3);
+}
+.case-meta strong{color:var(--fg-2);font-weight:600}
+
+/* 案例背景正文 */
+.case-scene{
+  margin:.2em 0 1em;padding:12px 14px;
+  background:var(--accent-soft);
+  border-left:3px solid var(--accent-3);
+  border-radius:0 var(--radius) var(--radius) 0;
+  font-size:14.5px;line-height:1.92;color:var(--fg);
+}
+.case-scene strong{color:var(--accent);font-weight:700}
+
+/* 题目列表 */
+.case-asks{margin:.2em 0 1em}
+ul.exam-questions{
+  list-style:none;margin:.4em 0;padding:0;
+}
+ul.exam-questions>li{
+  display:flex;gap:10px;align-items:flex-start;
+  padding:9px 0;border-bottom:1px solid var(--line);
+  font-size:14.5px;line-height:1.88;color:var(--fg);
+}
+ul.exam-questions>li:last-child{border-bottom:0}
+ul.exam-questions>li::before{content:none !important}
+.case-ask-no{
+  flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;
+  min-width:24px;height:22px;margin-top:3px;padding:0 6px;
+  border-radius:6px;background:var(--accent-soft-2);color:var(--accent);
+  font-family:var(--sans);font-size:11.5px;font-weight:700;
+  font-variant-numeric:tabular-nums;
+}
+.case-ask-t{flex:1;min-width:0}
+.case-ask-t strong{color:var(--accent);font-weight:700}
+
+/* ── 答案 / 解析 / 考点拆解 / 教材知识点 ── */
+.exam-points,.exam-keypoints,.exam-exp-more,.essay-bg{
+  padding:12px 14px;margin:8px 0;
+  border-left:4px solid var(--tip-line);
+  border-radius:0 var(--radius) var(--radius) 0;
+  background:var(--tip-bg);
+  font-size:14px;line-height:1.92;color:var(--fg);
+}
+.exam-keypoints{border-left-color:var(--accent-2);background:var(--accent-soft)}
+.exam-exp-more{border-left-color:var(--warn-line);background:var(--warn-bg);color:var(--warn-fg)}
+.essay-bg{border-left-color:var(--line-2);background:var(--bg-alt);color:var(--fg-2)}
+.exam-points strong,.exam-keypoints strong{color:var(--accent);font-weight:700}
+
+/* 教材知识点：章标签 + 可点学时胶囊 */
+.exam-textbook{
+  display:flex;flex-wrap:wrap;align-items:center;gap:6px;
+  padding:12px 14px;margin:8px 0;
+  background:var(--mem-bg);
+  border-left:4px solid var(--mem-line);
+  border-radius:0 var(--radius) var(--radius) 0;
+}
+.tb-chap{
+  font-family:var(--serif);font-size:14px;font-weight:700;color:var(--mem-fg);
+}
+.tb-hour{
+  display:inline-flex;align-items:center;
+  padding:2px 9px;border-radius:999px;
+  background:var(--bg-card);border:1px solid var(--mem-line);
+  color:var(--mem-fg) !important;font-size:12px;font-weight:600;
+  text-decoration:none;
+}
+.tb-hour:hover{background:var(--mem-line);color:var(--bg-card) !important;border-color:var(--mem-fg)}
+
+/* 模拟卷成绩/批次等小标签 */
+.exam-lv{
+  font-family:var(--sans);font-size:11.5px;color:var(--gold);
+  letter-spacing:.04em;white-space:nowrap;
+}
+.exam-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.exam-tag-en{
+  background:var(--mem-bg);color:var(--mem-fg);border-color:var(--mem-line);
+}
+.essay-batch{
+  font-family:var(--sans);font-size:11.5px;color:var(--fg-3);
+  padding:1px 8px;border:1px solid var(--line);border-radius:999px;
+}
+.exam-kp{
+  margin:.5em 0 0;font-family:var(--sans);font-size:12.5px;color:var(--fg-3);
+}
+.exam-kp::before{content:'🎯 ';font-size:11px}
+
+/* ── 全真模拟卷头部 ── */
+.mock-head{
+  padding:16px 18px;margin:0 0 12px;
+  border-radius:var(--radius-lg);
+  background:linear-gradient(135deg,var(--accent) 0%,var(--accent-2) 100%);
+  color:var(--fg-inv);
+  box-shadow:var(--shadow-2);
+}
+.mock-title{
+  font-family:var(--serif);font-size:17px;font-weight:700;
+  letter-spacing:.02em;line-height:1.5;
+}
+.mock-sub{
+  margin-top:6px;font-size:12.5px;line-height:1.75;
+  color:rgba(251,250,246,.82);
+}
+.mock-sub b{color:#fff;font-variant-numeric:tabular-nums}
+.mock-items{
+  border:1px solid var(--line);border-radius:var(--radius);
+  background:var(--bg-card);overflow:hidden;
+}
+.mock-items>.exam-q:first-child{border-top:0}
+.exam-mock .exam-subject{margin-top:14px}
+.exam-subj-only{display:block}
+
+/* 模拟卷内的综合知识答题条 */
+.exam-mock .exam-bar{
+  border-radius:var(--radius) var(--radius) 0 0;
+  border-bottom:0;
+}
+
+/* ── 窄屏 ── */
+@media(max-width:760px){
+  .exam-q-case,.exam-q-essay{padding:12px 12px 4px}
+  .case-scene,.exam-points,.exam-keypoints,.exam-exp-more,.essay-bg,.exam-textbook{
+    padding:10px 11px;font-size:13.5px;
+  }
+  ul.exam-questions>li{gap:8px;font-size:13.5px}
+  .mock-head{padding:13px 14px}
+  .mock-title{font-size:15.5px}
+}
+
+/* ── 打印：卡片不要再折叠，色条与底色转灰阶 ── */
+@media print{
+  .mock-head{background:none !important;color:#000 !important;border:1pt solid #999;
+    box-shadow:none}
+  .mock-title{font-size:13pt}
+  .mock-sub{color:#333 !important}
+  .exam-q-case,.exam-q-essay{break-inside:avoid;page-break-inside:avoid}
+  .case-scene,.exam-points,.exam-keypoints,.exam-exp-more,.essay-bg,.exam-textbook{
+    background:none !important;border-left:2pt solid #999 !important;
+  }
+  .exam-q-case,.exam-q-essay,.case-scene,.case-meta,ul.exam-questions>li{
+    font-size:9.5pt;
+  }
+  .tb-hour{color:#000 !important;border-color:#666}
+}
 </style>
 </head>
 <body>
@@ -2283,7 +2465,7 @@ html{scroll-padding-top:80px}
 1、数据汇聚整合能力：随着业务的多元化发展，企业内部往往信息部门和数据中心林立，大量系统、功能和应用重复建设，存在巨大的数据资源和人力资源浪费，同时组织壁垒也导致数据孤岛的出现，使得内外部数据难以被全局规划。数据中台需要能够对数据进行整合和完善，提供适用、适配、成熟、完善的一站式大数据平台工具，在简便有效的基础上，实现数据采集、交换等任务配置以及监控管理。
 2、数据提纯加工能力：企业需要完整的数据资产体系，也就必须以客户、产品、业务场景为指导原则进行建设，推动业务数据向数据资产的转化。传统数字化建设往往局限在单个业务流程，而忽视了多业务的关联数据，缺乏对数据的深度理解。
 3、数据服务可视化：为了尽快让数据用起来，数据中台必须提供便捷、快速的数据服务能力，让相关人员能够迅速开发数据应用，支持数据资产场景化能力的快速输出，以响应客户动态的需求。多数受访者还期待数据中台可以提供数据化运营平台，帮助企业快速实现数据资产的可视化分析，提供包括实时流数据分析、预测分析、机器学习等更为高级的服务，为企业数据化运营赋能。
-4、价值变现方面：企业内部的各个部门和团队不应该是数据孤岛，打通不同部门和团队之间数据难以整合、标签不成体系、与业务关联断层的现状，数据中台被寄予厚望。企业期待数据中台能助力跨部门的普适性业务价值能力，更好地管理数据应用，将数据洞察变成直接驱动业务行动的核心动能，跨业务场景推进数据实践。</p></details></div></details></details><details class="exam-year" data-exam-year="2020年11月"><summary><span class="exam-year-name">2020年11月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2020年11月-026"><summary><span class="exam-no">第 26 题</span><span class="exam-stem-peek">BI系统的处理流程主要包括4个阶段，(26)阶段不仅需要进行数据汇总/聚集，同时还提供切片、切块、下钻、上卷和旋转等海量…</span></summary><div class="exam-q-body"><p class="exam-stem">BI系统的处理流程主要包括4个阶段，(26)阶段不仅需要进行数据汇总/聚集，同时还提供切片、切块、下钻、上卷和旋转等海量数据分析功能。</p><ul class="exam-opts"><li><b>A</b> 业务流程分析</li><li><b>B</b> OLTP</li><li><b>C</b> OLAP</li><li><b>D</b> 数据清洗</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">OLAP（在线数据分析）是BI的核心分析阶段，支持数据汇总以及切片、切块、下钻、上卷、旋转这类多维交互式分析操作。</p></details></div></details><details class="exam-q" data-exam-id="2020年11月-025"><summary><span class="exam-no">第 25 题</span><span class="exam-stem-peek">BI系统的处理流程主要包括4个阶段，其中(25)阶段主要包括数据的抽取(extraction)、转换(transform…</span></summary><div class="exam-q-body"><p class="exam-stem">BI系统的处理流程主要包括4个阶段，其中(25)阶段主要包括数据的抽取(extraction)、转换(transformation)和加载(load)三个步骤（即ETL过程）。</p><ul class="exam-opts"><li><b>A</b> 数据预处理</li><li><b>B</b> 数据预加载</li><li><b>C</b> 数据前处理</li><li><b>D</b> 数据后处理</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">ETL（抽取、转换、加载）属于BI流程的数据预处理阶段，该环节完成原始业务数据的清洗、格式转换、入库，为后续分析做准备。</p></details></div></details></details></details><details class="exam-subject" data-exam-subject="案例"><summary><span class="exam-subject-name">📋 案例分析</span><span class="exam-subject-n">5 题</span><span class="exam-subject-tip">情景简答 · 采分点三色标记</span></summary><div class="exam-bar"><span class="exam-bar-label">📋 案例分析</span><span class="exam-bar-stat">共 <b>5</b> 题 · 情景简答</span></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">87</span>考点：大数据特征 / Lambda vs Kappa vs IOTA / 数据分层与治理 / 存储选型<br>📅 时间：2026-05-15 上午 📍 地点：数据平台方案评审<br>👤 人物：甘工（乙方·系统分析师）、彭工（乙方·架构设计师）、邓经理（甲方·运维经理）、算法团队（乙方·数据运营）<br>⚡ 冲突：话单、录音、转写文本、时序数据四类混在一起，实时要 60 秒、离线要分析<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：邓经理先把四类数据摆出来：&quot;结构化话单一亿两千万行、录音一年四个 T、转写文本九亿字、工商表五分钟一条——都往一个库里塞？&quot; 算法团队（乙方·数据运营）关心：&quot;我们要跑模型训练。&quot; 彭工提醒：&quot;还有实时大屏，延迟要小于一分钟。&quot; 甘工知道，这四类数据的读写特征完全不同，而&quot;实时&quot;和&quot;离线&quot;对架构的要求也完全不同——今天要一次把架构类型和存储选型定下来。<br>补充资料：转写文本（约 9 亿字/年，需全文检索）；④工商表远传时序数据（5 分钟/点，1.2 万户，需按时间聚合与异常检测）。需求：实时大屏延迟 ≤60 秒；离线分析按天/周/月输出；话务数据拟作为数据资产对外授权运营，但个人信息不得出域。<br>问题 1：（1）说明大数据的主要特征（4V/5V）；<br>问题 2：（2）比较 Lambda、Kappa、IOTA 架构并给出本项目方案；<br>问题 3：（3）为四类数据选择存储方案并说明理由；<br>问题 4：（4）给出数据分层与数据质量的量化治理措施。</p><ul class="exam-questions"><li><b>问题 1</b> （1）说明<strong>大数据</strong>的主要特征（4V/5V）；</li><li><b>问题 2</b> （2）比较 <strong>Lambda、Kappa、IOTA</strong> 架构并给出本项目方案；</li><li><b>问题 3</b> （3）为四类数据选择<strong>存储方案</strong>并说明理由；</li><li><b>问题 4</b> （4）给出数据分层与数据质量的量化治理措施。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）特征）：Volume 数据量大、Velocity 产生与处理速度快、Variety 类型多样（结构化/半结构化/非结构化）、Value 价值密度低（需挖掘）、Veracity 真实性/准确性（数据质量）；部分表述还有 Variability（可变性）、Visualization（可视化）。<br>- 🟢 加分：解析·架构选型题要&quot;各层做什么 + 优缺点 + 针对本项目哪条需求&quot;。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🔴 核心（2）架构比较与选型）：<br>问题 3｜参考答案要点：<br>- 🔴 核心：🔴 核心（3）存储选型）：<br>问题 4｜参考答案要点：<br>- 🔴 核心：🔴 核心（4）分层与质量）：</div></details></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">88</span>考点：系统部署（资源调度/多租户/弹性）／可靠性与容错测试／安全性测试／测试难点<br>📅 时间：2026-05-28 上午 📍 地点：集群运维评审<br>👤 人物：甘工（乙方·系统分析师）、邓经理（甲方·运维经理）、彭工（乙方·架构设计师）、李工（乙方·项目经理）<br>⚡ 冲突：GPU 被训练任务占满、机房间网络抖动，大屏延迟从 60 秒变 15 分钟<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：邓经理在群里发飙：&quot;大屏延迟十五分钟！客服还以为系统崩了。&quot; 一查：算法团队（乙方·数据运营）的训练任务把四台 GPU 全占了，还把内网带宽吃满。 算法团队（乙方·数据运营）也委屈：&quot;集群是大家一起买的。&quot; 李工问：&quot;那测试怎么做？总不能等出事才发现。&quot; 甘工清楚：这既是部署与多租户的问题，也是容错测试没做到位的问题。<br>问题 1：（1）说明大数据系统部署要点与多租户隔离方案；<br>问题 2：（2）给出可靠性与容错测试方案（故障清单、验证指标、判定标准）；<br>问题 3：（3）说明大数据测试的特点与难点；<br>问题 4：（4）给出安全性测试要点。</p><ul class="exam-questions"><li><b>问题 1</b> （1）说明大数据<strong>系统部署</strong>要点与<strong>多租户隔离</strong>方案；</li><li><b>问题 2</b> （2）给出<strong>可靠性与容错测试</strong>方案（故障清单、验证指标、判定标准）；</li><li><b>问题 3</b> （3）说明大数据<strong>测试的特点与难点</strong>；</li><li><b>问题 4</b> （4）给出安全性测试要点。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）部署与多租户）：<br>- 🟢 加分：解析·大数据题要&quot;部署 + 容错清单 + 难点 + 安全&quot;，对账思想贯穿始终。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🔴 核心（2）容错测试）：目标——在节点故障、网络异常、数据激增、依赖不可用下仍不丢数据、不重复计算、可自动恢复。<br>问题 3｜参考答案要点：<br>- 🔴 核心：🔴 核心（3）测试特点与难点）：特点——数据量大、以对账/聚合校验为主、关注吞吐与延迟、需覆盖容错与数据质量。难点——①无法全量比对（用抽样 + 校验和 + 对账）；②结果不确定/顺序不定（断言用&quot;集合等价/聚合相等&quot;而非&quot;行序相等&quot;）；③实时链路难复现（用流量回放与影子任务）；④环境难 1:1 复制（用脱敏生产副本做压测）；⑤口径易漂移（把指标口径写成可执行的 SQL 断言）。<br>问题 4｜参考答案要点：<br>- 🔴 核心：🔴 核心（4）安全测试）：①权限与越权（分析师只能看脱敏字段）；②脱敏有效性（做重标识攻击测试，验证无法还原个人身份）；③传输与存储加密；④审计留痕（谁何时查了什么）；⑤数据分类分级落地检查（敏感字段未被下放）；⑥对外共享采用隐私计算/密态计算验证。</div></details></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">89</span>📅 时间：2026-06-30 上午 📍 地点：私有云集群运维群 + 紧急会议<br>👤 人物：邓经理（甲方·运维经理）、甘工（乙方·系统分析师）、彭工（乙方·架构设计师）、算法团队（乙方·数据运营）负责人（孙博士）、徐总监（甲方·数智化信息部总监）<br>⚡ 冲突：算法团队（乙方·数据运营）跑模型训练吃满 GPU 与网络，导致线上 ASR 转写排队、大屏延迟从 60 秒涨到 15 分钟<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：邓经理在群里发飙：&quot;大屏延迟十五分钟！客服在问是不是系统崩了。&quot; 一查：算法团队（乙方·数据运营）昨晚提交了一个训练任务，把 4 台 GPU 机全占了，还把训练数据从对象存储往计算节点狂拉，把内网带宽也吃满了。 孙博士很委屈：&quot;模型训练本来就要算力，集群是我们一起买的。&quot; 彭工指出根因：&quot;没有多租户隔离，也没有配额——谁先提交谁占满，这不是人的问题，是平台的问题。&quot; 徐总监拍板：&quot;今天就把资源隔离定下来。&quot;<br>问题 1：（1）说明大数据平台资源调度与多租户的设计要点；<br>问题 2：（2）给出本项目的多租户隔离方案（资源、数据、计算、网络、成本）；<br>问题 3：（3）说明应如何做容量规划与弹性伸缩，兼顾训练与生产；<br>问题 4：（4）说明数据管理（元数据、主数据、质量、安全）在多租户场景下的注意事项。</p><ul class="exam-questions"><li><b>问题 1</b> （1）说明大数据平台<strong>资源调度与多租户</strong>的设计要点；</li><li><b>问题 2</b> （2）给出本项目的<strong>多租户隔离方案</strong>（资源、数据、计算、网络、成本）；</li><li><b>问题 3</b> （3）说明应如何做<strong>容量规划与弹性伸缩</strong>，兼顾训练与生产；</li><li><b>问题 4</b> （4）说明数据管理（元数据、主数据、质量、安全）在多租户场景下的注意事项。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）调度与多租户要点）：资源调度——用 YARN/K8s 统一管理 CPU/内存/GPU，按队列/命名空间划分配额，GPU 单独调度；数据本地性（计算靠近数据）；弹性伸缩（按队列积压与延迟自动扩缩）；高可用（管理节点主备、数据多副本）；监控（作业延迟、Checkpoint、GPU 利用率、数据倾斜）。<br>- 🟢 加分：解析·多租户题要&quot;隔离表 + 容量弹性 + 数据管理&quot;，重点是配额与优先级。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🟡 支撑（2）隔离方案）：<br>问题 3｜参考答案要点：<br>- 🔴 核心：🟡 支撑（3）容量规划与弹性）：①容量规划——按峰值话务（并发 800 路、日均 12 万通）测算 ASR/推理所需的 GPU 数量与吞吐，预留 30%~50%；训练需求单独评估；②分时复用——夜间（低峰）开放更多 GPU 给训练，白天保障生产；③弹性伸缩——生产按队列积压与 P99 自动扩缩，训练按需申请、到期释放；④排队与预约——大额训练任务走预约制并限定时间窗；⑤限流与降级——生产压力大时暂停/降级训练任务；⑥监控与容量预警（GPU 利用率、队列等待时长、带宽水位）。<br>问题 4｜参考答案要点：<br>- 🔴 核心：🔴 核心（4）多租户数据管理）：①元数据——统一元数据与血缘，标明数据的 Owner、敏感级别与用途；②主数据——客户/设备主数据统一，避免各租户各建一套；③数据质量——对各租户的输出也设质量规则（完整、准确、及时），防止污染下游；④数据安全——分类分级 + 脱敏 + 最小权限 + 审计，训练用数据必须脱敏，跨租户共享需审批与留痕；⑤生命周期——临时训练数据设到期清理，避免占用存储；⑥合规——对外共享/出域需评估（呼应第9章）。</div></details></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">90</span>📅 时间：2026-07-20 📍 地点：管理后端验收会<br>👤 人物：洪经理（甲方·客服部经理）、甘工（乙方·系统分析师）、邓经理（甲方·运维经理）、徐总监（甲方·数智化信息部总监）、李工（乙方·项目经理）<br>⚡ 冲突：清单第 48 项要求实时数据统计延迟 ≤1 分钟、第 55/56 项要求动态报表与动态预警，但现有 T+1 报表根本达不到<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：洪经理把清单第 48 项念出来：&quot;数据统计延迟低于 1 分钟，确保管理层实时监控对话量、转人工率、任务完成率。&quot; 邓经理摊手：&quot;我们现在是 T+1，早上八点出昨天的报表。实时要改架构。&quot; 李工担心成本：&quot;实时计算是不是很贵？&quot; 洪经理又补了一条：&quot;还要动态预警——阈值类和趋势类都要，通知对象可配。比如转人工率突然飙高、某技能组排队超时，要能马上通知到人。&quot; 甘工盘了一下：这需要流式链路 + 预聚合 + 预警引擎，并在延迟、成本、准确性之间做取舍。<br>补充资料：数据统计延迟 → ≤1 分钟 → T+1（次日 08:00） → 需流式改造；报表维度 → ≥10 类 → 6 类 → 需扩维；时间粒度 → 天/周/小时/月 → 仅天 → 需支持；报表下钻 → 两级 + 录音追溯 → 无下钻 → 需建设；动态预警 → 阈值类 + 趋势类 → 无 → 需引擎 实时链路目标：采集 ≤5 s → 计算 ≤10 s → 写入查询 ≤5 s，端到端 ≤60 秒；离线 T+1 仍保留用于对账。<br>问题 1：（1）说明批处理与流处理的差异，并给出满足&quot;≤1 分钟&quot;的架构方案；<br>问题 2：（2）说明 Lambda 与 Kappa 的取舍，并说明本项目为何选其一；<br>问题 3：（3）设计动态报表与动态预警（指标、阈值、通知、防抖）；<br>问题 4：（4）说明成本与准确性的权衡及验证方法。</p><ul class="exam-questions"><li><b>问题 1</b> （1）说明<strong>批处理与流处理</strong>的差异，并给出满足&quot;≤1 分钟&quot;的架构方案；</li><li><b>问题 2</b> （2）说明 <strong>Lambda 与 Kappa</strong> 的取舍，并说明本项目为何选其一；</li><li><b>问题 3</b> （3）设计<strong>动态报表与动态预警</strong>（指标、阈值、通知、防抖）；</li><li><b>问题 4</b> （4）说明成本与准确性的权衡及验证方法。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）批处理 vs 流处理）：批处理——对有界数据集周期性计算（如 T+1），吞吐高、延迟高（小时/天级），适合复杂全量计算与对账；流处理——对无界数据流持续计算（如 Flink），延迟低（秒~分钟级），适合实时监控与预警，但需处理乱序、窗口与状态。<br>- 🟢 加分：解析·实时化题要&quot;批流对比 + 架构 + 报表预警设计 + 成本准确性权衡&quot;。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🟡 支撑（2）Lambda vs Kappa 取舍）：Lambda——批层保证准确、速度层保证实时，服务层合并；口径易不一致、维护两套代码。Kappa——全部走流，历史重算靠重放消息队列；一套代码、口径统一，但对消息留存与重放能力要求高。<br>问题 3｜参考答案要点：<br>- 🔴 核心：🟡 支撑（3）动态报表与预警）：<br>问题 4｜参考答案要点：<br>- 🔴 核心：🟡 支撑（4）成本与准确性权衡）：①成本——实时链路常驻资源，可通过窗口合并、增量计算、预聚合、冷热分层（热数据内存、温数据列存、冷数据对象存储）控制成本；离线错峰；②准确性——实时指标允许近似（如近似去重、滑动窗口近似）以换取速度，但对账类、结算类指标以离线批为准，并做实时 vs 离线的对账（误差 ≤1%）；③验证——压测（峰值 3 倍数据注入，验证延迟 ≤60 秒）、故障注入（节点宕机验证恢复）、对账任务（实时与 T+1 结果比对）、演练（注入异常指标验证预警触发与通知）。</div></details></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">91</span>📅 时间：2026-08-20 上午 📍 地点：集团财务部 + 数智化信息部联席会<br>👤 人物：甘工（乙方·系统分析师）、龙工（乙方·数据工程师）、徐总监（甲方·数智化信息部总监）、郑专员（甲方·合规专员）、财务负责人（甲方·财务部）<br>⚡ 冲突：集团要把话务数据作为数据资产入表并对外授权运营，但合规、计量、权属三道关都卡着<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：财务负责人（甲方·财务部）把政策文件放在桌上：&quot;现在鼓励数据资产入表，我们攒了三年话务数据，能不能作价入账？还能对外卖服务。&quot; 郑专员立刻提出三个问题：&quot;这些数据是谁的？用户授权了吗？能对外给吗？&quot; 龙工补了一句：&quot;而且口径还没统一——&#x27;接通率&#x27;两个部门算出两个数，这数据能值多少钱？&quot; 徐总监看向甘工：&quot;你是最了解数据的，说清楚三条线：能不能入表、怎么计量、怎么对外。&quot; 甘工在白板上画了三道门：合规与权属、计量与质量、流通与安全。<br>补充资料：拥有或控制 → 私有化部署 ✔ → 明确持有权/加工使用权/经营权；经济利益可预期 → 拟对外授权运营 → 签约落地、收入可验证；成本可计量 → 部分有台账 → 建数据资源成本台账（采集/存储/标注/治理）；合法合规 → 用户授权部分覆盖 → 补充授权、去标识化、共享安全评估 质量控制：六维达标（完整/准确/一致/及时/唯一/有效），口径唯一（如&quot;接通率&quot;唯一定义）。对外路径：统计型产品 + 可信数据空间 + 隐私计算（数据可用不可见）。<br>问题 1：（1）说明数据资产入表的基本条件与前提；<br>问题 2：（2）说明话务数据要入表需先完成哪些数据治理工作；<br>问题 3：（3）说明对外授权运营的技术与合规方案（含可信数据空间/隐私计算）；<br>问题 4：（4）说明数据资产管理的组织与机制。</p><ul class="exam-questions"><li><b>问题 1</b> （1）说明<strong>数据资产入表</strong>的基本条件与前提；</li><li><b>问题 2</b> （2）说明话务数据要入表需先完成哪些<strong>数据治理</strong>工作；</li><li><b>问题 3</b> （3）说明对外授权运营的技术与合规方案（含<strong>可信数据空间/隐私计算</strong>）；</li><li><b>问题 4</b> （4）说明数据资产管理的组织与机制。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）入表条件与前提）：数据资源要确认为资产，需同时满足：①企业拥有或控制该数据资源（权属清晰：持有权、加工使用权、经营权界定明确；私有化部署与权限体系是&quot;控制&quot;的技术前提）；②预期能带来经济利益（对外授权运营、内部降本增效有可验证的收入或节约）；③成本或价值能够可靠计量（可归集采集、存储、加工、标注、治理成本，或采用收益法/市场法评估）；④合法合规（取得用户授权、履行告知义务，符合《个人信息保护法》《数据安全法》，涉及出域需安全评估）。<br>- 🟢 加分：解析·数据资产题要&quot;入表条件 + 治理前提 + 对外方案（隐私计算/可信空间）+ 组织机制&quot;。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🟡 支撑（2）需先完成的治理工作）：①确权与分类分级——明确数据来源、权属主体，按敏感程度分级（含个人信息的为敏感，须脱敏或匿名化）；②质量治理——统一指标口径与数据标准（如&quot;接通率&quot;唯一定义）、完整/准确/一致/及时/唯一/有效六维达标且有量化阈值；③元数据与血缘——可追溯数据来源、加工过程与责任主体（审计与计价都需要）；④主数据统一——客户、设备、组织编码一致，否则数据无法关联、价值大打折扣；⑤成本归集——建立数据资源成本台账（采集、存储、计算、标注、治理人力）；⑥安全与权限——分类分级、脱敏、加密、审计齐备；⑦资产盘点与目录——形成数据资产目录（名称、来源、规模、质量、权属、用途）。<br>问题 3｜参考答案要点：<br>- 🔴 核心：🟡 支撑（3）对外运营方案）：合规路线——①明确授权范围与用途（用户授权是否覆盖对外运营，必要时重新取得授权）；②去标识化/匿名化（对外提供前做不可逆脱敏或统计聚合）；③安全评估（数据出境与共享的安全评估、合规审查、合同约定用途限制与违约责任）；④审计留痕（谁取了什么数据、用于什么）。<br>问题 4｜参考答案要点：<br>- 🔴 核心：🟢 加分（4）组织与机制）：①设立数据 Owner／数据管家（Data Steward），明确&quot;谁的数、谁负责质量&quot;；②建立数据治理委员会（业务 + 信息 + 合规 + 财务联合决策）；③制度与规范（数据标准、质量规则、共享审批、安全分级、资产管理）；④平台支撑（元数据/质量/权限/审计一体化，避免&quot;制度写在纸上、执行靠人记&quot;）；⑤考核与激励（数据质量纳入部门考核，数据资产化收益与业务共享）；⑥定期盘点与评估（数据资产目录更新、价值复评、无效数据清理与销毁）。</div></details></div></details><details class="exam-subject" data-exam-subject="论文"><summary><span class="exam-subject-name">📄 论文写作</span><span class="exam-subject-n">5 题</span><span class="exam-subject-tip">论述题 · 先写再看题</span></summary><div class="exam-bar"><span class="exam-bar-label">📄 论文写作</span><span class="exam-bar-stat">共 <b>5</b> 题 · 论述题</span></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与分析开发的软件系统项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细阐述三种常用的数据挖掘方法。</li><li><b>问题 3</b> 说明项目中基于对应方法开展数据挖掘的实施过程。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 数据工程</span><span class="exam-lv">⭐⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与的大数据处理项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 阐述大数据系统与传统数据处理系统的差异，列举大数据系统的重要特征。</li><li><b>问题 3</b> 说明项目中大数据处理工作遇到的问题以及对应的解决办法。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 大数据</span><span class="exam-lv">⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与设计、开发的网格计算项目（项目的背景、资源类型、计算需求、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细论述网格计算的核心架构（五层沙漏架构）、资源调度算法、安全机制、网格中间件选型要点。</li><li><b>问题 3</b> 结合项目实践，论述网格计算在项目中的应用场景、性能优化方法，分析应用过程中遇到的问题及解决措施。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 大数据</span><span class="exam-lv">⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与实施的数据挖掘项目（项目的背景、数据来源、业务目标、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细论述数据挖掘的流程（数据预处理、特征工程、模型选择、模型训练、评估）、主流算法（聚类 / 分类 / 关联规则 / 回归）及适用场景。</li><li><b>问题 3</b> 结合项目实践，论述数据挖掘过程中的数据质量问题、模型落地难点及解决方法，总结数据挖掘对企业决策的支撑效果。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 数据工程</span><span class="exam-lv">⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与集成、开发或运维的大模型应用项目（项目的背景、业务场景、建设目标、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细论述大模型选型、私有化部署、提示工程设计、模型微调、系统集成等核心技术与实施流程。</li><li><b>问题 3</b> 结合项目实践，论述大模型应用的落地效果，分析数据安全、模型幻觉、输出精度不足等问题，并给出解决方案与优化思路。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 大模型与AI应用</span><span class="exam-lv">⭐⭐⭐</span></div></div></details></section>
+4、价值变现方面：企业内部的各个部门和团队不应该是数据孤岛，打通不同部门和团队之间数据难以整合、标签不成体系、与业务关联断层的现状，数据中台被寄予厚望。企业期待数据中台能助力跨部门的普适性业务价值能力，更好地管理数据应用，将数据洞察变成直接驱动业务行动的核心动能，跨业务场景推进数据实践。</p></details></div></details></details><details class="exam-year" data-exam-year="2020年11月"><summary><span class="exam-year-name">2020年11月</span><span class="exam-year-n">2 题</span></summary><details class="exam-q" data-exam-id="2020年11月-026"><summary><span class="exam-no">第 26 题</span><span class="exam-stem-peek">BI系统的处理流程主要包括4个阶段，(26)阶段不仅需要进行数据汇总/聚集，同时还提供切片、切块、下钻、上卷和旋转等海量…</span></summary><div class="exam-q-body"><p class="exam-stem">BI系统的处理流程主要包括4个阶段，(26)阶段不仅需要进行数据汇总/聚集，同时还提供切片、切块、下钻、上卷和旋转等海量数据分析功能。</p><ul class="exam-opts"><li><b>A</b> 业务流程分析</li><li><b>B</b> OLTP</li><li><b>C</b> OLAP</li><li><b>D</b> 数据清洗</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>C</b></p><p class="exam-exp">OLAP（在线数据分析）是BI的核心分析阶段，支持数据汇总以及切片、切块、下钻、上卷、旋转这类多维交互式分析操作。</p></details></div></details><details class="exam-q" data-exam-id="2020年11月-025"><summary><span class="exam-no">第 25 题</span><span class="exam-stem-peek">BI系统的处理流程主要包括4个阶段，其中(25)阶段主要包括数据的抽取(extraction)、转换(transform…</span></summary><div class="exam-q-body"><p class="exam-stem">BI系统的处理流程主要包括4个阶段，其中(25)阶段主要包括数据的抽取(extraction)、转换(transformation)和加载(load)三个步骤（即ETL过程）。</p><ul class="exam-opts"><li><b>A</b> 数据预处理</li><li><b>B</b> 数据预加载</li><li><b>C</b> 数据前处理</li><li><b>D</b> 数据后处理</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>A</b></p><p class="exam-exp">ETL（抽取、转换、加载）属于BI流程的数据预处理阶段，该环节完成原始业务数据的清洗、格式转换、入库，为后续分析做准备。</p></details></div></details></details></details><details class="exam-subject" data-exam-subject="案例"><summary><span class="exam-subject-name">📋 案例分析</span><span class="exam-subject-n">5 题</span><span class="exam-subject-tip">案例背景 · 题目 · 答案与解析</span></summary><div class="exam-bar"><span class="exam-bar-label">📋 案例分析</span><span class="exam-bar-stat">共 <b>5</b> 题 · 情景简答 · 采分点三色标记</span></div><div class="exam-q exam-q-case"><div class="case-head"><span class="exam-no">案例 87</span><span class="exam-tag">考点 · 话务数据平台的架构与存储选型</span><span class="exam-lv">⭐⭐⭐</span></div><div class="case-meta"><span><strong>考点</strong>：大数据特征 / Lambda vs Kappa vs IOTA / 数据分层与治理 / 存储选型</span><span>📅 <strong>时间</strong>：2026-05-15 上午 📍 <strong>地点</strong>：数据平台方案评审</span><span>👤 <strong>人物</strong>：甘工（乙方·系统分析师）、彭工（乙方·架构设计师）、邓经理（甲方·运维经理）、算法团队（乙方·数据运营）</span><span>⚡ <strong>冲突</strong>：话单、录音、转写文本、时序数据四类混在一起，实时要 60 秒、离线要分析</span><span><strong>难度</strong>：★★★　<strong>总分</strong>：25 分　<strong>建议用时</strong>：25 分钟</span></div><div class="case-scene"><div class="case-h">案例背景</div><strong>背景</strong>：邓经理先把四类数据摆出来：&quot;结构化话单一亿两千万行、录音一年四个 T、转写文本九亿字、工商表五分钟一条——都往一个库里塞？&quot; 算法团队（乙方·数据运营）关心：&quot;我们要跑模型训练。&quot; 彭工提醒：&quot;还有实时大屏，延迟要小于一分钟。&quot; 甘工知道，这四类数据的读写特征完全不同，而&quot;实时&quot;和&quot;离线&quot;对架构的要求也完全不同——今天要一次把<strong>架构类型和存储选型</strong>定下来。<br><strong>补充资料</strong>：转写文本<strong>（约 9 亿字/年，需全文检索）；④</strong>工商表远传时序数据<strong>（5 分钟/点，1.2 万户，需按时间聚合与异常检测）。需求：实时大屏</strong>延迟 ≤60 秒<strong>；离线分析按天/周/月输出；话务数据拟作为数据资产对外授权运营，但</strong>个人信息不得出域。</div><div class="case-asks"><div class="case-h">题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">（1）说明<strong>大数据</strong>的主要特征（4V/5V）；</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">（2）比较 <strong>Lambda、Kappa、IOTA</strong> 架构并给出本项目方案；</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">（3）为四类数据选择<strong>存储方案</strong>并说明理由；</span></li><li><span class="case-ask-no">4</span><span class="case-ask-t">（4）给出<strong>数据分层</strong>与<strong>数据质量</strong>的量化治理措施。</span></li></ul></div><details class="exam-ans"><summary>参考答案要点（三色标记）</summary><div class="exam-points"><strong>问题 1｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（1）特征）：Volume 数据量大、Velocity 产生与处理速度快、Variety 类型多样（结构化/半结构化/非结构化）、Value 价值密度低（需挖掘）、Veracity 真实性/准确性（数据质量）；部分表述还有 Variability（可变性）、Visualization（可视化）。<br><strong>问题 2｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（2）架构比较与选型）：<br><strong>问题 3｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（3）存储选型）：<br><strong>问题 4｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（4）分层与质量）：</div></details><details class="exam-ans"><summary>解析与加分项</summary><div class="exam-exp-more">- 🟢 加分：解析·架构选型题要&quot;各层做什么 + 优缺点 + 针对本项目哪条需求&quot;。</div></details></div><div class="exam-q exam-q-case"><div class="case-head"><span class="exam-no">案例 88</span><span class="exam-tag">考点 · 部署、容错与大数据测试</span><span class="exam-lv">⭐⭐⭐</span></div><div class="case-meta"><span><strong>考点</strong>：系统部署（资源调度/多租户/弹性）／可靠性与容错测试／安全性测试／测试难点</span><span>📅 <strong>时间</strong>：2026-05-28 上午 📍 <strong>地点</strong>：集群运维评审</span><span>👤 <strong>人物</strong>：甘工（乙方·系统分析师）、邓经理（甲方·运维经理）、彭工（乙方·架构设计师）、李工（乙方·项目经理）</span><span>⚡ <strong>冲突</strong>：GPU 被训练任务占满、机房间网络抖动，大屏延迟从 60 秒变 15 分钟</span><span><strong>难度</strong>：★★★　<strong>总分</strong>：25 分　<strong>建议用时</strong>：25 分钟</span></div><div class="case-scene"><div class="case-h">案例背景</div><strong>背景</strong>：邓经理在群里发飙：&quot;大屏延迟十五分钟！客服还以为系统崩了。&quot; 一查：算法团队（乙方·数据运营）的训练任务把四台 GPU 全占了，还把内网带宽吃满。 算法团队（乙方·数据运营）也委屈：&quot;集群是大家一起买的。&quot; 李工问：&quot;那测试怎么做？总不能等出事才发现。&quot; 甘工清楚：这既是<strong>部署与多租户</strong>的问题，也是<strong>容错测试</strong>没做到位的问题。</div><div class="case-asks"><div class="case-h">题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">（1）说明大数据<strong>系统部署</strong>要点与<strong>多租户隔离</strong>方案；</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">（2）给出<strong>可靠性与容错测试</strong>方案（故障清单、验证指标、判定标准）；</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">（3）说明大数据<strong>测试的特点与难点</strong>；</span></li><li><span class="case-ask-no">4</span><span class="case-ask-t">（4）给出<strong>安全性测试</strong>要点。</span></li></ul></div><details class="exam-ans"><summary>参考答案要点（三色标记）</summary><div class="exam-points"><strong>问题 1｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（1）部署与多租户）：<br><strong>问题 2｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（2）容错测试）：目标——在节点故障、网络异常、数据激增、依赖不可用下仍不丢数据、不重复计算、可自动恢复。<br><strong>问题 3｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（3）测试特点与难点）：特点——数据量大、以对账/聚合校验为主、关注吞吐与延迟、需覆盖容错与数据质量。难点——①无法全量比对（用抽样 + 校验和 + 对账）；②结果不确定/顺序不定（断言用&quot;集合等价/聚合相等&quot;而非&quot;行序相等&quot;）；③实时链路难复现（用流量回放与影子任务）；④环境难 1:1 复制（用脱敏生产副本做压测）；⑤口径易漂移（把指标口径写成可执行的 SQL 断言）。<br><strong>问题 4｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（4）安全测试）：①权限与越权（分析师只能看脱敏字段）；②脱敏有效性（做重标识攻击测试，验证无法还原个人身份）；③传输与存储加密；④审计留痕（谁何时查了什么）；⑤数据分类分级落地检查（敏感字段未被下放）；⑥对外共享采用隐私计算/密态计算验证。</div></details><details class="exam-ans"><summary>解析与加分项</summary><div class="exam-exp-more">- 🟢 加分：解析·大数据题要&quot;部署 + 容错清单 + 难点 + 安全&quot;，对账思想贯穿始终。</div></details></div><div class="exam-q exam-q-case"><div class="case-head"><span class="exam-no">案例 89</span><span class="exam-tag">考点 · 算法团队(乙方·数据运营)&quot;抢&quot;了GPU</span><span class="exam-lv">⭐⭐⭐</span></div><div class="case-meta"><span>📅 <strong>时间</strong>：2026-06-30 上午 📍 <strong>地点</strong>：私有云集群运维群 + 紧急会议</span><span>👤 <strong>人物</strong>：邓经理（甲方·运维经理）、甘工（乙方·系统分析师）、彭工（乙方·架构设计师）、算法团队（乙方·数据运营）负责人（孙博士）、徐总监（甲方·数智化信息部总监）</span><span>⚡ <strong>冲突</strong>：算法团队（乙方·数据运营）跑模型训练吃满 GPU 与网络，导致线上 ASR 转写排队、大屏延迟从 60 秒涨到 15 分钟</span><span><strong>难度</strong>：★★★　<strong>总分</strong>：25 分　<strong>建议用时</strong>：25 分钟</span></div><div class="case-scene"><div class="case-h">案例背景</div><strong>背景</strong>：邓经理在群里发飙：&quot;大屏延迟十五分钟！客服在问是不是系统崩了。&quot; 一查：算法团队（乙方·数据运营）昨晚提交了一个训练任务，把 4 台 GPU 机全占了，还把训练数据从对象存储往计算节点狂拉，把内网带宽也吃满了。 孙博士很委屈：&quot;模型训练本来就要算力，集群是我们一起买的。&quot; 彭工指出根因：&quot;<strong>没有多租户隔离，也没有配额</strong>——谁先提交谁占满，这不是人的问题，是平台的问题。&quot; 徐总监拍板：&quot;今天就把资源隔离定下来。&quot;</div><div class="case-asks"><div class="case-h">题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">（1）说明大数据平台<strong>资源调度与多租户</strong>的设计要点；</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">（2）给出本项目的<strong>多租户隔离方案</strong>（资源、数据、计算、网络、成本）；</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">（3）说明应如何做<strong>容量规划与弹性伸缩</strong>，兼顾训练与生产；</span></li><li><span class="case-ask-no">4</span><span class="case-ask-t">（4）说明<strong>数据管理</strong>（元数据、主数据、质量、安全）在多租户场景下的注意事项。</span></li></ul></div><details class="exam-ans"><summary>参考答案要点（三色标记）</summary><div class="exam-points"><strong>问题 1｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（1）调度与多租户要点）：资源调度——用 YARN/K8s 统一管理 CPU/内存/GPU，按队列/命名空间划分配额，GPU 单独调度；数据本地性（计算靠近数据）；弹性伸缩（按队列积压与延迟自动扩缩）；高可用（管理节点主备、数据多副本）；监控（作业延迟、Checkpoint、GPU 利用率、数据倾斜）。<br><strong>问题 2｜参考答案要点</strong>：<br>- 🔴 核心：🟡 支撑（2）隔离方案）：<br><strong>问题 3｜参考答案要点</strong>：<br>- 🔴 核心：🟡 支撑（3）容量规划与弹性）：①容量规划——按峰值话务（并发 800 路、日均 12 万通）测算 ASR/推理所需的 GPU 数量与吞吐，预留 30%~50%；训练需求单独评估；②分时复用——夜间（低峰）开放更多 GPU 给训练，白天保障生产；③弹性伸缩——生产按队列积压与 P99 自动扩缩，训练按需申请、到期释放；④排队与预约——大额训练任务走预约制并限定时间窗；⑤限流与降级——生产压力大时暂停/降级训练任务；⑥监控与容量预警（GPU 利用率、队列等待时长、带宽水位）。<br><strong>问题 4｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（4）多租户数据管理）：①元数据——统一元数据与血缘，标明数据的 Owner、敏感级别与用途；②主数据——客户/设备主数据统一，避免各租户各建一套；③数据质量——对各租户的输出也设质量规则（完整、准确、及时），防止污染下游；④数据安全——分类分级 + 脱敏 + 最小权限 + 审计，训练用数据必须脱敏，跨租户共享需审批与留痕；⑤生命周期——临时训练数据设到期清理，避免占用存储；⑥合规——对外共享/出域需评估（呼应第9章）。</div></details><details class="exam-ans"><summary>解析与加分项</summary><div class="exam-exp-more">- 🟢 加分：解析·多租户题要&quot;隔离表 + 容量弹性 + 数据管理&quot;，重点是配额与优先级。</div></details></div><div class="exam-q exam-q-case"><div class="case-head"><span class="exam-no">案例 90</span><span class="exam-tag">考点 · 清单要求&quot;实时延迟≤1分钟&quot;和&quot;动态预警&quot;</span><span class="exam-lv">⭐⭐⭐</span></div><div class="case-meta"><span>📅 <strong>时间</strong>：2026-07-20 📍 <strong>地点</strong>：管理后端验收会</span><span>👤 <strong>人物</strong>：洪经理（甲方·客服部经理）、甘工（乙方·系统分析师）、邓经理（甲方·运维经理）、徐总监（甲方·数智化信息部总监）、李工（乙方·项目经理）</span><span>⚡ <strong>冲突</strong>：清单第 48 项要求实时数据统计延迟 ≤1 分钟、第 55/56 项要求动态报表与动态预警，但现有 T+1 报表根本达不到</span><span><strong>难度</strong>：★★★　<strong>总分</strong>：25 分　<strong>建议用时</strong>：25 分钟</span></div><div class="case-scene"><div class="case-h">案例背景</div><strong>背景</strong>：洪经理把清单第 48 项念出来：&quot;数据统计延迟低于 1 分钟，确保管理层实时监控对话量、转人工率、任务完成率。&quot; 邓经理摊手：&quot;我们现在是 T+1，早上八点出昨天的报表。实时要改架构。&quot; 李工担心成本：&quot;实时计算是不是很贵？&quot; 洪经理又补了一条：&quot;还要<strong>动态预警</strong>——阈值类和趋势类都要，通知对象可配。比如转人工率突然飙高、某技能组排队超时，要能马上通知到人。&quot; 甘工盘了一下：这需要<strong>流式链路 + 预聚合 + 预警引擎</strong>，并在延迟、成本、准确性之间做取舍。<br><strong>补充资料</strong>：数据统计延迟 → ≤1 分钟 → T+1（次日 08:00） → 需流式改造；报表维度 → ≥10 类 → 6 类 → 需扩维；时间粒度 → 天/周/小时/月 → 仅天 → 需支持；报表下钻 → 两级 + 录音追溯 → 无下钻 → 需建设；动态预警 → 阈值类 + 趋势类 → 无 → 需引擎 <strong>实时链路目标</strong>：采集 ≤5 s → 计算 ≤10 s → 写入查询 ≤5 s，端到端 <strong>≤60 秒</strong>；离线 T+1 仍保留用于对账。</div><div class="case-asks"><div class="case-h">题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">（1）说明<strong>批处理与流处理</strong>的差异，并给出满足&quot;≤1 分钟&quot;的架构方案；</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">（2）说明 <strong>Lambda 与 Kappa</strong> 的取舍，并说明本项目为何选其一；</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">（3）设计<strong>动态报表与动态预警</strong>（指标、阈值、通知、防抖）；</span></li><li><span class="case-ask-no">4</span><span class="case-ask-t">（4）说明<strong>成本与准确性</strong>的权衡及验证方法。</span></li></ul></div><details class="exam-ans"><summary>参考答案要点（三色标记）</summary><div class="exam-points"><strong>问题 1｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（1）批处理 vs 流处理）：批处理——对有界数据集周期性计算（如 T+1），吞吐高、延迟高（小时/天级），适合复杂全量计算与对账；流处理——对无界数据流持续计算（如 Flink），延迟低（秒~分钟级），适合实时监控与预警，但需处理乱序、窗口与状态。<br><strong>问题 2｜参考答案要点</strong>：<br>- 🔴 核心：🟡 支撑（2）Lambda vs Kappa 取舍）：Lambda——批层保证准确、速度层保证实时，服务层合并；口径易不一致、维护两套代码。Kappa——全部走流，历史重算靠重放消息队列；一套代码、口径统一，但对消息留存与重放能力要求高。<br><strong>问题 3｜参考答案要点</strong>：<br>- 🔴 核心：🟡 支撑（3）动态报表与预警）：<br><strong>问题 4｜参考答案要点</strong>：<br>- 🔴 核心：🟡 支撑（4）成本与准确性权衡）：①成本——实时链路常驻资源，可通过窗口合并、增量计算、预聚合、冷热分层（热数据内存、温数据列存、冷数据对象存储）控制成本；离线错峰；②准确性——实时指标允许近似（如近似去重、滑动窗口近似）以换取速度，但对账类、结算类指标以离线批为准，并做实时 vs 离线的对账（误差 ≤1%）；③验证——压测（峰值 3 倍数据注入，验证延迟 ≤60 秒）、故障注入（节点宕机验证恢复）、对账任务（实时与 T+1 结果比对）、演练（注入异常指标验证预警触发与通知）。</div></details><details class="exam-ans"><summary>解析与加分项</summary><div class="exam-exp-more">- 🟢 加分：解析·实时化题要&quot;批流对比 + 架构 + 报表预警设计 + 成本准确性权衡&quot;。</div></details></div><div class="exam-q exam-q-case"><div class="case-head"><span class="exam-no">案例 91</span><span class="exam-tag">考点 · 数据要&quot;入表&quot;，先过三道关</span><span class="exam-lv">⭐⭐⭐</span></div><div class="case-meta"><span>📅 <strong>时间</strong>：2026-08-20 上午 📍 <strong>地点</strong>：集团财务部 + 数智化信息部联席会</span><span>👤 <strong>人物</strong>：甘工（乙方·系统分析师）、龙工（乙方·数据工程师）、徐总监（甲方·数智化信息部总监）、郑专员（甲方·合规专员）、财务负责人（甲方·财务部）</span><span>⚡ <strong>冲突</strong>：集团要把话务数据作为数据资产入表并对外授权运营，但合规、计量、权属三道关都卡着</span><span><strong>难度</strong>：★★★　<strong>总分</strong>：25 分　<strong>建议用时</strong>：25 分钟</span></div><div class="case-scene"><div class="case-h">案例背景</div><strong>背景</strong>：财务负责人（甲方·财务部）把政策文件放在桌上：&quot;现在鼓励<strong>数据资产入表</strong>，我们攒了三年话务数据，能不能作价入账？还能对外卖服务。&quot; 郑专员立刻提出三个问题：&quot;这些数据<strong>是谁的</strong>？用户授权了吗？<strong>能对外给吗</strong>？&quot; 龙工补了一句：&quot;而且口径还没统一——&#x27;接通率&#x27;两个部门算出两个数，这数据能值多少钱？&quot; 徐总监看向甘工：&quot;你是最了解数据的，说清楚三条线：<strong>能不能入表、怎么计量、怎么对外</strong>。&quot; 甘工在白板上画了三道门：<strong>合规与权属、计量与质量、流通与安全</strong>。<br><strong>补充资料</strong>：拥有或控制 → 私有化部署 ✔ → 明确持有权/加工使用权/经营权；经济利益可预期 → 拟对外授权运营 → 签约落地、收入可验证；成本可计量 → 部分有台账 → 建数据资源成本台账（采集/存储/标注/治理）；合法合规 → 用户授权部分覆盖 → 补充授权、去标识化、共享安全评估 <strong>质量控制</strong>：六维达标（完整/准确/一致/及时/唯一/有效），口径唯一（如&quot;接通率&quot;唯一定义）。<strong>对外路径</strong>：统计型产品 + 可信数据空间 + 隐私计算（数据可用不可见）。</div><div class="case-asks"><div class="case-h">题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">（1）说明<strong>数据资产入表</strong>的基本条件与前提；</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">（2）说明话务数据要入表需先完成哪些<strong>数据治理</strong>工作；</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">（3）说明对外授权运营的技术与合规方案（含<strong>可信数据空间/隐私计算</strong>）；</span></li><li><span class="case-ask-no">4</span><span class="case-ask-t">（4）说明数据资产管理的<strong>组织与机制</strong>。</span></li></ul></div><details class="exam-ans"><summary>参考答案要点（三色标记）</summary><div class="exam-points"><strong>问题 1｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（1）入表条件与前提）：数据资源要确认为资产，需同时满足：①企业拥有或控制该数据资源（权属清晰：持有权、加工使用权、经营权界定明确；私有化部署与权限体系是&quot;控制&quot;的技术前提）；②预期能带来经济利益（对外授权运营、内部降本增效有可验证的收入或节约）；③成本或价值能够可靠计量（可归集采集、存储、加工、标注、治理成本，或采用收益法/市场法评估）；④合法合规（取得用户授权、履行告知义务，符合《个人信息保护法》《数据安全法》，涉及出域需安全评估）。<br><strong>问题 2｜参考答案要点</strong>：<br>- 🔴 核心：🟡 支撑（2）需先完成的治理工作）：①确权与分类分级——明确数据来源、权属主体，按敏感程度分级（含个人信息的为敏感，须脱敏或匿名化）；②质量治理——统一指标口径与数据标准（如&quot;接通率&quot;唯一定义）、完整/准确/一致/及时/唯一/有效六维达标且有量化阈值；③元数据与血缘——可追溯数据来源、加工过程与责任主体（审计与计价都需要）；④主数据统一——客户、设备、组织编码一致，否则数据无法关联、价值大打折扣；⑤成本归集——建立数据资源成本台账（采集、存储、计算、标注、治理人力）；⑥安全与权限——分类分级、脱敏、加密、审计齐备；⑦资产盘点与目录——形成数据资产目录（名称、来源、规模、质量、权属、用途）。<br><strong>问题 3｜参考答案要点</strong>：<br>- 🔴 核心：🟡 支撑（3）对外运营方案）：合规路线——①明确授权范围与用途（用户授权是否覆盖对外运营，必要时重新取得授权）；②去标识化/匿名化（对外提供前做不可逆脱敏或统计聚合）；③安全评估（数据出境与共享的安全评估、合规审查、合同约定用途限制与违约责任）；④审计留痕（谁取了什么数据、用于什么）。<br><strong>问题 4｜参考答案要点</strong>：</div></details><details class="exam-ans"><summary>解析与加分项</summary><div class="exam-exp-more">- 🟢 加分：解析·数据资产题要&quot;入表条件 + 治理前提 + 对外方案（隐私计算/可信空间）+ 组织机制&quot;。<br>- 🔴 核心：🟢 加分（4）组织与机制）：①设立数据 Owner／数据管家（Data Steward），明确&quot;谁的数、谁负责质量&quot;；②建立数据治理委员会（业务 + 信息 + 合规 + 财务联合决策）；③制度与规范（数据标准、质量规则、共享审批、安全分级、资产管理）；④平台支撑（元数据/质量/权限/审计一体化，避免&quot;制度写在纸上、执行靠人记&quot;）；⑤考核与激励（数据质量纳入部门考核，数据资产化收益与业务共享）；⑥定期盘点与评估（数据资产目录更新、价值复评、无效数据清理与销毁）。</div></details></div></details><details class="exam-subject" data-exam-subject="论文"><summary><span class="exam-subject-name">📄 论文写作</span><span class="exam-subject-n">5 题</span><span class="exam-subject-tip">先看题 · 再看考点拆解</span></summary><div class="exam-bar"><span class="exam-bar-label">📄 论文写作</span><span class="exam-bar-stat">共 <b>5</b> 题 · 论述题 · 含考点拆解与教材知识点</span></div><div class="exam-q exam-q-essay"><div class="case-head"><span class="exam-no">论文 42</span><span class="exam-tag">方向 · 数据工程</span><span class="exam-lv">⭐⭐</span><span class="essay-batch">2018年上半年</span></div><div class="case-asks"><div class="case-h">论文题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">概要叙述你参与分析开发的软件系统项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">详细阐述三种常用的数据挖掘方法。</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">说明项目中基于对应方法开展数据挖掘的实施过程。</span></li></ul></div><details class="exam-ans" open><summary>试题背景</summary><div class="essay-bg">数据挖掘(KDD)是从海量数据库中发现新颖、有价值知识的非平凡过程。</div></details><details class="exam-ans"><summary>考点拆解（三色标记）</summary><div class="exam-keypoints"><strong>问题 1｜概要叙述项目与你承担的工作</strong>：<br>- 🔴 核心：点明近三年内一个具体的真实项目：项目名称、背景、发起单位、规模、周期、交付成果（教材 22.4-9/22.4-10 明确要求，泛泛而谈会判虚构）<br>- 🔴 核心：明确「我」在项目中的角色与承担的主要工作，并站在系统分析师视角论述，而非单纯开发实现视角<br>- 🟡 支撑：说明项目的组织结构、开发体制与技术栈，为后文论述做铺垫<br>- 🟢 加分：点出项目与本题主题的直接关联（如本项目正是因 XX 痛点才需要 XX 方法）<br><strong>问题 2｜理论知识 / 方法论述</strong>：<br>- 🔴 核心：三种常用的数据挖掘方法——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🟢 加分：给出与其他候选方案的取舍依据，体现选型判断力<br><strong>问题 3｜项目实践落地与复盘</strong>：<br>- 🔴 核心：给出可量化的落地效果（缺陷率/响应时间/迭代周期/资源成本等具体数据），而非「取得了良好效果」<br>- 🔴 核心：诚实分析存在的 2~3 个真实问题，并给出对应的改进措施——教材强调这才是用心的内容<br>- 🟡 支撑：结合具体实例说明措施的实施过程（怎么做的，而非教科书式罗列）<br>- 🟢 加分：总结经验教训与后续演进方向，体现复盘能力<br>- 🟡 支撑：项目中基于对应方法开展数据挖掘的实施过程</div></details><details class="exam-ans"><summary>教材知识点</summary><div class="exam-textbook"><span class="tb-chap">第 19 章 · 大数据处理系统</span><a class="tb-hour" href="H38.html">H38</a></div></details></div><div class="exam-q exam-q-essay"><div class="case-head"><span class="exam-no">论文 71</span><span class="exam-tag">方向 · 大数据</span><span class="exam-lv">⭐</span><span class="essay-batch">2012年上半年</span></div><div class="case-asks"><div class="case-h">论文题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">概要叙述你参与的大数据处理项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">阐述大数据系统与传统数据处理系统的差异，列举大数据系统的重要特征。</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">说明项目中大数据处理工作遇到的问题以及对应的解决办法。</span></li></ul></div><details class="exam-ans" open><summary>试题背景</summary><div class="essay-bg">大数据处理技术能够适配海量数据、高实时性的业务需求，与传统数据处理系统存在明显差异。</div></details><details class="exam-ans"><summary>考点拆解（三色标记）</summary><div class="exam-keypoints"><strong>问题 1｜概要叙述项目与你承担的工作</strong>：<br>- 🔴 核心：点明近三年内一个具体的真实项目：项目名称、背景、发起单位、规模、周期、交付成果（教材 22.4-9/22.4-10 明确要求，泛泛而谈会判虚构）<br>- 🔴 核心：明确「我」在项目中的角色与承担的主要工作，并站在系统分析师视角论述，而非单纯开发实现视角<br>- 🟡 支撑：说明项目的组织结构、开发体制与技术栈，为后文论述做铺垫<br>- 🟢 加分：点出项目与本题主题的直接关联（如本项目正是因 XX 痛点才需要 XX 方法）<br><strong>问题 2｜理论知识 / 方法论述</strong>：<br>- 🔴 核心：大数据系统与传统数据处理系统的差异——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：大数据系统与传统数据处理系统的列举大数据系统的重要特征——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🟢 加分：给出与其他候选方案的取舍依据，体现选型判断力<br><strong>问题 3｜项目实践落地与复盘</strong>：<br>- 🔴 核心：给出可量化的落地效果（缺陷率/响应时间/迭代周期/资源成本等具体数据），而非「取得了良好效果」<br>- 🔴 核心：诚实分析存在的 2~3 个真实问题，并给出对应的改进措施——教材强调这才是用心的内容<br>- 🟡 支撑：结合具体实例说明措施的实施过程（怎么做的，而非教科书式罗列）<br>- 🟢 加分：总结经验教训与后续演进方向，体现复盘能力<br>- 🟡 支撑：项目中大数据处理工作遇到的问题以及对应的解决办法</div></details><details class="exam-ans"><summary>教材知识点</summary><div class="exam-textbook"><span class="tb-chap">第 19 章 · 大数据处理系统</span><a class="tb-hour" href="H38.html">H38</a></div></details></div><div class="exam-q exam-q-essay"><div class="case-head"><span class="exam-no">论文 113</span><span class="exam-tag">方向 · 大数据</span><span class="exam-lv">⭐</span><span class="essay-batch">2010年下半年（11月）</span></div><div class="case-asks"><div class="case-h">论文题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">概要叙述你参与设计、开发的网格计算项目（项目的背景、资源类型、计算需求、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">详细论述网格计算的核心架构（五层沙漏架构）、资源调度算法、安全机制、网格中间件选型要点。</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">结合项目实践，论述网格计算在项目中的应用场景、性能优化方法，分析应用过程中遇到的问题及解决措施。</span></li></ul></div><details class="exam-ans" open><summary>试题背景</summary><div class="essay-bg">网格计算依托网络整合分布式异构资源，实现资源共享与协同计算，广泛应用于科学计算、企业资源整合等场景。</div></details><details class="exam-ans"><summary>考点拆解（三色标记）</summary><div class="exam-keypoints"><strong>问题 1｜概要叙述项目与你承担的工作</strong>：<br>- 🔴 核心：点明近三年内一个具体的真实项目：项目名称、背景、发起单位、规模、周期、交付成果（教材 22.4-9/22.4-10 明确要求，泛泛而谈会判虚构）<br>- 🔴 核心：明确「我」在项目中的角色与承担的主要工作，并站在系统分析师视角论述，而非单纯开发实现视角<br>- 🟡 支撑：说明项目的组织结构、开发体制与技术栈，为后文论述做铺垫<br>- 🟢 加分：点出项目与本题主题的直接关联（如本项目正是因 XX 痛点才需要 XX 方法）<br><strong>问题 2｜理论知识 / 方法论述</strong>：<br>- 🔴 核心：网格计算的核心架构五层沙漏架构——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：网格计算的资源调度算法——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：网格计算的安全机制——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🟡 支撑：网格计算的网格中间件选型要点<br>- 🟢 加分：给出与其他候选方案的取舍依据，体现选型判断力<br><strong>问题 3｜项目实践落地与复盘</strong>：<br>- 🔴 核心：给出可量化的落地效果（缺陷率/响应时间/迭代周期/资源成本等具体数据），而非「取得了良好效果」<br>- 🔴 核心：诚实分析存在的 2~3 个真实问题，并给出对应的改进措施——教材强调这才是用心的内容<br>- 🟡 支撑：结合具体实例说明措施的实施过程（怎么做的，而非教科书式罗列）<br>- 🟢 加分：总结经验教训与后续演进方向，体现复盘能力<br>- 🟡 支撑：论述网格计算在项目中的应用场景<br>- 🟡 支撑：论述网格计算在项目中的性能优化方法</div></details><details class="exam-ans"><summary>教材知识点</summary><div class="exam-textbook"><span class="tb-chap">第 19 章 · 大数据处理系统</span><a class="tb-hour" href="H38.html">H38</a></div></details></div><div class="exam-q exam-q-essay"><div class="case-head"><span class="exam-no">论文 121</span><span class="exam-tag">方向 · 数据工程</span><span class="exam-lv">⭐</span><span class="essay-batch">2009年下半年（11月）</span></div><div class="case-asks"><div class="case-h">论文题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">概要叙述你参与实施的数据挖掘项目（项目的背景、数据来源、业务目标、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">详细论述数据挖掘的流程（数据预处理、特征工程、模型选择、模型训练、评估）、主流算法（聚类 / 分类 / 关联规则 / 回归）及适用场景。</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">结合项目实践，论述数据挖掘过程中的数据质量问题、模型落地难点及解决方法，总结数据挖掘对企业决策的支撑效果。</span></li></ul></div><details class="exam-ans" open><summary>试题背景</summary><div class="essay-bg">数据挖掘技术从企业海量数据中提取有价值的知识，应用于客户分群、风险预警、需求预测等场景，是企业数据驱动决策的核心手段。</div></details><details class="exam-ans"><summary>考点拆解（三色标记）</summary><div class="exam-keypoints"><strong>问题 1｜概要叙述项目与你承担的工作</strong>：<br>- 🔴 核心：点明近三年内一个具体的真实项目：项目名称、背景、发起单位、规模、周期、交付成果（教材 22.4-9/22.4-10 明确要求，泛泛而谈会判虚构）<br>- 🔴 核心：明确「我」在项目中的角色与承担的主要工作，并站在系统分析师视角论述，而非单纯开发实现视角<br>- 🟡 支撑：说明项目的组织结构、开发体制与技术栈，为后文论述做铺垫<br>- 🟢 加分：点出项目与本题主题的直接关联（如本项目正是因 XX 痛点才需要 XX 方法）<br><strong>问题 2｜理论知识 / 方法论述</strong>：<br>- 🔴 核心：数据挖掘的流程数据预处理——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：数据挖掘的特征工程——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：数据挖掘的模型选择——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🟡 支撑：数据挖掘的模型训练<br>- 🟡 支撑：数据挖掘的评估<br>- 🟡 支撑：主流算法聚类 / 分类 / 关联规则 / 回归及适用场景<br>- 🟢 加分：给出与其他候选方案的取舍依据，体现选型判断力<br><strong>问题 3｜项目实践落地与复盘</strong>：<br>- 🔴 核心：给出可量化的落地效果（缺陷率/响应时间/迭代周期/资源成本等具体数据），而非「取得了良好效果」<br>- 🔴 核心：诚实分析存在的 2~3 个真实问题，并给出对应的改进措施——教材强调这才是用心的内容<br>- 🟡 支撑：结合具体实例说明措施的实施过程（怎么做的，而非教科书式罗列）<br>- 🟢 加分：总结经验教训与后续演进方向，体现复盘能力<br>- 🟡 支撑：论述数据挖掘过程中的数据质量问题<br>- 🟡 支撑：论述数据挖掘过程中的模型落地难点及解决方法</div></details><details class="exam-ans"><summary>教材知识点</summary><div class="exam-textbook"><span class="tb-chap">第 19 章 · 大数据处理系统</span><a class="tb-hour" href="H38.html">H38</a></div></details></div><div class="exam-q exam-q-essay"><div class="case-head"><span class="exam-no">论文 06</span><span class="exam-tag">方向 · 大模型与AI应用</span><span class="exam-lv">⭐⭐⭐</span><span class="essay-batch">2026年上半年（机考）第二批</span></div><div class="case-asks"><div class="case-h">论文题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">概要叙述你参与集成、开发或运维的大模型应用项目（项目的背景、业务场景、建设目标、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">详细论述大模型选型、私有化部署、提示工程设计、模型微调、系统集成等核心技术与实施流程。</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">结合项目实践，论述大模型应用的落地效果，分析数据安全、模型幻觉、输出精度不足等问题，并给出解决方案与优化思路。</span></li></ul></div><details class="exam-ans" open><summary>试题背景</summary><div class="essay-bg">大语言模型（LLM）已广泛应用于智能问答、内容生成、数据分析、自动化测试、智能运维等企业信息系统场景。</div></details><details class="exam-ans"><summary>考点拆解（三色标记）</summary><div class="exam-keypoints"><strong>问题 1｜概要叙述项目与你承担的工作</strong>：<br>- 🔴 核心：点明近三年内一个具体的真实项目：项目名称、背景、发起单位、规模、周期、交付成果（教材 22.4-9/22.4-10 明确要求，泛泛而谈会判虚构）<br>- 🔴 核心：明确「我」在项目中的角色与承担的主要工作，并站在系统分析师视角论述，而非单纯开发实现视角<br>- 🟡 支撑：说明项目的组织结构、开发体制与技术栈，为后文论述做铺垫<br>- 🟢 加分：点出项目与本题主题的直接关联（如本项目正是因 XX 痛点才需要 XX 方法）<br><strong>问题 2｜理论知识 / 方法论述</strong>：<br>- 🔴 核心：大模型选型——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：私有化部署——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：提示工程设计——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🟡 支撑：模型微调<br>- 🟡 支撑：系统集成等核心技术与实施流程<br>- 🟢 加分：给出与其他候选方案的取舍依据，体现选型判断力<br><strong>问题 3｜项目实践落地与复盘</strong>：<br>- 🔴 核心：给出可量化的落地效果（缺陷率/响应时间/迭代周期/资源成本等具体数据），而非「取得了良好效果」<br>- 🔴 核心：诚实分析存在的 2~3 个真实问题，并给出对应的改进措施——教材强调这才是用心的内容<br>- 🟡 支撑：结合具体实例说明措施的实施过程（怎么做的，而非教科书式罗列）<br>- 🟢 加分：总结经验教训与后续演进方向，体现复盘能力<br>- 🟡 支撑：论述大模型应用的分析数据安全<br>- 🟡 支撑：论述大模型应用的模型幻觉</div></details><details class="exam-ans"><summary>教材知识点</summary><div class="exam-textbook"><span class="tb-chap">第 19 章 · 大数据处理系统</span><a class="tb-hour" href="H38.html">H38</a></div></details></div></details></section>
     <div class="wrongbook"></div>
     <div class="keyhint">
   <span class="keyhint-title">键盘快捷键</span>
@@ -3166,7 +3348,9 @@ html{scroll-padding-top:80px}
     init() {
       const root = document.querySelector('.exam')
       if (!root) return
-      const chapter = root.dataset.examChapter || 'x'
+      // ⚠️ 专项页 / 全真模拟页没有 data-exam-chapter（无教材章），
+      //    旧写法一律退化成 'x' → H42~H48 共用同一个记忆键、互相串状态。
+      const chapter = root.dataset.examChapter || root.dataset.examHour || 'x'
 
       // 恢复上次展开状态：{ "H07": { "2025年5月": true, ... } }
       const saved = store.get(this.KEY, {}) || {}
@@ -3186,6 +3370,7 @@ html{scroll-padding-top:80px}
       const seen = store.get('examSeen', {}) || {}
       root.querySelectorAll('.exam-q').forEach(qd => {
         const qid = qd.dataset.examId
+        if (!qid) return
         if (seen[qid]) {
           const a = qd.querySelector('.exam-ans')
           if (a) a.open = true
@@ -3201,12 +3386,17 @@ html{scroll-padding-top:80px}
         btn.addEventListener('click', e => {
           e.preventDefault()
           const openAll = btn.dataset.examAll === '1'
-          root.querySelectorAll('.exam-subject,.exam-year').forEach(d => { d.open = openAll })
-          root.querySelectorAll('.exam-ans').forEach(d => {
-            d.open = openAll
-            if (openAll && d.parentElement.dataset.examId) seen[d.parentElement.dataset.examId] = 1
-          })
-          if (openAll) store.set('examSeen', seen)
+          // ⚠️ 必须把 .exam-q 也列进来：只开 .exam-subject/.exam-year/.exam-ans
+          //    时，单题仍折叠 → 答案藏在关闭的单题内，"全部展开"名不副实。
+          root.querySelectorAll('.exam-subject,.exam-year,.exam-q,.exam-ans')
+            .forEach(d => { d.open = openAll })
+          if (openAll) {
+            // ⚠️ 旧的 `d.parentElement.dataset.examId` 取到的是 .exam-q-body（无 id），
+            //    会把 seen[undefined] 写进 localStorage。改为直接从 .exam-q 取。
+            root.querySelectorAll('.exam-q[data-exam-id]')
+              .forEach(qd => { seen[qd.dataset.examId] = 1 })
+            store.set('examSeen', seen)
+          }
           // 同步年份级记忆
           root.querySelectorAll('.exam-year').forEach(y => { mine[y.dataset.examYear] = y.open })
           saved[chapter] = mine
@@ -3253,7 +3443,7 @@ html{scroll-padding-top:80px}
   // ══════════════════════════════════════════
   // 8. mermaid 渲染（自定义墨绿主题，与正文同色系）
   // ══════════════════════════════════════════
-  // 站点配色（与 design.css 的令牌保持一致）
+  // 站点配色（与设计令牌保持一致 —— 改主题色时这里要同步）
   const MERMAID_LIGHT = {
     bg: '#f2f0e9', fg: '#1b211c', line: '#cdc9bd',
     accent: '#3d5a40', accent2: '#5a8a62', accent3: '#7ea888',

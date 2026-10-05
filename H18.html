@@ -7,7 +7,7 @@
 <title>第 18 小时 · 项目管理（二）· 配置质量风险与文档 · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
-<meta name="build-stamp" content="2026-10-05 11:44:51">
+<meta name="build-stamp" content="2026-10-05 15:47:03">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -405,16 +405,21 @@ img{max-width:100%;height:auto}
   border-radius:100px;
   font-size:12.5px;color:var(--accent);font-weight:600;
 }
-.cover h1{
+/* ⚠️ 封面主标题刻意用 <div> 而不是 <h1>：index.md 正文自带 `# 阿甘系分 · 48 小时
+   冲刺手册`，若封面也用 h1，一页会出现两个 h1（语义/SEO 上都是错的）。
+   视觉与 h1 完全一致 —— 字号、颜色、以及那道 72px 短横线都在下面显式声明。 */
+.cover .cover-title{
   font-size:3.5em;font-weight:800;letter-spacing:-1.6px;
   color:var(--accent);line-height:1.14;margin-bottom:16px;
 }
-/* ⚠️ 封面 h1 也继承 `.main h1::after` 那道 56px 短横线，但它是 display:block 的
-   固定宽块级元素 —— 文字居中不代表块级元素居中，会贴到左边。
-   修法：给封面这条短横线加 margin-left/right:auto 让它真正居中。 */
-.cover h1::after{
-  margin-left:auto;margin-right:auto;
+/* 复刻 `.main h1::after` 的短横线（<div> 不继承 h1 的伪元素），并水平居中 —— */
+/* 文字居中不代表块级元素居中，不加 auto 会贴到左边。 */
+.cover .cover-title::after{
+  content:'';display:block;
   width:72px;height:3px;
+  background:var(--accent);
+  margin:.5em auto 0;
+  border-radius:2px;
 }
 .cover .sub{
   font-size:1.2em;color:var(--fg-2);
@@ -845,7 +850,7 @@ pre{
   .nav{margin-left:auto;gap:2px}
   .main{padding:32px 0 80px}
   .cover{padding:48px 0 40px;margin-bottom:40px}
-  .cover h1{font-size:2.4em;letter-spacing:-.8px}
+  .cover .cover-title{font-size:2.4em;letter-spacing:-.8px}
   .cover .sub{font-size:1.05em;margin-bottom:24px}
   .cover-stats{gap:10px;margin-bottom:28px}
   .stat{min-width:76px;padding:10px 14px}
@@ -901,7 +906,7 @@ pre{
   h1,h2,h3,h4{break-after:avoid;page-break-after:avoid}
 
   .cover{padding:0 0 18px;margin-bottom:18px;text-align:left}
-  .cover h1{font-size:24pt}
+  .cover .cover-title{font-size:24pt}
   .cover-stats,.cover-badge,.cta-row{display:none !important}
 
   a[href^="http"]:after{
@@ -1256,16 +1261,14 @@ html.focus-mode .chapbar{opacity:.35;pointer-events:none}
 }
 /* 章首横幅：h1 上方加一条"章号 + 主色渐变"的装饰带，
    让每页开头有一个明确的"进入新章"仪式感（原来 h1 直接浮在正文里）。
-   ⚠️ 必须排除 .cover —— 封面 h1 自己已有顶部留白与居中布局，
-   加上横幅会与下方分隔线叠成双线（首页曾出现两条横线紧挨）。 */
-.main h1:not(.cover h1)::before{
+   （封面主标题已改成 <div class="cover-title">，不再匹配 .main h1，无需再排除。） */
+.main h1::before{
   content:'';display:block;
   width:100%;height:4px;
   background:linear-gradient(90deg,var(--accent) 0%,var(--accent-3) 42%,transparent 88%);
   border-radius:2px;
   margin-bottom:.62em;
 }
-.cover h1::before{content:none}
 .main h1::after{
   content:'';display:block;
   width:56px;height:3px;
@@ -2087,6 +2090,185 @@ html{scroll-padding-top:80px}
   .exam-stem,.exam-opts li{font-size:9.5pt}
   .exam-exp{font-size:8.5pt;color:#333}
 }
+
+/* ══════════════════════════════════════════════════════════════
+   真题区块扩展 v2 · 案例 / 论文卡片 + 全真模拟卷
+   与既有 .exam-* 体系同源：米白卡底 + 左侧 4px 色条 + 墨绿强调色
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── 案例 / 论文卡片（非 <details>，直接展开的题卡）── */
+.exam-q-case,.exam-q-essay{
+  padding:14px 16px 4px;
+  background:var(--bg-card);
+}
+.exam-q-case:hover,.exam-q-essay:hover{background:var(--bg-alt)}
+.case-head{
+  display:flex;flex-wrap:wrap;align-items:center;gap:6px;
+  padding-bottom:10px;margin-bottom:10px;
+  border-bottom:1px dashed var(--line);
+}
+.case-head .exam-no{min-width:0}
+.case-h{
+  display:flex;align-items:center;gap:6px;
+  margin:12px 0 6px;font-size:12.5px;font-weight:700;
+  letter-spacing:.06em;color:var(--accent);
+}
+.case-h::before{
+  content:'';width:4px;height:13px;border-radius:2px;
+  background:var(--accent);flex:0 0 auto;
+}
+
+/* 情景要素（📅时间 / 📍地点 / 👤人物 / ⚡冲突 / 难度总分用时） */
+.case-meta{
+  display:flex;flex-direction:column;gap:2px;
+  padding:9px 12px;margin:.4em 0 .2em;
+  background:var(--bg-alt);
+  border-left:3px solid var(--line-2);
+  border-radius:0 var(--radius-sm) var(--radius-sm) 0;
+  font-size:12.5px;line-height:1.75;color:var(--fg-3);
+}
+.case-meta strong{color:var(--fg-2);font-weight:600}
+
+/* 案例背景正文 */
+.case-scene{
+  margin:.2em 0 1em;padding:12px 14px;
+  background:var(--accent-soft);
+  border-left:3px solid var(--accent-3);
+  border-radius:0 var(--radius) var(--radius) 0;
+  font-size:14.5px;line-height:1.92;color:var(--fg);
+}
+.case-scene strong{color:var(--accent);font-weight:700}
+
+/* 题目列表 */
+.case-asks{margin:.2em 0 1em}
+ul.exam-questions{
+  list-style:none;margin:.4em 0;padding:0;
+}
+ul.exam-questions>li{
+  display:flex;gap:10px;align-items:flex-start;
+  padding:9px 0;border-bottom:1px solid var(--line);
+  font-size:14.5px;line-height:1.88;color:var(--fg);
+}
+ul.exam-questions>li:last-child{border-bottom:0}
+ul.exam-questions>li::before{content:none !important}
+.case-ask-no{
+  flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;
+  min-width:24px;height:22px;margin-top:3px;padding:0 6px;
+  border-radius:6px;background:var(--accent-soft-2);color:var(--accent);
+  font-family:var(--sans);font-size:11.5px;font-weight:700;
+  font-variant-numeric:tabular-nums;
+}
+.case-ask-t{flex:1;min-width:0}
+.case-ask-t strong{color:var(--accent);font-weight:700}
+
+/* ── 答案 / 解析 / 考点拆解 / 教材知识点 ── */
+.exam-points,.exam-keypoints,.exam-exp-more,.essay-bg{
+  padding:12px 14px;margin:8px 0;
+  border-left:4px solid var(--tip-line);
+  border-radius:0 var(--radius) var(--radius) 0;
+  background:var(--tip-bg);
+  font-size:14px;line-height:1.92;color:var(--fg);
+}
+.exam-keypoints{border-left-color:var(--accent-2);background:var(--accent-soft)}
+.exam-exp-more{border-left-color:var(--warn-line);background:var(--warn-bg);color:var(--warn-fg)}
+.essay-bg{border-left-color:var(--line-2);background:var(--bg-alt);color:var(--fg-2)}
+.exam-points strong,.exam-keypoints strong{color:var(--accent);font-weight:700}
+
+/* 教材知识点：章标签 + 可点学时胶囊 */
+.exam-textbook{
+  display:flex;flex-wrap:wrap;align-items:center;gap:6px;
+  padding:12px 14px;margin:8px 0;
+  background:var(--mem-bg);
+  border-left:4px solid var(--mem-line);
+  border-radius:0 var(--radius) var(--radius) 0;
+}
+.tb-chap{
+  font-family:var(--serif);font-size:14px;font-weight:700;color:var(--mem-fg);
+}
+.tb-hour{
+  display:inline-flex;align-items:center;
+  padding:2px 9px;border-radius:999px;
+  background:var(--bg-card);border:1px solid var(--mem-line);
+  color:var(--mem-fg) !important;font-size:12px;font-weight:600;
+  text-decoration:none;
+}
+.tb-hour:hover{background:var(--mem-line);color:var(--bg-card) !important;border-color:var(--mem-fg)}
+
+/* 模拟卷成绩/批次等小标签 */
+.exam-lv{
+  font-family:var(--sans);font-size:11.5px;color:var(--gold);
+  letter-spacing:.04em;white-space:nowrap;
+}
+.exam-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.exam-tag-en{
+  background:var(--mem-bg);color:var(--mem-fg);border-color:var(--mem-line);
+}
+.essay-batch{
+  font-family:var(--sans);font-size:11.5px;color:var(--fg-3);
+  padding:1px 8px;border:1px solid var(--line);border-radius:999px;
+}
+.exam-kp{
+  margin:.5em 0 0;font-family:var(--sans);font-size:12.5px;color:var(--fg-3);
+}
+.exam-kp::before{content:'🎯 ';font-size:11px}
+
+/* ── 全真模拟卷头部 ── */
+.mock-head{
+  padding:16px 18px;margin:0 0 12px;
+  border-radius:var(--radius-lg);
+  background:linear-gradient(135deg,var(--accent) 0%,var(--accent-2) 100%);
+  color:var(--fg-inv);
+  box-shadow:var(--shadow-2);
+}
+.mock-title{
+  font-family:var(--serif);font-size:17px;font-weight:700;
+  letter-spacing:.02em;line-height:1.5;
+}
+.mock-sub{
+  margin-top:6px;font-size:12.5px;line-height:1.75;
+  color:rgba(251,250,246,.82);
+}
+.mock-sub b{color:#fff;font-variant-numeric:tabular-nums}
+.mock-items{
+  border:1px solid var(--line);border-radius:var(--radius);
+  background:var(--bg-card);overflow:hidden;
+}
+.mock-items>.exam-q:first-child{border-top:0}
+.exam-mock .exam-subject{margin-top:14px}
+.exam-subj-only{display:block}
+
+/* 模拟卷内的综合知识答题条 */
+.exam-mock .exam-bar{
+  border-radius:var(--radius) var(--radius) 0 0;
+  border-bottom:0;
+}
+
+/* ── 窄屏 ── */
+@media(max-width:760px){
+  .exam-q-case,.exam-q-essay{padding:12px 12px 4px}
+  .case-scene,.exam-points,.exam-keypoints,.exam-exp-more,.essay-bg,.exam-textbook{
+    padding:10px 11px;font-size:13.5px;
+  }
+  ul.exam-questions>li{gap:8px;font-size:13.5px}
+  .mock-head{padding:13px 14px}
+  .mock-title{font-size:15.5px}
+}
+
+/* ── 打印：卡片不要再折叠，色条与底色转灰阶 ── */
+@media print{
+  .mock-head{background:none !important;color:#000 !important;border:1pt solid #999;
+    box-shadow:none}
+  .mock-title{font-size:13pt}
+  .mock-sub{color:#333 !important}
+  .exam-q-case,.exam-q-essay{break-inside:avoid;page-break-inside:avoid}
+  .case-scene,.exam-points,.exam-keypoints,.exam-exp-more,.essay-bg,.exam-textbook{
+    background:none !important;border-left:2pt solid #999 !important;
+  }
+  .exam-q-case,.exam-q-essay,.case-scene,.case-meta,ul.exam-questions>li{
+    font-size:9.5pt;
+  }
+  .tb-hour{color:#000 !important;border-color:#666}
+}
 </style>
 </head>
 <body>
@@ -2590,7 +2772,7 @@ flowchart LR
 |----|-|-|-|-|-|-|-|-|-|-|-|
 |作业|C,D|C,D|E,B|E,G|F,G|A,F|A,F|A,H|H|H|H|
 |总人数|9|9|9|8|8|8|8|7|6|6|6|
-A连续占用第6、7、8三天。</p><ul class="exam-opts"><li><b>A</b> 第3～5天</li><li><b>B</b> 第4～6天</li><li><b>C</b> 第5～7天</li><li><b>D</b> 第6～8天</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">A作业需要7人连续执行3天，为避开H作业前期的人力冲突、保证每日总人数不超过9人上限，最优方案将A排布在第6~8天连续执行。</p></details></div></details><details class="exam-q" data-exam-id="2020年11月-052"><summary><span class="exam-no">第 52 题</span><span class="exam-stem-peek">线性规划问题由线性的目标函数和线性的约束条件（包括变量非负条件）组成。满足约束条件的所有解的集合称为可行解区。既满足约束…</span></summary><div class="exam-q-body"><p class="exam-stem">线性规划问题由线性的目标函数和线性的约束条件（包括变量非负条件）组成。满足约束条件的所有解的集合称为可行解区。既满足约束条件，又使目标函数达到极值的解称为最优解。以下关于可行解区和最优解的叙述中，正确的是（52）。</p><ul class="exam-opts"><li><b>A</b> 可行解区一定是封闭的多边形或多面体</li><li><b>B</b> 若增加一个线性约束条件，则可行解区可能会扩大</li><li><b>C</b> 若存在两个最优解，则它们的所有线性组合都是最优解</li><li><b>D</b> 若最优解存在且唯一，则可以从可行解区顶点处比较目标函数值来求解</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">A错误，可行域可无界不封闭；B错误，新增约束只会让可行区缩小或不变；C错误，只有两点连线上的凸组合是最优解，全部线性组合会超出可行域；D符合线性规划极值基本定理，唯一最优解必然在可行域顶点取得。</p></details></div></details></details></details><details class="exam-subject" data-exam-subject="案例"><summary><span class="exam-subject-name">📋 案例分析</span><span class="exam-subject-n">2 题</span><span class="exam-subject-tip">情景简答 · 采分点三色标记</span></summary><div class="exam-bar"><span class="exam-bar-label">📋 案例分析</span><span class="exam-bar-stat">共 <b>2</b> 题 · 情景简答</span></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">34</span>考点：活动排序与历时估算 / 关键路径 / 进度压缩 / 挣值分析 / 成本估算方法<br>📅 时间：2025-11-03 上午 📍 地点：项目组月度检查<br>👤 人物：李工（乙方·项目经理）、甘工（乙方·系统分析师）、彭工（乙方·架构设计师）、徐总（听取汇报）<br>⚡ 冲突：第 6 个月末，计划值与实际值对不上，徐总要一个说法<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：月度检查会，李工把三张表投出来：计划完成 420 万，实际完成 380 万，实际花了 450 万。 徐总皱眉：&quot;说人话——超了还是落后了？&quot; 彭工提醒：&quot;工期只剩五个月，关键路径还没走完。&quot; 甘工知道，光说&quot;有点落后&quot;没用，必须给出可计算的结论：成本差多少、进度差多少、照这个趋势最后要花多少钱。<br>补充资料：B → 架构与方案设计 → 3 → A；C → 主数据与工单中心开发 → 8 → B；D → AI 引擎对接（ASR/大模型） → 6 → B；E → 坐席工作台与大屏开发 → 5 → B；F → 集成与系统测试 → 3 → C、D、E；G → 试点上线 → 2 → F 项目预算 BAC = 800 万元，计划工期 11 个月。第 6 个月末检查时：PV = 420 万元，EV = 380 万元，AC = 450 万元。<br>问题 1：（1）绘制网络图思路，计算各活动的最早/最晚时间，求关键路径与总工期；求 D、E 的总时差；<br>问题 2：（2）计算 CV、SV、CPI、SPI，判断项目状态，并推算 EAC；<br>问题 3：（3）给出进度压缩与成本控制措施。</p><ul class="exam-questions"><li><b>问题 1</b> （1）绘制网络图思路，计算各活动的最早/最晚时间，<strong>求关键路径与总工期</strong>；求 D、E 的<strong>总时差</strong>；</li><li><b>问题 2</b> （2）计算 <strong>CV、SV、CPI、SPI</strong>，判断项目状态，并推算 <strong>EAC</strong>；</li><li><b>问题 3</b> （3）给出进度压缩与成本控制措施。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）关键路径）：<br>- 🟢 加分：解析·计算题必须写出公式与中间结果；纠偏措施要区分赶工与快速跟进的代价。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🔴 核心（2）挣值计算）：<br>问题 3｜参考答案要点：<br>- 🔴 核心：🔴 核心（3）纠偏措施）：</div></details></div><div class="exam-q exam-q-case"><p class="exam-stem"><span class="exam-no">36</span>📅 时间：2025-11-05 晚 8 点 📍 地点：项目组会议室（气氛紧张）<br>👤 人物：李工（项目经理）、甘工（乙方·系统分析师）、彭工（乙方·架构设计师）、丁工（乙方·测试负责人）、洪经理（电话接入）<br>⚡ 冲突：距&quot;迎峰度夏&quot;硬节点只剩 9 周，关键路径还差 3 周，只能三选一：加人赶工、砍范围、延期<br>难度：★★★　总分：25 分　建议用时：25 分钟<br>背景：李工把进度表拍在桌上：&quot;关键路径是主数据与工单中心那条，还差三周。徐总那边说了，&#x27;迎峰度夏&#x27;这个节点一天都不能推。&quot; 彭工先反对加人：&quot;新人进来要熟悉两周，沟通路径还会变多，加人只会让它更晚——这是布鲁克斯法则。&quot; 丁工也不客气：&quot;现在砍测试时间，上线就是事故。&quot; 洪经理在电话里喊：&quot;砍功能可以，但 AI 呼入和工单不能砍！&quot; 李工看向甘工：&quot;你说怎么办？&quot; 甘工知道：这不是单纯的技术问题，而是进度、成本、范围、质量四重约束的权衡，需要给出可比较的方案 + 推荐。<br>补充资料：B 架构与方案设计 → 3 → A → 0 → 有限（1 周）；C 主数据与工单中心开发 → 8 → B → 0 → 可并行拆分（省 2~3 周）；D AI 引擎对接 → 6 → B → 2 → 可与 C/E 并行；E 坐席工作台开发 → 5 → B → 3 → 可与 C/D 并行；F 集成与系统测试 → 3 → C、D、E → 0 → 不建议压缩 约束：距迎峰度夏 9 周；关键路径尚差 3 周；每压缩 1 周约增加成本 12 万元。<br>问题 1：（1）说明进度压缩的两种方法及各自代价；结合本案例给出推荐并说明原因；<br>问题 2：（2）说明资源平衡（资源优化）与关键链的思想；<br>问题 3：（3）若采用&quot;砍范围&quot;，说明应如何进行范围变更控制并与甲方达成一致；<br>问题 4：（4）说明成本估算的方法与赶工带来的成本影响。</p><ul class="exam-questions"><li><b>问题 1</b> （1）说明<strong>进度压缩</strong>的两种方法及各自代价；结合本案例给出推荐并说明原因；</li><li><b>问题 2</b> （2）说明<strong>资源平衡（资源优化）</strong>与<strong>关键链</strong>的思想；</li><li><b>问题 3</b> （3）若采用&quot;砍范围&quot;，说明应如何进行<strong>范围变更控制</strong>并与甲方达成一致；</li><li><b>问题 4</b> （4）说明成本估算的方法与赶工带来的成本影响。<br>?</li></ul><details class="exam-ans"><summary>显示采分点（三色标记）</summary><div class="exam-points">问题 1｜参考答案要点：<br>- 🔴 核心：🔴 核心（1）进度压缩）：<br>- 🟢 加分：解析·进度题要&quot;两种压缩 + 代价 + 本例推荐 + 变更流程 + 成本估算&quot;。<br>问题 2｜参考答案要点：<br>- 🔴 核心：🟡 支撑（2）资源平衡与关键链）：资源平衡是在资源受限时调整活动的开始时间，使资源负荷趋于均衡（可能延长工期）；资源平滑是在不改变关键路径的前提下调整非关键活动（利用时差）。关键链法认为应同时考虑资源约束与活动依赖，找出&quot;关键链&quot;，并插入缓冲（项目缓冲 PB、汇入缓冲 FB、资源缓冲），用缓冲管理而非每个任务的保守估计来控制进度（避免&quot;学生综合症&quot;与&quot;帕金森定律&quot;）。<br>问题 3｜参考答案要点：<br>- 🔴 核心：🔴 核心（3）范围变更控制）：①提交书面变更申请（内容、原因、影响）；②影响分析（范围、进度、成本、质量、风险）；③CCB 审批；④与甲方等价交换（本例可把&quot;统计报表高级分析&quot;&quot;微信渠道接入&quot;移至二期，保留&quot;AI 呼入 + 工单&quot;洪经理的底线）；⑤更新范围基线、进度与成本计划并书面确认；⑥通知所有干系人；⑦更新需求跟踪矩阵，确保砍掉的功能不产生遗留半成品。<br>问题 4｜参考答案要点：<br>- 🔴 核心：🔴 核心（4）成本估算与影响）：方法——类比估算（参照历史项目，快速但精度低）、参数估算（基于单位成本/功能模块数建模）、自下而上估算（基于 WBS 工作包逐项估算再汇总，最准确、成本高）、三点估算（PERT）：(乐观 + 4×最可能 + 悲观) / 6，并可用标准差评估不确定性；此外还有储备分析（应急储备 + 管理储备）。</div></details></div></details><details class="exam-subject" data-exam-subject="论文"><summary><span class="exam-subject-name">📄 论文写作</span><span class="exam-subject-n">9 题</span><span class="exam-subject-tip">论述题 · 先写再看题</span></summary><div class="exam-bar"><span class="exam-bar-label">📄 论文写作</span><span class="exam-bar-stat">共 <b>9</b> 题 · 论述题</span></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与管理、开发的信息系统项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细论述软件配置管理的核心流程（配置项标识、版本控制、变更控制、配置审计等）、关键活动及常用工具。</li><li><b>问题 3</b> 结合项目实践，论述配置管理过程中遇到的问题（如版本混乱、变更失控等）及对应的解决措施，总结配置管理的实施经验。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 项目管理</span><span class="exam-lv">⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与的软件开发项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 分别从成本、进度、质量三个维度，说明项目管理的实施方式。</li><li><b>问题 3</b> 说明项目管理过程中遇到的问题以及解决办法。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 项目管理</span><span class="exam-lv">⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与管理的信息系统项目（项目的背景、规模、交付期限、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细论述进度管理的核心方法（如 WBS 分解、关键路径法、敏捷燃尽图）、工期估算的技术（类比估算、参数估算、三点估算）、进度控制的措施。</li><li><b>问题 3</b> 结合项目实践，论述你在项目中如何解决进度延误问题，分析进度管理的不足并提出改进方案。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 项目管理</span><span class="exam-lv">⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与管理的信息系统项目（项目的背景、团队规模、成员构成、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细论述团队管理的核心方法（如敏捷团队管理、RACI 责任分配）、沟通渠道的搭建、激励机制的设计、冲突解决的策略。</li><li><b>问题 3</b> 结合项目实践，论述你在团队管理中解决的典型问题（如沟通不畅、成员积极性低），分析团队管理的不足并提出改进方案。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 项目管理</span><span class="exam-lv">⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与管理的信息系统项目（项目的背景、质量目标、行业标准、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细论述质量规划的方法、质量保证的核心活动、质量控制的工具（如帕累托图、鱼骨图、测试用例）及实施要点。</li><li><b>问题 3</b> 结合项目实践，论述你在项目中解决的质量问题，分析质量管理的不足并提出改进方案。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 项目管理</span><span class="exam-lv">⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与管理的信息系统项目（项目的背景、采购内容、预算规模、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细论述采购规划的方法、供方选择的评估指标（技术能力、价格、服务）、合同管理的核心条款、采购验收的流程。</li><li><b>问题 3</b> 结合项目实践，论述你在采购管理中解决的供方合作问题，分析采购管理的不足并提出改进方案。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 项目管理</span><span class="exam-lv">⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与管理的信息系统项目（项目的背景、整体目标、规模、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细论述项目整体规划的方法、整体执行中的协调措施、整体监控的核心指标（范围 / 进度 / 成本 / 质量）、项目收尾的流程。</li><li><b>问题 3</b> 结合项目实践，论述你在整体管理中解决的跨领域协调问题，分析整体管理的不足并提出改进方案。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 项目管理</span><span class="exam-lv">⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与管理的信息系统项目（项目的背景、变更频率、业务复杂度、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细论述变更管理的流程、变更评估的维度（范围 / 进度 / 成本 / 质量影响）、变更审批的权限设置、变更实施后的验证要点。</li><li><b>问题 3</b> 结合项目实践，论述你在变更管理中解决的变更失控问题，分析变更管理的不足并提出改进措施。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 项目管理</span><span class="exam-lv">⭐</span></div></div><div class="exam-q exam-q-essay"><p class="exam-title">（论文）</p><ul class="exam-questions"><li><b>问题 1</b> 概要叙述你参与规划、建设、运维的信息系统项目（项目的背景、建设目标、投资规模、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</li><li><b>问题 2</b> 详细论述信息系统常用的成本效益分析方法（如净现值、投资回报率、投资回收期、盈亏平衡分析等）及各类方法的适用场景。</li><li><b>问题 3</b> 结合项目实例，阐述你如何开展成本统计、效益测算、方案对比分析，并说明分析结果对项目决策的支撑作用，总结实施经验与不足。<br>?</li></ul><div class="exam-meta"><span class="exam-tag">方向 · 项目管理</span><span class="exam-lv">⭐⭐⭐</span></div></div></details></section>
+A连续占用第6、7、8三天。</p><ul class="exam-opts"><li><b>A</b> 第3～5天</li><li><b>B</b> 第4～6天</li><li><b>C</b> 第5～7天</li><li><b>D</b> 第6～8天</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">A作业需要7人连续执行3天，为避开H作业前期的人力冲突、保证每日总人数不超过9人上限，最优方案将A排布在第6~8天连续执行。</p></details></div></details><details class="exam-q" data-exam-id="2020年11月-052"><summary><span class="exam-no">第 52 题</span><span class="exam-stem-peek">线性规划问题由线性的目标函数和线性的约束条件（包括变量非负条件）组成。满足约束条件的所有解的集合称为可行解区。既满足约束…</span></summary><div class="exam-q-body"><p class="exam-stem">线性规划问题由线性的目标函数和线性的约束条件（包括变量非负条件）组成。满足约束条件的所有解的集合称为可行解区。既满足约束条件，又使目标函数达到极值的解称为最优解。以下关于可行解区和最优解的叙述中，正确的是（52）。</p><ul class="exam-opts"><li><b>A</b> 可行解区一定是封闭的多边形或多面体</li><li><b>B</b> 若增加一个线性约束条件，则可行解区可能会扩大</li><li><b>C</b> 若存在两个最优解，则它们的所有线性组合都是最优解</li><li><b>D</b> 若最优解存在且唯一，则可以从可行解区顶点处比较目标函数值来求解</li></ul><details class="exam-ans"><summary>显示答案与解析</summary><p class="exam-ans-line">答案：<b>D</b></p><p class="exam-exp">A错误，可行域可无界不封闭；B错误，新增约束只会让可行区缩小或不变；C错误，只有两点连线上的凸组合是最优解，全部线性组合会超出可行域；D符合线性规划极值基本定理，唯一最优解必然在可行域顶点取得。</p></details></div></details></details></details><details class="exam-subject" data-exam-subject="案例"><summary><span class="exam-subject-name">📋 案例分析</span><span class="exam-subject-n">2 题</span><span class="exam-subject-tip">案例背景 · 题目 · 答案与解析</span></summary><div class="exam-bar"><span class="exam-bar-label">📋 案例分析</span><span class="exam-bar-stat">共 <b>2</b> 题 · 情景简答 · 采分点三色标记</span></div><div class="exam-q exam-q-case"><div class="case-head"><span class="exam-no">案例 34</span><span class="exam-tag">考点 · 进度与成本(含计算)</span><span class="exam-lv">⭐⭐⭐</span></div><div class="case-meta"><span><strong>考点</strong>：活动排序与历时估算 / 关键路径 / 进度压缩 / 挣值分析 / 成本估算方法</span><span>📅 <strong>时间</strong>：2025-11-03 上午 📍 <strong>地点</strong>：项目组月度检查</span><span>👤 <strong>人物</strong>：李工（乙方·项目经理）、甘工（乙方·系统分析师）、彭工（乙方·架构设计师）、徐总（听取汇报）</span><span>⚡ <strong>冲突</strong>：第 6 个月末，计划值与实际值对不上，徐总要一个说法</span><span><strong>难度</strong>：★★★　<strong>总分</strong>：25 分　<strong>建议用时</strong>：25 分钟</span></div><div class="case-scene"><div class="case-h">案例背景</div><strong>背景</strong>：月度检查会，李工把三张表投出来：计划完成 420 万，实际完成 380 万，实际花了 450 万。 徐总皱眉：&quot;说人话——超了还是落后了？&quot; 彭工提醒：&quot;工期只剩五个月，关键路径还没走完。&quot; 甘工知道，光说&quot;有点落后&quot;没用，必须给出<strong>可计算的结论</strong>：成本差多少、进度差多少、照这个趋势最后要花多少钱。<br><strong>补充资料</strong>：B → 架构与方案设计 → 3 → A；C → 主数据与工单中心开发 → 8 → B；D → AI 引擎对接（ASR/大模型） → 6 → B；E → 坐席工作台与大屏开发 → 5 → B；F → 集成与系统测试 → 3 → C、D、E；G → 试点上线 → 2 → F 项目预算 <strong>BAC = 800 万元</strong>，计划工期 11 个月。第 6 个月末检查时：<strong>PV = 420 万元，EV = 380 万元，AC = 450 万元</strong>。</div><div class="case-asks"><div class="case-h">题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">（1）绘制网络图思路，计算各活动的最早/最晚时间，<strong>求关键路径与总工期</strong>；求 D、E 的<strong>总时差</strong>；</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">（2）计算 <strong>CV、SV、CPI、SPI</strong>，判断项目状态，并推算 <strong>EAC</strong>；</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">（3）给出进度压缩与成本控制措施。</span></li></ul></div><details class="exam-ans"><summary>参考答案要点（三色标记）</summary><div class="exam-points"><strong>问题 1｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（1）关键路径）：<br><strong>问题 2｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（2）挣值计算）：<br><strong>问题 3｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（3）纠偏措施）：</div></details><details class="exam-ans"><summary>解析与加分项</summary><div class="exam-exp-more">- 🟢 加分：解析·计算题必须写出公式与中间结果；纠偏措施要区分赶工与快速跟进的代价。</div></details></div><div class="exam-q exam-q-case"><div class="case-head"><span class="exam-no">案例 36</span><span class="exam-tag">考点 · 迎峰度夏前的&quot;三选一&quot;</span><span class="exam-lv">⭐⭐⭐</span></div><div class="case-meta"><span>📅 <strong>时间</strong>：2025-11-05 晚 8 点 📍 <strong>地点</strong>：项目组会议室（气氛紧张）</span><span>👤 <strong>人物</strong>：李工（项目经理）、甘工（乙方·系统分析师）、彭工（乙方·架构设计师）、丁工（乙方·测试负责人）、洪经理（电话接入）</span><span>⚡ <strong>冲突</strong>：距&quot;迎峰度夏&quot;硬节点只剩 9 周，关键路径还差 3 周，只能三选一：加人赶工、砍范围、延期</span><span><strong>难度</strong>：★★★　<strong>总分</strong>：25 分　<strong>建议用时</strong>：25 分钟</span></div><div class="case-scene"><div class="case-h">案例背景</div><strong>背景</strong>：李工把进度表拍在桌上：&quot;关键路径是主数据与工单中心那条，还差三周。徐总那边说了，&#x27;迎峰度夏&#x27;这个节点一天都不能推。&quot; 彭工先反对加人：&quot;新人进来要熟悉两周，沟通路径还会变多，<strong>加人只会让它更晚</strong>——这是布鲁克斯法则。&quot; 丁工也不客气：&quot;现在砍测试时间，上线就是事故。&quot; 洪经理在电话里喊：&quot;砍功能可以，但 AI 呼入和工单不能砍！&quot; 李工看向甘工：&quot;你说怎么办？&quot; 甘工知道：这不是单纯的技术问题，而是<strong>进度、成本、范围、质量四重约束的权衡</strong>，需要给出<strong>可比较的方案 + 推荐</strong>。<br><strong>补充资料</strong>：B 架构与方案设计 → 3 → A → 0 → 有限（1 周）；C 主数据与工单中心开发 → 8 → B → 0 → 可并行拆分（省 2~3 周）；D AI 引擎对接 → 6 → B → 2 → 可与 C/E 并行；E 坐席工作台开发 → 5 → B → 3 → 可与 C/D 并行；F 集成与系统测试 → 3 → C、D、E → 0 → <strong>不建议压缩</strong> <strong>约束</strong>：距迎峰度夏 9 周；关键路径尚差 3 周；每压缩 1 周约增加成本 12 万元。</div><div class="case-asks"><div class="case-h">题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">（1）说明<strong>进度压缩</strong>的两种方法及各自代价；结合本案例给出推荐并说明原因；</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">（2）说明<strong>资源平衡（资源优化）</strong>与<strong>关键链</strong>的思想；</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">（3）若采用&quot;砍范围&quot;，说明应如何进行<strong>范围变更控制</strong>并与甲方达成一致；</span></li><li><span class="case-ask-no">4</span><span class="case-ask-t">（4）说明<strong>成本估算</strong>的方法与赶工带来的成本影响。</span></li></ul></div><details class="exam-ans"><summary>参考答案要点（三色标记）</summary><div class="exam-points"><strong>问题 1｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（1）进度压缩）：<br><strong>问题 2｜参考答案要点</strong>：<br>- 🔴 核心：🟡 支撑（2）资源平衡与关键链）：资源平衡是在资源受限时调整活动的开始时间，使资源负荷趋于均衡（可能延长工期）；资源平滑是在不改变关键路径的前提下调整非关键活动（利用时差）。关键链法认为应同时考虑资源约束与活动依赖，找出&quot;关键链&quot;，并插入缓冲（项目缓冲 PB、汇入缓冲 FB、资源缓冲），用缓冲管理而非每个任务的保守估计来控制进度（避免&quot;学生综合症&quot;与&quot;帕金森定律&quot;）。<br><strong>问题 3｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（3）范围变更控制）：①提交书面变更申请（内容、原因、影响）；②影响分析（范围、进度、成本、质量、风险）；③CCB 审批；④与甲方等价交换（本例可把&quot;统计报表高级分析&quot;&quot;微信渠道接入&quot;移至二期，保留&quot;AI 呼入 + 工单&quot;洪经理的底线）；⑤更新范围基线、进度与成本计划并书面确认；⑥通知所有干系人；⑦更新需求跟踪矩阵，确保砍掉的功能不产生遗留半成品。<br><strong>问题 4｜参考答案要点</strong>：<br>- 🔴 核心：🔴 核心（4）成本估算与影响）：方法——类比估算（参照历史项目，快速但精度低）、参数估算（基于单位成本/功能模块数建模）、自下而上估算（基于 WBS 工作包逐项估算再汇总，最准确、成本高）、三点估算（PERT）：(乐观 + 4×最可能 + 悲观) / 6，并可用标准差评估不确定性；此外还有储备分析（应急储备 + 管理储备）。</div></details><details class="exam-ans"><summary>解析与加分项</summary><div class="exam-exp-more">- 🟢 加分：解析·进度题要&quot;两种压缩 + 代价 + 本例推荐 + 变更流程 + 成本估算&quot;。</div></details></div></details><details class="exam-subject" data-exam-subject="论文"><summary><span class="exam-subject-name">📄 论文写作</span><span class="exam-subject-n">9 题</span><span class="exam-subject-tip">先看题 · 再看考点拆解</span></summary><div class="exam-bar"><span class="exam-bar-label">📄 论文写作</span><span class="exam-bar-stat">共 <b>9</b> 题 · 论述题 · 含考点拆解与教材知识点</span></div><div class="exam-q exam-q-essay"><div class="case-head"><span class="exam-no">论文 52</span><span class="exam-tag">方向 · 项目管理</span><span class="exam-lv">⭐</span><span class="essay-batch">2015年下半年（11月）</span></div><div class="case-asks"><div class="case-h">论文题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">概要叙述你参与管理、开发的信息系统项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">详细论述软件配置管理的核心流程（配置项标识、版本控制、变更控制、配置审计等）、关键活动及常用工具。</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">结合项目实践，论述配置管理过程中遇到的问题（如版本混乱、变更失控等）及对应的解决措施，总结配置管理的实施经验。</span></li></ul></div><details class="exam-ans" open><summary>试题背景</summary><div class="essay-bg">软件配置管理是贯穿项目全生命周期的核心管理活动，能够有效控制软件变更、追溯版本演化、保障交付物一致性，是提升项目质量与效率的关键手段。</div></details><details class="exam-ans"><summary>考点拆解（三色标记）</summary><div class="exam-keypoints"><strong>问题 1｜概要叙述项目与你承担的工作</strong>：<br>- 🔴 核心：点明近三年内一个具体的真实项目：项目名称、背景、发起单位、规模、周期、交付成果（教材 22.4-9/22.4-10 明确要求，泛泛而谈会判虚构）<br>- 🔴 核心：明确「我」在项目中的角色与承担的主要工作，并站在系统分析师视角论述，而非单纯开发实现视角<br>- 🟡 支撑：说明项目的组织结构、开发体制与技术栈，为后文论述做铺垫<br>- 🟢 加分：点出项目与本题主题的直接关联（如本项目正是因 XX 痛点才需要 XX 方法）<br><strong>问题 2｜理论知识 / 方法论述</strong>：<br>- 🔴 核心：软件配置管理的核心流程配置项标识——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：软件配置管理的版本控制——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：软件配置管理的变更控制——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🟡 支撑：软件配置管理的配置审计等<br>- 🟡 支撑：软件配置管理的关键活动及常用工具<br>- 🟢 加分：给出与其他候选方案的取舍依据，体现选型判断力<br><strong>问题 3｜项目实践落地与复盘</strong>：<br>- 🔴 核心：给出可量化的落地效果（缺陷率/响应时间/迭代周期/资源成本等具体数据），而非「取得了良好效果」<br>- 🔴 核心：诚实分析存在的 2~3 个真实问题，并给出对应的改进措施——教材强调这才是用心的内容<br>- 🟡 支撑：结合具体实例说明措施的实施过程（怎么做的，而非教科书式罗列）<br>- 🟢 加分：总结经验教训与后续演进方向，体现复盘能力<br>- 🟡 支撑：论述配置管理过程中遇到的问题如版本混乱<br>- 🟡 支撑：论述配置管理过程中遇到的变更失控等及对应的解决措施</div></details><details class="exam-ans"><summary>教材知识点</summary><div class="exam-textbook"><span class="tb-chap">第 8 章 · 项目管理</span><a class="tb-hour" href="H17.html">H17</a><a class="tb-hour" href="H18.html">H18</a></div></details></div><div class="exam-q exam-q-essay"><div class="case-head"><span class="exam-no">论文 73</span><span class="exam-tag">方向 · 项目管理</span><span class="exam-lv">⭐</span><span class="essay-batch">2011年上半年</span></div><div class="case-asks"><div class="case-h">论文题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">概要叙述你参与的软件开发项目（项目的背景、规模、发起单位、目的、项目内容、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">分别从成本、进度、质量三个维度，说明项目管理的实施方式。</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">说明项目管理过程中遇到的问题以及解决办法。</span></li></ul></div><details class="exam-ans" open><summary>试题背景</summary><div class="essay-bg">软件项目管理对项目成本、进度、质量进行全面管控，保障项目顺利交付。</div></details><details class="exam-ans"><summary>考点拆解（三色标记）</summary><div class="exam-keypoints"><strong>问题 1｜概要叙述项目与你承担的工作</strong>：<br>- 🔴 核心：点明近三年内一个具体的真实项目：项目名称、背景、发起单位、规模、周期、交付成果（教材 22.4-9/22.4-10 明确要求，泛泛而谈会判虚构）<br>- 🔴 核心：明确「我」在项目中的角色与承担的主要工作，并站在系统分析师视角论述，而非单纯开发实现视角<br>- 🟡 支撑：说明项目的组织结构、开发体制与技术栈，为后文论述做铺垫<br>- 🟢 加分：点出项目与本题主题的直接关联（如本项目正是因 XX 痛点才需要 XX 方法）<br><strong>问题 2｜理论知识 / 方法论述</strong>：<br>- 🔴 核心：分别从成本——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：质量三个维度——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：说明项目管理的实施方式——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🟢 加分：给出与其他候选方案的取舍依据，体现选型判断力<br><strong>问题 3｜项目实践落地与复盘</strong>：<br>- 🔴 核心：给出可量化的落地效果（缺陷率/响应时间/迭代周期/资源成本等具体数据），而非「取得了良好效果」<br>- 🔴 核心：诚实分析存在的 2~3 个真实问题，并给出对应的改进措施——教材强调这才是用心的内容<br>- 🟡 支撑：结合具体实例说明措施的实施过程（怎么做的，而非教科书式罗列）<br>- 🟢 加分：总结经验教训与后续演进方向，体现复盘能力<br>- 🟡 支撑：项目管理过程中遇到的问题以及解决办法</div></details><details class="exam-ans"><summary>教材知识点</summary><div class="exam-textbook"><span class="tb-chap">第 8 章 · 项目管理</span><a class="tb-hour" href="H17.html">H17</a><a class="tb-hour" href="H18.html">H18</a></div></details></div><div class="exam-q exam-q-essay"><div class="case-head"><span class="exam-no">论文 84</span><span class="exam-tag">方向 · 项目管理</span><span class="exam-lv">⭐</span><span class="essay-batch">2013年上半年</span></div><div class="case-asks"><div class="case-h">论文题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">概要叙述你参与管理的信息系统项目（项目的背景、规模、交付期限、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">详细论述进度管理的核心方法（如 WBS 分解、关键路径法、敏捷燃尽图）、工期估算的技术（类比估算、参数估算、三点估算）、进度控制的措施。</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">结合项目实践，论述你在项目中如何解决进度延误问题，分析进度管理的不足并提出改进方案。</span></li></ul></div><details class="exam-ans" open><summary>试题背景</summary><div class="essay-bg">软件项目进度管理是保障项目按时交付的核心，涵盖活动定义、活动排序、工期估算、进度计划制定、进度控制等环节。</div></details><details class="exam-ans"><summary>考点拆解（三色标记）</summary><div class="exam-keypoints"><strong>问题 1｜概要叙述项目与你承担的工作</strong>：<br>- 🔴 核心：点明近三年内一个具体的真实项目：项目名称、背景、发起单位、规模、周期、交付成果（教材 22.4-9/22.4-10 明确要求，泛泛而谈会判虚构）<br>- 🔴 核心：明确「我」在项目中的角色与承担的主要工作，并站在系统分析师视角论述，而非单纯开发实现视角<br>- 🟡 支撑：说明项目的组织结构、开发体制与技术栈，为后文论述做铺垫<br>- 🟢 加分：点出项目与本题主题的直接关联（如本项目正是因 XX 痛点才需要 XX 方法）<br><strong>问题 2｜理论知识 / 方法论述</strong>：<br>- 🔴 核心：进度管理的核心方法如 WBS 分解——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：进度管理的关键路径法——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：进度管理的敏捷燃尽图——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🟡 支撑：进度管理的工期估算的技术类比估算<br>- 🟡 支撑：进度管理的参数估算<br>- 🟡 支撑：进度管理的三点估算<br>- 🟢 加分：给出与其他候选方案的取舍依据，体现选型判断力<br><strong>问题 3｜项目实践落地与复盘</strong>：<br>- 🔴 核心：给出可量化的落地效果（缺陷率/响应时间/迭代周期/资源成本等具体数据），而非「取得了良好效果」<br>- 🔴 核心：诚实分析存在的 2~3 个真实问题，并给出对应的改进措施——教材强调这才是用心的内容<br>- 🟡 支撑：结合具体实例说明措施的实施过程（怎么做的，而非教科书式罗列）<br>- 🟢 加分：总结经验教训与后续演进方向，体现复盘能力<br>- 🟡 支撑：论述你在项目中如何解决进度延误问题</div></details><details class="exam-ans"><summary>教材知识点</summary><div class="exam-textbook"><span class="tb-chap">第 8 章 · 项目管理</span><a class="tb-hour" href="H17.html">H17</a><a class="tb-hour" href="H18.html">H18</a></div></details></div><div class="exam-q exam-q-essay"><div class="case-head"><span class="exam-no">论文 92</span><span class="exam-tag">方向 · 项目管理</span><span class="exam-lv">⭐</span><span class="essay-batch">2012年上半年</span></div><div class="case-asks"><div class="case-h">论文题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">概要叙述你参与管理的信息系统项目（项目的背景、团队规模、成员构成、项目周期、交付的成果等），并说明你在其中承担的工作。</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">详细论述团队管理的核心方法（如敏捷团队管理、RACI 责任分配）、沟通渠道的搭建、激励机制的设计、冲突解决的策略。</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">结合项目实践，论述你在团队管理中解决的典型问题（如沟通不畅、成员积极性低），分析团队管理的不足并提出改进方案。</span></li></ul></div><details class="exam-ans" open><summary>试题背景</summary><div class="essay-bg">软件项目团队管理涵盖团队组建、沟通管理、激励机制、冲突解决等环节，是保障团队协作效率、提升项目执行力的关键。</div></details><details class="exam-ans"><summary>考点拆解（三色标记）</summary><div class="exam-keypoints"><strong>问题 1｜概要叙述项目与你承担的工作</strong>：<br>- 🔴 核心：点明近三年内一个具体的真实项目：项目名称、背景、发起单位、规模、周期、交付成果（教材 22.4-9/22.4-10 明确要求，泛泛而谈会判虚构）<br>- 🔴 核心：明确「我」在项目中的角色与承担的主要工作，并站在系统分析师视角论述，而非单纯开发实现视角<br>- 🟡 支撑：说明项目的组织结构、开发体制与技术栈，为后文论述做铺垫<br>- 🟢 加分：点出项目与本题主题的直接关联（如本项目正是因 XX 痛点才需要 XX 方法）<br><strong>问题 2｜理论知识 / 方法论述</strong>：<br>- 🔴 核心：团队管理的核心方法如敏捷团队管理——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：团队管理的RACI 责任分配——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：团队管理的沟通渠道的搭建——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🟡 支撑：团队管理的激励机制的设计<br>- 🟡 支撑：团队管理的冲突解决的策略<br>- 🟢 加分：给出与其他候选方案的取舍依据，体现选型判断力<br><strong>问题 3｜项目实践落地与复盘</strong>：<br>- 🔴 核心：给出可量化的落地效果（缺陷率/响应时间/迭代周期/资源成本等具体数据），而非「取得了良好效果」<br>- 🔴 核心：诚实分析存在的 2~3 个真实问题，并给出对应的改进措施——教材强调这才是用心的内容<br>- 🟡 支撑：结合具体实例说明措施的实施过程（怎么做的，而非教科书式罗列）<br>- 🟢 加分：总结经验教训与后续演进方向，体现复盘能力<br>- 🟡 支撑：论述你在团队管理中解决的典型问题如沟通不畅<br>- 🟡 支撑：论述你在团队管理中解决的成员积极性低</div></details><details class="exam-ans"><summary>教材知识点</summary><div class="exam-textbook"><span class="tb-chap">第 8 章 · 项目管理</span><a class="tb-hour" href="H17.html">H17</a><a class="tb-hour" href="H18.html">H18</a></div></details></div><div class="exam-q exam-q-essay"><div class="case-head"><span class="exam-no">论文 100</span><span class="exam-tag">方向 · 项目管理</span><span class="exam-lv">⭐</span><span class="essay-batch">2011年上半年</span></div><div class="case-asks"><div class="case-h">论文题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">概要叙述你参与管理的信息系统项目（项目的背景、质量目标、行业标准、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">详细论述质量规划的方法、质量保证的核心活动、质量控制的工具（如帕累托图、鱼骨图、测试用例）及实施要点。</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">结合项目实践，论述你在项目中解决的质量问题，分析质量管理的不足并提出改进方案。</span></li></ul></div><details class="exam-ans" open><summary>试题背景</summary><div class="essay-bg">软件项目质量管理涵盖质量规划、质量保证、质量控制等环节，通过建立质量标准、开展过程审计、实施质量检测，保障软件产品满足质量要求。</div></details><details class="exam-ans"><summary>考点拆解（三色标记）</summary><div class="exam-keypoints"><strong>问题 1｜概要叙述项目与你承担的工作</strong>：<br>- 🔴 核心：点明近三年内一个具体的真实项目：项目名称、背景、发起单位、规模、周期、交付成果（教材 22.4-9/22.4-10 明确要求，泛泛而谈会判虚构）<br>- 🔴 核心：明确「我」在项目中的角色与承担的主要工作，并站在系统分析师视角论述，而非单纯开发实现视角<br>- 🟡 支撑：说明项目的组织结构、开发体制与技术栈，为后文论述做铺垫<br>- 🟢 加分：点出项目与本题主题的直接关联（如本项目正是因 XX 痛点才需要 XX 方法）<br><strong>问题 2｜理论知识 / 方法论述</strong>：<br>- 🔴 核心：质量规划的方法——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：质量规划的质量保证的核心活动——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：质量规划的质量控制的工具如帕累托图——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🟡 支撑：质量规划的鱼骨图<br>- 🟡 支撑：质量规划的测试用例及实施要点<br>- 🟢 加分：给出与其他候选方案的取舍依据，体现选型判断力<br><strong>问题 3｜项目实践落地与复盘</strong>：<br>- 🔴 核心：给出可量化的落地效果（缺陷率/响应时间/迭代周期/资源成本等具体数据），而非「取得了良好效果」<br>- 🔴 核心：诚实分析存在的 2~3 个真实问题，并给出对应的改进措施——教材强调这才是用心的内容<br>- 🟡 支撑：结合具体实例说明措施的实施过程（怎么做的，而非教科书式罗列）<br>- 🟢 加分：总结经验教训与后续演进方向，体现复盘能力<br>- 🟡 支撑：论述你在项目中解决的质量问题</div></details><details class="exam-ans"><summary>教材知识点</summary><div class="exam-textbook"><span class="tb-chap">第 8 章 · 项目管理</span><a class="tb-hour" href="H17.html">H17</a><a class="tb-hour" href="H18.html">H18</a></div></details></div><div class="exam-q exam-q-essay"><div class="case-head"><span class="exam-no">论文 108</span><span class="exam-tag">方向 · 项目管理</span><span class="exam-lv">⭐</span><span class="essay-batch">2010年上半年</span></div><div class="case-asks"><div class="case-h">论文题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">概要叙述你参与管理的信息系统项目（项目的背景、采购内容、预算规模、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">详细论述采购规划的方法、供方选择的评估指标（技术能力、价格、服务）、合同管理的核心条款、采购验收的流程。</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">结合项目实践，论述你在采购管理中解决的供方合作问题，分析采购管理的不足并提出改进方案。</span></li></ul></div><details class="exam-ans" open><summary>试题背景</summary><div class="essay-bg">软件项目采购管理涵盖采购规划、供方选择、合同管理、采购验收等环节，是保障项目外部资源（软硬件、服务）有效供给的核心。</div></details><details class="exam-ans"><summary>考点拆解（三色标记）</summary><div class="exam-keypoints"><strong>问题 1｜概要叙述项目与你承担的工作</strong>：<br>- 🔴 核心：点明近三年内一个具体的真实项目：项目名称、背景、发起单位、规模、周期、交付成果（教材 22.4-9/22.4-10 明确要求，泛泛而谈会判虚构）<br>- 🔴 核心：明确「我」在项目中的角色与承担的主要工作，并站在系统分析师视角论述，而非单纯开发实现视角<br>- 🟡 支撑：说明项目的组织结构、开发体制与技术栈，为后文论述做铺垫<br>- 🟢 加分：点出项目与本题主题的直接关联（如本项目正是因 XX 痛点才需要 XX 方法）<br><strong>问题 2｜理论知识 / 方法论述</strong>：<br>- 🔴 核心：采购规划的方法——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：采购规划的供方选择的评估指标技术能力——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：采购规划的价格——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🟡 支撑：采购规划的服务<br>- 🟡 支撑：采购规划的合同管理的核心条款<br>- 🟡 支撑：采购规划的采购验收的流程<br>- 🟢 加分：给出与其他候选方案的取舍依据，体现选型判断力<br><strong>问题 3｜项目实践落地与复盘</strong>：<br>- 🔴 核心：给出可量化的落地效果（缺陷率/响应时间/迭代周期/资源成本等具体数据），而非「取得了良好效果」<br>- 🔴 核心：诚实分析存在的 2~3 个真实问题，并给出对应的改进措施——教材强调这才是用心的内容<br>- 🟡 支撑：结合具体实例说明措施的实施过程（怎么做的，而非教科书式罗列）<br>- 🟢 加分：总结经验教训与后续演进方向，体现复盘能力<br>- 🟡 支撑：论述你在采购管理中解决的供方合作问题</div></details><details class="exam-ans"><summary>教材知识点</summary><div class="exam-textbook"><span class="tb-chap">第 8 章 · 项目管理</span><a class="tb-hour" href="H17.html">H17</a><a class="tb-hour" href="H18.html">H18</a></div></details></div><div class="exam-q exam-q-essay"><div class="case-head"><span class="exam-no">论文 116</span><span class="exam-tag">方向 · 项目管理</span><span class="exam-lv">⭐</span><span class="essay-batch">2009年上半年</span></div><div class="case-asks"><div class="case-h">论文题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">概要叙述你参与管理的信息系统项目（项目的背景、整体目标、规模、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">详细论述项目整体规划的方法、整体执行中的协调措施、整体监控的核心指标（范围 / 进度 / 成本 / 质量）、项目收尾的流程。</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">结合项目实践，论述你在整体管理中解决的跨领域协调问题，分析整体管理的不足并提出改进方案。</span></li></ul></div><details class="exam-ans" open><summary>试题背景</summary><div class="essay-bg">软件项目整体管理涵盖项目启动、规划、执行、监控、收尾全流程，通过整合各知识领域活动，保障项目目标的整体实现。</div></details><details class="exam-ans"><summary>考点拆解（三色标记）</summary><div class="exam-keypoints"><strong>问题 1｜概要叙述项目与你承担的工作</strong>：<br>- 🔴 核心：点明近三年内一个具体的真实项目：项目名称、背景、发起单位、规模、周期、交付成果（教材 22.4-9/22.4-10 明确要求，泛泛而谈会判虚构）<br>- 🔴 核心：明确「我」在项目中的角色与承担的主要工作，并站在系统分析师视角论述，而非单纯开发实现视角<br>- 🟡 支撑：说明项目的组织结构、开发体制与技术栈，为后文论述做铺垫<br>- 🟢 加分：点出项目与本题主题的直接关联（如本项目正是因 XX 痛点才需要 XX 方法）<br><strong>问题 2｜理论知识 / 方法论述</strong>：<br>- 🔴 核心：项目整体规划的方法——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：项目整体规划的整体执行中的协调措施——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：整体监控的核心指标范围 / 进度 / 成本 / 质量——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🟡 支撑：项目整体规划的项目收尾的流程<br>- 🟢 加分：给出与其他候选方案的取舍依据，体现选型判断力<br><strong>问题 3｜项目实践落地与复盘</strong>：<br>- 🔴 核心：给出可量化的落地效果（缺陷率/响应时间/迭代周期/资源成本等具体数据），而非「取得了良好效果」<br>- 🔴 核心：诚实分析存在的 2~3 个真实问题，并给出对应的改进措施——教材强调这才是用心的内容<br>- 🟡 支撑：结合具体实例说明措施的实施过程（怎么做的，而非教科书式罗列）<br>- 🟢 加分：总结经验教训与后续演进方向，体现复盘能力<br>- 🟡 支撑：论述你在整体管理中解决的跨领域协调问题</div></details><details class="exam-ans"><summary>教材知识点</summary><div class="exam-textbook"><span class="tb-chap">第 8 章 · 项目管理</span><a class="tb-hour" href="H17.html">H17</a><a class="tb-hour" href="H18.html">H18</a></div></details></div><div class="exam-q exam-q-essay"><div class="case-head"><span class="exam-no">论文 120</span><span class="exam-tag">方向 · 项目管理</span><span class="exam-lv">⭐</span><span class="essay-batch">2009年下半年（11月）</span></div><div class="case-asks"><div class="case-h">论文题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">概要叙述你参与管理的信息系统项目（项目的背景、变更频率、业务复杂度、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">详细论述变更管理的流程、变更评估的维度（范围 / 进度 / 成本 / 质量影响）、变更审批的权限设置、变更实施后的验证要点。</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">结合项目实践，论述你在变更管理中解决的变更失控问题，分析变更管理的不足并提出改进措施。</span></li></ul></div><details class="exam-ans" open><summary>试题背景</summary><div class="essay-bg">软件项目变更管理涵盖变更请求、评估、审批、实施、验证等环节，是控制变更风险、保障项目可控性的核心管理活动。</div></details><details class="exam-ans"><summary>考点拆解（三色标记）</summary><div class="exam-keypoints"><strong>问题 1｜概要叙述项目与你承担的工作</strong>：<br>- 🔴 核心：点明近三年内一个具体的真实项目：项目名称、背景、发起单位、规模、周期、交付成果（教材 22.4-9/22.4-10 明确要求，泛泛而谈会判虚构）<br>- 🔴 核心：明确「我」在项目中的角色与承担的主要工作，并站在系统分析师视角论述，而非单纯开发实现视角<br>- 🟡 支撑：说明项目的组织结构、开发体制与技术栈，为后文论述做铺垫<br>- 🟢 加分：点出项目与本题主题的直接关联（如本项目正是因 XX 痛点才需要 XX 方法）<br><strong>问题 2｜理论知识 / 方法论述</strong>：<br>- 🔴 核心：变更管理的流程——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：变更评估的维度范围 / 进度 / 成本 / 质量影响——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：变更管理的变更审批的权限设置——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🟡 支撑：变更管理的变更实施后的验证要点<br>- 🟢 加分：给出与其他候选方案的取舍依据，体现选型判断力<br><strong>问题 3｜项目实践落地与复盘</strong>：<br>- 🔴 核心：给出可量化的落地效果（缺陷率/响应时间/迭代周期/资源成本等具体数据），而非「取得了良好效果」<br>- 🔴 核心：诚实分析存在的 2~3 个真实问题，并给出对应的改进措施——教材强调这才是用心的内容<br>- 🟡 支撑：结合具体实例说明措施的实施过程（怎么做的，而非教科书式罗列）<br>- 🟢 加分：总结经验教训与后续演进方向，体现复盘能力<br>- 🟡 支撑：论述你在变更管理中解决的变更失控问题</div></details><details class="exam-ans"><summary>教材知识点</summary><div class="exam-textbook"><span class="tb-chap">第 8 章 · 项目管理</span><a class="tb-hour" href="H17.html">H17</a><a class="tb-hour" href="H18.html">H18</a></div></details></div><div class="exam-q exam-q-essay"><div class="case-head"><span class="exam-no">论文 11</span><span class="exam-tag">方向 · 项目管理</span><span class="exam-lv">⭐⭐⭐</span><span class="essay-batch">2025年下半年（11月）</span></div><div class="case-asks"><div class="case-h">论文题目</div><ul class="exam-questions"><li><span class="case-ask-no">1</span><span class="case-ask-t">概要叙述你参与规划、建设、运维的信息系统项目（项目的背景、建设目标、投资规模、组织结构、项目周期、交付的成果等），并说明你在其中承担的工作。</span></li><li><span class="case-ask-no">2</span><span class="case-ask-t">详细论述信息系统常用的成本效益分析方法（如净现值、投资回报率、投资回收期、盈亏平衡分析等）及各类方法的适用场景。</span></li><li><span class="case-ask-no">3</span><span class="case-ask-t">结合项目实例，阐述你如何开展成本统计、效益测算、方案对比分析，并说明分析结果对项目决策的支撑作用，总结实施经验与不足。</span></li></ul></div><details class="exam-ans" open><summary>试题背景</summary><div class="essay-bg">成本效益分析是信息系统立项、方案选型、项目验收的核心决策依据，贯穿系统规划、建设、运维全生命周期。</div></details><details class="exam-ans"><summary>考点拆解（三色标记）</summary><div class="exam-keypoints"><strong>问题 1｜概要叙述项目与你承担的工作</strong>：<br>- 🔴 核心：点明近三年内一个具体的真实项目：项目名称、背景、发起单位、规模、周期、交付成果（教材 22.4-9/22.4-10 明确要求，泛泛而谈会判虚构）<br>- 🔴 核心：明确「我」在项目中的角色与承担的主要工作，并站在系统分析师视角论述，而非单纯开发实现视角<br>- 🟡 支撑：说明项目的组织结构、开发体制与技术栈，为后文论述做铺垫<br>- 🟢 加分：点出项目与本题主题的直接关联（如本项目正是因 XX 痛点才需要 XX 方法）<br><strong>问题 2｜理论知识 / 方法论述</strong>：<br>- 🔴 核心：信息系统常用的成本效益分析方法如净现值——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：信息系统常用的投资回报率——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🔴 核心：信息系统常用的投资回收期——须展开「是什么 + 本项目为何适用」，不能只列名词<br>- 🟡 支撑：信息系统常用的盈亏平衡分析等及各类方法的适用场景<br>- 🟢 加分：给出与其他候选方案的取舍依据，体现选型判断力<br><strong>问题 3｜项目实践落地与复盘</strong>：<br>- 🔴 核心：给出可量化的落地效果（缺陷率/响应时间/迭代周期/资源成本等具体数据），而非「取得了良好效果」<br>- 🔴 核心：诚实分析存在的 2~3 个真实问题，并给出对应的改进措施——教材强调这才是用心的内容<br>- 🟡 支撑：结合具体实例说明措施的实施过程（怎么做的，而非教科书式罗列）<br>- 🟢 加分：总结经验教训与后续演进方向，体现复盘能力<br>- 🟡 支撑：阐述你如何开展成本统计<br>- 🟡 支撑：效益测算</div></details><details class="exam-ans"><summary>教材知识点</summary><div class="exam-textbook"><span class="tb-chap">第 8 章 · 项目管理</span><a class="tb-hour" href="H17.html">H17</a><a class="tb-hour" href="H18.html">H18</a></div></details></div></details></section>
     <div class="wrongbook"></div>
     <div class="keyhint">
   <span class="keyhint-title">键盘快捷键</span>
@@ -3473,7 +3655,9 @@ A连续占用第6、7、8三天。</p><ul class="exam-opts"><li><b>A</b> 第3～
     init() {
       const root = document.querySelector('.exam')
       if (!root) return
-      const chapter = root.dataset.examChapter || 'x'
+      // ⚠️ 专项页 / 全真模拟页没有 data-exam-chapter（无教材章），
+      //    旧写法一律退化成 'x' → H42~H48 共用同一个记忆键、互相串状态。
+      const chapter = root.dataset.examChapter || root.dataset.examHour || 'x'
 
       // 恢复上次展开状态：{ "H07": { "2025年5月": true, ... } }
       const saved = store.get(this.KEY, {}) || {}
@@ -3493,6 +3677,7 @@ A连续占用第6、7、8三天。</p><ul class="exam-opts"><li><b>A</b> 第3～
       const seen = store.get('examSeen', {}) || {}
       root.querySelectorAll('.exam-q').forEach(qd => {
         const qid = qd.dataset.examId
+        if (!qid) return
         if (seen[qid]) {
           const a = qd.querySelector('.exam-ans')
           if (a) a.open = true
@@ -3508,12 +3693,17 @@ A连续占用第6、7、8三天。</p><ul class="exam-opts"><li><b>A</b> 第3～
         btn.addEventListener('click', e => {
           e.preventDefault()
           const openAll = btn.dataset.examAll === '1'
-          root.querySelectorAll('.exam-subject,.exam-year').forEach(d => { d.open = openAll })
-          root.querySelectorAll('.exam-ans').forEach(d => {
-            d.open = openAll
-            if (openAll && d.parentElement.dataset.examId) seen[d.parentElement.dataset.examId] = 1
-          })
-          if (openAll) store.set('examSeen', seen)
+          // ⚠️ 必须把 .exam-q 也列进来：只开 .exam-subject/.exam-year/.exam-ans
+          //    时，单题仍折叠 → 答案藏在关闭的单题内，"全部展开"名不副实。
+          root.querySelectorAll('.exam-subject,.exam-year,.exam-q,.exam-ans')
+            .forEach(d => { d.open = openAll })
+          if (openAll) {
+            // ⚠️ 旧的 `d.parentElement.dataset.examId` 取到的是 .exam-q-body（无 id），
+            //    会把 seen[undefined] 写进 localStorage。改为直接从 .exam-q 取。
+            root.querySelectorAll('.exam-q[data-exam-id]')
+              .forEach(qd => { seen[qd.dataset.examId] = 1 })
+            store.set('examSeen', seen)
+          }
           // 同步年份级记忆
           root.querySelectorAll('.exam-year').forEach(y => { mine[y.dataset.examYear] = y.open })
           saved[chapter] = mine
@@ -3560,7 +3750,7 @@ A连续占用第6、7、8三天。</p><ul class="exam-opts"><li><b>A</b> 第3～
   // ══════════════════════════════════════════
   // 8. mermaid 渲染（自定义墨绿主题，与正文同色系）
   // ══════════════════════════════════════════
-  // 站点配色（与 design.css 的令牌保持一致）
+  // 站点配色（与设计令牌保持一致 —— 改主题色时这里要同步）
   const MERMAID_LIGHT = {
     bg: '#f2f0e9', fg: '#1b211c', line: '#cdc9bd',
     accent: '#3d5a40', accent2: '#5a8a62', accent3: '#7ea888',
