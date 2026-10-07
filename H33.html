@@ -7,7 +7,7 @@
 <title>第 33 小时 · 系统运行与维护（一）· 运维指标与软件维护 · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
-<meta name="build-stamp" content="2026-10-05 15:47:03">
+<meta name="build-stamp" content="2026-10-07 08:06:18">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -2296,7 +2296,7 @@ ul.exam-questions>li::before{content:none !important}
 </div>
     
     <h1 id="第-33-小时-系统运行与维护-一-运维指标与软件维护">第 33 小时 · 系统运行与维护（一）· 运维指标与软件维护</h1>
-<div class="quote"><p>第 15 章<strong>真题占比 1.1%</strong>（6/557）—— 全书权重最低的一章，但<strong>运维四个 MT 与软件维护四类几乎每年都见</strong>，<br>而且是<strong>论文的优质素材</strong>（可维护性、技术债、遗留系统改造都能写进论文）。<br>本学时覆盖 <strong>15.1 运维技术指标 + 15.2 运行管理 + 15.3 故障管理 + 15.4 软件维护 + 15.5 系统评价 + 15.6 遗留系统</strong>。</p></div>
+<div class="quote"><p>第 15 章<strong>真题占比 0.7%</strong>（4/557）—— 综合知识只在 2023、2026 两年出现过（4 题，20 个章里排第 17，排在它后面的第 21、16、20 章题量更少），<br>而运维四个 MT 与软件维护四类<strong>在 11 套案例真题里一次都没考过</strong> —— 它是典型的<strong>「综合不考、案例不考、论文能用」</strong>章节：<br><strong>别在这里刷题</strong>，但<strong>可维护性 / 技术债 / 遗留系统改造是论文的优质素材</strong>，写论文时照样能用。<br>本学时覆盖 <strong>15.1 运维技术指标 + 15.2 运行管理 + 15.3 故障管理 + 15.4 软件维护 + 15.5 系统评价 + 15.6 遗留系统</strong>。</p></div>
 <div class="block gold"><div class="block-title">考情定位</div><p>四块必拿：① <strong>四个 MT 关系</strong>（<strong>MTBF = MTTF + MTTR</strong>）与<strong>可用度公式</strong>（A = MTBF/(MTBF+MTTR)）；② <strong>可用度与停机时间换算</strong>（99.9% ≈ 8.76 h/年，<strong>每多一个 9 缩小 10 倍</strong>）；③ <strong>软件维护四类及占比</strong>（完善性最大 ≈50%，预防性最小 <5%<strong>）；④ </strong>遗留系统四象限<strong>（高价值+低水平 → </strong>改造或替换）。</p></div>
 <div class="block mem"><div class="block-title">记忆口诀</div><p><strong>四个 MT</strong>：<strong>MTTF</strong> 平均失效时间 ｜ <strong>MTTR</strong> 平均修复时间 ｜ <strong>MTBF</strong> 平均故障间隔 ｜ <strong>MTBF = MTTF + MTTR</strong>。<br><strong>可用度 A</strong> = MTBF/(MTBF+MTTR) —— 提高只有两条路：<strong>延长 MTTF 或 缩短 MTTR</strong>。<br><strong>停机换算</strong>（8760 h/年）：99% → <strong>87.6 h</strong> ｜ 99.9% → <strong>8.76 h</strong> ｜ 99.99% → <strong>52.6 min</strong> ｜ 99.999% → <strong>5.26 min</strong>。<br><strong>维护四类</strong>：<strong>改正性</strong>（修 bug）· <strong>适应性</strong>（适应环境）· <strong>完善性</strong>（增强，<strong>最大</strong>）· <strong>预防性</strong>（重构备将来，<strong>最小</strong>）。<br><strong>故障五活动</strong>：<strong>发现 → 定位 → 恢复 → 复盘 → 预防</strong>（<strong>恢复优先于定位</strong>）。</p></div>
 <div class="block warning"><div class="block-title">易错陷阱</div><p><strong>可用度公式别记成 MTTF/(MTTF+MTTR) 与 MTBF/(MTBF+MTTR) 二选一</strong> —— 两者<strong>等价</strong>（因为 MTBF = MTTF + MTTR），用哪个都行。<br><strong>完善性维护是占比最大的</strong>（约 50%），不是改正性——很多人直觉以为"维护就是修 bug"。<br><strong>故障处理原则：先恢复、后定位</strong>（先止损让用户能用，再查根因）。</p></div>

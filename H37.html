@@ -7,7 +7,7 @@
 <title>第 37 小时 · 移动应用系统分析与设计 · 架构演进与开发方式选型 · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
-<meta name="build-stamp" content="2026-10-05 15:47:03">
+<meta name="build-stamp" content="2026-10-07 08:06:18">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -2296,7 +2296,7 @@ ul.exam-questions>li::before{content:none !important}
 </div>
     
     <h1 id="第-37-小时-移动应用系统分析与设计-架构演进与开发方式选型">第 37 小时 · 移动应用系统分析与设计 · 架构演进与开发方式选型</h1>
-<div class="quote"><p>第 18 章移动应用是<strong>案例题的常客</strong>——"给场景选开发方式""指出设计问题"几乎年年出现。<br>本学时覆盖 <strong>18.1 平台与环境 + 18.3 MVC→MVP→MVVM 演进 + 18.4 五种开发方式选型<br>+ 18.5 无代码/低代码 + 移动端约束与测试</strong>。</p></div>
+<div class="quote"><p>第 18 章移动应用<strong>综合知识 8 套一次没考过（0 题）</strong>，但<strong>案例真题 11 套里有 7 套命中</strong>（2020—2026 连续 7 年）——"给场景选开发方式""指出设计问题"是它的固定考法。<br>📌 <strong>结论：这一章只按案例准备就够，不需要背综合知识点。</strong><br>本学时覆盖 <strong>18.1 平台与环境 + 18.3 MVC→MVP→MVVM 演进 + 18.4 五种开发方式选型<br>+ 18.5 无代码/低代码 + 移动端约束与测试</strong>。</p></div>
 <div class="block gold"><div class="block-title">考情定位</div><p>四块必拿：① <strong>MVC / MVP / MVVM 的递进关系</strong>（核心是"View 与 Model 耦合度递减"）；② <strong>五种开发方式选型</strong>（原生 / 跨平台 / 混合 / Web / 低代码，按"性能 vs 成本"权衡）；③ <strong>移动端四大约束</strong>（资源受限 · 移动性强 · 设备碎片化 · 交互受限）；④ <strong>移动端测试的特殊关注点</strong>（碎片化 · 弱网 · 耗电 · 权限合规）。</p></div>
 <div class="block mem"><div class="block-title">记忆口诀</div><p><strong>架构演进</strong>：<strong>MVC 直接连</strong>（View 可读 Model）｜<strong>MVP 中间站</strong>（Presenter 中转，解耦）｜<strong>MVVM 自动传</strong>（数据双向绑定）。<br><strong>五种开发方式</strong>：<strong>原生</strong>性能最好成本最高 ｜ <strong>跨平台</strong>性能接近原生成本低 ｜ <strong>混合</strong>开发快性能差 ｜ <strong>Web App</strong>零成本性能最差 ｜ <strong>低代码</strong>非专业自助、适合简单应用。<br><strong>移动端四约束</strong>：<strong>资源受限 · 移动性强 · 设备碎片化 · 交互受限</strong>。<br><strong>"被动视图"三收益</strong>：可测试 · 可复用 · 可跨平台。</p></div>
 <div class="block warning"><div class="block-title">易错陷阱</div><p><strong>MVVM 里 View 不直接访问 Model</strong>（由 ViewModel 持有并通过绑定同步）——这是与 MVC 最本质的区别。<br><strong>混合应用（Hybrid）不是"最佳平衡"</strong>——它开发快但<strong>性能差</strong>（WebView 瓶颈）；要"性能+成本"平衡应该选<strong>跨平台</strong>。<br><strong>低代码 ≠ 无代码</strong>——低代码留了"代码逃生舱"（可扩展），无代码完全没有。</p></div>

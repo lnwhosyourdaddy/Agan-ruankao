@@ -7,7 +7,7 @@
 <title>第 27 小时 · 软件架构设计（二）· 架构风格与 SOA · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
-<meta name="build-stamp" content="2026-10-05 15:47:03">
+<meta name="build-stamp" content="2026-10-07 08:06:18">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -2296,7 +2296,7 @@ ul.exam-questions>li::before{content:none !important}
 </div>
     
     <h1 id="第-27-小时-软件架构设计-二-架构风格与-SOA">第 27 小时 · 软件架构设计（二）· 架构风格与 SOA</h1>
-<div class="quote"><p>本学时覆盖 <strong>12.3 架构风格六大类 + SOA 关键技术与实现三方法</strong> —— 本章<strong>主体</strong>，也是<strong>风格辨识题</strong>的来源。<br>风格类题目几乎每年出现在案例里，题干给场景问"属于哪种风格"。</p></div>
+<div class="quote"><p>本学时覆盖 <strong>12.3 架构风格六大类 + SOA 关键技术与实现三方法</strong> —— 本章<strong>主体</strong>，也是<strong>风格辨识题</strong>的来源。<br>风格类题目在 11 套案例真题里考过 5 套（2018、2020、2022、2024、2025）——<strong>案例侧算高频</strong>，题干给场景问"属于哪种风格"，值得按「风格 → 适用场景 → 优缺点」成组记忆。</p></div>
 <div class="block gold"><div class="block-title">考情定位</div><p>六类风格必须能一句话说出代表：① <strong>数据流</strong>（批处理、管道-过滤器）② <strong>调用/返回</strong>（主程序、面向对象、层次型、C/S）③ <strong>以数据为中心</strong>（仓库、黑板）④ <strong>虚拟机</strong>（解释器、规则系统）⑤ <strong>独立构件</strong>（消息传递、管道）⑥ <strong>SOA/微服务</strong>。<br>SOA 三技术必背：<strong>UDDI 找人 · WSDL 说事 · SOAP 送信</strong>。</p></div>
 <div class="block mem"><div class="block-title">记忆口诀</div><p><strong>六大类</strong>：数据流 · 调用返回 · 数据中心 · 虚拟机 · 独立构件 · SOA。<br><strong>SOA 三技术</strong>：<strong>UDDI</strong>（注册中心，找人）· <strong>WSDL</strong>（描述接口，说事）· <strong>SOAP</strong>（消息格式，送信）。<br><strong>SOA 三实现</strong>：Web Service（标准方式）· 注册表（解耦）· <strong>ESB</strong>（企业服务总线，协议转换+路由+安全）。<br><strong>黑板风格</strong>：共享黑板 + 独立知识源，<strong>黑板不知道知识源存在</strong>（控制反转）。</p></div>
 <div class="block warning"><div class="block-title">易错陷阱</div><p><strong>「管道-过滤器」属数据流，不属独立构件</strong>——虽然都叫"管道"，但考点分类是<strong>数据流风格</strong>。<br><strong>「黑板」是以数据为中心，不是虚拟机</strong>。<br><strong>SOAP 不是 REST 的升级版</strong>——两者定位不同：SOAP 强契约企业级集成，REST 互联网开放接口。<br><strong>三层 C/S 相比二层的核心改进 = 客户端不再直接访问数据库</strong>。</p></div>

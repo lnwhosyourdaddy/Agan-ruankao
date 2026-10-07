@@ -7,7 +7,7 @@
 <title>第 2 小时 · 数学与工程基础（一）· 概率统计与图论应用 · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
-<meta name="build-stamp" content="2026-10-05 15:47:03">
+<meta name="build-stamp" content="2026-10-07 08:06:18">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -2296,7 +2296,7 @@ ul.exam-questions>li::before{content:none !important}
 </div>
     
     <h1 id="第-2-小时-数学与工程基础-一-概率统计与图论应用">第 2 小时 · 数学与工程基础（一）· 概率统计与图论应用</h1>
-<div class="quote"><p>第 2 章<strong>真题占比 4.5%</strong>（25/557）—— 题少但<strong>全是计算 / 判断</strong>，会就是会，性价比高。<br>本学时覆盖 <strong>2.1 概率统计 + 2.2 图论与网络计划</strong>，是本章的计算主战场。</p></div>
+<div class="quote"><p>第 2 章<strong>真题占比 1.8%</strong>（10/557）—— 题少但<strong>全是计算 / 判断</strong>，会就是会，性价比高。<br>本学时覆盖 <strong>2.1 概率统计 + 2.2 图论与网络计划</strong>，是本章的计算主战场。</p></div>
 <div class="block gold"><div class="block-title">考情定位</div><p>四块必拿：① <strong>常用分布的期望与方差</strong>（二项 np / 泊松 λ / 正态 μ,σ²）；② <strong>最小生成树</strong> Prim vs Kruskal（加点 vs 加边）；③ <strong>最短路径</strong> Dijkstra（单源）vs Floyd（多源）；④ <strong>关键路径 + PERT 三点估算</strong>（总时差 = LS − ES，期望工期 = (O+4M+P)/6）。</p></div>
 <div class="block mem"><div class="block-title">记忆口诀</div><p><strong>Prim vs Kruskal</strong>：Prim <strong>加点</strong>（稠密图），Kruskal <strong>加边</strong>（稀疏图）。<br><strong>最短路径</strong>：Dijkstra <strong>单源</strong>（一点到各点），Floyd <strong>多源</strong>（任意两点）。<br><strong>关键路径</strong>：<strong>最长</strong>的那条 = 总工期，其上活动<strong>总时差 = 0</strong>。<br><strong>PERT 三点估算</strong>：期望 = <strong>(O + 4M + P) / 6</strong>，标准差 = <strong>(P − O) / 6</strong>。<br><strong>分布的期望方差</strong>：二项 <strong>np / np(1−p)</strong>；泊松 <strong>λ / λ</strong>（期望=方差是特征）；正态 <strong>μ / σ²</strong>。</p></div>
 <div class="block warning"><div class="block-title">易错陷阱</div><p><strong>关键路径是"最长路径"不是"最短路径"</strong> —— 它决定总工期，最容易记反。<br><strong>PERT 给 M 的权重是 4，不是 1</strong> —— 别和三角分布 `(O+M+P)/3` 混淆。<br><strong>Dijkstra 要求边权非负</strong>；有负权边要用 Bellman-Ford/SPFA，任意两点最短用 Floyd。</p></div>

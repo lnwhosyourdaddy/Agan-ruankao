@@ -7,7 +7,7 @@
 <title>第 20 小时 · 信息安全（二）· 网络安全与可靠性 · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
-<meta name="build-stamp" content="2026-10-05 15:47:03">
+<meta name="build-stamp" content="2026-10-07 08:06:18">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -2298,7 +2298,7 @@ ul.exam-questions>li::before{content:none !important}
     <h1 id="第-20-小时-信息安全-二-网络安全与可靠性">第 20 小时 · 信息安全（二）· 网络安全与可靠性</h1>
 <div class="quote"><p>本学时覆盖 <strong>9.3 网络安全 → 9.9 软件容错</strong>：防火墙、VPN、安全协议、访问控制、容灾、安全管理、可靠性、冗余与容错。</p></div>
 <div class="block mem"><div class="block-title">记忆口诀</div><p><strong>安全协议分层</strong>：网络层 IPSec｜传输与应用之间 SSL/TLS｜应用层 SET · HTTPS · PGP · S/MIME · Kerberos。<br><strong>可靠性</strong>：串联相乘（越串越差），并联 1−∏(1−Ri)（越并越好）。</p></div>
-<div class="block warning"><div class="block-title">易错陷阱</div><p>BLP 保<strong>机密性</strong>（不上读、不下写）；Biba 保<strong>完整性</strong>（不下读、不上写）。两者方向<strong>相反</strong>，每年都考。</p></div>
+<div class="block warning"><div class="block-title">易错陷阱</div><p>BLP 保<strong>机密性</strong>（不上读、不下写）；Biba 保<strong>完整性</strong>（不下读、不上写）。两者方向<strong>相反</strong>（口诀：<strong>BLP 向上不读、Biba 向下不写</strong>）。⚠️ 实测 8 套综合真题只考过 1 年（2023），<strong>不是年年题</strong>——理解方向即可，不要当高频考点死磕。</p></div>
 <h2 id="s9-3-网络安全技术">9.3 网络安全技术</h2>
 <h3 id="s9-3-1-防火墙-定义与功能">9.3.1 防火墙 · 定义与功能</h3>
 <p><strong>防火墙</strong>是一种<strong>隔离控制技术</strong>，在不同网域之间设置屏障，阻止对信息资源的<strong>非法访问</strong>，也可以阻止重要信息从内部网络中<strong>非法输出</strong>。</p>

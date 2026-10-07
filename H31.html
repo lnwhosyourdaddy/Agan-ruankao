@@ -7,7 +7,7 @@
 <title>第 31 小时 · 软件实现与测试（一）· 测试原则与黑盒白盒方法 · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
-<meta name="build-stamp" content="2026-10-05 15:47:03">
+<meta name="build-stamp" content="2026-10-07 08:06:18">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -2296,7 +2296,7 @@ ul.exam-questions>li::before{content:none !important}
 </div>
     
     <h1 id="第-31-小时-软件实现与测试-一-测试原则与黑盒白盒方法">第 31 小时 · 软件实现与测试（一）· 测试原则与黑盒白盒方法</h1>
-<div class="quote"><p>第 14 章<strong>真题占比 2.9%</strong>（16/557）。本学时覆盖 <strong>14.1 软件实现 + 14.2 测试概述与八原则<br>+ 14.3 测试分类（黑盒 vs 白盒 / 逻辑覆盖六级）</strong>。<br><strong>测试八原则</strong>是必考辨识，<strong>白盒逻辑覆盖六级</strong>是本章最经典的排序题。</p></div>
+<div class="quote"><p>第 14 章<strong>真题占比 2.3%</strong>（13/557）。本学时覆盖 <strong>14.1 软件实现 + 14.2 测试概述与八原则<br>+ 14.3 测试分类（黑盒 vs 白盒 / 逻辑覆盖六级）</strong>。<br><strong>测试八原则</strong>是必考辨识，<strong>白盒逻辑覆盖六级</strong>是本章最经典的排序题。</p></div>
 <div class="block gold"><div class="block-title">考情定位</div><p>四块必拿：① <strong>测试八原则</strong>（尤其 <strong>① 只能证明有错</strong>、<strong>④ 缺陷集群性 80/20</strong>、<strong>⑤ 杀虫剂悖论要更新用例</strong>）；② <strong>白盒覆盖六级排序</strong>（语句 → 判定 → 条件 → 判定/条件 → 条件组合 → 路径）；③ <strong>黑盒 vs 白盒</strong>（黑盒按需求规格不看结构，白盒按内部逻辑）；④ <strong>黑盒五大方法</strong>（等价类 · <strong>边界值</strong> · 因果图/判定表 · 正交 · 场景法）。</p></div>
 <div class="block mem"><div class="block-title">记忆口诀</div><p><strong>八原则</strong>：<strong>只能证明有错</strong> ｜ <strong>穷尽不可能</strong> ｜ <strong>尽早介入</strong> ｜ <strong>缺陷集群（80/20）</strong> ｜ <strong>杀虫剂悖论（要更新用例）</strong> ｜ <strong>依赖测试背景</strong> ｜ <strong>无缺陷谬论</strong> ｜ <strong>上下文相关</strong>。<br><strong>覆盖六级（弱→强）</strong>：<strong>语句 → 判定 → 条件 → 判定/条件 → 条件组合 → 路径</strong>。<br><strong>黑盒五法</strong>：<strong>等价类 · 边界值 · 因果图/判定表 · 正交试验 · 场景法</strong>。<br><strong>静态 vs 动态</strong>：静态<strong>不跑程序</strong>（评审/扫描），动态<strong>跑程序比输出</strong>。</p></div>
 <div class="block warning"><div class="block-title">易错陷阱</div><p><strong>路径覆盖最强但实践中常不可达</strong>（循环导致路径爆炸），常用<strong>条件组合覆盖</strong>折中。<br><strong>杀虫剂悖论的对策是"更新用例"</strong>，不是"增加执行频率"。<br><strong>边界值要测"等于 / 刚刚大于 / 刚刚小于"三类</strong>，只测边界值本身是不够的。</p></div>
@@ -2381,7 +2381,7 @@ ul.exam-questions>li::before{content:none !important}
 <p><strong>四原则</strong>：所有独立路径至少测一次 · 逻辑值真伪都测 · 检查内部数据结构有效性 · 循环在<strong>上下边界</strong>运行</p>
 <p>💡 灰盒 = 两者之间：<strong>多用于集成测试阶段</strong>——关注输入输出正确性，也通过<strong>标志/事件/现象</strong>关注内部运行状态。</p>
 <h3 id="白盒逻辑覆盖六级-由弱到强">白盒逻辑覆盖六级（由弱到强）⭐⭐⭐</h3>
-<p>📶发现错误能力递增 · 年年考排序</p>
+<p>📶发现错误能力递增 · 4/4 年考过排序</p>
 <p>① 语句覆盖（最弱）</p>
 <p><strong>每条语句至少执行一次</strong></p>
 <p>② 判定覆盖（分支）</p>

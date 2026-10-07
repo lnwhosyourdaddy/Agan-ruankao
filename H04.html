@@ -7,7 +7,7 @@
 <title>第 4 小时 · 计算机系统（一）· 硬件与体系结构 · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
-<meta name="build-stamp" content="2026-10-05 15:47:03">
+<meta name="build-stamp" content="2026-10-07 08:06:18">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -2296,10 +2296,10 @@ ul.exam-questions>li::before{content:none !important}
 </div>
     
     <h1 id="第-4-小时-计算机系统-一-硬件与体系结构">第 4 小时 · 计算机系统（一）· 硬件与体系结构</h1>
-<div class="quote"><p>第 3 章<strong>真题占比 13.1%</strong>（73/557）—— <strong>全教材第二大章</strong>，仅次于第 7 章软件工程（19.6%）。<br>本学时覆盖 <strong>3.1 三级层次 + 3.2 存储器系统 + 3.3 I/O 与总线 + 3.4 指令系统 + 3.5 多处理机</strong>。<br>硬件与体系结构部分是<strong>计算题集中营</strong>（Cache 平均访问时间、RAID 容量、流水线效率）。</p></div>
+<div class="quote"><p>第 3 章<strong>真题占比 15.3%</strong>（85/557）—— <strong>全教材第二大章，与第 7 章软件工程（15.4%）只差 1 题</strong>，两章几乎并列第一，复习时不能只押一章。<br>本学时覆盖 <strong>3.1 三级层次 + 3.2 存储器系统 + 3.3 I/O 与总线 + 3.4 指令系统 + 3.5 多处理机</strong>。<br>硬件与体系结构部分是<strong>计算题集中营</strong>（Cache 平均访问时间、RAID 容量、流水线效率）。</p></div>
 <div class="block gold"><div class="block-title">考情定位</div><p>四块必拿：① <strong>冯·诺依曼五部件</strong>（运算器+控制器=CPU）；② <strong>存储器层次</strong>（速度/容量/价格三反）；③ <strong>Cache 平均访问时间计算</strong>（加权平均是必考公式）；④ <strong>CISC vs RISC 五维度对比</strong> + <strong>多处理机紧/松耦合</strong>。</p></div>
 <div class="block mem"><div class="block-title">记忆口诀</div><p><strong>存储器层次三反</strong>：越靠上越<strong>快、小、贵</strong>；越靠下越<strong>慢、大、便宜</strong>。<br><strong>Cache 平均访问</strong>：`h·t_c + (1−h)·t`，命中率高才能体现 Cache 价值。<br><strong>CISC / RISC 一句话</strong>：CISC 指令多而杂（微程序、长度可变），RISC 指令少而精（<strong>只有 load/store 访存</strong>、长度固定、好流水线）。<br><strong>多处理机</strong>：紧耦合共享主存（SMP）、松耦合分布式主存（MPP）。</p></div>
-<div class="block warning"><div class="block-title">易错陷阱</div><p><strong>「阻塞态不能直接回到运行态」</strong>——必须先回就绪态排队，这是操作系统最高频的易错点。<br><strong>多处理机两维度别混</strong>：按存储方式分紧/松耦合；按共享方式分 SMP/MPP/S2MP。问"主存是否共享"就是在问紧/松耦合。<br><strong>RAID 各级别</strong>（0/1/5/6/10）必背，容量与可靠性计算题年年出现。</p></div>
+<div class="block warning"><div class="block-title">易错陷阱</div><p><strong>「阻塞态不能直接回到运行态」</strong>——必须先回就绪态排队，这是操作系统最高频的易错点。<br><strong>多处理机两维度别混</strong>：按存储方式分紧/松耦合；按共享方式分 SMP/MPP/S2MP。问"主存是否共享"就是在问紧/松耦合。<br><strong>RAID 各级别</strong>（0/1/5/6/10）必背，容量与可靠性计算题在 8 套综合真题里考过 2 年（2020、2024），出现频率不高，但一旦出现就是纯计算，必须一次算对。</p></div>
 <h2 id="第-3-章上集知识骨架">第 3 章上集知识骨架</h2>
 <div class="fig fig-mermaid"><div class="mermaid-src" data-src="mindmap
  root((03上 硬件与体系结构))
@@ -2589,7 +2589,7 @@ ul.exam-questions>li::before{content:none !important}
 <p>🕸️互连网络与互连函数</p>
 <p>互连网络：连接系统中各<strong>处理部件、存储模块、外设</strong>，在系统软件控制下使各功能部件相互通信的<strong>硬件网络结构</strong>。已成为<strong>并行处理系统的核心组成部分</strong>，对性能/价格比有<strong>决定性影响</strong>。</p>
 <p><strong>六种基本互连函数</strong>：</p>
-<p><strong>恒等置换</strong>（同号一一对应）· <strong>交换置换</strong>（第 0 位取反）· <strong>方体置换</strong>（第 k 位取反）· <strong>均匀洗牌 Shuffle</strong>（地址<strong>循环左移一位</strong>）· <strong>蝶式置换</strong>（最高位与最低位互换）· <strong>位序颠倒</strong>（位序整个颠倒）</p>
+<p><strong>恒等置换</strong>（同号一一对应）· <strong>交换置换</strong>（第 2 位取反）· <strong>方体置换</strong>（第 k 位取反）· <strong>均匀洗牌 Shuffle</strong>（地址<strong>循环左移一位</strong>）· <strong>蝶式置换</strong>（最高位与最低位互换）· <strong>位序颠倒</strong>（位序整个颠倒）</p>
 <p><strong>教材例题</strong>：16 个处理机（4 位编码）。</p>
 <ul><li>用 <strong>Cube₃ 方体置换</strong>（k＝3）：11 号（1011）→ 连接 <strong>3 号</strong>（0011）</li><li>用 <strong>Shuffle 洗牌</strong>：1011 循环左移一位 → 0111，即连接 <strong>7 号</strong></li></ul>
 <p>💡 <strong>性能度量五要素</strong>：<strong>连接度、延时性、带宽、可靠性、成本</strong>。</p>

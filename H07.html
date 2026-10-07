@@ -7,7 +7,7 @@
 <title>第 7 小时 · 计算机网络（二）· TCP/IP 与网络工程 · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
-<meta name="build-stamp" content="2026-10-05 15:47:03">
+<meta name="build-stamp" content="2026-10-07 08:06:18">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -2297,7 +2297,7 @@ ul.exam-questions>li::before{content:none !important}
     
     <h1 id="第-7-小时-计算机网络-二-TCP-IP-与网络工程">第 7 小时 · 计算机网络（二）· TCP/IP 与网络工程</h1>
 <div class="quote"><p>本学时覆盖 <strong>4.2.2 TCP/IP 与端口 → 4.2.3 IP 地址与子网划分 → 4.3 局域网以太网 → 4.4 网络工程</strong>。<br>网络章的分值有很大一部分落在这一学时。</p></div>
-<div class="block gold"><div class="block-title">考情定位</div><p><strong>子网划分是每年必考的计算题</strong>。三步走：① 掩码定主机位 n = 32 − 前缀长度；② 可用主机数 = 2ⁿ − 2；③ 子网数 = 2^借位数。CIDR 汇聚则反过来：把连续网段合并且前缀长度减去 log₂(网段数)。</p></div>
+<div class="block gold"><div class="block-title">考情定位</div><p><strong>子网划分是网络章最典型的计算题</strong>（8 套综合真题考过 2 年：2021、2022；11 套案例真题未考）——<strong>频率不高，但一旦出现就是纯计算，必须一次算对</strong>。三步走：① 掩码定主机位 n = 32 − 前缀长度；② 可用主机数 = 2ⁿ − 2；③ 子网数 = 2^借位数。CIDR 汇聚则反过来：把连续网段合并且前缀长度减去 log₂(网段数)。</p></div>
 <div class="block mem"><div class="block-title">记忆口诀</div><p>端口速记：<strong>21 FTP · 22 SSH · 23 Telnet · 25 SMTP · 53 DNS · 80 HTTP · 443 HTTPS</strong>。<br>设备归属：<strong>中继器/集线器 = 物理｜网桥/交换机 = 链路｜路由器 = 网络｜网关 = 传输层及以上</strong>。</p></div>
 <div class="block warning"><div class="block-title">易错陷阱</div><p><strong>可用主机数要减 2</strong>（网络地址 + 广播地址），只有点对点链路(/31、/32)才不减。<strong>有线用 CSMA/CD，无线用 CSMA/CA</strong>——选择题常把 CD 与 CA 对调。</p></div>
 <h2 id="s4-2-体系结构与协议-续">4.2 体系结构与协议（续）</h2>

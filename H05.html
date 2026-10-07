@@ -7,7 +7,7 @@
 <title>第 5 小时 · 计算机系统（二）· 操作系统 · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
-<meta name="build-stamp" content="2026-10-05 15:47:03">
+<meta name="build-stamp" content="2026-10-07 08:06:18">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -2296,7 +2296,7 @@ ul.exam-questions>li::before{content:none !important}
 </div>
     
     <h1 id="第-5-小时-计算机系统-二-操作系统">第 5 小时 · 计算机系统（二）· 操作系统</h1>
-<div class="quote"><p>本学时覆盖 <strong>3.6 操作系统</strong> —— 概述、进程与线程、死锁、存储管理、设备管理、文件管理、国产操作系统（信创）。<br>操作系统是<strong>案例题的绝对富矿</strong>：PV 操作、页面置换、磁盘调度、磁盘调度计算题几乎年年出现。</p></div>
+<div class="quote"><p>本学时覆盖 <strong>3.6 操作系统</strong> —— 概述、进程与线程、死锁、存储管理、设备管理、文件管理、国产操作系统（信创）。<br>操作系统是<strong>案例题的绝对富矿</strong>：PV 操作、页面置换、磁盘调度在 8 套综合真题里<strong>考过 6 年（2020—2025）</strong>，是本章最稳的得分点；磁盘调度计算题同样只在这 6 年里出现。</p></div>
 <div class="block gold"><div class="block-title">考情定位</div><p>五块必拿：① <strong>进程三态/五态转换</strong>（阻塞不能直接回运行）；② <strong>信号量 PV 操作</strong>（P 申请阻塞、V 释放唤醒）；③ <strong>死锁四条件 + 四种处理策略</strong>；④ <strong>页面置换算法 FIFO/LRU/OPT + 抖动</strong>；⑤ <strong>磁盘调度算法计算</strong>（FCFS/SSTF/SCAN）。</p></div>
 <div class="block mem"><div class="block-title">记忆口诀</div><p><strong>PV 操作</strong>：P 申请（S>0 则 S−1 继续；S=0 阻塞），V 释放（S+1 并唤醒一个）。<br><strong>死锁四条件</strong>：互斥 · 占有并等待 · 不可剥夺 · 循环等待——<strong>破坏任一即可预防</strong>。<br><strong>四种处理</strong>：预防（破坏必要条件）· 避免（安全序列/银行家）· 检测（资源分配图化简）· 解除（撤销进程/剥夺资源）。<br><strong>磁盘调度</strong>：SSTF 平均寻道最短（饿死在调），SCAN 电梯（继续服务同向请求）。</p></div>
 <div class="block warning"><div class="block-title">易错陷阱</div><p><strong>「阻塞 → 就绪」只能由外部事件驱动</strong>（I/O 完成、锁释放），不是被调度；被调度是「就绪 → 运行」。<br><strong>页面置换与抖动</strong>：缺页率高不一定是算法差，可能是<strong>分配块数太少</strong>导致抖动。<br><strong>SPOOLing 的本质是"用磁盘当缓冲区，把独占设备改成共享虚拟设备"</strong>，别答成"提高磁盘速度"。</p></div>

@@ -7,7 +7,7 @@
 <title>第 11 小时 · 数据库系统（三）· 设计、仓库与 NoSQL · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
-<meta name="build-stamp" content="2026-10-05 15:47:03">
+<meta name="build-stamp" content="2026-10-07 08:06:18">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -2299,7 +2299,7 @@ ul.exam-questions>li::before{content:none !important}
 <div class="quote"><p>本学时覆盖 <strong>5.4 数据库设计五阶段 + E-R 转换 + 5.5 分布式数据库 + 5.6 数据仓库与 OLAP + 5.7 数据挖掘 + 5.8 NoSQL</strong>。<br>后半段（仓库/挖掘/NoSQL）<strong>真题占比低但概念辨析必考</strong>，CAP 与 NoSQL 四种展开是论文素材。</p></div>
 <div class="block gold"><div class="block-title">考情定位</div><p>四块必拿：① <strong>数据库设计五阶段</strong>（需求→概念→逻辑→物理→实施）；② <strong>E-R 三联系 + 向关系模式转换</strong>（<strong>m:n 必须单独建表，组合主键</strong>）；③ <strong>OLTP vs OLAP</strong>（行存/列存、短事务/长查询）；④ <strong>CAP 三个字母 + CAP 最多取二 + BASE 是对 C 的弱化</strong>。</p></div>
 <div class="block mem"><div class="block-title">记忆口诀</div><p><strong>五阶段</strong>：需求 → <strong>概念（E-R）</strong> → 逻辑（关系+范式）→ 物理（索引存储）→ 实施维护。<br><strong>E-R 转换</strong>：1:1 任一方外键 ｜ 1:n <strong>"一"的主键做"多"的外键</strong> ｜ <strong>m:n 单独建表 + 组合主键</strong>。<br><strong>CAP</strong>：一致性 C ｜ 可用性 A ｜ 分区容错 P。分布式<strong>必保 P</strong> → 实际只剩 <strong>CP</strong>（ZooKeeper/etcd）或 <strong>AP</strong>（Cassandra）。<br><strong>BASE</strong> = 基本可用 + 软状态 + <strong>最终一致</strong> → <strong>ACID 保强一致，BASE 保最终一致</strong>。</p></div>
-<div class="block warning"><div class="block-title">易错陷阱</div><p><strong>"4NF ⊃ BCNF" 的方向别反</strong>：4NF 确实比 BCNF 更严（要处理多值依赖），所以 4NF 的表<strong>一定</strong>也是 BCNF、3NF；但反过来不成立。<br><strong>OLAP 用列存、OLTP 用行存</strong>——这题几乎每年出现，别只答"面向分析/面向事务"就收尾。<br><strong>NoSQL 四种展开</strong>：键值数据库、文档数据库、列族数据库、图数据库，各自典型产品要能举例。</p></div>
+<div class="block warning"><div class="block-title">易错陷阱</div><p><strong>"4NF ⊃ BCNF" 的方向别反</strong>：4NF 确实比 BCNF 更严（要处理多值依赖），所以 4NF 的表<strong>一定</strong>也是 BCNF、3NF；但反过来不成立。<br><strong>OLAP 用列存、OLTP 用行存</strong>——⚠️ 实测 8 套综合真题与 11 套案例真题<strong>都没考过</strong>；它是<strong>论文与面试的高频表述</strong>，不是刷题点。别只答"面向分析/面向事务"就收尾。<br><strong>NoSQL 四种展开</strong>：键值数据库、文档数据库、列族数据库、图数据库，各自典型产品要能举例。</p></div>
 <h2 id="第-5-章知识骨架">第 5 章知识骨架</h2>
 <div class="fig fig-mermaid"><div class="mermaid-src" data-src="mindmap
  root((05 数据库系统))
@@ -2669,7 +2669,7 @@ ul.exam-questions>li::before{content:none !important}
 <p>自己造三个关系模式：一个只到 1NF（含部分依赖）、一个只到 2NF（含传递依赖）、一个到 3NF 卡在 BCNF（决定因素不含候选键）。</p>
 <p>对每一个：<strong>① 用图示法求候选键 → ② 标出所有函数依赖 → ③ 逐级判断到哪一级 → ④ 写出分解方案并验证无损联接</strong>。</p>
 <p><strong>任务二 · 默写三张"解决什么"的表</strong></p>
-<ul><li><strong>三级封锁协议</strong>：一级/二级/三级各解决什么，差别在哪</li><li><strong>三种故障恢复</strong>：事务/系统/介质分别用什么手段</li><li><strong>ER 转关系五规则</strong>：1:1 / 1:n / m:n / 多元联系分别怎么转</li></ul>
+<ul><li><strong>三级封锁协议</strong>：一级/二级/三级各解决什么，差别在哪</li><li><strong>三种故障恢复</strong>：事务/系统/介质分别用什么手段</li><li><strong>ER 转关系五规则</strong>：1:52/557:n / m:n / 多元联系分别怎么转</li></ul>
 <p>三张表默写完，本章的概念题基本不会丢分。</p>
 <p><strong>任务三 · 把"阿甘科技"的真实库写进论文素材</strong></p>
 <p>围绕 <strong>200+ 张表、日 300 万会话</strong>的呼叫中心系统，写 200 字：<strong>为什么选关系库而不是 NoSQL</strong>（事务一致性 + 复杂关联查询）、<strong>哪些表做了反规范化</strong>（高频查询的统计字段）、<strong>读写分离与分片</strong>是怎么做的。</p>

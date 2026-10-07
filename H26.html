@@ -7,7 +7,7 @@
 <title>第 26 小时 · 软件架构设计（一）· 架构定义与 4+1 视图 · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
-<meta name="build-stamp" content="2026-10-05 15:47:03">
+<meta name="build-stamp" content="2026-10-07 08:06:18">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -2296,7 +2296,7 @@ ul.exam-questions>li::before{content:none !important}
 </div>
     
     <h1 id="第-26-小时-软件架构设计-一-架构定义与-4-1-视图">第 26 小时 · 软件架构设计（一）· 架构定义与 4+1 视图</h1>
-<div class="quote"><p>第 12 章<strong>真题占比 5.0%</strong>（28/557，第 7 位）—— 但它的特殊性是 <strong>论文 12 次 · 案例 18%</strong>，<br><strong>是"论文与案例双高频"章</strong>。权重不靠刷题，靠<strong>在论文里写得出架构决策的理由</strong>。<br>本学时覆盖 <strong>12.1 架构定义 + 12.2 五种模型 + "4+1" 视图（Kruchten）</strong>。</p></div>
+<div class="quote"><p>第 12 章<strong>真题占比 3.2%</strong>（18/557，第 10 位）—— 但它的特殊性是 <strong>论文 12 次 · 案例 18%</strong>，<br><strong>是"论文与案例双高频"章</strong>。权重不靠刷题，靠<strong>在论文里写得出架构决策的理由</strong>。<br>本学时覆盖 <strong>12.1 架构定义 + 12.2 五种模型 + "4+1" 视图（Kruchten）</strong>。</p></div>
 <div class="block gold"><div class="block-title">考情定位</div><p>三块必拿：① <strong>"4+1" 视图的四个视图 + 场景视图</strong>（场景视图最重要，它串起并验证其他四个）；② <strong>静态结构 vs 动态结构的分组</strong>（逻辑+开发=静态，进程+物理=动态）；③ <strong>1471 → 42010 的承继关系</strong>。</p></div>
 <div class="block mem"><div class="block-title">记忆口诀</div><p><strong>"4+1" 视图</strong>：逻辑（类图）· 进程（线程）· 开发（模块）· 物理（部署）＋ <strong>场景（用例）</strong>。<br><strong>分组</strong>：逻辑+开发 = <strong>静态结构</strong>；进程+物理 = <strong>动态结构</strong>。<br><strong>标准</strong>：1471（1995）→ 被 <strong>ISO/IEC/IEEE 42010</strong> 取代（2007）。</p></div>
 <div class="block warning"><div class="block-title">易错陷阱</div><p><strong>"4+1" 的"+1"不是第五个视图</strong>，它是<strong>场景视图</strong>——不描述系统结构，只描述典型场景，作用是<strong>串起并验证其他四视图</strong>。<br><strong>静态/动态分组的顺序别记反</strong>：是"<strong>逻辑 + 开发 = 静态</strong>"，不是"逻辑 + 进程"。<br><strong>架构 ≠ 详细设计</strong>：架构是系统级宏观结构与关键决策，构件内部算法是详细设计。</p></div>

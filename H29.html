@@ -7,7 +7,7 @@
 <title>第 29 小时 · 系统设计（一）· 结构化设计与面向对象设计 · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
-<meta name="build-stamp" content="2026-10-05 15:47:03">
+<meta name="build-stamp" content="2026-10-07 08:06:18">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -2296,7 +2296,7 @@ ul.exam-questions>li::before{content:none !important}
 </div>
     
     <h1 id="第-29-小时-系统设计-一-结构化设计与面向对象设计">第 29 小时 · 系统设计（一）· 结构化设计与面向对象设计</h1>
-<div class="quote"><p>第 13 章<strong>真题占比 3.8%</strong>（21/557）。本学时覆盖 <strong>13.1 概述 + 13.2 流程设计<br>+ 13.3 结构化设计 SD + 13.4 面向对象设计</strong>。<br><strong>耦合七级 / 内聚七级的排序</strong>是本章乃至全书最经典的排序题，务必一字不差背下来。</p></div>
+<div class="quote"><p>第 13 章<strong>真题占比 2.9%</strong>（16/557）。本学时覆盖 <strong>13.1 概述 + 13.2 流程设计<br>+ 13.3 结构化设计 SD + 13.4 面向对象设计</strong>。<br><strong>耦合七级 / 内聚七级的排序</strong>是本章乃至全书最经典的排序题，务必一字不差背下来。</p></div>
 <div class="block gold"><div class="block-title">考情定位</div><p>四块必拿：① <strong>耦合七级排序</strong>（非直接 → 数据 → 标记 → 控制 → 外部 → 公共 → 内容，<strong>越低越好</strong>）；② <strong>内聚七级排序</strong>（功能 → 顺序 → 通信 → 过程 → 时间 → 逻辑 → 偶然，<strong>越高越好</strong>）；③ <strong>高内聚低耦合</strong>总原则（方向相反，别记成"都高"）；④ <strong>SOLID 五大原则</strong>（尤其<strong>开闭</strong>与<strong>依赖倒置</strong>）。</p></div>
 <div class="block mem"><div class="block-title">记忆口诀</div><p><strong>耦合七级（低→高 = 好→坏）</strong>：<strong>非直接 · 数据 · 标记 · 控制 · 外部 · 公共 · 内容</strong>。<br><strong>内聚七级（高→低 = 好→坏）</strong>：<strong>功能 · 顺序 · 通信 · 过程 · 时间 · 逻辑 · 偶然</strong>。<br><strong>总原则</strong>：<strong>内聚要高，耦合要低</strong>（方向相反！）。<br><strong>SOLID</strong>：<strong>S</strong> 单一职责 ｜ <strong>O</strong> 开闭（扩展开放、修改关闭）｜ <strong>L</strong> 里氏替换 ｜ <strong>I</strong> 接口隔离 ｜ <strong>D</strong> 依赖倒置（<strong>都依赖抽象</strong>）。</p></div>
 <div class="block warning"><div class="block-title">易错陷阱</div><p><strong>顺序内聚 vs 过程内聚</strong>：顺序<strong>有数据流</strong>（前一输出=后一输入），过程<strong>只有执行次序</strong>。<br><strong>内容耦合是最坏的耦合</strong>（直接访问对方内部），<strong>功能内聚是最好的内聚</strong>。<br><strong>依赖倒置</strong> = <strong>高层不依赖低层，二者都依赖抽象</strong>——不是"高层依赖低层"（那是传统分层）。</p></div>

@@ -7,7 +7,7 @@
 <title>第 38 小时 · 大数据处理系统分析与设计 · Lambda/Kappa 架构 · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
-<meta name="build-stamp" content="2026-10-05 15:47:03">
+<meta name="build-stamp" content="2026-10-07 08:06:18">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -2296,7 +2296,7 @@ ul.exam-questions>li::before{content:none !important}
 </div>
     
     <h1 id="第-38-小时-大数据处理系统分析与设计-Lambda-Kappa-架构">第 38 小时 · 大数据处理系统分析与设计 · Lambda/Kappa 架构</h1>
-<div class="quote"><p>第 19 章大数据是<strong>案例核心章</strong>——<strong>Lambda / Kappa 架构的辨析几乎年年出现</strong>，<br>技术组件全家桶也是综合知识的"辨识题"来源。<br>本学时覆盖 <strong>19.1 大数据 5V + 19.2 Lambda/Kappa/IOTA 架构与技术组件 + 19.3 数仓分层与 ETL + 19.4 大数据测试</strong>。</p></div>
+<div class="quote"><p>第 19 章大数据<strong>真题占比 1.6%</strong>（9/557，4/8 年，全教材第 15 位），<strong>Lambda / Kappa 辨析在 11 套案例真题里只出现过 1 次（2023）</strong> ——<br>它是<strong>「概念要会辨析、刷题优先级靠后」</strong>的章，别把时间都压在刷 Lambda/Kappa 上。<br>技术组件全家桶也是综合知识的"辨识题"来源。<br>本学时覆盖 <strong>19.1 大数据 5V + 19.2 Lambda/Kappa/IOTA 架构与技术组件 + 19.3 数仓分层与 ETL + 19.4 大数据测试</strong>。</p></div>
 <div class="block gold"><div class="block-title">考情定位</div><p>四块必拿：① <strong>5V</strong>（Volume 体量 · Velocity 速度 · Variety 多样 · Veracity 真实性 · <strong>Value 价值密度低</strong>）；② <strong>Lambda 架构</strong>（<strong>批处理层 + 速度层</strong>双层并存，准确性 + 实时性折中）；③ <strong>Kappa vs Lambda</strong>（<strong>Kappa 取消批处理层，只留一条流</strong>）；④ <strong>数仓四层</strong>（<strong>ODS 贴源 → DWD 明细 → DWS 汇总 → ADS 应用</strong>）与 <strong>Hadoop 三大核心</strong>（<strong>HDFS 存储 / YARN 资源 / MapReduce 计算</strong>）。</p></div>
 <div class="block mem"><div class="block-title">记忆口诀</div><p><strong>5V</strong>：<strong>体量 · 速度 · 多样 · 真实 · 价值密度低</strong>。<br><strong>Lambda</strong>：<strong>批处理层（准确、慢）+ 速度层（实时、可能不准）→ 服务层合并</strong>。<br><strong>Kappa</strong>：<strong>一条流打通</strong>（取消批处理层，避免维护两套代码）。<br><strong>数仓四层</strong>：<strong>ODS 贴源 · DWD 明细 · DWS 汇总 · ADS 应用</strong>。<br><strong>Hadoop 三核心</strong>：<strong>HDFS 管存储 · YARN 管资源 · MapReduce 管计算</strong>。<br><strong>大数据测试特点</strong>：<strong>数据质量优先 + 批流一致性 + 节点故障 + 数据倾斜</strong>。</p></div>
 <div class="block warning"><div class="block-title">易错陷阱</div><p><strong>MapReduce 是"计算"框架不是存储</strong> —— 三大核心别配错：<strong>HDFS 存 / YARN 调度资源 / MR 算</strong>。<br><strong>Lambda 不是"两层各自独立返回"</strong> —— 它是<strong>服务层把两层结果合并</strong>后返回。<br><strong>Kappa 的前提是"历史数据可重放"</strong> —— 靠消息中间件保留全量日志，否则无法回溯重算。<br><strong>大数据测试不是"不测功能"</strong> —— 功能测试仍要做，只是更侧重<strong>数据质量与集群容错场景</strong>。</p></div>

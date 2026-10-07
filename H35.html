@@ -7,7 +7,7 @@
 <title>第 35 小时 · Web 应用系统分析与设计 · 架构、缓存与测试 · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
-<meta name="build-stamp" content="2026-10-05 15:47:03">
+<meta name="build-stamp" content="2026-10-07 08:06:18">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -2296,7 +2296,7 @@ ul.exam-questions>li::before{content:none !important}
 </div>
     
     <h1 id="第-35-小时-Web-应用系统分析与设计-架构-缓存与测试">第 35 小时 · Web 应用系统分析与设计 · 架构、缓存与测试</h1>
-<div class="quote"><p>第 16 章进入<strong>第三篇「案例实践」</strong>。Web 应用是<strong>案例题出现频率最高的场景</strong>，<br>其中 <strong>高并发与缓存</strong>（缓存穿透 / 击穿 / 雪崩）几乎每年案例必考，也是论文的优质项目背景。<br>本学时覆盖 <strong>Web 特点与架构原则 + MVC/MVP + HTTP 与会话 + 高并发缓存 + Web 测试</strong>。</p></div>
+<div class="quote"><p>第 16 章进入<strong>第三篇「案例实践」</strong>。<strong>真题占比 0.4%</strong>（2/557，只考过 1 年，全教材第 20 位）—— 综合知识几乎不出题，但 Web 应用是<strong>案例题出现频率最高的场景</strong>，<br>其中 <strong>高并发与缓存</strong>（缓存穿透 / 击穿 / 雪崩）在 11 套案例真题里考过 3 套（2023、2025、2026）——频率不算高，但<strong>一旦出现就是拉分题</strong>，必须按「现象 → 成因 → 对策」三段写清；它也是论文的优质项目背景。<br>本学时覆盖 <strong>Web 特点与架构原则 + MVC/MVP + HTTP 与会话 + 高并发缓存 + Web 测试</strong>。</p></div>
 <div class="block gold"><div class="block-title">考情定位</div><p>四块必拿：① <strong>缓存三兄弟</strong>（穿透=查不存在 / 击穿=热点过期 / 雪崩=集体过期）及各自对策；② <strong>缓解数据库压力的分层手段</strong>（CDN → 网关 → Redis → 本地缓存 → 读写分离）；③ <strong>Cookie vs Session vs JWT</strong>（<strong>Session 在服务端，Cookie 在客户端</strong>）；④ <strong>MVC vs MVP</strong>（MVP 中 View 与 Model 彻底解耦）。</p></div>
 <div class="block mem"><div class="block-title">记忆口诀</div><p><strong>缓存三兄弟</strong>：<strong>穿透</strong>查不存在（<strong>布隆过滤器 + 缓存空值</strong>）｜<strong>击穿</strong>热点过期（<strong>互斥锁 + 永不过期</strong>）｜<strong>雪崩</strong>集体过期（<strong>随机 TTL + 多级缓存</strong>）。<br><strong>缓存分层</strong>：<strong>CDN → Nginx → Redis → 本地缓存 → 读写分离</strong>（由外到内）。<br><strong>Cookie vs Session</strong>：<strong>Cookie 在客户端</strong>（4KB），<strong>Session 在服务端</strong>（客户端只存 SessionID）；<strong>JWT</strong> 状态在客户端、服务端无状态。<br><strong>MVC vs MVP</strong>：MVC 里 View <strong>可直读</strong> Model；MVP 里 View 与 Model <strong>全经 Presenter</strong> 中转（<strong>解耦、好测</strong>）。</p></div>
 <div class="block warning"><div class="block-title">易错陷阱</div><p><strong>"调大数据库连接池"不能缓解数据库压力</strong>——它只是让更多请求排队，反而可能因线程切换加剧恶化；真正的手段是<strong>缓存分层 + 读写分离</strong>。<br><strong>前后端分离后接口契约更重要</strong>（Swagger + 版本管理 + 契约测试），不是"不用管了"。<br><strong>负载测试找"性能拐点"（预期负载内），压力测试看"极限与恢复"（超负荷）</strong>，别混。</p></div>

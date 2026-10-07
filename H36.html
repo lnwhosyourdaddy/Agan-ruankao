@@ -7,7 +7,7 @@
 <title>第 36 小时 · 嵌入式系统分析与设计 · 实时调度与低功耗 · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
-<meta name="build-stamp" content="2026-10-05 15:47:03">
+<meta name="build-stamp" content="2026-10-07 08:06:18">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -2296,7 +2296,7 @@ ul.exam-questions>li::before{content:none !important}
 </div>
     
     <h1 id="第-36-小时-嵌入式系统分析与设计-实时调度与低功耗">第 36 小时 · 嵌入式系统分析与设计 · 实时调度与低功耗</h1>
-<div class="quote"><p>第 17 章是<strong>第三篇「案例实践」</strong>的第二站。嵌入式是<strong>综合知识与案例双重考点</strong>，<br>其中 <strong>RMS 调度计算</strong>与<strong>优先级反转两种解法</strong>几乎每年必考，属于"不背就一定错"的那种。<br>覆盖 <strong>17.1 概述与安全攸关 + 17.2 嵌入式数据库 + 17.3 实时调度 + 17.4 交叉开发与低功耗 + 17.5 验证</strong>。</p></div>
+<div class="quote"><p>第 17 章是<strong>第三篇「案例实践」</strong>的第二站。<strong>真题占比 2.0%</strong>（11/557，3/8 年，全教材第 13 位）。嵌入式是<strong>综合知识与案例双重考点</strong>，<br>其中 <strong>RMS 调度计算</strong>与<strong>优先级反转两种解法</strong>是嵌入式章的核心计算，但实测<strong>只在 2022 年的综合真题出现过 1 次、11 套案例真题未考</strong> —— 属于「<strong>低频但必须会算</strong>」：不背确实会错，但不必投入大量刷题时间。<br>覆盖 <strong>17.1 概述与安全攸关 + 17.2 嵌入式数据库 + 17.3 实时调度 + 17.4 交叉开发与低功耗 + 17.5 验证</strong>。</p></div>
 <div class="block gold"><div class="block-title">考情定位</div><p>四块必拿：① <strong>RMS 规则与 Liu & Layland 上界</strong>（`n(2^(1/n)−1)`，n=2→0.828）；② <strong>RMS vs EDF 对比</strong>（固定 vs 动态优先级、有上界 vs 理论 100%）；③ <strong>优先级反转的成因与两种解法</strong>（<strong>继承</strong>=锁持有者被提升，<strong>天花板</strong>=锁申请者被封顶）；④ <strong>DVFS</strong>（动态电压频率调整，动态功耗 ∝ C·V²·f）。</p></div>
 <div class="block mem"><div class="block-title">记忆口诀</div><p><strong>RMS</strong>：<strong>周期短 → 优先级高</strong>（<strong>固定</strong>优先级），上界 `n(2^(1/n)−1)`。<br><strong>EDF</strong>：<strong>截止期近 → 优先级高</strong>（<strong>动态</strong>优先级），<strong>理论 100%</strong> 利用率。<br><strong>一句话</strong>：<strong>RMS 稳但省，EDF 猛但险。</strong><br><strong>优先级反转</strong>：L 持锁 → H 阻塞 → <strong>M 抢占 L</strong> → H 被间接阻塞。<br><strong>两解法</strong>：<strong>继承</strong>（锁<strong>持有</strong>者 L 被提升）｜<strong>天花板</strong>（锁<strong>申请</strong>者被封顶到天花板）。<br><strong>低功耗三层</strong>：<strong>系统级</strong>（DVFS、休眠）· <strong>软件级</strong>（去轮询、批处理）· <strong>硬件级</strong>（低功耗外设）。<br><strong>DVFS 原理</strong>：动态功耗 ∝ <strong>C·V²·f</strong>（<strong>电压是平方项，降压最省电</strong>）。</p></div>
 <div class="block warning"><div class="block-title">易错陷阱</div><p><strong>优先级继承与天花板的方向别记反</strong>：</p><ul><li><strong>继承</strong>：<strong>锁的持有者</strong>（L）<strong>被提升</strong> → "<strong>持有者被继承</strong>"</li><li><strong>天花板</strong>：<strong>锁的申请者</strong>（L）<strong>申请时就被封顶</strong> → "<strong>申请者被封顶</strong>"</li></ul><p><strong>RMS 是固定优先级</strong>（不是动态）；<strong>EDF 才是动态</strong>。上界低的 RMS 更易分析、调度开销小。<br><strong>Liu & Layland 上界不同教材近似值略有差异</strong>（n≥3 时 0.757 / 0.78 都出现过），<strong>按教材算</strong>。</p></div>

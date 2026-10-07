@@ -7,7 +7,7 @@
 <title>第 39 小时 · 微服务系统分析与设计 · 组件、事务与反模式 · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
-<meta name="build-stamp" content="2026-10-05 15:47:03">
+<meta name="build-stamp" content="2026-10-07 08:06:18">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -2296,7 +2296,7 @@ ul.exam-questions>li::before{content:none !important}
 </div>
     
     <h1 id="第-39-小时-微服务系统分析与设计-组件-事务与反模式">第 39 小时 · 微服务系统分析与设计 · 组件、事务与反模式</h1>
-<div class="quote"><p>第 20 章微服务是<strong>案例分析的六大方向之一</strong>（综合知识 0 题，但案例常考）。<br><strong>CAP/BASE 与分布式事务</strong>是本章必考点，也是面试与论文的高频话题。<br>本学时覆盖 <strong>20.1 微服务 vs 单体 + 20.2 九原则六模式（DDD 限界上下文）+ 20.3 组件通信与分布式事务 + 20.4 测试与反模式</strong>。</p></div>
+<div class="quote"><p>第 20 章微服务是<strong>案例分析的六大方向之一</strong> —— <strong>真题占比 0.4%</strong>（2/557，只在 2022、2024 两年考过，全教材第 19 位），综合知识<strong>几乎不出题</strong>，<strong>主战场在案例</strong>。<br><strong>CAP/BASE 与分布式事务</strong>是本章必考点，也是面试与论文的高频话题。<br>本学时覆盖 <strong>20.1 微服务 vs 单体 + 20.2 九原则六模式（DDD 限界上下文）+ 20.3 组件通信与分布式事务 + 20.4 测试与反模式</strong>。</p></div>
 <div class="block gold"><div class="block-title">考情定位</div><p>四块必拿：① <strong>CAP 三选二</strong>（C 一致性 · A 可用性 · P 分区容错，<strong>实践必保 P</strong>，只剩 CP 或 AP）；② <strong>分布式事务四方案</strong>（2PC 强一致但阻塞 / TCC 业务侵入 / Saga 补偿 / 可靠消息）；③ <strong>DDD 限界上下文</strong>（微服务拆分依据，同术语在不同上下文含义不同）；④ <strong>分布式单体反模式</strong>（拆了但仍耦合，比单体更糟）。</p></div>
 <div class="block mem"><div class="block-title">记忆口诀</div><p><strong>CAP</strong>：一致性 <strong>C</strong> ｜ 可用性 <strong>A</strong> ｜ 分区容错 <strong>P</strong> —— <strong>最多取二，实践必保 P</strong>。<br><strong>BASE</strong>：<strong>基本可用 + 软状态 + 最终一致</strong>（对 C 的弱化）。<br><strong>分布式事务</strong>：<strong>2PC</strong>（强一致·阻塞·单点）｜ <strong>TCC</strong>（Try/Confirm/Cancel，业务侵入）｜ <strong>Saga</strong>（本地+补偿，长流程）｜ <strong>可靠消息</strong>（吞吐高）。<br><strong>微服务组件</strong>：<strong>注册中心</strong>（Nacos/Eureka）· <strong>配置中心</strong>（Nacos/Apollo）· <strong>网关</strong>（Gateway/Zuul）· <strong>熔断限流</strong>（Sentinel/Hystrix）· <strong>链路追踪</strong>（Sleuth/Zipkin）· <strong>消息</strong>（MQ）· <strong>服务网格</strong>（Istio）。<br><strong>反模式</strong>：<strong>分布式单体</strong>（共享数据库 + 共享代码 + 一起部署 = 最糟）。</p></div>
 <div class="block warning"><div class="block-title">易错陷阱</div><p><strong>BASE 是"最终一致"不是"强一致"</strong> —— 看到"BASE 保证数据任何时刻完全一致"直接排除。<br><strong>2PC 不是"没有缺点"</strong> —— 它<strong>强一致但同步阻塞 + 协调者单点</strong>，别只说优点。<br><strong>微服务不是"拆得越多越好"</strong> —— 过度拆分会导致调用链爆炸、运维成本飙升；判断标准是<strong>限界上下文边界</strong>，不是代码行数。<br><strong>"拆分后用分布式事务"是最后手段</strong> —— 优先考虑服务聚合，把强一致部分收敛在一个服务内。</p></div>

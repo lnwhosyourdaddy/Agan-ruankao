@@ -7,7 +7,7 @@
 <title>第 18 小时 · 项目管理（二）· 配置质量风险与文档 · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
-<meta name="build-stamp" content="2026-10-05 15:47:03">
+<meta name="build-stamp" content="2026-10-07 08:06:18">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -2423,6 +2423,15 @@ ul.exam-questions>li::before{content:none !important}
 <p>资源平衡</p>
 <p><strong>延迟项目任务</strong>来解决资源冲突；一种<strong>网络分析法</strong>——充分利用<strong>时差</strong>，使资源利用达到最佳状态</p>
 <p>💡 消除超负荷两招：<strong>修改进度表</strong> + <strong>利用活动时差</strong>——考"资源平衡是什么方法"答网络分析法。</p>
+<h4 id="资源受限排程-计算题解法-真题考过-2020-2022-2023-三年">资源受限排程 · 计算题解法 ⭐⭐（真题考过 2020、2022、2023 三年）</h4>
+<p><strong>题型识别</strong>：题干出现「整个团队<strong>总共只有 N 人</strong>」「各作业必须<strong>连续进行、不能中断</strong>」<br>「<strong>最少需要几人</strong>」—— 就是资源约束下的进度优化，<strong>不能直接把关键路径工期当答案</strong>。</p>
+<p><strong>两种考法别混</strong>：</p>
+<table><thead><tr><th>考法</th><th>典型问法</th><th>人力上限</th><th>会不会延长工期</th></tr></thead><tbody><tr><td><strong>资源平衡</strong> Leveling</td><td>给定 N 人，求<strong>最短工期</strong> / 求某作业排在第几天</td><td><strong>硬约束</strong>，必须满足</td><td><strong>会延长</strong>（推不动就加天数）</td></tr><tr><td><strong>资源平滑</strong> Smoothing</td><td>求「<strong>最少需要几人</strong>」</td><td>只削峰填谷</td><td><strong>不延长</strong>关键路径</td></tr></tbody></table>
+<p><strong>「给定 N 人求最短工期」三步法</strong>：</p>
+<ol><li><strong>先算无资源约束的关键路径工期</strong> —— 这是答案的<strong>下限</strong>（实际只会 ≥ 它）</li><li><strong>把非关键作业在其总时差范围内整体右移</strong>（作业不中断），让每天累计人数 ≤ N</li><li><strong>时差用尽仍冲突</strong> → 只能整体后推，工期 +1，回到第 2 步重排</li></ol>
+<p><strong>「最少需要几人」速算法</strong>：<strong>人数 = ⌈ 各工序工期之和 ÷ 关键路径工期 ⌉</strong><br>（2023 年 5 月真题：A–G 七道工序合计 45 天工作量、关键路径 A→C→G = 7+7+10 = 24 天<br>→ ⌈45/24⌉ = <strong>2 人</strong>，选它就是标准答案）</p>
+<p>⚠️ <strong>三个常见丢分点</strong>：<br>① 直接把关键路径工期当答案，<strong>忘了并行会突破人力上限</strong>（2020、2022 两道都栽在这）；<br>② 把"最多同时并行的工序数"当最少人数 —— 那是<strong>上限</strong>，可用<strong>时差错开</strong>压到更低；<br>③ 混淆「平衡」与「平滑」：问<strong>工期</strong>用平衡（可延长），问<strong>人数</strong>用平滑（不延长）。</p>
+<div class="quote"><p>📌 严谨提醒：上面那个「÷」是<strong>理论下限</strong>，它没有扣掉依赖造成的空档<br>（严格排布有时要多 1 人）。但<strong>真题按这个下限取值</strong>，考场上照算即可，别自己加码。</p></div>
 <h3 id="沟通管理-8-8-风险管理概念">沟通管理 + 8.8 风险管理概念</h3>
 <p>💬沟通管理</p>
 <p>目标：及时适当地<strong>创建/收集/发送/储存/处理</strong>项目信息；项目经理大部分时间花在<strong>沟通</strong>上</p>
