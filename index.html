@@ -7,7 +7,7 @@
 <title>阿甘系分 · 48 小时冲刺手册 · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
-<meta name="build-stamp" content="2026-10-07 08:06:18">
+<meta name="build-stamp" content="2026-10-09 06:54:29">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -1364,6 +1364,13 @@ html.focus-mode .chapbar{opacity:.35;pointer-events:none}
   border-radius:0;
   margin:1.8em 0;
   font-family:var(--sans);
+  /* ⚠️ v10.4：基础 `table{overflow:hidden}` 会把超宽表格**裁掉而不是让它可滚动**，
+     用户看不到后半截。这里改成横向滚动容器：列再多也能看完。
+     `display:block` 是让 table 成为滚动容器的标准写法（thead/tbody 的表格布局不受影响）。 */
+  display:block;
+  max-width:100%;
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
 }
 .main thead{ border-bottom:1px solid var(--line) }
 .main th{
@@ -1381,6 +1388,11 @@ html.focus-mode .chapbar{opacity:.35;pointer-events:none}
   padding:.85em 1em;
   border-bottom:1px solid var(--line);
   font-size:.96em;
+  /* ⚠️ v10.4：历年案例真题的 OCR 材料里会出现「一个单元格塞 10 个步骤」的长文本，
+     实测那张表被撑到 1980px、展开后撑破页面（而折叠状态下测不出来 → 旧的溢出
+     检查一直没发现）。让长内容**先换行**，表格才有机会收进容器宽度。 */
+  overflow-wrap:anywhere;
+  word-break:break-word;
 }
 .main tbody tr:last-child td{ border-bottom:none }
 .main tbody tr:hover{ background:var(--accent-soft) }
