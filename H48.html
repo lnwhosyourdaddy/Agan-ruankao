@@ -7,7 +7,7 @@
 <title>第 48 小时 · 全真模拟（二）· 下午场论文 + 复盘方法论 · 阿甘系分 48 小时冲刺</title>
 <meta name="description" content="系统分析师 48 小时冲刺手册 · 三科覆盖 + 案例论文专项 + 交互答题">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d5a40'/><text x='16' y='22' font-size='15' font-weight='700' fill='%23fbfaf6' text-anchor='middle' font-family='sans-serif'>48</text></svg>">
-<meta name="build-stamp" content="2026-10-09 06:54:29">
+<meta name="build-stamp" content="2026-10-09 23:22:06">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -2172,6 +2172,47 @@ ul.exam-questions>li::before{content:none !important}
 }
 .case-ask-t{flex:1;min-width:0}
 .case-ask-t strong{color:var(--accent);font-weight:700}
+
+/* ── v10.5：一问一个答案折叠 ──
+   题目行改成「编号 | 题干 + 该问答案折叠」的两栏，答案块缩进到题干下方，
+   视觉上一眼能看出"这个折叠属于上面那一问"。 */
+ul.exam-questions>li.case-ask{
+  display:block;                /* 原来是 flex 两栏，答案块会被挤到编号右边 */
+  padding:10px 0;
+}
+.case-ask-body{margin-top:2px}
+.case-ask-body .case-ask-t{display:block}
+.case-ans{margin:.5em 0 0}
+.case-ans>summary{
+  font-size:12.5px;padding:5px 12px;
+  background:var(--bg-alt);color:var(--fg-3);
+}
+.case-ans>summary:hover{background:var(--accent-soft-2);color:var(--accent)}
+
+/* 三色采分组：**每组标记只出现一次**，组内只列要点 */
+.pt-g{margin:.35em 0 .7em}
+.pt-g:last-child{margin-bottom:.2em}
+.pt-h{
+  display:inline-flex;align-items:center;gap:5px;
+  margin-bottom:5px;padding:2px 9px;border-radius:5px;
+  font-family:var(--sans);font-size:11.5px;font-weight:700;letter-spacing:.02em;
+}
+.pt-core .pt-h{background:var(--danger-bg,var(--accent-soft-2));color:var(--danger-fg,var(--accent))}
+.pt-sup  .pt-h{background:var(--warn-bg);color:var(--warn-fg)}
+.pt-plus .pt-h{background:var(--ok-bg,var(--accent-soft));color:var(--ok-fg,var(--accent-2))}
+ul.pt-list{list-style:none;margin:0;padding:0}
+ul.pt-list>li{
+  position:relative;padding:2px 0 2px 15px;
+  font-size:14px;line-height:1.9;
+}
+ul.pt-list>li::before{
+  content:"";position:absolute;left:3px;top:.82em;
+  width:4px;height:4px;border-radius:50%;background:var(--line-2);
+}
+.pt-core ul.pt-list>li::before{background:var(--accent)}
+.pt-sup  ul.pt-list>li::before{background:var(--warn-line,var(--accent-3))}
+.pt-plus ul.pt-list>li::before{background:var(--accent-2)}
+.pt-empty{font-size:13px;color:var(--fg-3);font-style:italic}
 
 /* ── 答案 / 解析 / 考点拆解 / 教材知识点 ── */
 .exam-points,.exam-keypoints,.exam-exp-more,.essay-bg{
